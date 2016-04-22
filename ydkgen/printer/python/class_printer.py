@@ -25,7 +25,7 @@ from .class_docstring_printer import ClassDocstringPrinter
 from .class_has_data_printer import ClassHasDataPrinter
 from .class_inits_printer import ClassInitsPrinter
 from .class_is_config_printer import ClassIsConfigPrinter
-from ydkgen.helper import sort_classes_at_same_level
+from ydkgen.common import sort_classes_at_same_level
 
 
 

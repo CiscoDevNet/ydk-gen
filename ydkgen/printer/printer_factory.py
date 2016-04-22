@@ -15,23 +15,21 @@
 # ------------------------------------------------------------------
 
 """
- module_printer.py 
+printer_factory.py
  
- YANG model driven API, module emitter.
+ Returns printer
  
 """
+from ydkgen.printer import PythonModulePrinter
+from enum import Enum
 
 
-from .bits_printer import BitsPrinter
-from .class_common_path_printer import ClassCommonPathPrinter
-from .class_docstring_printer import ClassDocstringPrinter
-from .class_has_data_printer import ClassHasDataPrinter
-from .class_inits_printer import ClassInitsPrinter
-from .class_is_config_printer import ClassIsConfigPrinter
-from .class_meta_printer import ClassMetaPrinter
-from .class_printer import ClassPrinter
-from .enum_printer import EnumPrinter
-from .import_test_printer import ImportTestPrinter
-from .python_module_printer import PythonModulePrinter
-from .python_rst_printer import PythonRstPrinter
-from .test_case_printer import TestCasePrinter
+class PrinterType(Enum):
+    PYTHON=1
+
+
+class PrinterFactory(object):
+        
+    def get_printer(self, language):
+        if language == PrinterType.PYTHON:
+            return PythonModulePrinter

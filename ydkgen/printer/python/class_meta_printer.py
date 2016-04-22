@@ -21,8 +21,8 @@ class_meta_printer.py
  
 """
 from ydkgen.api_model import Class, Enum, Property
-from ydkgen.helper import sort_classes_at_same_level, get_module_name
-from ydkgen.meta_data_util import get_meta_info_data
+from ydkgen.common import sort_classes_at_same_level, get_module_name
+from ydkgen.printer.meta_data_util import get_meta_info_data
 
 
 class ClassMetaPrinter(object):
