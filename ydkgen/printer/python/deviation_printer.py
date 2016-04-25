@@ -24,7 +24,7 @@ class_printer.py
 from ydkgen.api_model import Bits
 from ydkgen.api_model import Class
 from ydkgen.api_model import Enum
-from ydkgen.meta_data_util import get_meta_info_data
+from ydkgen.printer.meta_data_util import get_meta_info_data
 
 
 class DeviationPrinter(object):

@@ -21,7 +21,7 @@ class_common_path_printer.py
  
 """
 from ydkgen.api_model import Class
-from ydkgen.helper import get_module_name
+from ydkgen.common import get_module_name
 
 
 class ClassCommonPathPrinter(object):

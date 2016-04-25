@@ -20,9 +20,9 @@
   YANG model driven API, python emitter.
 """
 
-from api_model import Class, Enum, Bits, _get_enum_type_stmt, _get_bits_type_stmt, \
-    _get_union_type_stmt
-from helper import convert_to_reStructuredText, get_module_name
+from ydkgen.api_model import Class, Enum, Bits
+from ydkgen.api_model_builder import TypesExtractor
+from ydkgen.common import convert_to_reStructuredText, get_module_name
 from pyang import types
 from pyang.error import EmitError
 from pyang.types import BinaryTypeSpec, BooleanTypeSpec, Decimal64TypeSpec, EmptyTypeSpec, \
@@ -88,6 +88,7 @@ def get_class_docstring(clazz):
 
     return convert_to_reStructuredText(class_description) + '\n\n' + ''.join(properties_description)
 
+
 def add_presence_property_docstring(clazz):
     description = []
     description.append(".. attribute:: %s\n\n" % ("_is_presence"))
@@ -152,6 +153,7 @@ def get_meta_info_data(prop, property_type, type_stmt):
     """
     clazz = prop.owner
     meta_info_data = MetaInfoData(prop)
+    types_extractor = TypesExtractor()
     target_type_stmt = type_stmt
 
     if isinstance(property_type, Class):
@@ -284,9 +286,9 @@ def get_meta_info_data(prop, property_type, type_stmt):
             if len(type_spec.types) > 0:
                 meta_info_data.doc_link += 'one of { '
                 for contained_type_stmt in type_spec.types:
-                    enum_type_stmt = _get_enum_type_stmt(contained_type_stmt)
-                    bits_type_stmt = _get_bits_type_stmt(contained_type_stmt)
-                    union_type_stmt = _get_union_type_stmt(contained_type_stmt)
+                    enum_type_stmt = types_extractor.get_enum_type_stmt(contained_type_stmt)
+                    bits_type_stmt = types_extractor.get_bits_type_stmt(contained_type_stmt)
+                    union_type_stmt = types_extractor.get_union_type_stmt(contained_type_stmt)
                     contained_property_type = contained_type_stmt.i_type_spec
                     if isinstance(contained_property_type, IdentityrefTypeSpec):
                         contained_property_type = contained_property_type.base.i_identity.i_class
