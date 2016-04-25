@@ -62,7 +62,9 @@ class PythonRstPrinter(object):
         self.ctx.writeln('.. toctree::')
         self.ctx.lvl_inc()
         self.ctx.writeln(':maxdepth: 1\n')
-        for c in named_element.owned_elements:
+	owned_elements = named_element.owned_elements
+        owned_elements.reverse()
+        for c in owned_elements:
             if isinstance(c, Class) or isinstance(c, Enum):
                 #self.writeln(' :py:class:`%s <%s.%s>`'%(c.name, c.get_py_mod_name(), c.qn()))
                 self.ctx.writeln('%s <%s>' % (c.name, get_rst_file_name(c)))
