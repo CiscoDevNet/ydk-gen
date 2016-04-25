@@ -1,25 +1,15 @@
 [![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-gen)
 
-# INSTALL
+# Install Prerequsites
 
 ```
 user-machine# cd <git_root>
-user-machine# pip install -r requirements.txt
-user-machine# source env.sh
+user-machine# source install.sh
 ```
-
-## Install Tips:
-
-Run Installation instruction under python virtualenv. Once you have virtualenv installed:
-
-```
-user-machine# virtualenv mypython
-user-machine# source mypython/bin/activate
-user-machine# pip install -r requirements.txt
-```
+The `install.sh` will create and activate a virtual environment under ydk git root.
 
 
-# USAGE
+# Usage
 
 ```
 user-machine# python generate.py --help
@@ -101,25 +91,6 @@ Only directory examples are shown below.
         ]
     },
 ```
-
-## No Profile
-
-1. Place a copy of the Yang data models ```<git_root>/ydk/yang```
-
-1. Generate Python SDK:
-
-```
-user-machine# python generate.py -p --no-doc
-```
-
-The generated SDK will in ```<git_root>/ydk/gen-api/python```.
-
-The same SDK may be generated using the profile [```profiles/models-in-repo.json```](profiles/models-in-repo.json), which also turns documentation generation **off**:
-
-```
-user-machine# python generate.py --profile profiles/models-in-repo.json
-```
-
 
 # Notes
 
