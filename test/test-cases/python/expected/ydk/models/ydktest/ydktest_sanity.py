@@ -2260,6 +2260,103 @@ class Runner(object):
         return meta._meta_table['Runner']['meta_info']
 
 
+class SubTest(object):
+    """
+    
+    
+    .. attribute:: one_aug
+    
+    	config for one\_level data
+    	**type**\: :py:class:`OneAug <ydk.models.ydktest.ydktest_sanity.SubTest.OneAug>`
+    
+    
+
+    """
+
+    _prefix = 'ydkut'
+    _revision = '2016-04-25'
+
+    def __init__(self):
+        self.one_aug = SubTest.OneAug()
+        self.one_aug.parent = self
+
+
+    class OneAug(object):
+        """
+        config for one\_level data
+        
+        .. attribute:: name
+        
+        	this is string value
+        	**type**\: str
+        
+        .. attribute:: number
+        
+        	integer value type
+        	**type**\: int
+        
+        	**range:** \-2147483648..2147483647
+        
+        
+
+        """
+
+        _prefix = 'ydkut'
+        _revision = '2016-04-25'
+
+        def __init__(self):
+            self.parent = None
+            self.name = None
+            self.number = None
+
+        @property
+        def _common_path(self):
+
+            return '/ydktest-sanity-submodule:sub-test/ydktest-sanity-submodule:one-aug'
+
+        def is_config(self):
+            ''' Returns True if this instance represents config data else returns False '''
+            return True
+
+        def _has_data(self):
+            if not self.is_config():
+                return False
+            if self.name is not None:
+                return True
+
+            if self.number is not None:
+                return True
+
+            return False
+
+        @staticmethod
+        def _meta_info():
+            from ydk.models.ydktest._meta import _ydktest_sanity as meta
+            return meta._meta_table['SubTest.OneAug']['meta_info']
+
+    @property
+    def _common_path(self):
+
+        return '/ydktest-sanity-submodule:sub-test'
+
+    def is_config(self):
+        ''' Returns True if this instance represents config data else returns False '''
+        return True
+
+    def _has_data(self):
+        if not self.is_config():
+            return False
+        if self.one_aug is not None and self.one_aug._has_data():
+            return True
+
+        return False
+
+    @staticmethod
+    def _meta_info():
+        from ydk.models.ydktest._meta import _ydktest_sanity as meta
+        return meta._meta_table['SubTest']['meta_info']
+
+
 class ChildIdentity_Identity(BaseIdentity_Identity):
     """
     

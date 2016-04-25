@@ -29,9 +29,9 @@ _global_oc_pattern_nsp = 'http://cisco.com/ns/yang/oc-pattern'
 _global_ydktest_filterread_nsp = 'http://cisco.com/ns/yang/ydk-filter'
 _global_ydktest_sanity_nsp = 'http://cisco.com/ns/yang/ydktest-sanity'
 _global_ydktest_sanity_augm_nsp = 'http://cisco.com/ns/yang/ydktest-sanity-augm'
-_global_ydktest_union_nsp = 'http://cisco.com/ns/yang/ydktest-union'
 _global_ydktest_sanity_deviations_another_nsp = 'http://cisco.com/ns/yang/ydktest-sanity-deviations-another'
 _global_ydktest_sanity_deviations_types_nsp = 'http://cisco.com/ns/yang/ydktest-sanity-deviations-types'
+_global_ydktest_sanity_submodule_nsp = 'http://cisco.com/ns/yang/ydktest-sanity'
 _namespaces = { \
     'ietf-inet-types' : 'urn:ietf:params:xml:ns:yang:ietf-inet-types', 
     'ietf-netconf' : 'urn:ietf:params:xml:ns:netconf:base:1.0', 
@@ -47,9 +47,9 @@ _namespaces = { \
     'ydktest-filterread' : 'http://cisco.com/ns/yang/ydk-filter', 
     'ydktest-sanity' : 'http://cisco.com/ns/yang/ydktest-sanity', 
     'ydktest-sanity-augm' : 'http://cisco.com/ns/yang/ydktest-sanity-augm', 
-    'ydktest-union' : 'http://cisco.com/ns/yang/ydktest-union', 
     'ydktest-sanity-deviations-another' : 'http://cisco.com/ns/yang/ydktest-sanity-deviations-another', 
     'ydktest-sanity-deviations-types' : 'http://cisco.com/ns/yang/ydktest-sanity-deviations-types', 
+    'ydktest-sanity-submodule' : 'http://cisco.com/ns/yang/ydktest-sanity', 
 }
 
 _identity_map = { \
@@ -60,9 +60,10 @@ _identity_map = { \
 
 _namespace_package_map = { \
 ('http://cisco.com/ns/yang/inherit', 'runner') : 'from ydk.models.inherit.inherit import Runner', 
+('http://cisco.com/ns/yang/oc-pattern', 'A') : 'from ydk.models.oc.oc_pattern import A', 
 ('urn:ietf:params:xml:ns:yang:ietf-netconf-acm', 'nacm') : 'from ydk.models.ietf.ietf_netconf_acm import Nacm', 
+('http://cisco.com/ns/yang/ydktest-sanity', 'sub-test') : 'from ydk.models.ydktest.ydktest_sanity import SubTest', 
 ('http://cisco.com/ns/yang/ydk-filter', 'a') : 'from ydk.models.ydktest.ydktest_filterread import A', 
-('http://cisco.com/ns/yang/ydktest-union', 'built-in-t') : 'from ydk.models.ydktest.ydktest_union import BuiltInT', 
 ('http://cisco.com/ns/yang/ydktest-sanity', 'runner') : 'from ydk.models.ydktest.ydktest_sanity import Runner', 
 ('http://cisco.com/ns/yang/main', 'A') : 'from ydk.models.main.main import A', 
 }

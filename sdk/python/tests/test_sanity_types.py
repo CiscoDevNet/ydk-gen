@@ -525,6 +525,19 @@ class SanityTest(unittest.TestCase):
         self.assertRaises(YPYDataValidationError,
             self.crud.create, self.ncc, runner)
 
+    def test_submodule(self):
+        subtest = ysanity.SubTest()
+        subtest.one_aug.name = 'test'
+        subtest.one_aug.number = 3
+
+        res = self.crud.create(self.ncc, subtest)
+
+        subtest1 = self.crud.read(self.ncc, ysanity.SubTest())
+
+        # Compare runners
+        result = is_equal(subtest, subtest1)
+        self.assertEqual(result, True)
+
     # def test_binary(self):
     #     pass
 

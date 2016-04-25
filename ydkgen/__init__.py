@@ -240,7 +240,7 @@ def _parse_and_return_modules(resolved_model_dir):
         err_msg = '\n'.join(error_messages)
         raise YdkGenException(err_msg)
 
-    return [m for m in modules if m.keyword == 'module']
+    return [m for m in modules if m.keyword == 'module' or m.keyword == 'submodule']
 
 
 def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class, generate_python):
@@ -310,7 +310,7 @@ def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class
     packages = []
     
     if not groupings_as_class:
-        packages = ApiModelBuilder().generate(modules)
+        (packages, subm) = ApiModelBuilder().generate(modules)
     else:
         packages = GroupingClassApiModelBuilder().generate(
                 modules)
@@ -320,4 +320,4 @@ def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class
     if generate_python:
         language = 'python'
     printer = YdkPrinter(ydk_dir, ydk_doc_dir, language)
-    printer.emit(packages)
+    printer.emit(packages, subm)

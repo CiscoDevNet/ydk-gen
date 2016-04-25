@@ -111,7 +111,7 @@ def suite(profile, actual_directory, expected_directory, groupings_as_class):
     
         def translate_and_check(self):
             
-            ydkgen.generate(self.profile, self.actual_directory, True, ydk_root, self.groupings_as_class)
+            ydkgen.generate(self.profile, self.actual_directory, True, ydk_root, self.groupings_as_class, True)
             
             def check_diff_files(dcmp, diff_files):
                 

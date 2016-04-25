@@ -13,7 +13,9 @@ module ydktest-sanity {
 
   //import Cisco-IOS-XR-types { prefix "xr"; }
 
-
+  include ydktest-sanity-submodule {
+    revision-date 2016-04-25;
+  }
 
   organization "Cisco Systems, Inc.";
 

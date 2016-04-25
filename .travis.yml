@@ -17,4 +17,4 @@ script:
     - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq -r .head.ref`; fi)
     - export REPO=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_REPO_SLUG; else echo `curl -s $PR | jq -r .head.repo.full_name`; fi)
     - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, REPO=$REPO"
-    - docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/confd_all.sh -r https://github.com/$REPO.git -b $BRANCH
+    - docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/ydk_travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH

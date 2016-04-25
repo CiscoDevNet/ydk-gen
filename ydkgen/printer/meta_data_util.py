@@ -356,7 +356,7 @@ def get_range_limits(range_type):
                 if m_max is not None:
                     pmax = m_max
             if types.yang_type_specs['uint64'].max == pmax:
-                prange.append(long(pmin), long(pmax))
+                prange.append((long(pmin), long(pmax)))
             prange.append((pmin, pmax))
     elif isinstance(base_type, Decimal64TypeSpec):
         for m_min, m_max in range_type.ranges:

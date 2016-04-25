@@ -961,6 +961,46 @@ _meta_table = {
         'ydk.models.ydktest.ydktest_sanity'
         ),
     },
+    'SubTest.OneAug' : {
+        'meta_info' : _MetaInfoClass('SubTest.OneAug',
+            False, 
+            [
+            _MetaInfoClassMember('name', ATTRIBUTE, 'str' , None, None, 
+                [], [], 
+                '''                this is string value
+                ''',
+                'name',
+                'ydktest-sanity', False),
+            _MetaInfoClassMember('number', ATTRIBUTE, 'int' , None, None, 
+                [(-2147483648, 2147483647)], [], 
+                '''                integer value type
+                ''',
+                'number',
+                'ydktest-sanity', False),
+            ],
+            'ydktest-sanity',
+            'one-aug',
+            _yang_ns._namespaces['ydktest-sanity'],
+        'ydk.models.ydktest.ydktest_sanity'
+        ),
+    },
+    'SubTest' : {
+        'meta_info' : _MetaInfoClass('SubTest',
+            False, 
+            [
+            _MetaInfoClassMember('one-aug', REFERENCE_CLASS, 'OneAug' , 'ydk.models.ydktest.ydktest_sanity', 'SubTest.OneAug', 
+                [], [], 
+                '''                config for one_level data
+                ''',
+                'one_aug',
+                'ydktest-sanity', False),
+            ],
+            'ydktest-sanity',
+            'sub-test',
+            _yang_ns._namespaces['ydktest-sanity'],
+        'ydk.models.ydktest.ydktest_sanity'
+        ),
+    },
     'ChildIdentity_Identity' : {
         'meta_info' : _MetaInfoClass('ChildIdentity_Identity',
             False, 
@@ -1016,3 +1056,4 @@ _meta_table['Runner.ThreeList']['meta_info'].parent =_meta_table['Runner']['meta
 _meta_table['Runner.Two']['meta_info'].parent =_meta_table['Runner']['meta_info']
 _meta_table['Runner.TwoList']['meta_info'].parent =_meta_table['Runner']['meta_info']
 _meta_table['Runner.Ytypes']['meta_info'].parent =_meta_table['Runner']['meta_info']
+_meta_table['SubTest.OneAug']['meta_info'].parent =_meta_table['SubTest']['meta_info']

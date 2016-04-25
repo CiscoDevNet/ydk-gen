@@ -52,7 +52,7 @@ class YdkPrinter():
         else:
             raise Exception('Language not supported')
 
-    def emit(self, packages):
+    def emit(self, packages, subm):
         self.ypy_ctx = None
         self.packages = []
         self.models_dir = ''
@@ -62,6 +62,7 @@ class YdkPrinter():
         self.packages = sorted(self.packages, key=lambda package: package.name)
         self.deviation_packages = [p for p in self.packages if hasattr(p, 'is_deviation')]
         self.packages = [p for p in self.packages if not hasattr(p, 'is_deviation')]
+        self.subm = sorted(subm, key=lambda package: package.name)
         
         self.initialize_print_environment()
         self.print_files()
@@ -168,7 +169,7 @@ class YdkPrinter():
                         _EmitArgs(self.ypy_ctx, package))
 
     def print_yang_ns_file(self):
-        packages = self.packages + self.deviation_packages
+        packages = self.packages + self.deviation_packages + self.subm
         self.print_file(get_yang_ns_file_name(self.models_dir),
                         emit_yang_ns,
                         _EmitArgs(self.ypy_ctx, packages))
@@ -299,17 +300,25 @@ def emit_yang_ns(ctx, packages):
 
     ctx.printer.print_yang_ns_header()
     ns_list = []
+    module_map = {}
     namespace_map = {}
     for m in [p.stmt for p in packages]:
-
-        ns = m.search_one('namespace')
+        ns = m.search_one('namespace')        
         if ns is not None:
             ns_list.append((m.arg.replace('-', '_'), ns.arg, yang_id(m)))
+            module_map[m.arg] = ns.arg
+
+    for m in [p.stmt for p in packages]:
+        if m.keyword == 'submodule':
+            including_module = m.i_including_modulename
+            if including_module is not None and including_module in module_map:
+                main_ns = module_map[including_module]
+                ns_list.append((m.arg.replace('-', '_'), main_ns, yang_id(m)))
 
     for package in packages:
         ns = package.stmt.search_one('namespace')
         for ele in package.owned_elements:
-            if hasattr(ele, 'stmt') and ele.stmt is not None and ele.stmt.keyword == 'container':
+            if hasattr(ele, 'stmt') and ele.stmt is not None and (ele.stmt.keyword == 'container' or ele.stmt.keyword == 'list'):
                 namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
 
 
