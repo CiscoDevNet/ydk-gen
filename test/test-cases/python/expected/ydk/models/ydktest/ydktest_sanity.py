@@ -24,6 +24,27 @@ from ydk.errors import YPYError, YPYDataValidationError
 
 
 
+class YdkEnumIntTestEnum(Enum):
+    """
+    YdkEnumIntTestEnum
+
+    Int or any
+
+    .. data:: ANY = 4096
+
+    	Any value
+
+    """
+
+    ANY = 4096
+
+
+    @staticmethod
+    def _meta_info():
+        from ydk.models.ydktest._meta import _ydktest_sanity as meta
+        return meta._meta_table['YdkEnumIntTestEnum']
+
+
 class YdkEnumTestEnum(Enum):
     """
     YdkEnumTestEnum
@@ -1897,6 +1918,11 @@ class Runner(object):
             	this is empty value
             	**type**\: :py:class:`Empty <ydk.types.Empty>`
             
+            .. attribute:: enum_int_value
+            
+            	enum int type
+            	**type**\: one of { :py:class:`YdkEnumIntTestEnum <ydk.models.ydktest.ydktest_sanity.YdkEnumIntTestEnum>` | int }
+            
             .. attribute:: enum_value
             
             	this is enum type value
@@ -2000,6 +2026,7 @@ class Runner(object):
                 self.deci64 = None
                 self.embeded_enum = None
                 self.emptee = None
+                self.enum_int_value = None
                 self.enum_value = None
                 self.identity_ref_value = None
                 self.leaf_ref = None
@@ -2090,6 +2117,9 @@ class Runner(object):
                     return True
 
                 if self.emptee is not None:
+                    return True
+
+                if self.enum_int_value is not None:
                     return True
 
                 if self.enum_value is not None:

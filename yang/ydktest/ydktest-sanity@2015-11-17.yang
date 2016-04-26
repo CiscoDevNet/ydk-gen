@@ -77,6 +77,21 @@ module ydktest-sanity {
     }
     description "YDK Enum test";
   }
+  
+  typedef Ydk-Enum-Int-test {
+    type union {
+      type enumeration {
+        enum any {
+          value 4096;
+          description "Any value";
+        }
+      }
+      type uint32 {
+        range "1..4096";
+      }
+    }
+    description "Int or any";
+  }
 
   grouping leaf-ref-g {
     description "testing for leaf-ref";
@@ -287,6 +302,11 @@ module ydktest-sanity {
         leaf enum-value {
           description "this is enum type value";
           type Ydk-Enum-test;
+        }
+        
+        leaf enum-int-value {
+            description "enum int type";
+            type Ydk-Enum-Int-test;
         }
         
         leaf identity-ref-value {

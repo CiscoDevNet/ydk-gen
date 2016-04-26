@@ -14,6 +14,10 @@ from ydk.errors import YPYError, YPYDataValidationError
 from ydk.models import _yang_ns
 
 _meta_table = {
+    'YdkEnumIntTestEnum' : _MetaInfoEnum('YdkEnumIntTestEnum', 'ydk.models.ydktest.ydktest_sanity',
+        {
+            'any':'ANY',
+        }, 'ydktest-sanity', _yang_ns._namespaces['ydktest-sanity']),
     'YdkEnumTestEnum' : _MetaInfoEnum('YdkEnumTestEnum', 'ydk.models.ydktest.ydktest_sanity',
         {
             'not-set':'NOT_SET',
@@ -745,6 +749,25 @@ _meta_table = {
                 ''',
                 'emptee',
                 'ydktest-sanity', False),
+            _MetaInfoClassMember('enum-int-value', REFERENCE_UNION, 'str' , None, None, 
+                [], [], 
+                '''                enum int type
+                ''',
+                'enum_int_value',
+                'ydktest-sanity', False, [
+                    _MetaInfoClassMember('enum-int-value', REFERENCE_ENUM_CLASS, 'YdkEnumIntTestEnum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumIntTestEnum', 
+                        [], [], 
+                        '''                        enum int type
+                        ''',
+                        'enum_int_value',
+                        'ydktest-sanity', False),
+                    _MetaInfoClassMember('enum-int-value', ATTRIBUTE, 'int' , None, None, 
+                        [(1, 4096)], [], 
+                        '''                        enum int type
+                        ''',
+                        'enum_int_value',
+                        'ydktest-sanity', False),
+                ]),
             _MetaInfoClassMember('enum-value', REFERENCE_ENUM_CLASS, 'YdkEnumTestEnum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumTestEnum', 
                 [], [], 
                 '''                this is enum type value

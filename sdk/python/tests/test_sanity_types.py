@@ -20,12 +20,13 @@ import unittest
 
 from ydk.services import CRUDService
 from ydk.models.ydktest import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity_types as ysanity_types
 from ydk.providers import NetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from tests.compare import is_equal
 from ydk.errors import YPYError, YPYDataValidationError
 
-from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum
+from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
 
 class SanityTest(unittest.TestCase):
 
@@ -489,6 +490,32 @@ class SanityTest(unittest.TestCase):
         result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
+    def test_union_enum(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.enum_int_value = YdkEnumIntTestEnum.ANY
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
+    def test_union_int(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.enum_int_value = 2
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
     def test_identityref(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.identity_ref_value = \
@@ -536,6 +563,20 @@ class SanityTest(unittest.TestCase):
 
         # Compare runners
         result = is_equal(subtest, subtest1)
+        self.assertEqual(result, True)
+
+    def test_identity_from_other_module(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.identity_ref_value = \
+            ysanity_types.YdktestType_Identity()
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
     # def test_binary(self):

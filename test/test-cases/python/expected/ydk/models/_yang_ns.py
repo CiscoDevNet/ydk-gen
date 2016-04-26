@@ -29,6 +29,7 @@ _global_oc_pattern_nsp = 'http://cisco.com/ns/yang/oc-pattern'
 _global_ydktest_filterread_nsp = 'http://cisco.com/ns/yang/ydk-filter'
 _global_ydktest_sanity_nsp = 'http://cisco.com/ns/yang/ydktest-sanity'
 _global_ydktest_sanity_augm_nsp = 'http://cisco.com/ns/yang/ydktest-sanity-augm'
+_global_ydktest_sanity_types_nsp = 'http://cisco.com/ns/yang/ydktest-sanity-types'
 _global_ydktest_sanity_deviations_another_nsp = 'http://cisco.com/ns/yang/ydktest-sanity-deviations-another'
 _global_ydktest_sanity_deviations_types_nsp = 'http://cisco.com/ns/yang/ydktest-sanity-deviations-types'
 _global_ydktest_sanity_submodule_nsp = 'http://cisco.com/ns/yang/ydktest-sanity'
@@ -47,6 +48,7 @@ _namespaces = { \
     'ydktest-filterread' : 'http://cisco.com/ns/yang/ydk-filter', 
     'ydktest-sanity' : 'http://cisco.com/ns/yang/ydktest-sanity', 
     'ydktest-sanity-augm' : 'http://cisco.com/ns/yang/ydktest-sanity-augm', 
+    'ydktest-sanity-types' : 'http://cisco.com/ns/yang/ydktest-sanity-types', 
     'ydktest-sanity-deviations-another' : 'http://cisco.com/ns/yang/ydktest-sanity-deviations-another', 
     'ydktest-sanity-deviations-types' : 'http://cisco.com/ns/yang/ydktest-sanity-deviations-types', 
     'ydktest-sanity-submodule' : 'http://cisco.com/ns/yang/ydktest-sanity', 
@@ -56,6 +58,9 @@ _identity_map = { \
     ('ydktest-sanity', 'base-identity'):('ydk.models.ydktest.ydktest_sanity', 'BaseIdentity_Identity'),
     ('ydktest-sanity', 'child-child-identity'):('ydk.models.ydktest.ydktest_sanity', 'ChildChildIdentity_Identity'),
     ('ydktest-sanity', 'child-identity'):('ydk.models.ydktest.ydktest_sanity', 'ChildIdentity_Identity'),
+    ('ydktest-sanity-types', 'another-one'):('ydk.models.ydktest.ydktest_sanity_types', 'AnotherOne_Identity'),
+    ('ydktest-sanity-types', 'other'):('ydk.models.ydktest.ydktest_sanity_types', 'Other_Identity'),
+    ('ydktest-sanity-types', 'ydktest-type'):('ydk.models.ydktest.ydktest_sanity_types', 'YdktestType_Identity'),
 }
 
 _namespace_package_map = { \
