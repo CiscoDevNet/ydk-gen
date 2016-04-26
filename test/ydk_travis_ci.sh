@@ -15,8 +15,9 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 #
-# Script for installing precompiled fxs for ydktest
+# Script for running ydk CI on docker
 #
+# ------------------------------------------------------------------
 
 ROOT=/root
 CONFD=/root/confd
@@ -53,6 +54,7 @@ function compile_yang_to_fxs {
     source $CONFD/confdrc
     cd $YDK_ROOT/yang/ydktest
 
+    printf "\n"
     for YANG_FILE in *.yang
     do
         if [[ ${YANG_FILE} != *"submodule"* ]];then
@@ -114,6 +116,7 @@ function setup_deviation_sanity_models {
     source $CONFD/confdrc
     confd --stop
 
+    printf "\nSetting up deviation sanity models\n"
     cp $BGP_DEVIATION_FXS/* $CONFD_TARGET_DIR
     cp $YDKTEST_DEVIATION_FXS/* $CONFD_TARGET_DIR
     cd $CONFD_TARGET_DIR

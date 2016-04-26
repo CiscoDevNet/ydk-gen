@@ -1,6 +1,10 @@
+<a href="https://github.com/CiscoDevNet/ydk-gen"><img src="https://cloud.githubusercontent.com/assets/17089095/14834057/2e1fe270-0bb7-11e6-9e94-73dd7d71e87d.png" height="240" width="240" ></a>
+
+# YDK-GEN
+
 [![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-gen)
 
-# Installing ydk-gen
+## Installation
 
 ```
 user-machine# git clone https://github.com/CiscoDevNet/ydk-gen.git
@@ -9,7 +13,7 @@ user-machine# source install.sh
 ```
 
 
-# Using ydk-gen
+## Usage 
 
 ```
 user-machine# python generate.py --help
@@ -26,7 +30,7 @@ Options:
   --output-directory  The output-directory . If not specified the output can be found under YDKGEN_HOME/gen-api/python
 ```
 
-## Using profiles
+### Profiles
 
 1. Construct a profile file, such as [```profiles/xr532-native-oc-bgp.json```](profiles/xr532-native-oc-bgp.json)
 
@@ -38,7 +42,7 @@ python generate.py -p --profile profiles/xr532-native-oc-bgp.json
 
 The generated SDK will in ```<git_root>/ydk/gen-api/python```.
 
-### Profile file details
+#### Details
 
 A sample profile file is described below.
 
@@ -93,7 +97,7 @@ Only directory examples are shown below.
 ```
 
 
-# Notes
+## Notes
 
 YANG Development Kit Generator:
 
@@ -105,7 +109,7 @@ YANG Development Kit Generator:
     - Services: Provides simple API interface to be used with the entity and provider 
 
 
-# Python Notes
+### Python Notes
 
 For Python entities and netconf session, CRUD service invoked on python class will:
 
@@ -115,7 +119,7 @@ For Python entities and netconf session, CRUD service invoked on python class wi
 
 
 
-# Directory Structure
+## Directory Structure
 
 ```
 README          - install and usage notes
@@ -128,17 +132,26 @@ profiles        - profile files used during generation
 yang            - some yang models used for testing
 requirements.txt- python dependencies used during installation (refer README)
 sdk             - sdk stubs
-test            - test code, engg playground
+test            - test code, engineering playground
 ```
 
-
-# Running Unit Tests
+## Running Unit Tests
 
 Make sure that PYTHONPATH is set properly
 
 ```
 user-machine# cd ydk-gen 
 user-machine# export PYTHONPATH=.:$PYTHONPATH
+```
+
+To run the sanity tests, do the following after running install.sh.
+
+```
+user-machine# cd ydk-gen/sdk/python 
+user-machine# python test/test_sanity_types.py
+user-machine# python test/test_sanity_levels.py
+user-machine# python test/test_sanity_filters.py
+...
 ```
 
 To run the generator test case, do the following after running install.sh.
