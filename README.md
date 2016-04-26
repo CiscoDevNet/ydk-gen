@@ -32,7 +32,7 @@ Options:
 
 ### Profiles
 
-1. Construct a profile file, such as [```profiles/xr532-native-oc-bgp.json```](profiles/xr532-native-oc-bgp.json)
+1. Construct a profile file, such as [```profiles/xr532-native-oc-bgp.json```](profiles/cisco-ios-xr/xr600-native-oc.json)
 
 1. Generate the SDK using a command of the form:
 
