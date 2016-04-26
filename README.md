@@ -32,12 +32,12 @@ Options:
 
 ### Profiles
 
-1. Construct a profile file, such as [```profiles/xr532-native-oc-bgp.json```](profiles/cisco-ios-xr/xr600-native-oc.json)
+1. Construct a profile file, such as [```xr600-native-oc-bgp.json```](profiles/cisco-ios-xr/xr600-native-oc-bgp.json)
 
 1. Generate the SDK using a command of the form:
 
 ```
-python generate.py -p --profile profiles/xr532-native-oc-bgp.json
+python generate.py -p --profile profiles/cisco-ios-xr/xr600-native-oc-bgp.json --no-doc
 ```
 
 The generated SDK will in ```<git_root>/ydk/gen-api/python```.
