@@ -53,7 +53,7 @@ def generate_documentation(output_directory):
                 version = "version=" + rv[:rv.rfind(".")] + "'"
 
     # build docs
-    logger.debug('Building docs using sphinx-build...\n')
+    # logger.debug('Building docs using sphinx-build...\n')
     print('\nBuilding docs using sphinx-build...\n')
 
     p = subprocess.Popen(['sphinx-build',
