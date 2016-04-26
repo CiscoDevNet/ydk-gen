@@ -146,17 +146,13 @@ if __name__ == '__main__':
     else:
         output_directory = options.output_directory
 
-    try:
-        ydkgen.generate(options.profile, output_directory, options.nodoc, ydk_root,
-                        options.groupings_as_class)
+    ydkgen.generate(options.profile, output_directory, options.nodoc, ydk_root,
+                    options.groupings_as_class, options.python)
 
-        if options.nodoc == False:
-            generate_documentation(output_directory)
+    if options.nodoc == False:
+        generate_documentation(output_directory)
 
-        create_pip_package(output_directory)
+    create_pip_package(output_directory)
 
-        print 'Code generation completed successfully!'
+    print 'Code generation completed successfully!'
 
-    except ydkgen.YdkGenException as e:
-        print >> sys.stderr, e.message
-        sys.exit(1)

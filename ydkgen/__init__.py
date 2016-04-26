@@ -24,13 +24,13 @@ from pyang.error import err_add
 from pyang import util
 from pyang import statements
 import re
-from . import api_model, common, gen_target
-from .helper import get_rst_file_name
-from .module_printer import PythonModulePrinter
+from . import common
+from .common import get_rst_file_name
+from ydkgen.api_model_builder import ApiModelBuilder, GroupingClassApiModelBuilder
 import optparse
 import os
 import shutil
-from .ydk_py import YDKPythonGen
+from .printer import YdkPrinter
 from optparse import OptionParser
 import sys
 from common import YdkGenException
@@ -243,7 +243,7 @@ def _parse_and_return_modules(resolved_model_dir):
     return [m for m in modules if m.keyword == 'module']
 
 
-def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class=False):
+def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class, generate_python):
     """
         Generate ydk-py based in the output_directory using the supplied 
         profile_file
@@ -258,15 +258,15 @@ def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class
 
     resolved_model_dir = None
 
-    if profile_file is None:
+    if profile_file is None or len(profile_file) == 0:
         logger.error('profile_file is None.')
         raise YdkGenException('profile_file cannot be None.')
 
-    if output_directory is None:
+    if output_directory is None or len(output_directory) == 0:
         logger.error('output_directory is None.')
         raise YdkGenException('output_directory cannot be None.')
 
-    if ydk_root is None:
+    if ydk_root is None or len(ydk_root) == 0:
         logger.error('ydk_root is None.')
         raise YdkGenException('YDKGEN_HOME is not set.')
 
@@ -310,11 +310,14 @@ def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class
     packages = []
     
     if not groupings_as_class:
-        packages = api_model.generate_expanded_api_model(modules)
+        packages = ApiModelBuilder().generate(modules)
     else:
-        packages = api_model.generate_grouping_class_api_model(
+        packages = GroupingClassApiModelBuilder().generate(
                 modules)
     
-    #call the language emitter    
-    python_plugin = YDKPythonGen(ydk_dir, ydk_doc_dir)
-    python_plugin.emit(packages)
+    # call the language emitter
+    language = ''
+    if generate_python:
+        language = 'python'
+    printer = YdkPrinter(ydk_dir, ydk_doc_dir, language)
+    printer.emit(packages)

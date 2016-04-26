@@ -20,7 +20,7 @@ class_docstring_printer.py
  Printer for the docstrings.
  
 """
-from ydkgen.meta_data_util import get_class_docstring
+from ydkgen.printer.meta_data_util import get_class_docstring
 
 
 class ClassDocstringPrinter(object):

@@ -21,7 +21,7 @@
 """
 
 from ydkgen.api_model import Bits
-from ydkgen.helper import convert_to_reStructuredText, get_sphinx_ref_label
+from ydkgen.common import convert_to_reStructuredText, get_sphinx_ref_label
 
 
 class BitsPrinter(object):

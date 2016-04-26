@@ -22,8 +22,8 @@ Print rst documents for the generated Python api
 """
 
 from ydkgen.api_model import Class, Enum, Package
-from ydkgen.helper import get_rst_file_name
-from ydkgen.meta_data_util import get_class_docstring, get_enum_class_docstring
+from ydkgen.common import get_rst_file_name
+from ydkgen.printer.meta_data_util import get_class_docstring, get_enum_class_docstring
 
 
 class PythonRstPrinter(object):

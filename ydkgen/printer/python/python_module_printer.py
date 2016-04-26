@@ -24,7 +24,7 @@ from ydkgen.api_model import Class, Enum, Bits
 from .bits_printer import BitsPrinter
 from .class_printer import ClassPrinter
 from .enum_printer import EnumPrinter
-from ydkgen.helper import get_module_name
+from ydkgen.common import get_module_name
 from .import_test_printer import ImportTestPrinter
 from .class_meta_printer import ClassMetaPrinter
 from pyang.error import EmitError

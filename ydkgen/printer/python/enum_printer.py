@@ -22,8 +22,8 @@
 
 
 from ydkgen.api_model import Enum
-from ydkgen.helper import convert_to_reStructuredText, get_module_name
-from ydkgen.meta_data_util import get_enum_class_docstring
+from ydkgen.common import get_module_name
+from ydkgen.printer.meta_data_util import get_enum_class_docstring
 
 class EnumPrinter(object):
 
