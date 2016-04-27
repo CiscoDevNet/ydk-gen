@@ -44,6 +44,8 @@ class TypesExtractor(object):
         elif hasattr(type_stmt, 'i_type_spec'):
             type_spec = type_stmt.i_type_spec
             while isinstance(type_spec, PathTypeSpec):
+                if not hasattr(type_spec, 'i_target_node'):
+                    return None
                 type_stmt = type_spec.i_target_node.search_one('type')
                 type_spec = type_stmt.i_type_spec
                 if hasattr(type_stmt, 'i_typedef') and type_stmt.i_typedef is not None:

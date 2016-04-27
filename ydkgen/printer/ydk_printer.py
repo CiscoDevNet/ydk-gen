@@ -23,12 +23,12 @@
 import os
 import shutil
 
-from ydkgen import common
+from . import printer_context
 from ydkgen.common import yang_id
 from ydkgen.common import convert_to_reStructuredText
-from .printer_factory import PrinterFactory, PrinterType
+from .language_factory import LanguageFactory
 from ydkgen.common import get_rst_file_name
-from ydkgen.api_model import Bits, Class, Enum
+from ydkgen.api_model import Bits, Class, Enum, Package
 
 
 class _EmitArgs:
@@ -47,12 +47,9 @@ class YdkPrinter():
     def __init__(self, ydk_dir, ydk_doc_dir, language):
         self.ydk_dir = ydk_dir
         self.ydk_doc_dir = ydk_doc_dir
-        if language == 'python':
-            self.language = PrinterType.PYTHON
-        else:
-            raise Exception('Language not supported')
+        self.language = language
 
-    def emit(self, packages, subm):
+    def emit(self, packages, submodules):
         self.ypy_ctx = None
         self.packages = []
         self.models_dir = ''
@@ -62,7 +59,13 @@ class YdkPrinter():
         self.packages = sorted(self.packages, key=lambda package: package.name)
         self.deviation_packages = [p for p in self.packages if hasattr(p, 'is_deviation')]
         self.packages = [p for p in self.packages if not hasattr(p, 'is_deviation')]
-        self.subm = sorted(subm, key=lambda package: package.name)
+
+        self.submodules = []
+        for sub in submodules:
+            package = Package()
+            sub.i_package = package
+            package.stmt = sub
+            self.submodules.append(package)
         
         self.initialize_print_environment()
         self.print_files()
@@ -80,10 +83,10 @@ class YdkPrinter():
             self.models_dir + '/_deviate', True)
 
     def initialize_printer_context(self):
-        self.ypy_ctx = common.PrintCtx()
+        self.ypy_ctx = printer_context.PrintCtx()
         self.ypy_ctx.meta = True
         self.ypy_ctx.tab_size = 4
-        self.ypy_ctx.printer = PrinterFactory().get_printer(self.language)(self.ypy_ctx)
+        self.ypy_ctx.printer = LanguageFactory().get_printer(self.language)(self.ypy_ctx)
 
     def print_files(self):
         self.print_modules()
@@ -169,7 +172,7 @@ class YdkPrinter():
                         _EmitArgs(self.ypy_ctx, package))
 
     def print_yang_ns_file(self):
-        packages = self.packages + self.deviation_packages + self.subm
+        packages = self.packages + self.deviation_packages + self.submodules
         self.print_file(get_yang_ns_file_name(self.models_dir),
                         emit_yang_ns,
                         _EmitArgs(self.ypy_ctx, packages))

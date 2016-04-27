@@ -122,6 +122,8 @@ class ClassMetaPrinter(object):
         self.ctx.writeln('},')
 
     def print_meta_class_member(self, meta_info_data, ctx):
+        if meta_info_data is None:
+            return
 
         name = meta_info_data.name
         mtype = meta_info_data.mtype

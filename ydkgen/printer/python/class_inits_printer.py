@@ -53,9 +53,10 @@ class ClassInitsPrinter(object):
             self.ctx.writeln('self.parent = None')
         properties = clazz.properties()
         if len(properties) == 0:
-            # print _is_presence
             if clazz.stmt.search_one('presence'):
                 self._print_presence_property(clazz)
+            elif not clazz.is_rpc() and len(clazz.extends) == 0 and isinstance(clazz.owner, Package):
+                self.ctx.writeln('pass')
         else:
             for prop in properties:
                 self._print_class_inits_property(prop)

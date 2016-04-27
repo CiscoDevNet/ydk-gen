@@ -23,15 +23,9 @@ All rights reserved.
 '''
 import sys
 import os
-import optparse
-import re
-import subprocess
-import shutil
 import unittest
 import filecmp
 import difflib
-from shutil import rmtree
-from filecmp import dircmp
 import ydkgen
 from optparse import OptionParser
 import logging
@@ -39,16 +33,6 @@ import logging
 yang_mod_path = []
 
 logger = logging.getLogger('ydkgen')
-
-def we_are_frozen():
-    #All of the modules are built-in to the interpreter e.g by p2e
-    return hasattr(sys, "frozen")
-
-def module_path():
-    encoding = sys.getfilesystemencoding()
-    if we_are_frozen():
-        return os.path.dirname(unicode(sys.executable, encoding))
-    return os.path.dirname(unicode(__file__, encoding))    
 
 def init_verbose_logger():
     """ Initialize the logging infra and add a handler """
@@ -110,11 +94,11 @@ def suite(profile, actual_directory, expected_directory, groupings_as_class):
             return True
     
         def translate_and_check(self):
-            
-            ydkgen.generate(self.profile, self.actual_directory, True, ydk_root, self.groupings_as_class, True)
-            
+
+            ydkgen.YdkGenerator().generate(self.profile, self.actual_directory, ydk_root, self.groupings_as_class, True)
+
             def check_diff_files(dcmp, diff_files):
-                
+
                 for name in dcmp.diff_files:
                     diff_files.append('File %s/%s does not match'%(dcmp.left,name))
                    

@@ -21,15 +21,12 @@ printer_factory.py
  
 """
 from ydkgen.printer import PythonModulePrinter
-from enum import Enum
 
 
-class PrinterType(Enum):
-    PYTHON=1
-
-
-class PrinterFactory(object):
+class LanguageFactory(object):
         
     def get_printer(self, language):
-        if language == PrinterType.PYTHON:
+        if language == 'python':
             return PythonModulePrinter
+        else:
+            raise Exception('Language {0} not yet supported'.format(language))

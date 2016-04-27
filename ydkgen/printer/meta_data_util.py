@@ -21,7 +21,7 @@
 """
 
 from ydkgen.api_model import Class, Enum, Bits
-from ydkgen.api_model_builder import TypesExtractor
+from ydkgen.builder import TypesExtractor
 from ydkgen.common import convert_to_reStructuredText, get_module_name
 from pyang import types
 from pyang.error import EmitError
@@ -69,6 +69,8 @@ def get_class_docstring(clazz):
                 prop_comment = prop_comment[:-1]
         meta_info_data = get_meta_info_data(
             prop, prop.property_type, prop.stmt.search_one('type'))
+        if meta_info_data is None:
+            continue
         doc_link = meta_info_data.doc_link
 
         prop_restriction = get_property_restriction(meta_info_data)
@@ -224,6 +226,8 @@ def get_meta_info_data(prop, property_type, type_stmt):
         type_spec = type_stmt.i_type_spec
 
         while isinstance(type_spec, PathTypeSpec):
+            if not hasattr(type_spec, 'i_target_node'):
+                return None
             target_type_stmt = type_spec.i_target_node.search_one('type')
             type_spec = target_type_stmt.i_type_spec
 

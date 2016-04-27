@@ -45,11 +45,9 @@ class ApiModelBuilder(object):
         d_modules = [module for module in modules if hasattr(module, 'is_deviation_module')]
         modules = [module for module in modules if not hasattr(module, 'is_deviation_module')]
         only_modules = [module for module in modules if module.keyword == 'module']
-        sub_modules = [module for module in modules if module.keyword == 'submodule']
 
         packages = []
         deviation_packages = []
-        submodule_packages = []
 
         for module in d_modules:
             package = Package()
@@ -57,12 +55,6 @@ class ApiModelBuilder(object):
             package.stmt = module
             package.is_deviation = True
             deviation_packages.append(package)
-
-        for sub_module in sub_modules:
-            package = Package()
-            sub_module.i_package = package
-            package.stmt = sub_module
-            submodule_packages.append(package)
 
         for module in only_modules:
             package = Package()
@@ -75,7 +67,7 @@ class ApiModelBuilder(object):
         # resolve cross references
         for package in packages:
             self._resolve_expanded_cross_references(package)
-        return (packages, submodule_packages)
+        return packages
 
     def _add_enums_and_bits(self, s, pe):
         enum_type_stmt = self.types_extractor.get_enum_type_stmt(s)

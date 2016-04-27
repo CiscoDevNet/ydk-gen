@@ -87,8 +87,11 @@ function run_pygen_test {
 
 # generate ydktest package based on proile
 function generate_ydktest_package {
+    printf "\nGenerating ydktest model APIs with grouping classes\n"
+    run_test python generate.py --profile profiles/test/ydktest.json --python --verbose --no-doc --groupings-as-class
+
     printf "\nGenerating ydktest model APIs\n"
-    python generate.py --profile profiles/test/ydktest.json --python --no-doc --verbose
+    run_test python generate.py --profile profiles/test/ydktest.json --python --verbose
     deactivate
 }
 
@@ -99,6 +102,8 @@ function run_sanity_tests {
     pip install gen-api/python/dist/ydk-0.4.0.tar.gz
     source gen-api/python/env.sh
     cd gen-api/python
+
+    printf "\nRunning sanity tests\n"
     run_test python tests/test_sanity_codec.py
     run_test python tests/test_sanity_types.py
     run_test python tests/test_sanity_filters.py

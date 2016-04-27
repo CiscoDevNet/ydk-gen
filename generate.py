@@ -16,7 +16,7 @@
 
 import sys
 from optparse import OptionParser
-import ydkgen
+from ydkgen import YdkGenerator
 import os
 import logging
 import subprocess
@@ -142,7 +142,7 @@ if __name__ == '__main__':
     else:
         output_directory = options.output_directory
 
-    ydkgen.generate(options.profile, output_directory, options.nodoc, ydk_root,
+    YdkGenerator().generate(options.profile, output_directory, ydk_root,
                     options.groupings_as_class, options.python)
 
     if options.nodoc == False:
