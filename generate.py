@@ -39,18 +39,14 @@ def generate_documentation(output_directory):
 
     py_api_doc_gen = output_directory + '/python/docsgen'
     py_api_doc = output_directory + '/python/docs_expanded'
+    execfile(os.path.join(output_directory, 'python', 'ydk', '_version.py'))
 
     os.mkdir(py_api_doc)
     
     # set documentation version and release from setup.py setting
-    release = ''
-    version = ''
-    with open(ydk_root + '/sdk/python/setup.py') as fd:
-        for line in fd.readlines():
-            if 'version=' in line or 'version =' in line:
-                rv = line[line.find('=') + 1:line.rfind(",")]
-                release = "release=" + rv
-                version = "version=" + rv[:rv.rfind(".")] + "'"
+    version_number = locals()['__version__']
+    release = 'release={}'.format(version_number)
+    version = 'version={}'.format(version_number[:version_number.rfind(".")])
 
     # build docs
     # logger.debug('Building docs using sphinx-build...\n')
