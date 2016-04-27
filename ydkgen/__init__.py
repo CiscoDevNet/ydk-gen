@@ -273,6 +273,7 @@ def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class
     try:
         with open(profile_file) as json_file:
             profile_data = json.load(json_file)
+            version = profile_data['version']
             resolved_model_dir = resolve_profile.resolve_profile(
                 profile_data, ydk_root)
     except IOError as e:
@@ -300,11 +301,17 @@ def generate(profile_file, output_directory, nodoc, ydk_root, groupings_as_class
     shutil.copytree(ydk_root + '/sdk/python', output_directory + '/python',
                     ignore=shutil.ignore_patterns('.gitignore', 'ncclient'))
 
+
     # no errors found now we can begin the transformation
 
     # begin generation
     ydk_dir = '%sydk' % py_sdk_root
     ydk_doc_dir = '%sdocsgen' % py_sdk_root
+
+    # print version file
+    version_file = os.path.join(ydk_dir, '_version.py')
+    with open(version_file, 'w') as version_fd:
+        version_fd.write('__version__ = "{}"'.format(version))
 
     #create the packages
     packages = []
