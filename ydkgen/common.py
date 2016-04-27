@@ -174,6 +174,15 @@ class PrintCtx(object):
         self.fd.write(msg)
         self.fd.write('\n')
 
+    def writelns(self, lines, tab=0):
+        indent = ''
+        if self.lvl + tab > 0:
+            indent = ' ' * ((self.lvl + tab) * self.tab_size)
+        
+        fmt = '\n%s' % indent
+        lines = fmt.join(lines)
+        self.fd.write('%s%s' % (indent, lines))
+
     def bline(self):
         self.fd.write('\n')
 
@@ -209,8 +218,8 @@ def merge_file_path_segments(segs):
 
     for seg in segs:
         if not seg.length() == 0 and not return_seg.endswith('/'):
-            return_seg = return_seg + '/'
-        return_seg = return_seg + seg
+            return_seg = '%s/' % (return_seg)
+        return_seg = '%s%s' % (return_seg, seg)
     return return_seg
 
 
@@ -253,16 +262,16 @@ def split_to_words(input_text):
                         word = ch
                     else:
                         # add it to the current word
-                        word = word + ch
+                        word = '%s%s' % (word, ch)
                 else:
-                    word = word + ch
+                    word = '%s%s' % (word, ch)
 
             previous_caps = True
         else:
             if word is None:
                 word = ch
             else:
-                word = word + ch
+                word = '%s%s' % (word, ch)
             previous_caps = False
 
     words.append(word)

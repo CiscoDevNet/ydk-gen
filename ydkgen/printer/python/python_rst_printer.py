@@ -43,32 +43,37 @@ class PythonRstPrinter(object):
             raise EmitError('Unrecognized named_element')
 
     def print_ydk_models_rst(self, packages):
+        lines = []
         title = 'YDK Model API'
-        self.ctx.writeln(title)
-        self.ctx.writeln('=' * len(title))
-        self.ctx.bline()
-        self.ctx.bline()
-        self.ctx.writeln('.. toctree::')
+        lines.append(title)
+        lines.append('=' * len(title))
+        lines.append('')
+        lines.append('.. toctree::')
+        self.ctx.writelns(lines)
+
         self.ctx.lvl_inc()
-        self.ctx.writeln(':maxdepth: 1\n')
+        lines = []
+        lines.append(':maxdepth: 1\n')
 
         for package in packages:
             line = '%s <%s>' % (package.name, get_rst_file_name(package))
-            self.ctx.writeln(line)
+            lines.append(line)
 
+        self.ctx.writelns(lines)
         self.ctx.lvl_dec()
 
     def _write_toctree(self, named_element):
         self.ctx.writeln('.. toctree::')
         self.ctx.lvl_inc()
-        self.ctx.writeln(':maxdepth: 1\n')
-	owned_elements = named_element.owned_elements
+        lines = []
+        lines.append(':maxdepth: 1\n')
+        owned_elements = named_element.owned_elements
         owned_elements.reverse()
         for c in owned_elements:
             if isinstance(c, Class) or isinstance(c, Enum):
-                #self.writeln(' :py:class:`%s <%s.%s>`'%(c.name, c.get_py_mod_name(), c.qn()))
-                self.ctx.writeln('%s <%s>' % (c.name, get_rst_file_name(c)))
-        self.ctx.bline()
+                lines.append('%s <%s>' % (c.name, get_rst_file_name(c)))
+        lines.append('')
+        self.ctx.writelns(lines)
         self.ctx.lvl_dec()
 
     def _get_class_hierarchy(self, clazz):
@@ -78,16 +83,16 @@ class PythonRstPrinter(object):
             parent_list.append(parent)
             parent = parent.owner
 
-        clazz_hierarchy = 'Class Hierarchy \:'
+        clazz_hierarchy = ['Class Hierarchy \:']
         if len(parent_list) > 0:
             for parent in reversed(parent_list):
-                if not clazz_hierarchy[-1:] == ':':
-                    clazz_hierarchy += ' \>'
+                if not clazz_hierarchy[0][-1:] == ':':
+                    clazz_hierarchy.append(' \>')
 
-                clazz_hierarchy += ' :py:class:`%s <%s.%s>`' % (
-                    parent.name, parent.get_py_mod_name(), parent.qn())
+                clazz_hierarchy.append(' :py:class:`%s <%s.%s>`' % (
+                    parent.name, parent.get_py_mod_name(), parent.qn()))
 
-            return clazz_hierarchy
+            return ''.join(clazz_hierarchy)
         else:
             return None
 
@@ -95,113 +100,125 @@ class PythonRstPrinter(object):
         class_docstring = get_class_docstring(clazz)
 
         # Title
-        line = clazz.name
+        lines = []
+        lines.append(clazz.name)
+        lines.append('=' * len(clazz.name))
+        lines.append('\n')
+        self.ctx.writelns(lines)
 
-        self.ctx.writeln(line)
-        self.ctx.writeln('=' * len(line))
-        self.ctx.bline()
         # TOC Tree
         self._write_toctree(clazz)
 
-        self.ctx.bline()
-
-        self.ctx.writeln('.. py:currentmodule:: %s' %
+        lines = []
+        lines.append('')
+        lines.append('.. py:currentmodule:: %s' %
                          (clazz.get_py_mod_name()))
-        self.ctx.bline()
+        lines.append('\n')
 
         # Class Header
-        #self.rst_printer.writeln('.. _%s:' % (get_sphinx_ref_label(clazz)))
-        self.ctx.writeln('.. py:class:: %s' % (clazz.qn()))
-        self.ctx.bline()
+        lines.append('.. py:class:: %s' % (clazz.qn()))
+        lines.append('\n')
+
+        self.ctx.writelns(lines)
         self.ctx.lvl_inc()
 
         # Bases
+        lines = []
         bases = [':class:`object`']
         if clazz.extends:
             for item in clazz.extends:
                 bases.append(':class:`%s`' % (item.name))
-        self.ctx.writeln('Bases: %s' % (', '.join(bases)))
-        self.ctx.bline()
+        lines.append('Bases: %s' % (', '.join(bases)))
+        lines.append('\n')
 
         # Class Hierarchy
         if not clazz.is_identity() and not clazz.is_grouping():
             clazz_hierarchy = self._get_class_hierarchy(clazz)
             if clazz_hierarchy is not None:
-                self.ctx.writeln(clazz_hierarchy)
-                self.ctx.bline()
+                lines.append(clazz_hierarchy)
+                lines.append('\n')
 
         # Presence Container
-        self.ctx.bline()
+        lines.append('\n')
         if clazz.stmt.search_one('presence') is not None:
             line = """This class is a :ref:`presence class<presence-class>`"""
-            self.ctx.writeln(line)
-            self.ctx.bline()
+            lines.append(line)
+            lines.append('\n')
 
         # Doc String
         if len(class_docstring) > 0:
             for line in class_docstring.split('\n'):
                 if line.strip() != '':
-                    self.ctx.writeln(line)
-                    self.ctx.bline()
+                    lines.append(line)
+                    lines.append('\n')
 
         if not clazz.is_identity() and not clazz.is_grouping():
             # Config Method
-            self.ctx.writeln('.. method:: is_config()\n')
+            lines.append('.. method:: is_config()\n')
+            self.ctx.writelns(lines)
             self.ctx.lvl_inc()
             self.ctx.writeln("Returns True if this instance \
                 represents config data else returns False")
             self.ctx.lvl_dec()
-
             self.ctx.bline()
         self.ctx.lvl_dec()
 
     def _print_package_rst(self, package):
         # Header
+        lines = []
         line = package.name
         if package.stmt.keyword == 'module':
-            line = line + ' module'
-        self.ctx.writeln(line)
-        self.ctx.writeln('=' * len(line))
-        self.ctx.bline()
+            line = '%s module' % line
+        lines.append(line)
+        lines.append('=' * len(line))
+        lines.append('\n')
+        self.ctx.writelns(lines)
         self._write_toctree(package)
-        self.ctx.bline()
-        self.ctx.writeln('.. py:module:: %s.%s' %
+
+        lines = []
+        lines.append('\n')
+        lines.append('.. py:module:: %s.%s' %
                          (package.get_py_mod_name(), package.name))
-        self.ctx.bline()
-        self.ctx.writeln('%s' % package.name)
-        self.ctx.bline()
+        lines.append('\n')
+        lines.append('%s' % package.name)
+        lines.append('\n')
 
         if package.comment is not None:
-            self.ctx.writeln(package.comment)
+            lines.append(package.comment)
+
+        self.ctx.writelns(lines)
 
     def _print_enum_rst(self, enumz):
-
+        lines = []
         # Title
         line = enumz.name
-        self.ctx.writeln(line)
-        self.ctx.writeln('=' * len(line))
-        self.ctx.bline()
+        lines.append(line)
+        lines.append('=' * len(line))
+        lines.append('\n')
 
-        self.ctx.writeln('.. py:currentmodule:: %s' %
+        lines.append('.. py:currentmodule:: %s' %
                          (enumz.get_py_mod_name()))
-        self.ctx.bline()
+        lines.append('\n')
 
-        self.ctx.writeln('.. py:class:: %s' % (enumz.qn()))
-        self.ctx.bline()
+        lines.append('.. py:class:: %s' % (enumz.qn()))
+        lines.append('\n')
+
+        self.ctx.writelns(lines)
         self.ctx.lvl_inc()
 
         # Bases
+        lines = []
         bases = [':class:`enum.Enum`']
-        self.ctx.writeln('Bases: %s' % (', '.join(bases)))
-        self.ctx.bline()
+        lines.append('Bases: %s' % (', '.join(bases)))
+        lines.append('\n')
 
         enumz_docstring = get_enum_class_docstring(enumz)
 
         if len(enumz_docstring):
             for line in enumz_docstring.split('\n'):
                 if line.strip() != '':
-                    self.ctx.writeln(line)
-                    self.ctx.bline()
+                    lines.append(line)
+                    lines.append('\n')
 
-
+        self.ctx.writelns(lines)
         self.ctx.lvl_dec()
