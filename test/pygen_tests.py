@@ -105,6 +105,8 @@ def suite(profile, actual_directory, expected_directory, groupings_as_class):
                 for sub_dcmp in dcmp.subdirs.values():
                     check_diff_files(sub_dcmp, diff_files)
             
+            print self.actual_directory+'/python/ydk/models'
+            print self.expected_directory + '/ydk/models'
             self.assertTrue(self.are_dir_trees_equal(self.actual_directory+'/python/ydk/models', self.expected_directory + '/ydk/models', ['.gitignore']))
 
 

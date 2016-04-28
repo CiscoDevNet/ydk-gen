@@ -29,7 +29,7 @@ class A(object):
     """
     
     
-    .. attribute:: a
+    .. attribute:: a  <key>
     
     	blah
     	**type**\: str

@@ -318,7 +318,7 @@ class A(object):
         """
         
         
-        .. attribute:: number
+        .. attribute:: number  <key>
         
         	
         	**type**\: int

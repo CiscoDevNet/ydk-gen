@@ -75,7 +75,12 @@ def get_class_docstring(clazz):
 
         prop_restriction = get_property_restriction(meta_info_data)
 
-        properties_description.append('.. attribute:: %s\n\n' % (prop.name))
+        attribute_title = prop.name
+
+        keys = clazz.get_key_props()
+        if prop in keys:
+            attribute_title = '%s  <key>' % attribute_title
+        properties_description.append('.. attribute:: %s\n\n' % (attribute_title))
 
         properties_description.append('\t%s\n' % (
             convert_to_reStructuredText(prop_comment)))

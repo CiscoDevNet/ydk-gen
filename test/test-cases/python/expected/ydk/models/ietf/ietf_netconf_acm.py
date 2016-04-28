@@ -191,7 +191,7 @@ class Nacm(object):
             configured entries, not any entries learned from
             any transport protocols.
             
-            .. attribute:: name
+            .. attribute:: name  <key>
             
             	Group name associated with this entry
             	**type**\: str
@@ -275,7 +275,7 @@ class Nacm(object):
         """
         An ordered collection of access control rules.
         
-        .. attribute:: name
+        .. attribute:: name  <key>
         
         	Arbitrary name assigned to the rule\-list
         	**type**\: str
@@ -318,7 +318,7 @@ class Nacm(object):
             matches, the 'action' leaf determines if access is granted
             or not.
             
-            .. attribute:: name
+            .. attribute:: name  <key>
             
             	Arbitrary name assigned to the rule
             	**type**\: str
