@@ -20,7 +20,8 @@
 """
 from ydk.errors import YPYDataValidationError
 from ydk.types import YList, READ, DELETE
-from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION, ANYXML_CLASS
+from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, \
+    REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION, ANYXML_CLASS
 from .service import Service
 
 
@@ -81,18 +82,28 @@ class MetaService(Service):
                 deviation_tables: A dictionary of existing deviation tables
 
         """
-        if len(deviation_tables) == 0:
-            inject_imeta_helper(entity, deviation_tables)
+        if isinstance(entity, YList):
+            for entry in entity:
+                MetaService.inject_imeta(entry, deviation_tables)
         else:
-            for deviation_table in deviation_tables.values():
-                inject_imeta_helper(entity, deviation_table)
+            if len(deviation_tables) == 0:
+                inject_imeta_helper(entity, deviation_tables)
+            else:
+                for deviation_table in deviation_tables.values():
+                    inject_imeta_helper(entity, deviation_table)
 
 
 
 def get_active_deviation_module_names(capabilities, entity):
     """ Return active deviation module names """
-
-    entity_module_name = entity._meta_info().module_name
+    # entity could be a list
+    if isinstance(entity, YList):
+        if entity:
+            entity_module_name = entity[0]._meta_info().module_name
+        else:
+            return
+    else:
+        entity_module_name = entity._meta_info().module_name
     active_dmodule_names = []
 
     def parse_uri(uri):
@@ -138,7 +149,8 @@ def modify_member_meta(full_name, deviation_table, member):
                 setattr(member, '_%s' % key, val)
             except:
                 raise YPYDataValidationError
-        else:
+        elif key != 'default':
+            # TODO: other keyword not necessary to modify in client side
             try:
                 delattr(member, '_%s' % key)
             except:

@@ -101,6 +101,12 @@ _deviation_table = {
             ),
         ]
     },
+    'Runner.Ytypes.BuiltInT.bits_value' : {
+        'deviation_typ' : 'delete',
+        'keyword_value' : [
+            ('default', 'auto_sense_speed'),
+        ]
+    },
     'Runner.Ytypes.BuiltInT.bool_value' : {
         'deviation_typ' : 'replace',
         'keyword_value' : [

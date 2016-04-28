@@ -25,7 +25,7 @@ from lxml import etree
 from ncclient import manager
 from ncclient.operations import RPC, RPCReply
 
-from ydk._core._dm_meta_info import REFERENCE_IDENTITY_CLASS
+from ydk._core._dm_meta_info import REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS
 from ydk.errors import YPYDataValidationError, YPYError, YPYErrorCode
 from ydk.types import Empty, DELETE, READ, Decimal64, YList
 
@@ -249,6 +249,8 @@ class _NCClientSPPlugin(_SPPlugin):
         return self.head
 
     def _encode_edit_request(self, root, entity, optype):
+        if isinstance(entity, YList):
+            entity = entity.parent
         if not entity.is_config():
             self._raise_read_only_edit_error()
         root = self._create_element(root,
@@ -384,6 +386,8 @@ class _NCClientSPPlugin(_SPPlugin):
             member_elem.text = 'idx:%s' % key_value._meta_info().yang_name
         else:
             member_elem = etree.SubElement(root, key.name)
+            if key.mtype == REFERENCE_ENUM_CLASS:
+                key_value = key_value.name.replace('_', '-').lower()
             member_elem.text = str(key_value)
         
     def _get_parent_tuple_list(self, current_parent, current_meta_info):

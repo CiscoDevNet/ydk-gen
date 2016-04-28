@@ -127,6 +127,13 @@ module ydktest-sanity-deviations-types {
         }
       }
     }
+
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:bits-value {
+      deviate delete {
+        default "auto-sense-speed";
+      }
+    }
+
     deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:bits-value {
       deviate replace {
         type union {
