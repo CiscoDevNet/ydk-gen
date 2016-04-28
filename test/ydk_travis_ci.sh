@@ -99,7 +99,7 @@ function generate_ydktest_package {
 function run_sanity_tests {
     virtualenv myenv
     source myenv/bin/activate
-    pip install gen-api/python/dist/ydk-0.4.0.tar.gz
+    pip install gen-api/python/dist/ydk*.tar.gz
     source gen-api/python/env.sh
     cd gen-api/python
 
@@ -145,7 +145,7 @@ function run_deviation_sanity {
     python generate.py -p --no-doc --profile profiles/test/deviation/deviation.json
     deactivate
     source myenv/bin/activate
-    pip install gen-api/python/dist/ydk-0.4.0.tar.gz
+    pip install gen-api/python/dist/ydk*.tar.gz
     source gen-api/python/env.sh
     cd gen-api/python
     run_test python tests/test_sanity_deviation_bgp.py
