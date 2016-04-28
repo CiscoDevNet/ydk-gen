@@ -12,9 +12,24 @@ python:
 before_install:
     - docker pull ydkdev/confd
 
+install:
+    - pip install coveralls
+
 script:
     - export PR=https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST
     - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq -r .head.ref`; fi)
     - export REPO=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_REPO_SLUG; else echo `curl -s $PR | jq -r .head.repo.full_name`; fi)
     - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, REPO=$REPO"
     - docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH
+    - export docker_id=`docker ps -l -q`
+    - echo `pwd`
+    - docker cp $docker_id:/root/ydk-gen/.coverage .coverage
+    - export YDKGEN_HOME=`pwd`
+    - pip install coverage
+    - pip install -r requirements.txt 
+    - coverage run -a --source=ydkgen generate.py --profile profiles/test/ydktest.json
+    - export PYTHONPATH=.:$PYTHONPATH
+    - coverage run -a --source=ydkgen test/pygen_tests.py
+
+after_success:
+    - coveralls

@@ -3,6 +3,7 @@
 # YDK-GEN
 
 [![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-gen)
+[![Coverage Status](https://coveralls.io/repos/github/CiscoDevNet/ydk-gen/badge.svg?branch=coveralls)](https://coveralls.io/github/CiscoDevNet/ydk-gen?branch=coveralls)
 
 **ydk-gen** is a tool which is meant to be used to generate bindings for different languages like python, C++ etc from a given set of YANG models. The input YANG models are specified in a profile file.
 

@@ -15,7 +15,7 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 #
-# Script for running ydk CI on docker
+# Script for running ydk CI on docker via travis-ci.org
 #
 # ------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ BGP_DEVIATION_FXS=$FXS_DIR/bgp_deviation/
 YDKTEST_DEVIATION_FXS=$FXS_DIR/ydktest_deviation/
 
 function run_test {
-    "$@"
+    coverage run --source=ydkgen,sdk/python/ydk -a $@ 
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -47,6 +47,18 @@ function clone_repo {
 function set_root {
     cd ydk-gen
     YDK_ROOT=`pwd`
+    export YDKGEN_HOME=`pwd`
+}
+
+function setup_env {
+    virtualenv myenv
+    source myenv/bin/activate
+    pip install coverage
+    pip install -r requirements.txt 
+}
+
+function teardown_env {
+    deactivate
 }
 
 # compile yang to fxs
@@ -81,40 +93,36 @@ function init_confd {
 # pygen test
 function run_pygen_test {
     cd $YDK_ROOT
-    source install.sh
     export PYTHONPATH=.:$PYTHONPATH
-    run_test python test/pygen_tests.py
+    run_test test/pygen_tests.py
 }
 
 # generate ydktest package based on proile
 function generate_ydktest_package {
     printf "\nGenerating ydktest model APIs with grouping classes\n"
-    run_test python generate.py --profile profiles/test/ydktest.json --python --verbose --groupings-as-class
+    run_test generate.py --profile profiles/test/ydktest.json --python --verbose --groupings-as-class
 
     printf "\nGenerating ydktest model APIs with documentation\n"
-    run_test python generate.py --profile profiles/test/ydktest.json --python --verbose --generate-doc
-    deactivate
+    run_test generate.py --profile profiles/test/ydktest.json --python --verbose --generate-doc
 }
 
 # sanity tests
 function run_sanity_tests {
-    virtualenv myenv
-    source myenv/bin/activate
     pip install gen-api/python/dist/ydk*.tar.gz
     source gen-api/python/env.sh
-    cd gen-api/python
 
     printf "\nRunning sanity tests\n"
-    run_test python tests/test_sanity_codec.py
-    run_test python tests/test_sanity_types.py
-    run_test python tests/test_sanity_filters.py
-    run_test python tests/test_sanity_levels.py
-    run_test python tests/test_sanity_filter_read.py
-    run_test python tests/test_sanity_netconf.py
-    run_test python tests/test_sanity_rpc.py
-    run_test python tests/test_sanity_delete.py
-    cd ydk/tests
-    run_test python import_tests.py
+    export PYTHONPATH=./gen-api/python:$PYTHONPATH
+    run_test gen-api/python/tests/test_sanity_codec.py
+    run_test gen-api/python/tests/test_sanity_types.py
+    run_test gen-api/python/tests/test_sanity_filters.py
+    run_test gen-api/python/tests/test_sanity_levels.py
+    run_test gen-api/python/tests/test_sanity_filter_read.py
+    run_test gen-api/python/tests/test_sanity_netconf.py
+    run_test gen-api/python/tests/test_sanity_rpc.py
+    run_test gen-api/python/tests/test_sanity_delete.py
+
+    run_test gen-api/python/ydk/tests/import_tests.py
 }
 
 # deviation tests
@@ -134,22 +142,15 @@ function setup_deviation_sanity_models {
 function run_deviation_sanity {
     cd $YDK_ROOT
     source gen-api/python/env.sh
-    cd gen-api/python
-    export PYTHONPATH=.:$PYTHONPATH
-    run_test python tests/test_sanity_deviation.py
+    export PYTHONPATH=./gen-api/python:$PYTHONPATH
+    run_test gen-api/python/tests/test_sanity_deviation.py
 
     # bgp deviation
-    deactivate
-    cd $YDK_ROOT
-    source mypython/bin/activate
     printf "\nGenerating ydktest deviation model APIs\n"
     python generate.py --python --profile profiles/test/deviation/deviation.json
-    deactivate
-    source myenv/bin/activate
     pip install gen-api/python/dist/ydk*.tar.gz
     source gen-api/python/env.sh
-    cd gen-api/python
-    run_test python tests/test_sanity_deviation_bgp.py
+    run_test gen-api/python/tests/test_sanity_deviation_bgp.py
 }
 
 # Execution of the script starts here
@@ -171,6 +172,7 @@ done
 
 clone_repo
 set_root
+setup_env
 compile_yang_to_fxs
 init_confd
 run_pygen_test
@@ -178,6 +180,9 @@ generate_ydktest_package
 run_sanity_tests
 setup_deviation_sanity_models
 run_deviation_sanity
+coverage report
+teardown_env
+
 
 exit
 
