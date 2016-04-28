@@ -19,6 +19,7 @@
 #
 # ------------------------------------------------------------------
 
+
 ROOT=/root
 CONFD=/root/confd
 CONFD_TARGET_DIR=$CONFD/etc/confd
@@ -88,10 +89,10 @@ function run_pygen_test {
 # generate ydktest package based on proile
 function generate_ydktest_package {
     printf "\nGenerating ydktest model APIs with grouping classes\n"
-    run_test python generate.py --profile profiles/test/ydktest.json --python --verbose --no-doc --groupings-as-class
+    run_test python generate.py --profile profiles/test/ydktest.json --python --verbose --groupings-as-class
 
-    printf "\nGenerating ydktest model APIs\n"
-    run_test python generate.py --profile profiles/test/ydktest.json --python --verbose
+    printf "\nGenerating ydktest model APIs with documentation\n"
+    run_test python generate.py --profile profiles/test/ydktest.json --python --verbose --generate-doc
     deactivate
 }
 
@@ -142,7 +143,7 @@ function run_deviation_sanity {
     cd $YDK_ROOT
     source mypython/bin/activate
     printf "\nGenerating ydktest deviation model APIs\n"
-    python generate.py -p --no-doc --profile profiles/test/deviation/deviation.json
+    python generate.py --python --profile profiles/test/deviation/deviation.json
     deactivate
     source myenv/bin/activate
     pip install gen-api/python/dist/ydk*.tar.gz
@@ -179,3 +180,4 @@ setup_deviation_sanity_models
 run_deviation_sanity
 
 exit
+

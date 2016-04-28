@@ -1,3 +1,4 @@
+#!/bin/bash
 #  ----------------------------------------------------------------
 # Copyright 2016 Cisco Systems
 #
@@ -13,23 +14,51 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# -*-sh-*-
+#
 # Prepare virtual environment for ydk-gen,
 # Requirement: device with pip and virtualenv installed
+#
+# ------------------------------------------------------------------
+
+
+command -v pip >/dev/null 2>&1 || {
+    echo "pip not found.. please install python pip before continuing !!" >&2;
+    return
+}
+
+command -v virtualenv >/dev/null 2>&1 || {
+    echo ""
+    echo "Installing virtualenv"
+    pip install virtualenv 
+    echo ""
+}
 
 export YDKGEN_HOME=`pwd`
 MY_ENV=mypython
-OUT_DIR=$YDKGEN_HOME/gen-api/python
-PROFILE_FILE=$YDKGEN_HOME/profiles/ydk/ydk_0_4_0.json
 
 # Install virtual environment
-echo "Installing virtual environment under ${PWD}"
-virtualenv $MY_ENV
-source $MY_ENV/bin/activate
+echo ""
+echo "Creating/activating virtual environment"
+echo ""
+if [ -f "$MY_ENV/bin/activate" ]; then
+    source $MY_ENV/bin/activate
+else
+    virtualenv -p python2.7 $MY_ENV
+    source $MY_ENV/bin/activate
+fi
 
 # Install pip dependency packages
-echo "Installing python dependency"
+echo ""
+echo "Installing python dependencies.."
+echo ""
 pip install -r requirements.txt
 
-echo "To exit current environment:"
-echo "  $ deactivate"
+echo "Setup completed.. "
+echo ""
+echo "To exit virtualenv, run the below command from your shell/terminal:"
+echo "deactivate"
+echo ""
+echo "To generate YDK model APIs for your profile, run the below command from your shell/terminal:"
+echo "python generate.py --profile <profile-file>"
+echo ""
+

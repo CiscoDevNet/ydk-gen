@@ -26,8 +26,8 @@ Options:
                       ignored. Profile options override CLI currently
   -p, --python        Generate Python SDK
   -v, --verbose       Verbose mode
-  --no-doc            Skip generation of documentation
-  --output-directory  The output-directory . If not specified the output can be found under YDKGEN_HOME/gen-api/python
+  --generate-doc      Generation documentation
+  --output-directory  The output-directory . If not specified the output can be found under ydk-gen/gen-api/python
 ```
 
 ### Profiles
@@ -37,10 +37,10 @@ Options:
 1. Generate the SDK using a command of the form:
 
 ```
-python generate.py -p --profile profiles/cisco-ios-xr/xr600-native-oc-bgp.json --no-doc
+python generate.py --python --profile profiles/cisco-ios-xr/xr600-native-oc-bgp.json
 ```
 
-The generated SDK will in ```<git_root>/ydk/gen-api/python```.
+The generated SDK will in ```ydk-gen/gen-api/python```.
 
 #### Details
 

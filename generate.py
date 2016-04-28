@@ -87,7 +87,6 @@ def create_pip_package(output_directory):
 
 
 if __name__ == '__main__':
-
     parser = OptionParser(usage="usage: %prog [options]",
                           version="%prog 0.4.0")
 
@@ -104,7 +103,7 @@ if __name__ == '__main__':
     parser.add_option("-p", "--python",
                       action="store_true",
                       dest="python",
-                      default=False,
+                      default=True,
                       help="Generate Python SDK")
 
     parser.add_option("-v", "--verbose",
@@ -113,17 +112,23 @@ if __name__ == '__main__':
                       default=False,
                       help="Verbose mode")
 
-    parser.add_option("--no-doc",
+    parser.add_option("--generate-doc",
                       action="store_true",
-                      dest="nodoc",
+                      dest="gendoc",
                       default=False,
-                      help="Skip generation of documentation")
+                      help="Generate documentation")
 
     parser.add_option("--groupings-as-class",
                       action="store_true",
                       dest="groupings_as_class",
                       default=False,
                       help="Consider yang groupings as classes.")
+
+    try:
+        arg = sys.argv[1]
+    except IndexError:
+        parser.print_help()
+        sys.exit(1)
 
     (options, args) = parser.parse_args()
 
@@ -145,7 +150,7 @@ if __name__ == '__main__':
     YdkGenerator().generate(options.profile, output_directory, ydk_root,
                     options.groupings_as_class, options.python)
 
-    if options.nodoc == False:
+    if options.gendoc == True:
         generate_documentation(output_directory)
 
     create_pip_package(output_directory)
