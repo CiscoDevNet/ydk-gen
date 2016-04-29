@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/CiscoDevNet/ydk-gen.png?label=ready&title=Ready)](https://waffle.io/CiscoDevNet/ydk-gen)
 <a href="https://github.com/CiscoDevNet/ydk-gen"><img src="https://cloud.githubusercontent.com/assets/17089095/14834057/2e1fe270-0bb7-11e6-9e94-73dd7d71e87d.png" height="240" width="240" ></a>
 
 # YDK-GEN
