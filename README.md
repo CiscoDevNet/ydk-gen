@@ -4,6 +4,21 @@
 
 [![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-gen)
 
+##System Requirements:
+
+####Linux
+Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
+```
+user-machine# sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev
+```
+
+####Mac
+It is recommended to install homebrew (http://brew.sh) and Xcode command line tools on your system before installing YDK-Py:
+```
+user-machine# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+user-machine# xcode-select --install
+```
+
 ## Installation
 
 ```
@@ -11,7 +26,6 @@ user-machine# git clone https://github.com/CiscoDevNet/ydk-gen.git
 user-machine# cd ydk-gen
 user-machine# source install.sh
 ```
-
 
 ## Usage 
 
