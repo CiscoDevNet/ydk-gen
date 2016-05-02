@@ -59,12 +59,13 @@ class _SPPlugin(object):
 
 class _NCClientSPPlugin(_SPPlugin):
 
-    def __init__(self, service_protocol_name='Netconf protocol'):
+    def __init__(self, service_protocol_name='Netconf protocol', timeout=30):
         self._service_protocol_name = service_protocol_name
         self.head = None
         self._nc_manager = None
         self.netconf_sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
         self.separator = '*' * 28
+        self.timeout = timeout
 
     def encode(self, entity, optype, only_config=False):
         root = self._create_root()
@@ -162,7 +163,7 @@ class _NCClientSPPlugin(_SPPlugin):
         '''
             Raises exception on error, else returns result
         '''
-        service_provider_rpc = self._create_rpc_instance(session_manager)
+        service_provider_rpc = self._create_rpc_instance(session_manager, self.timeout)
         reply_str = "FAILED!"
         if len(payload) == 0:
             return reply_str
@@ -171,7 +172,7 @@ class _NCClientSPPlugin(_SPPlugin):
         reply_str = service_provider_rpc._request(payload)
         return self._handle_rpc_reply(session_manager, optype, payload, reply_str)
 
-    def _create_rpc_instance(self, session_manager):
+    def _create_rpc_instance(self, session_manager, timeout):
         class _SP_RPC(RPC):
             def _wrap(self, subele):
                 return subele
@@ -182,7 +183,7 @@ class _NCClientSPPlugin(_SPPlugin):
                 return True
 
         RPC.REPLY_CLS = _SP_REPLY_CLS
-        return _SP_RPC(session_manager._session, session_manager._device_handler)
+        return _SP_RPC(session_manager._session, session_manager._device_handler, timeout=timeout)
 
     def _handle_rpc_reply(self, session_manager, optype, payload, reply_str):
         err, pathlist = check_errors(reply_str.xml)
