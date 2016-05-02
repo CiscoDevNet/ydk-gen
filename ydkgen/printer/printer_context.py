@@ -102,6 +102,12 @@ class PrintCtx(object):
         lines = fmt.join(lines)
         self.fd.write('%s%s' % (indent, lines))
 
+    def get_indent(self):
+        indent = ''
+        if self.lvl > 0:
+            indent = ' ' * (self.lvl * self.tab_size)
+        return indent
+
     def bline(self):
         self.fd.write('\n')
 
