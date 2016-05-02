@@ -26,7 +26,7 @@ from ._ydk_types import _DEFAULT_ENCODING_FORMAT, _DEFAULT_NC_PORT
 
 class _NetworkElement(object):
 
-    def __init__(self, session_config, service_protocol_type, encode_format=None, port=None):
+    def __init__(self, session_config, service_protocol_type, encode_format=None, port=None, timeout=30):
 
         self.session_config = session_config
 
@@ -44,9 +44,10 @@ class _NetworkElement(object):
             self.port = port
 
         self.sp_instance = None
+        self.timeout = timeout
 
     def connect(self):
-        netconf_client = _NCClientSPPlugin('Netconf Protocol')
+        netconf_client = _NCClientSPPlugin('Netconf Protocol', self.timeout)
         self.sp_instance = netconf_client
         netconf_client._connect(self.session_config, self.port)
         return True

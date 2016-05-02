@@ -22,6 +22,7 @@ uses ncclient (a Netconf client library) to provide CRUD services.
 	:param username: The name of the user
 	:param password: The password to use
 	:param protocol: One of either ssh or tcp
+	:timeout: Default to 30
 	
 	.. py:method:: close()
 

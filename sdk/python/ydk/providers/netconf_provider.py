@@ -38,6 +38,7 @@ class NetconfServiceProvider(ServiceProvider):
             - username - The name of the user
             - password - The password to use
             - protocol - one of either ssh or tcp    
+            - timeout  - Default to 30
     """
 
     def __init__(self, **kwargs):
@@ -46,6 +47,7 @@ class NetconfServiceProvider(ServiceProvider):
         self.username = kwargs.get('username', 'admin')
         self.password = kwargs.get('password', 'admin')
         self.protocol = kwargs.get('protocol', 'ssh')
+        self.timeout = kwargs.get('timeout', 30)
 
         if self.protocol == 'tcp':
             self.session_config = _SessionConfig(
@@ -64,7 +66,8 @@ class NetconfServiceProvider(ServiceProvider):
 
         self.ne = _NetworkElement(
                                   self._session_config,
-                                  _ServiceProtocolName.NETCONF)
+                                  _ServiceProtocolName.NETCONF,
+                                  self.timeout)
 
         self.netconf_sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
         self.ne.connect()
