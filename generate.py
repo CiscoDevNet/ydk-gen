@@ -17,6 +17,7 @@
 import sys
 from optparse import OptionParser
 from ydkgen import YdkGenerator
+from git import Repo
 import os
 import logging
 import subprocess
@@ -35,7 +36,7 @@ def init_verbose_logger():
     logger.addHandler(ch)
 
 
-def generate_documentation(output_directory):
+def generate_documentation(output_directory, ydk_root):
 
     py_api_doc_gen = output_directory + '/python/docsgen'
     py_api_doc = output_directory + '/python/docs_expanded'
@@ -47,6 +48,21 @@ def generate_documentation(output_directory):
     version_number = locals()['__version__']
     release = 'release={}'.format(version_number)
     version = 'version={}'.format(version_number[:version_number.rfind(".")])
+
+    # print commit id page
+    repo = Repo(ydk_root)
+    remote = repo.remote().name
+    branch = repo.active_branch.name
+    url = repo.remote().url.split('://')[-1].split('.git')[0]
+    commit_id = repo.rev_parse(remote + '/' + branch).hexsha
+
+    with open(os.path.join(py_api_doc_gen, 'commit_id.rst'), 'w') as id_file:
+        id_file.write('Commit id\n'
+                      '=========\n'
+                      '\n'
+                      'This ydk-py is generated from `this commit '
+                      '<https://{}/commit/{}>`_.'.format(url, commit_id)
+                      )
 
     # build docs
     # logger.debug('Building docs using sphinx-build...\n')
@@ -151,7 +167,7 @@ if __name__ == '__main__':
                     options.groupings_as_class, options.python)
 
     if options.gendoc == True:
-        generate_documentation(output_directory)
+        generate_documentation(output_directory, ydk_root)
 
     create_pip_package(output_directory)
 
