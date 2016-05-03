@@ -38,7 +38,7 @@ function run_test_no_coverage {
 }
 
 function run_test {
-    coverage run --source=ydkgen,gen-api -a $@ 
+    coverage run --source=ydkgen,sdk -a $@ 
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -118,19 +118,21 @@ function generate_ydktest_package {
 # sanity tests
 function run_sanity_tests {
     pip install gen-api/python/dist/ydk*.tar.gz
-    source gen-api/python/env.sh
+    source sdk/python/env.sh
 
     printf "\nRunning sanity tests\n"
-    export PYTHONPATH=./gen-api/python:$PYTHONPATH
-    run_test gen-api/python/tests/test_sanity_codec.py
-    run_test gen-api/python/tests/test_sanity_types.py
-    run_test gen-api/python/tests/test_sanity_filters.py
-    run_test gen-api/python/tests/test_sanity_levels.py
-    run_test gen-api/python/tests/test_sanity_filter_read.py
-    run_test gen-api/python/tests/test_sanity_netconf.py
-    run_test gen-api/python/tests/test_sanity_rpc.py
-    run_test gen-api/python/tests/test_sanity_delete.py
+    export PYTHONPATH=./sdk/python:$PYTHONPATH
+    cp -r gen-api/python/ydk/models/* sdk/python/ydk/models
+    run_test sdk/python/tests/test_sanity_codec.py
+    run_test sdk/python/tests/test_sanity_types.py
+    run_test sdk/python/tests/test_sanity_filters.py
+    run_test sdk/python/tests/test_sanity_levels.py
+    run_test sdk/python/tests/test_sanity_filter_read.py
+    run_test sdk/python/tests/test_sanity_netconf.py
+    run_test sdk/python/tests/test_sanity_rpc.py
+    run_test sdk/python/tests/test_sanity_delete.py
 
+    export PYTHONPATH=./gen-api/python:$PYTHONPATH
     run_test gen-api/python/ydk/tests/import_tests.py
 }
 
