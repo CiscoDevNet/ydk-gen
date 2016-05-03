@@ -38,7 +38,7 @@ class NetconfServiceProvider(ServiceProvider):
             - username - The name of the user
             - password - The password to use
             - protocol - one of either ssh or tcp    
-            - timeout  - Default to 30
+            - timeout  - Default to 45
     """
 
     def __init__(self, **kwargs):

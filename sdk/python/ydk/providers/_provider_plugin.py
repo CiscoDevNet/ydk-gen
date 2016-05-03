@@ -59,7 +59,7 @@ class _SPPlugin(object):
 
 class _NCClientSPPlugin(_SPPlugin):
 
-    def __init__(self, service_protocol_name='Netconf protocol', timeout=30):
+    def __init__(self, service_protocol_name='Netconf protocol', timeout=45):
         self._service_protocol_name = service_protocol_name
         self.head = None
         self._nc_manager = None

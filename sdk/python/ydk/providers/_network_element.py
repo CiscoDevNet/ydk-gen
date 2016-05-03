@@ -26,7 +26,7 @@ from ._ydk_types import _DEFAULT_ENCODING_FORMAT, _DEFAULT_NC_PORT
 
 class _NetworkElement(object):
 
-    def __init__(self, session_config, service_protocol_type, encode_format=None, port=None, timeout=30):
+    def __init__(self, session_config, service_protocol_type, encode_format=None, port=None, timeout=45):
 
         self.session_config = session_config
 
