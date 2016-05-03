@@ -28,8 +28,17 @@ YDKTEST_FXS=$FXS_DIR/ydktest/
 BGP_DEVIATION_FXS=$FXS_DIR/bgp_deviation/
 YDKTEST_DEVIATION_FXS=$FXS_DIR/ydktest_deviation/
 
+function run_test_no_coverage {
+    python $@ 
+    local status=$?
+    if [ $status -ne 0 ]; then
+        exit $status
+    fi
+    return $status
+}
+
 function run_test {
-    coverage run --source=ydkgen,sdk/python/ydk -a $@ 
+    coverage run --source=ydkgen,gen-api -a $@ 
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -143,14 +152,22 @@ function run_deviation_sanity {
     cd $YDK_ROOT
     source gen-api/python/env.sh
     export PYTHONPATH=./gen-api/python:$PYTHONPATH
-    run_test gen-api/python/tests/test_sanity_deviation.py
+    run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py
 
     # bgp deviation
     printf "\nGenerating ydktest deviation model APIs\n"
     python generate.py --python --profile profiles/test/deviation/deviation.json
     pip install gen-api/python/dist/ydk*.tar.gz
     source gen-api/python/env.sh
-    run_test gen-api/python/tests/test_sanity_deviation_bgp.py
+    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py
+}
+
+# submit coverage
+function submit_coverage {
+    coverage report
+    pip install coveralls
+    export COVERALLS_REPO_TOKEN=MO7qRNCbd9uovAEK2w8Z41lRUgVMi0tbF
+    coveralls    
 }
 
 # Execution of the script starts here
@@ -178,9 +195,10 @@ init_confd
 run_pygen_test
 generate_ydktest_package
 run_sanity_tests
+submit_coverage
+
 setup_deviation_sanity_models
 run_deviation_sanity
-coverage report
 teardown_env
 
 

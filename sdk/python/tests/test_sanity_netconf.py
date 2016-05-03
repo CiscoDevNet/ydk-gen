@@ -22,7 +22,10 @@ import unittest
 
 from ydk.errors import YPYDataValidationError, YPYError
 from ydk.models.ydktest import ydktest_sanity as ysanity
-from ydk.models.ietf import ietf_netconf
+try:
+    from ydk.models.ietf import ietf_netconf
+except:
+    pass
 from ydk.providers import NetconfServiceProvider
 from ydk.services import NetconfService
 from ydk.services import Datastore
