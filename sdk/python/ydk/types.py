@@ -25,7 +25,9 @@ from errors import YPYDataValidationError
 
 
 class DELETE(object):
-    '''Marker class used to mark nodes that are to be deleted '''
+    '''Marker class used to mark nodes that are to be deleted 
+    Assign DELETE object to a mark a leaf for deletion.
+    A CRUD update operation will delete the leaf from the device it is on.'''
     pass
 
 class READ(object):

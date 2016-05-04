@@ -12,7 +12,9 @@ Contains type definitions.
 
 	Bases: :class:`object`
 	
-	Marker class used to mark nodes that are to be deleted.
+	Marker class used to mark nodes that are to be deleted. 
+
+	Assign DELETE object to a mark a leaf for deletion. A CRUD update operation will delete the leaf from the device it is on.
 	
 	
 .. py:class:: ydk.types.Decimal64(str_val)
