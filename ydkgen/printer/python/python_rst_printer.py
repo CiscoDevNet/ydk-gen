@@ -42,43 +42,86 @@ class PythonRstPrinter(object):
         else:
             raise EmitError('Unrecognized named_element')
 
+    def _append(self, line):
+        _line = '%s%s' % (self.ctx.get_indent(), line)
+        self.lines.append(_line)
+
     def print_ydk_models_rst(self, packages):
-        lines = []
+        self.lines = []
+
+        # Title
         title = 'YDK Model API'
-        lines.append(title)
-        lines.append('=' * len(title))
-        lines.append('')
-        lines.append('.. toctree::')
+        self._write_title(title)
+        #TOC Tree
+        self._write_toctree(packages, is_package=True)
 
+        self.ctx.writelns(self.lines)
+        del self.lines
+
+    def _print_class_rst(self, clazz):
+        self.lines = []
+        # Title
+        self._write_title(clazz.name)
+        # TOC Tree
+        self._write_toctree(clazz.owned_elements)
+        self._append('\n')
+        self._append('.. py:currentmodule:: %s\n' %
+                         (clazz.get_py_mod_name()))
+
+        self._append('.. py:class:: %s\n' % (clazz.qn()))
         self.ctx.lvl_inc()
-        lines.append('%s:maxdepth: 1\n' % self.ctx.get_indent())
-
-        for package in packages:
-            line = '%s <%s>' % (package.name, get_rst_file_name(package))
-            lines.append('%s%s' % (self.ctx.get_indent(), line))
-
+        # Bases
+        self._write_bases(clazz=clazz, is_class=True)
+        # Class Hierarchy
+        self._write_class_hierarchy(clazz)
+        # Presence Container
+        if clazz.stmt.search_one('presence') is not None:
+            self._append('This class is a :ref:`presence class<presence-class>`\n')
+        # Docstring
+        self._write_class_docstring(clazz)
+        # Config Method
+        if not clazz.is_identity() and not clazz.is_grouping():
+            self._write_class_config_method()
         self.ctx.lvl_dec()
-        self.ctx.writelns(lines)
 
-    def _write_toctree(self, named_element, lines):
-        # lines = []
-        lines.append('%s.. toctree::' % self.ctx.get_indent())
-        
+        self.ctx.writelns(self.lines)
+        del self.lines
+
+    def _write_title(self, title):
+        self._append(title)
+        self._append('=' * len(title))
+        self._append('\n')
+
+    def _write_toctree(self, elements, is_package=False):
+        self._append('.. toctree::')
         self.ctx.lvl_inc()
-        lines.append('%s:maxdepth: 1\n' % self.ctx.get_indent())
+        self._append(':maxdepth: 1\n')
 
-        owned_elements = named_element.owned_elements
-        owned_elements.reverse()
-        
-        for elem in owned_elements:
-            if isinstance(elem, Class) or isinstance(elem, Enum):
-                lines.append('%s%s <%s>' % (self.ctx.get_indent(), elem.name, get_rst_file_name(elem)))
-            # if isinstance(elem, Enum):
-                # from pdb import set_trace; set_trace()
-                # print 'hi'
-        lines.append('\n')
+        if not is_package:
+            elements.reverse()
+            for elem in elements:
+                if isinstance(elem, Class) or isinstance(elem, Enum):
+                    self._append('%s <%s>' % (elem.name, get_rst_file_name(elem)))
+        else:
+            for elem in elements:
+                self._append('%s <%s>' % (elem.name, get_rst_file_name(elem)))
+
+        self._append('\n')
         self.ctx.lvl_dec()
-        # self.ctx.writelns(lines)
+
+    def _write_bases(self, clazz=None, is_class=False):
+        bases = [':class:`%s`' % ('object' if is_class else 'enum.Enum')]
+        if is_class and clazz.extends:
+            for item in clazz.extends:
+                bases.append(':class:`%s`' % (item.name))
+        self._append('Bases: %s\n' % (', '.join(bases)))
+
+    def _write_class_hierarchy(self, clazz):
+        if not clazz.is_identity() and not clazz.is_grouping():
+            clazz_hierarchy = self._get_class_hierarchy(clazz)
+            if clazz_hierarchy is not None:
+                self._append(clazz_hierarchy)
+                self._append('\n\n')
 
     def _get_class_hierarchy(self, clazz):
         parent_list = []
@@ -100,128 +143,64 @@ class PythonRstPrinter(object):
         else:
             return None
 
-    def _print_class_rst(self, clazz):
+    def _write_class_docstring(self, clazz):
         class_docstring = get_class_docstring(clazz)
-
-        # Title
-        lines = []
-        lines.append(clazz.name)
-        lines.append('=' * len(clazz.name))
-        lines.append('\n')
-        # self.ctx.writelns(lines)
-
-        # TOC Tree
-        self._write_toctree(clazz, lines)
-
-        # lines = []
-        lines.append('\n')
-        lines.append('.. py:currentmodule:: %s' %
-                         (clazz.get_py_mod_name()))
-        lines.append('\n')
-
-        # Class Header
-        lines.append('.. py:class:: %s' % (clazz.qn()))
-        lines.append('\n')
-
-        # self.ctx.writelns(lines)
-        self.ctx.lvl_inc()
-
-        # Bases
-        # lines = []
-        bases = ['%s:class:`object`' % self.ctx.get_indent()]
-        if clazz.extends:
-            for item in clazz.extends:
-                bases.append('%s:class:`%s`' % (self.ctx.get_indent(), item.name))
-        lines.append('%sBases: %s' % (self.ctx.get_indent(), ', '.join(bases)))
-        lines.append('\n')
-
-        # Class Hierarchy
-        if not clazz.is_identity() and not clazz.is_grouping():
-            clazz_hierarchy = self._get_class_hierarchy(clazz)
-            if clazz_hierarchy is not None:
-                lines.append('%s%s' % (self.ctx.get_indent(), clazz_hierarchy))
-                lines.append('\n')
-
-        # Presence Container
-        lines.append('\n')
-        if clazz.stmt.search_one('presence') is not None:
-            line = """This class is a :ref:`presence class<presence-class>`"""
-            lines.append('%s%s' % (self.ctx.get_indent(), line))
-            lines.append('\n')
-
-        # Doc String
         if len(class_docstring) > 0:
             for line in class_docstring.split('\n'):
                 if line.strip() != '':
-                    lines.append('%s%s' % (self.ctx.get_indent(), line))
-                    lines.append('\n')
+                    self._append(line)
+                    self._append('\n')
 
-        if not clazz.is_identity() and not clazz.is_grouping():
-            # Config Method
-            lines.append('%s.. method:: is_config()\n' % (self.ctx.get_indent()))
-            self.ctx.lvl_inc()
-            lines.append("%sReturns True if this instance \
-                represents config data else returns False" % (self.ctx.get_indent()))
-            self.ctx.lvl_dec()
-            lines.append('\n')
-
-        self.ctx.lvl_dec()
-        self.ctx.writelns(lines)
-
-    def _print_package_rst(self, package):
-        # Header
-        lines = []
-        line = package.name
-        if package.stmt.keyword == 'module':
-            line = '%s module' % line
-        lines.append(line)
-        lines.append('=' * len(line))
-        lines.append('\n')
-        
-        self._write_toctree(package, lines)
-
-        lines.append('\n')
-        lines.append('.. py:module:: %s.%s' %
-                         (package.get_py_mod_name(), package.name))
-        lines.append('\n')
-        lines.append('%s' % package.name)
-        lines.append('\n')
-
-        if package.comment is not None:
-            lines.append(package.comment)
-
-        self.ctx.writelns(lines)
-
-    def _print_enum_rst(self, enumz):
-        # from pdb import set_trace; set_trace()
-        lines = []
-        # Title
-        line = enumz.name
-        lines.append(line)
-        lines.append('=' * len(line))
-        lines.append('\n')
-
-        lines.append('.. py:currentmodule:: %s' %
-                         (enumz.get_py_mod_name()))
-        lines.append('\n')
-
-        lines.append('.. py:class:: %s' % (enumz.qn()))
-        lines.append('\n')
-
-        self.ctx.lvl_inc()
-
-        # Bases
-        bases = ['%s:class:`enum.Enum`' % (self.ctx.get_indent())]
-        lines.append('%sBases: %s' % (self.ctx.get_indent(), ', '.join(bases)))
-        lines.append('\n')
-
+    def _write_enum_docstring(self, enumz):
         enumz_docstring = get_enum_class_docstring(enumz)
-
         if len(enumz_docstring):
             for line in enumz_docstring.split('\n'):
                 if line.strip() != '':
-                    lines.append('%s%s' % (self.ctx.get_indent(), line))
-                    lines.append('\n')
+                    self._append(line)
+                    self._append('\n')
+
+    def _write_class_config_method(self):
+        self._append('.. method:: is_config()\n')
+        self.ctx.lvl_inc()
+        self._append("Returns True if this instance \
+            represents config data else returns False")
+        self.ctx.lvl_dec()
+        self._append('\n')
+
+    def _print_package_rst(self, package):
+        self.lines = []
+
+        # Title
+        line = package.name
+        if package.stmt.keyword == 'module':
+            line = '%s module' % line
+        self._write_title(line)
+        # TOC Tree
+        self._write_toctree(package.owned_elements)
+        self._append('\n')
+        self._append('.. py:module:: %s.%s\n' %
+                         (package.get_py_mod_name(), package.name))
+
+        # Package Comment
+        self._append('%s\n' % package.name)
+        if package.comment is not None:
+            self._append(package.comment)
+
+        self.ctx.writelns(self.lines)
+
+    def _print_enum_rst(self, enumz):
+        self.lines = []
+        # Title
+        self._write_title(enumz.name)
+        
+        self._append('.. py:currentmodule:: %s\n' %
+                         (enumz.get_py_mod_name()))
+        self._append('.. py:class:: %s\n' % (enumz.qn()))
+        self.ctx.lvl_inc()
+        # Bases
+        self._write_bases()
+        # Docstring
+        self._write_enum_docstring(enumz)
 
         self.ctx.lvl_dec()
-        self.ctx.writelns(lines)
+        self.ctx.writelns(self.lines)
