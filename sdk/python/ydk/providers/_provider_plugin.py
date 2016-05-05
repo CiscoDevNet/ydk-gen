@@ -39,8 +39,6 @@ import ydk.models._yang_ns as _yang_ns
 
 
 class _SPPlugin(object):
-    __metaclass__ = abc.ABCMeta
-
     def __init__(self, service_protocol_name):
         self.service_protocol_name = service_protocol_name
 
@@ -59,8 +57,7 @@ class _SPPlugin(object):
 
 class _NCClientSPPlugin(_SPPlugin):
 
-    def __init__(self, service_protocol_name='Netconf protocol', timeout=45):
-        self._service_protocol_name = service_protocol_name
+    def __init__(self, timeout):
         self.head = None
         self._nc_manager = None
         self.netconf_sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
@@ -217,7 +214,7 @@ class _NCClientSPPlugin(_SPPlugin):
         else:
             self.netconf_sp_logger.debug('\n%s\n%s' , reply_str, self.separator)
 
-    def _connect(self, session_config, port):
+    def _connect(self, session_config):
         if (session_config.transportMode == _SessionTransportMode.SSH):
             self._nc_manager = manager.connect(
                 host=session_config.hostname,
