@@ -55,14 +55,6 @@ class PythonRstPrinter(object):
 
         self.ctx.writelns(self.lines)
         del self.lines
-
-    def _print_class_config_method(self):
-        self._append('.. method:: is_config()\n')
-        self.ctx.lvl_inc()
-        self._append("Returns True if this instance \
-            represents config data else returns False")
-        self.ctx.lvl_dec()
-        self._append('\n')
     
     def _print_package_rst(self, package):
         self._print_header(package)
@@ -178,3 +170,11 @@ class PythonRstPrinter(object):
                 if line.strip() != '':
                     self._append(line)
                     self._append('\n')
+
+    def _print_class_config_method(self):
+        self._append('.. method:: is_config()\n')
+        self.ctx.lvl_inc()
+        self._append("Returns True if this instance \
+            represents config data else returns False")
+        self.ctx.lvl_dec()
+        self._append('\n')
