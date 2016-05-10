@@ -21,7 +21,7 @@ import shutil
 
 from common import YdkGenException
 from ydkgen.builder import ApiModelBuilder, GroupingClassApiModelBuilder, PyangModelBuilder
-from . import resolve_profile
+from .resolver import resolve_profile
 from ydkgen.printer import language_factory
 
 

@@ -22,7 +22,7 @@ import shutil
 from argparse import ArgumentParser
 from os import listdir
 from os import walk
-from .common import YdkGenException
+from ..common import YdkGenException
 
 
 from git import Repo
