@@ -21,7 +21,7 @@
 """
 
 from ydkgen.api_model import Bits
-from ydkgen.common import convert_to_reStructuredText, get_sphinx_ref_label
+from ydkgen.common import convert_to_reStructuredText
 
 
 class BitsPrinter(object):
@@ -34,9 +34,8 @@ class BitsPrinter(object):
 
     """
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
 
     def print_bits(self, bits):
         """
@@ -50,7 +49,6 @@ class BitsPrinter(object):
         self._print_bits_trailer(bits)
 
     def _print_bits_header(self, bits):
-        self.parent._start_tab_leak_check()
         self.ctx.writeln('class %s(FixedBitsDict):' % bits.name)
 
     def _print_bits_body(self, bits):
@@ -98,4 +96,3 @@ class BitsPrinter(object):
 
     def _print_bits_trailer(self, bits):
         self.ctx.bline()
-        self.parent._check_tab_leak()

@@ -22,15 +22,17 @@ class_printer.py
 """
 # add inline enum to deviation module itself
 from ydkgen.api_model import Bits
-from ydkgen.api_model import Class
 from ydkgen.api_model import Enum
 from ydkgen.printer.meta_data_util import get_meta_info_data
 
+from .bits_printer import BitsPrinter
+from .class_meta_printer import ClassMetaPrinter
+from .enum_printer import EnumPrinter
+
 
 class DeviationPrinter(object):
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
         self.collected_enum_meta = []
 
     def print_deviation(self, package):
@@ -55,31 +57,28 @@ from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, 
 from ydk.models import _yang_ns
 
 """)
-        # self.ctx.lvl_inc()
 
     def print_collected_enum_meta(self):
         for e in self.collected_enum_meta:
             self.ctx.lvl_inc()
-            self.parent.print_enum_meta(e)
+            EnumPrinter(self.ctx).print_enum_meta(e)
             self.ctx.lvl_dec()
 
     def print_deviation_table_header(self):
         self.ctx.writeln("_deviation_table = {")
 
     def print_deviation_table_trailer(self):
-        # self.ctx.lvl_dec()
         self.ctx.writeln("}")
 
     def print_deviation_inline_class(self, deviation):
         if deviation.owned_elements != []:
             bitz = [b for b in deviation.owned_elements if isinstance(b, Bits)]
-            classes = [c for c in deviation.owned_elements if isinstance(c, Class)]
             enumz = [e for e in deviation.owned_elements if isinstance(e, Enum)]
             for b in bitz:
-                self.parent.print_bits(b)
+                BitsPrinter(self.ctx).print_bits(b)
             for e in enumz:
                 # collect inline enum meta
-                self.parent.print_enum(e, no_meta=True)
+                EnumPrinter(self.ctx).print_enum(e, no_meta_assign=True)
                 self.print_deviation_enum_meta_assignment(e)
                 self.collected_enum_meta.append(e)
 
@@ -91,7 +90,6 @@ from ydk.models import _yang_ns
         self.ctx.writeln("return _deviation_table['%s']" % (enum_class.qn()))
         self.ctx.lvl_dec(tab=2)
         self.ctx.write("\n\n")
-
 
     def print_deviation_entry(self, deviation):
         target = deviation.d_target
@@ -113,7 +111,7 @@ from ydk.models import _yang_ns
                     meta = get_meta_info_data(prop, prop.property_type, prop.stmt.search_one('type'))
                     self.ctx.bline()
                     self.ctx.lvl_inc()
-                    self.parent.print_meta_class_member(meta, self.ctx)
+                    ClassMetaPrinter(self.ctx).print_meta_class_member(meta, self.ctx)
                     self.ctx.lvl_dec()
                     self.ctx.writeln("),")
                 else:

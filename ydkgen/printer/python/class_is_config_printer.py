@@ -25,9 +25,8 @@ from ydkgen.api_model import Class
 
 class ClassIsConfigPrinter(object):
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
 
     def print_output(self, clazz):
         # prints a function for the entity clazz that

@@ -14,6 +14,6 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-from ._api_model_builder import ApiModelBuilder, GroupingClassApiModelBuilder
+from ._api_model_builder import ApiModelBuilder, GroupingClassApiModelBuilder, SubModuleBuilder
 from ._pyang_model_builder import PyangModelBuilder
 from ._types_extractor import TypesExtractor

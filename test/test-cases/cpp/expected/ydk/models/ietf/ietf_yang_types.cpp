@@ -1,0 +1,10 @@
+#include "ydk/make_unique.h"
+
+#include "ietf_yang_types.h"
+
+namespace ydk {
+namespace ietf_yang_types {
+
+}
+}
+

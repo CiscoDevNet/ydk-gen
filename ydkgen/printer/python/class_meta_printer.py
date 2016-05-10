@@ -23,13 +23,13 @@ class_meta_printer.py
 from ydkgen.api_model import Class, Enum, Property
 from ydkgen.common import sort_classes_at_same_level, get_module_name
 from ydkgen.printer.meta_data_util import get_meta_info_data
+from .enum_printer import EnumPrinter
 
 
 class ClassMetaPrinter(object):
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
         self.is_rpc = False
 
     def print_output(self, unsorted_classes):
@@ -68,7 +68,7 @@ class ClassMetaPrinter(object):
         enumz.extend([nested_enum for nested_enum in clazz.owned_elements if isinstance(
             nested_enum, Enum)])
         for nested_enumz in sorted(enumz, key=lambda e: e.name):
-            self.parent.print_enum_meta(nested_enumz)
+            EnumPrinter(self.ctx).print_enum_meta(nested_enumz)
         self._print_meta_member(clazz)
 
     def _print_meta_member(self, clazz):
