@@ -25,16 +25,14 @@ from ydkgen.printer.meta_data_util import get_class_docstring
 
 class ClassDocstringPrinter(object):
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         """
             Class doc string printer
 
             :attribute ctx The printer context
-            :attribute parent The parent printer object
 
         """
         self.ctx = ctx
-        self.parent = parent
 
     def print_output(self, clazz):
         """

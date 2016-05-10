@@ -44,16 +44,17 @@ def init_verbose_logger():
     # add the handlers to the logger
     logger.addHandler(ch)
 
-def suite(profile, actual_directory, expected_directory, groupings_as_class):
+def suite(profile, test_cases_root, groupings_as_class):
     
     class PyGenTest(unittest.TestCase):
-        def __init__(self, profile, actual_directory, expected_directory, groupings_as_class):
+        def __init__(self, profile, test_cases_root, language, groupings_as_class):
             self.profile = profile
-            self.actual_directory = actual_directory
-            self.expected_directory = expected_directory
             self.groupings_as_class = groupings_as_class
-            setattr(self, "Python Gen", self.translate_and_check)
-            unittest.TestCase.__init__(self, "Python Gen")
+            self.language = language
+            setattr(self, language + " Gen", self.translate_and_check)
+            self.actual_directory = test_cases_root + '/' + language + '/actual'
+            self.expected_directory = test_cases_root + '/' + language + '/expected'
+            unittest.TestCase.__init__(self, language + " Gen")
 
         def id(self):
             return 'Python Gen'
@@ -95,7 +96,7 @@ def suite(profile, actual_directory, expected_directory, groupings_as_class):
     
         def translate_and_check(self):
 
-            ydkgen.YdkGenerator().generate(self.profile, self.actual_directory, ydk_root, self.groupings_as_class, True)
+            ydkgen.YdkGenerator().generate(self.profile, self.actual_directory, ydk_root, self.groupings_as_class, self.language)
 
             def check_diff_files(dcmp, diff_files):
 
@@ -105,7 +106,7 @@ def suite(profile, actual_directory, expected_directory, groupings_as_class):
                 for sub_dcmp in dcmp.subdirs.values():
                     check_diff_files(sub_dcmp, diff_files)
             
-            self.assertTrue(self.are_dir_trees_equal(self.actual_directory+'/python/ydk/models', self.expected_directory + '/ydk/models', ['.gitignore']))
+            self.assertTrue(self.are_dir_trees_equal(self.actual_directory + '/' + self.language + '/ydk/models', self.expected_directory + '/ydk/models', ['.gitignore']))
 
 
         def setUp(self):
@@ -120,7 +121,8 @@ def suite(profile, actual_directory, expected_directory, groupings_as_class):
     
     suite = unittest.TestSuite()
 
-    suite.addTest(PyGenTest(profile, actual_directory, expected_directory, groupings_as_class))
+    suite.addTest(PyGenTest(profile, test_cases_root, 'python', groupings_as_class))
+    suite.addTest(PyGenTest(profile, test_cases_root, 'cpp', groupings_as_class))
     
     return suite
 
@@ -135,17 +137,11 @@ if __name__ == "__main__":
                       dest="profile",
                       help="Take options from a profile file, any CLI targets ignored")
 
-    parser.add_option("--actual-directory",
+    parser.add_option("--test-cases-root",
                       type=str,
-                      dest="actual_directory",
-                      help="The actual directory where the sdk will get created.")
-    
-    parser.add_option("--expected-directory",
-                      type=str,
-                      dest="expected_directory",
-                      help="The expected directory whose contents will be compared to the actual directory.")
+                      dest="test_cases_root",
+                      help="The root directory for the test cases.")
 
-   
     parser.add_option("-v", "--verbose",
                       action="store_true",
                       dest="verbose",
@@ -165,31 +161,22 @@ if __name__ == "__main__":
         init_verbose_logger()
     
     if not os.environ.has_key('YDKGEN_HOME'):
-        logger.error('YDKGEN_HOME not set')
-        print >> sys.stderr, "Need to have YDKGEN_HOME set!"
-        sys.exit(1)
+        logger.debug('YDKGEN_HOME not set. Assuming current directory is working directory.')
+        ydk_root = os.getcwd()
+    else:
+        ydk_root = os.environ['YDKGEN_HOME']
     
-    ydk_root = os.environ['YDKGEN_HOME']
-    
-    actual_directory = ydk_root + '/test/test-cases/python/actual'
-    if options.actual_directory is not None:
-        actual_directory = options.actual_directory
-    
-    #create the actual directory if it does not exist
-    if not os.path.isdir(actual_directory):
-        os.mkdir(actual_directory)
-    
-    expected_directory = ydk_root + '/test/test-cases/python/expected'
-    if options.expected_directory is not None:
-        expected_directory = options.expected_directory
-    
+    test_cases_root = ydk_root + '/test/test-cases/'
+    if options.test_cases_root is not None:
+        test_cases_root = options.test_cases_root
+
     profile = ydk_root + '/profiles/test/ydktest.json'
     if options.profile is not None:
         profile =options.profile
     
      
     
-    ret = unittest.TextTestRunner(verbosity=2).run(suite(profile, actual_directory, expected_directory, options.groupings_as_class)).wasSuccessful()
+    ret = unittest.TextTestRunner(verbosity=2).run(suite(profile, test_cases_root, options.groupings_as_class)).wasSuccessful()
     if ret:
         sys.exit(0)
     else:

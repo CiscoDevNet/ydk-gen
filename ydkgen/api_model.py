@@ -75,7 +75,6 @@ class Deviation(Element):
 
         return '.'.join(reversed(names))
 
-
     def convert_prop_name(self, stmt):
         name = snake_case(stmt.arg)
         if iskeyword(name):
@@ -151,6 +150,28 @@ class NamedElement(Element):
         py_mod_name = 'ydk.models%s.%s' % (sub, pkg.name)
         return py_mod_name
 
+    def get_cpp_header_name(self):
+        """
+            Get the c++ header that contains this
+            NamedElement.
+        """
+        pkg = self
+        while pkg is not None and not isinstance(pkg, Package):
+            pkg = pkg.owner
+        if pkg is None:
+            return ''
+        t = pkg.name.split('_')
+        t = [n for n in t if n.lower() not in ['cisco', 'ios', 'xr']]
+        if t:
+            sub = t[0].lower()
+            if iskeyword(sub):
+                sub = '%s_' % sub
+            sub = '%s' % sub
+        else:
+            sub = ''
+        py_mod_name = 'ydk/models/%s/%s.h' % (sub, pkg.name)
+        return py_mod_name
+
     def get_meta_py_mod_name(self):
         """
             Get the python meta module that contains the meta model
@@ -196,6 +217,18 @@ class NamedElement(Element):
             names.append(element.name)
             element = element.owner
         return '.'.join(reversed(names))
+
+    def qualified_cpp_name(self):
+        ''' get the C++ qualified name , name sans
+        package name '''
+        names = []
+        element = self
+        while element is not None and not isinstance(element, Package):
+            if isinstance(element, Deviation):
+                element = element.owner
+            names.append(element.name)
+            element = element.owner
+        return '::'.join(reversed(names))
 
 
 class Package(NamedElement):

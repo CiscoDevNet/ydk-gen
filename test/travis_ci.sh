@@ -136,6 +136,19 @@ function run_sanity_tests {
     run_test gen-api/python/ydk/tests/import_tests.py
 }
 
+# cpp tests
+function run_cpp_tests {
+    printf "\nGenerating ydktest C++ model APIs\n"
+    run_test generate.py --profile profiles/test/ydktest.json --cpp --verbose
+    cd gen-api/cpp
+    make
+    local status=$?
+    if [ $status -ne 0 ]; then
+        exit $status
+    fi
+    cd -
+}
+
 # deviation tests
 # modify confd instance
 function setup_deviation_sanity_models {
@@ -197,6 +210,7 @@ init_confd
 run_pygen_test
 generate_ydktest_package
 run_sanity_tests
+run_cpp_tests
 submit_coverage
 
 setup_deviation_sanity_models

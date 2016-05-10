@@ -25,19 +25,26 @@ from ydkgen.api_model import Class
 from ydkgen.common import get_module_name
 
 
-class YangNsPrinter(object):
+class NamespacePrinter(object):
     def __init__(self, ctx):
         self.ctx = ctx
+        self.namespace_list = []
+        self.namespace_map = {}
 
-    def print_(self, packages):
-        self.ctx.printer.print_yang_ns_header()
-        ns_list = []
+    def print_output(self, packages):
+        self._init_namespace_info(packages)
+
+        self._print_namespaces(self.namespace_list)
+        self._print_identity_map(packages)
+        self._print_namespaces_map(self.namespace_map)
+
+    def _init_namespace_info(self, packages):
         module_map = {}
-        namespace_map = {}
+
         for m in [p.stmt for p in packages]:
             ns = m.search_one('namespace')
             if ns is not None:
-                ns_list.append((m.arg.replace('-', '_'), ns.arg, yang_id(m)))
+                self.namespace_list.append((m.arg.replace('-', '_'), ns.arg, yang_id(m)))
                 module_map[m.arg] = ns.arg
     
         for m in [p.stmt for p in packages]:
@@ -45,20 +52,15 @@ class YangNsPrinter(object):
                 including_module = m.i_including_modulename
                 if including_module is not None and including_module in module_map:
                     main_ns = module_map[including_module]
-                    ns_list.append((m.arg.replace('-', '_'), main_ns, yang_id(m)))
+                    self.namespace_list.append((m.arg.replace('-', '_'), main_ns, yang_id(m)))
 
         for package in packages:
             ns = package.stmt.search_one('namespace')
             for ele in package.owned_elements:
                 if hasattr(ele, 'stmt') and ele.stmt is not None and (ele.stmt.keyword == 'container' or ele.stmt.keyword == 'list'):
-                    namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
+                    self.namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
 
-
-        self.print_namespaces(ns_list)
-        self.print_identity_map(packages)
-        self.print_namespaces_map(namespace_map)
-
-    def print_namespaces(self, ns):
+    def _print_namespaces(self, ns):
         for n in ns:
             self.ctx.writeln("_global_%s_nsp = '%s'" % (n[0], n[1]))
         self.ctx.writeln("_namespaces = { \\")
@@ -67,14 +69,14 @@ class YangNsPrinter(object):
         self.ctx.writeln("}")
         self.ctx.bline()
 
-    def print_namespaces_map(self, namespace_map):
+    def _print_namespaces_map(self, namespace_map):
         self.ctx.writeln("_namespace_package_map = { \\")
         for namespace, python_import in namespace_map.iteritems():
             self.ctx.writeln("('%s', '%s') : 'from %s import %s', " % (namespace[0], namespace[1], python_import[0], python_import[1]))
         self.ctx.writeln("}")
         self.ctx.bline()
 
-    def print_identity_map(self, packages):
+    def _print_identity_map(self, packages):
         self.ctx.writeln("_identity_map = { \\")
         self.ctx.lvl_inc()
         for package in packages:

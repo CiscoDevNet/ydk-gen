@@ -545,3 +545,13 @@ class GroupingClassApiModelBuilder(ApiModelBuilder):
             for child_stmt in chs:
                 self._create_grouping_class_api_model(child_stmt, element)
 
+
+class SubModuleBuilder(object):
+    def generate(self, submodules):
+        packages = []
+        for sub in submodules:
+            package = Package()
+            sub.i_package = package
+            package.stmt = sub
+            packages.append(package)
+        return packages

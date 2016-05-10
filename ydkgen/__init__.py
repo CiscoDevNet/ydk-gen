@@ -20,9 +20,9 @@ import os
 import shutil
 
 from common import YdkGenException
-from ydkgen.builder import ApiModelBuilder, GroupingClassApiModelBuilder, PyangModelBuilder
+from ydkgen.builder import ApiModelBuilder, GroupingClassApiModelBuilder, PyangModelBuilder, SubModuleBuilder
 from .resolver import resolve_profile
-from ydkgen.printer import language_factory
+from ydkgen.printer import printer_factory
 
 
 logger = logging.getLogger('ydkgen')
@@ -30,7 +30,7 @@ logger.addHandler(logging.NullHandler())
 
 
 class YdkGenerator(object):
-    def generate(self, profile_file, output_directory, ydk_root, groupings_as_class, generate_python):
+    def generate(self, profile_file, output_directory, ydk_root, groupings_as_class, language):
         """
             Generate ydk-py based in the output_directory using the supplied
             profile_file
@@ -41,23 +41,25 @@ class YdkGenerator(object):
             :param bool groupings_as_class: If set to true YANG grouping is converted to a class.
             :raise YdkGenException: if an error has occurred
         """
+        self.language = language
+        if language != 'cpp' and language != 'python':
+            raise YdkGenException('Language {0} not supported'.format(language))
+        ydk_directory = self._get_ydk_directory(output_directory, language)
 
         self._perform_argument_checks(profile_file, output_directory, ydk_root)
-        (ydk_dir, ydk_doc_dir) = self._get_ydk_paths(output_directory, ydk_root)
-        resolved_model_dir = self._get_resolved_model_path_and_version(profile_file, ydk_root, ydk_dir)
+        self._create_ydk_directories(output_directory, ydk_root, language)
+        resolved_model_dir = self._get_resolved_model_dir(profile_file, ydk_root, ydk_directory)
 
         pyang_builder = PyangModelBuilder(resolved_model_dir)
         modules = pyang_builder.parse_and_return_modules()
 
         # create the packages
         packages = self._build_api_model_packages(modules, groupings_as_class)
+        packages.extend(SubModuleBuilder().generate(pyang_builder.get_submodules()))
 
         # call the language emitter
-        language = ''
-        if generate_python:
-            language = 'python'
-        printer = language_factory.LanguageFactory().get_printer(language)(ydk_dir, ydk_doc_dir, language)
-        printer.emit(packages, pyang_builder.submodules)
+        printer = printer_factory.PrinterFactory().get_printer(language)(ydk_directory)
+        printer.emit(packages)
 
     def _perform_argument_checks(self, profile_file, output_directory, ydk_root):
         if profile_file is None or len(profile_file) == 0:
@@ -72,17 +74,14 @@ class YdkGenerator(object):
             logger.error('ydk_root is None.')
             raise YdkGenException('YDKGEN_HOME is not set.')
 
-    def _get_resolved_model_path_and_version(self, profile_file, ydk_root, ydk_dir):
+    def _get_resolved_model_dir(self, profile_file, ydk_root, ydk_directory):
         resolved_model_dir = None
+        prof = profile_file
         try:
-            with open(profile_file) as json_file:
+            with open(prof) as json_file:
                 profile_data = json.load(json_file)
-                version = profile_data['version']
                 # print version file
-                version_file = os.path.join(ydk_dir, '_version.py')
-                with open(version_file, 'w') as version_fd:
-                    version_fd.write('__version__ = "{}"'.format(version))
-
+                self._print_version_file(ydk_directory, profile_data['version'])
                 resolved_model_dir = resolve_profile.resolve_profile(profile_data, ydk_root)
         except IOError as e:
             err_msg = 'Cannot open profile file (%s)' % e.strerror
@@ -94,10 +93,15 @@ class YdkGenerator(object):
             raise YdkGenException(err_msg)
         return resolved_model_dir
 
-    def _get_ydk_paths(self, output_directory, ydk_root):
-        py_sdk_root = output_directory + '/python/'
+    def _print_version_file(self, ydk_directory, version):
+        version_file = ydk_directory + '/ydk/_version.py'
+        with open(version_file, 'w') as version_fd:
+            version_fd.write('__version__ = "{}"'.format(version))
+
+    def _create_ydk_directories(self, output_directory, ydk_root, language):
+        py_sdk_root = self._get_ydk_directory(output_directory, language)
         py_api_doc_gen = py_sdk_root + '/docsgen'
-        py_api_doc = output_directory + '/python/docs_expanded'
+        py_api_doc = output_directory + '/' + language + '/docs_expanded'
 
         if os.path.isdir(py_sdk_root):
             shutil.rmtree(py_sdk_root)
@@ -106,13 +110,11 @@ class YdkGenerator(object):
         if os.path.isfile(py_api_doc_gen + '/getting_started.rst'):
             os.remove(py_api_doc_gen + '/getting_started.rst')
 
-        shutil.copytree(ydk_root + '/sdk/python', output_directory + '/python',
+        shutil.copytree(ydk_root + '/sdk/' + language, output_directory + '/' + language,
                         ignore=shutil.ignore_patterns('.gitignore', 'ncclient'))
 
-
-        ydk_dir = '%sydk' % py_sdk_root
-        ydk_doc_dir = '%sdocsgen' % py_sdk_root
-        return (ydk_dir, ydk_doc_dir)
+    def _get_ydk_directory(self, output_directory, language):
+        return output_directory + '/' + language + '/'
 
     def _build_api_model_packages(self, modules, groupings_as_class):
         packages = []
@@ -120,6 +122,5 @@ class YdkGenerator(object):
         if not groupings_as_class:
             packages = ApiModelBuilder().generate(modules)
         else:
-            packages = GroupingClassApiModelBuilder().generate(
-                    modules)
+            packages = GroupingClassApiModelBuilder().generate(modules)
         return packages

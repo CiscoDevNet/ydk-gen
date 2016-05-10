@@ -30,13 +30,11 @@ class ClassCommonPathPrinter(object):
         Print Common Class Path Printer
 
         :attribute ctx The printer context
-        :attribute parent The parent printer object
 
     """
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
 
     def print_output(self, clazz):
         """

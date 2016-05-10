@@ -25,9 +25,8 @@ from ydkgen.api_model import Bits, Class, Package
 
 class ClassInitsPrinter(object):
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
 
     def print_output(self, clazz):
         self._print_class_inits_header(clazz)
