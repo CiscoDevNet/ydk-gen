@@ -152,11 +152,10 @@ if __name__ == '__main__':
         init_verbose_logger()
 
     if not os.environ.has_key('YDKGEN_HOME'):
-        logger.error('YDKGEN_HOME not set')
-        print >> sys.stderr, "Need to have YDKGEN_HOME set!"
-        sys.exit(1)
-
-    ydk_root = os.environ['YDKGEN_HOME']
+        logger.debug('YDKGEN_HOME not set. Assuming current directory is working directory.')
+        ydk_root = os.getcwd()
+    else:
+        ydk_root = os.environ['YDKGEN_HOME']
 
     if options.output_directory is None:
         output_directory = '%s/gen-api' % ydk_root
