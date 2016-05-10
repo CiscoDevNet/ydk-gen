@@ -16,7 +16,7 @@
 from pyang.error import EmitError
 
 """
-python_rst_printer.py
+doc_printer.py
 
 Print rst documents for the generated Python api
 """
@@ -26,11 +26,9 @@ from ydkgen.common import get_rst_file_name
 from ydkgen.printer.meta_data_util import get_class_docstring, get_enum_class_docstring
 
 
-class PythonRstPrinter(object):
-
-    def __init__(self, ctx, parent):
+class DocPrinter(object):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
 
     def print_rst_file(self, named_element):
         self.lines = []

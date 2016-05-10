@@ -22,7 +22,8 @@ import shutil
 from common import YdkGenException
 from ydkgen.builder import ApiModelBuilder, GroupingClassApiModelBuilder, PyangModelBuilder
 from . import resolve_profile
-from .printer import YdkPrinter
+from ydkgen.printer import language_factory
+
 
 logger = logging.getLogger('ydkgen')
 logger.addHandler(logging.NullHandler())
@@ -55,7 +56,7 @@ class YdkGenerator(object):
         language = ''
         if generate_python:
             language = 'python'
-        printer = YdkPrinter(ydk_dir, ydk_doc_dir, language)
+        printer = language_factory.LanguageFactory().get_printer(language)(ydk_dir, ydk_doc_dir, language)
         printer.emit(packages, pyang_builder.submodules)
 
     def _perform_argument_checks(self, profile_file, output_directory, ydk_root):

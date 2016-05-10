@@ -20,13 +20,13 @@ printer_factory.py
  Returns printer
  
 """
-from ydkgen.printer import PythonModulePrinter
+from ydkgen.printer.python.python_printer import PythonPrinter
 
 
 class LanguageFactory(object):
         
     def get_printer(self, language):
         if language == 'python':
-            return PythonModulePrinter
+            return PythonPrinter
         else:
             raise Exception('Language {0} not yet supported'.format(language))

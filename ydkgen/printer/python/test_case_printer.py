@@ -78,10 +78,8 @@ class FieldAccess(object):
 
 
 class TestCasePrinter(object):
-
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
 
     def print_test_cases(self, clazz):
         ''''''

@@ -26,9 +26,8 @@ from ydkgen.api_model import Class, Enum, Package
 
 class ImportTestPrinter(object):
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
 
     def print_import_tests(self, packages):
         self.ctx.bline()

@@ -23,12 +23,24 @@
 import os
 import shutil
 
-from . import printer_context
-from ydkgen.common import yang_id
+from pyang.error import EmitError
+
+from ydkgen.api_model import Class, Enum, Bits
+from ydkgen.api_model import Package
 from ydkgen.common import convert_to_reStructuredText
-from .language_factory import LanguageFactory
 from ydkgen.common import get_rst_file_name
-from ydkgen.api_model import Bits, Class, Enum, Package
+from ydkgen.common import yang_id
+from ydkgen.printer import printer_context
+
+from .bits_printer import BitsPrinter
+from .class_meta_printer import ClassMetaPrinter
+from .class_printer import ClassPrinter
+from .deviation_printer import DeviationPrinter
+from .doc_printer import DocPrinter
+from .enum_printer import EnumPrinter
+from .import_test_printer import ImportTestPrinter
+from .test_case_printer import TestCasePrinter
+from .yang_ns_printer import YangNsPrinter
 
 
 class _EmitArgs:
@@ -42,7 +54,7 @@ class _EmitArgs:
 # ============================================================
 # Plugin class definitions
 # ============================================================
-class YdkPrinter():
+class PythonPrinter():
 
     def __init__(self, ydk_dir, ydk_doc_dir, language):
         self.ydk_dir = ydk_dir
@@ -86,7 +98,7 @@ class YdkPrinter():
         self.ypy_ctx = printer_context.PrintCtx()
         self.ypy_ctx.meta = True
         self.ypy_ctx.tab_size = 4
-        self.ypy_ctx.printer = LanguageFactory().get_printer(self.language)(self.ypy_ctx)
+        self.ypy_ctx.printer = PythonModulePrinter(self.ypy_ctx)
 
     def print_files(self):
         self.print_modules()
@@ -201,8 +213,7 @@ class YdkPrinter():
                 if emit_args.extra_args is None:
                     emit_func(emit_args.ctx, emit_args.package)
                 else:
-                    emit_func(
-                        emit_args.ctx, emit_args.package, emit_args.extra_args)
+                    emit_func(emit_args.ctx, emit_args.package, emit_args.extra_args)
 
     def initialize_output_directory(self, path, delete_if_exists=False):
         if delete_if_exists:
@@ -300,46 +311,19 @@ def emit_module_header(ctx, package, mheader=None, is_meta=False):
 
 
 def emit_yang_ns(ctx, packages):
-
-    ctx.printer.print_yang_ns_header()
-    ns_list = []
-    module_map = {}
-    namespace_map = {}
-    for m in [p.stmt for p in packages]:
-        ns = m.search_one('namespace')        
-        if ns is not None:
-            ns_list.append((m.arg.replace('-', '_'), ns.arg, yang_id(m)))
-            module_map[m.arg] = ns.arg
-
-    for m in [p.stmt for p in packages]:
-        if m.keyword == 'submodule':
-            including_module = m.i_including_modulename
-            if including_module is not None and including_module in module_map:
-                main_ns = module_map[including_module]
-                ns_list.append((m.arg.replace('-', '_'), main_ns, yang_id(m)))
-
-    for package in packages:
-        ns = package.stmt.search_one('namespace')
-        for ele in package.owned_elements:
-            if hasattr(ele, 'stmt') and ele.stmt is not None and (ele.stmt.keyword == 'container' or ele.stmt.keyword == 'list'):
-                namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
-
-
-    ctx.printer.print_namespaces(ns_list)
-    ctx.printer.print_identity_map(packages)
-    ctx.printer.print_namespaces_map(namespace_map)
+    YangNsPrinter(ctx).print_(packages)
 
 
 def emit_importests(ctx, packages):
-    ctx.printer.print_import_tests(packages)
+    ImportTestPrinter(ctx).print_import_tests(packages)
 
 
 def emit_python_rst(ctx, named_element):
-    ctx.printer.print_python_rst(named_element)
+    DocPrinter(ctx).print_rst_file(named_element)
 
 
 def emit_ydk_models_rst(ctx, packages):
-    ctx.printer.print_ydk_models_rst(packages)
+    DocPrinter(ctx).print_ydk_models_rst(packages)
 
 
 def emit_module(ctx, package, mheader):
@@ -370,35 +354,182 @@ def emit_module_bits(ctx, package):
 
 
 def emit_module_classes(ctx, package):
-    ctx.printer.print_classes_at_same_level(
+    ClassPrinter(ctx, PythonModulePrinter(ctx)).print_classes(
         [clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
 
 
 def emit_test_module(ctx, package):
-    ctx.printer.print_testcases(package)
+    TestCasePrinter(ctx).print_testcases(package)
 
 
 def emit_meta(ctx, package):
     ctx.print_meta = True
     emit_module_header(ctx, package, is_meta=True)
     if package is not None:
-        emit_meta_table_open(ctx)
+        ctx.writeln('_meta_table = {')
+        ctx.lvl_inc()
         for nested_enumz in [e for e in package.owned_elements if isinstance(e, Enum)]:
             ctx.printer.print_enum_meta(nested_enumz)
         ctx.printer.print_classes_meta([c for c in package.owned_elements if isinstance(c, Class)])
-        emit_meta_table_close(ctx)
+        ctx.lvl_dec()
+        ctx.writeln('}')
         ctx.printer.print_classes_meta_parents(
             [c for c in package.owned_elements if isinstance(c, Class)])
 
 
-def emit_meta_table_open(ctx):
-    ctx.writeln('_meta_table = {')
-    ctx.lvl_inc()
-
-
-def emit_meta_table_close(ctx):
-    ctx.lvl_dec()
-    ctx.writeln('}')
-
 def emit_deviation(ctx, package):
-    ctx.printer.print_deviation(package)
+    DeviationPrinter(ctx, PythonModulePrinter(ctx)).print_deviation(package)
+
+
+class _Stack:
+
+    def __init__(self):
+        self.items = []
+
+    def isEmpty(self):
+        return self.items == []
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
+    def peek(self):
+        return self.items[len(self.items) - 1]
+
+    def size(self):
+        return len(self.items)
+
+
+class PythonModulePrinter(object):
+
+    def __init__(self, ctx):
+        self.ctx = ctx
+        self._start_tab = _Stack()
+
+    def _start_tab_leak_check(self):
+        self._start_tab.push(self.ctx.lvl)
+
+    def _check_tab_leak(self):
+        end_tab = self.ctx.lvl
+        if self._start_tab.pop() != end_tab:
+            raise EmitError('Tab leak !!!')
+
+    def header(self, mheader):
+        self.ctx.str('''
+
+import re
+import collections
+
+from enum import Enum
+
+from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
+
+from ydk.errors import YPYError, YPYDataValidationError
+
+
+''')
+
+    def meta_header(self, anyxml_import):
+        self.ctx.str("""
+
+
+import re
+import collections
+
+from enum import Enum
+
+from ydk._core._dm_meta_info import _MetaInfoClassMember, _MetaInfoClass, _MetaInfoEnum
+from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
+from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, \
+    REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION{0}
+
+from ydk.errors import YPYError, YPYDataValidationError
+from ydk.models import _yang_ns
+
+""".format(anyxml_import))
+
+    def print_yang_ns_header(self):
+        self.ctx.str('''
+#  ----------------------------------------------------------------
+# Copyright 2016 Cisco Systems
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------
+
+''')
+
+    def comment(self, lines):
+        for line in lines:
+            self.ctx.writeln("# %s" % line)
+        self.ctx.bline()
+
+    def imports(self, p):
+
+        imports_to_print = []
+
+        for imported_type in p.imported_types():
+            import_stmt = 'from %s import %s' % (
+                imported_type.get_py_mod_name(), imported_type.qn().split('.')[0])
+            if import_stmt in imports_to_print:
+                continue
+            else:
+                imports_to_print.append(import_stmt)
+
+        imports_to_print = sorted(imports_to_print)
+        for import_to_print in imports_to_print:
+            self.ctx.writeln('%s' % import_to_print)
+
+        self.ctx.bline()
+
+    def print_classes_at_same_level(self, unsorted_classes):
+        ClassPrinter(self.ctx, self).print_classes(unsorted_classes)
+
+    def print_classes_meta(self, unsorted_classes):
+        ClassMetaPrinter(self.ctx, self).print_output(unsorted_classes)
+
+    def print_classes_meta_parents(self, unsorted_classes):
+        ClassMetaPrinter(self.ctx, self).print_parents(unsorted_classes)
+
+    def print_child_enums(self, parent):
+        enumz = []
+        enumz.extend([nested_enum for nested_enum in parent.owned_elements if isinstance(
+            nested_enum, Enum)])
+
+        for nested_enumz in sorted(enumz, key=lambda e: e.name):
+            self.print_enum(nested_enumz)
+
+    def print_child_bits(self, parent):
+        bits = []
+        bits.extend(
+            [nested_bit for nested_bit in parent.owned_elements if isinstance(nested_bit, Bits)])
+
+        for bit in sorted(bits, key=lambda b: b.name):
+            self.print_bits(bit)
+
+    def print_child_classes(self, parent):
+        self.print_classes_at_same_level(
+            [nested_class for nested_class in parent.owned_elements if isinstance(nested_class, Class)])
+
+    def print_bits(self, bits):
+        BitsPrinter(self.ctx, self).print_bits(bits)
+
+    def print_enum(self, enum_class, no_meta=False):
+        EnumPrinter(self.ctx, self).print_enum(enum_class, no_meta)
+
+    def print_enum_meta(self, enum_class):
+        EnumPrinter(self.ctx, self).print_enum_meta(enum_class)
+
+    def print_meta_class_member(self, meta, ctx):
+        ClassMetaPrinter(self.ctx, self).print_meta_class_member(meta, ctx)
