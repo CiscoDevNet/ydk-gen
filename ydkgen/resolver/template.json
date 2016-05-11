@@ -48,5 +48,36 @@
             "minor-version-number" : "{{ydk_version.minor}}",
             "patch-level" : "{{ydk_version.patch}}"
         }
+        {% if dependencies is defined %}
+        "bundle-dependencies" : [
+            {% for dependency in dependencies[:-1] %}{
+                "name" : {{dependency.name}},
+                "bundle-version" : {
+                    "major-version-number" : {{dependency.bundle_version.major}},
+                    "minor-version-number" : {{dependency.bundle_version.minor}},
+                    "patch-level" : {{dependency.bundle_version.patch}}
+                },
+                "ydk-version" : {
+                    "major-version-number" : {{dependency.ydk_version.major}},
+                    "minor-version-number" : {{dependency.ydk_version.minor}},
+                    "patch-level" : {{dependency.ydk_version.patch}}
+                }
+            },
+
+            {% endfor %}{
+                "name" : {{dependencies[-1].name}},
+                "bundle-version" : {
+                    "major-version-number" : {{dependencies[-1].bundle_version.major}},
+                    "minor-version-number" : {{dependencies[-1].bundle_version.minor}},
+                    "patch-level" : {{dependencies[-1].bundle_version.patch}}
+                },
+                "ydk_version" : {
+                    "major-version-number" : {{dependencies[-1].ydk_version.major}},
+                    "minor-version-number" : {{dependencies[-1].ydk_version.minor}},
+                    "patch-level" : {{dependencies[-1].ydk_version.patch}}
+                }
+            }
+        ]
+        {% endif %}
     }
 }
