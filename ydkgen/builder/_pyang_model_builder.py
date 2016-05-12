@@ -33,6 +33,7 @@ class PyangModelBuilder(object):
         self.repos = pyang.FileRepository(resolved_model_dir, False)
         self.ctx = pyang.Context(self.repos)
         self.resolved_model_dir = resolved_model_dir
+        self.submodules = []
 
     def parse_and_return_modules(self):
         """ Use pyang to parse the files, validate them and get a list of modules.
@@ -50,6 +51,9 @@ class PyangModelBuilder(object):
 
         self.submodules = [m for m in modules if  m.keyword == 'submodule']
         return [m for m in modules if m.keyword == 'module']
+
+    def get_submodules(self):
+        return self.submodules
 
     def _copy_substmts_ichildren(self, stmt):
         """ Return copy of current statement's substmts and i_children """

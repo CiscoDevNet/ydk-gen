@@ -81,9 +81,6 @@ class TestCasePrinter(object):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    def print_test_cases(self, clazz):
-        ''''''
-
     def print_testcases(self, package):
         assert isinstance(package, Package)
         self.ctx.bline()

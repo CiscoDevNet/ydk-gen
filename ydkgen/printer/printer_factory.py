@@ -20,13 +20,16 @@ printer_factory.py
  Returns printer
  
 """
-from ydkgen.printer.python.python_printer import PythonPrinter
+from ydkgen.printer.cpp.cpp_bindings_printer import CppBindingsPrinter
+from ydkgen.printer.python.python_bindings_printer import PythonBindingsPrinter
 
 
-class LanguageFactory(object):
+class PrinterFactory(object):
         
     def get_printer(self, language):
-        if language == 'python':
-            return PythonPrinter
+        if language == 'cpp':
+            return CppBindingsPrinter
+        elif language == 'python':
+            return PythonBindingsPrinter
         else:
             raise Exception('Language {0} not yet supported'.format(language))

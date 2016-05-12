@@ -25,16 +25,14 @@ from ydkgen.api_model import Bits, Class
 
 class ClassHasDataPrinter(object):
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         """
             _has_data() printer
 
             :attribute ctx The printer context
-            :attribute parent The parent printer object
 
         """
         self.ctx = ctx
-        self.parent = parent
 
     def print_output(self, clazz):
         """

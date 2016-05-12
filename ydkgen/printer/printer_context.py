@@ -21,7 +21,7 @@
 """
 
 
-class PrintCtx(object):
+class PrinterContext(object):
 
     """
         Print Context.

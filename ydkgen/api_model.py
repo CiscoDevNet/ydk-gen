@@ -75,7 +75,6 @@ class Deviation(Element):
 
         return '.'.join(reversed(names))
 
-
     def convert_prop_name(self, stmt):
         name = snake_case(stmt.arg)
         if iskeyword(name):
@@ -196,6 +195,18 @@ class NamedElement(Element):
             names.append(element.name)
             element = element.owner
         return '.'.join(reversed(names))
+
+    def qualified_cpp_name(self):
+        ''' get the C++ qualified name , name sans
+        package name '''
+        names = []
+        element = self
+        while element is not None and not isinstance(element, Package):
+            if isinstance(element, Deviation):
+                element = element.owner
+            names.append(element.name)
+            element = element.owner
+        return '::'.join(reversed(names))
 
 
 class Package(NamedElement):

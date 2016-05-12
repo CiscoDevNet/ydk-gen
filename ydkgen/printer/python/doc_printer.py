@@ -30,7 +30,7 @@ class DocPrinter(object):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    def print_rst_file(self, named_element):
+    def print_module_documentation(self, named_element):
         self.lines = []
         
         if isinstance(named_element, Enum):
@@ -45,7 +45,7 @@ class DocPrinter(object):
         self.ctx.writelns(self.lines)
         del self.lines
 
-    def print_ydk_models_rst(self, packages):
+    def print_table_of_contents(self, packages):
         self.lines = []
 
         self._print_title('YDK Model API')

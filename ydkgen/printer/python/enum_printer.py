@@ -27,9 +27,8 @@ from ydkgen.printer.meta_data_util import get_enum_class_docstring
 
 class EnumPrinter(object):
 
-    def __init__(self, ctx, parent):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.parent = parent
 
     def print_enum(self, enum_class, no_meta_assign):
         assert isinstance(enum_class, Enum)
@@ -52,7 +51,6 @@ class EnumPrinter(object):
         self.ctx.lvl_dec()
 
     def _print_enum_header(self, enum_class):
-        self.parent._start_tab_leak_check()
         self.ctx.writeln('class %s(Enum):' % enum_class.name)
         self.ctx.lvl_inc()
 
@@ -96,4 +94,3 @@ class EnumPrinter(object):
     def _print_enum_trailer(self, enum_class):
         self.ctx.lvl_dec()
         self.ctx.bline()
-        self.parent._check_tab_leak()
