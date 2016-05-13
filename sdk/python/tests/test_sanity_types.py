@@ -32,8 +32,12 @@ class SanityTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(address='127.0.0.1',
-            username='admin', password='admin', port=12022)
+        self.ncc = NetconfServiceProvider(
+            address='127.0.0.1',
+            username='admin',
+            password='admin',
+            protocol='ssh',
+            port=12022)
         self.crud = CRUDService()
 
     @classmethod
@@ -530,14 +534,11 @@ class SanityTest(unittest.TestCase):
         result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
-    # Will only test max-elements. If min-elements is set, then this
-    # constraint is required for every READ/UPDATE operation. So it will fail all other cases.
-    def test_leaflist_max_elements(self):
+
+    def test_leaflist_unique(self):
         runner = self._create_runner()
-        runner.ytypes.built_in_t.llstring = [str(i) for i in range(30)]
-        runner.ytypes.built_in_t.llstring.extend([None for i in range(20)])
-        self.assertRaises(YPYDataValidationError,
-            self.crud.create, self.ncc, runner)
+        with self.assertRaises(YPYDataValidationError):
+            runner.ytypes.built_in_t.llstring.extend([None for i in range(3)])
 
     def test_list_max_elements(self):
         runner = self._create_runner()

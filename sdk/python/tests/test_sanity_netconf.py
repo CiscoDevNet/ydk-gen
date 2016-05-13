@@ -35,7 +35,12 @@ from ydk.types import Empty
 class SanityNetconf(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(address='127.0.0.1', username='admin', password='admin', protocol='ssh', port=12022)
+        self.ncc = NetconfServiceProvider(
+            address='127.0.0.1',
+            username='admin',
+            password='admin',
+            protocol='ssh',
+            port=12022)
         self.netconf_service = NetconfService()
 
     @classmethod

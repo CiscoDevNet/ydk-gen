@@ -34,7 +34,12 @@ from ydk.types import Empty
 class SanityRpc(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(address='127.0.0.1', username='admin', password='admin', protocol='ssh', port=12022)
+        self.ncc = NetconfServiceProvider(
+            address='127.0.0.1',
+            username='admin',
+            password='admin',
+            protocol='ssh',
+            port=12022)
         self.executor = ExecutorService()
 
     @classmethod
@@ -129,7 +134,7 @@ class SanityRpc(unittest.TestCase):
             self.executor.execute_rpc(self.ncc, runner)
         except Exception as e:
             self.assertIsInstance(e, YPYError)
-            self.assertEqual(e.error_code, YPYErrorCode.INVALID_RPC)
+            self.assertEqual(e.errcode, YPYErrorCode.INVALID_RPC)
 
     '''TODO: get-schema rpc is not yet supported on netsim
     def test_execute_get_schema(self):

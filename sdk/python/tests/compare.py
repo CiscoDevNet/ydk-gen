@@ -21,18 +21,23 @@ return True if attributes in entity(lhs) = entity(rhs)
 import sys
 from enum import Enum
 from pdb import set_trace as bp
-from ydk.types import Empty, Decimal64, FixedBitsDict, YList
+from ydk.types import Empty, Decimal64, FixedBitsDict, YList, YListItem, YLeafList
 
 def is_builtin_type(attr):
     # all the derived types should have __cmp__ implemented
     if isinstance(attr, int) or \
-            isinstance(attr, str) or \
-            isinstance(attr, long) or \
-            isinstance(attr, float) or \
-            isinstance(attr, Enum) or \
-            isinstance(attr, Empty) or \
-            isinstance(attr, Decimal64) or \
-            isinstance(attr, FixedBitsDict):
+        isinstance(attr, bool) or \
+        isinstance(attr, dict) or \
+        isinstance(attr, str) or \
+        isinstance(attr, long) or \
+        isinstance(attr, float) or \
+        isinstance(attr, Enum) or \
+        isinstance(attr, Empty) or \
+        isinstance(attr, Decimal64) or \
+        isinstance(attr, FixedBitsDict) or \
+        isinstance(attr, YLeafList) or \
+        isinstance(attr, YListItem):
+
         return True
     else:
         return False
@@ -110,6 +115,8 @@ def is_equal(lhs, rhs):
             elif is_builtin_type(dict_lhs[k]) or is_builtin_type(dict_rhs[k]):
                 try:
                     if dict_lhs[k] != dict_rhs[k]:
+                        lhs = dict_lhs[k]
+                        rhs = dict_rhs[k]
                         errtyp, ret = ErrNo.WRONG_VALUE, False
                 except Exception:
                     errtyp, ret = ErrNo.WRONG_TYPES, False
