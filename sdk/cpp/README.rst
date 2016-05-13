@@ -81,16 +81,16 @@ Next set the attributes ::
  auto bgp = make_unique<Bgp>();
 
  // set the Global AS
- bgp->global_->config->as_ = 65001
+ bgp->global_->config->as_ = 65001;
 
  // create an AFI SAFI config
- ipv4_afsf = bgp_cfg.global_.afi_safis.AfiSafi()
- ipv4_afsf.afi_safi_name = 'ipv4-unicast'
- ipv4_afsf.config.afi_safi_name = 'ipv4-unicast'
- ipv4_afsf.config.enabled = True
+ auto ipv4_afsf = make_unique<Bgp::Global::AfiSafis::AfiSafi>();
+ ipv4_afsf->afi_safi_name = "ipv4-unicast";
+ ipv4_afsf->config->afi_safi_name = "ipv4-unicast";
+ ipv4_afsf->config->enabled = true;
 
  // add the AFI SAFI config to the global AFI SAFI list
- bgp_cfg.global_.afi_safis.afi_safi.append(ipv4_afsf)
+ bgp->global_->afi_safis->afi_safi.push_back(move(ipv4_afsf));
 
 Invoking the CRUDService
 --------------------------
