@@ -71,6 +71,10 @@ class ClassInitsPrinter(object):
             self.ctx.writeln('self.%s = YList()' % prop.name)
             self.ctx.writeln('self.%s.parent = self' % prop.name)
             self.ctx.writeln("self.%s.name = '%s'" % (prop.name, prop.name))
+        elif prop.stmt.keyword == 'leaf-list':
+            self.ctx.writeln('self.%s = YLeafList()' % prop.name)
+            self.ctx.writeln('self.%s.parent = self' % prop.name)
+            self.ctx.writeln("self.%s.name = '%s'" % (prop.name, prop.name))
         else:
             self.ctx.writeln('self.%s = []' % prop.name)
 

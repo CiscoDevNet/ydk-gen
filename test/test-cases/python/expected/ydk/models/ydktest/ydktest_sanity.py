@@ -18,7 +18,7 @@ import collections
 
 from enum import Enum
 
-from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
+from ydk.types import Empty, YList, YLeafList, DELETE, Decimal64, FixedBitsDict
 
 from ydk.errors import YPYError, YPYDataValidationError
 
@@ -2030,7 +2030,9 @@ class Runner(object):
                 self.enum_value = None
                 self.identity_ref_value = None
                 self.leaf_ref = None
-                self.llstring = []
+                self.llstring = YLeafList()
+                self.llstring.parent = self
+                self.llstring.name = 'llstring'
                 self.name = None
                 self.number16 = None
                 self.number32 = None

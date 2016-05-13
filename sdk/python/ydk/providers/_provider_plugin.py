@@ -27,7 +27,7 @@ from ncclient.operations import RPC, RPCReply
 
 from ydk._core._dm_meta_info import REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS
 from ydk.errors import YPYDataValidationError, YPYError, YPYErrorCode
-from ydk.types import Empty, DELETE, READ, Decimal64, YList
+from ydk.types import Empty, DELETE, READ, Decimal64, YList, YListItem, YLeafList
 
 from ._decoder import XmlDecoder
 from ._encoder import XmlEncoder
@@ -246,25 +246,117 @@ class _NCClientSPPlugin(_SPPlugin):
         self.head.set('message-id', '101')
         return self.head
 
-    def _encode_edit_request(self, root, entity, optype):
-        if isinstance(entity, YList):
+    def _match_key(self, root, entity):
+        if type(entity) == YListItem:
+            return self._match_leaflist_key(root, entity)
+        else:
+            return self._match_list_key(root, entity)
+
+    def _match_leaflist_key(self, root, entity):
+        target_root = None
+        chs = root.getchildren()
+        # leaflist of enum
+        if hasattr(entity, 'i_meta') and entity.i_meta.mtype == REFERENCE_ENUM_CLASS:
+            value = key_value.name.replace('_', '-').lower()
+        value = str(entity.item)
+        for ch in chs:
+            if ch.tag == entity.name and ch.text == value:
+                target_root = ch
+                return target_root
+        return target_root
+
+    def _match_list_key(self, root, entity):
+        target_root = None
+        chs = root.getchildren()
+        keys = entity.i_meta.key_members()
+        for key in keys:
+            key_value = getattr(entity, key.presentation_name)
+            if key.mtype == REFERENCE_ENUM_CLASS:
+                key_value = key_value.name.replace('_', '-').lower()
+            key_value = str(key_value)
+            for ch in chs:
+                if key.name == ch.tag and key_value == ch.text:
+                    target_root = root
+                    return target_root
+        return target_root
+
+
+    def _attach_tag(self, root, entity, optype):
+        if type(entity) ==  YList or type(entity) == YLeafList:
+            self._attach_list_tag(root, entity, optype)
+        elif type(entity) == YListItem:
+            # attach tag to this particular leaflist element
+            chs = root.getchildren()
+            for ch in chs:
+                # match parent
+                if entity.parent.i_meta.yang_name == ch.tag:
+                    ch.clear()
+                    elem = etree.SubElement(ch, entity.name)
+                    xc = 'urn:ietf:params:xml:ns:netconf:base:1.0'
+                    elem.set('{' + xc + '}operation', 'delete')
+                    elem.text = str(entity.item)
+                    # clean chs, attach elem
+        else:
+            chs = root.getchildren()
+            for ch in chs:
+                if entity.i_meta.yang_name == ch.tag:
+                    elem = ch
+                    xc = 'urn:ietf:params:xml:ns:netconf:base:1.0'
+                    elem.set('{' + xc + '}operation', 'delete')
+
+    def _attach_list_tag(self, root, entity, optype):
+        if type(entity) == YList or type(entity) == YLeafList:
+            for item in entity:
+                self._attach_list_tag(root, item, optype)
+        else:
+            chs = root.getchildren()
+            for ch in chs:
+                elem = self._match_key(ch, entity)
+                if elem is not None:
+                    xc = 'urn:ietf:params:xml:ns:netconf:base:1.0'
+                    elem.set('{' + xc + '}operation', 'delete')
+
+
+    def _encode_epilogue(self, entity, root, optype):
+        if type(entity) == YLeafList or type(entity) == YListItem:
+            # parent_meta_tuple_list is not created for leaflist's parent
             entity = entity.parent
-        if not entity.is_config():
-            self._raise_read_only_edit_error()
+            XmlEncoder().encode_to_xml(entity, root, optype)
+        elif type(entity) == YList:
+            for item in entity:
+                self._encode_epilogue(item, root, optype)
+        else:
+            XmlEncoder().encode_to_xml(entity, root, optype)
+
+    def _check_read_only_edit_error(self, entity):
+        if type(entity) ==  YLeafList:
+            pass
+        elif type(entity) == YListItem:
+            pass
+        elif isinstance(entity, YList):
+            for item in entity:
+                self._check_read_only_edit_error(item)
+        else:
+            if not entity.is_config():
+                self._raise_read_only_edit_error()
+
+    def _encode_edit_request(self, root, entity, optype):
+        self._check_read_only_edit_error(entity)
+
         root = self._create_element(root,
                                     'edit-config',
                                     'target',
                                     self._get_target_datastore(),
                                     'config',
                                     optype)
+
         root = self._create_preamble(entity, root)
 
-        if operation_is_create_or_update(optype):
-            XmlEncoder().encode_to_xml(entity, root, optype)
-        else:
-            # this is delete
-            # To do revisit
-            root = self._encode_delete_request(root, entity)
+        self._encode_epilogue(entity, root, optype)
+
+        if not operation_is_create_or_update(optype):
+            self._attach_tag(root, entity, optype)
+
         return root
 
     def _encode_read_request(self, root, entity, optype, only_config):
@@ -287,17 +379,17 @@ class _NCClientSPPlugin(_SPPlugin):
         XmlEncoder().encode_filter(entity, root, optype)
         return root
 
-    def _encode_delete_request(self, root, entity):
-        meta_info = entity._meta_info()
-        if self._entity_is_abstract(entity, meta_info):
-            self._raise_parent_hierarchy_error()
-            return
-        NSMAP = { None: meta_info.namespace}
-        root = etree.SubElement(root, meta_info.yang_name, nsmap=NSMAP)
-        root.set('{urn:ietf:params:xml:ns:netconf:base:1.0}operation', 'delete')
-        # are there keys
-        root = self._encode_keys(root, entity, meta_info)
-        return root
+    # def _encode_delete_request(self, root, entity):
+    #     meta_info = entity._meta_info()
+    #     if self._entity_is_abstract(entity, meta_info):
+    #         self._raise_parent_hierarchy_error()
+    #         return
+    #     NSMAP = { None: meta_info.namespace}
+    #     root = etree.SubElement(root, meta_info.yang_name, nsmap=NSMAP)
+    #     root.set('{urn:ietf:params:xml:ns:netconf:base:1.0}operation', 'delete')
+    #     # are there keys
+    #     root = self._encode_keys(root, entity, meta_info)
+    #     return root
 
     def _encode_rpc_request(self, root, rpc):
         XmlEncoder().encode_to_xml(rpc, root, '')
@@ -327,6 +419,12 @@ class _NCClientSPPlugin(_SPPlugin):
         return root
 
     def _create_preamble(self, entity, root):
+        parent_meta_tuple_list = []
+        if type(entity) == YLeafList or type(entity) == YListItem:
+            # escape current level
+            entity = entity.parent
+        elif type(entity) == YList:
+            entity = entity[0]
         parent_meta_tuple_list = self._get_parent_tuple_list(entity, entity._meta_info())
         parent_ns = self._get_parent_namespace(root)
         return self._encode_parents_of_root(root, parent_meta_tuple_list, parent_ns)
@@ -388,6 +486,19 @@ class _NCClientSPPlugin(_SPPlugin):
                 key_value = key_value.name.replace('_', '-').lower()
             member_elem.text = str(key_value)
         
+    def _get_current_tuple_list(self, current_parent, current_meta_info):
+        parent_meta_tuple_list = [(current_meta_info, current_parent)]
+        while hasattr(current_meta_info, 'parent'):
+            current_meta_info = current_meta_info.parent
+            if current_parent is not None:
+                current_parent = current_parent.parent
+            if self._entity_is_abstract(current_parent, current_meta_info) or \
+                    self._entity_has_no_keys(current_parent, current_meta_info):
+                self._raise_parent_hierarchy_error()
+                return []
+            parent_meta_tuple_list.append((current_meta_info, current_parent))
+        return parent_meta_tuple_list
+
     def _get_parent_tuple_list(self, current_parent, current_meta_info):
         parent_meta_tuple_list = []
         while hasattr(current_meta_info, 'parent'):
