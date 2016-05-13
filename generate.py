@@ -92,10 +92,10 @@ def create_pip_package(output_directory):
     exit_code = subprocess.call(args, env=os.environ.copy())
 
     if exit_code == 0:
-        print('Successfully created source distribution at %sdist' %
+        print('\nSuccessfully created source distribution at %sdist' %
               (py_sdk_root,))
     else:
-        print('Failed to create source distribution')
+        print('\nFailed to create source distribution')
         sys.exit(exit_code)
     print('=================================================')
     print('Successfully generated Python YDK at %s' % (py_sdk_root,))
@@ -111,7 +111,7 @@ def create_shared_library(output_directory):
     exit_code = subprocess.call(args, env=os.environ.copy())
 
     if exit_code == 0 and os.path.isfile(cpp_sdk_root + 'ydk_cpp.so'):
-        print('Successfully created shared library %s as ydk_cpp.so' %
+        print('\nSuccessfully created shared library %s as ydk_cpp.so' %
               (cpp_sdk_root))
     else:
         print('\nERROR: Failed to create shared library!\n')

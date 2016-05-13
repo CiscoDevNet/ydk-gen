@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	auto bgp = make_unique<Bgp>();
 
 	// Set the Global AS
-	bgp->global_->config->as_ = 65001
+	bgp->global_->config->as_ = 65001;
 
 	// Create an AFI SAFI config
 	auto ipv4_afsf = make_unique<Bgp::Global::AfiSafis::AfiSafi>();
