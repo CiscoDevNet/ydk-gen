@@ -44,6 +44,7 @@ Options:
   --profile=PROFILE   Take options from a profile file, any CLI targets
                       ignored. Profile options override CLI currently
   -p, --python        Generate Python SDK
+  -c, --cpp           Generate C++ SDK
   -v, --verbose       Verbose mode
   --generate-doc      Generation documentation
   --output-directory  The output-directory . If not specified the output can be found under ydk-gen/gen-api/python

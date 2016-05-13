@@ -96,11 +96,30 @@ def create_pip_package(output_directory):
               (py_sdk_root,))
     else:
         print('Failed to create source distribution')
+        sys.exit(exit_code)
     print('=================================================')
     print('Successfully generated Python YDK at %s' % (py_sdk_root,))
     print('Please read %sREADME.rst for information on how to install the package in your environment' % (
         py_sdk_root,))
 
+
+def create_shared_library(output_directory):
+
+    cpp_sdk_root = output_directory + '/cpp/'
+    os.chdir(cpp_sdk_root)
+    args = ['make']
+    exit_code = subprocess.call(args, env=os.environ.copy())
+
+    if exit_code == 0 and os.path.isfile(cpp_sdk_root + 'ydk_cpp.so'):
+        print('Successfully created shared library %s as ydk_cpp.so' %
+              (cpp_sdk_root))
+    else:
+        print('\nERROR: Failed to create shared library!\n')
+        sys.exit(exit_code)
+    print('\n=================================================')
+    print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
+    print('Please read %sREADME.rst for information on how to install the package in your environment\n' % (
+        cpp_sdk_root,))
 
 if __name__ == '__main__':
     parser = OptionParser(usage="usage: %prog [options]",
@@ -180,7 +199,9 @@ if __name__ == '__main__':
     if options.gendoc == True:
         generate_documentation(output_directory, ydk_root)
 
-    if not options.cpp:
+    if options.cpp:
+        create_shared_library(output_directory)
+    else:
         create_pip_package(output_directory)
 
     print 'Code generation completed successfully!'
