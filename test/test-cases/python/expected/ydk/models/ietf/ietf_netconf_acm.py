@@ -23,7 +23,7 @@ import collections
 
 from enum import Enum
 
-from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
+from ydk.types import Empty, YList, YLeafList, DELETE, Decimal64, FixedBitsDict
 
 from ydk.errors import YPYError, YPYDataValidationError
 
@@ -215,7 +215,9 @@ class Nacm(object):
             def __init__(self):
                 self.parent = None
                 self.name = None
-                self.user_name = []
+                self.user_name = YLeafList()
+                self.user_name.parent = self
+                self.user_name.name = 'user_name'
 
             @property
             def _common_path(self):
@@ -302,7 +304,9 @@ class Nacm(object):
         def __init__(self):
             self.parent = None
             self.name = None
-            self.group = []
+            self.group = YLeafList()
+            self.group.parent = self
+            self.group.name = 'group'
             self.rule = YList()
             self.rule.parent = self
             self.rule.name = 'rule'

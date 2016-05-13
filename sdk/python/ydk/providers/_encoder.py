@@ -25,7 +25,7 @@ from ydk._core._dm_meta_info import REFERENCE_CLASS, REFERENCE_LIST , REFERENCE_
                                  REFERENCE_UNION, ANYXML_CLASS, REFERENCE_BITS, \
                                  REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS
 from ydk.errors import YPYDataValidationError, YPYError
-from ydk.types import Empty, DELETE, READ, Decimal64, YList
+from ydk.types import Empty, DELETE, READ, Decimal64, YList, YLeafList, YListItem
 
 import ydk.models._yang_ns as _yang_ns
 
@@ -60,6 +60,7 @@ class XmlEncoder(object):
 
             if entity.i_meta.namespace is not None and parent_ns != entity.i_meta.namespace:
                 elem.set('xmlns', entity.i_meta.namespace)
+
 
         for member in entity.i_meta.meta_info_class_members:
             value = eval('entity.%s' % member.presentation_name)
@@ -97,7 +98,7 @@ class XmlEncoder(object):
                     member_elem = etree.SubElement(elem, member.name, nsmap=NSMAP)
                     if entity.i_meta.namespace is not None and entity.i_meta.namespace != _yang_ns._namespaces[member.module_name]:
                         NSMAP[None] = _yang_ns._namespaces[member.module_name]
-                    member_elem.text = self.encode_value(member, NSMAP, child)
+                    member_elem.text = self.encode_value(member, NSMAP, child.item)
             elif member.mtype == REFERENCE_UNION:
                 for contained_member in member.members:
                     # determine what kind of encoding is needed here

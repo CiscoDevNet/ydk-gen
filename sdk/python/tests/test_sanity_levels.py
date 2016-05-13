@@ -32,7 +32,13 @@ class SanityYang(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(address='127.0.0.1', username='admin', password='admin', protocol='ssh', port=12022)
+        self.ncc = NetconfServiceProvider(
+                    address='127.0.0.1',
+                    username='admin',
+                    password='admin',
+                    protocol='ssh',
+                    port=12022
+                    )
         self.crud = CRUDService()
 
     @classmethod
@@ -87,7 +93,6 @@ class SanityYang(unittest.TestCase):
         self.crud.delete(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_1)
         self.assertEqual(r_2._has_data(), False)
-
 
     def test_three_level_pos(self):
         # READ
