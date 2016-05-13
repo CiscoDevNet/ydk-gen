@@ -210,8 +210,8 @@ init_confd
 run_pygen_test
 generate_ydktest_package
 run_sanity_tests
-run_cpp_tests
 submit_coverage
+run_cpp_tests
 
 setup_deviation_sanity_models
 run_deviation_sanity

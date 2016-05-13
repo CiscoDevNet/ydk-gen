@@ -30,6 +30,10 @@ int main(int argc, char* argv[])
 {
 	auto bgp = make_unique<Bgp>();
 
+	// Set the Global AS
+	bgp->global_->config->as_ = 65001
+
+	// Create an AFI SAFI config
 	auto ipv4_afsf = make_unique<Bgp::Global::AfiSafis::AfiSafi>();
 	ipv4_afsf->afi_safi_name = "ipv4-unicast";
 	ipv4_afsf->config->afi_safi_name = "ipv4-unicast";
@@ -40,6 +44,7 @@ int main(int argc, char* argv[])
 	ipv6_afsf->config->afi_safi_name = "ipv6-unicast";
 	ipv6_afsf->config->enabled = true;
 
+	// add the AFI SAFI configs to the global AFI SAFI list
 	bgp->global_->afi_safis->afi_safi.push_back(move(ipv4_afsf));
 	bgp->global_->afi_safis->afi_safi.push_back(move(ipv4_afsf));
 
