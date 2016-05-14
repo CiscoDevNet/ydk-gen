@@ -295,7 +295,7 @@ class _NCClientSPPlugin(_SPPlugin):
                     xc = 'urn:ietf:params:xml:ns:netconf:base:1.0'
                     elem.set('{' + xc + '}operation', 'delete')
                     elem.text = str(entity.item)
-                    # clean chs, attach elem
+
         else:
             chs = root.getchildren()
             for ch in chs:
@@ -378,18 +378,6 @@ class _NCClientSPPlugin(_SPPlugin):
         root = self._create_preamble(entity, root)
         XmlEncoder().encode_filter(entity, root, optype)
         return root
-
-    # def _encode_delete_request(self, root, entity):
-    #     meta_info = entity._meta_info()
-    #     if self._entity_is_abstract(entity, meta_info):
-    #         self._raise_parent_hierarchy_error()
-    #         return
-    #     NSMAP = { None: meta_info.namespace}
-    #     root = etree.SubElement(root, meta_info.yang_name, nsmap=NSMAP)
-    #     root.set('{urn:ietf:params:xml:ns:netconf:base:1.0}operation', 'delete')
-    #     # are there keys
-    #     root = self._encode_keys(root, entity, meta_info)
-    #     return root
 
     def _encode_rpc_request(self, root, rpc):
         XmlEncoder().encode_to_xml(rpc, root, '')

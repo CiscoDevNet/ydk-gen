@@ -32,6 +32,8 @@ from optparse import OptionParser
 from collections import defaultdict
 from jinja2 import Environment, FileSystemLoader
 
+logger = logging.getLogger('ydkgen')
+
 dd = lambda: defaultdict(dd)
 CWD = os.path.dirname(os.path.abspath(__file__))
 
@@ -91,7 +93,7 @@ def get_local_files_attr(tmp_dir, d):
     target_dir = tmp_dir + d
     for (dirpath, dirnames, filenames) in walk(target_dir):
         for filename in filenames:
-            path = os.path.join(target_dir, filename)
+            path = os.path.join(target_dir, dirpath, filename)
             attr = get_local_file_attr(target_dir, filename)
             files_attr.append(attr)
     return files_attr
@@ -115,7 +117,7 @@ def get_remote_files_attr(url, commitid, d, tmp_dir):
     target_dir = os.path.join(tmp_dir, d)
     for (dirpath, dirnames, filenames) in walk(target_dir):
         for filename in filenames:
-            path = os.path.join(d, filename)
+            path = os.path.join(d, dirpath, filename)
             attr = get_remote_file_attr(url, commitid, path, tmp_dir)
             files_attr.append(attr)
     return files_attr
@@ -177,6 +179,8 @@ def print_json_output(file, output_dir):
                     commitid = commit['commitid']
                 else:
                     commitid = 'HEAD'
+
+                repo.git.checkout(commitid)
 
                 if 'file' in commit:
                     for path in commit['file']:
