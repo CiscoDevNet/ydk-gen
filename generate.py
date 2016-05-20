@@ -36,6 +36,24 @@ def init_verbose_logger():
     logger.addHandler(ch)
 
 
+def print_about_ydk_page(ydk_root, py_api_doc_gen):
+    repo = Repo(ydk_root)
+    remote = repo.remote().name
+    branch = repo.active_branch.name
+    url = repo.remote().url.split('://')[-1].split('.git')[0]
+    commit_id = repo.rev_parse(remote + '/' + branch).hexsha
+
+    contents = ''
+
+    with open(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'r+w') as about_file:
+        contents = about_file.read()
+        contents = contents.replace('git clone repo-url', 'git clone https://{0}.git'.format(url))
+        contents = contents.replace('git checkout commit-id', 'git checkout {0}'.format(commit_id))
+
+    with open(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'w') as about_file:
+        about_file.write(contents)
+
+
 def generate_documentation(output_directory, ydk_root):
 
     py_api_doc_gen = output_directory + '/python/docsgen'
@@ -49,23 +67,10 @@ def generate_documentation(output_directory, ydk_root):
     release = 'release={}'.format(version_number)
     version = 'version={}'.format(version_number[:version_number.rfind(".")])
 
-    # print commit id page
-    repo = Repo(ydk_root)
-    remote = repo.remote().name
-    branch = repo.active_branch.name
-    url = repo.remote().url.split('://')[-1].split('.git')[0]
-    commit_id = repo.rev_parse(remote + '/' + branch).hexsha
-
-    with open(os.path.join(py_api_doc_gen, 'commit_id.rst'), 'w') as id_file:
-        id_file.write('Commit id\n'
-                      '=========\n'
-                      '\n'
-                      'This ydk-py is generated from `this commit '
-                      '<https://{}/commit/{}>`_.'.format(url, commit_id)
-                      )
+    # print about YDK page
+    print_about_ydk_page(ydk_root, py_api_doc_gen)
 
     # build docs
-    # logger.debug('Building docs using sphinx-build...\n')
     print('\nBuilding docs using sphinx-build...\n')
 
     p = subprocess.Popen(['sphinx-build',

@@ -18,7 +18,7 @@ Contents:
    presence_class.rst
    types_doc.rst
    deviation.rst
-   commit_id.rst
+   about_ydk.rst
    ydk.rst
    ydk.models.rst
 

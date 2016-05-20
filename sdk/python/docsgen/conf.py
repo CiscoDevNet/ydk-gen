@@ -17,7 +17,10 @@ import os
 import shlex
 import sphinx_rtd_theme
 
-ydk_root = os.environ['YDKGEN_HOME']
+if not os.environ.has_key('YDKGEN_HOME'):
+    ydk_root = os.getcwd()
+else:
+    ydk_root = os.environ['YDKGEN_HOME']
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
