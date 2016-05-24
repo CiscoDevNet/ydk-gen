@@ -1945,6 +1945,11 @@ class Runner(object):
             	A list of string
             	**type**\: list of str
             
+            .. attribute:: llunion
+            
+            	A list of union
+            	**type**\: list of one of { list of int | list of str }
+            
             .. attribute:: name
             
             	this is string value
@@ -2011,6 +2016,16 @@ class Runner(object):
             	union test value
             	**type**\: one of { :py:class:`YdkEnumTestEnum <ydk.models.ydktest.ydktest_sanity.YdkEnumTestEnum>` | int }
             
+            .. attribute:: younion_list
+            
+            	members of the younion
+            	**type**\: list of one of { list of one of { list of int | list of str } | list of str | list of str }
+            
+            .. attribute:: younion_recursive
+            
+            	Recursive union leaf
+            	**type**\: one of { one of { int | str } | int }
+            
             
 
             """
@@ -2033,6 +2048,9 @@ class Runner(object):
                 self.llstring = YLeafList()
                 self.llstring.parent = self
                 self.llstring.name = 'llstring'
+                self.llunion = YLeafList()
+                self.llunion.parent = self
+                self.llunion.name = 'llunion'
                 self.name = None
                 self.number16 = None
                 self.number32 = None
@@ -2043,6 +2061,10 @@ class Runner(object):
                 self.u_number64 = None
                 self.u_number8 = None
                 self.younion = None
+                self.younion_list = YLeafList()
+                self.younion_list.parent = self
+                self.younion_list.name = 'younion_list'
+                self.younion_recursive = None
 
             class EmbededEnumEnum(Enum):
                 """
@@ -2138,6 +2160,11 @@ class Runner(object):
                         if child is not None:
                             return True
 
+                if self.llunion is not None:
+                    for child in self.llunion:
+                        if child is not None:
+                            return True
+
                 if self.name is not None:
                     return True
 
@@ -2166,6 +2193,14 @@ class Runner(object):
                     return True
 
                 if self.younion is not None:
+                    return True
+
+                if self.younion_list is not None:
+                    for child in self.younion_list:
+                        if child is not None:
+                            return True
+
+                if self.younion_recursive is not None:
                     return True
 
                 return False

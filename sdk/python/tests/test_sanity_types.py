@@ -21,6 +21,7 @@ import unittest
 from ydk.services import CRUDService
 from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.models.ydktest import ydktest_sanity_types as ysanity_types
+from ydk.models.ydktest import ydktest_types as y_types
 from ydk.providers import NetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from tests.compare import is_equal
@@ -510,6 +511,47 @@ class SanityTest(unittest.TestCase):
     def test_union_int(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.enum_int_value = 2
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
+    def test_union_recursive(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.younion_recursive = 18
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+
+        self.assertEqual(result, True)
+
+    def test_union_list(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.llunion.append(1)
+        runner.ytypes.built_in_t.llunion.append(3)
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
+    def test_union_complex_list(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.younion_list.append("123:45")
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2

@@ -72,7 +72,7 @@ class XmlEncoder(object):
 
             member_elem = None
             NSMAP = {}
-            if member.mtype not in [REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, REFERENCE_IDENTITY_CLASS] or isinstance(value, DELETE) or isinstance(value, READ):
+            if member.mtype not in [REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, REFERENCE_IDENTITY_CLASS, REFERENCE_UNION] or isinstance(value, DELETE) or isinstance(value, READ):
                 member_elem = etree.SubElement(elem, member.name, nsmap=NSMAP)
 
                 if entity.i_meta.namespace is not None \
@@ -101,10 +101,25 @@ class XmlEncoder(object):
                     member_elem.text = self.encode_value(member, NSMAP, child.item)
             elif member.mtype == REFERENCE_UNION:
                 for contained_member in member.members:
-                    # determine what kind of encoding is needed here
-                    member_elem.text = self.encode_value(contained_member, NSMAP, value)
-                    if len(member_elem.text) > 0:
-                        break
+                    if contained_member.mtype == REFERENCE_LEAFLIST:
+                        for child in value:
+                            t = self.encode_value(contained_member, NSMAP, child.item)
+                            if len(t) == 0:
+                                continue
+                            member_elem = etree.SubElement(elem, contained_member.name, nsmap=NSMAP)
+                            if entity.i_meta.namespace is not None and entity.i_meta.namespace != _yang_ns._namespaces[contained_member.module_name]:
+                                NSMAP[None] = _yang_ns._namespaces[contained_member.module_name]
+                            member_elem.text = t
+                        if len(member_elem.text) > 0:
+                            break
+                    else:
+                        t = self.encode_value(contained_member, NSMAP, value)
+                        if len(t) == 0:
+                                continue
+                        member_elem = etree.SubElement(elem, contained_member.name, nsmap=NSMAP)
+                        member_elem.text = t
+                        if len(member_elem.text) > 0:
+                            break
             elif member.mtype == REFERENCE_IDENTITY_CLASS:
                 text = self.encode_value(member, NSMAP, value)
                 member_elem = etree.SubElement(elem, member.name, nsmap=NSMAP)
