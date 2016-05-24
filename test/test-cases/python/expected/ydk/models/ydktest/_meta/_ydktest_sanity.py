@@ -791,6 +791,25 @@ _meta_table = {
                 ''',
                 'llstring',
                 'ydktest-sanity', False),
+            _MetaInfoClassMember('llunion', REFERENCE_UNION, 'str' , None, None, 
+                [], [], 
+                '''                A list of union
+                ''',
+                'llunion',
+                'ydktest-sanity', False, [
+                    _MetaInfoClassMember('llunion', REFERENCE_LEAFLIST, 'int' , None, None, 
+                        [(-32768, 32767)], [], 
+                        '''                        A list of union
+                        ''',
+                        'llunion',
+                        'ydktest-sanity', False),
+                    _MetaInfoClassMember('llunion', REFERENCE_LEAFLIST, 'str' , None, None, 
+                        [], [], 
+                        '''                        A list of union
+                        ''',
+                        'llunion',
+                        'ydktest-sanity', False),
+                ]),
             _MetaInfoClassMember('name', ATTRIBUTE, 'str' , None, None, 
                 [], [], 
                 '''                this is string value
@@ -862,6 +881,76 @@ _meta_table = {
                         '''                        union test value
                         ''',
                         'younion',
+                        'ydktest-sanity', False),
+                ]),
+            _MetaInfoClassMember('younion-list', REFERENCE_UNION, 'str' , None, None, 
+                [], [], 
+                '''                members of the younion
+                ''',
+                'younion_list',
+                'ydktest-sanity', False, [
+                    _MetaInfoClassMember('younion-list', REFERENCE_UNION, 'str' , None, None, 
+                        [], [], 
+                        '''                        members of the younion
+                        ''',
+                        'younion_list',
+                        'ydktest-sanity', False, [
+                            _MetaInfoClassMember('younion-list', REFERENCE_LEAFLIST, 'int' , None, None, 
+                                [(0, 4294967295)], [], 
+                                '''                                members of the younion
+                                ''',
+                                'younion_list',
+                                'ydktest-sanity', False),
+                            _MetaInfoClassMember('younion-list', REFERENCE_LEAFLIST, 'str' , None, None, 
+                                [], [], 
+                                '''                                members of the younion
+                                ''',
+                                'younion_list',
+                                'ydktest-sanity', False),
+                        ]),
+                    _MetaInfoClassMember('younion-list', REFERENCE_LEAFLIST, 'str' , None, None, 
+                        [], [], 
+                        '''                        members of the younion
+                        ''',
+                        'younion_list',
+                        'ydktest-sanity', False),
+                    _MetaInfoClassMember('younion-list', REFERENCE_LEAFLIST, 'str' , None, None, 
+                        [], [], 
+                        '''                        members of the younion
+                        ''',
+                        'younion_list',
+                        'ydktest-sanity', False),
+                ]),
+            _MetaInfoClassMember('younion-recursive', REFERENCE_UNION, 'str' , None, None, 
+                [], [], 
+                '''                Recursive union leaf
+                ''',
+                'younion_recursive',
+                'ydktest-sanity', False, [
+                    _MetaInfoClassMember('younion-recursive', REFERENCE_UNION, 'str' , None, None, 
+                        [], [], 
+                        '''                        Recursive union leaf
+                        ''',
+                        'younion_recursive',
+                        'ydktest-sanity', False, [
+                            _MetaInfoClassMember('younion-recursive', ATTRIBUTE, 'int' , None, None, 
+                                [(0, 4294967295)], [], 
+                                '''                                Recursive union leaf
+                                ''',
+                                'younion_recursive',
+                                'ydktest-sanity', False),
+                            _MetaInfoClassMember('younion-recursive', ATTRIBUTE, 'str' , None, None, 
+                                [], [], 
+                                '''                                Recursive union leaf
+                                ''',
+                                'younion_recursive',
+                                'ydktest-sanity', False),
+                        ]),
+                    _MetaInfoClassMember('younion-recursive', ATTRIBUTE, 'int' , None, None, 
+                        [(-128, 127)], [], 
+                        '''                        Recursive union leaf
+                        ''',
+                        'younion_recursive',
                         'ydktest-sanity', False),
                 ]),
             ],

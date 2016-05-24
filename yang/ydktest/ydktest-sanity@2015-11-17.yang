@@ -11,7 +11,7 @@ module ydktest-sanity {
 
   //import ietf-inet-types { prefix "inet"; }
 
-  //import Cisco-IOS-XR-types { prefix "xr"; }
+  import ydktest-types { prefix "types"; }
 
   include ydktest-sanity-submodule {
     revision-date 2016-04-25;
@@ -311,7 +311,7 @@ module ydktest-sanity {
         
         leaf identity-ref-value {
           type identityref {
-          	base base-identity;
+            base base-identity;
            }
         }
         
@@ -351,6 +351,31 @@ module ydktest-sanity {
           //orered-by user;
           description "A list of string";
         }
+
+        leaf-list llunion {
+          type union {
+              type int16;
+              type string;
+          }
+          description "A list of union";
+        }
+
+        leaf younion-recursive {
+            type types:Ydk-Recursive-Union-type;
+            description "Recursive union leaf";
+        }
+
+        leaf-list younion-list {
+             type union {
+                type types:Ydk-Simple-Union-type;
+                type types:Ydk-String-type;
+                type string;
+                //type types:Ydk-Identity-type; //TODO this does not work
+              }
+              description
+                "members of the younion";
+        }
+        
         
         //leaf-refs refeerring to different target node
         

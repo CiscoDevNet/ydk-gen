@@ -27,6 +27,7 @@ from ydk.services import CodecService
 
 from samples.session_mgr import init_logging
 from ydk.models.bgp import bgp
+from ydk.models.routing.routing_policy import RoutingPolicy
 
 
 def bgp_run(codec_service, provider):
@@ -73,9 +74,34 @@ def bgp_run(codec_service, provider):
     assert bgp_payload == codec_service.encode(provider, bgp_entity)
 
 
+def run_routing(codec_service, provider):
+    # set up routing policy definition
+    routing_policy = RoutingPolicy()
+
+    pass_all_policy_defn = RoutingPolicy.PolicyDefinitions.PolicyDefinition()
+    pass_all_policy_defn.name = 'PASS-ALL'
+
+    routing_policy.policy_definitions.policy_definition.append(pass_all_policy_defn)
+    pass_all_policy_defn._parent = routing_policy.policy_definitions
+
+    comm_set = RoutingPolicy.DefinedSets.BgpDefinedSets.CommunitySets.CommunitySet()
+    comm_set.community_set_name = 'testing'
+    comm_set.community_member.append("oooo")
+    comm_set.community_member.append("a")
+    routing_policy.defined_sets.bgp_defined_sets.community_sets.community_set.append(comm_set)
+
+    routing_payload = codec_service.encode(provider, routing_policy)
+    print routing_payload
+    routing_entity = codec_service.decode(provider, routing_payload)
+    print 'Encoded payload:\n', routing_payload, \
+            '\nRe-encode the decoded payload:\n', codec_service.encode(provider, routing_entity)
+    assert routing_payload == codec_service.encode(provider, routing_entity)
+
+
 if __name__ == "__main__":
-    init_logging()
+    # init_logging()
     provider = CodecServiceProvider(type='xml')
     codec_service = CodecService()
     bgp_run(codec_service, provider)
+    run_routing(codec_service, provider)
     exit()
