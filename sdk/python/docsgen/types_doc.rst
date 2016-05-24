@@ -42,7 +42,7 @@ Example use of FixedBitsDict type
 
 .. code-block:: python
 
-    from  from ydk.models.ietf.ietf_netconf_acm import Nacm
+    from ydk.models.ietf.ietf_netconf_acm import Nacm
 
     rule_list   = Nacm.RuleList()
     rule        = rule_list.Rule()
@@ -57,8 +57,26 @@ Example use of YList type
 
 .. code-block:: python
 
-    from  from ydk.models.ietf.ietf_netconf_acm import Nacm
+    from ydk.models.ietf.ietf_netconf_acm import Nacm
 
     rule_list   = Nacm.RuleList()
     rule        = rule_list.Rule()
     rule.parent = rule_list
+
+Example use of YLeafList type
+=============================
+
+- The node being configured (ipv4_dscp) under the ydk.models.asr9k.Cisco_IOS_XR_asr9k_policymgr_cfg module:
+**ipv4_dscp:** An leaflist of Match IPv4 DSCP. **type:** YLeafList
+
+.. code-block:: python
+
+    from ydk.models.asr9k.Cisco_IOS_XR_asr9k_policymgr_cfg import PolicyManager
+
+    match = PolicyManager.ClassMaps.ClassMap.Match()
+    match.ipv4_dscp.extend(['15', '16', '17', '18', '19'])
+    even_elements = match.ipv4_dscp[::2]
+
+    # Note: YLeafList is associative array, attempt to add duplicated element will raise Exception.
+    match.ipv4_dscp.append('15')
+    # YPYDataValidationError will be raised.

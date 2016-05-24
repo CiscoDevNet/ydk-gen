@@ -24,214 +24,177 @@ import os
 import re
 import sys
 import json
-import shutil
+import logging
 import tempfile
 from os import walk
 from git import Repo
+from shutil import rmtree
 from optparse import OptionParser
-from collections import defaultdict
-from jinja2 import Environment, FileSystemLoader
+from collections import namedtuple
+from jinja2 import Environment
 
 logger = logging.getLogger('ydkgen')
 
-dd = lambda: defaultdict(dd)
-CWD = os.path.dirname(os.path.abspath(__file__))
+MODULE_STATEMENT = re.compile(r'''^[ \t]*(sub)?module +(["'])?([-A-Za-z0-9]*(@[0-9-]*)?)(["'])? *\{.*$''')
+REVISION_STATEMENT = re.compile(r'''^[ \t]*revision[\s]*(['"])?([-0-9]*)?(['"])?[\s]*\{.*$''')
 
-MODULE_STATEMENT = re.compile('''^[ \t]*(sub)?module +(["'])?([-A-Za-z0-9]*(@[0-9-]*)?)(["'])? *\{.*$''')
-REVISION_STATEMENT = re.compile('''^[ \t]*revision[\s]*(['"])?([-0-9]*)?(['"])?[\s]*\{.*$''')
+Local_URI = namedtuple('Local_URI', ['url'])
+Remote = namedtuple('Remote', ['url', 'commitid'])
+Remote_URI = namedtuple('RemoteURI', ['url', 'commitid', 'path'])
 
-def convert_uri(file=None, url=None, commitid=None, path=None):
+Bundle = namedtuple('Bundle', ['name', 'version', 'ydk_version'])
+
+TEMPLATE = """{% set comma = joiner(",") %}
+{
+    "modules" : [{% for m in modules %}{{ comma() }}
+        {
+            "name" : "{{ m.name }}",
+            "revision" : "{{ m.revision }}",
+            "kind" : "{{ m.kind }}",
+            "uri" : "{{ m.uri }}"
+        }{% endfor %}
+    ],
+
+    "bundle" : {
+        "name" : "{{ definition.name }}",
+        "version" : "{{ definition.version}}",
+        "ydk-version" : "{{ definition.ydk_version }}"{% if dependency is defined %},
+        "dependency" : [{% for d in dependency %}{{ comma() }}
+            {
+                "name" : "{{ d.name }}",
+                "version" : "{{ d.version }}",
+                "ydk-version" : "{{ d.ydk_version }}",
+                "uri" : "{{ d.uri }}"
+            }{% endfor %}
+        ]{% endif %}
+    }
+}
+"""
+
+class Module(object):
+    def __init__(self, name, revision, kind, uri):
+        self.name = name
+        self.revision = revision
+        self.kind = kind
+        self.uri = convert_uri(uri)
+
+def convert_uri(uri):
     """ Convert uri to bundle format, local files is represented as:
-            file://$YDKGEN_HOME/[relative path]
-        remote file is represented as:
-            https://[url]?commit-id=[commitid]&path=[path]
+
+        For example:
+            >>> convert_uri(Local_URI('relative/path/to/file'))
+            'file://relative/path/to/file'
+            >>> convert_uri(Remote_URI('repository', 'commitid', 'path'))
+            'repository?commit-id=commitid&path=path'
 
     """
-    if file:
-        return "file://{}".format(file)
-    else:
-        return "{}?commit-id={}&path={}".format(url, commitid, path)
+    if isinstance(uri, Local_URI):
+        # path relative to $YDKGEN_HOME
+        return "file://%s" % uri.url
+    elif isinstance(uri, Remote_URI):
+        return "%s?commit-id=%s&path=%s" % uri
 
-def parse_file(lines):
-    name = None
-    revision = None
-    kind = None
-
-    for line in lines:
-        match = MODULE_STATEMENT.match(line)
-        if match:
-            name = match.groups()[2]
-            if match.groups()[0] == 'sub':
-                kind = 'SUBMODULE'
-            else:
-                kind = 'MODULE'
-        match = REVISION_STATEMENT.match(line)
-        if match:
-            revision = match.groups()[1]
-
-    return name, revision, kind
-
-def get_attr(tmp_dir, file):
-    file = os.path.join(tmp_dir, file)
-    with open(file) as fd:
-        name, revision, kind = parse_file(fd.readlines())
-
-    return name, revision, kind
-
-def get_local_file_attr(tmp_dir, file):
-    name, revision, kind = get_attr(tmp_dir, file)
-    uri = convert_uri(file=os.path.join(tmp_dir, file))
-    return {
-            'name' : name,
-            'revision' : revision,
-            'kind' : kind,
-            'uri' : uri
-            }
-
-def get_local_files_attr(tmp_dir, d):
-    files_attr = []
-    target_dir = tmp_dir + d
-    for (dirpath, dirnames, filenames) in walk(target_dir):
-        for filename in filenames:
-            path = os.path.join(target_dir, dirpath, filename)
-            attr = get_local_file_attr(target_dir, filename)
-            files_attr.append(attr)
-    return files_attr
-
-
-def get_remote_file_attr(url, commitid, path, tmp_dir):
-    file_attr = {}
-    file = os.path.join(tmp_dir, path)
-
-    name, revision, kind = get_attr(tmp_dir, file)
-    uri = convert_uri(url=url, commitid=commitid, path=path)
-    return {
-            'name' : name,
-            'revision' : revision,
-            'kind' : kind,
-            'uri' : uri
-            }
-
-def get_remote_files_attr(url, commitid, d, tmp_dir):
-    files_attr = []
-    target_dir = os.path.join(tmp_dir, d)
-    for (dirpath, dirnames, filenames) in walk(target_dir):
-        for filename in filenames:
-            path = os.path.join(d, dirpath, filename)
-            attr = get_remote_file_attr(url, commitid, path, tmp_dir)
-            files_attr.append(attr)
-    return files_attr
-
-def get_bundle_definition(data, file):
-    major, minor, patch = data['version'].split('.')
-    name = os.path.basename(file).split('.json')[0]
-    return {
-            "name"  : name,
-            "major" : major,
-            "minor" : minor,
-            "patch" : patch
-            }
-
-
-def get_ydk_version(data):
-    major, minor, patch = data['version'].split('.')
-    return {
-            "major" : major,
-            "minor" : minor,
-            "patch" : patch
-            }
-
-def print_json_output(file, output_dir):
-
-    ydk_root = os.path.expandvars('$YDKGEN_HOME')
-    env = Environment(loader=FileSystemLoader(CWD),
-                    trim_blocks=True)
-    with open(os.path.join(ydk_root, file)) as json_file:
-        data = json.load(json_file)
-
-    bundle = get_bundle_definition(data, file)
-
-    ydk_version = get_ydk_version(data)
-
-    # populate local files
-    local_files = []
-    tmp_dir = ydk_root
-    if 'dir' in data['models']:
-        for d in data['models']['dir']:
-            attrs = get_local_files_attr(tmp_dir, d)
-            local_files.extend(attrs)
-
-    if 'file' in data['models']:
-        for f in data['models']['file']:
-            attr = get_local_file_attr(tmp_dir, f)
-            local_files.append(attr)
-
-    # populate remote files
-    remote_files = []
-    remote_dirs = []
-    if 'git' in data['models']:
-        for g in data['models']['git']:
-            tmp_dir = tempfile.mkdtemp(suffix='.yang')
-            url = g['url']
-            repo = Repo.clone_from(url, tmp_dir)
-            for commit in g['commits']:
-                if 'commitid' in commit:
-                    commitid = commit['commitid']
+def get_module_attrs(module_file, root, remote=None):
+    """ Return name, latest revision, kind and uri attribute for module."""
+    name, revision, kind, rpath = None, None, None, os.path.relpath(module_file, root)
+    with open(module_file) as f:
+        for line in f:
+            match =  MODULE_STATEMENT.match(line)
+            if match:
+                name = match.groups()[2]
+                if match.groups()[0] == 'sub':
+                    kind = 'SUBMODULE'
                 else:
-                    commitid = 'HEAD'
+                    kind = 'MODULE'
+            match = REVISION_STATEMENT.match(line)
+            if match:
+                revision = match.groups()[1]
+                break
 
-                repo.git.checkout(commitid)
+    if remote is None:
+        uri = Local_URI(rpath)
+    else:
+        uri = Remote_URI(remote.url, remote.commitid, rpath)
+    return Module(name, revision, kind, uri)
 
-                if 'file' in commit:
-                    for path in commit['file']:
-                        attr = get_remote_file_attr(url, commitid, path, tmp_dir)
-                        remote_files.append(attr)
+def get_file_attrs(files, root, remote=None):
+    for f in files:
+        logger.debug('Getting attrs from file: %s' % f)
+        yield get_module_attrs(os.path.join(root, f), root, remote)
 
-                if 'dir' in commit:
-                    for d in commit['dir']:
-                        attrs = get_remote_files_attr(url, commitid, d, tmp_dir)
-                        remote_files.extend(attrs)
-            shutil.rmtree(tmp_dir)
+def get_dir_attrs(dirs, root, remote=None):
+    for d in dirs:
+        for (d, _, files) in walk(os.path.join(root, d.lstrip('/'))):
+            for res in  get_file_attrs((os.path.join(d, f) for f in files), root, remote):
+                yield res
 
-    output = env.get_template('template.json').render(
-        local_files=local_files, remote_files=remote_files,
-        bundle=bundle, ydk_version=ydk_version
-        )
+def get_git_attrs(repos, root, remote=None):
+    for g in repos:
+        url, tmp_dir = g['url'], tempfile.mkdtemp(suffix='.yang')
+        logger.debug('Cloning from %s to %s' % (url, tmp_dir))
+        repo = Repo.clone_from(url, tmp_dir)
+        for c in g['commits']:
+            commitid = c['commitid'] if 'commitid' in c else 'HEAD'
+            repo.git.checkout(commitid)
+            if 'file' in c:
+                for fattr in get_file_attrs(c['file'], tmp_dir, Remote(url, commitid)):
+                    yield fattr
+            if 'dir' in c:
+                for fattr in get_dir_attrs(c['dir'], tmp_dir, Remote(url, commitid)):
+                    yield fattr
+        logger.debug('Removing folder %s:' % tmp_dir)
+        rmtree(tmp_dir)
 
-    with open(os.path.join(output_dir, bundle['name'] + '.json'), 'w') as fd:
-        fd.write(output)
-
-if __name__ == '__main__':
-
-    parser = OptionParser(usage="usage: %prog [options]",
-                          version="%prog 0.0.1",
-                          description="Translate profile file to bundle file.")
-
-    parser.add_option("--profile",
-                      type=str,
-                      dest="profile",
-                      help="Take options from a profile file, any CLI targets ignored")
-
-    parser.add_option("--output-directory",
-                      type=str,
-                      dest="output",
-                      help="Output directory for bundle file.")
-
-    try:
-        arg = sys.argv[1]
-    except IndexError:
-        parser.print_help()
-        sys.exit(1)
-
-    (options, args) = parser.parse_args()
-
+def check_envs():
     if not os.environ.has_key('YDKGEN_HOME'):
-        logger.error('YDKGEN_HOME not set')
+        logger.error('YDKGEN_HOME not set.')
         print >> sys.stderr, "Need to have YDKGEN_HOME set!"
         sys.exit(1)
 
-    if options.profile:
-        print_json_output(options.profile, options.output)
-    else:
-        print >> sys.stderr, "Profile file is required, see help."
-        sys.exit(1)
+def populate_template(in_file, out_file):
+    """ Generate bundle file using profile file. File is a relative path to a
+    local profile file.
+    """
+    check_envs()
+    ydk_root = os.path.expandvars('$YDKGEN_HOME')
+
+    with open(in_file) as f:
+        data = json.load(f)
+
+    modules = []
+    accepted_resources = ['file', 'dir', 'git']
+    for source in accepted_resources:
+        if source in data['models']:
+            modules.extend(globals()['get_%s_attrs' % source](data['models'][source], ydk_root))
+
+    version = data['version']
+    definition = Bundle('bundle_name', version, version)
+
+    output = Environment().from_string(TEMPLATE).render(
+        modules=modules, definition=definition)
+
+    with open(out_file, 'w') as f:
+        f.write(output)
+
+
+if __name__ == '__main__':
+
+    import doctest
+    doctest.testmod()
+
+    parser = OptionParser(usage="usage: %prog [options]")
+
+    parser.add_option("-v", "--verbose",
+                  action="store_true",
+                  dest="verbose",
+                  default=False,
+                  help="Verbose mode")
+
+    (options, args) = parser.parse_args()
+
+    if options.verbose:
+        handler = logging.StreamHandler()
+        logger.addHandler(handler)
+        logger.setLevel(logging.DEBUG)
+
+    populate_template('profiles/ydk/ydk_0_4_0.json', 'b.json')
