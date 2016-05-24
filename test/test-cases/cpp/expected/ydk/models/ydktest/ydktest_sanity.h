@@ -333,6 +333,7 @@ class Runner : public Entity {
                 std::string identity_ref_value;
                 int leaf_ref;
                 std::vector<std::string> llstring;
+                std::vector<std::string> llunion;
                 std::string name;
                 int number16;
                 int number32;
@@ -343,6 +344,8 @@ class Runner : public Entity {
                 int u_number64;
                 int u_number8;
                 std::string younion;
+                std::vector<std::string> younion_list;
+                std::string younion_recursive;
 
         };
 
