@@ -74,4 +74,9 @@ Example use of YLeafList type
     from ydk.models.asr9k.Cisco_IOS_XR_asr9k_policymgr_cfg import PolicyManager
 
     match = PolicyManager.ClassMaps.ClassMap.Match()
-    match.ipv4_dscp.extend(['15', '16'])
+    match.ipv4_dscp.extend(['15', '16', '17', '18', '19'])
+    even_elements = match.ipv4_dscp[::2]
+
+    # Note: YLeafList is associative array, attempt to add duplicated element will raise Exception.
+    match.ipv4_dscp.append('15')
+    # YPYDataValidationError will be raised.

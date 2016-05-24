@@ -29,6 +29,7 @@ import tempfile
 from os import walk
 from git import Repo
 from shutil import rmtree
+from optparse import OptionParser
 from collections import namedtuple
 from jinja2 import Environment
 
@@ -41,8 +42,7 @@ Local_URI = namedtuple('Local_URI', ['url'])
 Remote = namedtuple('Remote', ['url', 'commitid'])
 Remote_URI = namedtuple('RemoteURI', ['url', 'commitid', 'path'])
 
-Module = namedtuple('Module', ['name', 'revision', 'kind', 'uri'])
-Bundle = namedtuple('BundleDefinition', ['name', 'version', 'ydk_version'])
+Bundle = namedtuple('Bundle', ['name', 'version', 'ydk_version'])
 
 TEMPLATE = """{% set comma = joiner(",") %}
 {
@@ -66,8 +66,7 @@ TEMPLATE = """{% set comma = joiner(",") %}
                 "ydk-version" : "{{ d.ydk_version }}",
                 "uri" : "{{ d.uri }}"
             }{% endfor %}
-        ]
-        {% endif %}
+        ]{% endif %}
     }
 }
 """
@@ -83,22 +82,22 @@ def convert_uri(uri):
     """ Convert uri to bundle format, local files is represented as:
 
         For example:
-            >>> convert_uri(Local_URI('/abs/path/to/file'))
-            'file:///abs/path/to/file'
+            >>> convert_uri(Local_URI('relative/path/to/file'))
+            'file://relative/path/to/file'
             >>> convert_uri(Remote_URI('repository', 'commitid', 'path'))
             'repository?commit-id=commitid&path=path'
 
     """
     if isinstance(uri, Local_URI):
-        # path relative to ydkgen_home
+        # path relative to $YDKGEN_HOME
         return "file://%s" % uri.url
     elif isinstance(uri, Remote_URI):
         return "%s?commit-id=%s&path=%s" % uri
 
-def get_module_attrs(file, root, remote=None):
-    """ Return name, revision, kind and uri attribute for module."""
-    name, revision, kind, rpath = None, None, None, os.path.relpath(file, root)
-    with open(file) as f:
+def get_module_attrs(module_file, root, remote=None):
+    """ Return name, latest revision, kind and uri attribute for module."""
+    name, revision, kind, rpath = None, None, None, os.path.relpath(module_file, root)
+    with open(module_file) as f:
         for line in f:
             match =  MODULE_STATEMENT.match(line)
             if match:
@@ -152,7 +151,7 @@ def check_envs():
         print >> sys.stderr, "Need to have YDKGEN_HOME set!"
         sys.exit(1)
 
-def populate_temple(in_file, out_file):
+def populate_template(in_file, out_file):
     """ Generate bundle file using profile file. File is a relative path to a
     local profile file.
     """
@@ -181,6 +180,21 @@ def populate_temple(in_file, out_file):
 if __name__ == '__main__':
 
     import doctest
-    print doctest.testmod()
+    doctest.testmod()
 
-    populate_temple('profiles/ydk/ydk_0_4_0.json', 'b.json')
+    parser = OptionParser(usage="usage: %prog [options]")
+
+    parser.add_option("-v", "--verbose",
+                  action="store_true",
+                  dest="verbose",
+                  default=False,
+                  help="Verbose mode")
+
+    (options, args) = parser.parse_args()
+
+    if options.verbose:
+        handler = logging.StreamHandler()
+        logger.addHandler(handler)
+        logger.setLevel(logging.DEBUG)
+
+    populate_template('profiles/ydk/ydk_0_4_0.json', 'b.json')
