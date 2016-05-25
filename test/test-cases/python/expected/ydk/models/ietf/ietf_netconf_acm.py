@@ -287,8 +287,20 @@ class Nacm(object):
         .. attribute:: group
         
         	List of administrative groups that will be assigned the associated access rights defined by the 'rule' list.  The string '\*' indicates that all groups apply to the entry
-        	**type**\: list of one of { list of str | list of str }
+        	**type**\: one of the below types:
         
+        	**type**\: list of str
+        
+        	**pattern:** \\\*
+        
+        
+        ----
+        	**type**\: list of str
+        
+        	**pattern:** [^\\\*].\*
+        
+        
+        ----
         .. attribute:: rule
         
         	One access control rule.  Rules are processed in user\-defined order until a match is found.  A rule matches if 'module\-name', 'rule\-type', and 'access\-operations' match the request.  If a rule matches, the 'action' leaf determines if access is granted or not
@@ -332,8 +344,18 @@ class Nacm(object):
             .. attribute:: access_operations
             
             	Access operations associated with this rule.  This leaf matches if it has the value '\*' or if the bit corresponding to the requested operation is set
-            	**type**\: one of { str | :py:class:`AccessOperationsType_Bits <ydk.models.ietf.ietf_netconf_acm.AccessOperationsType_Bits>` }
+            	**type**\: one of the below types:
             
+            	**type**\: str
+            
+            	**pattern:** \\\*
+            
+            
+            ----
+            	**type**\: :py:class:`AccessOperationsType_Bits <ydk.models.ietf.ietf_netconf_acm.AccessOperationsType_Bits>`
+            
+            
+            ----
             .. attribute:: action
             
             	The access control action associated with the rule.  If a rule is determined to match a particular request, then this object is used to determine whether to permit or deny the request
@@ -347,13 +369,33 @@ class Nacm(object):
             .. attribute:: module_name
             
             	Name of the module associated with this rule.  This leaf matches if it has the value '\*' or if the object being accessed is defined in the module with the specified module name
-            	**type**\: one of { str | str }
+            	**type**\: one of the below types:
             
+            	**type**\: str
+            
+            	**pattern:** \\\*
+            
+            
+            ----
+            	**type**\: str
+            
+            
+            ----
             .. attribute:: notification_name
             
             	This leaf matches if it has the value '\*' or if its value equals the requested notification name
-            	**type**\: one of { str | str }
+            	**type**\: one of the below types:
             
+            	**type**\: str
+            
+            	**pattern:** \\\*
+            
+            
+            ----
+            	**type**\: str
+            
+            
+            ----
             .. attribute:: path
             
             	Data Node Instance Identifier associated with the data node controlled by this rule.  Configuration data or state data instance identifiers start with a top\-level data node.  A complete instance identifier is required for this type of path value.  The special value '/' refers to all possible datastore contents
@@ -362,8 +404,18 @@ class Nacm(object):
             .. attribute:: rpc_name
             
             	This leaf matches if it has the value '\*' or if its value equals the requested protocol operation name
-            	**type**\: one of { str | str }
+            	**type**\: one of the below types:
             
+            	**type**\: str
+            
+            	**pattern:** \\\*
+            
+            
+            ----
+            	**type**\: str
+            
+            
+            ----
             
 
             """

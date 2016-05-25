@@ -71,13 +71,9 @@ def get_class_docstring(clazz):
             prop, prop.property_type, prop.stmt.search_one('type'))
         if meta_info_data is None:
             continue
-        doc_link = meta_info_data.doc_link
-
-        prop_restriction = get_property_restriction(meta_info_data)
-
-        attribute_title = prop.name
 
         keys = clazz.get_key_props()
+        attribute_title = prop.name
         if prop in keys:
             attribute_title = '%s  <key>' % attribute_title
         properties_description.append('.. attribute:: %s\n\n' % (attribute_title))
@@ -85,10 +81,7 @@ def get_class_docstring(clazz):
         properties_description.append('\t%s\n' % (
             convert_to_reStructuredText(prop_comment)))
 
-        properties_description.append('\t**type**\: %s\n\n' % doc_link)
-
-        if prop_restriction is not None and len(prop_restriction) > 0:
-            properties_description.append('\t%s\n\n' % prop_restriction)
+        properties_description.extend(get_type_doc(meta_info_data, type_depth=1))
 
         if clazz.stmt.search_one('presence'):
             properties_description.append(add_presence_property_docstring(clazz))
@@ -96,12 +89,29 @@ def get_class_docstring(clazz):
     return convert_to_reStructuredText(class_description) + '\n\n' + ''.join(properties_description)
 
 
+def get_type_doc(meta_info_data, type_depth):
+    properties_description = []
+
+    if len(meta_info_data.children) > 0:
+        if type_depth == 1:
+            properties_description.append('\t**type**\: one of the below types:\n\n')
+        for child in meta_info_data.children:
+            properties_description.extend(get_type_doc(child, type_depth + 1))
+            properties_description.append('\n----\n')
+    else:
+        properties_description.append('\t**type**\: %s\n\n' % (meta_info_data.doc_link))
+        prop_restriction = get_property_restriction(meta_info_data)
+        if prop_restriction is not None and len(prop_restriction) > 0:
+            properties_description.append('\t%s\n\n' % (prop_restriction))
+
+    return properties_description
+
+
 def add_presence_property_docstring(clazz):
     description = []
     description.append(".. attribute:: %s\n\n" % ("_is_presence"))
     description.append("\tIs present if this instance represents presence container else not\n")
     description.append("\t**type**\: bool\n\n")
-
 
     return ''.join(description)
 
@@ -293,7 +303,7 @@ def get_meta_info_data(prop, property_type, type_stmt):
             meta_info_data.ptype = 'str'
             meta_info_data.property_type = type_spec
             if len(type_spec.types) > 0:
-                meta_info_data.doc_link += 'one of { '
+                # meta_info_data.doc_link += 'one of { '
                 for contained_type_stmt in type_spec.types:
                     enum_type_stmt = types_extractor.get_enum_type_stmt(contained_type_stmt)
                     bits_type_stmt = types_extractor.get_bits_type_stmt(contained_type_stmt)
@@ -314,10 +324,10 @@ def get_meta_info_data(prop, property_type, type_stmt):
                     child_meta_info_data = get_meta_info_data(
                         prop, contained_property_type, contained_type_stmt)
                     meta_info_data.children.append(child_meta_info_data)
-                    if meta_info_data.doc_link[-1:] != ' ':
-                        meta_info_data.doc_link += ' | '
-                    meta_info_data.doc_link += child_meta_info_data.doc_link
-                meta_info_data.doc_link += ' }'
+                    # if meta_info_data.doc_link[-1:] != ' ':
+                    #    meta_info_data.doc_link += ' | '
+                    # meta_info_data.doc_link += child_meta_info_data.doc_link
+                # meta_info_data.doc_link += ' }'
 
         elif isinstance(type_spec, TypeSpec) and type_spec.name == 'instance-identifier':
             # Treat as string

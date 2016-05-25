@@ -1921,8 +1921,18 @@ class Runner(object):
             .. attribute:: enum_int_value
             
             	enum int type
-            	**type**\: one of { :py:class:`YdkEnumIntTestEnum <ydk.models.ydktest.ydktest_sanity.YdkEnumIntTestEnum>` | int }
+            	**type**\: one of the below types:
             
+            	**type**\: :py:class:`YdkEnumIntTestEnum <ydk.models.ydktest.ydktest_sanity.YdkEnumIntTestEnum>`
+            
+            
+            ----
+            	**type**\: int
+            
+            	**range:** 1..4096
+            
+            
+            ----
             .. attribute:: enum_value
             
             	this is enum type value
@@ -1948,8 +1958,18 @@ class Runner(object):
             .. attribute:: llunion
             
             	A list of union
-            	**type**\: list of one of { list of int | list of str }
+            	**type**\: one of the below types:
             
+            	**type**\: list of int
+            
+            	**range:** \-32768..32767
+            
+            
+            ----
+            	**type**\: list of str
+            
+            
+            ----
             .. attribute:: name
             
             	this is string value
@@ -2014,18 +2034,66 @@ class Runner(object):
             .. attribute:: younion
             
             	union test value
-            	**type**\: one of { :py:class:`YdkEnumTestEnum <ydk.models.ydktest.ydktest_sanity.YdkEnumTestEnum>` | int }
+            	**type**\: one of the below types:
             
+            	**type**\: :py:class:`YdkEnumTestEnum <ydk.models.ydktest.ydktest_sanity.YdkEnumTestEnum>`
+            
+            
+            ----
+            	**type**\: int
+            
+            	**range:** 0..63
+            
+            
+            ----
             .. attribute:: younion_list
             
             	members of the younion
-            	**type**\: list of one of { list of one of { list of int | list of str } | list of str | list of str }
+            	**type**\: one of the below types:
             
+            	**type**\: list of int
+            
+            	**range:** 0..4294967295
+            
+            
+            ----
+            	**type**\: list of str
+            
+            
+            ----
+            
+            ----
+            	**type**\: list of str
+            
+            
+            ----
+            	**type**\: list of str
+            
+            
+            ----
             .. attribute:: younion_recursive
             
             	Recursive union leaf
-            	**type**\: one of { one of { int | str } | int }
+            	**type**\: one of the below types:
             
+            	**type**\: int
+            
+            	**range:** 0..4294967295
+            
+            
+            ----
+            	**type**\: str
+            
+            
+            ----
+            
+            ----
+            	**type**\: int
+            
+            	**range:** \-128..127
+            
+            
+            ----
             
 
             """
