@@ -179,10 +179,13 @@ function run_deviation_sanity {
 
 # submit coverage
 function submit_coverage {
-    coverage report
-    pip install coveralls
-    export COVERALLS_REPO_TOKEN=MO7qRNCbd9uovAEK2w8Z41lRUgVMi0tbF
-    coveralls    
+    if [[ "$BRANCH" == "master" ]] &&  [[ "$REPO" == *"CiscoDevNet/ydk-gen"* ]]
+    then
+        coverage report
+        pip install coveralls
+        export COVERALLS_REPO_TOKEN=MO7qRNCbd9uovAEK2w8Z41lRUgVMi0tbF
+        coveralls
+    fi
 }
 
 # Execution of the script starts here
