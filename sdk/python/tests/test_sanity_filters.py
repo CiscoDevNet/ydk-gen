@@ -179,8 +179,20 @@ class SanityYang(unittest.TestCase):
         # ysanity only have config data, ok to compare
         self.assertEqual(is_equal(r_2, r_3), True)
 
+    def test_decoder(self):
+        # send payload to device
+        runner = ysanity.Runner()
+        element = ysanity.Runner.OneList.Ldata()
+        element.number = 5
+        element.name = 'five'
+        runner.one_list.ldata.append(element)
+
+        self.crud.create(self.ncc, runner)
+
+        self.crud.read(self.ncc, ysanity.Runner.OneList.Ldata())
+
 
 
 
 if __name__ == '__main__':
-    unittest.main()  
+    unittest.main()

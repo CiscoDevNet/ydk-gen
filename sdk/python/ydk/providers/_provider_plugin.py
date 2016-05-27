@@ -94,21 +94,22 @@ class _NCClientSPPlugin(_SPPlugin):
         # incomplete key paths, in which case what is returned
         # will be the entity whose common path can be determined
 
-        suffix_field_names = []
-        current_entity = read_filter
-        if isinstance(current_entity, YList):
-            suffix_field_names.append(current_entity.name)
-            current_entity = current_entity.parent
-
         current = entity
+        current_entity = read_filter
+        current_meta = current_entity.i_meta
+
         yang_nodes = []
-        yang_nodes.extend([ s for s in current_entity._common_path.split('/') if ':' in s])
+
+        while hasattr(current_meta, 'parent'):
+            yang_nodes.append(current_meta.yang_name)
+            current_meta = current_meta.parent
+        if current_meta:
+            yang_nodes.append(current_meta.yang_name)
+
+        yang_nodes = list(reversed(yang_nodes))
         yang_nodes = yang_nodes[1:]
 
-        for seg in yang_nodes:
-            if '[' in seg:
-                seg = seg.split('[')[0]
-            _, yang_node_name = seg.split(':')
+        for yang_node_name in yang_nodes:
 
             found = False
             for member in current._meta_info().meta_info_class_members:
@@ -130,9 +131,6 @@ class _NCClientSPPlugin(_SPPlugin):
             if not found:
                 self.crud_logger.error('Error determing what needs to be returned')
                 raise YPYError('Error determining what needs to be returned')
-
-        for field in suffix_field_names:
-            current = eval('current.%s' % field)
 
         return current
 
