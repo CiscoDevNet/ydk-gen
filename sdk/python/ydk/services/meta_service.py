@@ -81,6 +81,10 @@ class MetaService(Service):
                 deviation_tables: A dictionary of existing deviation tables
 
         """
+
+        if hasattr(entity, 'parent'):
+            set_parent_imeta(entity)
+
         if isinstance(entity, YList) or isinstance(entity, YLeafList):
             entity = entity.parent
             MetaService.inject_imeta(entity, deviation_tables)
@@ -91,9 +95,14 @@ class MetaService(Service):
                 for deviation_table in deviation_tables.values():
                     inject_imeta_helper(entity, deviation_table)
 
-    # inject meta preamble
 
-
+def set_parent_imeta(entity, child_meta=None):
+    if isinstance(entity, YList) or isinstance(entity, YLeafList) or isinstance(entity, YListItem):
+        set_parent_imeta(entity.parent, child_meta)
+    elif entity:
+        entity.i_meta = entity._meta_info()
+        if hasattr(entity, 'parent'):
+            set_parent_imeta(entity.parent, entity.i_meta)
 
 def get_active_deviation_module_names(capabilities, entity):
     """ Return active deviation module names """
