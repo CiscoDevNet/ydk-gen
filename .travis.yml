@@ -18,3 +18,8 @@ script:
     - export REPO=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_REPO_SLUG; else echo `curl -s $PR | jq -r .head.repo.full_name`; fi)
     - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, REPO=$REPO"
     - docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH
+
+notifications:
+  email:
+    recipients:
+      - yang-dk@cisco.com
