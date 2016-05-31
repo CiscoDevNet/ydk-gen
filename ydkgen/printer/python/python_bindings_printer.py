@@ -25,12 +25,8 @@ import os
 from ydkgen.api_model import Class, Enum
 from ydkgen.common import get_rst_file_name
 
-from .bits_printer import BitsPrinter
-from .class_meta_printer import ClassMetaPrinter
-from .class_printer import ClassPrinter
 from .deviation_printer import DeviationPrinter
 from .doc_printer import DocPrinter
-from .enum_printer import EnumPrinter
 from .import_test_printer import ImportTestPrinter
 from .module_printer import ModulePrinter
 from .module_meta_printer import ModuleMetaPrinter

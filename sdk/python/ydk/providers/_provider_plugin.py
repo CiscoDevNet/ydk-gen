@@ -161,8 +161,6 @@ class _NCClientSPPlugin(_SPPlugin):
         '''
             Raises exception on error, else returns result
         '''
-        # import pdb
-        # pdb.set_trace()
         service_provider_rpc = self._create_rpc_instance(self.timeout)
         reply_str = "FAILED!"
         if len(payload) == 0:
