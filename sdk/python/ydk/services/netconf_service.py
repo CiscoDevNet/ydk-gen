@@ -28,6 +28,7 @@ try:
 except:
     pass 
 from ydk.types import Empty
+import logging
 
 
 class Datastore(Enum):
@@ -44,6 +45,8 @@ class NetconfService(Service):
 
     def __init__(self):
         self.executor = ExecutorService()
+        self.service_logger = logging.getLogger(__name__)
+
 
     def cancel_commit(self, provider, persist_id=None):
         """ Execute an cancel-commit operation to cancel an ongoing confirmed commit.
@@ -63,6 +66,8 @@ class NetconfService(Service):
                   - a server side error
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
+        self.service_logger.info('Executing cancel-commit RPC')
+
         rpc = ietf_netconf.CancelCommitRpc()
         rpc.input.persist_id = persist_id
 
@@ -83,6 +88,7 @@ class NetconfService(Service):
                   - a server side error
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
+        self.service_logger.info('Executing close-session RPC')
         return self.executor.execute_rpc(provider, ietf_netconf.CloseSessionRpc())
 
     def commit(self, provider):
@@ -101,6 +107,7 @@ class NetconfService(Service):
                   - a server side error
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
+        self.service_logger.info('Executing commit RPC')
         return self.executor.execute_rpc(provider, ietf_netconf.CommitRpc())
 
     def commit_confirmed(self, provider, confirm_timeout=None, persist=False, persist_id=None):
@@ -127,6 +134,7 @@ class NetconfService(Service):
                   - a server side error
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
+        self.service_logger.info('Executing commit-confirmed RPC')
         rpc = ietf_netconf.CommitRpc()
         rpc.input.confirm_timeout = confirm_timeout
         rpc.input.persist_id = persist_id
@@ -159,6 +167,8 @@ class NetconfService(Service):
         if with_defaults_option is not None:
             assert isinstance(with_defaults_option, ietf_netconf_with_defaults.WithDefaultsMode_Enum)
 
+        self.service_logger.info('Executing copy-config RPC')
+
         rpc = ietf_netconf.CopyConfigRpc()
         rpc.input.source = _get_rpc_datastore_object(source, rpc.input.source)
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
@@ -182,6 +192,7 @@ class NetconfService(Service):
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
         assert target is not None
+        self.service_logger.info('Executing delete-config RPC')
 
         rpc = ietf_netconf.DeleteConfigRpc()
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
@@ -204,6 +215,7 @@ class NetconfService(Service):
                   - a server side error
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
+        self.service_logger.info('Executing discard-changes RPC')
         return self.executor.execute_rpc(provider, ietf_netconf.DiscardChangesRpc())
 
     def edit_config(self, provider, target, config, default_operation=None, error_option=None, test_option=None):
@@ -237,6 +249,8 @@ class NetconfService(Service):
         if test_option is not None:
             assert isinstance(test_option, ietf_netconf.EditConfigRpc.Input.TestOption_Enum)
 
+        self.service_logger.info('Executing edit-config RPC')
+
         rpc = ietf_netconf.EditConfigRpc()
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
         rpc.input.config = config
@@ -269,12 +283,15 @@ class NetconfService(Service):
         if with_defaults_option is not None:
             assert isinstance(with_defaults_option, ietf_netconf_with_defaults.WithDefaultsMode_Enum)
 
+        self.service_logger.info('Executing get-config RPC')
+
         rpc = ietf_netconf.GetConfigRpc()
         rpc.input.filter = get_filter
         rpc.input.source = _get_rpc_datastore_object(source, rpc.input.source)
         rpc.input.with_defaults_option = with_defaults_option
 
-        return self.executor.execute_rpc(provider, rpc)
+        payload = self.executor.execute_rpc(provider, rpc)
+        return provider.decode(payload_convert(payload), None)
 
     def get(self, provider, get_filter, with_defaults_option=None):
         """ Execute a get operation to retrieve running configuration and device state information.
@@ -297,11 +314,14 @@ class NetconfService(Service):
         if with_defaults_option is not None:
             assert isinstance(with_defaults_option, ietf_netconf_with_defaults.WithDefaultsMode_Enum)
 
+        self.service_logger.info('Executing get RPC')
+
         rpc = ietf_netconf.GetRpc()
         rpc.input.filter = get_filter
         rpc.input.with_defaults_option = with_defaults_option
 
-        return self.executor.execute_rpc(provider, rpc)
+        payload = self.executor.execute_rpc(provider, rpc)
+        return provider.decode(payload_convert(payload), None)
 
     def kill_session(self, provider, session_id):
         """ Execute a kill-session operation to force the termination of a NETCONF session.
@@ -319,6 +339,7 @@ class NetconfService(Service):
                   - a server side error
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
+        self.service_logger.info('Executing kill-session RPC')
         rpc = ietf_netconf.KillSessionRpc()
         rpc.input.session_id = session_id
 
@@ -341,6 +362,7 @@ class NetconfService(Service):
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
         assert target is not None
+        self.service_logger.info('Executing lock RPC')
 
         rpc = ietf_netconf.LockRpc()
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
@@ -364,6 +386,7 @@ class NetconfService(Service):
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
         assert target is not None
+        self.service_logger.info('Executing unlock RPC')
 
         rpc = ietf_netconf.UnlockRpc()
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
@@ -387,6 +410,7 @@ class NetconfService(Service):
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
         """
         assert source is not None or config is not None
+        self.service_logger.info('Executing validate RPC')
 
         rpc = ietf_netconf.ValidateRpc()
         if source is not None:
@@ -412,3 +436,11 @@ def _get_rpc_datastore_object(datastore, rpc_datastore_type):
         return rpc_datastore_type
     else:
         raise YPYDataValidationError('Invalid datastore specified')
+
+
+def payload_convert(payload):
+    from lxml import etree
+
+    rt = etree.fromstring(payload)
+    chchs = rt.getchildren()[0].getchildren()
+    return etree.tostring(chchs[0], pretty_print=True)

@@ -24,6 +24,7 @@ from .provider import ServiceProvider
 from ._encoder import XmlEncoder
 from ._decoder import XmlDecoder
 from ydk.errors import YPYError
+import logging
 
 
 class CodecServiceProvider(ServiceProvider):
@@ -49,12 +50,19 @@ class CodecServiceProvider(ServiceProvider):
             self.decoder = XmlDecoder()
         else:
             raise YPYError('Codec type "{0}" not yet supported'.format(codec_type))
+        self.logger = logging.getLogger(__name__)
 
-    def _encode(self, payload):
-        """ Encodes the payload into the desired encoding format """
-        return self.encoder.encode(payload)
+    def _encode(self, entity):
+        """ Encodes the entity into the desired encoding format """
+        self.logger.info('Encoding object: \n{0}'.format(entity))
+        payload = self.encoder.encode(entity)
+        self.logger.info('Result of encoding: \n{0}'.format(payload))
+        return payload
 
-    def _decode(self, entity):
+    def _decode(self, payload):
         """ Decodes the payload from the desired decoding format """
-        return self.decoder.decode(entity)
+        self.logger.info('Decoding payload: {0}'.format(payload))
+        entity = self.decoder.decode(payload)
+        self.logger.info('Result of decoding: {0}'.format(entity))
+        return entity
 
