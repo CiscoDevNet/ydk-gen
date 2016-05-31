@@ -19,6 +19,7 @@ sanity test for netconf
 """
 
 import unittest
+from tests.compare import is_equal
 
 from ydk.errors import YPYDataValidationError, YPYError
 from ydk.models.ydktest import ydktest_sanity as ysanity
@@ -68,14 +69,14 @@ class SanityNetconf(unittest.TestCase):
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
         self.assertIn('ok', op)
 
-        op = self.netconf_service.get_config(self.ncc, Datastore.candidate, get_filter)
-        self.assertIn(runner.one.name, op)
+        result = self.netconf_service.get_config(self.ncc, Datastore.candidate, get_filter)
+        self.assertEqual(is_equal(runner, result), True)
 
         op = self.netconf_service.commit(self.ncc)
         self.assertIn('ok', op)
 
-        op = self.netconf_service.get(self.ncc, get_filter)
-        self.assertIn(runner.one.name, op)
+        result = self.netconf_service.get(self.ncc, get_filter)
+        self.assertEqual(is_equal(runner, result), True)
 
     def test_copy(self):
         op = self.netconf_service.copy_config(self.ncc, target=Datastore.candidate, source=Datastore.running)
@@ -134,8 +135,12 @@ class SanityNetconf(unittest.TestCase):
         op = self.netconf_service.commit(self.ncc)
         self.assertIn('ok', op)
 
-        op = self.netconf_service.get(self.ncc, get_filter)
-        self.assertIn(runner.two.name, op)
+        result = self.netconf_service.get(self.ncc, get_filter)
+        self.assertEqual(is_equal(runner, result), True)
+
+    def test_copy_config(self):
+        op = self.netconf_service.copy_config(self.ncc, Datastore.candidate, Datastore.running)
+        self.assertIn('ok', op)
 
 
 if __name__ == '__main__':

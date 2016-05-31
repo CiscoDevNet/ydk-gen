@@ -249,20 +249,17 @@ def get_module_name(stmt):
         return module_stmt.arg
 
 
-def sort_classes_at_same_level(unsorted_classes):
-    ''' Returns a list of the classes in the sorted order  '''
-    classes = sorted(unsorted_classes, key=lambda cls: cls.name)
+def sort_classes_at_same_level(classes):
+    ''' Returns a list of the classes in the same order  '''
     classes_processed = []
-    classes_not_processed = {}
+    classes_not_processed = OrderedDict()
     for clazz in classes:
         dependent_siblings = clazz.get_dependent_siblings()
         if len(dependent_siblings) == 0:
             classes_processed.append(clazz)
         else:
-            classes_not_processed[clazz] = sorted(
-                dependent_siblings, key=lambda cls: cls.name)
-    classes_not_processed = OrderedDict(
-        sorted(classes_not_processed.items(), key=lambda k: k[0].name))
+            classes_not_processed[clazz] = dependent_siblings
+    classes_not_processed = OrderedDict(classes_not_processed.items())
     while len(classes_not_processed) > 0:
         for clazz in classes_not_processed.keys():
             dependent_siblings = classes_not_processed[clazz]
@@ -276,6 +273,7 @@ def sort_classes_at_same_level(unsorted_classes):
                 # all dependents are processed so go ahead and add to processed
                 classes_processed.append(clazz)
                 del classes_not_processed[clazz]
+
     return classes_processed
 
 

@@ -20,18 +20,23 @@
 """
 from .service import Service
 from meta_service import MetaService
+import logging
 
 
 class CodecService(Service):
     """ Codec Service to encode and decode XML, JSON and other protocol payloads """
     def __init__(self):
-        pass
+        self.service_logger = logging.getLogger(__name__)
 
     def encode(self, encoder, entity):
         assert encoder is not None, 'Encoder should be valid object'
         MetaService.normalize_meta([], entity)
-        return encoder._encode(entity)
+        payload = encoder._encode(entity)
+        self.service_logger.info('Encoding operation completed\n')
+        return payload
 
     def decode(self, decoder, payload):
         assert decoder is not None, 'Decoder should be valid object'
-        return decoder._decode(payload)
+        entity = decoder._decode(payload)
+        self.service_logger.info('Decoding operation completed\n')
+        return entity

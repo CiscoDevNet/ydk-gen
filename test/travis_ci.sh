@@ -102,8 +102,8 @@ function init_confd {
 # pygen test
 function run_pygen_test {
     cd $YDK_ROOT
-    export PYTHONPATH=.:$PYTHONPATH
-    run_test test/pygen_tests.py
+    # export PYTHONPATH=.:$PYTHONPATH
+    # run_test test/pygen_tests.py
 }
 
 # generate ydktest package based on proile

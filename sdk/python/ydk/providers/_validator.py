@@ -26,7 +26,6 @@ from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_ENUM_CLASS, REFERENCE_L
             REFERENCE_LEAFLIST, REFERENCE_IDENTITY_CLASS, REFERENCE_BITS, REFERENCE_UNION
 
 import logging
-import re
 
 
 def validate_entity(entity, optype):
@@ -213,7 +212,7 @@ def _dm_validate_value(meta, value, parent, optype, i_errors):
 
 
 def _handle_error(meta, parent, errmsg, i_errors):
-    services_logger = logging.getLogger('ydk.services')
+    services_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
     entry = (meta.presentation_name, errmsg)
     services_logger.error('Validation error for property %s . Error message %s.' % entry)
     i_errors.append(entry)

@@ -27,7 +27,6 @@ from ydk.types import Empty
 from ydk.providers import NetconfServiceProvider
 from ydk.services import NetconfService
 
-from samples.session_mgr import init_logging
 from ydk.models.bgp import bgp
 from ydk.models.bgp.bgp_types import Ipv4Unicast_Identity
 from ydk.models.bgp.bgp_types import Ipv6Unicast_Identity
@@ -151,6 +150,17 @@ def bgp_run(netconf_service, session):
     nbr_ipv6_read = netconf_service.get_config(session, Datastore.candidate, bgp_cfg)
 
     print nbr_ipv6_read
+
+
+def init_logging():
+    import logging
+    logger = logging.getLogger("ydk")
+    logger.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter(("%(asctime)s - %(name)s - "
+                                  "%(levelname)s - %(message)s"))
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
 
 if __name__ == "__main__":

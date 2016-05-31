@@ -32,7 +32,7 @@ import logging
 class CRUDService(Service):
     """ CRUD Service class for supporting CRUD operations on entities """
     def __init__(self):
-        self.crud_logger = logging.getLogger('ydk.services.CRUDService')
+        self.service_logger = logging.getLogger(__name__)
 
     def create(self, provider, entity):
         """ Create the entity 
@@ -131,23 +131,21 @@ class CRUDService(Service):
         self._perform_read_filter_check(read_filter)
         payload = self._execute_crud_operation_on_provider(provider, read_filter, 'READ', only_config)
 
-        return provider.sp_instance.decode(payload, read_filter)
+        return provider.decode(payload, read_filter)
 
     def _execute_crud_operation_on_provider(self, provider, entity, operation, only_config):
-
-
         try:
             return self.execute_payload(
                                         provider,
-                                        operation,
-                                        provider.sp_instance.encode(
-                                                                    entity,
-                                                                    operation,
-                                                                    only_config
-                                                                    )
+                                        provider.encode(
+                                                        entity,
+                                                        operation,
+                                                        only_config
+                                                        ),
+                                        operation
                                         )
         finally:
-            self.crud_logger.info('{0} operation completed'.format(operation))
+            self.service_logger.info('{0} operation completed'.format(operation))
 
     def _perform_read_filter_check(self, read_filter):
         if read_filter is None:
@@ -163,7 +161,7 @@ class CRUDService(Service):
                                 self._create_update_entity_filter(entity))
 
         if not read_entity._has_data():
-            self.crud_logger.error('Entity does not exist on remote server. Cannot perform update operations.')
+            self.service_logger.error('Entity does not exist on remote server. Cannot perform update operations.')
             raise YPYError('Entity does not exist on remote server. Cannot perform update operation.')
 
         return True
