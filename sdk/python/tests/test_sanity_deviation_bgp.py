@@ -14,17 +14,14 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-import ydk.types as ytypes
 import unittest
-# from errors import YPYDataValidationError 
 
 from ydk.services import CRUDService
 from ydk.providers import NetconfServiceProvider
-from ydk.types import Empty, DELETE, Decimal64
-from tests.compare import is_equal
-from ydk.errors import YPYError, YPYDataValidationError
+from ydk.errors import YPYDataValidationError
 from ydk.models.bgp import bgp
-from ydk.models.routing.routing_policy import DefaultPolicyTypeEnum, RoutingPolicy
+from ydk.models.routing.routing_policy import DefaultPolicyTypeEnum
+
 
 class SanityTest(unittest.TestCase):
 
@@ -61,7 +58,7 @@ class SanityTest(unittest.TestCase):
         bgp_cfg.global_.afi_safis.afi_safi.append(ipv4_afsf)
 
         self.assertRaises(YPYDataValidationError,
-            self.crud.create, self.ncc, bgp_cfg)
+                          self.crud.create, self.ncc, bgp_cfg)
 
 
 if __name__ == '__main__':

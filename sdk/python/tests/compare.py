@@ -20,8 +20,9 @@ return True if attributes in entity(lhs) = entity(rhs)
 """
 import sys
 from enum import Enum
-from pdb import set_trace as bp
-from ydk.types import Empty, Decimal64, FixedBitsDict, YList, YListItem, YLeafList
+from ydk.types import (Empty, Decimal64, FixedBitsDict,
+                       YList, YListItem, YLeafList)
+
 
 def is_builtin_type(attr):
     # all the derived types should have __cmp__ implemented
@@ -42,6 +43,7 @@ def is_builtin_type(attr):
     else:
         return False
 
+
 class ErrNo(Enum):
     WRONG_VALUE = 0
     WRONG_TYPES = 1
@@ -49,6 +51,7 @@ class ErrNo(Enum):
     WRONG_DICT = 3
     WRONG_DICT_VALUE = 4
     WRONG_CLASS = 5
+
 
 class ErrorMsg(object):
     def __init__(self, lhs, rhs, errno):
@@ -68,7 +71,7 @@ class ErrorMsg(object):
             errtyp = "Wrong types:\n"
         elif errno == ErrNo.POPULATION_FAILED:
             errtyp = "Failed population:\n"
-        elif errno == WRONG_DICT:
+        elif errno == ErrNo.WRONG_DICT:
             errtyp = "Wrong dict: different dictionary key\n"
         return ''.join([errtyp, errlhs, errrhs])
 
@@ -79,8 +82,7 @@ class ErrorMsg(object):
 
 def is_equal(lhs, rhs):
     ret, errtyp = True, None
-    if lhs is None and rhs is None or \
-            lhs == [] and rhs == []:
+    if lhs is None and rhs is None or lhs == [] and rhs == []:
         pass
     elif is_builtin_type(lhs) or is_builtin_type(rhs):
         try:
@@ -90,8 +92,8 @@ def is_equal(lhs, rhs):
             errtyp, ret = ErrNo.WRONG_TYPES, False
     elif lhs is None or rhs is None:
         errtyp, ret = ErrNo.POPULATION_FAILED, False
-    elif isinstance(lhs, YList) and isinstance(rhs, YList) or \
-            isinstance(lhs, list) and isinstance(rhs, list):
+    elif (isinstance(lhs, YList) and isinstance(rhs, YList) or
+          isinstance(lhs, list) and isinstance(rhs, list)):
         if len(lhs) != len(rhs):
             errtyp, ret = ErrNo.WRONG_VALUE, False
         else:
@@ -121,11 +123,11 @@ def is_equal(lhs, rhs):
                 except Exception:
                     errtyp, ret = ErrNo.WRONG_TYPES, False
             elif k not in dict_rhs:
-                errtype, ret = ErrNo.WRONG_DICT, False
+                errtyp, ret = ErrNo.WRONG_DICT, False
             elif not is_equal(dict_lhs[k], dict_rhs[k]):
                 ret = False
 
-    if ret == False and errtyp is not None:
+    if ret is False and errtyp is not None:
         err_msg = ErrorMsg(rhs, lhs, errtyp)
         err_msg.print_err()
 

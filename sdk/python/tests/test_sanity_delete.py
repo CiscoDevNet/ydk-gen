@@ -17,16 +17,14 @@
     test_sanity_delete.py
         Unittest for DELETE object.
 """
-import ydk.types as ytypes
 import unittest
 
 from ydk.services import CRUDService
 from ydk.providers import NetconfServiceProvider
-from ydk.types import Empty, DELETE, Decimal64, YLeafList
+from ydk.types import DELETE
 from tests.compare import is_equal
-from ydk.errors import YPYError, YPYDataValidationError
 from ydk.models.ydktest import ydktest_sanity as ysanity
-from pdb import set_trace as bp
+
 
 class SanityYang(unittest.TestCase):
 
@@ -63,26 +61,30 @@ class SanityYang(unittest.TestCase):
         e_1 = ysanity.Runner.InbtwList.Ldata()
         e_2 = ysanity.Runner.InbtwList.Ldata()
         e_1.number = 11
-        e_1.name = 'runner:inbtwlist:['+str(e_1.number)+']:name'
+        e_1.name = 'runner:inbtwlist:[' + str(e_1.number) + ']:name'
         e_1.subc.number = 111
-        e_1.subc.name = 'runner:inbtwlist:['+str(e_1.number)+']:subc:name'
+        e_1.subc.name = 'runner:inbtwlist:[' + str(e_1.number) + ']:subc:name'
         e_2.number = 12
-        e_2.name = 'runner:inbtwlist:['+str(e_2.number)+']:name'
+        e_2.name = 'runner:inbtwlist:[' + str(e_2.number) + ']:name'
         e_2.subc.number = 121
-        e_2.subc.name = 'runner:inbtwlist:['+str(e_2.number)+']:name'
+        e_2.subc.name = 'runner:inbtwlist:[' + str(e_2.number) + ']:name'
         e_11 = ysanity.Runner.InbtwList.Ldata.Subc.SubcSubl1()
         e_11.number = 111
-        e_11.name = 'runner:inbtwlist:['+str(e_1.number)+']:subc:subcsubl1['+str(e_11.number)+']:name'
+        e_11.name = ("runner:inbtwlist:[%d]:subc:subcsubl1[%d]:name"
+                     % (e_1.number, e_11.number))
         e_12 = ysanity.Runner.InbtwList.Ldata.Subc.SubcSubl1()
         e_12.number = 112
-        e_12.name = 'runner:inbtwlist:['+str(e_1.number)+']:subc:subcsubl1['+str(e_12.number)+']:name'
+        e_12.name = ("runner:inbtwlist:[%d]:subc:subcsubl1[%d]:name"
+                     % (e_1.number, e_12.number))
         e_1.subc.subc_subl1.extend([e_11, e_12])
         e_21 = ysanity.Runner.InbtwList.Ldata.Subc.SubcSubl1()
         e_21.number = 121
-        e_21.name = 'runner:inbtwlist:['+str(e_2.number)+']:subc:subcsubl1['+str(e_21.number)+']:name'
+        e_21.name = ("runner:inbtwlist:[%d]:subc:subcsubl1[%d]:name"
+                     % (e_2.number, e_21.number))
         e_22 = ysanity.Runner.InbtwList.Ldata.Subc.SubcSubl1()
         e_22.number = 122
-        e_22.name = 'runner:inbtwlist:['+str(e_2.number)+']:subc:subcsubl1['+str(e_22.number)+']:name'
+        e_22.name = ("runner:inbtwlist:[%d]:subc:subcsubl1[%d]:name"
+                     % (e_2.number, e_22.number))
         e_2.subc.subc_subl1.extend([e_21, e_22])
         runner_create.inbtw_list.ldata.extend([e_1, e_2])
 
@@ -110,11 +112,11 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(is_equal(runner_read, runner_left), True)
 
-
     def test_delete_on_leaflist_slice(self):
         runner_create = ysanity.Runner()
         runner_create.one.name = 'one'
-        runner_create.ytypes.built_in_t.llstring.extend([str(i) for i in range(5)])
+        elems = [str(i) for i in range(5)]
+        runner_create.ytypes.built_in_t.llstring.extend(elems)
 
         self.crud.create(self.ncc, runner_create)
 
@@ -130,7 +132,8 @@ class SanityYang(unittest.TestCase):
     def test_delete_on_leaflist(self):
         runner_create = ysanity.Runner()
         runner_create.one.name = 'one'
-        runner_create.ytypes.built_in_t.llstring.extend([str(i) for i in range(5)])
+        elems = [str(i) for i in range(5)]
+        runner_create.ytypes.built_in_t.llstring.extend(elems)
 
         self.crud.create(self.ncc, runner_create)
 

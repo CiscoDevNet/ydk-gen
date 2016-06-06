@@ -21,10 +21,11 @@ sanity test for ydktest-sanity.yang
 import unittest
 from tests.compare import is_equal
 
-from ydk.models.ydktest import ydktest_sanity as ysanity 
+from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.providers import NetconfServiceProvider
 from ydk.services import CRUDService
 from ydk.types import READ
+
 
 class SanityYang(unittest.TestCase):
     @classmethod
@@ -67,19 +68,19 @@ class SanityYang(unittest.TestCase):
         self.crud.create(self.ncc, r_1)
         r_2 = ysanity.Runner()
         r_2.one.number = READ()
-        r_2 = self.crud.read(self.ncc, r_2)        
+        r_2 = self.crud.read(self.ncc, r_2)
         self.assertEqual(r_2.one.number, r_1.one.number)
 
         # this will also read r_2.one.name, not able to read only one of them
         r_2 = ysanity.Runner()
         r_2.one.number = 1
-        r_2 = self.crud.read(self.ncc, r_2)        
+        r_2 = self.crud.read(self.ncc, r_2)
         self.assertEqual(r_2.one.number, r_1.one.number)
 
         # no such value, will return empty data
         r_2 = ysanity.Runner()
         r_2.one.number = 2
-        r_2 = self.crud.read(self.ncc, r_2)        
+        r_2 = self.crud.read(self.ncc, r_2)
         self.assertNotEqual(r_2.one.number, r_1.one.number)
 
     def test_read_on_ref_enum_class(self):
@@ -107,7 +108,8 @@ class SanityYang(unittest.TestCase):
     # TODO: crud read or READ object?
     def test_read_on_ref_list(self):
         r_1 = ysanity.Runner.OneList()
-        l_1, l_2 = ysanity.Runner.OneList.Ldata(), ysanity.Runner.OneList.Ldata()
+        l_1 = ysanity.Runner.OneList.Ldata()
+        l_2 = ysanity.Runner.OneList.Ldata()
         l_1.number, l_2.number = 1, 2
         r_1.ldata.extend([l_1, l_2])
         self.crud.create(self.ncc, r_1)
@@ -121,7 +123,8 @@ class SanityYang(unittest.TestCase):
     # crud read
     def test_read_on_list_with_key(self):
         r_1 = ysanity.Runner.OneList()
-        l_1, l_2 = ysanity.Runner.OneList.Ldata(), ysanity.Runner.OneList.Ldata()
+        l_1 = ysanity.Runner.OneList.Ldata()
+        l_2 = ysanity.Runner.OneList.Ldata()
         l_1.number, l_2.number = 1, 2
         r_1.ldata.extend([l_1, l_2])
         self.crud.create(self.ncc, r_1)
@@ -146,12 +149,11 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(is_equal(r_1, runner_read), True)
 
         r_2 = ysanity.Runner.Ytypes.BuiltInT()
-        # invalid input, user should use READ() 
+        # invalid input, user should use READ()
         # or the same data on device
         r_2.llstring.extend(['something else'])
         runner_read = self.crud.read(self.ncc, r_2)
         self.assertNotEqual(is_equal(r_1, runner_read), True)
-
 
     def test_read_on_identity_ref(self):
         r_1 = ysanity.Runner.Ytypes.BuiltInT()
@@ -190,8 +192,6 @@ class SanityYang(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         self.crud.read(self.ncc, ysanity.Runner.OneList.Ldata())
-
-
 
 
 if __name__ == '__main__':

@@ -80,7 +80,8 @@ class SanityRpc(unittest.TestCase):
     def test_execute_get_config_rpc(self):
         get_config_rpc = ietf_netconf.GetConfigRpc()
         get_config_rpc.input.source.candidate = Empty()
-        initial_candidate_data = self.executor.execute_rpc(self.ncc, get_config_rpc)
+        initial_candidate_data = self.executor.execute_rpc(self.ncc,
+                                                           get_config_rpc)
 
         runner = ysanity.Runner()
         runner.two.number = 2
@@ -92,7 +93,8 @@ class SanityRpc(unittest.TestCase):
         op = self.executor.execute_rpc(self.ncc, edit_rpc)
         self.assertIn('ok', op)
 
-        final_candidate_data = self.executor.execute_rpc(self.ncc, get_config_rpc)
+        final_candidate_data = self.executor.execute_rpc(self.ncc,
+                                                         get_config_rpc)
 
         self.assertNotEqual(initial_candidate_data, final_candidate_data)
         self.assertNotIn(runner.two.name, initial_candidate_data)

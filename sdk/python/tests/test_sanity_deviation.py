@@ -14,19 +14,15 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-import ydk.types as ytypes
 import unittest
-# from errors import YPYDataValidationError 
-
 from ydk.services import CRUDService
 from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.providers import NetconfServiceProvider
-from ydk.types import Empty, DELETE, Decimal64
+from ydk.types import Empty, Decimal64
 from tests.compare import is_equal
-from ydk.errors import YPYError, YPYDataValidationError
-
-from pdb import set_trace as bp
+from ydk.errors import YPYDataValidationError
 from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum
+
 
 class SanityTest(unittest.TestCase):
 
@@ -106,7 +102,7 @@ class SanityTest(unittest.TestCase):
         runner = self._create_runner()
         runner.ytypes.built_in_t.number64 = -9223372036854775808
         self.assertRaises(YPYDataValidationError,
-            self.crud.create, self.ncc, runner)
+                          self.crud.create, self.ncc, runner)
 
     # changed to type uint16
     def test_uint8(self):
@@ -209,29 +205,28 @@ class SanityTest(unittest.TestCase):
         runner = self._create_runner()
         runner.ytypes.built_in_t.bool_value = False
         self.assertRaises(YPYDataValidationError,
-            self.crud.update, self.ncc, runner)
-
+                          self.crud.update, self.ncc, runner)
 
     # max val changed to 7
     def test_leaflist_max_elements(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.llstring.extend([str(i) for i in range(8)])
         self.assertRaises(YPYDataValidationError,
-            self.crud.create, self.ncc, runner)
+                          self.crud.create, self.ncc, runner)
 
     # not supported leaf
     def test_not_supported_leaf(self):
         runner = self._create_runner()
         runner.not_supported_1.not_supported_leaf = 'leaf value'
         self.assertRaises(YPYDataValidationError,
-            self.crud.create, self.ncc, runner)
+                          self.crud.create, self.ncc, runner)
 
     # not supported container
     def test_not_supported_container(self):
         runner = self._create_runner()
         runner.not_supported_1.not_supported_1_2.some_leaf = 'some leaf'
         self.assertRaises(YPYDataValidationError,
-            self.crud.create, self.ncc, runner)
+                          self.crud.create, self.ncc, runner)
 
     # not supported list
     def test_not_supported_list(self):
@@ -241,15 +236,7 @@ class SanityTest(unittest.TestCase):
             elems.append(runner.NotSupported2())
         runner.not_supported_2.extend(elems)
         self.assertRaises(YPYDataValidationError,
-            self.crud.create, self.ncc, runner)
-
-    # Will only test max-elements. If min-elements is set, then this
-    # constraint is required for every READ/UPDATE operation. So it will fail all other cases.
-    def test_leaflist_max_elements(self):
-        runner = self._create_runner()
-        runner.ytypes.built_in_t.llstring.extend([str(i) for i in range(20)])
-        self.assertRaises(YPYDataValidationError,
-            self.crud.create, self.ncc, runner)
+                          self.crud.create, self.ncc, runner)
 
 
 if __name__ == '__main__':

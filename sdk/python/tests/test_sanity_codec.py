@@ -32,41 +32,48 @@ class SanityYang(unittest.TestCase):
         self.codec = CodecService()
         self.provider = CodecServiceProvider(type='xml')
 
-        self._enum_payload_1 = \
-'<built-in-t xmlns="http://cisco.com/ns/yang/ydktest-sanity">\n  <enum-value>local</enum-value>\n</built-in-t>\n'
+        self._enum_payload_1 = """<built-in-t xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+  <enum-value>local</enum-value>
+</built-in-t>
+"""
 
-        self._enum_payload_2 = \
-'<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">\n  <ytypes>\n    <built-in-t>\n      <enum-value>local</enum-value>\n    </built-in-t>\n  </ytypes>\n</runner>\n'
-
-        self._runner_payload = \
-'<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">\n\
-  <two-list>\n\
-    <ldata>\n\
-      <number>21</number>\n\
-      <name>runner:twolist:ldata[21]:name</name>\n\
-      <subl1>\n\
-        <number>211</number>\n\
-        <name>runner:twolist:ldata[21]:subl1[211]:name</name>\n\
-      </subl1>\n\
-      <subl1>\n\
-        <number>212</number>\n\
-        <name>runner:twolist:ldata[21]:subl1[212]:name</name>\n\
-      </subl1>\n\
-    </ldata>\n\
-    <ldata>\n\
-      <number>22</number>\n\
-      <name>runner:twolist:ldata[22]:name</name>\n\
-      <subl1>\n\
-        <number>221</number>\n\
-        <name>runner:twolist:ldata[22]:subl1[221]:name</name>\n\
-      </subl1>\n\
-      <subl1>\n\
-        <number>222</number>\n\
-        <name>runner:twolist:ldata[22]:subl1[222]:name</name>\n\
-      </subl1>\n\
-    </ldata>\n\
-  </two-list>\n\
-</runner>\n'
+        self._enum_payload_2 = """<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+  <ytypes>
+    <built-in-t>
+      <enum-value>local</enum-value>
+    </built-in-t>
+  </ytypes>
+</runner>
+"""
+        self._runner_payload = """<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+  <two-list>
+    <ldata>
+      <number>21</number>
+      <name>runner:twolist:ldata[21]:name</name>
+      <subl1>
+        <number>211</number>
+        <name>runner:twolist:ldata[21]:subl1[211]:name</name>
+      </subl1>
+      <subl1>
+        <number>212</number>
+        <name>runner:twolist:ldata[21]:subl1[212]:name</name>
+      </subl1>
+    </ldata>
+    <ldata>
+      <number>22</number>
+      <name>runner:twolist:ldata[22]:name</name>
+      <subl1>
+        <number>221</number>
+        <name>runner:twolist:ldata[22]:subl1[221]:name</name>
+      </subl1>
+      <subl1>
+        <number>222</number>
+        <name>runner:twolist:ldata[22]:subl1[222]:name</name>
+      </subl1>
+    </ldata>
+  </two-list>
+</runner>
+"""
 
     @classmethod
     def tearDownClass(self):
@@ -80,22 +87,29 @@ class SanityYang(unittest.TestCase):
 
     def _get_runner_entity(self):
         r_1 = ysanity.Runner()
-        e_1, e_2 = ysanity.Runner.TwoList.Ldata(), ysanity.Runner.TwoList.Ldata()
-        e_11, e_12 = ysanity.Runner.TwoList.Ldata.Subl1(), ysanity.Runner.TwoList.Ldata.Subl1()
+        e_1 = ysanity.Runner.TwoList.Ldata()
+        e_2 = ysanity.Runner.TwoList.Ldata()
+        e_11 = ysanity.Runner.TwoList.Ldata.Subl1()
+        e_12 = ysanity.Runner.TwoList.Ldata.Subl1()
         e_1.number = 21
-        e_1.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:name'
+        e_1.name = 'runner:twolist:ldata[%d]:name' % e_1.number
         e_11.number = 211
-        e_11.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:subl1[' + str(e_11.number) + ']:name'
+        e_11.name = ('runner:twolist:ldata[%d]:subl1[%d]:name'
+                     % (e_1.number, e_11.number))
         e_12.number = 212
-        e_12.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:subl1[' + str(e_12.number) + ']:name'
+        e_12.name = ('runner:twolist:ldata[%d]:subl1[%d]:name'
+                     % (e_1.number, e_12.number))
         e_1.subl1.extend([e_11, e_12])
-        e_21, e_22 = ysanity.Runner.TwoList.Ldata.Subl1(), ysanity.Runner.TwoList.Ldata.Subl1()
+        e_21 = ysanity.Runner.TwoList.Ldata.Subl1()
+        e_22 = ysanity.Runner.TwoList.Ldata.Subl1()
         e_2.number = 22
-        e_2.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:name'
+        e_2.name = 'runner:twolist:ldata[%d]:name' % e_2.number
         e_21.number = 221
-        e_21.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:subl1[' + str(e_21.number) + ']:name'
+        e_21.name = ('runner:twolist:ldata[%d]:subl1[%d]:name'
+                     % (e_2.number, e_21.number))
         e_22.number = 222
-        e_22.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:subl1[' + str(e_22.number) + ']:name'
+        e_22.name = ('runner:twolist:ldata[%d]:subl1[%d]:name'
+                     % (e_2.number, e_22.number))
         e_2.subl1.extend([e_21, e_22])
         r_1.two_list.ldata.extend([e_1, e_2])
         return r_1
@@ -115,7 +129,8 @@ class SanityYang(unittest.TestCase):
 
     def test_decode_1(self):
         entity = self.codec.decode(self.provider, self._enum_payload_2)
-        self.assertEqual(self._enum_payload_2, self.codec.encode(self.provider, entity))
+        self.assertEqual(self._enum_payload_2,
+                         self.codec.encode(self.provider, entity))
 
     def test_encode_decode(self):
         r_1 = self._get_runner_entity()
