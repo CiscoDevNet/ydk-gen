@@ -15,7 +15,7 @@
 # ------------------------------------------------------------------
 
 """
- test_case_printer.py 
+ test_case_printer.py
 
  YANG model driven API, python emitter.
 """

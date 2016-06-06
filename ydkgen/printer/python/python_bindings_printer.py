@@ -16,7 +16,7 @@
 
 '''
    YDK PY converter
-   
+
 '''
 
 
@@ -37,8 +37,8 @@ from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _E
 
 class PythonBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir):
-        super(PythonBindingsPrinter, self).__init__(ydk_root_dir)
+    def __init__(self, ydk_root_dir, pkg_name):
+        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, pkg_name)
 
     def print_files(self):
         self.print_modules()
@@ -66,8 +66,10 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
             return
 
         py_mod_name = package.get_py_mod_name()
-        sub = py_mod_name[len('ydk.models.'): py_mod_name.rfind('.')]
-
+        if package.bundle_name is None:
+            sub = py_mod_name[len('ydk.models.'): py_mod_name.rfind('.')]
+        else:
+            sub = py_mod_name[len('%s.models.' % package.bundle_name): py_mod_name.rfind('.')]
         module_dir = self.initialize_output_directory(
             '%s/%s' % (self.models_dir, sub))
         meta_dir = self.initialize_output_directory(module_dir + '/_meta')

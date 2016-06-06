@@ -14,7 +14,7 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 """
- enum_printer.py 
+ enum_printer.py
 
  YANG model driven API, python emitter.
 

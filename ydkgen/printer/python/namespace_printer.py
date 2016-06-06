@@ -16,7 +16,7 @@
 
 '''
    YDK PY converter
-   
+
 '''
 
 from ydkgen.common import yang_id
@@ -46,7 +46,7 @@ class NamespacePrinter(object):
             if ns is not None:
                 self.namespace_list.append((m.arg.replace('-', '_'), ns.arg, yang_id(m)))
                 module_map[m.arg] = ns.arg
-    
+
         for m in [p.stmt for p in packages]:
             if m.keyword == 'submodule':
                 including_module = m.i_including_modulename

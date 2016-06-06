@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_printer.py 
- 
+class_printer.py
+
  YANG model driven API, class emitter.
- 
+
 """
 from ydkgen.api_model import Class, Enum, Bits
 from ydkgen.common import sort_classes_at_same_level
@@ -39,8 +39,8 @@ class ClassPrinter(FilePrinter):
         super(ClassPrinter, self).__init__(ctx)
 
     def print_body(self, unsorted_classes):
-        ''' This arranges the classes at the same level 
-            so that super references are printed before 
+        ''' This arranges the classes at the same level
+            so that super references are printed before
             the subclassess'''
         sorted_classes = sort_classes_at_same_level(unsorted_classes)
 
