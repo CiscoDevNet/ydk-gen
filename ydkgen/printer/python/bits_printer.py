@@ -15,7 +15,7 @@
 # ------------------------------------------------------------------
 
 """
- bits_printer.py 
+ bits_printer.py
 
  Printer for Bits Classes
 """

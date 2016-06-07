@@ -1,3 +1,22 @@
+#  ----------------------------------------------------------------
+# Copyright 2016 Cisco Systems
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------
+""" bundle_resolver.py
+    Resovles bundle description file.
+    Returns list of bundle and directory for resolved models.
+"""
 import re
 import os
 import json
@@ -69,6 +88,10 @@ class BundleDefinition(object):
         self._name = 'ydk_' + data['name']
         self._version = Version(*tuple(data['version'].split('.')))
         self._ydk_version = Version(*tuple(data['ydk-version'].split('.')))
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def fqn(self):
@@ -180,6 +203,7 @@ class Bundle(BundleDefinition):
             if 'dependencies' in data['bundle']:
                 for d in data['bundle']['dependencies']:
                     self.dependencies.append(BundleDependency(d))
+
         except KeyError as e:
             raise YdkGenException('Bundle file is not well formatted.')
 
@@ -235,7 +259,7 @@ class Resolver(object):
         self._resolve_modules()
         self._clean_up()
 
-        return self.tree.values(), self.cached_models_dir
+        return self.tree.values()
 
     def _expand_tree(self, root):
         """ Populate uri to module_repos."""
@@ -247,14 +271,12 @@ class Resolver(object):
                 dst = os.path.join(self.cached_models_dir, fname)
                 logger.debug('Resolving module %s --> %s' % (fname, dst))
                 copy(m.uri.url, dst)
-
         for d in root.dependencies:
             if d.fqn not in self.tree:
                 file = self._resolve_bundle_file(d.uri)
                 node = Bundle(file)
                 self.tree[d.fqn] = node
-            root.children.append(self.tree[d.fqn])
-            self._expand_tree(node)
+                self._expand_tree(node)
 
     def _resolve_bundle_file(self, uri):
         """ Resolve a remote or local bundle file, return the location for resolved file."""
@@ -268,6 +290,7 @@ class Resolver(object):
                 self.bundle_repos[uri.url] = Repo_Dir_Pair(repo, tmp_dir)
 
             repo = self.bundle_repos[uri.url].repo
+            tmp_dir = self.bundle_repos[uri.url].dir
             repo.git.checkout(uri.commitid)
             src = os.path.join(tmp_dir, uri.path)
 

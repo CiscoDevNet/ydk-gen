@@ -45,7 +45,7 @@ def init_verbose_logger():
     logger.addHandler(ch)
 
 def suite(profile, test_cases_root, groupings_as_class):
-    
+
     class PyGenTest(unittest.TestCase):
         def __init__(self, profile, test_cases_root, language, groupings_as_class):
             self.profile = profile
@@ -58,7 +58,7 @@ def suite(profile, test_cases_root, groupings_as_class):
 
         def id(self):
             return 'Python Gen'
-    
+
         def compare(self, src, dest):
             if os.path.isfile(src):
                 if src.split('/')[-1].startswith('.'):
@@ -69,16 +69,17 @@ def suite(profile, test_cases_root, groupings_as_class):
                     src_file = open(src, 'r')
                     diff = difflib.context_diff(dest_file.readlines(), src_file.readlines())
                     delta = ''.join(diff)
-                    self.assertEquals(same, True, 'File comparison failed for test case %s\n\
-                       expected %s \n \
-                       generated %s \n \
-                       if generated is correct use command \n \
-                       cp %s %s \n \
-                         diff %s'%(self.test_case_name, dest, src, src, os.path.dirname(dest), delta))
+                    self.assertEquals(same, True,
+                    "File comparison failed for test case %s\n"
+                    "expected %s \n "
+                    "generated %s \n "
+                    "if generated is correct use command \n "
+                    "cp %s %s \n "
+                    "diff %s" % (self.test_case_name, dest, src, src, os.path.dirname(dest), delta))
                     return
-        
+
         def are_dir_trees_equal(self, dir1, dir2, ignore=[]):
-           
+
             dirs_cmp = filecmp.dircmp(dir1, dir2, ignore)
             if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or \
                 len(dirs_cmp.funny_files)>0:
@@ -93,19 +94,22 @@ def suite(profile, test_cases_root, groupings_as_class):
                 if not self.are_dir_trees_equal(new_dir1, new_dir2, ignore):
                     return False
             return True
-    
+
         def translate_and_check(self):
 
-            ydkgen.YdkGenerator().generate(self.profile, self.actual_directory, ydk_root, self.groupings_as_class, self.language)
+            ydkgen.YdkGenerator(self.actual_directory,
+                                ydk_root,
+                                self.groupings_as_class,
+                                self.language, 'profile').generate(self.profile)
 
             def check_diff_files(dcmp, diff_files):
 
                 for name in dcmp.diff_files:
                     diff_files.append('File %s/%s does not match'%(dcmp.left,name))
-                   
+
                 for sub_dcmp in dcmp.subdirs.values():
                     check_diff_files(sub_dcmp, diff_files)
-            
+
             self.assertTrue(self.are_dir_trees_equal(self.actual_directory + '/' + self.language + '/ydk/models', self.expected_directory + '/ydk/models', ['.gitignore']))
 
 
@@ -118,17 +122,17 @@ def suite(profile, test_cases_root, groupings_as_class):
 
         def testName(self):
             self.yang_file
-    
+
     suite = unittest.TestSuite()
 
     suite.addTest(PyGenTest(profile, test_cases_root, 'python', groupings_as_class))
     suite.addTest(PyGenTest(profile, test_cases_root, 'cpp', groupings_as_class))
-    
+
     return suite
 
 
 if __name__ == "__main__":
-    
+
     parser = OptionParser(usage="usage: %prog [options]",
                           version="%prog 0.3.0")
 
@@ -148,7 +152,7 @@ if __name__ == "__main__":
                       default=False,
                       help="Verbose mode")
 
-   
+
     parser.add_option("--groupings-as-class",
                       action="store_true",
                       dest="groupings_as_class",
@@ -159,23 +163,22 @@ if __name__ == "__main__":
 
     if options.verbose:
         init_verbose_logger()
-    
+
     if not os.environ.has_key('YDKGEN_HOME'):
         logger.debug('YDKGEN_HOME not set. Assuming current directory is working directory.')
         ydk_root = os.getcwd()
     else:
         ydk_root = os.environ['YDKGEN_HOME']
-    
-    test_cases_root = ydk_root + '/test/test-cases/'
+
+    test_cases_root = os.path.join(ydk_root, 'test', 'test-cases')
     if options.test_cases_root is not None:
         test_cases_root = options.test_cases_root
 
     profile = ydk_root + '/profiles/test/ydktest.json'
     if options.profile is not None:
         profile =options.profile
-    
-     
-    
+
+
     ret = unittest.TextTestRunner(verbosity=2).run(suite(profile, test_cases_root, options.groupings_as_class)).wasSuccessful()
     if ret:
         sys.exit(0)

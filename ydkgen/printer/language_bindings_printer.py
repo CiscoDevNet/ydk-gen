@@ -36,9 +36,9 @@ class _EmitArgs:
 
 class LanguageBindingsPrinter(object):
 
-    def __init__(self, ydk_root_dir):
-        self.ydk_dir = ydk_root_dir + '/ydk/'
-        self.ydk_doc_dir = ydk_root_dir + '/docsgen'
+    def __init__(self, ydk_root_dir, pkg_name):
+        self.ydk_dir = os.path.join(ydk_root_dir, pkg_name)
+        self.ydk_doc_dir = os.path.join(ydk_root_dir, 'docsgen')
 
     def emit(self, packages):
         self.ypy_ctx = None

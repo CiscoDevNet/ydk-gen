@@ -26,8 +26,8 @@ from .source_printer import SourcePrinter
 
 class CppBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir):
-        super(CppBindingsPrinter, self).__init__(ydk_root_dir)
+    def __init__(self, ydk_root_dir, pkg_name):
+        super(CppBindingsPrinter, self).__init__(ydk_root_dir, pkg_name)
 
     def print_files(self):
         only_modules = [package.stmt for package in self.packages]

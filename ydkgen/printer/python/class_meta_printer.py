@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_meta_printer.py 
- 
+class_meta_printer.py
+
  YANG model driven API, class emitter.
- 
+
 """
 from ydkgen.api_model import Class, Enum, Property
 from ydkgen.common import sort_classes_at_same_level, get_module_name
@@ -33,8 +33,8 @@ class ClassMetaPrinter(object):
         self.is_rpc = False
 
     def print_output(self, unsorted_classes):
-        ''' This arranges the classes at the same level 
-            so that super references are printed before 
+        ''' This arranges the classes at the same level
+            so that super references are printed before
             the subclassess'''
         sorted_classes = sort_classes_at_same_level(unsorted_classes)
 
@@ -42,8 +42,8 @@ class ClassMetaPrinter(object):
             self.print_class_meta(clazz)
 
     def print_parents(self, unsorted_classes):
-        ''' This arranges the classes at the same level 
-            so that super references are printed before 
+        ''' This arranges the classes at the same level
+            so that super references are printed before
             the subclassess'''
         sorted_classes = sort_classes_at_same_level(unsorted_classes)
 
