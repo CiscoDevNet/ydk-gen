@@ -19,12 +19,10 @@ from optparse import OptionParser
 from ydkgen import YdkGenerator
 from git import Repo
 import os
-import re
 import logging
 import subprocess
 
 logger = logging.getLogger('ydkgen')
-VERSION = re.compile(r"^[\s]*version='(?P<version>\d+(\.\d+)*)'")
 
 
 def init_verbose_logger():
@@ -40,6 +38,7 @@ def init_verbose_logger():
 
 def print_about_ydk_page(ydk_root, py_api_doc_gen):
     repo = Repo(ydk_root)
+    remote = repo.remote().name
     branch = repo.active_branch.name
     url = repo.remote().url.split('://')[-1].split('.git')[0]
     commit_id = repo.rev_parse(remote + '/' + branch).hexsha
@@ -54,9 +53,10 @@ def print_about_ydk_page(ydk_root, py_api_doc_gen):
     with open(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'w') as about_file:
         about_file.write(contents)
 
+
 def get_release_version(output_directory):
     version = ''
-    revision = ''
+    release = ''
     setup_file = os.path.join(output_directory, 'setup.py')
     with open(setup_file, 'r') as f:
         for line in f:
@@ -65,6 +65,7 @@ def get_release_version(output_directory):
                 release = "release=" + rv
                 version = "version=" + rv[:rv.rfind(".")] + "'"
     return release, version
+
 
 def generate_documentations(output_dirs, ydk_root, language):
     for output_directory in output_dirs:
@@ -77,7 +78,7 @@ def generate_documentations(output_dirs, ydk_root, language):
         os.mkdir(py_api_doc)
 
         # print about YDK page
-        # print_about_ydk_page(ydk_root, py_api_doc_gen)
+        print_about_ydk_page(ydk_root, py_api_doc_gen)
 
         # build docs
         print('\nBuilding docs using sphinx-build...\n')
@@ -201,8 +202,9 @@ if __name__ == '__main__':
     if options.verbose:
         init_verbose_logger()
 
-    if not os.environ.has_key('YDKGEN_HOME'):
-        logger.debug('YDKGEN_HOME not set. Assuming current directory is working directory.')
+    if 'YDKGEN_HOME' not in os.environ:
+        logger.debug("YDKGEN_HOME not set."
+                     " Assuming current directory is working directory.")
         ydk_root = os.getcwd()
     else:
         ydk_root = os.environ['YDKGEN_HOME']
@@ -220,26 +222,25 @@ if __name__ == '__main__':
 
     output_dirs = []
 
-
     if options.profile:
         output_dirs.append(YdkGenerator(
-                            output_directory, ydk_root,
-                            options.groupings_as_class, language, 'profile'
-                            ).generate(options.profile))
+                           output_directory, ydk_root,
+                           options.groupings_as_class, language, 'profile'
+                           ).generate(options.profile))
 
     elif options.bundle:
         output_dirs.extend(YdkGenerator(
-                            output_directory, ydk_root,
-                            options.groupings_as_class, language, 'bundle'
-                            ).generate(options.bundle))
+                           output_directory, ydk_root,
+                           options.groupings_as_class, language, 'bundle'
+                           ).generate(options.bundle))
 
     elif options.core:
         output_dirs.append(YdkGenerator(
-                            output_directory, ydk_root,
-                            options.groupings_as_class, language, 'core'
-                            ).generate())
+                           output_directory, ydk_root,
+                           options.groupings_as_class, language, 'core'
+                           ).generate())
 
-    if options.gendoc == True:
+    if options.gendoc:
         generate_documentations(output_dirs, ydk_root, language)
 
     if options.cpp:
@@ -248,4 +249,3 @@ if __name__ == '__main__':
         create_pip_packages(output_dirs)
 
     print 'Code generation completed successfully!'
-

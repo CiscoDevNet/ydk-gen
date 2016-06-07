@@ -14,11 +14,12 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-""" providers.py 
- 
-   Service Providers module. Current implementation supports the NetconfServiceProvider which
-   uses ncclient (a Netconf client library) to provide CRUD services.
-   
+""" providers.py
+
+   Service Providers module. Current implementation supports the
+   NetconfServiceProvider which uses ncclient (a Netconf client library)
+   to provide CRUD services.
+
 """
 from lxml import etree
 
@@ -261,6 +262,7 @@ class _NCClientSPPlugin(_SPPlugin):
         chs = root.getchildren()
         # leaflist of enum
         if hasattr(entity, 'i_meta') and entity.i_meta.mtype == REFERENCE_ENUM_CLASS:
+            key_value = getattr(entity, entity.presentation_name)
             value = key_value.name.replace('_', '-').lower()
         value = str(entity.item)
         for ch in chs:
@@ -284,9 +286,8 @@ class _NCClientSPPlugin(_SPPlugin):
                     return target_root
         return target_root
 
-
     def _attach_tag(self, root, entity, optype):
-        if type(entity) ==  YList or type(entity) == YLeafList:
+        if type(entity) == YList or type(entity) == YLeafList:
             self._attach_list_tag(root, entity, optype)
         elif type(entity) == YListItem:
             # attach tag to this particular leaflist element
@@ -320,7 +321,6 @@ class _NCClientSPPlugin(_SPPlugin):
                     xc = 'urn:ietf:params:xml:ns:netconf:base:1.0'
                     elem.set('{' + xc + '}operation', 'delete')
 
-
     def _encode_epilogue(self, entity, root, optype):
         if type(entity) == YLeafList or type(entity) == YListItem:
             # parent_meta_tuple_list is not created for leaflist's parent
@@ -333,7 +333,7 @@ class _NCClientSPPlugin(_SPPlugin):
             XmlEncoder().encode_to_xml(entity, root, optype)
 
     def _check_read_only_edit_error(self, entity):
-        if type(entity) ==  YLeafList:
+        if type(entity) == YLeafList:
             pass
         elif type(entity) == YListItem:
             pass
@@ -455,7 +455,7 @@ class _NCClientSPPlugin(_SPPlugin):
     def _raise_non_rpc_error(self):
         self.netconf_sp_logger.error(YPYErrorCode.INVALID_RPC)
         raise YPYError(YPYErrorCode.INVALID_RPC)
-    
+
     def _encode_keys(self, root, entity, meta_info):
         for key in meta_info.key_members():
             self._encode_key(root, entity, meta_info, key)
@@ -476,7 +476,7 @@ class _NCClientSPPlugin(_SPPlugin):
             if key.mtype == REFERENCE_ENUM_CLASS:
                 key_value = key_value.name.replace('_', '-').lower()
             member_elem.text = str(key_value)
-        
+
     def _get_current_tuple_list(self, current_parent, current_meta_info):
         parent_meta_tuple_list = [(current_meta_info, current_parent)]
         while hasattr(current_meta_info, 'parent'):

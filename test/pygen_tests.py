@@ -34,6 +34,7 @@ yang_mod_path = []
 
 logger = logging.getLogger('ydkgen')
 
+
 def init_verbose_logger():
     """ Initialize the logging infra and add a handler """
     logger.setLevel(logging.DEBUG)
@@ -43,6 +44,7 @@ def init_verbose_logger():
     ch.setLevel(logging.DEBUG)
     # add the handlers to the logger
     logger.addHandler(ch)
+
 
 def suite(profile, test_cases_root, groupings_as_class):
 
@@ -70,12 +72,12 @@ def suite(profile, test_cases_root, groupings_as_class):
                     diff = difflib.context_diff(dest_file.readlines(), src_file.readlines())
                     delta = ''.join(diff)
                     self.assertEquals(same, True,
-                    "File comparison failed for test case %s\n"
-                    "expected %s \n "
-                    "generated %s \n "
-                    "if generated is correct use command \n "
-                    "cp %s %s \n "
-                    "diff %s" % (self.test_case_name, dest, src, src, os.path.dirname(dest), delta))
+                                      "File comparison failed for test case %s\n"
+                                      "expected %s \n "
+                                      "generated %s \n "
+                                      "if generated is correct use command \n "
+                                      "cp %s %s \n "
+                                      "diff %s" % (self.test_case_name, dest, src, src, os.path.dirname(dest), delta))
                     return
 
         def are_dir_trees_equal(self, dir1, dir2, ignore=[]):
