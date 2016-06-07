@@ -19,8 +19,8 @@ import hashlib
 import keyword
 from collections import OrderedDict
 """
- common.py 
- 
+ common.py
+
  YANG model driven API, common definitions.
 """
 

@@ -112,7 +112,7 @@ class Deviation(Element):
 
 class NamedElement(Element):
 
-    ''' 
+    '''
 
         An abstract element that may have a name
         The name is used for identification of the named element
@@ -147,7 +147,10 @@ class NamedElement(Element):
             sub = '.%s' % sub
         else:
             sub = ''
-        py_mod_name = 'ydk.models%s.%s' % (sub, pkg.name)
+        if pkg.bundle_name is None:
+            py_mod_name = 'ydk.models%s.%s' % (sub, pkg.name)
+        else:
+            py_mod_name = '%s.models%s.%s' % (pkg.bundle_name, sub, pkg.name)
         return py_mod_name
 
     def get_cpp_header_name(self):
@@ -192,7 +195,10 @@ class NamedElement(Element):
             sub = '.%s' % sub
         else:
             sub = ''
-        py_meta_mod_name = 'ydk.models%s._meta' % sub
+        if pkg.bundle_name is None:
+            py_meta_mod_name = 'ydk.models%s._meta' % sub
+        else:
+            py_meta_mod_name = '%s.models%s._meta' % (pkg.bundle_name, sub)
         return py_meta_mod_name
 
     def fqn(self):
@@ -240,10 +246,19 @@ class Package(NamedElement):
     def __init__(self):
         super(Package, self).__init__()
         self._stmt = None
+        self._bundle_name = None
 
     def qn(self):
         """ Return the qualified name """
         return self.name
+
+    @property
+    def bundle_name(self):
+        return self._bundle_name
+
+    @bundle_name.setter
+    def bundle_name(self, bundle_name):
+        self._bundle_name = bundle_name
 
     @property
     def stmt(self):
@@ -296,7 +311,7 @@ class DataType(NamedElement):
 class Class(NamedElement):
 
     """
-       Represents a Class in the api. 
+       Represents a Class in the api.
     """
 
     def __init__(self):

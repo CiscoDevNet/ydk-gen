@@ -29,7 +29,7 @@ BGP_DEVIATION_FXS=$FXS_DIR/bgp_deviation/
 YDKTEST_DEVIATION_FXS=$FXS_DIR/ydktest_deviation/
 
 function run_test_no_coverage {
-    python $@ 
+    python $@
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -38,7 +38,7 @@ function run_test_no_coverage {
 }
 
 function run_test {
-    coverage run --source=ydkgen,sdk -a $@ 
+    coverage run --source=ydkgen,sdk -a $@
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -50,7 +50,7 @@ function run_test {
 function clone_repo {
     cd $ROOT
     printf "\nCloning from: %s, branch: %s\n" "$REPO" "$BRANCH"
-    git clone -b $BRANCH $REPO 
+    git clone -b $BRANCH $REPO
 }
 
 function set_root {
@@ -60,10 +60,8 @@ function set_root {
 }
 
 function setup_env {
-    virtualenv myenv
-    source myenv/bin/activate
+    source install.sh
     pip install coverage
-    pip install -r requirements.txt 
 }
 
 function teardown_env {
@@ -106,8 +104,9 @@ function run_pygen_test {
     # run_test test/pygen_tests.py
 }
 
-# generate ydktest package based on proile
+# generate ydktest package based on profile
 function generate_ydktest_package {
+    # need sanity test
     printf "\nGenerating ydktest model APIs with grouping classes\n"
     run_test generate.py --profile profiles/test/ydktest.json --python --verbose --groupings-as-class
 
@@ -118,22 +117,71 @@ function generate_ydktest_package {
 # sanity tests
 function run_sanity_tests {
     pip install gen-api/python/dist/ydk*.tar.gz
-    source sdk/python/env.sh
 
     printf "\nRunning sanity tests\n"
-    export PYTHONPATH=./sdk/python:$PYTHONPATH
-    cp -r gen-api/python/ydk/models/* sdk/python/ydk/models
-    run_test sdk/python/tests/test_sanity_codec.py
-    run_test sdk/python/tests/test_sanity_types.py
-    run_test sdk/python/tests/test_sanity_filters.py
-    run_test sdk/python/tests/test_sanity_levels.py
-    run_test sdk/python/tests/test_sanity_filter_read.py
-    run_test sdk/python/tests/test_sanity_netconf.py
-    run_test sdk/python/tests/test_sanity_rpc.py
-    run_test sdk/python/tests/test_sanity_delete.py
 
-    export PYTHONPATH=./gen-api/python:$PYTHONPATH
-    run_test gen-api/python/ydk/tests/import_tests.py
+    cd gen-api/python
+    source env.sh
+
+    for f in $(find tests/* ! -name '*deviation*.py' ! -name 'compare.py' ! -name '__init__.py')
+    do
+        run_test $f
+    done
+
+    run_test ydk/tests/import_tests.py
+
+    cd $YDK_ROOT
+}
+
+# generate ydktest bundle package based on bundle files
+function generate_bundle_packages {
+    printf "\nTranslating profile files to bundle files\n"
+    run_test ydkgen/resolver/bundle_translator.py --verbose
+
+    # validate translated bundle files
+    pip install demjson
+    for f in $(find bundles -type f ! -name 'bgp_ydk_dev.json' ! -name 'ydk_0_1_0.json' -name '*.json')
+    do
+        printf "Linting %s\n" "$f"
+        jsonlint $f > /dev/null
+        if [ $? -ne 0 ]; then
+            exit $?
+        fi
+    done
+
+    printf "\nGenerating core library"
+    run_test generate.py --python --core --verbose
+
+    printf "\nGenerating bundle packages\n"
+    run_test generate.py --python --bundle bundles/test/ydktest.json --verbose
+    run_test generate.py --python --bundle bundles/ietf/ietf_models.json --verbose
+
+}
+
+function install_bundle_packages {
+    for p in $(find gen-api/python/ydk*/dist -type f -name '*.tar.gz')
+    do
+        printf "\nInstalling bundle package %s\n" "$p"
+        pip install $p --force-reinstall
+    done
+}
+
+function run_bundle_sanity_tests {
+    # sanity tests are bind with core library at the moment
+    cd gen-api/python/ydk/
+    source env.sh
+    for f in $(find tests/* ! -name '*deviation*.py' ! -name 'compare.py' ! -name '__init__.py')
+    do
+        run_test $f
+    done
+
+    # import tests for bundle packages
+    for f in $(find . -type f -name 'import_tests.py')
+    do
+        run_test $f
+    done
+
+    cd $YDK_ROOT
 }
 
 # cpp tests
@@ -165,6 +213,12 @@ function setup_deviation_sanity_models {
 # sanity deviation
 function run_deviation_sanity {
     cd $YDK_ROOT
+
+    # current ydk is core library need to regenerate sanity package
+    printf "\nGenerating ydktest model APIs with documentation\n"
+    export PYTHONPATH=''
+    run_test_no_coverage generate.py --profile profiles/test/ydktest.json --python --verbose
+    pip install gen-api/python/dist/ydk*.tar.gz --force-reinstall
     source gen-api/python/env.sh
     export PYTHONPATH=./gen-api/python:$PYTHONPATH
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py
@@ -211,8 +265,13 @@ setup_env
 compile_yang_to_fxs
 init_confd
 run_pygen_test
+# profile packages
 generate_ydktest_package
 run_sanity_tests
+# bundle packages
+generate_bundle_packages
+install_bundle_packages
+run_bundle_sanity_tests
 submit_coverage
 run_cpp_tests
 

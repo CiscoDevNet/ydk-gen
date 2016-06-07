@@ -54,77 +54,88 @@ def print_about_ydk_page(ydk_root, py_api_doc_gen):
         about_file.write(contents)
 
 
-def generate_documentation(output_directory, ydk_root):
-
-    py_api_doc_gen = output_directory + '/python/docsgen'
-    py_api_doc = output_directory + '/python/docs_expanded'
-    execfile(os.path.join(output_directory, 'python', 'ydk', '_version.py'))
-
-    os.mkdir(py_api_doc)
-    
-    # set documentation version and release from setup.py setting
-    version_number = locals()['__version__']
-    release = 'release={}'.format(version_number)
-    version = 'version={}'.format(version_number[:version_number.rfind(".")])
-
-    # print about YDK page
-    print_about_ydk_page(ydk_root, py_api_doc_gen)
-
-    # build docs
-    print('\nBuilding docs using sphinx-build...\n')
-
-    p = subprocess.Popen(['sphinx-build',
-                          '-D', version,
-                          '-D', release,
-                          py_api_doc_gen, py_api_doc],
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
-
-    stdout, stderr = p.communicate()
-    logger.debug(stdout)
-    logger.error(stderr)
-    print >> sys.stderr, stderr
-    print(stdout)
-    print('*' * 28 + '\n' + 'DOCUMENTATION ERRORS/WARNINGS\n' +
-          '*' * 28 + '\n' + stderr)
+def get_release_version(output_directory):
+    version = ''
+    release = ''
+    setup_file = os.path.join(output_directory, 'setup.py')
+    with open(setup_file, 'r') as f:
+        for line in f:
+            if 'version=' in line or 'version =' in line:
+                rv = line[line.find('=') + 1:line.rfind(",")]
+                release = "release=" + rv
+                version = "version=" + rv[:rv.rfind(".")] + "'"
+    return release, version
 
 
-def create_pip_package(output_directory):
+def generate_documentations(output_dirs, ydk_root, language):
+    for output_directory in output_dirs:
+        py_api_doc_gen = os.path.join(output_directory, 'docsgen')
+        py_api_doc = os.path.join(output_directory, 'docs_expanded')
+        # if it is package type
 
-    py_sdk_root = output_directory + '/python/'
-    os.chdir(py_sdk_root)
-    args = [sys.executable, 'setup.py', 'sdist']
-    exit_code = subprocess.call(args, env=os.environ.copy())
+        release, version = get_release_version(output_directory)
 
-    if exit_code == 0:
-        print('\nSuccessfully created source distribution at %sdist' %
-              (py_sdk_root,))
-    else:
-        print('\nFailed to create source distribution')
-        sys.exit(exit_code)
-    print('=================================================')
-    print('Successfully generated Python YDK at %s' % (py_sdk_root,))
-    print('Please read %sREADME.rst for information on how to install the package in your environment' % (
-        py_sdk_root,))
+        os.mkdir(py_api_doc)
+
+        # print about YDK page
+        print_about_ydk_page(ydk_root, py_api_doc_gen)
+
+        # build docs
+        print('\nBuilding docs using sphinx-build...\n')
+
+        p = subprocess.Popen(['sphinx-build',
+                              '-D', version,
+                              '-D', release,
+                              py_api_doc_gen, py_api_doc],
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+
+        stdout, stderr = p.communicate()
+        logger.debug(stdout)
+        logger.error(stderr)
+        print >> sys.stderr, stderr
+        print(stdout)
+        print('*' * 28 + '\n' + 'DOCUMENTATION ERRORS/WARNINGS\n' +
+              '*' * 28 + '\n' + stderr)
 
 
-def create_shared_library(output_directory):
+def create_pip_packages(output_dirs):
+    for output_directory in output_dirs:
+        py_sdk_root = output_directory
+        os.chdir(py_sdk_root)
+        args = [sys.executable, 'setup.py', 'sdist']
+        exit_code = subprocess.call(args, env=os.environ.copy())
 
-    cpp_sdk_root = output_directory + '/cpp/'
-    os.chdir(cpp_sdk_root)
-    args = ['make']
-    exit_code = subprocess.call(args, env=os.environ.copy())
+        if exit_code == 0:
+            print('\nSuccessfully created source distribution at %sdist' %
+                  (py_sdk_root,))
+        else:
+            print('\nFailed to create source distribution')
+            sys.exit(exit_code)
+        print('=================================================')
+        print('Successfully generated Python YDK at %s' % (py_sdk_root,))
+        print('Please read %sREADME.rst for information on how to install the package in your environment' % (
+            py_sdk_root,))
 
-    if exit_code == 0 and os.path.isfile(cpp_sdk_root + 'ydk_cpp.so'):
-        print('\nSuccessfully created shared library %s as ydk_cpp.so' %
-              (cpp_sdk_root))
-    else:
-        print('\nERROR: Failed to create shared library!\n')
-        sys.exit(exit_code)
-    print('\n=================================================')
-    print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
-    print('Please read %sREADME.rst for information on how to install the package in your environment\n' % (
-        cpp_sdk_root,))
+
+def create_shared_libraries(output_dirs):
+    for output_directory in output_dirs:
+        cpp_sdk_root = output_directory
+        os.chdir(cpp_sdk_root)
+        args = ['make']
+        exit_code = subprocess.call(args, env=os.environ.copy())
+
+        if exit_code == 0 and os.path.isfile(
+                                os.path.join(cpp_sdk_root, 'ydk_cpp.so')):
+            print('\nSuccessfully created shared library %s as ydk_cpp.so' %
+                  (cpp_sdk_root))
+        else:
+            print('\nERROR: Failed to create shared library!\n')
+            sys.exit(exit_code)
+        print('\n=================================================')
+        print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
+        print('Please read %sREADME.rst for information on how to install the package in your environment\n' % (
+            cpp_sdk_root,))
 
 if __name__ == '__main__':
     parser = OptionParser(usage="usage: %prog [options]",
@@ -134,6 +145,16 @@ if __name__ == '__main__':
                       type=str,
                       dest="profile",
                       help="Take options from a profile file, any CLI targets ignored")
+
+    parser.add_option("--bundle",
+                      type=str,
+                      dest="bundle",
+                      help="Take options from a bundle file, any CLI targets ignored")
+
+    parser.add_option("--core",
+                      action='store_true',
+                      dest="core",
+                      help="Take options from a bundle file, any CLI targets ignored")
 
     parser.add_option("--output-directory",
                       type=str,
@@ -181,8 +202,9 @@ if __name__ == '__main__':
     if options.verbose:
         init_verbose_logger()
 
-    if not os.environ.has_key('YDKGEN_HOME'):
-        logger.debug('YDKGEN_HOME not set. Assuming current directory is working directory.')
+    if 'YDKGEN_HOME' not in os.environ:
+        logger.debug("YDKGEN_HOME not set."
+                     " Assuming current directory is working directory.")
         ydk_root = os.getcwd()
     else:
         ydk_root = os.environ['YDKGEN_HOME']
@@ -198,16 +220,32 @@ if __name__ == '__main__':
     elif options.python:
         language = 'python'
 
-    YdkGenerator().generate(options.profile, output_directory, ydk_root,
-                    options.groupings_as_class, language)
+    output_dirs = []
 
-    if options.gendoc == True:
-        generate_documentation(output_directory, ydk_root)
+    if options.profile:
+        output_dirs.append(YdkGenerator(
+                           output_directory, ydk_root,
+                           options.groupings_as_class, language, 'profile'
+                           ).generate(options.profile))
+
+    elif options.bundle:
+        output_dirs.extend(YdkGenerator(
+                           output_directory, ydk_root,
+                           options.groupings_as_class, language, 'bundle'
+                           ).generate(options.bundle))
+
+    elif options.core:
+        output_dirs.append(YdkGenerator(
+                           output_directory, ydk_root,
+                           options.groupings_as_class, language, 'core'
+                           ).generate())
+
+    if options.gendoc:
+        generate_documentations(output_dirs, ydk_root, language)
 
     if options.cpp:
-        create_shared_library(output_directory)
+        create_shared_libraries(output_dirs)
     else:
-        create_pip_package(output_directory)
+        create_pip_packages(output_dirs)
 
     print 'Code generation completed successfully!'
-

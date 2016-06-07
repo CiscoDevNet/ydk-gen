@@ -79,7 +79,7 @@ class Module(object):
         self.uri = convert_uri(uri)
 
 def convert_uri(uri):
-    """ Convert uri to bundle format, local files is represented as:
+    """ Convert uri to bundle format.
 
         For example:
             >>> convert_uri(Local_URI('relative/path/to/file'))
@@ -119,7 +119,7 @@ def get_module_attrs(module_file, root, remote=None):
 
 def get_file_attrs(files, root, remote=None):
     for f in files:
-        logger.debug('Getting attrs from file: %s' % f)
+        # logger.debug('Getting attrs from file: %s' % f)
         yield get_module_attrs(os.path.join(root, f), root, remote)
 
 def get_dir_attrs(dirs, root, remote=None):
@@ -131,7 +131,7 @@ def get_dir_attrs(dirs, root, remote=None):
 def get_git_attrs(repos, root, remote=None):
     for g in repos:
         url, tmp_dir = g['url'], tempfile.mkdtemp(suffix='.yang')
-        logger.debug('Cloning from %s to %s' % (url, tmp_dir))
+        logger.debug('Bundle Translator: Cloning from %s --> %s' % (url, tmp_dir))
         repo = Repo.clone_from(url, tmp_dir)
         for c in g['commits']:
             commitid = c['commitid'] if 'commitid' in c else 'HEAD'
@@ -142,7 +142,7 @@ def get_git_attrs(repos, root, remote=None):
             if 'dir' in c:
                 for fattr in get_dir_attrs(c['dir'], tmp_dir, Remote(url, commitid)):
                     yield fattr
-        logger.debug('Removing folder %s:' % tmp_dir)
+        logger.debug('Bundle Translator: Removing folder %s' % tmp_dir)
         rmtree(tmp_dir)
 
 def check_envs():
@@ -151,8 +151,18 @@ def check_envs():
         print >> sys.stderr, "Need to have YDKGEN_HOME set!"
         sys.exit(1)
 
-def populate_template(in_file, out_file):
-    """ Generate bundle file using profile file. File is a relative path to a
+def get_bundle_name(in_file):
+    name = 'ydk'
+    with open(in_file) as f:
+        data = json.load(f)
+
+    if 'name' in data:
+        name = data['name']
+
+    return name
+
+def translate(in_file, out_file):
+    """ Generate bundle file using profile file(in_file). in_file is a relative path to a
     local profile file.
     """
     check_envs()
@@ -168,7 +178,7 @@ def populate_template(in_file, out_file):
             modules.extend(globals()['get_%s_attrs' % source](data['models'][source], ydk_root))
 
     version = data['version']
-    definition = Bundle('bundle_name', version, version)
+    definition = Bundle(get_bundle_name(in_file), version, version)
 
     output = Environment().from_string(TEMPLATE).render(
         modules=modules, definition=definition)
@@ -179,9 +189,9 @@ def populate_template(in_file, out_file):
 
 if __name__ == '__main__':
 
-    import doctest
-    doctest.testmod()
+    check_envs()
 
+    # init option parser
     parser = OptionParser(usage="usage: %prog [options]")
 
     parser.add_option("-v", "--verbose",
@@ -192,9 +202,32 @@ if __name__ == '__main__':
 
     (options, args) = parser.parse_args()
 
+    # init logger
     if options.verbose:
         handler = logging.StreamHandler()
         logger.addHandler(handler)
         logger.setLevel(logging.DEBUG)
 
-    populate_template('profiles/ydk/ydk_0_4_0.json', 'b.json')
+    # init dirs
+    ydk_root = os.path.expandvars('$YDKGEN_HOME')
+    profiles_root = os.path.join(ydk_root, 'profiles')
+    bundles_root = os.path.join(ydk_root, 'bundles')
+    if os.path.isdir(bundles_root):
+        rmtree(bundles_root)
+    else:
+        os.mkdir(bundles_root)
+
+    # translate profile description files to bundle description files.
+    for (dirpath, _, filenames) in walk(profiles_root):
+        for filename in filenames:
+            if filename.endswith('.json'):
+                if filename in ('ydk_0_4_0-mdt.json', 'ydk_0_1_0.json', 'bgp_ydk_dev.json'):
+                    continue
+                in_file = os.path.join(dirpath, filename)
+                out_path = os.path.join(bundles_root,
+                                        os.path.relpath(dirpath, profiles_root))
+                if not os.path.isdir(out_path):
+                    os.makedirs(out_path)
+                out_file = os.path.join(out_path, filename)
+                logger.debug('Bundle Translator: Translating profile %s -> bundle %s' % (in_file, out_file))
+                translate(in_file, out_file)

@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_inits_printer.py 
- 
+class_inits_printer.py
+
  __init__ printer
- 
+
 """
 from ydkgen.api_model import Bits, Class, Package
 

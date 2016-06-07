@@ -52,7 +52,7 @@ from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, 
     REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION{0}
 
 from ydk.errors import YPYError, YPYDataValidationError
-from ydk.models import _yang_ns
+from ... import _yang_ns
 
 """.format(anyxml_import))
 

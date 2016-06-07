@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_has_data_printer.py 
- 
+class_has_data_printer.py
+
  Printer for the _has_data method.
- 
+
 """
 from ydkgen.api_model import Bits, Class
 
