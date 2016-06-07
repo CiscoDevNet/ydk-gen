@@ -28,20 +28,16 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-# Get version from version file
-execfile(path.join(here, 'ydk', '_version.py'))
-
-# Get the long description from the README file
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='ydk',
+    name='$PACKAGE$',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version=__version__,
+    version='$VERSION$',
 
     description='YDK Python SDK',
     long_description=long_description,
@@ -101,7 +97,8 @@ setup(
                     'pycrypto==2.6.1',
                     'Twisted>=16.0.0',
                     'protobuf==3.0.0b2.post2',
-                    'ncclient>=0.4.7'],
+                    'ncclient>=0.4.7',
+                    $DEPENDENCY$],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
