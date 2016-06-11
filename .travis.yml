@@ -22,4 +22,4 @@ script:
 notifications:
   email:
     recipients:
-      - yang-dk@cisco.com
+      - ask-ydk@external.cisco.com

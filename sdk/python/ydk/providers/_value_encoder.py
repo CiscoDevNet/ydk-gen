@@ -51,7 +51,7 @@ class ValueEncoder(object):
                     value = " ".join([k for k in bits_value._dictionary if bits_value._dictionary[k] == True])
                     if (len(value) > 1):
                         text = value
-            elif member.mtype == REFERENCE_ENUM_CLASS:
+            elif member.mtype == REFERENCE_ENUM_CLASS or 'Enum' in member.ptype:
                 enum_value = value
                 exec_import = 'from ' + member.pmodule_name + ' import ' + member.clazz_name.split('.')[0]
                 exec exec_import

@@ -549,6 +549,35 @@ class SanityTest(unittest.TestCase):
         result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
+    def test_enum_list(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.enum_llist.append(YdkEnumTestEnum.LOCAL)
+        runner.ytypes.built_in_t.enum_llist.append(YdkEnumTestEnum.REMOTE)
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
+    @unittest.skip("Doesn't work")
+    def test_identity_list(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildIdentity_Identity())
+        runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildChildIdentity_Identity())
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
     def test_union_complex_list(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.younion_list.append("123:45")

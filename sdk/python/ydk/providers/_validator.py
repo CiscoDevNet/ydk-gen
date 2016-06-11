@@ -76,13 +76,16 @@ def _dm_validate_value(meta, value, parent, optype, i_errors):
         exec 'from ydk.types import Empty'
     elif meta._ptype == 'Decimal64':
         exec 'from ydk.types import Decimal64'
+    elif 'Enum' in meta._ptype:
+        exec_import = 'from %s import %s' \
+            % (meta.pmodule_name, meta.clazz_name.split('.')[0])
+        exec exec_import
 
     if meta.mtype in (REFERENCE_IDENTITY_CLASS,
         REFERENCE_BITS, REFERENCE_ENUM_CLASS, REFERENCE_LIST):
         exec_import = 'from %s import %s' \
             % (meta.pmodule_name, meta.clazz_name.split('.')[0])
         exec exec_import
-
 
     if isinstance(value, YList) and meta.mtype == REFERENCE_LIST:
         if optype == 'READ' or meta.max_elements is None:

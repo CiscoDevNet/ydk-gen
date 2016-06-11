@@ -65,7 +65,7 @@ def generate_documentation(output_directory, ydk_root):
     # set documentation version and release from setup.py setting
     version_number = locals()['__version__']
     release = 'release={}'.format(version_number)
-    version = 'version={}'.format(version_number[:version_number.rfind(".")])
+    version = 'version={}'.format(version_number)
 
     # print about YDK page
     print_about_ydk_page(ydk_root, py_api_doc_gen)

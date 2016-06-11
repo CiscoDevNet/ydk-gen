@@ -348,9 +348,20 @@ module ydktest-sanity {
         //leaf-list types for all types
         leaf-list llstring {
           type string;
-          //orered-by user;
           description "A list of string";
         }
+
+        leaf-list enum-llist {
+          type Ydk-Enum-test;
+          description "A leaf-list of enum";
+        }
+                
+        leaf-list identity-llist {
+          type identityref {
+            base base-identity;
+           }
+          description "A leaf-list of identityref";
+        }       
 
         leaf-list llunion {
           type union {
