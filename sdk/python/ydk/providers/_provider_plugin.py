@@ -14,16 +14,13 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-""" providers.py
+""" _provider_plugin.py
 
    Service Providers module. Current implementation supports the NetconfServiceProvider which
-   uses ncclient (a Netconf client library) to provide CRUD services.
+   uses connect to a device and execute operations using netconf.
 
 """
 from lxml import etree
-
-from ncclient import manager
-from ncclient.operations import RPC, RPCReply
 
 from ydk._core._dm_meta_info import REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS
 from ydk.errors import YPYServiceProviderError, YPYErrorCode
@@ -37,6 +34,33 @@ import abc
 import logging
 import importlib
 import ydk.models._yang_ns as _yang_ns
+
+import ydk_client
+
+
+class YdkClient(object):
+    def __init__(self, username, password, host, port):
+        try:
+            self.client = ydk_client.NetconfClient(username, password, host, port, 0)
+            self.client.connect()
+        except Exception as e:
+            raise YPYServiceProviderError('Could not connect to client: ' + str(e))
+
+    def execute_payload(self, payload):
+        reply = ''
+        try:
+            reply = self.client.execute_payload(payload)
+            return reply
+        except Exception as e:
+            raise YPYServiceProviderError('Could not execute RPC: ' + str(e))
+
+    def get_capabilities(self):
+        caps = []
+        caps.extend(self.client.get_capabilities())
+        return caps
+
+    def disconnect(self):
+        self.client.close()
 
 
 class _SPPlugin(object):
@@ -61,6 +85,7 @@ class _NCClientSPPlugin(_SPPlugin):
     def __init__(self, timeout):
         self.head = None
         self._nc_manager = None
+        self.ydk_client = None
         self.netconf_sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
         self.separator = '*' * 28
         self.timeout = timeout
@@ -88,7 +113,7 @@ class _NCClientSPPlugin(_SPPlugin):
         # In order to figure out which fields are the
         # ones we are interested find the field list
         entity = self._create_top_level_entity_from_read_filter(read_filter)
-        XmlDecoder._bind_to_object(payload, entity, self._nc_manager.server_capabilities)
+        XmlDecoder._bind_to_object(payload, entity, self.ydk_client.get_capabilities())
         # drill down to figure out the field access expression
         # that matches the entity or entities to be returned
         # not the argument passed in as a filter might have
@@ -159,95 +184,74 @@ class _NCClientSPPlugin(_SPPlugin):
         '''
             Raises exception on error, else returns result
         '''
-        service_provider_rpc = self._create_rpc_instance(self.timeout)
         reply_str = "FAILED!"
         if len(payload) == 0:
             return reply_str
-        payload = payload.replace("101", service_provider_rpc._id, 1)
         self.netconf_sp_logger.debug('\n%s\n%s', self.separator, payload)
-        reply_str = service_provider_rpc._request(payload)
+
+        assert self.ydk_client is not None
+        reply_str = self.ydk_client.execute_payload(payload)
         return self._handle_rpc_reply(operation, payload, reply_str)
 
-    def _create_rpc_instance(self, timeout):
-        assert self._nc_manager is not None
-        class _SP_RPC(RPC):
-            def _wrap(self, subele):
-                return subele
-
-        class _SP_REPLY_CLS(RPCReply):
-            def parse(self):
-                self._parsed = True
-                return True
-
-        RPC.REPLY_CLS = _SP_REPLY_CLS
-        return _SP_RPC(self._nc_manager._session, self._nc_manager._device_handler, timeout=timeout)
-
     def _handle_rpc_reply(self, optype, payload, reply_str):
-        err, pathlist = check_errors(reply_str.xml)
+        if 'ok' in reply_str:
+            self._handle_rpc_ok(optype, payload, reply_str)
+            return reply_str
+        err, pathlist = check_errors(reply_str)
         if err:
             self._handle_rpc_error(payload, reply_str, pathlist)
-        else:
-            self._handle_rpc_ok(optype, payload, reply_str)
 
-        root = etree.fromstring(reply_str.xml)
+        root = etree.fromstring(reply_str)
         payload = etree.tostring(root, method='xml', pretty_print='True')
         return payload
 
     def _handle_rpc_ok(self, optype, payload, reply_str):
-        assert self._nc_manager is not None
-        if operation_is_edit(optype) and confirmed_commit_supported(self._nc_manager):
+#         assert self._nc_manager is not None
+        if operation_is_edit(optype) and confirmed_commit_supported(self.ydk_client.get_capabilities()):
             self.netconf_sp_logger.debug('\n%s' , reply_str)
             self._handle_commit(payload, reply_str)
         else:
             self.netconf_sp_logger.debug('\n%s\n%s' , reply_str, self.separator)
 
     def _handle_rpc_error(self, payload, reply_str, pathlist):
-        self.netconf_sp_logger.error('%s\n%s\n%s\n%s' , self.separator, payload, reply_str.xml, self.separator)
+        self.netconf_sp_logger.error('%s\n%s\n%s\n%s' , self.separator, payload, reply_str, self.separator)
         raise YPYServiceProviderError(YPYErrorCode.SERVER_REJ, reply_str)
 
     def _handle_commit(self, payload, reply_str):
-        assert self._nc_manager is not None
-        self.netconf_sp_logger.debug('\n<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="101">\n  <commit/>\n</rpc>')
-        commit = self._nc_manager.commit()
-        if 'ok' not in commit.xml:
+        assert self.ydk_client is not None
+        self.netconf_sp_logger.debug('\n<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">\n  <commit/>\n</rpc>')
+        rep = self.ydk_client.execute_payload('\n<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">\n  <commit/>\n</rpc>')
+        if 'ok' not in rep:
             self.netconf_sp_logger.error('%s\n%s\n%s\ncommit-reply\n%s\n%s', self.separator,
-                                    payload, reply_str.xml, commit.xml, self.separator)
+                                    payload, reply_str, rep, self.separator)
             raise YPYServiceProviderError(YPYErrorCode.SERVER_COMMIT_ERR, reply_str)
         else:
             self.netconf_sp_logger.debug('\n%s\n%s' , reply_str, self.separator)
 
     def connect(self, session_config):
-        if (session_config.transportMode == _SessionTransportMode.SSH):
-            self._nc_manager = manager.connect(
-                host=session_config.hostname,
-                port=session_config.port,
-                username=session_config.username,
-                password=session_config.password,
-                look_for_keys=False,
-                allow_agent=False,
-                hostkey_verify=False)
-        elif (session_config.transportMode == _SessionTransportMode.TCP):
-            self._nc_manager = manager.connect(
-                host=session_config.hostname,
-                port=session_config.port,
-                transport='tcp')
-        return self._nc_manager
+        assert session_config.transportMode == _SessionTransportMode.SSH
+        self.ydk_client = YdkClient(
+            username=session_config.username,
+            password=session_config.password,
+            host=session_config.hostname,
+            port=session_config.port)
+
+        return self.ydk_client
 
     def disconnect(self):
-        assert self._nc_manager is not None
-        self._nc_manager.close_session()
+        assert self.ydk_client is not None
+        self.ydk_client.disconnect()
 
     def _get_target_datastore(self):
-        assert self._nc_manager is not None
+#         assert self._nc_manager is not None
         target_ds = 'candidate'
-        if not confirmed_commit_supported(self._nc_manager):
+        if not confirmed_commit_supported(self.ydk_client.get_capabilities()):
             target_ds = 'running'
         return target_ds
 
     def _create_root(self):
         NSMAP = {'xmlns': 'urn:ietf:params:xml:ns:netconf:base:1.0'}
         self.head = etree.Element('rpc', NSMAP)
-        self.head.set('message-id', '101')
         return self.head
 
     def _match_key(self, root, entity):
@@ -519,8 +523,8 @@ def operation_is_create_or_update(operation):
     return operation in ('CREATE', 'UPDATE')
 
 
-def confirmed_commit_supported(session_manager):
-    capabilities = session_manager.server_capabilities
+def confirmed_commit_supported(capabilities):
+#     capabilities = session_manager.server_capabilities
     confirmed_1_0 = 'urn:ietf:params:netconf:capability:confirmed-commit:1.0'
     confirmed_1_1 = 'urn:ietf:params:netconf:capability:confirmed-commit:1.1'
     return confirmed_1_0 in capabilities or confirmed_1_1 in capabilities

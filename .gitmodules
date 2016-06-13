@@ -1,0 +1,3 @@
+[submodule "sdk/cpp/libnetconf"]
+	path = sdk/cpp/libnetconf
+	url = https://github.com/abhikeshav/libnetconf.git

@@ -29,8 +29,8 @@ import logging
 
 from samples.session_mgr import establish_session, init_logging
 from ydk.models.bgp import bgp
-from ydk.models.bgp.bgp_types import Ipv4Unicast_Identity
-from ydk.models.bgp.bgp_types import Ipv6Unicast_Identity
+from ydk.models.bgp.bgp_types import Ipv4UnicastIdentity
+from ydk.models.bgp.bgp_types import Ipv6UnicastIdentity
 from ydk.models.routing.routing_policy import RoutingPolicy
 from ydk.errors import YPYError
 
@@ -81,7 +81,7 @@ def bgp_run(crud_service, session):
     
     try:
         crud_service.delete(session, bgp_cfg)
-    except YPYError:
+    except Exception:
         print 'BGP config does not exist!'
     
     #set up routing policy definition
