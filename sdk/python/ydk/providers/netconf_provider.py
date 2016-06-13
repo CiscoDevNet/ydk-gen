@@ -90,4 +90,4 @@ class NetconfServiceProvider(ServiceProvider):
         return self.sp_instance.execute_operation(payload, operation)
 
     def _get_capabilities(self):
-        return self.sp_instance._nc_manager.server_capabilities
+        return self.sp_instance.ydk_client.get_capabilities()

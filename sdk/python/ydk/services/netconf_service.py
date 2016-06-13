@@ -47,7 +47,6 @@ class NetconfService(Service):
         self.executor = ExecutorService()
         self.service_logger = logging.getLogger(__name__)
 
-
     def cancel_commit(self, provider, persist_id=None):
         """ Execute an cancel-commit operation to cancel an ongoing confirmed commit.
 

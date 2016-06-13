@@ -28,6 +28,15 @@ YDKTEST_FXS=$FXS_DIR/ydktest/
 BGP_DEVIATION_FXS=$FXS_DIR/bgp_deviation/
 YDKTEST_DEVIATION_FXS=$FXS_DIR/ydktest_deviation/
 
+function run_exec_test {
+    $@
+    local status=$?
+    if [ $status -ne 0 ]; then
+        exit $status
+    fi
+    return $status
+}
+
 function run_test_no_coverage {
     python $@ 
     local status=$?
@@ -60,6 +69,8 @@ function set_root {
 }
 
 function setup_env {
+    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev
+    sudo apt-get update
     virtualenv myenv
     source myenv/bin/activate
     pip install coverage
@@ -140,7 +151,7 @@ function run_sanity_tests {
 }
 
 # cpp tests
-function run_cpp_tests {
+function run_cpp_gen_tests {
     printf "\nGenerating ydktest C++ model APIs\n"
     run_test generate.py --profile profiles/test/ydktest.json --cpp --verbose
     cd gen-api/cpp
@@ -150,6 +161,14 @@ function run_cpp_tests {
         exit $status
     fi
     cd -
+}
+
+# cpp sanity tests
+function run_cpp_sanity_tests {
+    sudo apt install libunittest++-dev
+    cd $YDK_ROOT/sdk/cpp/tests
+    run_exec_test make clean all
+    cd $YDK_ROOT
 }
 
 # deviation tests
@@ -217,12 +236,11 @@ run_pygen_test
 generate_ydktest_package
 run_sanity_tests
 submit_coverage
-run_cpp_tests
+run_cpp_gen_tests
+run_cpp_sanity_tests
 
 setup_deviation_sanity_models
 run_deviation_sanity
 teardown_env
 
-
 exit
-
