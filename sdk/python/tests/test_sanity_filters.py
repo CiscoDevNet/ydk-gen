@@ -155,7 +155,7 @@ class SanityYang(unittest.TestCase):
 
     def test_read_on_identity_ref(self):
         r_1 = ysanity.Runner.Ytypes.BuiltInT()
-        r_1.identity_ref_value = ysanity.ChildIdentity_Identity()
+        r_1.identity_ref_value = ysanity.ChildIdentityIdentity()
         self.crud.create(self.ncc, r_1)
         r_2 = ysanity.Runner.Ytypes.BuiltInT()
         r_2.identity_ref_value = READ()
@@ -163,7 +163,7 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(is_equal(r_1, r_2), True)
 
         r_2 = ysanity.Runner.Ytypes.BuiltInT()
-        r_2.identity_ref_value = ysanity.ChildIdentity_Identity()
+        r_2.identity_ref_value = ysanity.ChildIdentityIdentity()
         r_2 = self.crud.read(self.ncc, r_2)
         self.assertEqual(is_equal(r_1, r_2), True)
 

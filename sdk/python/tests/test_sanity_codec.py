@@ -124,5 +124,14 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(is_equal(r_1, entity), True)
         self.assertEqual(payload, self.codec.encode(self.provider, entity))
 
+    def test_encode_decode_dict(self):
+        r_1 = self._get_runner_entity()
+        r_entity = {'ydktest-sanity':r_1}
+        payload = self.codec.encode(self.provider, r_entity)
+        entity = self.codec.decode(self.provider, payload)
+        for module in entity:
+            self.assertEqual(is_equal(r_entity[module], entity[module]), True)
+        self.assertEqual(payload, self.codec.encode(self.provider, entity))
+
 if __name__ == '__main__':
     unittest.main()

@@ -566,8 +566,8 @@ class SanityTest(unittest.TestCase):
     @unittest.skip("Doesn't work")
     def test_identity_list(self):
         runner = self._create_runner()
-        runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildIdentity_Identity())
-        runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildChildIdentity_Identity())
+        runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildIdentityIdentity())
+        runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildChildIdentityIdentity())
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
@@ -594,7 +594,7 @@ class SanityTest(unittest.TestCase):
     def test_identityref(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.identity_ref_value = \
-            ysanity.ChildIdentity_Identity()
+            ysanity.ChildIdentityIdentity()
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
@@ -640,7 +640,7 @@ class SanityTest(unittest.TestCase):
     def test_identity_from_other_module(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.identity_ref_value = \
-            ysanity_types.YdktestType_Identity()
+            ysanity_types.YdktestTypeIdentity()
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2

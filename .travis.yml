@@ -19,7 +19,3 @@ script:
     - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, REPO=$REPO"
     - docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH
 
-notifications:
-  email:
-    recipients:
-      - ask-ydk@external.cisco.com

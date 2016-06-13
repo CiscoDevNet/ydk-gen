@@ -452,9 +452,9 @@ class Class(NamedElement):
     def stmt(self, stmt):
         name = escape_name(stmt.arg)
         if stmt.keyword == 'grouping':
-            name = '%s_Grouping' % camel_case(name)
+            name = '%sGrouping' % camel_case(name)
         elif stmt.keyword == 'identity':
-            name = '%s_Identity' % camel_case(name)
+            name = '%sIdentity' % camel_case(name)
         elif stmt.keyword == 'rpc':
             name = camel_case(name) + 'Rpc'
         else:
