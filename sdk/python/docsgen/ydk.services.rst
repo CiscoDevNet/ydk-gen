@@ -379,17 +379,33 @@ CodecService: Provides encode/decode API's
 
 		.. py:method:: encode(provider, entity)
 		
-				Encodes the python entity and returns the payload. Entity is an instance of an entity class defined under the ydk.models package or subpackages
+				Encodes the python entity and returns the payload. Entity is either:
+				  - an instance of an entity class defined under the ydk.models package or subpackages, or
+				  - a dictionary containing:
+				     - module names as keys and
+				     - entity instances as values
 				
-				:return: encoded payload
+				:return: encoded value can be:
+				  - an instance of an XML payload defined for a yang module, or
+                  - a dictionary containing:
+                     - module names as keys and
+                     - instances of XML payload defined for a yang module as values
  
 				:raises ydk.errors.YPYDataValidationError: if validation error has occurred
 				
 		.. py:method:: decode(provider, payload)
 		
-				Decodes the the payload and returns the python entity.	Entity is an instance of an entity class defined under the ydk.models package or subpackages
+				Decodes the the payload and returns the python entity. Entity is either:
+				  - an instance of an XML payload defined for a yang module, or
+				  - a dictionary containing:
+				     - module names as keys and
+				     - instances of XML payload defined for a yang module as values
 				
-				:return: decoded entity
+				:return: decoded entity. Entity is either:
+                  - an instance of an entity class defined under the ydk.models package or subpackages, or
+                  - a dictionary containing:
+                     - module names as keys and
+                     - entity instances as values
  
 				:raises ydk.errors.YPYDataValidationError: if validation error has occurred
 

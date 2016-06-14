@@ -65,7 +65,7 @@ class XmlEncoder(object):
             value = eval('entity.%s' % member.presentation_name)
             if value is None or isinstance(value, list) and value == []:
                 continue
-            # bits
+
             if not member.mtype == ANYXML_CLASS and hasattr(value, '_has_data') and not value._has_data():
                 continue
 
