@@ -13,11 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-""" meta_services.py 
- 
+""" meta_services.py
+
    The MetaService class. Inject i_meta to entity
-   
+
 """
+import importlib
+
 from ydk.errors import YPYModelError
 from ydk.types import YList, READ, DELETE, YListItem, YLeafList
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, \
@@ -65,9 +67,8 @@ class MetaService(Service):
         deviation_tables = {}
         active_pmodule_names = [name.replace('-', '_') for name in active_dmodule_names]
         for pname in active_pmodule_names:
-            import_stmt = 'from ydk.models._deviate import _%s as %s' % (pname, pname)
-            exec import_stmt
-            deviation_table = eval(pname + '._deviation_table')
+            module = importlib.import_module('ydk.models._deviate._%s' % pname)
+            deviation_table = getattr(module, '_deviation_table')
             deviation_tables[pname] = deviation_table
 
         return deviation_tables
@@ -187,7 +188,7 @@ def inject_imeta_helper(entity, deviation_table, parent=None):
 
     new_members = []
     for idx, member in enumerate(entity.i_meta.meta_info_class_members):
-        value = eval('entity.%s' % member.presentation_name)
+        value = getattr(entity, member.presentation_name)
         if member.mtype not in (REFERENCE_LIST, REFERENCE_CLASS):
             name = member.presentation_name
         else:
@@ -212,7 +213,7 @@ def inject_imeta_helper(entity, deviation_table, parent=None):
 
     entity.i_meta.meta_info_class_members = new_members
     for idx, member in enumerate(entity.i_meta.meta_info_class_members):
-        value = eval('entity.%s' % member.presentation_name)
+        value = getattr(entity, member.presentation_name)
         if value is None or isinstance(value, list) and value == []:
             continue
         elif isinstance(value, READ) or isinstance(value, DELETE):
@@ -223,10 +224,12 @@ def inject_imeta_helper(entity, deviation_table, parent=None):
         elif member.mtype in (REFERENCE_CLASS, ANYXML_CLASS):
             inject_imeta_helper(value, deviation_table, entity.i_meta)
 
+
 def copy_meta(meta):
     """ Return a copy of the meta, an instance of MetaInfoClass"""
     import copy
     # need to copy members in union type if it contains union type
+
     def copy_union_meta(meta):
         new_meta = copy.copy(meta)
         if meta.members is None:

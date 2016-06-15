@@ -13,20 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-""" services.py 
- 
-   The Services module. 
-   
+""" services.py
+
+   The Services module.
+
    Supported Services Include
-   
-     CRUDService: Provide Create/Read/Update/Delete API's 
-     
+
+     CRUDService: Provide Create/Read/Update/Delete API's
+
 """
 from ydk.errors import YPYServiceError
 from ydk.types import YList
 from .service import Service
 from meta_service import MetaService
 import logging
+import importlib
 
 
 class CRUDService(Service):
@@ -35,49 +36,49 @@ class CRUDService(Service):
         self.service_logger = logging.getLogger(__name__)
 
     def create(self, provider, entity):
-        """ Create the entity 
-        
+        """ Create the entity
+
             Args:
                 provider: An instance of ydk.providers.ServiceProvider
                 entity: An instance of an entity class defined under the ydk.models package or subpackages
 
            Returns:
                  None
-        
+
            Raises:
               `YPYModelError <ydk.errors.html#ydk.errors.YPYModelError>`_ if validation.
-              `YPYServiceError <ydk.errors.html#ydk.errors.YPYServiceError>`_ if other error has occurred. Possible errors could be 
+              `YPYServiceError <ydk.errors.html#ydk.errors.YPYServiceError>`_ if other error has occurred. Possible errors could be
                   - a server side error
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
-                  
-                  
+
+
         """
         MetaService.normalize_meta(provider._get_capabilities(), entity)
         self._execute_crud_operation_on_provider(provider, entity, 'CREATE', False)
 
     def delete(self, provider, entity):
-        """ Delete the entity 
-        
+        """ Delete the entity
+
             Args:
                 provider: An instance of ydk.providers.ServiceProvider
                 entity: An an entity class defined under the ydk.models package or subpackages
-                
-           
+
+
 
            Returns:
                  None
-        
+
            Raises:
-              `YPYModelError <ydk.errors.html#ydk.errors.YPYModelError>`_ if validation failed. 
+              `YPYModelError <ydk.errors.html#ydk.errors.YPYModelError>`_ if validation failed.
               `YPYServiceError <ydk.errors.html#ydk.errors.YPYServiceError>`_ if other error has occurred. Possible errors could be a service side error
               or if there isn't enough information in the entity to prepare the message (missing keys for example)
-                  
+
         """
         MetaService.normalize_meta(provider._get_capabilities(), entity)
         self._execute_crud_operation_on_provider(provider, entity, 'DELETE', False)
 
     def update(self, provider, entity):
-        """ Update the entity 
+        """ Update the entity
 
             Args:
                - provider: An instance of ydk.providers.ServiceProvider
@@ -94,7 +95,7 @@ class CRUDService(Service):
               `YPYModelError <ydk.errors.html#ydk.errors.YPYModelError>`_ if validation failed.
               `YPYServiceError <ydk.errors.html#ydk.errors.YPYServiceError>`_ if other error has occurred. Possible errors could be a service side error
               or if there isn't enough information in the entity to prepare the message (missing keys for example)
-                  
+
         """
         # first read the object
         if self._entity_exists(provider, entity):
@@ -104,28 +105,28 @@ class CRUDService(Service):
 
     def read(self, provider, read_filter, only_config=False):
         """ Read the entity or entities
-            
+
             Args:
                 - provider: An instance of ydk.providers.ServiceProvider
                 - read_filter: A read_filter is an instance of an entity class.
-                
+
                          An entity class is a class defined under the ydk.models package that is not an Enum , Identity of subclass of FixedBitsDict) .
                          Attributes of this entity class may contain values that act as match expressions or can be explicitly marked as to be read by assigning an instance of ydk.types.READ class to them.
-                
+
                 - only_config: Flag that indicates that only data that represents configuration data is to be fetched.
-                        
+
                             Default is set to False i.e. both oper and config data will be fetched.
-                
+
            Returns:
                  The entity or entities as identified by the read_filter.
-        
+
            Raises:
               `YPYModelError <ydk.errors.html#ydk.errors.YPYModelError>`_ if validation failed.
               `YPYServiceError <ydk.errors.html#ydk.errors.YPYServiceError>`_ if other error has occurred. Possible errors could be
                   - a server side error
                   - if there isn't enough information in the entity to prepare the message (missing keys for example)
                   - if the type to be returned cannot be determined.
-                  
+
         """
         MetaService.normalize_meta(provider._get_capabilities(), read_filter)
         self._perform_read_filter_check(read_filter)
@@ -167,13 +168,12 @@ class CRUDService(Service):
         return True
 
     def _create_update_entity_filter(self, entity):
-        stmt = 'from ' + entity._meta_info().pmodule_name + ' import ' + entity._meta_info().name.split('.')[0]
-        exec(stmt)
+        module = importlib.import_module(entity._meta_info().pmodule_name)
+        update_filter = getattr(module, entity._meta_info().name)()
 
-        update_filter = eval('%s()' % entity._meta_info().name)
         # copy over the keys
         for key_member in entity._meta_info().key_members():
-            key_val = eval('entity.%s' % key_member.presentation_name)
+            key_val = getattr(entity, key_member.presentation_name)
             update_filter.__dict__[key_member.presentation_name] = key_val
 
         return update_filter

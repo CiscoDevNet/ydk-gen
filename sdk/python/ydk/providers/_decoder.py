@@ -18,7 +18,7 @@
    Decoder.
 
 """
-
+import importlib
 from lxml import etree
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LEAFLIST, \
             REFERENCE_LIST, REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, \
@@ -61,14 +61,12 @@ class XmlDecoder(object):
             elif contained_member.mtype == REFERENCE_LEAFLIST:
                 return XmlDecoder._to_real_list_type(rt, contained_member, entity)
             elif contained_member.mtype == REFERENCE_ENUM_CLASS:
-                exec_import = 'from ' + contained_member.pmodule_name + ' import ' + contained_member.clazz_name.split('.')[0]
-                exec exec_import
-                # first get the enum_class
-                meta_info = eval('%s._meta_info()' % contained_member.clazz_name)
+                clazz = get_class(contained_member.pmodule_name, contained_member.clazz_name)
+                meta_info = getattr(clazz, '_meta_info')()
                 enum_literal_key = rt[0].text
                 if enum_literal_key in meta_info.literal_map:
                     enum_literal = meta_info.literal_map[enum_literal_key]
-                    return eval('%s.%s' % (contained_member.clazz_name, enum_literal))
+                    return getattr(clazz, enum_literal)
             elif contained_member.mtype == REFERENCE_IDENTITY_CLASS:
                 identity_mod_name = None
                 identity_name = None
@@ -88,15 +86,9 @@ class XmlDecoder(object):
 
                 if (identity_mod_name, identity_name) in _yang_ns._identity_map:
                     (py_mod_name, identity_clazz_name) = _yang_ns._identity_map[(identity_mod_name, identity_name)]
-                    exec_import = 'from ' + py_mod_name + ' import ' + identity_clazz_name
-                    exec exec_import
-                    eval_getinstance = identity_clazz_name + '()'
-                    instance = eval(eval_getinstance)
-                    return instance
+                    return get_class_instance(py_mod_name, identity_clazz_name)
 
             elif contained_member.mtype == REFERENCE_BITS:
-                exec_import = 'from ' + contained_member.pmodule_name + ' import ' + contained_member.clazz_name.split('.')[0]
-                exec exec_import
                 keys = rt[0].text.split(" ")
                 for key in keys:
                     entity.__dict__[member.presentation_name][key] = True
@@ -212,10 +204,7 @@ class XmlDecoder(object):
             elif (member.mtype == REFERENCE_CLASS):
                 instance = entity.__dict__[member.presentation_name]
                 if instance is None:
-                    exec_import = 'from ' + member.pmodule_name + ' import ' + member.clazz_name.split('.')[0]
-                    exec exec_import
-                    eval_getinstance = member.clazz_name + '()'
-                    instance = eval(eval_getinstance)
+                    instance = get_class_instance(member.pmodule_name, member.clazz_name)
                     entity.__dict__[member.presentation_name] = instance
                     instance.parent = entity
                 XmlDecoder._bind_to_object_helper(rt[0], instance, deviation_tables, pretty_p + '-|')
@@ -224,10 +213,10 @@ class XmlDecoder(object):
                 if instance is None:
                     instance = []
                     entity.__dict__[member] = instance
-                exec_import = 'from ' + member.pmodule_name + ' import ' + member.clazz_name.split('.')[0]
-                exec exec_import
+                module = importlib.import_module(member.pmodule_name)
                 for rtchild in rt:
-                    child = eval(member.clazz_name + '()')
+                    # get nested class
+                    child = get_class_instance(member.pmodule_name, member.clazz_name)
                     child.parent = entity
                     instance.append(child)
                     XmlDecoder._bind_to_object_helper(rtchild, child, deviation_tables, pretty_p + '-l')
@@ -265,29 +254,21 @@ class XmlDecoder(object):
                     (py_mod_name, identity_clazz_name) = _yang_ns._identity_map[(identity_mod_name, identity_name)]
 
                 if py_mod_name is not None:
-                    exec_import = 'from ' + py_mod_name + ' import ' + identity_clazz_name
-                    exec exec_import
-
-                    eval_getinstance = identity_clazz_name + '()'
-                    instance = eval(eval_getinstance)
+                    instance = get_class_instance(py_mod_name, identity_clazz_name)
                     entity.__dict__[member.presentation_name] = instance
             elif member.mtype == REFERENCE_ENUM_CLASS:
                 entity.__dict__[member.presentation_name] = XmlDecoder._bind_to_enum_helper(member, rt[0])
             elif member.mtype == REFERENCE_BITS:
-                exec_import = 'from ' + member.pmodule_name + ' import ' + member.clazz_name.split('.')[0]
-                exec exec_import
                 keys = rt[0].text.split(" ")
                 for key in keys:
                     entity.__dict__[member.presentation_name][key] = True
             elif member.mtype == REFERENCE_UNION:
                 entity.__dict__[member.presentation_name] = XmlDecoder._to_real_union_type_helper(rt, member, entity)
-    
+
     @staticmethod
     def _bind_to_enum_helper(member, elem):
-        exec_import = 'from ' + member.pmodule_name + ' import ' + member.clazz_name.split('.')[0]
-        exec exec_import
-        # first get the enum_class
-        meta_info = eval('%s._meta_info()' % member.clazz_name)
+        clazz = get_class(member.pmodule_name, member.clazz_name.split('.')[0])
+        meta_info = getattr(clazz, '_meta_info')()
         enum_literal_key = elem.text
         if enum_literal_key not in meta_info.literal_map:
             sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
@@ -298,14 +279,24 @@ class XmlDecoder(object):
             if enum_literal_key.upper() in meta_info.literal_map:
                 sp_logger.debug('Found literal using secondary mechanism')
                 enum_literal = meta_info.literal_map[enum_literal_key.upper()]
-                return eval('%s.%s' % (member.clazz_name, enum_literal))
+                return getattr(clazz, enum_literal)
+
             elif enum_literal_key.lower() in meta_info.literal_map:
                 sp_logger.debug('Found literal using secondary mechanism')
                 enum_literal = meta_info.literal_map[enum_literal_key.lower()]
-                return eval('%s.%s' % (member.clazz_name, enum_literal))
+                return getattr(clazz, enum_literal)
         else:
             enum_literal = meta_info.literal_map[enum_literal_key]
-            return eval('%s.%s' % (member.clazz_name, enum_literal))
+            return getattr(clazz, enum_literal)
+
+
+def get_class(py_mod_name, clazz_name):
+    module = importlib.import_module(py_mod_name)
+    return reduce(getattr, clazz_name.split('.'), module)
+
+
+def get_class_instance(py_mod_name, clazz_name):
+    return get_class(py_mod_name, clazz_name)()
 
 
 def get_root(root, common_path, module_nmsp):

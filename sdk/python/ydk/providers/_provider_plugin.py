@@ -14,11 +14,11 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-""" providers.py 
- 
+""" providers.py
+
    Service Providers module. Current implementation supports the NetconfServiceProvider which
    uses ncclient (a Netconf client library) to provide CRUD services.
-   
+
 """
 from lxml import etree
 
@@ -35,6 +35,7 @@ from ._ydk_types import _SessionTransportMode
 
 import abc
 import logging
+import importlib
 import ydk.models._yang_ns as _yang_ns
 
 
@@ -115,7 +116,7 @@ class _NCClientSPPlugin(_SPPlugin):
             for member in current._meta_info().meta_info_class_members:
                 if member.name == yang_node_name:
                     found = True
-                    current = eval('current.%s' % member.presentation_name)
+                    current = getattr(current, member.presentation_name)
                     if current is None:
                         return None
                     if isinstance(current, YList):
@@ -150,9 +151,8 @@ class _NCClientSPPlugin(_SPPlugin):
             # need to find the member that has
             top_entity_meta_info = top_entity_meta_info.parent
 
-        exec_import = 'from ' + top_entity_meta_info.pmodule_name + ' import ' + top_entity_meta_info.name.split('.')[0]
-        exec exec_import
-        entity = eval(top_entity_meta_info.name + '()')
+        module = importlib.import_module(top_entity_meta_info.pmodule_name)
+        entity = getattr(module, top_entity_meta_info.name)()
         return entity
 
     def execute_operation(self, payload, operation):
@@ -455,7 +455,7 @@ class _NCClientSPPlugin(_SPPlugin):
     def _raise_non_rpc_error(self):
         self.netconf_sp_logger.error(YPYErrorCode.INVALID_RPC)
         raise YPYServiceProviderError(YPYErrorCode.INVALID_RPC)
-    
+
     def _encode_keys(self, root, entity, meta_info):
         for key in meta_info.key_members():
             self._encode_key(root, entity, meta_info, key)
@@ -476,7 +476,7 @@ class _NCClientSPPlugin(_SPPlugin):
             if key.mtype == REFERENCE_ENUM_CLASS:
                 key_value = key_value.name.replace('_', '-').lower()
             member_elem.text = str(key_value)
-        
+
     def _get_current_tuple_list(self, current_parent, current_meta_info):
         parent_meta_tuple_list = [(current_meta_info, current_parent)]
         while hasattr(current_meta_info, 'parent'):

@@ -25,7 +25,9 @@ from ydk.types import READ, DELETE, Decimal64, Empty, YList, YLeafList, YListIte
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_ENUM_CLASS, REFERENCE_LIST, \
             REFERENCE_LEAFLIST, REFERENCE_IDENTITY_CLASS, REFERENCE_BITS, REFERENCE_UNION
 
+import ast
 import logging
+import importlib
 
 
 def validate_entity(entity, optype):
@@ -48,7 +50,7 @@ def validate_entity_delegate(entity, optype, errors):
         Note this method will raise ydk.errors.YPYModelError if validation fails
     """
     for member in entity.i_meta.meta_info_class_members:
-        value = eval('entity.%s' % member.presentation_name)
+        value = getattr(entity, member.presentation_name)
         if isinstance(value, READ) or isinstance(value, DELETE):
             continue
 
@@ -83,9 +85,7 @@ def _dm_validate_value(meta, value, parent, optype, errors):
 
     if meta.mtype in (REFERENCE_IDENTITY_CLASS,
         REFERENCE_BITS, REFERENCE_ENUM_CLASS, REFERENCE_LIST):
-        exec_import = 'from %s import %s' \
-            % (meta.pmodule_name, meta.clazz_name.split('.')[0])
-        exec exec_import
+        module = importlib.import_module(meta.pmodule_name)
 
     if isinstance(value, YList) and meta.mtype == REFERENCE_LIST:
         if optype == 'READ' or meta.max_elements is None:
@@ -103,10 +103,8 @@ def _dm_validate_value(meta, value, parent, optype, errors):
 
     elif meta.mtype == REFERENCE_ENUM_CLASS:
         enum_value = value
-        exec_import = 'from %s import %s' \
-            % (meta.pmodule_name, meta.clazz_name.split('.')[0])
-        exec exec_import
-        enum_clazz = eval(meta.clazz_name)
+        module = importlib.import_module(meta.pmodule_name)
+        enum_clazz = reduce(getattr, meta.clazz_name.split('.'), module)
         literal_map = enum_clazz._meta_info().literal_map
         enum_found = False
         for yang_enum_name in literal_map:
@@ -121,12 +119,13 @@ def _dm_validate_value(meta, value, parent, optype, errors):
         return value
 
     elif meta.mtype == REFERENCE_LIST:
-        if not isinstance(value, eval(meta.clazz_name)):
+        clazz = reduce(getattr, meta.clazz_name.split('.'), module)
+        if not isinstance(value, clazz):
             errmsg = "Invalid list element type, type = %s" % value
             _handle_error(meta, parent, errors, errmsg)
         return value
 
-    elif isinstance(value, eval(meta._ptype)):
+    elif value.__class__.__name__ == meta._ptype:
         if isinstance(value, (int, long)):
             return _validate_number(meta, value, parent, errors)
         elif isinstance(value, str):
@@ -163,7 +162,7 @@ def _dm_validate_value(meta, value, parent, optype, errors):
             # enum, etc.
             return value
 
-    elif isinstance(value, (int, long)) and eval(meta._ptype) in (int,long):
+    elif isinstance(value, (int, long)) and meta._ptype in ('int', 'long'):
         return _validate_number(meta, value, parent, errors)
 
     elif isinstance(value, YLeafList) and meta.mtype == REFERENCE_LEAFLIST:
