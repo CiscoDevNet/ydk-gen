@@ -14,29 +14,90 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-""" errors.py 
- 
+""" errors.py
+
    Contains types representing the Exception hierarchy in YDK
-   
+
 """
+from lxml import etree
+from enum import Enum
+
+
+class YPYErrorCode(Enum):
+    ''' Exception Enum for YDK errors '''
+    INVALID_UNION_VALUE = 'Cannot translate union value'
+    INVALID_ENCODE_VALUE = 'Cannot encode value'
+
+    INVALID_HIERARCHY_PARENT = 'Parent is not set. \
+                    Parent Hierarchy cannot be determined'
+    INVALID_HIERARCHY_KEY = 'Key value is not set. \
+                    Parent hierarchy cannot be constructed'
+    INVALID_RPC = 'Object is not an RPC, cannot execute non-RPC object.'
+    INVALID_MODIFY = 'Entity is read-only, cannot modify a read-only entity.'
+    SERVER_REJ = 'Server rejected request.'
+    SERVER_COMMIT_ERR = 'Server reported an error while committing change.'
+
+    INVALID_TYPE = 'Cannot encode value'
+    INVALID_VALUE = 'Value is out of range'
+
 
 class YPYError(Exception):
     ''' Base Exception for YDK Errors '''
-    pass
+    def __init__(self, error_code=None, error_msg=None):
+        self.code = error_code
+        self.message = error_msg
 
-class YPYDataValidationError(YPYError):
-    '''	
+    def __str__(self):
+        ret = None
+        if self.code is None:
+            ret = self.message
+            return ret
+        else:
+            ret = self.code.value
+            if self.message is not None:
+                ret = [ret]
+                parser = etree.XMLParser(remove_blank_text=True)
+                root = etree.XML(self.message.xml, parser)
+                for r in root.iter():
+                    tag = r.tag[r.tag.rfind('}') + 1:]
+                    if r.text is not None:
+                        ret.append('\t{}: {}'.format(tag, r.text.strip()))
+                ret = '\n'.join(ret)
+            return ret
+
+
+class YPYModelError(YPYError):
+    '''
     Exception for Client Side Data Validation
 
     Type Validation\n
     --------
     Any data validation error encountered that is related to type \
-    validation encountered does not raise an Exception right away. 
-    
+    validation encountered does not raise an Exception right away.
+
     To uncover as many client side issues as possible, \
     an i_errors list is injected in the parent entity of any entity \
     with issues. The items added to this i_errors list captures the \
     object type that caused the error as well as an error message.
 
     '''
-    pass
+    def __init__(self, errmsg):
+        super(YPYModelError, self).__init__(error_msg=errmsg)
+
+
+class YPYServiceError(YPYError):
+    '''
+    Exception for Service Side Validation
+    '''
+    def __init__(self, errcode=None, errmsg=None):
+        super(YPYServiceError, self).__init__(
+            error_code=errcode, error_msg=errmsg)
+
+
+class YPYServiceProviderError(YPYError):
+    '''
+    Exception for Provider Side Validation
+    '''
+    def __init__(self, errcode=None, errmsg=None):
+        super(YPYServiceProviderError, self).__init__(
+            error_code=errcode, error_msg=errmsg)

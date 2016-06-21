@@ -6,15 +6,19 @@ import collections
 
 from enum import Enum
 
-from ydk._core._dm_meta_info import _MetaInfoClassMember, _MetaInfoClass, _MetaInfoEnum, _dm_validate_value
-from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
+from ydk._core._dm_meta_info import _MetaInfoClassMember, _MetaInfoClass, _MetaInfoEnum
+from ydk.types import Empty, YList, YLeafList, DELETE, Decimal64, FixedBitsDict
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST,     REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION
 
 from ydk.errors import YPYError, YPYDataValidationError
 from ydk.models import _yang_ns
 
 _meta_table = {
-    'YdkEnumTest_Enum' : _MetaInfoEnum('YdkEnumTest_Enum', 'ydk.models.ydktest.ydktest_sanity',
+    'YdkEnumIntTestEnum' : _MetaInfoEnum('YdkEnumIntTestEnum', 'ydk.models.ydktest.ydktest_sanity',
+        {
+            'any':'ANY',
+        }, 'ydktest-sanity', _yang_ns._namespaces['ydktest-sanity']),
+    'YdkEnumTestEnum' : _MetaInfoEnum('YdkEnumTestEnum', 'ydk.models.ydktest.ydktest_sanity',
         {
             'not-set':'NOT_SET',
             'none':'NONE',
@@ -150,10 +154,10 @@ _meta_table = {
         'meta_info' : _MetaInfoClass('Runner.LeafRef.One',
             False, 
             [
-            _MetaInfoClassMember('name', ATTRIBUTE, 'str' , None, None, 
-                [], [], 
+            _MetaInfoClassMember('name-of-one', ATTRIBUTE, 'str' , None, None, 
+                [], ['(([0\\-9]\\|[1\\-9][0\\-9]\\|1[0\\-9][0\\-9]\\|2[0\\-4][0\\-9]\\|25[0\\-5])\\.){3}([0\\-9]\\|[1\\-9][0\\-9]\\|1[0\\-9][0\\-9]\\|2[0\\-4][0\\-9]\\|25[0\\-5])(%[\\p{N}\\p{L}]+)?'], 
                 '''                ''',
-                'name',
+                'name_of_one',
                 'ydktest-sanity', False),
             _MetaInfoClassMember('two', REFERENCE_CLASS, 'Two' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.LeafRef.One.Two', 
                 [], [], 
@@ -199,6 +203,60 @@ _meta_table = {
             ],
             'ydktest-sanity',
             'leaf-ref',
+            _yang_ns._namespaces['ydktest-sanity'],
+        'ydk.models.ydktest.ydktest_sanity'
+        ),
+    },
+    'Runner.NotSupported1.NotSupported12' : {
+        'meta_info' : _MetaInfoClass('Runner.NotSupported1.NotSupported12',
+            False, 
+            [
+            _MetaInfoClassMember('some-leaf', ATTRIBUTE, 'str' , None, None, 
+                [], [], 
+                '''                ''',
+                'some_leaf',
+                'ydktest-sanity', False),
+            ],
+            'ydktest-sanity',
+            'not-supported-1-2',
+            _yang_ns._namespaces['ydktest-sanity'],
+        'ydk.models.ydktest.ydktest_sanity'
+        ),
+    },
+    'Runner.NotSupported1' : {
+        'meta_info' : _MetaInfoClass('Runner.NotSupported1',
+            False, 
+            [
+            _MetaInfoClassMember('not-supported-1-2', REFERENCE_CLASS, 'NotSupported12' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.NotSupported1.NotSupported12', 
+                [], [], 
+                '''                ''',
+                'not_supported_1_2',
+                'ydktest-sanity', False),
+            _MetaInfoClassMember('not-supported-leaf', ATTRIBUTE, 'str' , None, None, 
+                [], [], 
+                '''                ''',
+                'not_supported_leaf',
+                'ydktest-sanity', False),
+            ],
+            'ydktest-sanity',
+            'not-supported-1',
+            _yang_ns._namespaces['ydktest-sanity'],
+        'ydk.models.ydktest.ydktest_sanity'
+        ),
+    },
+    'Runner.NotSupported2' : {
+        'meta_info' : _MetaInfoClass('Runner.NotSupported2',
+            False, 
+            [
+            _MetaInfoClassMember('number', ATTRIBUTE, 'int' , None, None, 
+                [(-2147483648, 2147483647)], [], 
+                '''                Integer key for not supported list
+                ''',
+                'number',
+                'ydktest-sanity', True),
+            ],
+            'ydktest-sanity',
+            'not-supported-2',
             _yang_ns._namespaces['ydktest-sanity'],
         'ydk.models.ydktest.ydktest_sanity'
         ),
@@ -333,7 +391,7 @@ _meta_table = {
                 '''                one list data
                 ''',
                 'ldata',
-                'ydktest-sanity', False, max_elements=5, min_elements=0),
+                'ydktest-sanity', False, max_elements=5),
             _MetaInfoClassMember('one-aug-list', REFERENCE_CLASS, 'OneAugList' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.OneList.OneAugList', 
                 [], [], 
                 '''                config for one_level list data
@@ -645,6 +703,12 @@ _meta_table = {
         'ydk.models.ydktest.ydktest_sanity'
         ),
     },
+    'Runner.Ytypes.BuiltInT.EmbededEnumEnum' : _MetaInfoEnum('EmbededEnumEnum', 'ydk.models.ydktest.ydktest_sanity',
+        {
+            'zero':'ZERO',
+            'two':'TWO',
+            'seven':'SEVEN',
+        }, 'ydktest-sanity', _yang_ns._namespaces['ydktest-sanity']),
     'Runner.Ytypes.BuiltInT' : {
         'meta_info' : _MetaInfoClass('Runner.Ytypes.BuiltInT',
             False, 
@@ -673,13 +737,38 @@ _meta_table = {
                 ''',
                 'deci64',
                 'ydktest-sanity', False),
+            _MetaInfoClassMember('embeded-enum', REFERENCE_ENUM_CLASS, 'EmbededEnumEnum' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.Ytypes.BuiltInT.EmbededEnumEnum', 
+                [], [], 
+                '''                enum embeded in leaf
+                ''',
+                'embeded_enum',
+                'ydktest-sanity', False),
             _MetaInfoClassMember('emptee', ATTRIBUTE, 'Empty' , None, None, 
                 [], [], 
                 '''                this is empty value
                 ''',
                 'emptee',
                 'ydktest-sanity', False),
-            _MetaInfoClassMember('enum-value', REFERENCE_ENUM_CLASS, 'YdkEnumTest_Enum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumTest_Enum', 
+            _MetaInfoClassMember('enum-int-value', REFERENCE_UNION, 'str' , None, None, 
+                [], [], 
+                '''                enum int type
+                ''',
+                'enum_int_value',
+                'ydktest-sanity', False, [
+                    _MetaInfoClassMember('enum-int-value', REFERENCE_ENUM_CLASS, 'YdkEnumIntTestEnum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumIntTestEnum', 
+                        [], [], 
+                        '''                        enum int type
+                        ''',
+                        'enum_int_value',
+                        'ydktest-sanity', False),
+                    _MetaInfoClassMember('enum-int-value', ATTRIBUTE, 'int' , None, None, 
+                        [(1, 4096)], [], 
+                        '''                        enum int type
+                        ''',
+                        'enum_int_value',
+                        'ydktest-sanity', False),
+                ]),
+            _MetaInfoClassMember('enum-value', REFERENCE_ENUM_CLASS, 'YdkEnumTestEnum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumTestEnum', 
                 [], [], 
                 '''                this is enum type value
                 ''',
@@ -701,7 +790,26 @@ _meta_table = {
                 '''                A list of string
                 ''',
                 'llstring',
-                'ydktest-sanity', False, max_elements=30, min_elements=0),
+                'ydktest-sanity', False),
+            _MetaInfoClassMember('llunion', REFERENCE_UNION, 'str' , None, None, 
+                [], [], 
+                '''                A list of union
+                ''',
+                'llunion',
+                'ydktest-sanity', False, [
+                    _MetaInfoClassMember('llunion', REFERENCE_LEAFLIST, 'int' , None, None, 
+                        [(-32768, 32767)], [], 
+                        '''                        A list of union
+                        ''',
+                        'llunion',
+                        'ydktest-sanity', False),
+                    _MetaInfoClassMember('llunion', REFERENCE_LEAFLIST, 'str' , None, None, 
+                        [], [], 
+                        '''                        A list of union
+                        ''',
+                        'llunion',
+                        'ydktest-sanity', False),
+                ]),
             _MetaInfoClassMember('name', ATTRIBUTE, 'str' , None, None, 
                 [], [], 
                 '''                this is string value
@@ -744,7 +852,7 @@ _meta_table = {
                 ''',
                 'u_number32',
                 'ydktest-sanity', False),
-            _MetaInfoClassMember('u_number64', ATTRIBUTE, 'int' , None, None, 
+            _MetaInfoClassMember('u_number64', ATTRIBUTE, 'long' , None, None, 
                 [(0, 18446744073709551615L)], [], 
                 '''                64 bit uinteger value type
                 ''',
@@ -762,7 +870,7 @@ _meta_table = {
                 ''',
                 'younion',
                 'ydktest-sanity', False, [
-                    _MetaInfoClassMember('younion', REFERENCE_ENUM_CLASS, 'YdkEnumTest_Enum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumTest_Enum', 
+                    _MetaInfoClassMember('younion', REFERENCE_ENUM_CLASS, 'YdkEnumTestEnum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumTestEnum', 
                         [], [], 
                         '''                        union test value
                         ''',
@@ -773,6 +881,76 @@ _meta_table = {
                         '''                        union test value
                         ''',
                         'younion',
+                        'ydktest-sanity', False),
+                ]),
+            _MetaInfoClassMember('younion-list', REFERENCE_UNION, 'str' , None, None, 
+                [], [], 
+                '''                members of the younion
+                ''',
+                'younion_list',
+                'ydktest-sanity', False, [
+                    _MetaInfoClassMember('younion-list', REFERENCE_UNION, 'str' , None, None, 
+                        [], [], 
+                        '''                        members of the younion
+                        ''',
+                        'younion_list',
+                        'ydktest-sanity', False, [
+                            _MetaInfoClassMember('younion-list', REFERENCE_LEAFLIST, 'int' , None, None, 
+                                [(0, 4294967295)], [], 
+                                '''                                members of the younion
+                                ''',
+                                'younion_list',
+                                'ydktest-sanity', False),
+                            _MetaInfoClassMember('younion-list', REFERENCE_LEAFLIST, 'str' , None, None, 
+                                [], [], 
+                                '''                                members of the younion
+                                ''',
+                                'younion_list',
+                                'ydktest-sanity', False),
+                        ]),
+                    _MetaInfoClassMember('younion-list', REFERENCE_LEAFLIST, 'str' , None, None, 
+                        [], [], 
+                        '''                        members of the younion
+                        ''',
+                        'younion_list',
+                        'ydktest-sanity', False),
+                    _MetaInfoClassMember('younion-list', REFERENCE_LEAFLIST, 'str' , None, None, 
+                        [], [], 
+                        '''                        members of the younion
+                        ''',
+                        'younion_list',
+                        'ydktest-sanity', False),
+                ]),
+            _MetaInfoClassMember('younion-recursive', REFERENCE_UNION, 'str' , None, None, 
+                [], [], 
+                '''                Recursive union leaf
+                ''',
+                'younion_recursive',
+                'ydktest-sanity', False, [
+                    _MetaInfoClassMember('younion-recursive', REFERENCE_UNION, 'str' , None, None, 
+                        [], [], 
+                        '''                        Recursive union leaf
+                        ''',
+                        'younion_recursive',
+                        'ydktest-sanity', False, [
+                            _MetaInfoClassMember('younion-recursive', ATTRIBUTE, 'int' , None, None, 
+                                [(0, 4294967295)], [], 
+                                '''                                Recursive union leaf
+                                ''',
+                                'younion_recursive',
+                                'ydktest-sanity', False),
+                            _MetaInfoClassMember('younion-recursive', ATTRIBUTE, 'str' , None, None, 
+                                [], [], 
+                                '''                                Recursive union leaf
+                                ''',
+                                'younion_recursive',
+                                'ydktest-sanity', False),
+                        ]),
+                    _MetaInfoClassMember('younion-recursive', ATTRIBUTE, 'int' , None, None, 
+                        [(-128, 127)], [], 
+                        '''                        Recursive union leaf
+                        ''',
+                        'younion_recursive',
                         'ydktest-sanity', False),
                 ]),
             ],
@@ -831,6 +1009,16 @@ _meta_table = {
                 '''                ''',
                 'leaf_ref',
                 'ydktest-sanity', False),
+            _MetaInfoClassMember('not-supported-1', REFERENCE_CLASS, 'NotSupported1' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.NotSupported1', 
+                [], [], 
+                '''                ''',
+                'not_supported_1',
+                'ydktest-sanity', False),
+            _MetaInfoClassMember('not-supported-2', REFERENCE_LIST, 'NotSupported2' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.NotSupported2', 
+                [], [], 
+                '''                ''',
+                'not_supported_2',
+                'ydktest-sanity', False),
             _MetaInfoClassMember('one', REFERENCE_CLASS, 'One' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.One', 
                 [], [], 
                 '''                config for one_level data
@@ -885,6 +1073,46 @@ _meta_table = {
         'ydk.models.ydktest.ydktest_sanity'
         ),
     },
+    'SubTest.OneAug' : {
+        'meta_info' : _MetaInfoClass('SubTest.OneAug',
+            False, 
+            [
+            _MetaInfoClassMember('name', ATTRIBUTE, 'str' , None, None, 
+                [], [], 
+                '''                this is string value
+                ''',
+                'name',
+                'ydktest-sanity', False),
+            _MetaInfoClassMember('number', ATTRIBUTE, 'int' , None, None, 
+                [(-2147483648, 2147483647)], [], 
+                '''                integer value type
+                ''',
+                'number',
+                'ydktest-sanity', False),
+            ],
+            'ydktest-sanity',
+            'one-aug',
+            _yang_ns._namespaces['ydktest-sanity'],
+        'ydk.models.ydktest.ydktest_sanity'
+        ),
+    },
+    'SubTest' : {
+        'meta_info' : _MetaInfoClass('SubTest',
+            False, 
+            [
+            _MetaInfoClassMember('one-aug', REFERENCE_CLASS, 'OneAug' , 'ydk.models.ydktest.ydktest_sanity', 'SubTest.OneAug', 
+                [], [], 
+                '''                config for one_level data
+                ''',
+                'one_aug',
+                'ydktest-sanity', False),
+            ],
+            'ydktest-sanity',
+            'sub-test',
+            _yang_ns._namespaces['ydktest-sanity'],
+        'ydk.models.ydktest.ydktest_sanity'
+        ),
+    },
     'ChildIdentity_Identity' : {
         'meta_info' : _MetaInfoClass('ChildIdentity_Identity',
             False, 
@@ -913,6 +1141,7 @@ _meta_table['Runner.InbtwList.Ldata.Subc']['meta_info'].parent =_meta_table['Run
 _meta_table['Runner.InbtwList.Ldata']['meta_info'].parent =_meta_table['Runner.InbtwList']['meta_info']
 _meta_table['Runner.LeafRef.One.Two']['meta_info'].parent =_meta_table['Runner.LeafRef.One']['meta_info']
 _meta_table['Runner.LeafRef.One']['meta_info'].parent =_meta_table['Runner.LeafRef']['meta_info']
+_meta_table['Runner.NotSupported1.NotSupported12']['meta_info'].parent =_meta_table['Runner.NotSupported1']['meta_info']
 _meta_table['Runner.One.OneAug']['meta_info'].parent =_meta_table['Runner.One']['meta_info']
 _meta_table['Runner.OneList.OneAugList.Ldata']['meta_info'].parent =_meta_table['Runner.OneList.OneAugList']['meta_info']
 _meta_table['Runner.OneList.Ldata']['meta_info'].parent =_meta_table['Runner.OneList']['meta_info']
@@ -929,6 +1158,8 @@ _meta_table['Runner.Ytypes.BuiltInT']['meta_info'].parent =_meta_table['Runner.Y
 _meta_table['Runner.Ytypes.DerivedT']['meta_info'].parent =_meta_table['Runner.Ytypes']['meta_info']
 _meta_table['Runner.InbtwList']['meta_info'].parent =_meta_table['Runner']['meta_info']
 _meta_table['Runner.LeafRef']['meta_info'].parent =_meta_table['Runner']['meta_info']
+_meta_table['Runner.NotSupported1']['meta_info'].parent =_meta_table['Runner']['meta_info']
+_meta_table['Runner.NotSupported2']['meta_info'].parent =_meta_table['Runner']['meta_info']
 _meta_table['Runner.One']['meta_info'].parent =_meta_table['Runner']['meta_info']
 _meta_table['Runner.OneList']['meta_info'].parent =_meta_table['Runner']['meta_info']
 _meta_table['Runner.Runner2']['meta_info'].parent =_meta_table['Runner']['meta_info']
@@ -937,3 +1168,4 @@ _meta_table['Runner.ThreeList']['meta_info'].parent =_meta_table['Runner']['meta
 _meta_table['Runner.Two']['meta_info'].parent =_meta_table['Runner']['meta_info']
 _meta_table['Runner.TwoList']['meta_info'].parent =_meta_table['Runner']['meta_info']
 _meta_table['Runner.Ytypes']['meta_info'].parent =_meta_table['Runner']['meta_info']
+_meta_table['SubTest.OneAug']['meta_info'].parent =_meta_table['SubTest']['meta_info']

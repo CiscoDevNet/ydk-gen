@@ -5,10 +5,12 @@
 .externalToolBuilders/
 *.pyc
 *~
+*.swp
 debug.log
 netconf.log
 protocol.log
 myenv
+mypython
 v/
 gittmp*/
 .DS_Store

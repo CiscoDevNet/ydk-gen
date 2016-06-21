@@ -28,6 +28,9 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
+# Get version from version file
+execfile(path.join(here, 'ydk', '_version.py'))
+
 # Get the long description from the README file
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
@@ -38,7 +41,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.3.0',
+    version=__version__,
 
     description='YDK Python SDK',
     long_description=long_description,
@@ -73,10 +76,10 @@ setup(
         #'Programming Language :: Python :: 2',
         #'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        #'Programming Language :: Python :: 3',
+        #'Programming Language :: Python :: 3.2',
+        #'Programming Language :: Python :: 3.3',
+        #'Programming Language :: Python :: 3.4',
     ],
 
     # What does your project relate to?
@@ -90,11 +93,15 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['ecdsa>=0.13', 'enum>=0.4.4', 
-                      'lxml>=3.4.4', 
-                      'paramiko>=1.15.2',
-                      'pycrypto>=2.6.1',
-                      'ncclient>=0.4.7'],
+    install_requires=['ecdsa==0.13',
+                    'enum34==1.1.3',
+                    'lxml==3.4.4',
+                    'paramiko==1.15.2',
+                    'pyang==1.6',
+                    'pycrypto==2.6.1',
+                    'Twisted>=16.0.0',
+                    'protobuf==3.0.0b2.post2',
+                    'ncclient>=0.4.7'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,

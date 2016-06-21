@@ -1,0 +1,147 @@
+module ydktest-sanity-deviations-types {
+    namespace "http://cisco.com/ns/yang/ydktest-sanity-deviations-types";
+    prefix "ydkut-deviations-types";
+    import ydktest-sanity { prefix ydkut; }
+    organization "Cisco Systems, Inc.";
+
+    contact
+      "Cisco Systems, Inc.
+       Customer Service
+
+       Postal: 170 West Tasman Drive
+       San Jose, CA 95134
+
+       Tel: +1 800 553-NETS
+
+       E-mail: cs-yang@cisco.com";
+
+    description 
+      "This module contains a set of deviations for ydktest-sanity module, it replaces
+       type for every leaf under path /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut.
+
+       Copyright (c) 2015 by Cisco Systems, Inc.
+       All rights reserved.";    
+
+    revision "2015-11-17" {
+        description
+            "Initial commit";
+    }
+    // change type of every node to the type of next node
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:number8 {
+      deviate replace {
+        type int16;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:number16 {
+      deviate replace {
+        type int32;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:number32 {
+      deviate replace {
+        type int64;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:number64 {
+      deviate replace {
+        type uint8;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:u_number8 {
+      deviate replace {
+        type uint16;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:u_number16 {
+      deviate replace {
+        type uint32;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:u_number32 {
+      deviate replace {
+        type uint64;
+      }
+    }
+//    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:u_number64 {
+//      deviate replace {
+//        type leafref {
+//          path "/runner/ytypes/built-in-t/number8";
+//        }
+//      }
+//    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:leaf-ref {
+      deviate replace {
+        type decimal64 {
+          fraction-digits 2;
+          range "1 .. 3.14 | 10 | 20..max";
+        }
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:deci64 {
+      deviate replace {
+        type string;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:name {
+      deviate replace {
+        type empty;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:bool-value {
+      deviate replace {
+        type ydkut:Ydk-Enum-test;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:enum-value {
+      deviate replace {
+        type enumeration {
+          enum zero;
+          enum one;
+          enum seven {
+            value 7;
+          }
+        }
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:embeded-enum {
+      deviate replace {
+        type identityref {
+          base ydkut:child-child-identity;
+        }
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:identity-ref-value {
+      deviate replace {
+        type binary;
+      }
+    }
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:bincoded {
+      deviate replace {
+        type bits {
+          bit disable-nagle {
+            position 0;
+          }
+          bit auto-sense-speed {
+            position 1;
+          }
+        }
+      }
+    }
+
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:bits-value {
+      deviate delete {
+        default "auto-sense-speed";
+      }
+    }
+
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:bits-value {
+      deviate replace {
+        type union {
+          type ydkut:Ydk-Enum-test;
+          type uint32 {
+            range "0..63";
+          }
+        }
+      }
+    }
+}

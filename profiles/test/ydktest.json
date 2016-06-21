@@ -1,19 +1,13 @@
 {
-    "version": "0.1.0",
+    "version": "0.4.0",
     "Author": "Cisco",
     "Copyright": "Cisco",
     "Description": "YDK Test Profile",
     "models": {
 	"dir": [
-	    "/yang/ydktest"
+	    "/yang/ydktest",
+	    "/yang/ietf"
         ]
-    },
-    "targets": [
-	{
-	    "python": {
-		"output_dir": "sdktmp",
-		"no_doc": true
-	    }
-	}
-    ]
+     
+    }
 }

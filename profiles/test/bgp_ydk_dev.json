@@ -1,0 +1,90 @@
+{
+    "_descr": "A profile file contains the metadata for generating a number of SDKs of varying languages from a single set of yang models.",
+    "version": "0.1.0",
+    "Author": "Cisco",
+    "Copyright": "Cisco",
+    
+    "models": {
+	
+	"_descr_git": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
+	"git": [
+	    {
+		"url": "http://gitlab.cisco.com/ydk-dev/ydk-models.git",
+		"commits": [
+					
+	    		
+	    			
+	    			{
+		
+						"commitid": "73f7569cbc062bdae06ffe37fdae9dae15087d53",
+						"file": [
+		    					"yang/ietf/ietf-inet-types@2013-07-15.yang",
+		    					"yang/ietf/ietf-interfaces@2014-05-08.yang",
+		    					"yang/ietf/ietf-netconf-acm@2012-02-22.yang",
+		    					"yang/ietf/ietf-yang-smiv2@2012-06-22.yang",
+		    					"yang/ietf/ietf-yang-types@2013-07-15.yang"
+		    
+								]
+	    			},
+	    			
+	    			
+	    			
+	    			
+	    			{
+		
+						"commitid": "73f7569cbc062bdae06ffe37fdae9dae15087d53",
+						"file": [
+                                                        "yang/iana/iana-if-type@2015-06-12.yang",
+		    					"yang/iana/iana-crypt-hash@2014-04-04.yang"
+		    
+								]
+	    			},
+	    			
+	    			{
+		
+						"commitid": "73f7569cbc062bdae06ffe37fdae9dae15087d53",
+						"file": [
+		    					"yang/openconfig/bgp@2015-05-15.yang",
+		    					"yang/openconfig/bgp-multiprotocol@2015-05-15.yang",
+		    					"yang/openconfig/bgp-operational@2015-05-15.yang",
+		    					"yang/openconfig/bgp-types@2015-05-15.yang",
+		    					"yang/openconfig/policy-types@2015-05-15.yang",
+		    					"yang/openconfig/routing-policy@2015-05-15.yang",
+		    					"yang/openconfig/model-structure@2015-03-06.yang",
+                                                        "yang/openconfig/oc-xr-mapping@2015-02-10.yang"
+		    
+								]
+	    			}
+	    			
+	    			]
+	    },
+	    
+	    {
+	    "url": "http://gitlab.cisco.com/ydk-dev/openconfig.git",
+	    "commits": [
+	    			{
+						"commitid": "4ab22755c2484e893b2c2b6d88f800b8dd41bb09",
+						"dir": [
+		    					
+		    					"release/models/interfaces",
+		    					"release/models/inventory",
+		    					"release/models/mpls",
+		    					"release/models/optical-transport",
+		    					"release/models/rpc",
+		    					"release/models/telemetry",
+		    					"release/models/vlan"
+		    
+								],
+						"file": [
+		    					"release/models/openconfig-extensions.yang",
+		    					"release/models/openconfig-types.yang"
+		    				
+								]
+					}
+				   ]
+        
+     }
+     ]
+}
+}
+

@@ -12,7 +12,9 @@ Contains type definitions.
 
 	Bases: :class:`object`
 	
-	Marker class used to mark nodes that are to be deleted.
+	Marker class used to mark nodes that are to be deleted. 
+
+	Assign DELETE object to a mark a leaf for deletion. A CRUD update operation will delete the leaf from the device it is on.
 	
 	
 .. py:class:: ydk.types.Decimal64(str_val)
@@ -63,7 +65,15 @@ Contains type definitions.
 	
 	Represents a list with support for hanging a parent.
 
-	All YANG based entity classes that have lists or leaf-lists in them 
+	All YANG based entity classes that have lists in them 
 	use YList to represent the list. 
 	
+.. py:class:: ydk.types.YLeafList()
+
+	Bases: :class:`YList`
+
+	Represents a leaf-list with support for hanging a parent.
+
+	All YANG leaf-list is represented as YLeafList. YLeafList is 
+	associative array, it contains unique elemenets.
 	

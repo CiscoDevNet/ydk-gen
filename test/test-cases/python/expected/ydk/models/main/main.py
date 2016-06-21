@@ -18,7 +18,7 @@ import collections
 
 from enum import Enum
 
-from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
+from ydk.types import Empty, YList, YLeafList, DELETE, Decimal64, FixedBitsDict
 
 from ydk.errors import YPYError, YPYDataValidationError
 
@@ -114,15 +114,9 @@ class A(object):
         def _has_data(self):
             if not self.is_config():
                 return False
-            if self.is_presence():
-                return True
             if self.two is not None:
                 return True
 
-            return False
-
-        def is_presence(self):
-            ''' Returns True if this instance represents presence container else returns False '''
             return False
 
         @staticmethod
@@ -165,15 +159,9 @@ class A(object):
         def _has_data(self):
             if not self.is_config():
                 return False
-            if self.is_presence():
-                return True
             if self.three is not None:
                 return True
 
-            return False
-
-        def is_presence(self):
-            ''' Returns True if this instance represents presence container else returns False '''
             return False
 
         @staticmethod
@@ -216,15 +204,9 @@ class A(object):
         def _has_data(self):
             if not self.is_config():
                 return False
-            if self.is_presence():
-                return True
             if self.poo is not None:
                 return True
 
-            return False
-
-        def is_presence(self):
-            ''' Returns True if this instance represents presence container else returns False '''
             return False
 
         @staticmethod
@@ -267,15 +249,9 @@ class A(object):
         def _has_data(self):
             if not self.is_config():
                 return False
-            if self.is_presence():
-                return True
             if self.meh is not None:
                 return True
 
-            return False
-
-        def is_presence(self):
-            ''' Returns True if this instance represents presence container else returns False '''
             return False
 
         @staticmethod
@@ -316,15 +292,9 @@ class A(object):
         def _has_data(self):
             if not self.is_config():
                 return False
-            if self.is_presence():
-                return True
             if self.buh is not None:
                 return True
 
-            return False
-
-        def is_presence(self):
-            ''' Returns True if this instance represents presence container else returns False '''
             return False
 
         @staticmethod
@@ -344,45 +314,24 @@ class A(object):
     def _has_data(self):
         if not self.is_config():
             return False
-        if self.is_presence():
-            return True
         if self.main_aug1_c is not None and self.main_aug1_c._has_data():
-            return True
-
-        if self.main_aug1_c is not None and self.main_aug1_c.is_presence():
             return True
 
         if self.main_aug2_c is not None and self.main_aug2_c._has_data():
             return True
 
-        if self.main_aug2_c is not None and self.main_aug2_c.is_presence():
-            return True
-
         if self.main_aug2_d is not None and self.main_aug2_d._has_data():
-            return True
-
-        if self.main_aug2_d is not None and self.main_aug2_d.is_presence():
             return True
 
         if self.main_aug3_c is not None and self.main_aug3_c._has_data():
             return True
 
-        if self.main_aug3_c is not None and self.main_aug3_c.is_presence():
-            return True
-
         if self.main_aug3_d is not None and self.main_aug3_d._has_data():
-            return True
-
-        if self.main_aug3_d is not None and self.main_aug3_d.is_presence():
             return True
 
         if self.one is not None:
             return True
 
-        return False
-
-    def is_presence(self):
-        ''' Returns True if this instance represents presence container else returns False '''
         return False
 
     @staticmethod

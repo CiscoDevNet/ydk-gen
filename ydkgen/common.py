@@ -13,7 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-
+import sys
+import logging
+import hashlib
+import keyword
+from collections import OrderedDict
 """
  common.py 
  
@@ -93,101 +97,9 @@ class YdkGenException(Exception):
 
     def __init__(self, msg):
         self.msg = msg
-
-
-class PrintCtx(object):
-
-    """
-        Print Context.
-
-        Used to encapsulate information needed by the printers.
-    """
-
-    def __init__(self):
-        self.fd = None
-        self.lvl = 0
-        # internal
-        self.all_classes = []
-        self.aug_stmt = None
-        self.augment_path = ''
-        self.class_list = []
-        self.class_name = ''
-        self.class_stack = []
-        self.comment = False
-        self.contact = ''
-        self.depth = 0
-        self.env = None
-        self.first = True
-        self.group_list = []
-        self.groupings = {}
-        self.idx = 0
-        self.idx_stack = []
-        self.import_enum = []
-        self.imports = {}
-        self.loader = None
-        self.local_group_list = []
-        self.meta = True
-        self.module = None
-        self.module_name = ''
-        self.namespace = ''
-        self.ns = []
-        self.organization = ''
-        self.prefix = ''
-        self.printer = None
-        self.revision = ''
-        self.rpc = []
-        self.tab_size = 4
-        self.target = ''
-        self.templates = None
-        self.types = []
-        self.uses = []
-
-    def str(self, msg):
-        self.fd.write(msg)
-
-    def tab(self, lvl=None):
-        if lvl is None:
-            lvl = self.lvl
-        if lvl > 0:
-            fmt = '%%%ds' % (lvl * self.tab_size)
-        else:
-            return ''
-        return fmt % ' '
-
-    def write(self, msg):
-        if self.lvl > 0:
-            fmt = '%%%ds' % (self.lvl * self.tab_size)
-            self.fd.write(fmt % ' ')
-        self.fd.write(msg)
-
-    def writeln(self, msg, tab=0):
-        if self.lvl + tab > 0:
-            fmt = '%%%ds' % ((self.lvl + tab) * self.tab_size)
-            self.fd.write(fmt % ' ')
-        self.fd.write(msg)
-        self.fd.write('\n')
-
-    def bline(self):
-        self.fd.write('\n')
-
-    def lvl_inc(self, tab=1):
-        self.lvl += tab
-
-    def lvl_dec(self, tab=1):
-        self.lvl -= tab
-
-    def push_idx(self):
-        self.idx_stack.append(self.idx)
-
-    def pop_idx(self):
-        self.idx = self.idx_stack.pop()
-
-    def push_class(self):
-        self.class_stack.append(self.class_list)
-        self.class_list = []
-
-    def pop_class(self):
-        self.class_list = self.class_stack.pop()
+        logger = logging.getLogger('ydkgen')
+        if len(logger.handlers) == 1:
+            print msg
 
 
 def yang_id(stmt):
@@ -195,3 +107,176 @@ def yang_id(stmt):
         return stmt.arg.replace(':', '_')
     else:
         return None
+
+def merge_file_path_segments(segs):
+    '''Merge the segs to form a path '''
+    return_seg = ''
+
+    for seg in segs:
+        if not seg.length() == 0 and not return_seg.endswith('/'):
+            return_seg = '%s/' % (return_seg)
+        return_seg = '%s%s' % (return_seg, seg)
+    return return_seg
+
+
+def iskeyword(word):
+    return keyword.iskeyword(word) or word in ('None', 'parent')
+
+
+def get_sphinx_ref_label(named_element):
+    return named_element.fqn().replace('.', '_')
+
+
+def split_to_words(input_text):
+    words = []
+    ''' A word boundary starts if the current character is
+    in Caps and the previous character is in lowercase
+    for example NetworkElement , at Element the E is in Caps
+    and the previoud character is k in lower
+
+    or if the current character is in Caps and the next character
+    in in lower case ApplicationCLIEvent for Event while reaching E
+    the next chracter is v
+
+    '''
+    word = None
+    previous_caps = False
+    for index, ch in enumerate(input_text):
+        if ch.isupper():
+            if not previous_caps:
+                # word boundary
+                if word is not None:
+                    words.append(word)
+                word = ch
+            else:
+                # previous was caps
+                if index != len(input_text) - 1:
+                    if input_text[index + 1].islower():
+                        # this is a word boundary
+                        if word is not None:
+                            words.append(word)
+                        word = ch
+                    else:
+                        # add it to the current word
+                        word = '%s%s' % (word, ch)
+                else:
+                    word = '%s%s' % (word, ch)
+
+            previous_caps = True
+        else:
+            if word is None:
+                word = ch
+            else:
+                word = '%s%s' % (word, ch)
+            previous_caps = False
+
+    words.append(word)
+    return words
+
+
+def snake_case(input_text):
+    snake_case = input_text.replace('-', '_')
+    snake_case = snake_case.replace('.', '_')
+    return snake_case.lower()
+
+
+def camel_case(input_text):
+    return ''.join([word.title() for word in input_text.split('-')])
+
+
+def escape_name(name):
+    name = name.replace('+', '__PLUS__')
+    name = name.replace('/', '__FWD_SLASH__')
+    name = name.replace('\\', '__BACK_SLASH__')
+    name = name.replace('.', '__DOT__')
+    name = name.replace('*', '__STAR__')
+    name = name.replace('$', '__DOLLAR__')
+    name = name.replace('@', '__AT__')
+    name = name.replace('#', '__POUND__')
+    name = name.replace('^', '__CARET__')
+    name = name.replace('&', '__AMPERSAND__')
+    name = name.replace('(', '__LPAREN__')
+    name = name.replace(')', '__RPAREN__')
+    name = name.replace('=', '__EQUALS__')
+    name = name.replace('{', '__LCURLY__')
+    name = name.replace('}', '__RCURLY__')
+    name = name.replace("'", '__SQUOTE__')
+    name = name.replace('"', '__DQUOTE__')
+    name = name.replace('<', '__GREATER_THAN__')
+    name = name.replace('>', '__LESS_THAN__')
+    name = name.replace(',', '__COMMA__')
+    name = name.replace(':', '__COLON__')
+    name = name.replace('?', '__QUESTION__')
+    name = name.replace('!', '__BANG__')
+    name = name.replace(';', '__SEMICOLON__')
+
+    return name
+
+
+def convert_to_reStructuredText(yang_text):
+    reSt = yang_text
+    if reSt is not None and len(reSt) > 0:
+        reSt = yang_text.replace('\\', '\\\\')
+        reSt = reSt.replace(':', '\:')
+        reSt = reSt.replace('_', '\_')
+        reSt = reSt.replace('-', '\-')
+        reSt = reSt.replace('*', '\*')
+        reSt = reSt.replace('|', '\|')
+    return reSt
+
+
+def is_config_stmt(stmt):
+
+    if hasattr(stmt, 'i_config'):
+        is_config = stmt.i_config
+        if is_config is not None:
+            return is_config
+    parent = stmt.parent
+    if parent is None:
+        return True
+    else:
+        return is_config_stmt(parent)
+
+
+def get_module_name(stmt):
+    if stmt.keyword == 'module':
+        return stmt.arg
+
+    module_stmt = stmt.i_module
+    if module_stmt.i_including_modulename is not None:
+        return module_stmt.i_including_modulename
+    else:
+        return module_stmt.arg
+
+
+def sort_classes_at_same_level(classes):
+    ''' Returns a list of the classes in the same order  '''
+    classes_processed = []
+    classes_not_processed = OrderedDict()
+    for clazz in classes:
+        dependent_siblings = clazz.get_dependent_siblings()
+        if len(dependent_siblings) == 0:
+            classes_processed.append(clazz)
+        else:
+            classes_not_processed[clazz] = dependent_siblings
+    classes_not_processed = OrderedDict(classes_not_processed.items())
+    while len(classes_not_processed) > 0:
+        for clazz in classes_not_processed.keys():
+            dependent_siblings = classes_not_processed[clazz]
+
+            not_processed = False
+            for sibling in dependent_siblings:
+                if sibling not in classes_processed:
+                    not_processed = True
+                    break
+            if not not_processed:
+                # all dependents are processed so go ahead and add to processed
+                classes_processed.append(clazz)
+                del classes_not_processed[clazz]
+
+    return classes_processed
+
+
+def get_rst_file_name(named_element):
+    hex_name = hashlib.sha1(named_element.fqn()).hexdigest()
+    return hex_name

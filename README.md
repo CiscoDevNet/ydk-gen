@@ -1,25 +1,49 @@
-[![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg)](https://travis-ci.org/CiscoDevNet/ydk-gen)
+<a href="https://github.com/CiscoDevNet/ydk-gen"><img src="https://cloud.githubusercontent.com/assets/17089095/14834057/2e1fe270-0bb7-11e6-9e94-73dd7d71e87d.png" height="240" width="240" ></a>
 
-# INSTALL
+# YDK-GEN
+
+[![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-gen)
+[![Coverage Status](https://coveralls.io/repos/github/CiscoDevNet/ydk-gen/badge.svg?branch=master)](https://coveralls.io/github/CiscoDevNet/ydk-gen?branch=master)
+
+
+**ydk-gen** is a developer tool that can generate API bindings to YANG data models for, today, Python. Work is underway to support C++, and the ydk-gen may be used as the starting point for supporting bindings to any language.
+
+Other tools and libraries are used to deliver ydk-gen's functionality. In particular:
+
+* YANG model analysis and code generation is implemented as an extension to [pyang](https://github.com/mbj4668/pyang)
+* Core libraries are built on [ncclient](https://github.com/ncclient/ncclient)
+* Documentation is generated using [Sphinx](http://www.sphinx-doc.org/en/stable/)
+
+Of course, many other libraries are used as an integral part of ydk-gen and its dependencies, too many to mention!
+
+Developers can either use pre-packaged generated code (e.g. [ydk-py](http://cs.co/ydk-py)), or they can define the YANG models that code is to be generated for are specified in a profile file. This gives a developer the ability to customize the scope of their SDK based on their requirements.
+
+
+##System Requirements:
+
+####Linux
+Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
+```
+user-machine# sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev
+```
+
+####Mac
+It is recommended to install homebrew (http://brew.sh) and Xcode command line tools on your system before installing YDK-Py:
+```
+user-machine# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+user-machine# xcode-select --install
+```
+
+## Installation
 
 ```
-user-machine# cd <git_root>
-user-machine# pip install -r requirements.txt
-user-machine# source env.sh
-```
-
-## Install Tips:
-
-Run Installation instruction under python virtualenv. Once you have virtualenv installed:
-
-```
-user-machine# virtualenv mypython
-user-machine# source mypython/bin/activate
-user-machine# pip install -r requirements.txt
+user-machine# git clone https://github.com/CiscoDevNet/ydk-gen.git
+user-machine# cd ydk-gen
+user-machine# source install.sh
 ```
 
 
-# USAGE
+## Usage 
 
 ```
 user-machine# python generate.py --help
@@ -31,24 +55,25 @@ Options:
   --profile=PROFILE   Take options from a profile file, any CLI targets
                       ignored. Profile options override CLI currently
   -p, --python        Generate Python SDK
+  -c, --cpp           Generate C++ SDK
   -v, --verbose       Verbose mode
-  --no-doc            Skip generation of documentation
-  --output-directory  The output-directory . If not specified the output can be found under YDKGEN_HOME/gen-api/python
+  --generate-doc      Generation documentation
+  --output-directory  The output-directory . If not specified the output can be found under ydk-gen/gen-api/python
 ```
 
-## Profile Approach
+### Profiles
 
-1. Construct a profile file, such as [```profiles/xr532-native-oc-bgp.json```](profiles/xr532-native-oc-bgp.json)
+1. Construct a profile file, such as [```xr600-native-oc-bgp.json```](profiles/cisco-ios-xr/xr600-native-oc-bgp.json)
 
 1. Generate the SDK using a command of the form:
 
 ```
-python generate.py -p --profile profiles/xr532-native-oc-bgp.json
+python generate.py --python --profile profiles/cisco-ios-xr/xr600-native-oc-bgp.json
 ```
 
-The generated SDK will in ```<git_root>/ydk/gen-api/python```.
+The generated SDK will in ```ydk-gen/gen-api/python```.
 
-### Profile File Documentation
+#### Details
 
 A sample profile file is described below.
 
@@ -102,26 +127,8 @@ Only directory examples are shown below.
     },
 ```
 
-## No Profile
 
-1. Place a copy of the Yang data models ```<git_root>/ydk/yang```
-
-1. Generate Python SDK:
-
-```
-user-machine# python generate.py -p --no-doc
-```
-
-The generated SDK will in ```<git_root>/ydk/gen-api/python```.
-
-The same SDK may be generated using the profile [```profiles/models-in-repo.json```](profiles/models-in-repo.json), which also turns documentation generation **off**:
-
-```
-user-machine# python generate.py --profile profiles/models-in-repo.json
-```
-
-
-# Notes
+## Notes
 
 YANG Development Kit Generator:
 
@@ -129,13 +136,11 @@ YANG Development Kit Generator:
 - Runtime libraries which provided "services" and transport code for App to talk to network devices (runtime for: Python, Ruby, gRPCServer). These runtime libraries also have protocol plugin, currently netconf plug has been added for testing.
 - The runtime libraries have three parts:
     - Entity:  X object definitions for YANG model. X here is programming language (Python, Ruby, Obj-C, GPBIDL, ThriftIDL etc)
-    - Services:
-        - CRUDservice: Consume device object and Entity that does "encoding" and "transport" operation specific to "session".
-    - ServiceProvider:
-        - 
+    - ServiceProvider: Provides concrete implementation that abstracts underlying protocol details
+    - Services: Provides simple API interface to be used with the entity and provider 
 
 
-# Python Notes
+### Python Notes
 
 For Python entities and netconf session, CRUD service invoked on python class will:
 
@@ -143,39 +148,46 @@ For Python entities and netconf session, CRUD service invoked on python class wi
 - Perform transport operation with device, collect the netconf response, 
 - Decode netconf response in python class, return result to python app. 
 
-> Note: The Python API currently supports just the CRUDService. This is internally written over encode/decode api.
 
 
-
-# Directory Structure
+## Directory Structure
 
 ```
 README          - install and usage notes
-env.sh          - bash environment setup file
+install.sh      - Simple one-shot installation script 
 gen-api         - source dir or autogenerated SDK 
 					- python (Python SDK)
 
 generate.py     - bootstrap script to generate SDK for yang data models
-yang            - yang models used by generate.py 
+profiles        - profile files used during generation
+yang            - some yang models used for testing
 requirements.txt- python dependencies used during installation (refer README)
 sdk             - sdk stubs
-test            - test code, engg playground 
+test            - test code, engineering playground
 ```
 
-
-# Running Unit Tests
+## Running Unit Tests
 
 Make sure that PYTHONPATH is set properly
 
 ```
-user-machine# cd <git_root>
+user-machine# cd ydk-gen 
 user-machine# export PYTHONPATH=.:$PYTHONPATH
 ```
 
-To run the generator test case, do the following.
+To run the sanity tests, do the following after running install.sh.
 
 ```
-user-machine# cd <git_root>
-user-machine# source env.sh
+user-machine# cd ydk-gen/sdk/python 
+user-machine# python test/test_sanity_types.py
+user-machine# python test/test_sanity_levels.py
+user-machine# python test/test_sanity_filters.py
+...
+```
+
+To run the generator test case, do the following after running install.sh.
+
+```
+user-machine# cd ydk-gen 
 user-machine# python test/pygen_tests.py
 ```

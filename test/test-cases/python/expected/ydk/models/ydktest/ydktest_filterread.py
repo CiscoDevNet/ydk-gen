@@ -18,7 +18,7 @@ import collections
 
 from enum import Enum
 
-from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
+from ydk.types import Empty, YList, YLeafList, DELETE, Decimal64, FixedBitsDict
 
 from ydk.errors import YPYError, YPYDataValidationError
 
@@ -133,7 +133,7 @@ class A(object):
 
             def __init__(self):
                 self.parent = None
-                pass
+                self._is_presence = True
 
             @property
             def _common_path(self):
@@ -147,13 +147,9 @@ class A(object):
             def _has_data(self):
                 if not self.is_config():
                     return False
-                if self.is_presence():
+                if self._is_presence:
                     return True
                 return False
-
-            def is_presence(self):
-                ''' Returns True if this instance represents presence container else returns False '''
-                return True
 
             @staticmethod
             def _meta_info():
@@ -239,18 +235,12 @@ class A(object):
                 def _has_data(self):
                     if not self.is_config():
                         return False
-                    if self.is_presence():
-                        return True
                     if self.e1 is not None:
                         return True
 
                     if self.e2 is not None:
                         return True
 
-                    return False
-
-                def is_presence(self):
-                    ''' Returns True if this instance represents presence container else returns False '''
                     return False
 
                 @staticmethod
@@ -270,8 +260,6 @@ class A(object):
             def _has_data(self):
                 if not self.is_config():
                     return False
-                if self.is_presence():
-                    return True
                 if self.d1 is not None:
                     return True
 
@@ -284,13 +272,6 @@ class A(object):
                 if self.e is not None and self.e._has_data():
                     return True
 
-                if self.e is not None and self.e.is_presence():
-                    return True
-
-                return False
-
-            def is_presence(self):
-                ''' Returns True if this instance represents presence container else returns False '''
                 return False
 
             @staticmethod
@@ -310,8 +291,6 @@ class A(object):
         def _has_data(self):
             if not self.is_config():
                 return False
-            if self.is_presence():
-                return True
             if self.b1 is not None:
                 return True
 
@@ -324,19 +303,9 @@ class A(object):
             if self.c is not None and self.c._has_data():
                 return True
 
-            if self.c is not None and self.c.is_presence():
-                return True
-
             if self.d is not None and self.d._has_data():
                 return True
 
-            if self.d is not None and self.d.is_presence():
-                return True
-
-            return False
-
-        def is_presence(self):
-            ''' Returns True if this instance represents presence container else returns False '''
             return False
 
         @staticmethod
@@ -349,7 +318,7 @@ class A(object):
         """
         
         
-        .. attribute:: number
+        .. attribute:: number  <key>
         
         	
         	**type**\: int
@@ -387,18 +356,12 @@ class A(object):
         def _has_data(self):
             if not self.is_config():
                 return False
-            if self.is_presence():
-                return True
             if self.number is not None:
                 return True
 
             if self.value is not None:
                 return True
 
-            return False
-
-        def is_presence(self):
-            ''' Returns True if this instance represents presence container else returns False '''
             return False
 
         @staticmethod
@@ -418,8 +381,6 @@ class A(object):
     def _has_data(self):
         if not self.is_config():
             return False
-        if self.is_presence():
-            return True
         if self.a1 is not None:
             return True
 
@@ -432,18 +393,11 @@ class A(object):
         if self.b is not None and self.b._has_data():
             return True
 
-        if self.b is not None and self.b.is_presence():
-            return True
-
         if self.lst is not None:
             for child_ref in self.lst:
                 if child_ref._has_data():
                     return True
 
-        return False
-
-    def is_presence(self):
-        ''' Returns True if this instance represents presence container else returns False '''
         return False
 
     @staticmethod

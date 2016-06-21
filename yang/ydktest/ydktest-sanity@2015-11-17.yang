@@ -11,9 +11,11 @@ module ydktest-sanity {
 
   //import ietf-inet-types { prefix "inet"; }
 
-  //import Cisco-IOS-XR-types { prefix "xr"; }
+  import ydktest-types { prefix "types"; }
 
-
+  include ydktest-sanity-submodule {
+    revision-date 2016-04-25;
+  }
 
   organization "Cisco Systems, Inc.";
 
@@ -75,6 +77,21 @@ module ydktest-sanity {
     }
     description "YDK Enum test";
   }
+  
+  typedef Ydk-Enum-Int-test {
+    type union {
+      type enumeration {
+        enum any {
+          value 4096;
+          description "Any value";
+        }
+      }
+      type uint32 {
+        range "1..4096";
+      }
+    }
+    description "Int or any";
+  }
 
   grouping leaf-ref-g {
     description "testing for leaf-ref";
@@ -101,8 +118,11 @@ module ydktest-sanity {
         }
       }
       container one {
-        leaf name {
-          type string;
+        leaf name-of-one {
+          type string {
+            pattern "(([0\-9]\|[1\-9][0\-9]\|1[0\-9][0\-9]\|2[0\-4][0\-9]\|25[0\-5])\\.){3}([0\-9]\|[1\-9][0\-9]\|1[0\-9][0\-9]\|2[0\-4][0\-9]\|25[0\-5])(%[\\p{N}\\p{L}]+)?";
+          }
+
         }
         container two {
           leaf self-ref-one-name {
@@ -268,14 +288,30 @@ module ydktest-sanity {
           type boolean;
         }
 
+        leaf embeded-enum {
+          description "enum embeded in leaf";
+          type enumeration {
+            enum zero;
+            enum two;
+            enum seven {
+              value 7;
+            }
+          }
+        }
+
         leaf enum-value {
           description "this is enum type value";
-          type Ydk-Enum-test; 
+          type Ydk-Enum-test;
+        }
+        
+        leaf enum-int-value {
+            description "enum int type";
+            type Ydk-Enum-Int-test;
         }
         
         leaf identity-ref-value {
           type identityref {
-          	base base-identity;
+            base base-identity;
            }
         }
         
@@ -312,11 +348,45 @@ module ydktest-sanity {
         //leaf-list types for all types
         leaf-list llstring {
           type string;
-          max-elements 30;
-          min-elements 0;
-          //orered-by user;
           description "A list of string";
         }
+
+        leaf-list enum-llist {
+          type Ydk-Enum-test;
+          description "A leaf-list of enum";
+        }
+                
+        leaf-list identity-llist {
+          type identityref {
+            base base-identity;
+           }
+          description "A leaf-list of identityref";
+        }       
+
+        leaf-list llunion {
+          type union {
+              type int16;
+              type string;
+          }
+          description "A list of union";
+        }
+
+        leaf younion-recursive {
+            type types:Ydk-Recursive-Union-type;
+            description "Recursive union leaf";
+        }
+
+        leaf-list younion-list {
+             type union {
+                type types:Ydk-Simple-Union-type;
+                type types:Ydk-String-type;
+                type string;
+                //type types:Ydk-Identity-type; //TODO this does not work
+              }
+              description
+                "members of the younion";
+        }
+        
         
         //leaf-refs refeerring to different target node
         
@@ -344,7 +414,6 @@ module ydktest-sanity {
         description "one list data";
         key "number";
         max-elements 5;
-        min-elements 0;
         leaf number {
           description "integer value type";
           type int32;
@@ -485,6 +554,26 @@ module ydktest-sanity {
     }
   }
 
+  grouping not-supported {
+    container not-supported-1 {
+      container not-supported-1-2 {
+        leaf some-leaf {
+          type string;
+        }
+      }
+      leaf not-supported-leaf {
+        type string;
+      }
+    }
+    list not-supported-2 {
+      key "number";
+      leaf number {
+        description "Integer key for not supported list";
+        type int32;
+      }
+    }
+  }
+
   container runner {
 
     //container at 1,2,3 nested level
@@ -503,6 +592,8 @@ module ydktest-sanity {
     uses three-level-w-list-at-two;
 
     uses leaf-ref-g;  
+
+    uses not-supported;
     
     container runner-2 {
     
