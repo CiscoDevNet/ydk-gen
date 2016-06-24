@@ -1,0 +1,63 @@
+AC_PREREQ([2.63])
+AC_INIT([$$PROJECTNAME$$], [1.0], [BUG-REPORT-ADDRESS])
+AC_CONFIG_SRCDIR([$$PROJECTNAME$$.c])
+
+PROJECTNAME=$$PROJECTNAME$$
+AC_SUBST(PROJECTNAME)
+
+# --enable-debug option
+AC_ARG_ENABLE([debug],
+	AC_HELP_STRING([--enable-debug],[Compile with debug options]),
+	CFLAGS="$CFLAGS -g -DDEBUG",
+	CFLAGS="$CFLAGS -O3"
+)
+
+# --with-libxml2=path-to-libxml2-git-repository
+AC_ARG_WITH([libxml2],
+[AC_HELP_STRING([--with-libxml2], [specific libxml2 location])],
+[
+	AC_CHECK_PROG([XML2_CONFIG], [xml2-config], [yes], [no], [$withval])
+	if test "$XML2_CONFIG" = "no"; then
+		AC_MSG_ERROR([Missing development package of libxml2.])
+	fi
+	CFLAGS="`$withval/xml2-config --cflags` $CFLAGS"
+	LDFLAGS="`$withval/xml2-config --libs` $LDFLAGS"
+	WITH_LIBXML2="$withval"
+]
+)
+
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+
+# Use libtool
+AC_PROG_LIBTOOL
+# Always use ./libtool unless overridden from command-line
+if test -z "$libtool"; then
+	libtool='./libtool'
+fi
+AC_SUBST(libtool)
+
+# Checks for libraries.
+AC_SEARCH_LIBS([ncds_apply_rpc2all], [netconf], ,AC_MSG_ERROR([libnetconf not found!]))
+
+# Check for libxml2.
+if test -z "$WITH_LIBXML2" ; then
+	AC_CHECK_PROG([XML2_CONFIG], [xml2-config], [yes], [no])
+	if test "$XML2_CONFIG" = "no"; then
+		AC_MSG_ERROR([Missing development package of libxml2.])
+	fi
+	AC_CHECK_LIB([xml2], [main], [LIBS="`xml2-config --libs` $LIBS" CFLAGS="`xml2-config --cflags` $CFLAGS"], AC_MSG_ERROR([Libxml2 not found ]))
+fi
+
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h libnetconf.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+#AC_TYPE_UINT32_T
+
+# Checks for library functions.
+#AC_CHECK_FUNCS([strdup])
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT

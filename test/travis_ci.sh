@@ -69,8 +69,8 @@ function set_root {
 }
 
 function setup_env {
-    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev
     sudo apt-get update
+    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool
     virtualenv myenv
     source myenv/bin/activate
     pip install coverage

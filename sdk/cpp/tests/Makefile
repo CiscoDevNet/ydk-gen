@@ -20,7 +20,7 @@ LIBYDK_AR      = ../libydk_client.a
 
 CXX             = g++
 CXXFLAGS        = -Wall -std=c++0x -I./../
-LXXFLAGS        = -lunittest++ -L./../ -lydk_client -lnetconf -lboost_python -lpython2.7
+LXXFLAGS        = -lunittest++ -I./../.includes -L./../ -lydk_client -L./../.libs -lnetconf -lboost_python -lpython2.7 -lssh -lxml2 -lcurl -lssh_threads -lxslt -lpthread -ldl
 
 default: all
 

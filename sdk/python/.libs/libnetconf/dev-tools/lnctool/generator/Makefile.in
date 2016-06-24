@@ -1,0 +1,49 @@
+PKGNAME = @PROJECTNAME@
+TARGET = @PROJECTNAME@.la
+
+# Various configurable paths (remember to edit Makefile.in, not Makefile)
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+datarootdir = @datarootdir@
+datadir = @datadir@
+bindir = @bindir@
+includedir = @includedir@
+libdir =  @libdir@
+mandir = @mandir@
+libtool = @libtool@
+
+CC = @CC@
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+LIBS = @LIBS@
+CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
+LDFLAGS = @LDFLAGS@
+LIBTOOL = $(libtool) --tag=CC --quiet
+
+SRCS = @PROJECTNAME@.c
+OBJDIR = .obj
+LOBJS = $(SRCS:%.c=$(OBJDIR)/%.lo)
+
+all: $(TARGET)
+
+$(TARGET): $(LOBJS)
+	$(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LIBS) -avoid-version -module -shared -export-dynamic --mode=link -o $@ $^ -rpath $(libdir)
+
+$(OBJDIR)/%.lo: %.c
+	@[ -d $$(dirname $@) ] || \
+		(mkdir -p $$(dirname $@))
+	$(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(CPPFLAGS) -fPIC -shared -c $< -o $@
+
+.PHONY: install
+install: $(TARGET)
+	$(INSTALL) -m 775 -d $(DESTDIR)/$(libdir)
+	$(LIBTOOL) --mode=install cp $(TARGET) $(DESTDIR)/$(libdir)/;
+
+.PHONY: clean
+clean:
+	$(LIBTOOL) --mode clean rm -f $(LOBJS)
+	$(LIBTOOL) --mode clean rm -f $(TARGET)
+	rm -rf $(TARGET) $(OBJDIR)
+

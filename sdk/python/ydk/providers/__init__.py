@@ -22,6 +22,7 @@
 import logging
 from .provider import ServiceProvider
 from .netconf_provider import NetconfServiceProvider
+from .native_netconf_provider import NativeNetconfServiceProvider
 from .codec_provider import CodecServiceProvider
 
 

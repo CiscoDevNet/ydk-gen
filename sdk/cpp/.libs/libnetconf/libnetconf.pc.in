@@ -1,0 +1,13 @@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+includedir = @includedir@
+libdir =  @libdir@
+datarootdir = @datarootdir@
+datadir = @datadir@
+ncworkingdir = @NC_WORKINGDIR_PATH@ 
+
+Name: libnetconf
+Version: @PACKAGE_VERSION@
+Description: NETCONF protocol library for NETCONF applications development.
+Libs: -L${libdir} -lnetconf
+Cflags: -I${includedir}

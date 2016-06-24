@@ -1,0 +1,528 @@
+#!/usr/bin/python
+# vim set fileencoding=utf-8
+#
+# @file lnctool
+# @author David Kupka <dkupka@cesnet.cz>
+# @author Radek Krejci <rkrejci@cesnet.cz>
+# @brief libnetconf developer tool.
+#
+# Copyright (c) 2012-2014 CESNET, z.s.p.o.
+# All rights reserved.
+#
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in
+#    the documentation and/or other materials provided with the
+#    distribution.
+# 3. Neither the name of the CESNET, z.s.p.o. nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+try:
+	import libxml2
+	import argparse
+	import shutil
+	import re
+	import os
+	import subprocess
+	import tempfile
+except ImportError as e:
+	print(e.message+'. Please install missing package.')
+	exit(1)
+
+# transAPI version built by this tool
+transapi_version = 6
+
+# paths to transformation stylesheets and schemas
+RNGLIB='@RNGLIB@'
+XSLTDIR='@XSLTDIR@'
+TEMPLATEDIR='@TEMPLATEDIR@'
+
+def pyang_output(arguments):
+	try:
+		data = subprocess.check_output(arguments)
+		return data
+	except AttributeError as e:
+		child = ""
+		child = subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		(data, errdata) = child.communicate()
+		child.wait()
+		return data
+
+# Find pyang and use it to convert model to YIN
+def convert_to_yin(input_file_name, search_path):
+	# convert model to YIN using pyang
+	arguments = ['pyang', '-p', search_path, '-f', 'yin', input_file_name]
+	yin_data = pyang_output(arguments)
+	model = libxml2.parseMemory(yin_data, len(yin_data))
+	# infer name of file from input file name
+	(yin_file_name, ext) = os.path.splitext(os.path.basename(input_file_name))
+	yin_file_name+='.yin'
+	# store converted yin
+	yin_file = open(args.output_dir+'/'+yin_file_name, 'w')
+	yin_file.write(str(model))
+	yin_file.close()
+
+	return(model)
+
+def generate_validators(yin_model_path, augment_models_paths, search_path, features):
+	(yin_file_name, ext) = os.path.splitext(os.path.basename(yin_model_path))
+	yin_file_name = args.output_dir+'/'+os.path.basename(yin_file_name)
+
+	#prepare features options list
+	features_args = []
+	if features is not None:
+		for feature in features:
+			features_args.append('--features')
+			features_args.append(feature)
+
+	#create temporary file fof DSDL schema
+	(dsdl_schema_fd,dsdl_schema_name) = tempfile.mkstemp(prefix='dsdl', suffix='.dsdl')
+	(xslt_tmp_fd,xslt_tmp_name) = tempfile.mkstemp(prefix='schxsl')
+	(xslt_tmp_inout_fd,xslt_tmp_inout_name) = tempfile.mkstemp()
+	#generate DSDL schema from YIN schema files
+	subprocess.check_call(['pyang', '-p', search_path, '-f', 'dsdl', '--dsdl-no-documentation', '--dsdl-no-dublin-core', '-o', os.path.abspath(dsdl_schema_name), yin_model_path ] + features_args + augment_models_paths)
+	#generate RNG files from DSDL
+	subprocess.check_call(['xsltproc', '--output', yin_file_name+'-config.rng', '--stringparam', 'basename', './'+os.path.basename(yin_file_name), '--stringparam', 'target', 'config', '--stringparam', 'schema-dir', RNGLIB, os.path.join(XSLTDIR, 'gen-relaxng.xsl'), os.path.abspath(dsdl_schema_name)])
+	subprocess.check_call(['xsltproc', '--output', yin_file_name+'-gdefs-config.rng', '--stringparam', 'gdefs-only', '1', '--stringparam', 'target', 'config', os.path.join(XSLTDIR, 'gen-relaxng.xsl'), os.path.abspath(dsdl_schema_name)])
+	#generate schematrom files form DSDL
+	subprocess.check_call(['xsltproc', '--output', os.path.abspath(xslt_tmp_name), '--stringparam', 'target', 'config', os.path.join(XSLTDIR, 'gen-schematron.xsl'), os.path.abspath(dsdl_schema_name)])
+	subprocess.check_call(['xsltproc', os.path.join(XSLTDIR, 'iso_abstract_expand.xsl'), os.path.abspath(xslt_tmp_name)], stdout=xslt_tmp_inout_fd)
+	os.lseek(xslt_tmp_inout_fd, 0, 0) # SEEK_SET
+	subprocess.check_call(['xsltproc', '-o', yin_file_name+'-schematron.xsl', os.path.join(XSLTDIR, 'iso_svrl_for_xslt1.xsl'), '-'], stdin=xslt_tmp_inout_fd)
+	#close
+	os.close(dsdl_schema_fd)
+	os.close(xslt_tmp_fd)
+	os.close(xslt_tmp_inout_fd)
+	#and remove temporary files
+	os.remove(os.path.abspath(dsdl_schema_name))
+	os.remove(os.path.abspath(xslt_tmp_name))
+	os.remove(os.path.abspath(xslt_tmp_inout_name))
+	return(None)
+
+# Use configure.in.template and replace all variables with text
+def generate_configure_in(replace):
+	inf = open (args.template_dir+'/configure.in', 'r')
+	outf = open (args.output_dir+'/configure.in', 'w')
+
+	conf_in = inf.read()
+	for pattern, value in replace.items():
+		conf_in = conf_in.replace(pattern, value)
+
+	outf.write(conf_in)
+	inf.close()
+	outf.close()
+
+# Copy source files for autotools
+def generate_template_files(replace):
+	shutil.copy2(args.template_dir+'/install-sh', args.output_dir+'/install-sh')
+	shutil.copy2(args.template_dir+'/config.guess', args.output_dir+'/config.guess')
+	shutil.copy2(args.template_dir+'/config.sub', args.output_dir+'/config.sub')
+	shutil.copy2(args.template_dir+'/ltmain.sh', args.output_dir+'/ltmain.sh')
+	shutil.copy2(args.template_dir+'/Makefile.in', args.output_dir+'/Makefile.in')
+	generate_configure_in(replace)
+
+def separate_paths_and_namespaces(defs):
+	paths = []
+	namespaces = []
+	if not defs is None:
+		for d in defs:
+			d = d.rstrip()
+			# skip empty lines and lines starting with '#' (bash/python style single line comments)
+			if len(d) == 0 or d[0] == '#':
+				continue
+
+			# path definition
+			if re.match(r'(/([\w\.\-]+:)?[\w\.\-]+)+', d):
+				paths.append(d)
+			elif re.match(r'[\w\.\-]+=.+', d):
+				namespaces.append(d.split('='))
+			else:
+				raise ValueError('Line '+d+' is not valid namespace definition nor XPath.')
+
+	return (paths,namespaces)
+
+def generate_callbacks_file(name, defs, model):
+	# Create or rewrite .c file, will be generated
+	outf = open(args.output_dir+'/'+name+'.c', 'w')
+
+	content = ''
+	# License and description
+	content += '/*\n'
+	content += ' * This is automatically generated callbacks file\n'
+	content += ' * It contains 3 parts: Configuration callbacks, RPC callbacks and state data callbacks.\n'
+	content += ' * Do NOT alter function signatures or any structures unless you know exactly what you are doing.\n'
+	content += ' */\n\n'
+	# Include header files
+	content += '#include <stdlib.h>\n'
+	content += '#include <sys/inotify.h>\n'
+	content += '#include <libxml/tree.h>\n'
+	content += '#include <libnetconf_xml.h>\n'
+	content += '\n'
+	# transAPI version
+	content += '/* transAPI version which must be compatible with libnetconf */\n'
+	content += 'int transapi_version = '+str(transapi_version)+';\n\n'
+	content += '/* Signal to libnetconf that configuration data were modified by any callback.\n'
+	content += ' * 0 - data not modified\n'
+	content += ' * 1 - data have been modified\n'
+	content += ' */\n'
+	content += 'int config_modified = 0;\n\n'
+	# callbacks order
+	content += '/*\n'
+	content += ' * Determines the callbacks order.\n'
+	content += ' * Set this variable before compilation and DO NOT modify it in runtime.\n'
+	content += ' * TRANSAPI_CLBCKS_LEAF_TO_ROOT (default)\n'
+	content += ' * TRANSAPI_CLBCKS_ROOT_TO_LEAF\n'
+	content += ' */\n'
+	content += 'const TRANSAPI_CLBCKS_ORDER_TYPE callbacks_order = TRANSAPI_CLBCKS_ORDER_DEFAULT;\n\n'
+	content += '/* Do not modify or set! This variable is set by libnetconf to announce edit-config\'s error-option\n'
+	content += 'Feel free to use it to distinguish module behavior for different error-option values.\n'
+	content += ' * Possible values:\n'
+	content += ' * NC_EDIT_ERROPT_STOP - Following callback after failure are not executed, all successful callbacks executed till\n'
+	content += '                         failure point must be applied to the device.\n'
+	content += ' * NC_EDIT_ERROPT_CONT - Failed callbacks are skipped, but all callbacks needed to apply configuration changes are executed\n'
+	content += ' * NC_EDIT_ERROPT_ROLLBACK - After failure, following callbacks are not executed, but previous successful callbacks are\n'
+	content += '                         executed again with previous configuration data to roll it back.\n'
+	content += ' */\n'
+	content += 'NC_EDIT_ERROPT_TYPE erropt = NC_EDIT_ERROPT_NOTSET;\n\n'
+
+	# init and close functions
+	content += generate_init_callback()
+	content += generate_close_callback()
+	# Add get state data callback
+	content += generate_state_callback()
+	# Config callbacks part
+	(paths, namespaces) = separate_paths_and_namespaces(defs)
+	content += generate_config_callbacks(name, paths, namespaces)
+	if not (model is None):
+		content += generate_rpc_callbacks(model)
+	content += generate_file_callbacks()
+
+	# Write to file
+	outf.write(content)
+	outf.close()
+
+def generate_init_callback():
+	content = '';
+	content += '/**\n'
+	content += ' * @brief Initialize plugin after loaded and before any other functions are called.\n\n'
+	content += ' * This function should not apply any configuration data to the controlled device. If no\n'
+	content += ' * running is returned (it stays *NULL), complete startup configuration is consequently\n'
+	content += ' * applied via module callbacks. When a running configuration is returned, libnetconf\n'
+	content += ' * then applies (via module\'s callbacks) only the startup configuration data that\n'
+	content += ' * differ from the returned running configuration data.\n\n'
+	content += ' * Please note, that copying startup data to the running is performed only after the\n'
+	content += ' * libnetconf\'s system-wide close - see nc_close() function documentation for more\n'
+	content += ' * information.\n\n'
+	content += ' * @param[out] running\tCurrent configuration of managed device.\n\n'
+	content += ' * @return EXIT_SUCCESS or EXIT_FAILURE\n'
+	content += ' */\n'
+	content += 'int transapi_init(xmlDocPtr *running) {\n'
+	content += '\treturn EXIT_SUCCESS;\n}\n\n'
+
+	return (content)
+
+def generate_close_callback():
+	content = ''
+	content += '/**\n'
+	content += ' * @brief Free all resources allocated on plugin runtime and prepare plugin for removal.\n'
+	content += ' */\n'
+	content += 'void transapi_close(void) {\n'
+	content += '\treturn;\n}\n\n'
+
+	return (content)
+
+def generate_state_callback():
+	content = ''
+	# function for retrieving state data from device
+	content += '/**\n'
+	content += ' * @brief Retrieve state data from device and return them as XML document\n'
+	content += ' *\n'
+	content += ' * @param model\tDevice data model. libxml2 xmlDocPtr.\n'
+	content += ' * @param running\tRunning datastore content. libxml2 xmlDocPtr.\n'
+	content += ' * @param[out] err  Double pointer to error structure. Fill error when some occurs.\n'
+	content += ' * @return State data as libxml2 xmlDocPtr or NULL in case of error.\n'
+	content += ' */\n'
+	content += 'xmlDocPtr get_state_data(xmlDocPtr model, xmlDocPtr running, struct nc_err **err) {\n'
+	content += '\treturn(NULL);\n}\n'
+
+	return(content)
+
+def generate_config_callbacks(name, paths, namespaces):
+	if paths is None:
+		raise ValueError('At least one path is required.')
+
+	content = ''
+	callbacks = '\t.callbacks = {'
+	funcs_count = 0
+
+	# prefix to uri mapping
+	content += '/*\n'
+	content += ' * Mapping prefixes with namespaces.\n'
+	content += ' * Do NOT modify this structure!\n'
+	content += ' */\n'
+	namespace = 'struct ns_pair namespace_mapping[] = {'
+	for ns in namespaces:
+		namespace += '{"'+ns[0]+'", "'+ns[1]+'"}, '
+
+	content += namespace +'{NULL, NULL}};\n'
+	content += '\n'
+
+	# Add description and instructions
+	content += '/*\n'
+	content += ' * CONFIGURATION callbacks\n'
+	content += ' * Here follows set of callback functions run every time some change in associated part of running datastore occurs.\n'
+	content += ' * You can safely modify the bodies of all function as well as add new functions for better lucidity of code.\n'
+	content += ' */\n\n'
+	# generate callback function for every given sensitive path
+	for path in paths:
+		func_name = 'callback'+re.sub(r'[^\w]', '_', path)
+		# first entry in callbacks without coma
+		if funcs_count != 0:
+			callbacks += ','
+
+		# single entry per generated function
+		callbacks += '\n\t\t{.path = "'+path+'", .func = '+func_name+'}'
+
+		# generate function with default doxygen documentation
+		content += '/**\n'
+		content += ' * @brief This callback will be run when node in path '+path+' changes\n'
+		content += ' *\n'
+		content += ' * @param[in] data\tDouble pointer to void. Its passed to every callback. You can share data using it.\n'
+		content += ' * @param[in] op\tObserved change in path. XMLDIFF_OP type.\n'
+		content += ' * @param[in] old_node\tOld configuration node. If op == XMLDIFF_ADD, it is NULL.\n'
+		content += ' * @param[in] new_node\tNew configuration node. if op == XMLDIFF_REM, it is NULL.\n'
+		content += ' * @param[out] error\tIf callback fails, it can return libnetconf error structure with a failure description.\n'
+		content += ' *\n'
+		content += ' * @return EXIT_SUCCESS or EXIT_FAILURE\n'
+		content += ' */\n'
+		content += '/* !DO NOT ALTER FUNCTION SIGNATURE! */\n'
+		content += 'int '+func_name+'(void **data, XMLDIFF_OP op, xmlNodePtr old_node, xmlNodePtr new_node, struct nc_err **error) {\n\treturn EXIT_SUCCESS;\n}\n\n'
+		funcs_count += 1
+
+	# in the end of file write strucure connecting paths in XML data with callback function
+	content += '/*\n'
+	content += ' * Structure transapi_config_callbacks provide mapping between callback and path in configuration datastore.\n'
+	content += ' * It is used by libnetconf library to decide which callbacks will be run.\n'
+	content += ' * DO NOT alter this structure\n'
+	content += ' */\n'
+	content += 'struct transapi_data_callbacks clbks =  {\n'
+	content += '\t.callbacks_count = '+str(funcs_count)+',\n'
+	content += '\t.data = NULL,\n'
+	content += callbacks+'\n\t}\n'
+	content += '};\n\n'
+
+	return(content);
+
+def generate_rpc_callbacks(doc):
+	content = ''
+	callbacks = ''
+
+	# Add a convenient function
+	content += '/**\n'
+	content += ' * @brief Get a node from the RPC input. The first found node is returned, so if traversing lists,\n'
+	content += ' * call repeatedly with result->next as the node argument.\n'
+	content += ' *\n'
+	content += ' * @param name	Name of the node to be retrieved.\n'
+	content += ' * @param node	List of nodes that will be searched.\n'
+	content += ' * @return Pointer to the matching node or NULL\n'
+	content += ' */\n'
+	content += 'xmlNodePtr get_rpc_node(const char *name, const xmlNodePtr node) {\n'
+	content += '\txmlNodePtr ret = NULL;\n'
+	content += '\n'
+	content += '\tfor (ret = node; ret != NULL; ret = ret->next) {\n'
+	content += '\t\tif (xmlStrEqual(BAD_CAST name, ret->name)) {\n'
+	content += '\t\t\tbreak;\n'
+	content += '\t\t}\n'
+	content += '\t}\n'
+	content += '\n'
+	content += '\treturn ret;\n'
+	content += '}\n\n'
+
+	# Add description and instructions
+	content += '/*\n'
+	content += ' * RPC callbacks\n'
+	content += ' * Here follows set of callback functions run every time RPC specific for this device arrives.\n'
+	content += ' * You can safely modify the bodies of all function as well as add new functions for better lucidity of code.\n'
+	content += ' * Every function takes an libxml2 list of inputs as an argument.\n'
+	content += ' * If input was not set in RPC message argument is set to NULL. To retrieve each argument, preferably use get_rpc_node().\n'
+	content += ' */\n\n'
+
+	# create xpath context
+	ctxt = doc.xpathNewContext()
+	ctxt.xpathRegisterNs('yang', 'urn:ietf:params:xml:ns:yang:yin:1')
+
+	# find all RPC defined in data model
+	rpcs = ctxt.xpathEval('//yang:rpc')
+
+	# for every RPC
+	for rpc in rpcs:
+		rpc_name = rpc.prop('name')
+		# create callback function
+		rpc_function = 'nc_reply *rpc_'+re.sub(r'[^\w]', '_', rpc_name)+'(xmlNodePtr input) {\n'
+		rpc_function += '\treturn NULL;\n}\n'
+		content += rpc_function
+
+		if not rpc is rpcs[0]:
+			callbacks += ','
+		# add connection between callback and RPC message and order of arguments passed to the callback
+		callbacks += '\n\t\t{.name="'+rpc_name+'", .func=rpc_'+re.sub(r'[^\w]', '_', rpc_name)+'}'
+
+	content += '/*\n'
+	content += ' * Structure transapi_rpc_callbacks provides mapping between callbacks and RPC messages.\n'
+	content += ' * It is used by libnetconf library to decide which callbacks will be run when RPC arrives.\n'
+	content += ' * DO NOT alter this structure\n'
+	content += ' */\n'
+	content += 'struct transapi_rpc_callbacks rpc_clbks = {\n'
+	content += '\t.callbacks_count = '+str(len(rpcs))+',\n'
+	content += '\t.callbacks = {'+callbacks+'\n\t}'
+	content += '\n};\n\n'
+
+	return(content)
+
+def generate_file_callbacks():
+	content = ''
+
+	content += '/*\n'
+	content += ' * Structure transapi_file_callbacks provides mapping between specific files\n'
+	content += ' * (e.g. configuration file in /etc/) and the callback function executed when\n'
+	content += ' * the file is modified.\n'
+	content += ' * The structure is empty by default. Add items, as in example, as you need.\n'
+	content += ' *\n * Example:\n'
+	content += ' * int example_callback(const char *filepath, xmlDocPtr *edit_config, int *exec) {\n'
+	content += ' *     // do the job with changed file content\n'
+	content += ' *     // if needed, set edit_config parameter to the edit-config data to be applied\n'
+	content += ' *     // if needed, set exec to 1 to perform consequent transapi callbacks\n'
+	content += ' *     return 0;\n * }\n *\n'
+	content += ' * struct transapi_file_callbacks file_clbks = {\n'
+	content += ' *     .callbacks_count = 1,\n'
+	content += ' *     .callbacks = {\n'
+	content += ' *         {.path = "/etc/my_cfg_file", .func = example_callback}\n'
+	content += ' *     }\n * }\n'
+	content += ' */\n'
+	content += 'struct transapi_file_callbacks file_clbks = {\n'
+	content += '\t.callbacks_count = 0,\n'
+	content += '\t.callbacks = {{NULL}}\n'
+	content += '};\n\n'
+
+	return(content)
+
+# "main" starts here
+# create argument parser
+parser = argparse.ArgumentParser(description="Actions have the following meanings:\n"
+								+"  convert    - convert YANG model to the YIN format\n"
+								+"  validation - generate validation files for a given model\n"
+								+"  transapi   - prepare transAPI module template (and perform both previous actions)\n\n"
+								+"For detailed instruction for transapi action (other commands don't need any\nadditional parameters), type:\n"
+								+"  $> "+os.sys.argv[0]+" transapi --help",
+								epilog="Examples:\n"
+								+"  Convert YANG model to the YIN format:\n"
+								+"\t$> "+os.sys.argv[0]+" --model ./model.yang convert\n\n"
+								+"  Generate validation files needed by libnetconf:\n"
+								+"\t$> "+os.sys.argv[0]+" --model ./model.yang validation\n\n"
+								+"  Generate C template for a transAPI module with functions mapped to the XML\n  paths specified in the ./mymodel.paths file:\n"
+								+"\t$> "+os.sys.argv[0]+" --model ./model.yang transapi --paths ./model.paths",
+								formatter_class=argparse.RawTextHelpFormatter)
+parser.add_argument('--version', action='version', version='libnetconf developer tool for transAPI v'+str(transapi_version))
+parser.add_argument('--model', required=True, type=argparse.FileType('r'), help='File holding data model.')
+parser.add_argument('--augment-model', type=argparse.FileType('r'), action='append', help='Specify augment models.')
+parser.add_argument('--feature', action='append', help='Specify features to enable (in form \'modulename:feature\'). By default all features are enabled. To disable all, use \'modulename:\'')
+parser.add_argument('--search-path', default='.', help='pyang search path.')
+parser.add_argument('--output-dir', default='./', help='Output directory for generated files (current directory by default).')
+
+#create subparsers
+subparsers = parser.add_subparsers(dest='subcommand')
+
+# convert to implement YANG -> YIN conversion
+parser_convert = subparsers.add_parser('convert')
+
+# validation to implement validation schema generation
+parser_validation = subparsers.add_parser('validation')
+
+# transapi to implement transapi module files generation
+parser_transapi = subparsers.add_parser('transapi')
+parser_transapi.add_argument('--name', help='Name of module with callbacks. If not supplied name of module in data model will be used.')
+parser_transapi.add_argument('--paths', type=argparse.FileType('r'), help='File holding list of sensitive paths in configuration XML.')
+parser_transapi.add_argument('--template-dir', default=TEMPLATEDIR, help='Path to the directory with template files')
+parser_transapi.add_argument('--no-autotools-files', help='Do not generate autotools template files', action='store_true')
+parser_transapi.add_argument('--no-validation', help='Do not generate validation files', action='store_true')
+
+# add common model option
+try:
+	augment_models = []
+	augment_models_paths = []
+	args = parser.parse_args()
+
+	# prepare output directory
+	if not os.path.exists(args.output_dir):
+		os.makedirs(args.output_dir)
+
+	# whatever type the model is try to convert it to YIN
+	model = convert_to_yin(args.model.name, args.search_path)
+	(model_name, ext) = os.path.splitext(os.path.abspath(args.model.name))
+
+	if not args.augment_model is None:
+		for augment_model in args.augment_model:
+			augment_models.append(convert_to_yin(augment_model.name, args.search_path))
+			(augment_model_name, ext) = os.path.splitext(os.path.abspath(augment_model.name))
+			augment_models_paths.append(augment_model_name+'.yin')
+
+	# when subcommand is 'validation' or 'transapi'
+	if (args.subcommand == 'validation') or (args.subcommand == 'transapi' and not args.no_validation):
+		generate_validators(model_name+'.yin', augment_models_paths, args.search_path, args.feature)
+
+	if args.subcommand == 'transapi':
+		# process model and find module name
+		if args.name is None:
+			(module_name,ext) = os.path.splitext(os.path.basename(args.model.name))
+		else:
+			module_name = args.name
+
+		if not args.no_autotools_files:
+			# store paterns and text for replacing in configure.in
+			replace = {'$$PROJECTNAME$$' : module_name}
+
+			# copy files for autotools (Makefile.in, ...)
+			generate_template_files(replace)
+
+		#generate callbacks code
+		generate_callbacks_file(module_name, args.paths, model)
+except ValueError as e:
+	print (e)
+	os.sys.exit(1)
+except IOError as e:
+	print(e[1]+'('+str(e[0])+'): '+e.filename)
+	os.sys.exit(1)
+except libxml2.libxmlError as e:
+	print('Can not parse data model: '+e.msg)
+	os.sys.exit(1)
+except subprocess.CalledProcessError as e:
+	print("Command '%s' failed (%d)" % (' '.join(e.cmd), e.returncode))
+	os.sys.exit(1)
+except KeyboardInterrupt:
+	print('Killed by user!')
+	os.sys.exit(1)
+#except Exception as e:
+#	print('Some unspecified error occured! '+str(e))
+
+os.sys.exit(0)
+
