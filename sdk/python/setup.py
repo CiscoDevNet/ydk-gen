@@ -23,7 +23,8 @@ from setuptools import setup, find_packages, extension
 # To use a consistent encoding
 from codecs import open
 from os import path
-import platform
+import subprocess
+import sys
 
 
 __version__ = ''
@@ -36,12 +37,15 @@ execfile(path.join(here, 'ydk', '_version.py'))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-# Compile the YDK C++ code
-lib_path = here + '/.libs/' + platform.uname()[0]
-libnetconf_include_path = here + '/.includes/'
-
 ydk_packages = find_packages(exclude=['contrib', 'docs*', 'tests*', 'ncclient', 'samples'])
 
+# Compile the YDK C++ code
+exit_status = subprocess.call(['cd ' + here + '/.libs/libnetconf/ && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a .. '], shell=True)
+if exit_status != 0:
+    print('\nFailed to build libnetconf. Install all the dependencies mentioned in the README.')
+    sys.exit(exit_status)
+lib_path = here + '/.libs'
+libnetconf_include_path = here + '/.includes/'
 ext = extension.Extension(
                           'ydk_client',
                           sources=[here + '/ydk/providers/_cpp_files/netconf_client.cpp'],

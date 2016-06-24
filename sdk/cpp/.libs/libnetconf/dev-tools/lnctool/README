@@ -1,0 +1,37 @@
+ABOUT
+================================================================================
+Libnetconf transAPI is a framework that will save developers time and let them
+focus on configuring and managing their device instead of fighting with NETCONF
+protocol.
+It allows for a developer to choose parts of configuration that can easily be
+configured as a single block. Based on a list of so-called 'sensitive paths',
+enerator creates C code containing a single callback function for every
+'sensitive path'. Whenever something changes in configuration file, appropriate
+callback function is called and should reflect configuration changes to the
+device behavior.
+
+GETTING STARTED
+================================================================================
+1. Run python script 'lnctool'. Description of the parameters as follows:
+		--model	Path to the main model.
+		transapi	To say you want to generate files for a new transAPI module.
+		--paths	File with the list of sensitive paths. One per line.
+3. Open generated .c file and fill function bodies with code that has to be run
+	when the configuration changes. You can add as many auxiliary functions as
+	you need, but do NOT modify anything else.
+4. Fill body of get_state_data() function so that it returns overall device
+	state data defined in the device data model.
+5. Run sequence the following sequence of commands:
+
+$ autoreconf --force --install
+$ ./configure && make.
+
+	If the build is succesful, a shared library is generated. You can use it
+	with libnetconf for configuring your device.
+
+AUTHORS
+================================================================================
+CESNET, z.s.p.o.
+David Kupka <dkupka@cesnet.cz>
+Radek Krejci <rkrejci@cesnet.cz>
+

@@ -24,11 +24,15 @@ from lxml import etree
 
 from ydk._core._dm_meta_info import REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS
 from ydk.errors import YPYServiceProviderError, YPYErrorCode
-from ydk.types import Empty, DELETE, READ, Decimal64, YList, YListItem, YLeafList
+from ydk.types import YList, YListItem, YLeafList
 
 from ._decoder import XmlDecoder
 from ._encoder import XmlEncoder
 from ._ydk_types import _SessionTransportMode
+
+
+from ncclient import manager
+from ncclient.operations import RPC, RPCReply
 
 import abc
 import logging
@@ -82,10 +86,14 @@ class _SPPlugin(object):
 
 class _NCClientSPPlugin(_SPPlugin):
 
-    def __init__(self, timeout):
+    def __init__(self, timeout, use_native_client):
         self.head = None
         self._nc_manager = None
-        self.ydk_client = None
+        self.use_native_client = use_native_client
+        if use_native_client:
+            self.ydk_client = None
+        else:
+            self._nc_manager = None
         self.netconf_sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
         self.separator = '*' * 28
         self.timeout = timeout
@@ -113,7 +121,7 @@ class _NCClientSPPlugin(_SPPlugin):
         # In order to figure out which fields are the
         # ones we are interested find the field list
         entity = self._create_top_level_entity_from_read_filter(read_filter)
-        XmlDecoder._bind_to_object(payload, entity, self.ydk_client.get_capabilities())
+        XmlDecoder._bind_to_object(payload, entity, self._get_capabilities())
         # drill down to figure out the field access expression
         # that matches the entity or entities to be returned
         # not the argument passed in as a filter might have
@@ -179,6 +187,12 @@ class _NCClientSPPlugin(_SPPlugin):
         module = importlib.import_module(top_entity_meta_info.pmodule_name)
         entity = getattr(module, top_entity_meta_info.name)()
         return entity
+    
+    def _get_capabilities(self):
+        if self.use_native_client:
+            return self.ydk_client.get_capabilities()
+        else:
+            return self._nc_manager.server_capabilities
 
     def execute_operation(self, payload, operation):
         '''
@@ -189,9 +203,30 @@ class _NCClientSPPlugin(_SPPlugin):
             return reply_str
         self.netconf_sp_logger.debug('\n%s\n%s', self.separator, payload)
 
-        assert self.ydk_client is not None
-        reply_str = self.ydk_client.execute_payload(payload)
-        return self._handle_rpc_reply(operation, payload, reply_str)
+        if self.use_native_client:
+            assert self.ydk_client is not None
+            reply_str = self.ydk_client.execute_payload(payload)
+            return self._handle_rpc_reply(operation, payload, reply_str)
+        else:
+            service_provider_rpc = self._create_rpc_instance(self.timeout)
+            payload = payload.replace("101", service_provider_rpc._id, 1)
+            self.netconf_sp_logger.debug('\n%s\n%s', self.separator, payload)
+            reply_str = service_provider_rpc._request(payload)
+            return self._handle_rpc_reply(operation, payload, reply_str.xml)
+
+    def _create_rpc_instance(self, timeout):
+        assert self._nc_manager is not None
+        class _SP_RPC(RPC):
+            def _wrap(self, subele):
+                return subele
+
+        class _SP_REPLY_CLS(RPCReply):
+            def parse(self):
+                self._parsed = True
+                return True
+
+        RPC.REPLY_CLS = _SP_REPLY_CLS
+        return _SP_RPC(self._nc_manager._session, self._nc_manager._device_handler, timeout=timeout)
 
     def _handle_rpc_reply(self, optype, payload, reply_str):
         if 'ok' in reply_str:
@@ -207,7 +242,7 @@ class _NCClientSPPlugin(_SPPlugin):
 
     def _handle_rpc_ok(self, optype, payload, reply_str):
 #         assert self._nc_manager is not None
-        if operation_is_edit(optype) and confirmed_commit_supported(self.ydk_client.get_capabilities()):
+        if operation_is_edit(optype) and confirmed_commit_supported(self._get_capabilities()):
             self.netconf_sp_logger.debug('\n%s' , reply_str)
             self._handle_commit(payload, reply_str)
         else:
@@ -218,9 +253,15 @@ class _NCClientSPPlugin(_SPPlugin):
         raise YPYServiceProviderError(YPYErrorCode.SERVER_REJ, reply_str)
 
     def _handle_commit(self, payload, reply_str):
-        assert self.ydk_client is not None
         self.netconf_sp_logger.debug('\n<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">\n  <commit/>\n</rpc>')
-        rep = self.ydk_client.execute_payload('\n<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">\n  <commit/>\n</rpc>')
+        if self.use_native_client:
+            assert self.ydk_client is not None
+            rep = self.ydk_client.execute_payload('\n<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">\n  <commit/>\n</rpc>')
+        else:
+            assert self._nc_manager is not None
+            rep = self._nc_manager.commit()
+            rep = rep.xml
+
         if 'ok' not in rep:
             self.netconf_sp_logger.error('%s\n%s\n%s\ncommit-reply\n%s\n%s', self.separator,
                                     payload, reply_str, rep, self.separator)
@@ -230,28 +271,45 @@ class _NCClientSPPlugin(_SPPlugin):
 
     def connect(self, session_config):
         assert session_config.transportMode == _SessionTransportMode.SSH
-        self.ydk_client = YdkClient(
-            username=session_config.username,
-            password=session_config.password,
-            host=session_config.hostname,
-            port=session_config.port)
-
-        return self.ydk_client
+        if self.use_native_client:            
+            self.ydk_client = YdkClient(
+                username=session_config.username,
+                password=session_config.password,
+                host=session_config.hostname,
+                port=session_config.port)
+    
+            return self.ydk_client
+        else:
+            self._nc_manager = manager.connect(
+                host=session_config.hostname,
+                port=session_config.port,
+                username=session_config.username,
+                password=session_config.password,
+                look_for_keys=False,
+                allow_agent=False,
+                hostkey_verify=False)
+            return self._nc_manager
 
     def disconnect(self):
-        assert self.ydk_client is not None
-        self.ydk_client.disconnect()
+        if self.use_native_client:
+            assert self.ydk_client is not None
+            self.ydk_client.disconnect()
+        else:
+            assert self._nc_manager is not None
+            self._nc_manager.close_session()
 
     def _get_target_datastore(self):
 #         assert self._nc_manager is not None
         target_ds = 'candidate'
-        if not confirmed_commit_supported(self.ydk_client.get_capabilities()):
+        if not confirmed_commit_supported(self._get_capabilities()):
             target_ds = 'running'
         return target_ds
 
     def _create_root(self):
         NSMAP = {'xmlns': 'urn:ietf:params:xml:ns:netconf:base:1.0'}
         self.head = etree.Element('rpc', NSMAP)
+        if not self.use_native_client:
+            self.head.set('message-id', '101')
         return self.head
 
     def _match_key(self, root, entity):

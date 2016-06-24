@@ -1,8 +1,5 @@
 include README.rst
 include ydk/providers/_cpp_files/netconf_client.cpp
 include ydk/providers/_cpp_files/netconf_client.h
-include .libs/Darwin/*
-include .libs/Linux/*
-include .includes/*
-include .includes/libnetconf/*
-
+recursive-include .includes *
+recursive-include .libs *

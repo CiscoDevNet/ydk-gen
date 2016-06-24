@@ -71,7 +71,7 @@ class NetconfServiceProvider(ServiceProvider):
                                % (self.address, self.port, self.protocol))
 
     def _connect(self):
-        self.sp_instance = _NCClientSPPlugin(self.timeout)
+        self.sp_instance = _NCClientSPPlugin(self.timeout, use_native_client=False)
         self.sp_instance.connect(self.session_config)
 
     def close(self):
@@ -90,4 +90,4 @@ class NetconfServiceProvider(ServiceProvider):
         return self.sp_instance.execute_operation(payload, operation)
 
     def _get_capabilities(self):
-        return self.sp_instance.ydk_client.get_capabilities()
+        return self.sp_instance._get_capabilities()

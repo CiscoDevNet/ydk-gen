@@ -23,14 +23,9 @@ from tests.compare import is_equal
 
 from ydk.errors import YPYModelError, YPYError
 from ydk.models.ydktest import ydktest_sanity as ysanity
-try:
-    from ydk.models.ietf import ietf_netconf
-except:
-    pass
 from ydk.providers import NetconfServiceProvider
 from ydk.services import NetconfService
 from ydk.services import Datastore
-from ydk.types import Empty
 
 
 class SanityNetconf(unittest.TestCase):
