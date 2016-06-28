@@ -81,23 +81,23 @@ class YPYModelError(YPYError):
     object type that caused the error as well as an error message.
 
     '''
-    def __init__(self, errmsg):
-        super(YPYModelError, self).__init__(error_msg=errmsg)
+    def __init__(self, error_msg):
+        super(YPYModelError, self).__init__(error_msg=error_msg)
 
 
 class YPYServiceError(YPYError):
     '''
     Exception for Service Side Validation
     '''
-    def __init__(self, errcode=None, errmsg=None):
+    def __init__(self, error_code=None, error_msg=None):
         super(YPYServiceError, self).__init__(
-            error_code=errcode, error_msg=errmsg)
+            error_code=error_code, error_msg=error_msg)
 
 
 class YPYServiceProviderError(YPYError):
     '''
     Exception for Provider Side Validation
     '''
-    def __init__(self, errcode=None, errmsg=None):
+    def __init__(self, error_code=None, error_msg=None):
         super(YPYServiceProviderError, self).__init__(
-            error_code=errcode, error_msg=errmsg)
+            error_code=error_code, error_msg=error_msg)

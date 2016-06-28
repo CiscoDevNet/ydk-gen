@@ -22,7 +22,7 @@
 """
 import logging
 from .provider import ServiceProvider
-from ._provider_plugin import _NCClientSPPlugin
+from ._provider_plugin import _ClientSPPlugin
 from ._session_config import _SessionConfig
 from ._ydk_types import _SessionTransportMode
 
@@ -71,7 +71,7 @@ class NetconfServiceProvider(ServiceProvider):
                                % (self.address, self.port, self.protocol))
 
     def _connect(self):
-        self.sp_instance = _NCClientSPPlugin(self.timeout, use_native_client=False)
+        self.sp_instance = _ClientSPPlugin(self.timeout, use_native_client=False)
         self.sp_instance.connect(self.session_config)
 
     def close(self):
