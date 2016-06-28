@@ -32,6 +32,7 @@ It is recommended to install homebrew (http://brew.sh) and Xcode command line to
 ```
 user-machine# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 user-machine# xcode-select --install
+user-machine# brew install boost boost-python pkg-config cmake libssh
 ```
 
 ## Installation

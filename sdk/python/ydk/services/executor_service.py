@@ -48,7 +48,7 @@ class ExecutorService(Service):
         if None in (provider, rpc):
             self.service_logger.error('Passed in a None arg')
             err_msg = "'provider' and 'rpc' cannot be None"
-            raise YPYServiceError(errmsg=err_msg)
+            raise YPYServiceError(error_msg=err_msg)
         try:
             rpc = MetaService.normalize_meta(provider._get_capabilities(), rpc)
             return provider.execute(

@@ -22,21 +22,30 @@ import unittest
 from tests.compare import is_equal
 
 from ydk.models.ydktest import ydktest_filterread as ysanity 
-from ydk.providers import NetconfServiceProvider
+from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import CRUDService
 from ydk.types import READ, YList
 
-class SanityYang(unittest.TestCase):
 
+class SanityYang(unittest.TestCase):
+    PROVIDER_TYPE = "non-native"
 
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(
-            address='127.0.0.1',
-            username='admin',
-            password='admin',
-            protocol='ssh',
-            port=12022)
+        if SanityYang.PROVIDER_TYPE == "native":
+            self.ncc = NativeNetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
+        else:
+            self.ncc = NetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
         self.crud = CRUDService()
         a = self.getInitEntity()
         self.crud.delete(self.ncc, a)
@@ -162,4 +171,7 @@ class SanityYang(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        SanityYang.PROVIDER_TYPE = sys.argv.pop()
     unittest.main()

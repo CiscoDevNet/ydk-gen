@@ -56,7 +56,7 @@ class CRUDService(Service):
         if None in (provider, entity):
             self.service_logger.error('Passed in a None arg')
             err_msg = "'provider' and 'entity' cannot be None"
-            raise YPYServiceError(errmsg=err_msg)
+            raise YPYServiceError(error_msg=err_msg)
         MetaService.normalize_meta(provider._get_capabilities(), entity)
         self._execute_crud_operation_on_provider(provider, entity, 'CREATE', False)
 
@@ -81,7 +81,7 @@ class CRUDService(Service):
         if None in (provider, entity):
             self.service_logger.error('Passed in a None arg')
             err_msg = "'provider' and 'entity' cannot be None"
-            raise YPYServiceError(errmsg=err_msg) 
+            raise YPYServiceError(error_msg=err_msg)
         MetaService.normalize_meta(provider._get_capabilities(), entity)
         self._execute_crud_operation_on_provider(provider, entity, 'DELETE', False)
 
@@ -109,7 +109,7 @@ class CRUDService(Service):
         if None in (provider, entity):
             self.service_logger.error('Passed in a None arg')
             err_msg = "'provider' and 'entity' cannot be None"
-            raise YPYServiceError(errmsg=err_msg)
+            raise YPYServiceError(error_msg=err_msg)
         if self._entity_exists(provider, entity):
             # read has succeeded so do an edit-config
             MetaService.normalize_meta(provider._get_capabilities(), entity)
@@ -143,7 +143,7 @@ class CRUDService(Service):
         if None in (provider, read_filter):
             self.service_logger.error('Passed in a None arg')
             err_msg = "'provider' and 'read_filter' cannot be None"
-            raise YPYServiceError(errmsg=err_msg)
+            raise YPYServiceError(error_msg=err_msg)
         MetaService.normalize_meta(provider._get_capabilities(), read_filter)
         self._perform_read_filter_check(read_filter)
         payload = self._execute_crud_operation_on_provider(provider, read_filter, 'READ', only_config)
@@ -154,7 +154,7 @@ class CRUDService(Service):
         if None in (provider, entity, operation, only_config):
             self.service_logger.error('Passed in a None arg')
             err_msg = "'provider', 'entity', 'operation', and 'only_config' cannot be None"
-            raise YPYServiceError(errmsg=err_msg)
+            raise YPYServiceError(error_msg=err_msg)
         try:
             return self.execute_payload(
                                         provider,
@@ -181,7 +181,7 @@ class CRUDService(Service):
         if None in (provider, entity):
             self.service_logger.error('Passed in a None arg')
             err_msg = "'provider' and 'entity' cannot be None"
-            raise YPYServiceError(errmsg=err_msg)
+            raise YPYServiceError(error_msg=err_msg)
 
         read_entity = self.read(
             provider,
@@ -198,7 +198,7 @@ class CRUDService(Service):
         if entity is None:
             self.service_logger.error('Passed in a None entity')
             err_msg = "'entity' cannot be None"
-            raise YPYServiceError(errmsg=err_msg)
+            raise YPYServiceError(error_msg=err_msg)
             
         module = importlib.import_module(entity._meta_info().pmodule_name)
         update_filter = getattr(module, entity._meta_info().name)()

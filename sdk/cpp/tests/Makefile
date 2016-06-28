@@ -26,13 +26,13 @@ default: all
 
 ydk_test : $(TEST_SOURCE) Makefile
 	$(CXX) $(CXXFLAGS) $(TEST_SOURCE) -o $(TEST_BINARY) $(LXXFLAGS)
-	@touch ydk_test
+	@touch $(TEST_BINARY)
 
-all : $(LIBYDK_AR) ydk_test
+all : $(LIBYDK_AR) $(TEST_BINARY)
 	./$(TEST_BINARY)
 
 $(LIBYDK_AR) : ../Makefile
 	make -C .. netconf_client 
 
 clean :
-	rm -f $(TEST_BINARY)
+	rm -f $(TEST_BINARY) $(LIBYDK_AR)

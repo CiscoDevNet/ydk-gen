@@ -188,7 +188,7 @@ def _dm_validate_value(meta, value, parent, optype, errors):
                 encoded = True
                 break
         if not encoded:
-            _handle_error(meta, parent, errors, errcode=YPYErrorCode.INVALID_UNION_VALUE)
+            _handle_error(meta, parent, errors, error_code=YPYErrorCode.INVALID_UNION_VALUE)
 
     else:
         if '' == ValueEncoder().encode(meta, {}, value):
