@@ -26,20 +26,30 @@ try:
     from ydk.models.ietf import ietf_netconf
 except:
     pass
-from ydk.providers import NetconfServiceProvider
+from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import ExecutorService
 from ydk.types import Empty
 
 
 class SanityRpc(unittest.TestCase):
+    PROVIDER_TYPE = "non-native"
+
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(
-            address='127.0.0.1',
-            username='admin',
-            password='admin',
-            protocol='ssh',
-            port=12022)
+        if SanityRpc.PROVIDER_TYPE == "native":
+            self.ncc = NativeNetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
+        else:
+            self.ncc = NetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
         self.executor = ExecutorService()
 
     @classmethod
@@ -145,4 +155,8 @@ class SanityRpc(unittest.TestCase):
         print op'''
 
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        SanityRpc.PROVIDER_TYPE = sys.argv.pop()
+
     unittest.main()

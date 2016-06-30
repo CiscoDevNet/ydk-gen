@@ -14,18 +14,20 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-
 """Setup for YDK
-
-
 """
 
+
 # Always prefer setuptools over distutils
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, extension
 # To use a consistent encoding
 from codecs import open
 from os import path
+import subprocess
+import sys
 
+
+__version__ = ''
 here = path.abspath(path.dirname(__file__))
 
 # Get version from version file
@@ -34,6 +36,25 @@ execfile(path.join(here, 'ydk', '_version.py'))
 # Get the long description from the README file
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
+
+ydk_packages = find_packages(exclude=['contrib', 'docs*', 'tests*', 'ncclient', 'samples'])
+
+# Compile the YDK C++ code
+exit_status = subprocess.call(['cd ' + here + '/.libs/libnetconf/ && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a .. '], shell=True)
+if exit_status != 0:
+    print('\nFailed to build libnetconf. Install all the dependencies mentioned in the README.')
+    sys.exit(exit_status)
+lib_path = here + '/.libs'
+libnetconf_include_path = here + '/.includes/'
+ext = extension.Extension(
+                          'ydk_client',
+                          sources=[here + '/ydk/providers/_cpp_files/netconf_client.cpp'],
+                          language='c++',
+                          libraries=['netconf', 'python2.7', 'boost_python', 'xml2', 'curl', 'ssh', 'ssh_threads', 'xslt'],
+                          extra_compile_args=['-Wall', '-std=c++0x'],
+                          include_dirs=['/usr/include/python2.7', '/usr/include/boost', libnetconf_include_path],
+                          library_dirs=[lib_path]
+                          )
 
 setup(
     name='ydk',
@@ -87,7 +108,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs*', 'tests*', 'ncclient', 'samples']),
+    packages=ydk_packages,
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
@@ -102,6 +123,9 @@ setup(
                     'Twisted>=16.0.0',
                     'protobuf==3.0.0b2.post2',
                     'ncclient>=0.4.7'],
+
+
+    ext_modules=[ext],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
@@ -135,3 +159,6 @@ setup(
     #    ],
     #},
 )
+
+
+

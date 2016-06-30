@@ -37,8 +37,8 @@ class YPYErrorCode(Enum):
     SERVER_REJ = 'Server rejected request.'
     SERVER_COMMIT_ERR = 'Server reported an error while committing change.'
 
-    INVALID_TYPE = 'Cannot encode value'
-    INVALID_VALUE = 'Value is out of range'
+    INVALID_TYPE = 'Type is invalid'
+    INVALID_VALUE = 'Value is invalid'
 
 
 class YPYError(Exception):
@@ -57,7 +57,7 @@ class YPYError(Exception):
             if self.message is not None:
                 ret = [ret]
                 parser = etree.XMLParser(remove_blank_text=True)
-                root = etree.XML(self.message.xml, parser)
+                root = etree.XML(self.message, parser)
                 for r in root.iter():
                     tag = r.tag[r.tag.rfind('}') + 1:]
                     if r.text is not None:
@@ -81,23 +81,23 @@ class YPYModelError(YPYError):
     object type that caused the error as well as an error message.
 
     '''
-    def __init__(self, errmsg):
-        super(YPYModelError, self).__init__(error_msg=errmsg)
+    def __init__(self, error_msg):
+        super(YPYModelError, self).__init__(error_msg=error_msg)
 
 
 class YPYServiceError(YPYError):
     '''
     Exception for Service Side Validation
     '''
-    def __init__(self, errcode=None, errmsg=None):
+    def __init__(self, error_code=None, error_msg=None):
         super(YPYServiceError, self).__init__(
-            error_code=errcode, error_msg=errmsg)
+            error_code=error_code, error_msg=error_msg)
 
 
 class YPYServiceProviderError(YPYError):
     '''
     Exception for Provider Side Validation
     '''
-    def __init__(self, errcode=None, errmsg=None):
+    def __init__(self, error_code=None, error_msg=None):
         super(YPYServiceProviderError, self).__init__(
-            error_code=errcode, error_msg=errmsg)
+            error_code=error_code, error_msg=error_msg)

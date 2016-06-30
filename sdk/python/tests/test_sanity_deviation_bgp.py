@@ -18,23 +18,33 @@ import ydk.types as ytypes
 import unittest 
 
 from ydk.services import CRUDService
-from ydk.providers import NetconfServiceProvider
+from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from tests.compare import is_equal
 from ydk.errors import YPYError, YPYModelError
 from ydk.models.bgp import bgp
 from ydk.models.routing.routing_policy import DefaultPolicyTypeEnum, RoutingPolicy
 
+
 class SanityTest(unittest.TestCase):
+    PROVIDER_TYPE = "non-native"
 
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(
-            address='127.0.0.1',
-            username='admin',
-            password='admin',
-            protocol='ssh',
-            port=12022)
+        if SanityTest.PROVIDER_TYPE == "native":
+            self.ncc = NativeNetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
+        else:
+            self.ncc = NetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
         self.crud = CRUDService()
 
     @classmethod
@@ -64,4 +74,7 @@ class SanityTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        SanityTest.PROVIDER_TYPE = sys.argv.pop()
     unittest.main()

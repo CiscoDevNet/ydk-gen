@@ -14,4 +14,26 @@ mypython
 v/
 gittmp*/
 .DS_Store
+sdk/cpp/.libs/libnetconf.a
+sdk/cpp/.libs/libnetconf/.libs/
+sdk/cpp/.libs/libnetconf/.obj/
+sdk/cpp/.libs/libnetconf/Doxyfile
+sdk/cpp/.libs/libnetconf/Makefile
+sdk/cpp/.libs/libnetconf/config.status
+sdk/cpp/.libs/libnetconf/dev-tools/lncdatastore/Makefile
+sdk/cpp/.libs/libnetconf/dev-tools/lnctool/lnctool
+sdk/cpp/.libs/libnetconf/dev-tools/lnctool/lnctool.install
+sdk/cpp/.libs/libnetconf/headers/libnetconf.h
+sdk/cpp/.libs/libnetconf/headers/libnetconf_ssh.h
+sdk/cpp/.libs/libnetconf/headers/libnetconf_xml.h
+sdk/cpp/.libs/libnetconf/libnetconf.la
+sdk/cpp/.libs/libnetconf/libnetconf.pc
+sdk/cpp/.libs/libnetconf/libnetconf.spec
+sdk/cpp/.libs/libnetconf/libtool
+sdk/cpp/.libs/libnetconf/models/ietf-netconf-acm-config.rng
+sdk/cpp/.libs/libnetconf/src/config.h
+sdk/cpp/libydk_client.a
+sdk/cpp/netconf_client.o
+sdk/cpp/tests/ydk_test
+sdk/cpp/ydk_client.so
 

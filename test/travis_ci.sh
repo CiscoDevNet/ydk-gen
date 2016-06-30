@@ -28,6 +28,15 @@ YDKTEST_FXS=$FXS_DIR/ydktest/
 BGP_DEVIATION_FXS=$FXS_DIR/bgp_deviation/
 YDKTEST_DEVIATION_FXS=$FXS_DIR/ydktest_deviation/
 
+function run_exec_test {
+    $@
+    local status=$?
+    if [ $status -ne 0 ]; then
+        exit $status
+    fi
+    return $status
+}
+
 function run_test_no_coverage {
     python $@ 
     local status=$?
@@ -60,6 +69,8 @@ function set_root {
 }
 
 function setup_env {
+    sudo apt-get update
+    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool
     virtualenv myenv
     source myenv/bin/activate
     pip install coverage
@@ -116,14 +127,8 @@ function generate_ydktest_package {
 }
 
 # sanity tests
-function run_sanity_tests {
-    pip install gen-api/python/dist/ydk*.tar.gz
-    source sdk/python/env.sh
-
-    printf "\nRunning sanity tests\n"
-    export PYTHONPATH=./sdk/python:$PYTHONPATH
-    cp -r gen-api/python/ydk/models/* sdk/python/ydk/models
-    run_test sdk/python/tests/test_sanity_codec.py
+function run_sanity_ncclient_tests {
+    printf "\nRunning sanity tests on NCClient client\n"
     run_test sdk/python/tests/test_sanity_types.py
     run_test sdk/python/tests/test_sanity_errors.py
     run_test sdk/python/tests/test_sanity_filters.py
@@ -133,14 +138,40 @@ function run_sanity_tests {
     run_test sdk/python/tests/test_sanity_rpc.py
     run_test sdk/python/tests/test_sanity_delete.py
     run_test sdk/python/tests/test_sanity_service_errors.py
+}
 
+function run_sanity_native_tests {
+    printf "\nRunning sanity tests on native client\n"
+    run_test sdk/python/tests/test_sanity_types.py native
+    run_test sdk/python/tests/test_sanity_errors.py native
+    run_test sdk/python/tests/test_sanity_filters.py native
+    run_test sdk/python/tests/test_sanity_levels.py native
+    run_test sdk/python/tests/test_sanity_filter_read.py native
+    run_test sdk/python/tests/test_sanity_netconf.py native
+    run_test sdk/python/tests/test_sanity_rpc.py native
+    run_test sdk/python/tests/test_sanity_delete.py native
+    run_test sdk/python/tests/test_sanity_service_errors.py native
+    run_test sdk/python/tests/test_ydk_client.py
+}
+
+function run_sanity_tests {
+    pip install gen-api/python/dist/ydk*.tar.gz
+    source sdk/python/env.sh
+
+    printf "\nRunning sanity tests\n"
+    export PYTHONPATH=./sdk/python:$PYTHONPATH
+    cp -r gen-api/python/ydk/models/* sdk/python/ydk/models
+    run_test sdk/python/tests/test_sanity_codec.py
+
+    run_sanity_ncclient_tests
+    run_sanity_native_tests
 
     export PYTHONPATH=./gen-api/python:$PYTHONPATH
     run_test gen-api/python/ydk/tests/import_tests.py
 }
 
 # cpp tests
-function run_cpp_tests {
+function run_cpp_gen_tests {
     printf "\nGenerating ydktest C++ model APIs\n"
     run_test generate.py --profile profiles/test/ydktest.json --cpp --verbose
     cd gen-api/cpp
@@ -150,6 +181,14 @@ function run_cpp_tests {
         exit $status
     fi
     cd -
+}
+
+# cpp sanity tests
+function run_cpp_sanity_tests {
+    sudo apt install libunittest++-dev
+    cd $YDK_ROOT/sdk/cpp/tests
+    run_exec_test make clean all
+    cd $YDK_ROOT
 }
 
 # deviation tests
@@ -171,6 +210,7 @@ function run_deviation_sanity {
     source gen-api/python/env.sh
     export PYTHONPATH=./gen-api/python:$PYTHONPATH
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py
+    run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py native
 
     # bgp deviation
     printf "\nGenerating ydktest deviation model APIs\n"
@@ -178,6 +218,7 @@ function run_deviation_sanity {
     pip install gen-api/python/dist/ydk*.tar.gz
     source gen-api/python/env.sh
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py
+    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py native
 }
 
 # submit coverage
@@ -217,12 +258,11 @@ run_pygen_test
 generate_ydktest_package
 run_sanity_tests
 submit_coverage
-run_cpp_tests
+run_cpp_gen_tests
+run_cpp_sanity_tests
 
 setup_deviation_sanity_models
 run_deviation_sanity
 teardown_env
 
-
 exit
-

@@ -1,0 +1,117 @@
+Please note, that master branch of our git repository is supposed to be
+an unstable branch. For stable code, please switch to the one of the version
+branches such as 0.10.x.
+
+Prerequisites
+=============
+
+You will need to have installed the following software. Header
+files (-dev or -devel packages) of the following libraries are
+also needed to compile libnetconf.
+
+- libxml2
+  http://xmlsoft.org
+
+- libssh
+  Version 0.6.4 or greater is recomended.
+  http://www.libssh.org
+
+  To disable usage of the libssh, use:
+
+  $ ./configure --disable-libssh
+
+  In such a case, libnetconf will use standalone ssh(1) client
+  application to connect NETCONF client to the NETCONF server.
+  ssh(1) is available as a part of the OpenSSH.
+
+- DBus
+  libdbus version 1.0.0 or greater
+  http://dbus.freedesktop.org
+
+  DBus is required by the NETCONF Notifications subsystem. If the
+  Notifications support is switched off, DBus is no more needed:
+
+  $ ./configure --disable-notifications
+
+These items are conditional.
+
+- OpenSSL
+  Always the newest version is recommended, to ensure maximum
+  security.
+  https://www.openssl.org
+
+  OpenSSL is required only if compiling with either
+
+  $ ./configure --enable-tls
+
+  or
+
+  $ ./configure --enable-dnssec
+
+  or both.
+
+- dnsval (libval)
+  Version 2.0 or greater
+  http://dnssec-tools.org
+
+  Required when compiling with
+
+  $ ./configure --enable-dnssec
+
+  to enable DNSSEC data retrieval and validation - automatic server SSH
+  key acceptance. In that case, the following is performed once a client
+  tries to connect to a server:
+
+  - DNSSEC query is sent with the server hostname asking for SSHFP entries
+  - then any answers are carefully checked and then compared to
+    the key fingerprint presented by the server
+  - only if an exact match is found and DNSSEC was used for the fingerprint
+    retrieval is user input skipped and key is accepted (but it is NOT added
+    into the known_hosts file!)
+
+The remaining items are optional.
+
+- doxygen
+  Used to generate documentation from the source code.
+  Version 1.8.0 or greater is recommended.
+  http://www.doxygen.org
+
+- rpmbuild
+  Used to build RPM package.
+  http://www.rpm.org
+
+
+Building / Installation
+=======================
+
+To install libnetconf with default options:
+
+$ ./configure
+$ make
+# make install
+
+This way the library will be installed in /usr/local/lib and
+/usr/local/include respectively. Configure can have many
+options specified, to show them all use:
+
+$ ./configure --help
+
+
+Contact
+=======
+
+The homepage is at
+
+  https://github.com/CESNET/libnetconf
+
+
+To get the very latest source code from the GIT repository, use:
+
+  $ git clone https://github.com/CESNET/libnetconf.git
+
+
+Problem reports, questions, suggestions as well as success stories
+are welcome. Feel free to contact us via the project issue tracker:
+
+  https://github.com/CESNET/libnetconf/issues
+

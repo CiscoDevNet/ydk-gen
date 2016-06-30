@@ -22,7 +22,7 @@ from ydk.services.meta_service import MetaService
 from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.models.ydktest import ydktest_sanity_types as ysanity_types
 from ydk.models.ydktest import ydktest_types as y_types
-from ydk.providers import NetconfServiceProvider
+from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from tests.compare import is_equal
 from ydk.errors import YPYServiceError
@@ -169,15 +169,23 @@ class SanityCodec(unittest.TestCase):
             raise Exception('YPYServiceError not raised')
 
 class SanityCrud(unittest.TestCase):
-
+    PROVIDER_TYPE = "non-native"
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(
-            address='127.0.0.1',
-            username='admin',
-            password='admin',
-            protocol='ssh',
-            port=12022)
+        if SanityCrud.PROVIDER_TYPE == "native":
+            self.ncc = NativeNetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
+        else:
+            self.ncc = NetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
         self.crud = CRUDService()
 
     @classmethod
@@ -334,15 +342,23 @@ class SanityCrud(unittest.TestCase):
             raise Exception('YPYServiceError not Raised')
 
 class SanityExecutor(unittest.TestCase):
-
+    PROVIDER_TYPE = "non-native"
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(
-            address='127.0.0.1',
-            username='admin',
-            password='admin',
-            protocol='ssh',
-            port=12022)
+        if SanityExecutor.PROVIDER_TYPE == "native":
+            self.ncc = NativeNetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
+        else:
+            self.ncc = NetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
         self.executor = ExecutorService()
 
     @classmethod
@@ -394,15 +410,23 @@ class SanityExecutor(unittest.TestCase):
             raise Exception('YPYServiceError not raised')
 
 class SanityMeta(unittest.TestCase):
-
+    PROVIDER_TYPE = "non-native"
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(
-            address='127.0.0.1',
-            username='admin',
-            password='admin',
-            protocol='ssh',
-            port=12022)
+        if SanityMeta.PROVIDER_TYPE == "native":
+            self.ncc = NativeNetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
+        else:
+            self.ncc = NetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
 
     @classmethod
     def tearDownClass(self):
@@ -447,18 +471,26 @@ class SanityMeta(unittest.TestCase):
             raise Exception('YPYServiceError not raised')
 
 class SanityNetconf(unittest.TestCase):
-
+    PROVIDER_TYPE = "non-native"
     @classmethod
     def setUpClass(self):
         from ydk.providers import NetconfServiceProvider
         from ydk.services import NetconfService
 
-        self.ncc = NetconfServiceProvider(
-            address='127.0.0.1',
-            username='admin',
-            password='admin',
-            protocol='ssh',
-            port=12022)
+        if SanityNetconf.PROVIDER_TYPE == "native":
+            self.ncc = NativeNetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
+        else:
+            self.ncc = NetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
         self.netconf_service = NetconfService()
 
     @classmethod
@@ -686,4 +718,11 @@ class SanityNetconf(unittest.TestCase):
             raise Exception('YPYServiceError not raised')
 
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        provider_type = sys.argv.pop()
+        SanityCrud.PROVIDER_TYPE = provider_type
+        SanityExecutor.PROVIDER_TYPE = provider_type
+        SanityMeta.PROVIDER_TYPE = provider_type
+        SanityNetconf.PROVIDER_TYPE = provider_type
     unittest.main()
