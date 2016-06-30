@@ -211,7 +211,7 @@ def _validate_number(meta, value, parent, errors):
         if not valid:
             errcode = YPYErrorCode.INVALID_VALUE
             _range = str(meta._range) if len(meta._range) > 1 else str(meta._range[0])
-            errmsg = '{}: {} not in {}'.format(errcode.value, value, _range)
+            errmsg = '{}: {} not in range {}'.format(errcode.value, value, _range)
             _handle_error(meta, parent, errors, errmsg, errcode)
     return value
 

@@ -108,7 +108,7 @@ class SanityTest(unittest.TestCase):
             runner.ytypes.built_in_t.number64 = 9223372036854775808
             self.crud.create(self.ncc, runner)
         except YPYModelError as err:
-            expected_msg = "Runner.Ytypes.BuiltInT.number64: (INVALID_VALUE, Value is out of range: 9223372036854775808 not in (-9223372036854775808, 9223372036854775807))"
+            expected_msg = "Runner.Ytypes.BuiltInT.number64: (INVALID_VALUE, Value is invalid: 9223372036854775808 not in range (-9223372036854775808, 9223372036854775807))"
             self.assertEqual(err.message.strip(), expected_msg)
         else:
             raise Exception('YPYModelError not raised')
@@ -119,7 +119,7 @@ class SanityTest(unittest.TestCase):
             runner.ytypes.built_in_t.u_number8 = -1
             self.crud.create(self.ncc, runner)
         except YPYModelError as err:
-            expected_msg = "Runner.Ytypes.BuiltInT.u_number8: (INVALID_VALUE, Value is out of range: -1 not in (0, 255))"
+            expected_msg = "Runner.Ytypes.BuiltInT.u_number8: (INVALID_VALUE, Value is invalid: -1 not in range (0, 255))"
             self.assertEqual(err.message.strip(), expected_msg)
         else:
             raise Exception('YPYModelError not raised')
@@ -141,7 +141,7 @@ class SanityTest(unittest.TestCase):
             runner.ytypes.built_in_t.u_number32 = 4294967296
             self.crud.create(self.ncc, runner)
         except YPYModelError as err:
-            expected_msg = "Runner.Ytypes.BuiltInT.u_number32: (INVALID_VALUE, Value is out of range: 4294967296 not in (0, 4294967295))"
+            expected_msg = "Runner.Ytypes.BuiltInT.u_number32: (INVALID_VALUE, Value is invalid: 4294967296 not in range (0, 4294967295))"
             self.assertEqual(err.message.strip(), expected_msg)
         else:
             raise Exception('YPYModelError not raised')
@@ -152,7 +152,7 @@ class SanityTest(unittest.TestCase):
             runner.ytypes.built_in_t.u_number64 = -1
             self.crud.create(self.ncc, runner)
         except YPYModelError as err:
-            expected_msg = "Runner.Ytypes.BuiltInT.u_number64: (INVALID_VALUE, Value is out of range: -1 not in (0, 18446744073709551615L))"
+            expected_msg = "Runner.Ytypes.BuiltInT.u_number64: (INVALID_VALUE, Value is invalid: -1 not in range (0, 18446744073709551615L))"
             self.assertEqual(err.message.strip(), expected_msg)
         else:
             raise Exception('YPYModelError not raised')
@@ -163,7 +163,7 @@ class SanityTest(unittest.TestCase):
             runner.ytypes.built_in_t.u_number64 = 18446744073709551616
             self.crud.create(self.ncc, runner)
         except YPYModelError as err:
-            expected_msg = "Runner.Ytypes.BuiltInT.u_number64: (INVALID_VALUE, Value is out of range: 18446744073709551616 not in (0, 18446744073709551615L))"
+            expected_msg = "Runner.Ytypes.BuiltInT.u_number64: (INVALID_VALUE, Value is invalid: 18446744073709551616 not in range (0, 18446744073709551615L))"
             self.assertEqual(err.message.strip(), expected_msg)
         else:
             raise Exception('YPYModelError not raised')
