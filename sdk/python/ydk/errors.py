@@ -37,8 +37,8 @@ class YPYErrorCode(Enum):
     SERVER_REJ = 'Server rejected request.'
     SERVER_COMMIT_ERR = 'Server reported an error while committing change.'
 
-    INVALID_TYPE = 'Cannot encode value'
-    INVALID_VALUE = 'Value is out of range'
+    INVALID_TYPE = 'Type is invalid'
+    INVALID_VALUE = 'Value is invalid'
 
 
 class YPYError(Exception):

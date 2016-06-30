@@ -128,6 +128,7 @@ function generate_ydktest_package {
 
 # sanity tests
 function run_sanity_ncclient_tests {
+    printf "\nRunning sanity tests on NCClient client\n"
     run_test sdk/python/tests/test_sanity_types.py
     run_test sdk/python/tests/test_sanity_errors.py
     run_test sdk/python/tests/test_sanity_filters.py
@@ -139,7 +140,8 @@ function run_sanity_ncclient_tests {
     run_test sdk/python/tests/test_sanity_service_errors.py
 }
 
-function run_sanity_ncclient_tests {
+function run_sanity_native_tests {
+    printf "\nRunning sanity tests on native client\n"
     run_test sdk/python/tests/test_sanity_types.py native
     run_test sdk/python/tests/test_sanity_errors.py native
     run_test sdk/python/tests/test_sanity_filters.py native
@@ -149,6 +151,7 @@ function run_sanity_ncclient_tests {
     run_test sdk/python/tests/test_sanity_rpc.py native
     run_test sdk/python/tests/test_sanity_delete.py native
     run_test sdk/python/tests/test_sanity_service_errors.py native
+    run_test sdk/python/tests/test_ydk_client.py
 }
 
 function run_sanity_tests {
