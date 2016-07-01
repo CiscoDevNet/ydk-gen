@@ -27,6 +27,12 @@ Ubuntu (Debian-based): The following packages must be present in your system bef
 user-machine# sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool-bin
 ```
 
+Centos (Fedora-based): The following packages must be present in your system before installing YDK-Py:
+```
+user-machine# sudo yum install epel-release
+user-machine# sudo yum install python-pip python-devel libxml2-devel libxslt-devel libssh-devel boost-devel boost-python libcurl-devel libtool gcc-c++
+```
+
 ####Mac
 It is recommended to install homebrew (http://brew.sh) and Xcode command line tools on your system before installing YDK-Py:
 ```

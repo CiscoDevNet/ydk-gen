@@ -59,9 +59,6 @@ RELEASE = @RELEASE@
 version_info = @LIBTOOL_VERSION_INFO@
 
 CC = @CC@
-DOXYGEN = @DOXYGEN@
-DOXYGEN_CONFIG = Doxyfile
-DOXYGEN_DIR = $(shell cat $(DOXYGEN_CONFIG) | grep '^OUTPUT_DIRECTORY' | sed 's/.*=//')
 RPMBUILD = @RPMBUILD@
 LDCONFIG = ldconfig
 INSTALL = @INSTALL@
@@ -90,7 +87,6 @@ TARBALLPYAPI = tarball-pyapi
 TARBALLPYAPIDIR = python3-netconf-$(VERSION)
 INSTALLPYAPI = install-pyapi
 UNINSTALLPYAPI = uninstall-pyapi
-DOXYGEN_CONFIG_PYTHON = Doxyfile.python
 PYPREFIX = @PYPREFIX@
 PYHDRS = doc/python/netconf.py
 PYSRCS = python/netconf.c \
@@ -235,69 +231,10 @@ $(OBJDIR)/%.lo: %.c
 		(mkdir -p $$(dirname $@))
 	$(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(CPPFLAGS) $(INCLUDES) $(DBG) -fPIC -c $< -o $@
 
-.PHONY: doc
-doc: doc/doxygen/html/index.html
 
-doc/doxygen/html/index.html: $(DOXYGEN_CONFIG).in $(HDRS_PRIV) $(DOXYGEN_CONFIG_PYTHON) $(PYHDRS)
-	@if [ "$(DOXYGEN)" != "no" ]; then \
-		[ -d $(DOXYGEN_DIR) ] || mkdir -p $(DOXYGEN_DIR); \
-		$(DOXYGEN); \
-		if [ -n "$(DOXYGEN_CONFIG_PYTHON)" ]; then \
-			$(DOXYGEN) $(DOXYGEN_CONFIG_PYTHON); \
-		fi; \
-	else \
-		echo "Missing doxygen!"; \
-	fi;
-
-.PHONY: dist
-dist: $(NAME).spec tarball rpm
-
-.PHONY: tarball
-tarball: $(SRCS) $(HEADERS)
-	@rm -rf $(NAME)-$(VERSION);
-	@mkdir $(NAME)-$(VERSION);
-	for i in $(SRCS) $(HDRS_PUBL) $(HDRS_PRIV) configure.in configure \
-	    headers/libnetconf.h.in headers/libnetconf_xml.h.in headers/libnetconf_ssh.h.in \
-	    ltmain.sh Makefile.in VERSION $(NAME).spec.in $(NAME).pc.in $(LNCDS_FILES)\
-	    dev-tools/lnctool/lnctool.in dev-tools/lnctool/rnglib/* dev-tools/lnctool/xslt/* dev-tools/lnctool/generator/*\
-	    install-sh config.sub config.guess Doxyfile.in doc/img/*.png models/*; do \
-	    [ -d $(NAME)-$(VERSION)/$$(dirname $$i) ] || (mkdir -p $(NAME)-$(VERSION)/$$(dirname $$i)); \
-		cp $$i $(NAME)-$(VERSION)/$$i; \
-	done;
-	@rm -rf $(RPMDIR)/SOURCES/; \
-	mkdir -p $(RPMDIR)/SOURCES/;
-	tar -c -z -f $(RPMDIR)/SOURCES/$(NAME)-$(VERSION)-$(RELEASE).tar.gz \
-	    $(NAME)-$(VERSION); \
-	rm -rf $(NAME)-$(VERSION);
-
-.PHONY: tarball-pyapi
-tarball-pyapi: tarball
-	@rm -rf $(TARBALLPYAPIDIR);
-	@mkdir $(TARBALLPYAPIDIR);
-	for i in python/netconf.h python/netconf.c python/session.c python/setup.py; do \
-		cp $$i $(TARBALLPYAPIDIR)/$$(basename $$i); \
-	done;
-	@[ -d "$(RPMDIR)/SOURCES/" ] || (mkdir -p $(RPMDIR)/SOURCES/);
-	tar -c -z -f $(RPMDIR)/SOURCES/$(TARBALLPYAPIDIR)-$(RELEASE).tar.gz $(TARBALLPYAPIDIR); \
-	rm -rf $(TARBALLPYAPIDIR);
-
-.PHONY: rpm
-rpm: tarball $(TARBALLPYAPI)
-	if [ "$(RPMBUILD)" != "no" ]; then \
-		mkdir -p $(RPMDIR)/BUILD $(RPMDIR)/RPMS $(RPMDIR)/SRPMS; \
-		QA_RPATHS="[ 0x0001|0x0010 ]" $(RPMBUILD) -ba $(NAME).spec \
-			--define "_topdir `pwd`/$(RPMDIR)"; \
-		if [ -n "$(PYAPI)" ]; then \
-			$(RPMBUILD) -ba python/python3-netconf.spec \
-				--define "_topdir `pwd`/$(RPMDIR)"; \
-		fi \
-	else \
-		echo "Missing rpmbuild"; \
-		exit 1; \
-	fi
 
 .PHONY: install
-install: all install-bin install-devel  $(INSTALLPYAPI)
+install: all install-bin install-devel 
 
 .PHONY: install-bin
 install-bin:
@@ -358,12 +295,6 @@ install-devel: $(LNCTOOL) $(NAME).la $(HDRS_PUBL_ROOT) $(HDRS_PUBL_SUBDIR) $(NAM
 	$(INSTALL_DATA) dev-tools/lnctool/xslt/* $(DESTDIR)/$(datadir)/$(NAME)/xslt/;
 	$(INSTALL_DATA) dev-tools/lnctool/generator/* $(DESTDIR)/$(datadir)/$(NAME)/templates/;
 
-.PHONY: install-doc
-install-doc: doc
-	[ -d $(DESTDIR)/$(datadir)/$(NAME)/doxygen ] || \
-		(mkdir -p $(DESTDIR)/$(datadir)/$(NAME)/doxygen; \
-		chmod -R 755 $(DESTDIR)/$(datadir)/$(NAME))
-	cp -r $(DOXYGEN_DIR)/* $(DESTDIR)/$(datadir)/$(NAME)/doxygen/;
 
 .PHONY: install-pyapi
 install-pyapi: pyapi
@@ -391,13 +322,6 @@ uninstall-devel:
 	rm -rf $(DESTDIR)/$(datadir)/$(NAME)/xslt/; \
 	rm -f $(DESTDIR)/$(bindir)/lncdatastore;
 
-.PHONY: uninstall-doc
-uninstall-doc:
-	rm -rf $(DESTDIR)/$(datadir)/$(NAME)/doxygen;
-
-.PHONY: uninstall-pyapi
-uninstall-pyapi:
-	@cd python; $(PYTHON) ./setup.py uninstall; cd -;
 
 .PHONY: clean clean-all clean-doc clean-rpm
 clean:
@@ -407,8 +331,6 @@ clean:
 
 clean-all: clean clean-doc clean-rpm
 
-clean-doc:
-	rm -rf $(DOXYGEN_DIR);
 
 clean-rpm:
 	rm -rf $(RPMDIR)
