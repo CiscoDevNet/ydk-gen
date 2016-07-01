@@ -170,6 +170,12 @@ if __name__ == '__main__':
                       default=False,
                       help="Consider yang groupings as classes.")
 
+    parser.add_option("--build-native-provider",
+                      action="store_true",
+                      dest="build_native_provider",
+                      default=False,
+                      help="Build native C++ netconf provider")
+
     try:
         arg = sys.argv[1]
     except IndexError:
