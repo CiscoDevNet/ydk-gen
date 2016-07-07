@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
-# project(ydk_cpp_test)
-# message ("Generating project ${PROJECT_NAME}")
+cmake_policy(SET CMP0048 NEW)
+project(ydk_test)
+message ("Generating project ${PROJECT_NAME}")
 
 enable_testing()
 set(BUILDS_DIR ${CMAKE_SOURCE_DIR}/builds)
@@ -36,9 +37,9 @@ include_directories(
 )
 message("ydk dir: " ${YDK_DIR})
 
-add_executable (test_ydk ${TESTS_DIR}/test_netconf_client.cpp)
+add_executable (test_netconf_client ${TESTS_DIR}/test_netconf_client.cpp)
 
-target_link_libraries(test_ydk
+target_link_libraries(test_netconf_client
 	# May be a solution if unittest-cpp was installed with brew (instead of github clone) and cannot be found
 	# ${unittest_location}
 	UnitTest++
@@ -55,9 +56,9 @@ target_link_libraries(test_ydk
 	${dl_location}
 )
 
-target_compile_features(test_ydk PRIVATE cxx_range_for)
+target_compile_features(test_netconf_client PRIVATE cxx_range_for)
 
-add_test(NAME test_netconf_client COMMAND ${TESTS_DIR}/test_netconf_client.cpp)
+add_test(NAME netconf_client COMMAND test_netconf_client)
 
 # install(TARGETS test_ydk DESTINATION .)
 # execute_process(COMMAND test_ydk)
