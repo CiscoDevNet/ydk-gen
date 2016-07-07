@@ -53,7 +53,7 @@ class YdkClient(object):
             if isinstance(e, ImportError):
                 raise YPYServiceProviderError(error_msg='Native YDK client is not installed. Try installing all dependencies in README and re-installing ydk: ' + str(e))
             else:
-                raise YPYServiceProviderError(error_msg='Could not connect to client: ' + str(e))
+                raise YPYServiceProviderError(error_msg=str(type(e)) + '. Could not connect to client: ' + str(e))
 
     def connect(self):
         self.client.connect()

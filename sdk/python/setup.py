@@ -32,10 +32,10 @@ __version__ = ''
 here = path.abspath(path.dirname(__file__))
 lib_path = here + '/.libs'
 libnetconf_include_path = here + '/.includes/'
-python_homebrew_path = ''
+lib_paths = [lib_path]
 if platform.system() == 'Darwin' and subprocess.call(['brew info python &> /dev/null'], shell=True) == 0:
     python_homebrew_path='/usr/local/opt/python/Frameworks/Python.framework/Versions/2.7/lib'
-lib_paths = [lib_path, python_homebrew_path]
+    lib_paths = [lib_path, python_homebrew_path]
 
 
 def _build_ydk_client_using_prebuilt_libnetconf():
