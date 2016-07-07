@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_has_data_printer.py 
- 
+class_has_data_printer.py
+
  Printer for the _has_data method.
- 
+
 """
 from ydkgen.api_model import Bits, Class
 
@@ -53,7 +53,7 @@ class ClassHasDataPrinter(object):
 
     def _print_has_data_functions_body(self, clazz):
         self._print_has_data_function('not self.is_config()', 'False')
-        if clazz.stmt.search_one('presence') and len(clazz.properties()) == 0:
+        if clazz.stmt.search_one('presence'):
             self._print_has_data_function('self._is_presence')
 
         for prop in clazz.properties():
