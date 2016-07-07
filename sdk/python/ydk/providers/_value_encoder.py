@@ -33,7 +33,7 @@ class ValueEncoder(object):
         text = ''
         if member.mtype == REFERENCE_IDENTITY_CLASS:
             module = importlib.import_module(member.pmodule_name)
-            clazz = getattr(module, member.clazz_name)
+            clazz = reduce(getattr, member.clazz_name.split('.'), module)
 
             if issubclass(type(value), clazz):
                 identity_inst = value
@@ -54,7 +54,7 @@ class ValueEncoder(object):
         elif member.mtype == REFERENCE_ENUM_CLASS or 'Enum' in member.ptype:
             enum_value = value
             module = importlib.import_module(member.pmodule_name)
-            enum_clazz = getattr(module, member.clazz_name)
+            enum_clazz = reduce(getattr, member.clazz_name.split('.'), module)
             literal_map = enum_clazz._meta_info().literal_map
             for yang_enum_name in literal_map:
                 literal = literal_map[yang_enum_name]
