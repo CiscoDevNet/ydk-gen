@@ -126,6 +126,7 @@ def create_shared_library(output_directory):
     print('Please read %sREADME.rst for information on how to install the package in your environment\n' % (
         cpp_sdk_root,))
 
+
 if __name__ == '__main__':
     parser = OptionParser(usage="usage: %prog [options]",
                           version="%prog 0.4.0")

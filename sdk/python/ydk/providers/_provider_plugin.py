@@ -39,7 +39,10 @@ import logging
 import importlib
 import ydk.models._yang_ns as _yang_ns
 
-import ydk_client
+try:
+    import ydk_client
+except:
+    pass
 
 
 class YdkClient(object):
@@ -47,7 +50,10 @@ class YdkClient(object):
         try:
             self.client = ydk_client.NetconfClient(username, password, host, port, 0)
         except Exception as e:
-            raise YPYServiceProviderError(error_msg='Could not connect to client: ' + str(e))
+            if isinstance(e, ImportError):
+                raise YPYServiceProviderError(error_msg='Native YDK client is not installed. Try installing all dependencies in README and re-installing ydk: ' + str(e))
+            else:
+                raise YPYServiceProviderError(error_msg='Could not connect to client: ' + str(e))
 
     def connect(self):
         self.client.connect()
