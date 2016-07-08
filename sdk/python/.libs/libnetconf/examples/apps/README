@@ -1,0 +1,27 @@
+
+libnetconf Example Applications
+===============================
+
+Programs available from this directory serve as simple examples of using
+libnetconf for building NETCONF enabled applications. All examples provide
+'-h' option that provides detailed user description.
+
+To build examples, just type:
+
+$ make
+
+
+get
+---
+
+Retrieves configuration as well as status data of the device. It connects to
+the specified host and executes NETCONF <get> operation. Optionally, user
+can specify NETCONF subtree filter to retrieve only a specific part of the
+configuration/status data.
+
+notif
+-----
+
+Simple application that generates a NETCONF event on the NETCONF server side.
+The event is logged into the NETCONF stream and can be replayed by a NETCONF
+server to clients.

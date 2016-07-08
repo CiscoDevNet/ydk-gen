@@ -188,7 +188,7 @@ def _dm_validate_value(meta, value, parent, optype, errors):
                 encoded = True
                 break
         if not encoded:
-            _handle_error(meta, parent, errors, errcode=YPYErrorCode.INVALID_UNION_VALUE)
+            _handle_error(meta, parent, errors, error_code=YPYErrorCode.INVALID_UNION_VALUE)
 
     else:
         if '' == ValueEncoder().encode(meta, {}, value):
@@ -211,7 +211,7 @@ def _validate_number(meta, value, parent, errors):
         if not valid:
             errcode = YPYErrorCode.INVALID_VALUE
             _range = str(meta._range) if len(meta._range) > 1 else str(meta._range[0])
-            errmsg = '{}: {} not in {}'.format(errcode.value, value, _range)
+            errmsg = '{}: {} not in range {}'.format(errcode.value, value, _range)
             _handle_error(meta, parent, errors, errmsg, errcode)
     return value
 

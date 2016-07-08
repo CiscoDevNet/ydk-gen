@@ -1,0 +1,20 @@
+This is work in progress. DO NOT USE for now.
+
+Requirements
+------------
+
+ Python 3
+
+Building
+--------
+
+$ python3 setup.py build
+# python3 setup.py install
+
+Usage
+-----
+
+>>> import netconf
+>>> session = netconf.Session('localhost', 830)
+>>> del(session)
+

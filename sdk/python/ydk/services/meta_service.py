@@ -47,7 +47,7 @@ class MetaService(Service):
         """
         if None in (capabilities, entity):
             err_msg = "'capabilities' and 'entity' cannot be None"
-            raise YPYServiceError(errmsg=err_msg)
+            raise YPYServiceError(error_msg=err_msg)
         deviation_tables = MetaService.get_active_deviation_tables(capabilities, entity)
         MetaService.inject_imeta(entity, deviation_tables)
         return entity

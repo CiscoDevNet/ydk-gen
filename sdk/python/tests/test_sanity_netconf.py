@@ -23,25 +23,30 @@ from tests.compare import is_equal
 
 from ydk.errors import YPYModelError, YPYError
 from ydk.models.ydktest import ydktest_sanity as ysanity
-try:
-    from ydk.models.ietf import ietf_netconf
-except:
-    pass
-from ydk.providers import NetconfServiceProvider
+from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import NetconfService
 from ydk.services import Datastore
-from ydk.types import Empty
 
 
 class SanityNetconf(unittest.TestCase):
+    PROVIDER_TYPE = "non-native"
+
     @classmethod
     def setUpClass(self):
-        self.ncc = NetconfServiceProvider(
-            address='127.0.0.1',
-            username='admin',
-            password='admin',
-            protocol='ssh',
-            port=12022)
+        if SanityNetconf.PROVIDER_TYPE == "native":
+            self.ncc = NativeNetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
+        else:
+            self.ncc = NetconfServiceProvider(
+                address='127.0.0.1',
+                username='admin',
+                password='admin',
+                protocol='ssh',
+                port=12022)
         self.netconf_service = NetconfService()
 
     @classmethod
@@ -144,4 +149,8 @@ class SanityNetconf(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        SanityNetconf.PROVIDER_TYPE = sys.argv.pop()
+
     unittest.main()

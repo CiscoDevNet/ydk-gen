@@ -3,19 +3,31 @@ sudo: required
 services:
     - docker
 
-language: python
+#language: python
 
-python:
-    - "2.7"
-
+os:
+    - linux
+    - osx
 
 before_install:
-    - docker pull ydkdev/confd
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update && sudo apt-get install -y python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install python boost-python libssh jq; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull ydkdev/confd; fi
 
 script:
     - export PR=https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST
     - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq -r .head.ref`; fi)
     - export REPO=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_REPO_SLUG; else echo `curl -s $PR | jq -r .head.repo.full_name`; fi)
     - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, REPO=$REPO"
-    - docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH
-
+    - mkdir sandbox; cd sandbox
+    - git clone https://github.com/$REPO.git -b $BRANCH
+    - cd ydk-gen
+    - sudo pip install -r requirements.txt
+    - sudo python generate.py --profile profiles/test/ydktest.json
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PATH=/usr/local/bin:/usr/local/sbin:~/bin:$PATH ; fi
+    - sudo pip install gen-api/python/dist/*
+    - cd test
+    - sudo ./test_native_ydk.py
+    - cd ../../..
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH ; fi

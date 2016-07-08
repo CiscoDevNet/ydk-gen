@@ -20,21 +20,35 @@ BGP_MODEL       = $(MODELS_DIR)/bgp/bgp.cpp
 PROVIDERS       = $(SDK_DIR)/ydk/providers.cpp
 SERVICES        = $(SDK_DIR)/ydk/services.cpp
 
+LIBNETCONF_LIB  = $(SDK_DIR)/.libs/libnetconf.a
+LIBNETCONF_DIR  = $(SDK_DIR)/.libs/libnetconf
+LIBNETCONF_CONF = $(SDK_DIR)/.libs/libnetconf/configure
+
 MODELS_DIRS     = ${shell find ${MODELS_DIR} -type d -print}
 MODELS_LIST     = $(foreach dir,$(MODELS_DIRS),$(wildcard $(dir)/*.cpp))
 
 CXX             = g++
-CXXFLAGS        = -std=c++0x -I/$(SDK_DIR)
+CXXFLAGS        = -Wall -std=c++0x
 LDFLAGS         = -shared  -fPIC
+ARCHIVE         = ar
+ARFLAGS         = -cvq
  
 default: all
 
 all : $(MODELS_LIST)
-	@$(CXX) $(CXXFLAGS) $(LDFLAGS) -o ydk_cpp.so $^
+	@$(CXX) $(CXXFLAGS) $(LDFLAGS)  -I/$(SDK_DIR) -o ydk_cpp.so $^
 
-bgp_sample : samples/bgp_sample.cpp	 	
+bgp_sample : samples/bgp_sample.cpp
 	@$(CXX) $(CXXFLAGS) -o bgp_sample $(PROVIDERS) $(SERVICES) $(BGP_MODEL) $<
+
+$(LIBNETCONF_LIB) : .
+	$(shell cd $(LIBNETCONF_DIR) && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a ..)
+
+netconf_client : ydk/netconf_client.cpp ydk/netconf_client.h Makefile $(LIBNETCONF_LIB)
+	@printf "Compiling %-40s\n\n" $<
+	$(CXX) $(CXXFLAGS) -I./.includes -I/usr/include/python2.7 -c $<
+	$(ARCHIVE) $(ARFLAGS) libydk_client.a *.o
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -I/usr/include/python2.7 -I./.includes -o ydk_client.so $< -L./.libs -lnetconf  -lpython2.7 -lboost_python -lxml2 -lcurl -lssh -lssh_threads -lxslt
 
 clean :
 	@rm bgp_sample
-

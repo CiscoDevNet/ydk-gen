@@ -126,6 +126,7 @@ def create_shared_library(output_directory):
     print('Please read %sREADME.rst for information on how to install the package in your environment\n' % (
         cpp_sdk_root,))
 
+
 if __name__ == '__main__':
     parser = OptionParser(usage="usage: %prog [options]",
                           version="%prog 0.4.0")
@@ -169,6 +170,12 @@ if __name__ == '__main__':
                       dest="groupings_as_class",
                       default=False,
                       help="Consider yang groupings as classes.")
+
+    parser.add_option("--build-native-provider",
+                      action="store_true",
+                      dest="build_native_provider",
+                      default=False,
+                      help="Build native C++ netconf provider")
 
     try:
         arg = sys.argv[1]
