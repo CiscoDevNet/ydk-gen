@@ -164,7 +164,7 @@ function run_sanity_tests {
     run_test sdk/python/tests/test_sanity_codec.py
 
     run_sanity_ncclient_tests
-    run_sanity_native_tests
+#run_sanity_native_tests
 
     export PYTHONPATH=./gen-api/python:$PYTHONPATH
     run_test gen-api/python/ydk/tests/import_tests.py
@@ -210,7 +210,7 @@ function run_deviation_sanity {
     source gen-api/python/env.sh
     export PYTHONPATH=./gen-api/python:$PYTHONPATH
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py
-    run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py native
+#    run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py native
 
     # bgp deviation
     printf "\nGenerating ydktest deviation model APIs\n"
@@ -218,7 +218,8 @@ function run_deviation_sanity {
     pip install gen-api/python/dist/ydk*.tar.gz
     source gen-api/python/env.sh
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py
-    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py native
+#    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py 
+#    native
 }
 
 # submit coverage

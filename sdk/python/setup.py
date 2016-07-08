@@ -30,7 +30,18 @@ import subprocess
 
 __version__ = ''
 here = path.abspath(path.dirname(__file__))
-lib_path = here + '/.libs'
+
+# Get version from version file
+execfile(path.join(here, 'ydk', '_version.py'))
+
+# Get the long description from the README file
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
+
+ydk_packages = find_packages(exclude=['contrib', 'docs*', 'tests*', 'ncclient', 'samples'])
+ext = []
+
+'''lib_path = here + '/.libs'
 libnetconf_include_path = here + '/.includes/'
 lib_paths = [lib_path]
 if platform.system() == 'Darwin' and subprocess.call(['brew info python &> /dev/null'], shell=True) == 0:
@@ -45,15 +56,6 @@ def _build_ydk_client_using_prebuilt_libnetconf():
                             ' -shared -fPIC ' + here + '/ydk/providers/_cpp_files/netconf_client.cpp'
                             ' -L/' + lib_path + ' -lnetconf -lpython2.7 -lboost_python -lxml2 -lcurl -lssh -lssh_threads -lxslt'], shell=True)
 
-
-# Get version from version file
-execfile(path.join(here, 'ydk', '_version.py'))
-
-# Get the long description from the README file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
-
-ydk_packages = find_packages(exclude=['contrib', 'docs*', 'tests*', 'ncclient', 'samples'])
 
 # Compile the YDK C++ code
 exit_status = subprocess.call(['cd ' + here + '/.libs/libnetconf/ && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a .. '], shell=True)
@@ -72,7 +74,7 @@ else:
                               extra_compile_args=['-Wall', '-std=c++0x'],
                               include_dirs=['/usr/include/python2.7', '/usr/include/boost', libnetconf_include_path],
                               library_dirs=lib_paths
-                              )]
+                              )]'''
 
 setup(
     name='ydk',
