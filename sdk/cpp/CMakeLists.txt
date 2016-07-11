@@ -1,3 +1,13 @@
+# To Run:
+# cd <build_dir>
+# cmake ..
+# make install or cmake --build .
+
+# Testing:
+# make test
+# Individual Testing:
+# ctest -R <test_name> -VV
+
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(SET CMP0048 NEW)
 project(ydk VERSION 0.4.2)
