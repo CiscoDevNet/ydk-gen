@@ -15,8 +15,8 @@
 # ------------------------------------------------------------------
 
 """
- import_test_printer.py 
- 
+ import_test_printer.py
+
  YANG model driven API, python emitter.
 
 """

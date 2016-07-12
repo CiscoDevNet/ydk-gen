@@ -33,8 +33,6 @@ class HeaderPrinter(FilePrinter):
         self._print_include_guard_header(package)
         self._print_imports(package)
         self.ctx.writeln('namespace ydk {')
-        sub = package.get_py_mod_name()[len('ydk.models.'): package.get_py_mod_name().rfind('.')]
-        self.ctx.writeln('namespace {0}'.format(sub + ' {'))
         self.ctx.bline()
 
     def _print_imports(self, package):
@@ -66,7 +64,6 @@ class HeaderPrinter(FilePrinter):
 
     def print_trailer(self, package):
         self.ctx.bline()
-        self.ctx.writeln('}')
         self.ctx.writeln('}')
         self._print_include_guard_trailer(package)
         self.ctx.bline()

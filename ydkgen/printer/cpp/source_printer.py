@@ -35,13 +35,10 @@ class SourcePrinter(FilePrinter):
         self.ctx.writeln('#include "{0}.h"'.format(package.name))
         self.ctx.bline()
         self.ctx.writeln('namespace ydk {')
-        sub = package.get_py_mod_name()[len('ydk.models.'): package.get_py_mod_name().rfind('.')]
-        self.ctx.writeln('namespace {0}'.format(sub + ' {'))
         self.ctx.bline()
 
     def print_trailer(self, package):
         self.ctx.bline()
-        self.ctx.writeln('}')
         self.ctx.writeln('}')
         self.ctx.bline()
 

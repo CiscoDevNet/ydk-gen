@@ -85,7 +85,7 @@ from enum import Enum
 
 from ydk.types import Empty, YList, YLeafList, DELETE, Decimal64, FixedBitsDict
 
-from ydk.errors import YPYError, YPYModelError
+from ydk.errors import YPYError, YPYDataValidationError
 
 
 ''')

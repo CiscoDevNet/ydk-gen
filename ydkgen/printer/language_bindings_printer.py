@@ -36,20 +36,23 @@ class _EmitArgs:
 
 class LanguageBindingsPrinter(object):
 
-    def __init__(self, ydk_root_dir):
-        self.ydk_dir = ydk_root_dir + '/ydk/'
-        self.ydk_doc_dir = ydk_root_dir + '/docsgen'
+    def __init__(self, ydk_root_dir, bundle_name):
+        self.ydk_dir = os.path.join(ydk_root_dir, 'ydk')
+        self.ydk_doc_dir = os.path.join(ydk_root_dir, 'docsgen')
+        self.bundle_name = bundle_name
 
     def emit(self, packages):
         self.ypy_ctx = None
         self.packages = []
         self.models_dir = ''
         self.test_dir = ''
+        self.sub_dir = ''
+        self.aug_dir = ''
 
         self.packages = packages
         self.packages = sorted(self.packages, key=lambda package: package.name)
-        self.deviation_packages = [p for p in self.packages if hasattr(p, 'is_deviation')]
-        self.packages = [p for p in self.packages if not hasattr(p, 'is_deviation')]
+        self.deviation_packages = [p for p in self.packages if p.is_deviation is True]
+        self.packages = [p for p in self.packages if p.is_deviation is not True]
 
         self.initialize_print_environment()
         self.print_files()
@@ -61,6 +64,11 @@ class LanguageBindingsPrinter(object):
     def initialize_top_level_directories(self):
         self.models_dir = self.initialize_output_directory(
             self.ydk_dir + '/models', True)
+        if self.bundle_name:
+            self.sub_dir = self.initialize_output_directory(
+                self.models_dir + '/%s' % self.bundle_name, True)
+            self.aug_dir = self.initialize_output_directory(
+                self.sub_dir + '/_aug', True)
         self.test_dir = self.initialize_output_directory(
             self.ydk_dir + '/tests', True)
         self.deviation_dir = self.initialize_output_directory(

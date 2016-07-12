@@ -34,6 +34,10 @@ class ModuleMetaPrinter(FilePrinter):
         super(ModuleMetaPrinter, self).__init__(ctx)
 
     def print_header(self, package):
+        if package.bundle_name == '':
+            ns_imp_stmt = "from ydk.models import _yang_ns"
+        else:
+            ns_imp_stmt = "from ydk.providers._importer import _yang_ns"
         rpcs = [idx for idx in package.owned_elements if isinstance(idx, Class) and idx.is_rpc()]
         anyxml_import = ''
         if len(rpcs) > 0:
@@ -51,10 +55,10 @@ from ydk.types import Empty, YList, YLeafList, DELETE, Decimal64, FixedBitsDict
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, \
     REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION{0}
 
-from ydk.errors import YPYError, YPYModelError
-from ydk.models import _yang_ns
+from ydk.errors import YPYError, YPYDataValidationError
+{1}
 
-""".format(anyxml_import))
+""".format(anyxml_import, ns_imp_stmt))
 
     def print_body(self, package):
         self.ctx.writeln('_meta_table = {')

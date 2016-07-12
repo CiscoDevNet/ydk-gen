@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_docstring_printer.py 
- 
+class_docstring_printer.py
+
  Printer for the docstrings.
- 
+
 """
 from ydkgen.printer.meta_data_util import get_class_docstring
 

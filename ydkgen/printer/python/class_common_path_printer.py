@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_common_path_printer.py 
- 
+class_common_path_printer.py
+
  Printer for the common path method.
- 
+
 """
 from ydkgen.api_model import Class
 from ydkgen.common import get_module_name
@@ -91,7 +91,7 @@ class ClassCommonPathPrinter(object):
         self.ctx.writeln('if self.{0} is None:'.format(prop))
         self.ctx.lvl_inc()
         self.ctx.writeln(
-            "raise YPYModelError('{0}')".format(error_message))
+            "raise YPYDataValidationError('{0}')".format(error_message))
         self.ctx.lvl_dec()
 
     def _print_common_path_functions_trailer(self, clazz):

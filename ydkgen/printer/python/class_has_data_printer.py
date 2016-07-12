@@ -53,7 +53,7 @@ class ClassHasDataPrinter(object):
 
     def _print_has_data_functions_body(self, clazz):
         self._print_has_data_function('not self.is_config()', 'False')
-        if clazz.stmt.search_one('presence'):
+        if clazz.stmt.search_one('presence') and len(clazz.properties()) == 0:
             self._print_has_data_function('self._is_presence')
 
         for prop in clazz.properties():
