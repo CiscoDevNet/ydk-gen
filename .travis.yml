@@ -21,6 +21,7 @@ script:
     - sudo pip install -r requirements.txt
     - sudo python generate.py --profile profiles/test/ydktest.json
     - sudo pip install gen-api/python/dist/*
+    - export PYTHONPATH=gen-api/python:$PYTHONPATH
     - python gen-api/python/tests/test_sanity_codec.py
 #    - sudo ./test_native_ydk.py
 #    - cd ../../..
