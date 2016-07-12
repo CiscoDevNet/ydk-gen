@@ -21,7 +21,7 @@ script:
     - sudo pip install -r requirements.txt
     - sudo python generate.py --profile profiles/test/ydktest.json
     - sudo pip install gen-api/python/dist/*
-    - python gen-api/python/test/test_sanity_codec.py
+    - python gen-api/python/tests/test_sanity_codec.py
 #    - sudo ./test_native_ydk.py
 #    - cd ../../..
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH ; fi
