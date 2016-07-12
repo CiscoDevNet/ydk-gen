@@ -39,7 +39,7 @@ module main {
       "Initial revision.";
   }
 
-  container A {
+  container main-A {
 
     leaf one {
       description "blah";

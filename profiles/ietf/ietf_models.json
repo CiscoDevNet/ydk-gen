@@ -1,18 +1,19 @@
 {
+	"name": "ietf",
     "_descr": "A profile file contains the metadata for generating a number of SDKs of varying languages from a single set of yang models.",
     "version": "0.4.0",
     "Author": "Cisco",
     "Copyright": "Cisco",
-    
+
     "models": {
-	
-    
+
+
 	"_descr_git": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
 	"git": [
 	    {
 		"url": "https://github.com/YangModels/yang.git",
-		"commits": [					  	    			
-	    			{	
+		"commits": [
+	    			{
 						"commitid": "1dc8f5417bca052bb2248d077b845581056f1036",
 						"file": [
 		    					"standard/ietf/RFC/ietf-inet-types.yang",
@@ -24,20 +25,20 @@
 		    					"standard/ietf/RFC/iana-if-type.yang",
 		    					"standard/ietf/RFC/ietf-netconf.yang",
 		    					"standard/ietf/RFC/ietf-netconf-with-defaults.yang"
-		    
+
 								]
 	    			},
 	    			{
-		
+
 						"commitid": "be8ff2197e1179c2193433c38ba766a65aca5828",
 						"file": [
 		    					"standard/ietf/RFC/iana-crypt-hash.yang"
-		    
+
 								]
 	    			}
 	    			]
-	    }	    
-     ]    
+	    }
+     ]
 }
 }
 
