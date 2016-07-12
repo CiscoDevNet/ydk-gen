@@ -267,8 +267,10 @@ class XmlDecoder(object):
 
     @staticmethod
     def _bind_to_enum_helper(member, elem):
-        clazz = get_class(member.pmodule_name, member.clazz_name.split('.')[0])
-        meta_info = getattr(clazz, '_meta_info')()
+        exec_import = 'from ' + member.pmodule_name + ' import ' + member.clazz_name.split('.')[0]
+        exec exec_import
+        # first get the enum_class
+        meta_info = eval('%s._meta_info()' % member.clazz_name)
         enum_literal_key = elem.text
         if enum_literal_key not in meta_info.literal_map:
             sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
@@ -279,15 +281,15 @@ class XmlDecoder(object):
             if enum_literal_key.upper() in meta_info.literal_map:
                 sp_logger.debug('Found literal using secondary mechanism')
                 enum_literal = meta_info.literal_map[enum_literal_key.upper()]
-                return getattr(clazz, enum_literal)
+                return eval('%s.%s' % (member.clazz_name, enum_literal))
 
             elif enum_literal_key.lower() in meta_info.literal_map:
                 sp_logger.debug('Found literal using secondary mechanism')
                 enum_literal = meta_info.literal_map[enum_literal_key.lower()]
-                return getattr(clazz, enum_literal)
+                return eval('%s.%s' % (member.clazz_name, enum_literal))
         else:
             enum_literal = meta_info.literal_map[enum_literal_key]
-            return getattr(clazz, enum_literal)
+            return eval('%s.%s' % (member.clazz_name, enum_literal))
 
 
 def get_class(py_mod_name, clazz_name):
