@@ -261,6 +261,19 @@ class SanityTest(unittest.TestCase):
         result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
+    def test_embedded_enum(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.embeded_enum = ysanity.Runner.Ytypes.BuiltInT.EmbededEnumEnum.ZERO
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
     def test_enum(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.enum_value = YdkEnumTestEnum.NONE
