@@ -91,7 +91,7 @@ class ClassCommonPathPrinter(object):
         self.ctx.writeln('if self.{0} is None:'.format(prop))
         self.ctx.lvl_inc()
         self.ctx.writeln(
-            "raise YPYDataValidationError('{0}')".format(error_message))
+            "raise YPYModelError('{0}')".format(error_message))
         self.ctx.lvl_dec()
 
     def _print_common_path_functions_trailer(self, clazz):

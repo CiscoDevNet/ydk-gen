@@ -1,0 +1,20 @@
+ABOUT
+============================================
+This small utility lets developers play with
+libnetconf datastores. The main purpose is
+to be able to see the actual model trees
+built by ncds_consolidate() with all their
+imports, augments and groupings resolved.
+
+lncdatastore does not initialize libnetconf,
+therefore is does NOT modify any actual
+datastores or anything else. The loaded
+models and the whole state are lost after
+exit.
+
+
+Additional Requirements
+-----------------------
+
+libreadline-devel
+

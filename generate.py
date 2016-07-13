@@ -40,21 +40,21 @@ def init_verbose_logger():
 
 
 def modify_existing_docs(ydk_root, py_api_doc_gen):
-    repo = Repo(ydk_root)
-    remote = repo.remote().name
-    branch = repo.active_branch.name
-    url = repo.remote().url.split('://')[-1].split('.git')[0]
-    commit_id = repo.rev_parse(remote + '/' + branch).hexsha
+    #repo = Repo(ydk_root)
+    #remote = repo.remote().name
+    #branch = repo.active_branch.name
+    #url = repo.remote().url.split('://')[-1].split('.git')[0]
+    #commit_id = repo.rev_parse(remote + '/' + branch).hexsha
 
-    # modify about_ydk.rst page
-    for line in fileinput.input(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'r+w'):
-        if 'git clone repo-url' in line:
-            print line.replace('repo-url', 'https://{0}.git'.format(url)),
-        elif 'git checkout commit-id' in line:
-            print line.replace('commit-id', '{}'.format(commit_id))
-        else:
-            print line,
-
+    ## modify about_ydk.rst page
+    #for line in fileinput.input(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'r+w'):
+    #    if 'git clone repo-url' in line:
+    #        print line.replace('repo-url', 'https://{0}.git'.format(url)),
+    #    elif 'git checkout commit-id' in line:
+    #        print line.replace('commit-id', '{}'.format(commit_id))
+    #    else:
+    #        print line,
+    pass
 
 def get_release_version(output_directory):
     version = ''

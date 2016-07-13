@@ -38,7 +38,7 @@ function run_exec_test {
 }
 
 function run_test_no_coverage {
-    python $@ 
+    python $@
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -47,7 +47,7 @@ function run_test_no_coverage {
 }
 
 function run_test {
-    coverage run --source=ydkgen,sdk -a $@ 
+    coverage run --source=ydkgen,sdk -a $@
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -59,7 +59,7 @@ function run_test {
 function clone_repo {
     cd $ROOT
     printf "\nCloning from: %s, branch: %s\n" "$REPO" "$BRANCH"
-    git clone -b $BRANCH $REPO 
+    git clone -b $BRANCH $REPO
 }
 
 function set_root {
@@ -74,7 +74,7 @@ function setup_env {
     virtualenv myenv
     source myenv/bin/activate
     pip install coverage
-    pip install -r requirements.txt 
+    pip install -r requirements.txt
 }
 
 function teardown_env {
@@ -129,40 +129,36 @@ function generate_ydktest_package {
 # sanity tests
 function run_sanity_ncclient_tests {
     printf "\nRunning sanity tests on NCClient client\n"
-    run_test sdk/python/tests/test_sanity_types.py
-    run_test sdk/python/tests/test_sanity_errors.py
-    run_test sdk/python/tests/test_sanity_filters.py
-    run_test sdk/python/tests/test_sanity_levels.py
-    run_test sdk/python/tests/test_sanity_filter_read.py
-    run_test sdk/python/tests/test_sanity_netconf.py
-    run_test sdk/python/tests/test_sanity_rpc.py
-    run_test sdk/python/tests/test_sanity_delete.py
-    run_test sdk/python/tests/test_sanity_service_errors.py
+    run_test gen-api/python/tests/test_sanity_types.py
+    run_test gen-api/python/tests/test_sanity_errors.py
+    run_test gen-api/python/tests/test_sanity_filters.py
+    run_test gen-api/python/tests/test_sanity_levels.py
+    run_test gen-api/python/tests/test_sanity_filter_read.py
+    run_test gen-api/python/tests/test_sanity_netconf.py
+    run_test gen-api/python/tests/test_sanity_rpc.py
+    run_test gen-api/python/tests/test_sanity_delete.py
+    run_test gen-api/python/tests/test_sanity_service_errors.py
 }
 
 function run_sanity_native_tests {
     printf "\nRunning sanity tests on native client\n"
-    run_test sdk/python/tests/test_sanity_types.py native
-    run_test sdk/python/tests/test_sanity_errors.py native
-    run_test sdk/python/tests/test_sanity_filters.py native
-    run_test sdk/python/tests/test_sanity_levels.py native
-    run_test sdk/python/tests/test_sanity_filter_read.py native
-    run_test sdk/python/tests/test_sanity_netconf.py native
-    run_test sdk/python/tests/test_sanity_rpc.py native
-    run_test sdk/python/tests/test_sanity_delete.py native
-    run_test sdk/python/tests/test_sanity_service_errors.py native
-    run_test sdk/python/tests/test_ydk_client.py
+    run_test gen-api/python/tests/test_sanity_types.py native
+    run_test gen-api/python/tests/test_sanity_errors.py native
+    run_test gen-api/python/tests/test_sanity_filters.py native
+    run_test gen-api/python/tests/test_sanity_levels.py native
+    run_test gen-api/python/tests/test_sanity_filter_read.py native
+    run_test gen-api/python/tests/test_sanity_netconf.py native
+    run_test gen-api/python/tests/test_sanity_rpc.py native
+    run_test gen-api/python/tests/test_sanity_delete.py native
+    run_test gen-api/python/tests/test_sanity_service_errors.py native
+    run_test gen-api/python/tests/test_ydk_client.py
 }
 
 function run_sanity_tests {
     pip install gen-api/python/dist/ydk*.tar.gz
-    source sdk/python/env.sh
 
     printf "\nRunning sanity tests\n"
-    export PYTHONPATH=./sdk/python:$PYTHONPATH
-    cp -r gen-api/python/ydk/models/* sdk/python/ydk/models
-    run_test sdk/python/tests/test_sanity_codec.py
-
+    run_test gen-api/python/tests/test_sanity_codec.py
     run_sanity_ncclient_tests
 #run_sanity_native_tests
 
@@ -218,7 +214,7 @@ function run_deviation_sanity {
     pip install gen-api/python/dist/ydk*.tar.gz
     source gen-api/python/env.sh
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py
-#    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py 
+#    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py
 #    native
 }
 

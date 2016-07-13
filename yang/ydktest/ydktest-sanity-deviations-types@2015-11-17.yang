@@ -103,7 +103,7 @@ module ydktest-sanity-deviations-types {
         }
       }
     }
-    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:embedded-enum {
+    deviation /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut:embeded-enum {
       deviate replace {
         type identityref {
           base ydkut:child-child-identity;

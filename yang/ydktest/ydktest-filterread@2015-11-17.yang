@@ -37,13 +37,13 @@ module ydktest-filterread {
 
      E-mail: cs-yang@cisco.com";
 
-  description 
+  description
     "This module contains a collection of YANG definitions
      for sanity package.
 
      This module contains definitions
      for the following management objects:
-    
+
 
      Copyright (c) 2013-2014 by Cisco Systems, Inc.
      All rights reserved.";
@@ -74,7 +74,7 @@ module ydktest-filterread {
         type string;
       }
       container c {
-        presence "enables c";
+        presence "Enables c";
       }
       container d {
         leaf d1 {
@@ -93,6 +93,12 @@ module ydktest-filterread {
           leaf e2 {
             type string;
           }
+        }
+      }
+      container f {
+        presence "Enables e";
+        leaf f1 {
+          type string;
         }
       }
     }
