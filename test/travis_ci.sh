@@ -159,6 +159,7 @@ function run_sanity_tests {
 
     printf "\nRunning sanity tests\n"
     run_test gen-api/python/tests/test_sanity_codec.py
+
     run_sanity_ncclient_tests
 #run_sanity_native_tests
 

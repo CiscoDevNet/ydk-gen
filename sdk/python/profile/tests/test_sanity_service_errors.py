@@ -717,10 +717,13 @@ if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
         provider_type = sys.argv.pop()
-        SanityCrud.PROVIDER_TYPE = provider_type
-        SanityExecutor.PROVIDER_TYPE = provider_type
-        SanityMeta.PROVIDER_TYPE = provider_type
-        SanityNetconf.PROVIDER_TYPE = provider_type
-    suite = unittest.TestSuite()
-    suite.addTests([SanityCrud, SanityExecutor, SanityMeta, SanityNetconf])
+    else:
+        provider_type = "non-native"
+
+    loader = unittest.TestLoader()
+    testCaseList = []
+    for testCase in [SanityCrud, SanityExecutor, SanityMeta, SanityNetconf]:
+        testCase.PROVIDER_TYPE = provider_type
+        testCaseList.append(loader.loadTestsFromTestCase(testCase))
+    suite = unittest.TestSuite(testCaseList)
     unittest.TextTestRunner(verbosity=2).run(suite)

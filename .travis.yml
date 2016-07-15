@@ -3,8 +3,6 @@ sudo: required
 services:
     - docker
 
-#language: python
-
 os:
     - linux
     - osx
@@ -20,13 +18,13 @@ script:
     - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq -r .head.ref`; fi)
     - export REPO=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_REPO_SLUG; else echo `curl -s $PR | jq -r .head.repo.full_name`; fi)
     - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, REPO=$REPO"
-#    - mkdir sandbox; cd sandbox
-#    - git clone https://github.com/$REPO.git -b $BRANCH
-#    - cd ydk-gen
-    - sudo pip install -r requirements.txt
-    - sudo python generate.py --profile profiles/test/ydktest.json
-    - sudo pip install gen-api/python/dist/*
-#- cd test
+    - virtualenv myenv
+    - source myenv/bin/activate
+    - pip install -r requirements.txt
+    - python generate.py --profile profiles/test/ydktest.json
+    - pip install gen-api/python/dist/*
+    - export PYTHONPATH=gen-api/python:$PYTHONPATH
+    - python gen-api/python/tests/test_sanity_codec.py
 #    - sudo ./test_native_ydk.py
 #    - cd ../../..
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH ; fi
