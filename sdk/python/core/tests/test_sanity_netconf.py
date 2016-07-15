@@ -59,7 +59,6 @@ class SanityNetconf(unittest.TestCase):
         runner = ysanity.Runner()
         crud.delete(self.ncc, runner)
 
-        print '\nIn method', self._testMethodName + ':'
 
     def tearDown(self):
         pass
@@ -153,4 +152,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         SanityNetconf.PROVIDER_TYPE = sys.argv.pop()
 
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityNetconf)
+    unittest.TextTestRunner(verbosity=2).run(suite)

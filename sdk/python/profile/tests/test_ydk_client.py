@@ -46,7 +46,7 @@ class SanityTest(unittest.TestCase):
         pass
 
     def setUp(self):
-        print '\nIn method', self._testMethodName + ':'
+        pass
 
     def tearDown(self):
         pass
@@ -101,4 +101,5 @@ class SanityTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityTest)
+    unittest.TextTestRunner(verbosity=2).run(suite)

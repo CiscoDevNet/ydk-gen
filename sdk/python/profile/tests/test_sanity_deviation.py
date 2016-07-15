@@ -53,7 +53,7 @@ class SanityTest(unittest.TestCase):
         self.ncc.close()
 
     def setUp(self):
-        print "\nIn method", self._testMethodName
+        pass
 
     def tearDown(self):
         runner = ysanity.Runner()
@@ -264,4 +264,5 @@ if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
         SanityTest.PROVIDER_TYPE = sys.argv.pop()
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityTest)
+    unittest.TextTestRunner(verbosity=2).run(suite)

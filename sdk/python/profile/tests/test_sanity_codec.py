@@ -74,7 +74,7 @@ class SanityYang(unittest.TestCase):
         pass
 
     def setUp(self):
-        print '\nIn method', self._testMethodName + ':'
+        pass
 
     def tearDown(self):
         pass
@@ -195,4 +195,5 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(payload, self.codec.encode(self.provider, entity))
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)
+    unittest.TextTestRunner(verbosity=2).run(suite)

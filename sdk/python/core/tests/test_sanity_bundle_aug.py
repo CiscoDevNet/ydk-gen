@@ -43,7 +43,6 @@ class SanityYang(unittest.TestCase):
     def setUp(self):
         self.crud.delete(self.ncc, ietf_aug_base_1.Cpython())
         self.crud.delete(self.ncc, ietf_aug_base_2.Cpython())
-        print '\nIn method', self._testMethodName + ':'
 
     def tearDown(self):
         self.crud.delete(self.ncc, ietf_aug_base_1.Cpython())
@@ -92,4 +91,5 @@ if __name__ == '__main__':
     if augmentation_bundles.issubset(installed_packages):
         from ydk.models.ietf import ietf_aug_base_1
         from ydk.models.ietf import ietf_aug_base_2
-        unittest.main()
+        suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)
+        unittest.TextTestRunner(verbosity=2).run(suite)

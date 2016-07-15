@@ -21,7 +21,7 @@ read API according to discussion
 import unittest
 from compare import is_equal
 
-from ydk.models.ydktest import ydktest_filterread as ysanity 
+from ydk.models.ydktest import ydktest_filterread as ysanity
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import CRUDService
 from ydk.types import READ, YList
@@ -57,7 +57,7 @@ class SanityYang(unittest.TestCase):
         self.ncc.close()
 
     def setUp(self):
-        print '\nIn method', self._testMethodName + ':'
+        pass
 
     def tearDown(self):
         pass
@@ -210,4 +210,5 @@ if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
         SanityYang.PROVIDER_TYPE = sys.argv.pop()
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)
+    unittest.TextTestRunner(verbosity=2).run(suite)

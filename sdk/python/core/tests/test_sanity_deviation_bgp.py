@@ -15,7 +15,7 @@
 # ------------------------------------------------------------------
 
 import ydk.types as ytypes
-import unittest 
+import unittest
 
 from ydk.services import CRUDService
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
@@ -77,4 +77,5 @@ if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
         SanityTest.PROVIDER_TYPE = sys.argv.pop()
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityTest)
+    unittest.TextTestRunner(verbosity=2).run(suite)

@@ -54,7 +54,6 @@ class SanityYang(unittest.TestCase):
     def setUp(self):
         runner = ysanity.Runner()
         self.crud.delete(self.ncc, runner)
-        print '\nIn method', self._testMethodName + ':'
 
     def tearDown(self):
         runner = ysanity.Runner()
@@ -600,4 +599,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         SanityYang.PROVIDER_TYPE = sys.argv.pop()
 
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)
+    unittest.TextTestRunner(verbosity=2).run(suite)

@@ -82,7 +82,7 @@ class SanityCodec(unittest.TestCase):
         pass
 
     def setUp(self):
-        print '\nIn method', self._testMethodName + ':'
+        pass
 
     def tearDown(self):
         pass
@@ -193,7 +193,6 @@ class SanityCrud(unittest.TestCase):
         self.ncc.close()
 
     def setUp(self):
-        print "\nIn method", self._testMethodName
         runner = ysanity.Runner()
         self.crud.delete(self.ncc, runner)
 
@@ -366,7 +365,6 @@ class SanityExecutor(unittest.TestCase):
         self.ncc.close()
 
     def setUp(self):
-        print "\nIn method", self._testMethodName
         from ydk.services import CRUDService
         crud = CRUDService()
         runner = ysanity.Runner()
@@ -433,7 +431,6 @@ class SanityMeta(unittest.TestCase):
         self.ncc.close()
 
     def setUp(self):
-        print "\nIn method", self._testMethodName
         crud = CRUDService()
         runner = ysanity.Runner()
         crud.delete(self.ncc, runner)
@@ -503,7 +500,6 @@ class SanityNetconf(unittest.TestCase):
         runner = ysanity.Runner()
         crud.delete(self.ncc, runner)
 
-        print '\nIn method', self._testMethodName + ':'
 
     def tearDown(self):
         pass
@@ -725,4 +721,6 @@ if __name__ == '__main__':
         SanityExecutor.PROVIDER_TYPE = provider_type
         SanityMeta.PROVIDER_TYPE = provider_type
         SanityNetconf.PROVIDER_TYPE = provider_type
-    unittest.main()
+    suite = unittest.TestSuite()
+    suite.addTests([SanityCrud, SanityExecutor, SanityMeta, SanityNetconf])
+    unittest.TextTestRunner(verbosity=2).run(suite)

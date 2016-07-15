@@ -21,7 +21,7 @@ sanity test for ydktest-sanity.yang
 import unittest
 from compare import is_equal
 
-from ydk.models.ydktest import ydktest_sanity as ysanity 
+from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import CRUDService
 
@@ -54,7 +54,6 @@ class SanityYang(unittest.TestCase):
     def setUp(self):
         runner = ysanity.Runner()
         self.crud.delete(self.ncc, runner)
-        print '\nIn method', self._testMethodName + ':'
 
     def tearDown(self):
         runner = ysanity.Runner()
@@ -188,7 +187,7 @@ class SanityYang(unittest.TestCase):
         e_11, e_12 = ysanity.Runner.TwoList.Ldata.Subl1(), ysanity.Runner.TwoList.Ldata.Subl1()
         e_1.number = 21
         e_1.name = 'runner:twolist:ldata['+str(e_1.number)+']:name'
-        e_11.number = 211 
+        e_11.number = 211
         e_11.name = 'runner:twolist:ldata['+str(e_1.number)+']:subl1['+str(e_11.number)+']:name'
         e_12.number = 212
         e_12.name = 'runner:twolist:ldata['+str(e_1.number)+']:subl1['+str(e_12.number)+']:name'
@@ -411,7 +410,7 @@ class SanityYang(unittest.TestCase):
         r_1.inbtw_list.ldata.extend([e_1, e_2])
         self.crud.update(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
-        self.assertEqual(is_equal(r_1, r_2), True)   
+        self.assertEqual(is_equal(r_1, r_2), True)
         # DELETE
         r_1 = ysanity.Runner()
         self.crud.delete(self.ncc, r_1)
@@ -442,7 +441,7 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(r_2._has_data(), False)
 
     def test_leafref_pos(self):
-        # rfc: refer to leaf 
+        # rfc: refer to leaf
         # 1.already exists
         # 2.has default value
         # create leafs will be referred to
@@ -540,7 +539,7 @@ class SanityYang(unittest.TestCase):
         r_2 = self.crud.read(self.ncc, r_1)
         self.assertEqual(r_2._has_data(), False)
 
-    def test_aug_one_pos(self): 
+    def test_aug_one_pos(self):
         # CREATE
         r_1, r_2 = ysanity.Runner(), ysanity.Runner()
         r_1.one.one_aug.number = 1
@@ -554,7 +553,7 @@ class SanityYang(unittest.TestCase):
         r_1.one.one_aug.name =r_1.one.one_aug._common_path.replace(':', '/')
         self.crud.update(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
-        self.assertEqual(is_equal(r_1, r_2), True)        
+        self.assertEqual(is_equal(r_1, r_2), True)
         # DELETE
         r_1 = ysanity.Runner()
         self.crud.delete(self.ncc, r_1)
@@ -600,4 +599,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         SanityYang.PROVIDER_TYPE = sys.argv.pop()
 
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)
+    unittest.TextTestRunner(verbosity=2).run(suite)
