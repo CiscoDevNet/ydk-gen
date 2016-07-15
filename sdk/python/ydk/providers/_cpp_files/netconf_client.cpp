@@ -15,7 +15,6 @@
  ------------------------------------------------------------------*/
 #include <iostream>
 
-#include <Python.h>
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
@@ -61,14 +60,15 @@ NetconfClient::NetconfClient(string  username, string  password,
 	nc_callback_ssh_host_authenticity_check(clb_ssh_host_authenticity_check);
 
 	password_lookup.insert(make_pair(make_pair(username, hostname), password));
+	session=NULL;
 }
 
 int NetconfClient::connect()
 {
-	session = nc_session_connect(hostname.c_str(), port, username.c_str(),
-			NULL);
+	session = nc_session_connect(hostname.c_str(), port, username.c_str(), NULL);
 	if (session == NULL)
 	{
+		return_status = EXIT_FAILURE;
 		return (EXIT_FAILURE);
 	}
 
@@ -92,13 +92,20 @@ void NetconfClient::init_capabilities()
 
 const string NetconfClient::execute_payload(string  payload)
 {
+	if(session==NULL)
+	{
+		return_status = EXIT_FAILURE;
+		return "";
+	}
 	nc_reply *reply;
 	NC_MSG_TYPE reply_type;
 	nc_rpc *rpc;
 	string reply_payload;
 
-	if ((rpc = build_rpc_request(move(payload))) == NULL)
+	rpc = build_rpc_request(move(payload));
+	if (rpc == NULL || return_status != EXIT_SUCCESS || NC_RPC_UNKNOWN==nc_rpc_get_type(rpc))
 	{
+		return_status = EXIT_FAILURE;
 		return "";
 	}
 
@@ -118,8 +125,15 @@ const string NetconfClient::execute_payload(string  payload)
 
 int NetconfClient::close()
 {
+	if(session==NULL)
+	{
+		return_status = EXIT_FAILURE;
+		return EXIT_FAILURE;
+
+	}
+
 	nc_session_free(session);
-	return return_status;
+	return EXIT_SUCCESS;
 }
 
 nc_rpc* NetconfClient::build_rpc_request(string  payload)
@@ -127,8 +141,6 @@ nc_rpc* NetconfClient::build_rpc_request(string  payload)
 	nc_rpc* rpc = nc_rpc_build(payload.c_str(), session);
 	if (rpc == NULL)
 	{
-		cerr << "Creating RPC message failed." << endl;
-		;
 		return_status = EXIT_FAILURE;
 	}
 	return rpc;
@@ -193,6 +205,11 @@ int NetconfClient::clb_ssh_host_authenticity_check(const char *hostname,
 		ssh_session session)
 {
 	return EXIT_SUCCESS;
+}
+
+int NetconfClient::get_status()
+{
+	return return_status;
 }
 
 }

@@ -41,9 +41,9 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         super(PythonBindingsPrinter, self).__init__(ydk_root_dir)
 
     def print_files(self):
-        self.print_modules()
         self.print_init_file(self.models_dir)
         self.print_yang_ns_file()
+        self.print_modules()
         self.print_import_tests_file()
         self.print_deviate_file()
 
@@ -120,9 +120,10 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
                         _EmitArgs(self.ypy_ctx, package))
 
     def print_test_module(self, package, path):
+        self.print_init_file(self.test_dir)
         self.print_file(get_test_module_file_name(path, package),
                         emit_test_module,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.identity_subclasses))
 
     def print_yang_ns_file(self):
         packages = self.packages + self.deviation_packages
@@ -200,8 +201,8 @@ def emit_module(ctx, package):
     ModulePrinter(ctx).print_output(package)
 
 
-def emit_test_module(ctx, package):
-    TestCasePrinter(ctx).print_testcases(package)
+def emit_test_module(ctx, package, identity_subclasses):
+    TestCasePrinter(ctx).print_testcases(package, identity_subclasses)
 
 
 def emit_meta(ctx, package):

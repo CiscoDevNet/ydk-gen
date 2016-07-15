@@ -42,7 +42,8 @@ bgp_sample : samples/bgp_sample.cpp
 	@$(CXX) $(CXXFLAGS) -o bgp_sample $(PROVIDERS) $(SERVICES) $(BGP_MODEL) $<
 
 $(LIBNETCONF_LIB) : .
-	$(shell cd $(LIBNETCONF_DIR) && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a ..)
+	@printf "Checking out and compiling libnetconf\n\n"
+	$(shell rm -rf $(LIBNETCONF_DIR) && git clone https://github.com/abhikeshav/libnetconf.git $(LIBNETCONF_DIR) && cd $(LIBNETCONF_DIR) && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a ..)
 
 netconf_client : ydk/netconf_client.cpp ydk/netconf_client.h Makefile $(LIBNETCONF_LIB)
 	@printf "Compiling %-40s\n\n" $<
@@ -51,4 +52,4 @@ netconf_client : ydk/netconf_client.cpp ydk/netconf_client.h Makefile $(LIBNETCO
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -I/usr/include/python2.7 -I./.includes -o ydk_client.so $< -L./.libs -lnetconf  -lpython2.7 -lboost_python -lxml2 -lcurl -lssh -lssh_threads -lxslt
 
 clean :
-	@rm bgp_sample
+	@rm -f bgp_sample

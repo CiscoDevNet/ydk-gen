@@ -192,6 +192,10 @@ def get_meta_info_data(prop, property_type, type_stmt, identity_subclasses=None)
     meta_info_data = MetaInfoData(prop)
     types_extractor = TypesExtractor()
     target_type_stmt = type_stmt
+    
+    mandatory = prop.stmt.search_one('mandatory')
+    if mandatory is not None and mandatory.arg == 'true':
+        meta_info_data.mandatory = True
 
     mandatory = prop.stmt.search_one('mandatory')
     if mandatory is not None and mandatory.arg == 'true':
@@ -210,13 +214,7 @@ def get_meta_info_data(prop, property_type, type_stmt, identity_subclasses=None)
                 property_type.qn()
             )
         else:
-            meta_info_data.doc_link = []
-            for subclass in identity_subclasses[property_type]:
-                meta_info_data.doc_link.append(doc_link_template % (
-                    subclass.name, 
-                    subclass.get_py_mod_name(), 
-                    subclass.qn()
-                ))
+            meta_info_data.doc_link = _get_identity_docstring(identity_subclasses, doc_link_template, property_type)
             meta_info_data.doc_link_description = 'one of the below types:'
 
         if prop.stmt.keyword == 'leaf-list':
@@ -355,24 +353,9 @@ def get_meta_info_data(prop, property_type, type_stmt, identity_subclasses=None)
             if len(type_spec.types) > 0:
                 # meta_info_data.doc_link += 'one of { '
                 for contained_type_stmt in type_spec.types:
-                    enum_type_stmt = types_extractor.get_enum_type_stmt(contained_type_stmt)
-                    bits_type_stmt = types_extractor.get_bits_type_stmt(contained_type_stmt)
-                    union_type_stmt = types_extractor.get_union_type_stmt(contained_type_stmt)
-                    contained_property_type = contained_type_stmt.i_type_spec
-                    if isinstance(contained_property_type, IdentityrefTypeSpec):
-                        contained_property_type = contained_property_type.base.i_identity.i_class
-                    elif enum_type_stmt is not None:
-                        # this is an enumeration
-                        if not hasattr(enum_type_stmt, 'i_enum'):
-                            raise EmitError('Failure to get i_enum')
-                        contained_property_type = enum_type_stmt.i_enum
-                    elif bits_type_stmt is not None:
-                        # bits
-                        contained_property_type = bits_type_stmt.i_bits
-                    elif union_type_stmt is not None:
-                        contained_property_type = union_type_stmt
+                    contained_property_type = types_extractor.get_property_type(contained_type_stmt)
                     child_meta_info_data = get_meta_info_data(
-                        prop, contained_property_type, contained_type_stmt)
+                        prop, contained_property_type, contained_type_stmt, identity_subclasses)
                     meta_info_data.children.append(child_meta_info_data)
                     # if meta_info_data.doc_link[-1:] != ' ':
                     #    meta_info_data.doc_link += ' | '
@@ -386,6 +369,26 @@ def get_meta_info_data(prop, property_type, type_stmt, identity_subclasses=None)
         else:
             raise EmitError('Illegal path')
     return meta_info_data
+
+
+def _get_identity_docstring(identity_subclasses, doc_link_template, property_type):
+    doc_link = []
+    if property_type in identity_subclasses:
+        for subclass in identity_subclasses[property_type]:
+            doc_link.append(doc_link_template % (
+                subclass.name,
+                subclass.get_py_mod_name(),
+                subclass.qn()
+            ))
+            if subclass in identity_subclasses:
+                doc_link.extend(x for x in _get_identity_docstring(identity_subclasses, doc_link_template, subclass) if x not in doc_link)
+    else:
+        doc_link.append(doc_link_template % (
+                property_type.name,
+                property_type.get_py_mod_name(),
+                property_type.qn()
+            ))
+    return doc_link
 
 
 def get_length_limits(length_type):

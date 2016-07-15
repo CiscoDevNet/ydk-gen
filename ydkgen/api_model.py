@@ -24,6 +24,7 @@
 from common import camel_case, iskeyword
 from common import snake_case, escape_name
 
+from pyang.types import UnionTypeSpec
 
 
 class Element(object):
@@ -47,6 +48,7 @@ class Element(object):
         self.owned_elements = []
         self.owner = None
         self.comment = None
+
 
 class Deviation(Element):
     def __init__(self):
@@ -109,6 +111,7 @@ class Deviation(Element):
         else:
             if hasattr(self.owner, 'get_package'):
                 return self.owner.get_package()
+
 
 class NamedElement(Element):
 
@@ -230,6 +233,7 @@ class NamedElement(Element):
             element = element.owner
         return '::'.join(reversed(names))
 
+
 class Package(NamedElement):
 
     """
@@ -239,6 +243,7 @@ class Package(NamedElement):
     def __init__(self):
         super(Package, self).__init__()
         self._stmt = None
+        self.identity_subclasses = {}
 
     def qn(self):
         """ Return the qualified name """
@@ -281,6 +286,7 @@ class Package(NamedElement):
         else:
             return False
 
+
 class DataType(NamedElement):
 
     """
@@ -289,6 +295,7 @@ class DataType(NamedElement):
 
     def __init__(self):
         super(DataType, self).__init__()
+
 
 class Class(NamedElement):
 
@@ -376,18 +383,30 @@ class Class(NamedElement):
                     imported_types.append(super_class)
 
         for p in self.properties():
-            prop_type = p.property_type
-            if isinstance(prop_type, Class) or isinstance(prop_type, Enum) or isinstance(prop_type, Bits):
-                if prop_type.get_package() != package:
-                    if prop_type not in imported_types:
-                        imported_types.append(prop_type)
-
+            prop_types = [p.property_type]
+            if isinstance(p.property_type, UnionTypeSpec):
+                for child_type_stmt in p.property_type.types:
+                    prop_types.extend(self._get_union_types(child_type_stmt, p))
+            for prop_type in prop_types:
+                if isinstance(prop_type, Class) or isinstance(prop_type, Enum) or isinstance(prop_type, Bits):
+                    if prop_type.get_package() != package:
+                        if prop_type not in imported_types:
+                            imported_types.append(prop_type)
         # do this for nested classes too
         for nested_class in [clazz for clazz in self.owned_elements if isinstance(clazz, Class)]:
             imported_types.extend(
                 [c for c in nested_class.imported_types() if not c in imported_types])
 
         return imported_types
+    
+    def _get_union_types(self, type_stmt, p):
+        from builder import TypesExtractor
+        prop_type = TypesExtractor().get_property_type(type_stmt)
+        prop_types = [prop_type]
+        if isinstance(prop_type, UnionTypeSpec):
+            for child_type_stmt in prop_type.types:
+                prop_types.extend(self._get_union_type(child_type_stmt))
+        return prop_types
 
     def get_dependent_siblings(self):
         ''' This will return all types that are referenced by this Class
@@ -486,13 +505,14 @@ class Class(NamedElement):
                 for prop in [p for p in self.owned_elements if isinstance(p, Property)]:
                     if prop.stmt in key_stmts:
                         key_props.append(prop)
-        return sorted(key_props, key=lambda k: k.name)
+        return key_props
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.fqn() == other.fqn()
         else:
             return False
+
 
 class AnyXml(NamedElement):
 
@@ -518,6 +538,7 @@ class AnyXml(NamedElement):
 
     def properties(self):
         return get_properties(self.owned_elements)
+
 
 class Bits(DataType):
 
@@ -578,6 +599,7 @@ class Bits(DataType):
             pos_stmt = bit_stmt.search_one('position')
             if pos_stmt is not None:
                 self._pos_map[bit_stmt.arg] = pos_stmt.arg
+
 
 class Property(NamedElement):
 
@@ -769,9 +791,9 @@ def get_properties(owned_elements):
 
     # first get the key properties
     key_props = [p for p in all_props if p.is_key()]
-    props.extend(sorted(key_props, key=lambda p: p.name))
+    props.extend(key_props)
 
     non_key_props = [p for p in all_props if not p.is_key()]
-    props.extend(sorted(non_key_props, key=lambda p: p.name))
+    props.extend(non_key_props)
 
     return props

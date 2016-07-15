@@ -50,6 +50,7 @@ public:
 	const std::string execute_payload(std::string  payload);
 	int close();
 	std::vector<std::string> get_capabilities();
+	int get_status();
 
 private:
 

@@ -25,6 +25,7 @@ CONFD=/root/confd
 CONFD_TARGET_DIR=$CONFD/etc/confd
 FXS_DIR=$CONFD/src/confd/yang/ydktest/fxs/
 YDKTEST_FXS=$FXS_DIR/ydktest/
+YDKTEST_MODEL_FXS=$FXS_DIR/ydk_model_test/
 BGP_DEVIATION_FXS=$FXS_DIR/bgp_deviation/
 YDKTEST_DEVIATION_FXS=$FXS_DIR/ydktest_deviation/
 
@@ -70,18 +71,12 @@ function set_root {
 
 function setup_env {
     sudo apt-get update
-    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libcurl4-openssl-dev libtool
+    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libtool libssh-dev libcurl4-gnutls-dev cmake
 
     cd ~
-    git clone https://github.com/Kitware/CMake.git 
     git clone https://github.com/unittest-cpp/unittest-cpp.git
-    git clone https://git.libssh.org/projects/libssh.git libssh
-    git clone https://github.com/CESNET/libnetconf
+    git clone https://github.com/abhikeshav/libnetconf
 
-    printf "\nMaking CMake...\n"
-    cd CMake
-    git checkout 8842a501cffe67a665b6fe70956e207193b3f76d
-    ./bootstrap && make && make install
 
     printf "\nMaking unittest-cpp...\n"
     cd ~/unittest-cpp/builds
@@ -89,17 +84,8 @@ function setup_env {
     cmake ..
     cmake --build ./ --target install
 
-    printf "\nMaking libssh...\n"
-    cd ~/libssh
-    git checkout 47d21b642094286fb22693cac75200e8e670ad78
-    mkdir builds
-    cd builds
-    cmake ..
-    make install
-
     printf "\nMaking libnetconf...\n"
     cd ~/libnetconf
-    git checkout d4585969d71b7d7dec181955a6753b171b4a8424
     ./configure && make && make install
 
     cd $YDKGEN_HOME
@@ -114,7 +100,7 @@ function teardown_env {
 }
 
 # compile yang to fxs
-function compile_yang_to_fxs {
+function compile_test_yang_to_fxs {
     rm -f $YDKTEST_FXS/*.fxs
     source $CONFD/confdrc
     cd $YDK_ROOT/yang/ydktest
@@ -133,9 +119,47 @@ function compile_yang_to_fxs {
     cd $YDK_ROOT
 }
 
+function compile_model_test_yang_to_fxs {
+    rm -rf $YDKTEST_MODEL_FXS
+    mkdir $YDKTEST_MODEL_FXS
+    cd $YDKTEST_MODEL_FXS
+    source $CONFD/confdrc
+
+    git clone https://github.com/abhikeshav/ydk-test-yang.git
+    cd ydk-test-yang/yang
+    printf "\n"
+    for YANG_FILE in *.yang
+    do
+        `grep "^submodule.*{" $YANG_FILE &> /dev/null`
+        local status=$?
+        if [ $status -eq 1 ]; then
+            printf "Compiling %s to fxs\n" "$YANG_FILE"
+            confdc -c $YANG_FILE
+        fi
+    done
+
+    mv *.fxs $YDKTEST_MODEL_FXS
+
+    cd $YDK_ROOT
+}
+
+function compile_yang_to_fxs {
+    compile_test_yang_to_fxs
+    compile_model_test_yang_to_fxs
+}
+
 # init confd for ydktest
 function init_confd {
     cp $YDKTEST_FXS/* $CONFD_TARGET_DIR
+    source $CONFD/confdrc
+    cd $CONFD_TARGET_DIR
+    confd -c confd.conf
+    printf "\nInitializing confd\n"
+}
+
+function init_confd_model_test {
+    confd --stop
+    cp -f $YDKTEST_MODEL_FXS/* $CONFD_TARGET_DIR
     source $CONFD/confdrc
     cd $CONFD_TARGET_DIR
     confd -c confd.conf
@@ -174,6 +198,7 @@ function run_sanity_ncclient_tests {
 
 function run_sanity_native_tests {
     printf "\nRunning sanity tests on native client\n"
+    ./test/test_native_ydk.py
     run_test sdk/python/tests/test_sanity_types.py native
     run_test sdk/python/tests/test_sanity_errors.py native
     run_test sdk/python/tests/test_sanity_filters.py native
@@ -201,8 +226,45 @@ function run_sanity_tests {
     run_test gen-api/python/ydk/tests/import_tests.py
 }
 
+# ydk model tests
+function run_ydk_model_tests {
+    cd $YDK_ROOT
+    
+    virtualenv myenv
+    source myenv/bin/activate
+    pip install coverage
+    pip install -r requirements.txt 
+    
+    printf "\nGenerating ydk model APIs for testing\n"
+    python generate.py --profile profiles/test/ydk-models-test.json --verbose
+    cd gen-api/python
+    pip uninstall -y ydk
+    pip install dist/*.tar.gz
+    cd gen-api/python
+    export PYTHONPATH=.:$PYTHONPATH
+    for file in ydk/tests/*/*.py; do
+        source $CONFD/confdrc
+        confd --status &> /dev/null
+        local status=$?
+        if [ $status -ne 0 ]; then
+            printf "\nRestarting confd\n"
+            source $CONFD/confdrc
+            cd $CONFD_TARGET_DIR
+            confd -c confd.conf
+            local c_status=$?
+            if [ $c_status -ne 0 ]; then
+                return $c_status
+            fi
+            cd -
+        fi
+        printf "\nRunning %s python model test\n" "$file"
+        python $file
+    done
+}
+
 # cpp tests
 function run_cpp_gen_tests {
+    cd $YDK_ROOT
     printf "\nGenerating ydktest C++ model APIs\n"
     run_test generate.py --profile profiles/test/ydktest.json --cpp --verbose
     cd gen-api/cpp
@@ -306,6 +368,7 @@ printf "\nIn Method run_sanity_tests\n"
 run_sanity_tests
 printf "\nIn Method submit_coverage\n"
 submit_coverage
+
 printf "\nIn Method run_cpp_gen_tests\n"
 run_cpp_gen_tests
 printf "\nIn Method run_cpp_sanity_tests\n"
@@ -317,6 +380,11 @@ printf "\nIn Method setup_deviation_sanity_models\n"
 setup_deviation_sanity_models
 printf "\nIn Method run_deviation_sanity\n"
 run_deviation_sanity
+
+printf "\nIn Method run_ydk_model_tests\n"
+init_confd_model_test
+run_ydk_model_tests
+
 printf "\nIn Method teardown_env\n"
 teardown_env
 

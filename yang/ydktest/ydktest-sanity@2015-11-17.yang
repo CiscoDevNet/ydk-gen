@@ -336,6 +336,20 @@ module ydktest-sanity {
           }
           default "auto-sense-speed";
         }
+        
+//TODO
+        /*leaf-list bits-list {
+          description "this is bits type list";
+          type bits {
+            bit val1 {
+              position 0;
+            }
+
+            bit val2 {
+              position 1;
+            }
+          }          
+        }*/
 
         leaf younion {
           type union {
