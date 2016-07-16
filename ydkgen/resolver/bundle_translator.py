@@ -38,8 +38,7 @@ from jinja2 import Environment
 logger = logging.getLogger('ydkgen')
 
 MODULE_STATEMENT = re.compile(r'''^[ \t]*(sub)?module +(["'])?([-A-Za-z0-9]*(@[0-9-]*)?)(["'])? *\{.*$''')
-REVISION_STATEMENT = re.compile(r'''^[ \t]*revision[\s]*(['"])?([-0-9]*)?(['"])?[\s]*\{.*$''')
-
+REVISION_STATEMENT = re.compile(r'''^[ \t]*revision[\s]*(['"])?([-0-9]+)?(['"])?[\s]*\{.*$''')
 Local_URI = namedtuple('Local_URI', ['url'])
 Remote = namedtuple('Remote', ['url', 'commitid'])
 Remote_URI = namedtuple('RemoteURI', ['url', 'commitid', 'path'])

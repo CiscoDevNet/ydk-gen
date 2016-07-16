@@ -18,7 +18,7 @@ script:
     - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq -r .head.ref`; fi)
     - export REPO=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_REPO_SLUG; else echo `curl -s $PR | jq -r .head.repo.full_name`; fi)
     - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, REPO=$REPO"
-    - virtualenv myenv
+    - virtualenv myenv -p $(which python)
     - source myenv/bin/activate
     - pip install -r requirements.txt
     - python generate.py --profile profiles/test/ydktest.json
