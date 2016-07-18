@@ -293,13 +293,17 @@ class ApiModelBuilder(object):
         if hasattr(stmt, 'i_children'):
             self._sanitize_namespace(stmt)
 
-            chs = [child for child in stmt.i_children
-                   if child.keyword in statements.data_definition_keywords
+            child_stmts=[]
+            if hasattr(stmt, 'i_key') and stmt.i_key is not None:
+                child_stmts.extend([s for s in stmt.i_key])
+            child_stmts.extend([child for child in stmt.i_children
+                   if child not in child_stmts
+                   and (child.keyword in statements.data_definition_keywords
                    or child.keyword == 'case'
                    or child.keyword == 'rpc'
                    or child.keyword == 'input'
-                   or child.keyword == 'output']
-            for child_stmt in chs:
+                   or child.keyword == 'output')])
+            for child_stmt in child_stmts:
                 self._create_expanded_api_model(child_stmt, element, deviation_packages)
 
 
