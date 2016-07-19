@@ -457,10 +457,14 @@ class Runner(object):
         	
         	**type**\: str
         
+        	**refers to**\: :py:class:`name <ydk.models.ydktest_sanity.Runner.InbtwList.Ldata.Subc.SubcSubl1>`
+        
         .. attribute:: ref_one_name
         
         	
         	**type**\: str
+        
+        	**refers to**\: :py:class:`name <ydk.models.ydktest_sanity.Runner.One>`
         
         .. attribute:: ref_three_sub1_sub2_number
         
@@ -469,12 +473,16 @@ class Runner(object):
         
         	**range:** \-2147483648..2147483647
         
+        	**refers to**\: :py:class:`number <ydk.models.ydktest_sanity.Runner.Three.Sub1.Sub2>`
+        
         .. attribute:: ref_two_sub1_number
         
         	
         	**type**\: int
         
         	**range:** \-2147483648..2147483647
+        
+        	**refers to**\: :py:class:`number <ydk.models.ydktest_sanity.Runner.Two.Sub1>`
         
         
 
@@ -531,6 +539,8 @@ class Runner(object):
                 
                 	
                 	**type**\: str
+                
+                	**refers to**\: :py:class:`ref_one_name <ydk.models.ydktest_sanity.Runner.LeafRef>`
                 
                 
 
@@ -1959,6 +1969,8 @@ class Runner(object):
             	**type**\: int
             
             	**range:** \-128..127
+            
+            	**refers to**\: :py:class:`number8 <ydk.models.ydktest_sanity.Runner.Ytypes.BuiltInT>`
             
             .. attribute:: llstring
             

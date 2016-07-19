@@ -19,6 +19,7 @@
 
 """
 import importlib
+from functools import reduce
 from lxml import etree
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LEAFLIST, \
             REFERENCE_LIST, REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, \
@@ -267,8 +268,8 @@ class XmlDecoder(object):
 
     @staticmethod
     def _bind_to_enum_helper(member, elem):
-        clazz = get_class(member.pmodule_name, member.clazz_name.split('.')[0])
-        meta_info = getattr(clazz, '_meta_info')()
+        enum_clazz = get_class(member.pmodule_name, member.clazz_name)
+        meta_info = enum_clazz._meta_info()
         enum_literal_key = elem.text
         if enum_literal_key not in meta_info.literal_map:
             sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
@@ -279,15 +280,15 @@ class XmlDecoder(object):
             if enum_literal_key.upper() in meta_info.literal_map:
                 sp_logger.debug('Found literal using secondary mechanism')
                 enum_literal = meta_info.literal_map[enum_literal_key.upper()]
-                return getattr(clazz, enum_literal)
+                return getattr(enum_clazz, enum_literal)
 
             elif enum_literal_key.lower() in meta_info.literal_map:
                 sp_logger.debug('Found literal using secondary mechanism')
                 enum_literal = meta_info.literal_map[enum_literal_key.lower()]
-                return getattr(clazz, enum_literal)
+                return getattr(enum_clazz, enum_literal)
         else:
             enum_literal = meta_info.literal_map[enum_literal_key]
-            return getattr(clazz, enum_literal)
+            return getattr(enum_clazz, enum_literal)
 
 
 def get_class(py_mod_name, clazz_name):
@@ -392,4 +393,3 @@ def is_digit(n):
         return True
     except ValueError:
         return  False
-

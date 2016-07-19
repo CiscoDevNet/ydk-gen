@@ -20,7 +20,7 @@ return True if attributes in entity(lhs) = entity(rhs)
 """
 import sys
 from enum import Enum
-from pdb import set_trace as bp
+from functools import reduce
 from ydk.types import Empty, Decimal64, FixedBitsDict, YList, YListItem, YLeafList
 
 def is_builtin_type(attr):

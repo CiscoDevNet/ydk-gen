@@ -13,11 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-""" providers.py 
- 
+""" providers.py
+
    Service Providers module. Current implementation supports the NetconfServiceProvider which
    uses ncclient (a Netconf client library) to provide CRUD services.
-   
+
 """
 from ._value_encoder import ValueEncoder
 from ydk.errors import YPYModelError, YPYErrorCode
@@ -25,9 +25,9 @@ from ydk.types import READ, DELETE, Decimal64, Empty, YList, YLeafList, YListIte
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_ENUM_CLASS, REFERENCE_LIST, \
             REFERENCE_LEAFLIST, REFERENCE_IDENTITY_CLASS, REFERENCE_BITS, REFERENCE_UNION
 
-import ast
 import logging
 import importlib
+from functools import reduce
 
 
 def validate_entity(entity, optype):
@@ -42,11 +42,11 @@ def validate_entity(entity, optype):
 
 def validate_entity_delegate(entity, optype, errors):
     """ Validates the given entity.
-    
+
         This function validates the given entity and it's children. If an entity class
         has any errors , the errors will available in the injected member errors ,
         which is a list of tuples of form (<name of the class member>, <error messsage>)
-        
+
         Note this method will raise ydk.errors.YPYModelError if validation fails
     """
     for member in entity.i_meta.meta_info_class_members:

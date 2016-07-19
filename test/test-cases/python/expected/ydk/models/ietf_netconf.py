@@ -1746,6 +1746,8 @@ class KillSessionRpc(object):
         
         	**range:** 1..4294967295
         
+        	**mandatory**\: True
+        
         
 
         """

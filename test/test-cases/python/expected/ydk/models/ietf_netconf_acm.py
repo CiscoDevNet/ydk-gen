@@ -90,6 +90,8 @@ class Nacm(object):
     
     	**range:** 0..4294967295
     
+    	**mandatory**\: True
+    
     .. attribute:: denied_notifications
     
     	Number of times since the server last restarted that a notification was dropped for a subscription because access to the event type was denied
@@ -97,12 +99,16 @@ class Nacm(object):
     
     	**range:** 0..4294967295
     
+    	**mandatory**\: True
+    
     .. attribute:: denied_operations
     
     	Number of times since the server last restarted that a protocol operation request was denied
     	**type**\: int
     
     	**range:** 0..4294967295
+    
+    	**mandatory**\: True
     
     .. attribute:: enable_external_groups
     
@@ -361,6 +367,8 @@ class Nacm(object):
             	The access control action associated with the rule.  If a rule is determined to match a particular request, then this object is used to determine whether to permit or deny the request
             	**type**\: :py:class:`ActionTypeEnum <ydk.models.ietf_netconf_acm.ActionTypeEnum>`
             
+            	**mandatory**\: True
+            
             .. attribute:: comment
             
             	A textual description of the access rule
@@ -400,6 +408,8 @@ class Nacm(object):
             
             	Data Node Instance Identifier associated with the data node controlled by this rule.  Configuration data or state data instance identifiers start with a top\-level data node.  A complete instance identifier is required for this type of path value.  The special value '/' refers to all possible datastore contents
             	**type**\: str
+            
+            	**mandatory**\: True
             
             .. attribute:: rpc_name
             

@@ -20,6 +20,7 @@
 """
 import logging
 import importlib
+from functools import reduce
 
 from ydk._core._dm_meta_info import REFERENCE_BITS, \
     REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_LEAFLIST
@@ -81,4 +82,3 @@ class ValueEncoder(object):
             ydk_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
             ydk_logger.info('Could not encode leaf {0}, type: {1}, {2} value: {3}'.format(member.name, member.mtype, member.ptype, value))
         return text
-

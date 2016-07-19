@@ -34,6 +34,8 @@ class OcA(object):
     	blah
     	**type**\: str
     
+    	**refers to**\: :py:class:`b <ydk.models.oc_pattern.OcA.B>`
+    
     .. attribute:: b
     
     	

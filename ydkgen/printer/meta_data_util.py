@@ -53,6 +53,8 @@ class MetaInfoData:
         self.is_key = prop.is_key()
         self.max_elements = prop.max_elements
         self.min_elements = prop.min_elements
+        self.target_of_leafref = ''
+        self.mandatory = False
 
 
 def get_class_docstring(clazz):
@@ -103,6 +105,10 @@ def get_type_doc(meta_info_data, type_depth):
         prop_restriction = get_property_restriction(meta_info_data)
         if prop_restriction is not None and len(prop_restriction) > 0:
             properties_description.append('\t%s\n\n' % (prop_restriction))
+        if len(meta_info_data.target_of_leafref) > 0:
+            properties_description.append('\t**refers to**\: %s\n\n' % (meta_info_data.target_of_leafref))
+        if meta_info_data.mandatory:
+            properties_description.append('\t**mandatory**\: True\n\n')
 
     return properties_description
 
@@ -173,6 +179,10 @@ def get_meta_info_data(prop, property_type, type_stmt):
     types_extractor = TypesExtractor()
     target_type_stmt = type_stmt
 
+    mandatory = prop.stmt.search_one('mandatory')
+    if mandatory is not None and mandatory.arg == 'true':
+        meta_info_data.mandatory = True
+
     if isinstance(property_type, Class):
         meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name()
         meta_info_data.clazz_name = "'%s'" % property_type.qn()
@@ -239,6 +249,12 @@ def get_meta_info_data(prop, property_type, type_stmt):
             meta_info_data.doc_link = ''
 
         type_spec = type_stmt.i_type_spec
+
+        if isinstance(type_spec, PathTypeSpec):
+            if prop.stmt.i_leafref_ptr is not None:
+                reference_class = prop.stmt.i_leafref_ptr[0].parent.i_class
+                reference_prop = prop.stmt.i_leafref_ptr[0].i_property
+                meta_info_data.target_of_leafref = ':py:class:`%s <%s.%s>`' % (reference_prop.name, reference_class.get_py_mod_name(), reference_class.qn())
 
         while isinstance(type_spec, PathTypeSpec):
             if not hasattr(type_spec, 'i_target_node'):
