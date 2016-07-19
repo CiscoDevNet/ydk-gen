@@ -54,7 +54,7 @@ class YdkGenerator(object):
             YdkGenException: If an error has occurred
     """
 
-    def __init__(self, output_dir, ydk_root, groupings_as_class, language, pkg_type, gen_doc):
+    def __init__(self, output_dir, ydk_root, groupings_as_class, language, pkg_type, gen_doc, sort_clazz):
 
         _check_generator_args(output_dir, ydk_root, language, pkg_type)
 
@@ -64,6 +64,7 @@ class YdkGenerator(object):
         self.language = language
         self.pkg_type = pkg_type
         self.gen_doc = gen_doc
+        self.sort_clazz = sort_clazz
 
     def generate(self, description_file=None):
         """ Generate ydk profile package, bundle packages or ydk core library.
@@ -187,7 +188,7 @@ class YdkGenerator(object):
                             For example 'ydk_bgp', 'ydk_ietf'.
         """
         factory = printer_factory.PrinterFactory()
-        ydk_printer = factory.get_printer(self.language)(output_dir, bundle_name)
+        ydk_printer = factory.get_printer(self.language)(output_dir, bundle_name, self.sort_clazz)
         ydk_printer.emit(pkgs)
 
     def _get_profile_resolved_model_dir(self, profile_file, gen_api_root):

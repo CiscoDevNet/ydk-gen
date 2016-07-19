@@ -38,8 +38,8 @@ from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _E
 
 class PythonBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle_name):
-        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle_name)
+    def __init__(self, ydk_root_dir, bundle_name, sort_clazz):
+        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle_name, sort_clazz)
 
     def print_files(self):
         # print namespace pkg init file
@@ -129,13 +129,13 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         package.parent_pkg_name = sub
         self.print_file(get_python_module_file_name(path, package),
                         emit_module,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
     def print_meta_module(self, package, path):
         self.print_init_file(path)
         self.print_file(get_meta_module_file_name(path, package),
                         emit_meta,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
     def print_test_module(self, package, path):
         self.print_file(get_test_module_file_name(path, package),
@@ -156,7 +156,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         for package in self.deviation_packages:
             self.print_file(get_meta_module_file_name(self.deviation_dir, package),
                             emit_deviation,
-                            _EmitArgs(self.ypy_ctx, package))
+                            _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
     def print_import_tests_file(self):
         self.print_file(get_import_test_file_name(self.test_dir),
@@ -229,20 +229,20 @@ def emit_table_of_contents(ctx, packages, bundle_name):
     DocPrinter(ctx).print_table_of_contents(packages, bundle_name)
 
 
-def emit_module(ctx, package):
-    ModulePrinter(ctx).print_output(package)
+def emit_module(ctx, package, sort_clazz):
+    ModulePrinter(ctx, sort_clazz).print_output(package)
 
 
 def emit_test_module(ctx, package):
     TestCasePrinter(ctx).print_testcases(package)
 
 
-def emit_meta(ctx, package):
-    ModuleMetaPrinter(ctx).print_output(package)
+def emit_meta(ctx, package, sort_clazz):
+    ModuleMetaPrinter(ctx, sort_clazz).print_output(package)
 
 
-def emit_deviation(ctx, package):
-    DeviationPrinter(ctx).print_deviation(package)
+def emit_deviation(ctx, package, sort_clazz):
+    DeviationPrinter(ctx, sort_clazz).print_deviation(package)
 
 
 def emit_nmsp_declare_init(ctx, package):

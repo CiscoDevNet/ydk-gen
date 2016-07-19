@@ -31,9 +31,10 @@ from .enum_printer import EnumPrinter
 
 
 class DeviationPrinter(object):
-    def __init__(self, ctx):
+    def __init__(self, ctx, sort_clazz):
         self.ctx = ctx
         self.collected_enum_meta = []
+        self.sort_clazz = sort_clazz
 
     def print_deviation(self, package):
         self.print_deviation_header(package)
@@ -115,7 +116,7 @@ from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, 
                     meta = get_meta_info_data(prop, prop.property_type, prop.stmt.search_one('type'))
                     self.ctx.bline()
                     self.ctx.lvl_inc()
-                    ClassMetaPrinter(self.ctx).print_meta_class_member(meta, self.ctx)
+                    ClassMetaPrinter(self.ctx, self.sort_clazz).print_meta_class_member(meta, self.ctx)
                     self.ctx.lvl_dec()
                     self.ctx.writeln("),")
                 else:

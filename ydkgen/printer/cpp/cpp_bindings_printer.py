@@ -26,8 +26,8 @@ from .source_printer import SourcePrinter
 
 class CppBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle_name):
-        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle_name)
+    def __init__(self, ydk_root_dir, bundle_name, sort_clazz):
+        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle_name, sort_clazz)
 
     def print_files(self):
         only_modules = [package.stmt for package in self.packages]
@@ -47,12 +47,12 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
     def _print_header_file(self, package, path):
         self.print_file(get_header_file_name(path, package),
                         emit_header,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
     def _print_source_file(self, package, path):
         self.print_file(get_source_file_name(path, package),
                         emit_source,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
 
 def get_source_file_name(path, package):
@@ -63,9 +63,9 @@ def get_header_file_name(path, package):
     return '%s/%s.h' % (path, package.name)
 
 
-def emit_header(ctx, package):
-    HeaderPrinter(ctx).print_output(package)
+def emit_header(ctx, package, sort_clazz):
+    HeaderPrinter(ctx, sort_clazz).print_output(package)
 
 
-def emit_source(ctx, package):
-    SourcePrinter(ctx).print_output(package)
+def emit_source(ctx, package, sort_clazz):
+    SourcePrinter(ctx, sort_clazz).print_output(package)

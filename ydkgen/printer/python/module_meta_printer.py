@@ -30,8 +30,9 @@ from ydkgen.printer.file_printer import FilePrinter
 
 class ModuleMetaPrinter(FilePrinter):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx, sort_clazz):
         super(ModuleMetaPrinter, self).__init__(ctx)
+        self.sort_clazz = sort_clazz
 
     def print_header(self, package):
         if package.bundle_name == '':
@@ -72,10 +73,10 @@ from ydk.errors import YPYError, YPYModelError
             [c for c in package.owned_elements if isinstance(c, Class)])
 
     def print_classes_meta(self, unsorted_classes):
-        ClassMetaPrinter(self.ctx).print_output(unsorted_classes)
+        ClassMetaPrinter(self.ctx, self.sort_clazz).print_output(unsorted_classes)
 
     def print_enum_meta(self, enum_class):
         EnumPrinter(self.ctx).print_enum_meta(enum_class)
 
     def print_classes_meta_parents(self, unsorted_classes):
-        ClassMetaPrinter(self.ctx).print_parents(unsorted_classes)
+        ClassMetaPrinter(self.ctx, self.sort_clazz).print_parents(unsorted_classes)

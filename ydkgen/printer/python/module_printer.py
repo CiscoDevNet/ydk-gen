@@ -32,8 +32,9 @@ from ydkgen.printer.file_printer import FilePrinter
 
 class ModulePrinter(FilePrinter):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx, sort_clazz):
         super(ModulePrinter, self).__init__(ctx)
+        self.sort_clazz = sort_clazz
 
     def print_header(self, package):
         self._print_module_description(package)
@@ -105,7 +106,7 @@ from ydk.errors import YPYError, YPYModelError
             self._print_bits(bit)
 
     def _print_module_classes(self, package):
-        ClassPrinter(self.ctx).print_output(
+        ClassPrinter(self.ctx, self.sort_clazz).print_output(
             [clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
 
     def _print_bits(self, bits):

@@ -154,7 +154,7 @@ def create_pip_packages(output_dirs):
         exit_code = subprocess.call(args, env=os.environ.copy())
 
         if exit_code == 0:
-            print('\nSuccessfully created source distribution at %sdist' %
+            print('\nSuccessfully created source distribution at %s/dist' %
                   (py_sdk_root,))
         else:
             print('\nFailed to create source distribution')
@@ -238,6 +238,12 @@ if __name__ == '__main__':
                       default=False,
                       help="Consider yang groupings as classes.")
 
+    parser.add_option("--sort-class",
+                      action="store_true",
+                      dest="sort_clazz",
+                      default=False,
+                      help="Sort class at same level when generating APIs.")
+
     try:
         arg = sys.argv[1]
     except IndexError:
@@ -271,21 +277,33 @@ if __name__ == '__main__':
 
     if options.profile:
         output_dirs.append(YdkGenerator(
-                           output_directory, ydk_root,
-                           options.groupings_as_class, language, 'profile',
-                           options.gendoc).generate(options.profile))
+                           output_directory,
+                           ydk_root,
+                           options.groupings_as_class,
+                           language,
+                           'profile',
+                           options.gendoc,
+                           options.sort_clazz).generate(options.profile))
 
     elif options.bundle:
         output_dirs.extend(YdkGenerator(
-                           output_directory, ydk_root,
-                           options.groupings_as_class, language, 'bundle',
-                           options.gendoc).generate(options.bundle))
+                           output_directory,
+                           ydk_root,
+                           options.groupings_as_class,
+                           language,
+                           'bundle',
+                           options.gendoc,
+                           options.sort_clazz).generate(options.bundle))
 
     elif options.core:
         output_dirs.append(YdkGenerator(
-                           output_directory, ydk_root,
-                           options.groupings_as_class, language, 'core',
-                           options.gendoc).generate())
+                           output_directory,
+                           ydk_root,
+                           options.groupings_as_class,
+                           language,
+                           'core',
+                           options.gendoc,
+                           options.sort_clazz).generate())
 
     if options.gendoc:
         generate_documentations(output_dirs, ydk_root, language)

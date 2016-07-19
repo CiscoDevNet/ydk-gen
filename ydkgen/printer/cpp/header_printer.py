@@ -26,8 +26,9 @@ from ydkgen.printer.file_printer import FilePrinter
 
 
 class HeaderPrinter(FilePrinter):
-    def __init__(self, ctx):
+    def __init__(self, ctx, sort_clazz):
         super(HeaderPrinter, self).__init__(ctx)
+        self.sort_clazz = sort_clazz
 
     def print_header(self, package):
         self._print_include_guard_header(package)
@@ -72,7 +73,7 @@ class HeaderPrinter(FilePrinter):
         self._print_classes([clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
 
     def _print_classes(self, clazzes):
-        sorted_classes = sort_classes_at_same_level(clazzes)
+        sorted_classes = sort_classes_at_same_level(clazzes, self.sort_clazz)
         for clazz in sorted_classes:
             self._print_class(clazz)
 
