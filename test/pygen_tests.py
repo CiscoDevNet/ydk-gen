@@ -258,8 +258,8 @@ class PyBundlePatchTest(TestCase):
                           self.groupings_as_class, 'python', 'bundle', False, True)
 
         patch_pkgs = []
-        for p in sorted(patch) + ['ydk']:
-            # installation order should be: 1. ietf, 2. ydktest_aug_ietf_[0-9]
+        for p in ['ydk'] + sorted(patch):
+            # installation order should be: 0. ydk core library 1. ietf, 2. ydktest_aug_ietf_[0-9]
             patch_pkgs.extend(glob.glob(self.actual_dir + '/python/%s/dist/*.tar.gz' % p))
 
         for pkg in patch_pkgs:

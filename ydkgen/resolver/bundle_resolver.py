@@ -350,7 +350,8 @@ class Resolver(object):
                 repo.git.checkout(commitid)
                 for path in self.repos[url][commitid]:
                     src = os.path.join(tmp_dir, path)
-                    bundle = self.repos[url][commitid][path]
-                    self._resolve_file(src, bundle.resolved_models_dir)
+                    bundles = self.repos[url][commitid][path]
+                    for bundle in bundles:
+                        self._resolve_file(src, bundle.resolved_models_dir)
 
             rmtree(tmp_dir)

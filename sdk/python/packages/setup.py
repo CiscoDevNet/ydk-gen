@@ -99,6 +99,7 @@ setup(
                     'Twisted>=16.0.0',
                     'protobuf==3.0.0b2.post2',
                     'ncclient>=0.4.7',
+                    'ydk>=0.4.2',
                     $DEPENDENCY$],
 
     # List additional groups of dependencies here (e.g. development

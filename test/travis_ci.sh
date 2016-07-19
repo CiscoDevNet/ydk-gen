@@ -156,9 +156,9 @@ function setup_confd {
 function run_pygen_test {
     cd $YDKGEN_HOME
     export PYTHONPATH=$YDKGEN_HOME
-    run_test test/pygen_tests.py --aug-base profiles/profile-with-dependencies/ietf.json \
-    --aug-contrib profiles/profile-with-dependencies/ydktest-aug-ietf-1.json profiles/profile-with-dependencies/ydktest-aug-ietf-2.json profiles/profile-with-dependencies/ydktest-aug-ietf-4.json \
-    --aug-compare profiles/profile-with-dependencies/ydktest-aug-ietf.json \
+    run_test test/pygen_tests.py --aug-base profiles/test-augmentation/ietf-aug-base.json \
+    --aug-contrib profiles/test-augmentation/ydktest-aug-ietf-1.json profiles/test-augmentation/ydktest-aug-ietf-2.json profiles/test-augmentation/ydktest-aug-ietf-4.json \
+    --aug-compare profiles/test-augmentation/ydktest-aug-ietf.json \
     -v
     echo_msg "TEST: Finished running PyGen test."
 }
@@ -242,10 +242,10 @@ function run_cpp_sanity_tests {
 function generate_ydktest_augm_packages {
     rm -rf gen-api/python/*
     run_test generate.py --core
-    run_test generate.py --bundle profiles/profile-with-dependencies/ietf.json --verbose
-    run_test generate.py --bundle profiles/profile-with-dependencies/ydktest-aug-ietf-1.json --verbose
-    run_test generate.py --bundle profiles/profile-with-dependencies/ydktest-aug-ietf-2.json --verbose
-    run_test generate.py --bundle profiles/profile-with-dependencies/ydktest-aug-ietf-4.json --verbose
+    run_test generate.py --bundle profiles/test-augmentation/ietf-aug-base.json --verbose
+    run_test generate.py --bundle profiles/test-augmentation/ydktest-aug-ietf-1.json --verbose
+    run_test generate.py --bundle profiles/test-augmentation/ydktest-aug-ietf-2.json --verbose
+    run_test generate.py --bundle profiles/test-augmentation/ydktest-aug-ietf-4.json --verbose
     echo_msg "YDKGEN: Finished generating ydktest augmentation packages."
 }
 ### Install ydktest augmentation packages.

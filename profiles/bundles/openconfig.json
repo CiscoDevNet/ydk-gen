@@ -46,7 +46,7 @@
          "name":"ietf",
          "version":"0.1.0",
          "ydk_version":"0.4.1",
-         "uri":"file://profiles/profile-with-dependencies/ietf.json"
+         "uri":"file://profiles/bundles/ietf.json"
       }
    ]
 }
