@@ -49,12 +49,13 @@ class YdkGenerator(object):
                             Valid option for profile approach is: 'profile'.
                             Valid options for bundle approach are: 'core',
                                                                    'bundle'.
+            sort_clazz (bool): Option to sort generated classes at same leve.
 
         Raises:
             YdkGenException: If an error has occurred
     """
 
-    def __init__(self, output_dir, ydk_root, groupings_as_class, language, pkg_type, gen_doc, sort_clazz):
+    def __init__(self, output_dir, ydk_root, groupings_as_class, language, pkg_type, sort_clazz=False):
 
         _check_generator_args(output_dir, ydk_root, language, pkg_type)
 
@@ -63,7 +64,6 @@ class YdkGenerator(object):
         self.groupings_as_class = groupings_as_class
         self.language = language
         self.pkg_type = pkg_type
-        self.gen_doc = gen_doc
         self.sort_clazz = sort_clazz
 
     def generate(self, description_file=None):
@@ -112,7 +112,7 @@ class YdkGenerator(object):
             profile_file (str): Path to profile description file.
 
         Returns:
-            dirs (List[str]): List of root directory for generated APIs.
+            gen_api_root (str): Root directory for generated APIs.
         """
         _check_description_file(profile_file)
 
@@ -120,37 +120,27 @@ class YdkGenerator(object):
 
         bundle_translator.translate(profile_file, tmp_file)
 
-        dirs = []
         resolver = bundle_resolver.Resolver(self.output_dir)
         curr_bundle, all_bundles = resolver.resolve(tmp_file)
 
-        if self.gen_doc:
-            bundles = all_bundles
-            dirs.append(self._generate_core())
-        else:
-            bundles = [curr_bundle]
+        api_pkgs = self._get_api_pkgs(curr_bundle.resolved_models_dir)
 
-        for bundle in bundles:
+        _set_api_pkg_sub_name(all_bundles, api_pkgs)
 
-            api_pkgs = self._get_api_pkgs(bundle.resolved_models_dir)
-
-            _set_api_pkg_sub_name(all_bundles, api_pkgs)
-
-            bundle_dir = self._init_dirs(bundle=bundle)
-            bundle_pkgs = _filter_bundle_pkgs(bundle, api_pkgs)
-            self._print_pkgs(bundle_pkgs, bundle_dir, bundle.name)
-            dirs.append(bundle_dir)
+        gen_api_root = self._init_dirs(bundle=curr_bundle)
+        bundle_pkgs = _filter_bundle_pkgs(curr_bundle, api_pkgs)
+        self._print_pkgs(bundle_pkgs, gen_api_root, curr_bundle.name)
 
         os.remove(tmp_file)
 
-        return dirs
+        return gen_api_root
 
     def _generate_core(self):
         """ Generate ydk core package.
             Copy core library sdk template to generated APIs root directory.
 
         Returns:
-            gen_api_root (str): Path to generated APIs root directory.
+            gen_api_root (str): Root directory for generated APIs.
         """
         gen_api_root = self._init_dirs(pkg_name='ydk', pkg_type='core')
         return gen_api_root

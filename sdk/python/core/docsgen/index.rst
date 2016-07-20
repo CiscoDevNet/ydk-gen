@@ -20,6 +20,3 @@ Contents:
    deviation.rst
    about_ydk.rst
    ydk.rst
-   ydk.models.rst
-
-

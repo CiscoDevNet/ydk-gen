@@ -141,7 +141,6 @@ class PyGenTest(TestCase):
                             self.groupings_as_class,
                             self.language,
                             'profile',
-                            False,
                             True).generate(self.profile)
         actual_dir = self.actual_dir + '/' + self.language + '/ydk/models'
         expected_dir = self.expected_dir + '/ydk/models'
@@ -243,7 +242,7 @@ class PyBundlePatchTest(TestCase):
         # TODO: add wrapper function to get arguments for YdkGenerator
         # ydk core
         self.generate_pkg(None, 'ydk', self.actual_dir, self.ydk_root,
-                          self.groupings_as_class, 'python', 'core', False, True)
+                          self.groupings_as_class, 'python', 'core', True)
         # bundle packages, augmentation base bundle and augmentation contributors
         base = get_bundle_name(self.aug_base)
         patch = []
@@ -251,11 +250,11 @@ class PyBundlePatchTest(TestCase):
             bundle_name = get_bundle_name(profile)
             patch.append(bundle_name)
             self.generate_pkg(profile, bundle_name, self.actual_dir, self.ydk_root,
-                              self.groupings_as_class, 'python', 'bundle', False, True)
+                              self.groupings_as_class, 'python', 'bundle', True)
         # bundle package for comparison
         compare = bundle_name = get_bundle_name(self.aug_compare)
         self.generate_pkg(self.aug_compare, bundle_name, self.actual_dir, self.ydk_root,
-                          self.groupings_as_class, 'python', 'bundle', False, True)
+                          self.groupings_as_class, 'python', 'bundle', True)
 
         patch_pkgs = []
         for p in ['ydk'] + sorted(patch):
