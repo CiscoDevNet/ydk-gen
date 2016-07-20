@@ -45,6 +45,9 @@ class PyangModelBuilder(object):
         statements.add_validation_fun('reference_3', ['deviation'], self._add_d_info)
         statements.add_validation_fun('reference_3', ['deviate'], self._remove_d_info)
 
+        # set marker for models being augmented
+        statements.add_validation_fun('expand_2', ['augment'], self._set_i_aug)
+
         filenames = self._get_yang_file_names()
         modules = self._get_pyang_modules(filenames)
         self._validate_pyang_modules(filenames)
@@ -167,6 +170,21 @@ class PyangModelBuilder(object):
                             (c.keyword, t.i_module.arg, t.arg))
                 else:
                     self._add_deviation(t, stmt.arg, stmt.i_module, c)
+
+
+    def _set_i_aug(self, ctx, stmt):
+        """ inject bool 'i_augment' to top statement for model being augmented"""
+        i_target_node = None
+        if hasattr(stmt, 'i_target_node'):
+            i_target_node = stmt.i_target_node
+        else:
+            i_target_node = statements.find_target_node(ctx, stmt, is_augment=True)
+        if i_target_node is not None:
+            if hasattr(stmt.top , 'i_aug_targets'):
+                stmt.top.i_aug_targets.append(i_target_node.top)
+            else:
+                stmt.top.i_aug_targets = [i_target_node.top]
+            i_target_node.top.is_augmented_module = True
 
     def _get_yang_file_names(self):
         filenames = []

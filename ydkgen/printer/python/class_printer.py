@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_printer.py 
- 
+class_printer.py
+
  YANG model driven API, class emitter.
- 
+
 """
 from ydkgen.api_model import Class, Enum, Bits
 from ydkgen.common import sort_classes_at_same_level
@@ -35,14 +35,15 @@ from .enum_printer import EnumPrinter
 
 class ClassPrinter(FilePrinter):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx, sort_clazz):
         super(ClassPrinter, self).__init__(ctx)
+        self.sort_clazz = sort_clazz
 
     def print_body(self, unsorted_classes):
-        ''' This arranges the classes at the same level 
-            so that super references are printed before 
+        ''' This arranges the classes at the same level
+            so that super references are printed before
             the subclassess'''
-        sorted_classes = sort_classes_at_same_level(unsorted_classes)
+        sorted_classes = sort_classes_at_same_level(unsorted_classes, self.sort_clazz)
 
         for clazz in sorted_classes:
             self._print_class(clazz)
@@ -93,7 +94,7 @@ class ClassPrinter(FilePrinter):
         self.ctx.writeln('@staticmethod')
         self.ctx.writeln('def _meta_info():')
         self.ctx.lvl_inc()
-        self.ctx.writeln('from %s import _%s as meta' % (
+        self.ctx.writeln('import %s._%s as meta' % (
             clazz.get_meta_py_mod_name(), clazz.get_package().name))
         self.ctx.writeln(
             "return meta._meta_table['%s']['meta_info']" % clazz.qn())

@@ -1,0 +1,34 @@
+Summary: Python API of the libnetconf library.
+Name: python3-netconf
+Version: @PACKAGE_VERSION@
+Release: @RELEASE@
+URL: https://libnetconf.googlecode.com/
+Source: https://code.google.com/p/libnetconf/source/browse/%{name}-%{version}-%{release}.tar.gz
+Group: Liberouter
+License: BSD
+Vendor: CESNET, z.s.p.o.
+Packager: @USERNAME@ <@USERMAIL@>
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+
+BuildRequires: python3
+Requires: libnetconf >= 0.9.0
+Provides: @PROVIDES@
+
+%description
+Library provides NETCONF protocol functionality for both client as well as
+server side applications. It also handles access to the NETCONF
+configuration data repositories.
+
+%prep
+%setup
+
+%build
+python3 setup.py build;
+
+%install
+python3 setup.py install --prefix=$RPM_BUILD_ROOT/%{_prefix};
+
+%post
+
+%files
+%{_libdir}/python3*/site-packages/netconf*

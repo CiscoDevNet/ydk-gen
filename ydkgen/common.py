@@ -19,8 +19,8 @@ import hashlib
 import keyword
 from collections import OrderedDict
 """
- common.py 
- 
+ common.py
+
  YANG model driven API, common definitions.
 """
 
@@ -249,8 +249,10 @@ def get_module_name(stmt):
         return module_stmt.arg
 
 
-def sort_classes_at_same_level(classes):
+def sort_classes_at_same_level(classes, sort_clazz):
     ''' Returns a list of the classes in the same order  '''
+    if sort_clazz:
+        classes = sorted(classes, key=lambda cls: cls.name)
     classes_processed = []
     classes_not_processed = OrderedDict()
     for clazz in classes:
@@ -278,5 +280,9 @@ def sort_classes_at_same_level(classes):
 
 
 def get_rst_file_name(named_element):
-    hex_name = hashlib.sha1(named_element.fqn()).hexdigest()
+    if hasattr(named_element, 'get_package'):
+        package = named_element.get_package()
+    else:
+        package = named_element
+    hex_name = hashlib.sha1(package.bundle_name + named_element.fqn()).hexdigest()
     return hex_name

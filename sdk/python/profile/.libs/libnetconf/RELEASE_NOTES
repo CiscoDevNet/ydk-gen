@@ -1,0 +1,79 @@
+libnetconf 0.10.0
+
+This release includes the following changes:
+
+ * SSH support is provided using libssh instead libssh2
+   - required the introduction of new nc_init() flags,
+     it must be called in every libnetconf application,
+     even clients
+ * optional support for POSIX shared memory instead of System V
+ * lnctool - validation files generation updated
+ * Support for non-standard terminal environment in SSH callbacks input
+ * Augment statement processing fixed - local augments and chained augments
+ * Notification thread starvation fixed
+ * NETCONF session IDs are now unique numbers with no relation to PIDs
+ * Subtree filtering optimized to when merging data from different modules
+ * <rpc>/<rpc-reply> creation optimized
+ * Fix reverting transAPI changes on root-to-leaf direction.
+ * Fix handling datastore content when data contains XML header (<?xml)
+ * Provide daatstore custom implementation via libnetconf.h
+ * missing read_datastore_data() when validation is disabled
+ * fix memory leaks and uninitialized memory usage issues
+ * fix several building issues
+ * ... and lots of other small bugfixes
+
+Removed functions:
+
+ * ncds_apply_rpc()
+
+Added functions:
+
+ * nc_del_keypair_path()
+ * nc_session_accept_libssh_channel()	- libnetconf will read data directly from an SSH channel
+ * nc_session_accept_tls()				- libnetconf will read data directly from a TLS session
+ * ncxml_reply_data_ns()
+ * ncntf_session_get_active_subscription()
+
+Added init macros:
+
+ * NC_INIT_CLIENT
+ * NC_INIT_LIBSSH_PTHREAD
+
+
+API/ABI is incompatible with 0.9.0, see reports in 'doc/compat_reports/'
+directory.
+
+
+libnetconf 0.9.0
+
+This release includes the following changes:
+
+ * Python bindings (of a basic libnetconf functionality)
+ * Possibility to completely replace transport layer using
+   nc_session_accept_inout() and nc_session_connect_inout() functions
+ * TransAPI moved to version 5 (external file monitoring)
+ * Redesigned library initiation (nc_init()) and closing (nc_close())
+ * Support for multiple top-level elements defined in a single data-model
+ * Support for a nested 'groupings' definitions in the data models
+ * Improved handling of the 'features' defined in the data models
+ * Handling TLS certificates revocation list (nc_tls_init())
+ * NETCONF <lock>/<unlock> operations generate a NETCONF event notification
+ * lncdatastore(1) tool allowing developers to analyse how libnetconf see the
+   loaded data models
+ * Support for the DNSSEC SSHFP retrieval when client checks the fingerprint
+   of a new SSH server
+ * A specific check of the remote SSH host authenticity can be now specified
+   as a callback
+ * Support for better recovery after an application crash
+ * Better symbol visibility control
+ * Several bugs of subtree filtering
+ * ... and many other small bugfixes
+
+Deprecated functions:
+
+ * ncds_apply_rpc(), will be removed 1.0.0, use ncds_apply_rpc2all() instead
+
+
+For API/ABI compatibility to previous versions, see reports in
+'doc/compat_reports/' directory.
+

@@ -39,14 +39,14 @@ module oc-pattern {
       "Initial revision.";
   }
 
-  list A {
+  list oc-A {
 
     key a;
     
     leaf a {
       description "blah";
       type leafref{
-        path "/oc:A/oc:B/oc:b";
+        path "/oc:oc-A/oc:B/oc:b";
       }
     }
 

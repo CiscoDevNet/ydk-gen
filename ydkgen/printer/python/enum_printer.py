@@ -14,7 +14,7 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 """
- enum_printer.py 
+ enum_printer.py
 
  YANG model driven API, python emitter.
 
@@ -85,7 +85,7 @@ class EnumPrinter(object):
         self.ctx.writeln('def _meta_info():')
         self.ctx.lvl_inc()
 
-        self.ctx.writeln('from %s import _%s as meta' % (
+        self.ctx.writeln('import %s._%s as meta' % (
             enum_class.get_meta_py_mod_name(), enum_class.get_package().name))
         self.ctx.writeln("return meta._meta_table['%s']" % (enum_class.qn()))
         self.ctx.lvl_dec()

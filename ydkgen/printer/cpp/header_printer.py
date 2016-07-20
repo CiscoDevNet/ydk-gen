@@ -26,15 +26,14 @@ from ydkgen.printer.file_printer import FilePrinter
 
 
 class HeaderPrinter(FilePrinter):
-    def __init__(self, ctx):
+    def __init__(self, ctx, sort_clazz):
         super(HeaderPrinter, self).__init__(ctx)
+        self.sort_clazz = sort_clazz
 
     def print_header(self, package):
         self._print_include_guard_header(package)
         self._print_imports(package)
         self.ctx.writeln('namespace ydk {')
-        sub = package.get_py_mod_name()[len('ydk.models.'): package.get_py_mod_name().rfind('.')]
-        self.ctx.writeln('namespace {0}'.format(sub + ' {'))
         self.ctx.bline()
 
     def _print_imports(self, package):
@@ -67,7 +66,6 @@ class HeaderPrinter(FilePrinter):
     def print_trailer(self, package):
         self.ctx.bline()
         self.ctx.writeln('}')
-        self.ctx.writeln('}')
         self._print_include_guard_trailer(package)
         self.ctx.bline()
 
@@ -75,7 +73,7 @@ class HeaderPrinter(FilePrinter):
         self._print_classes([clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
 
     def _print_classes(self, clazzes):
-        sorted_classes = sort_classes_at_same_level(clazzes)
+        sorted_classes = sort_classes_at_same_level(clazzes, self.sort_clazz)
         for clazz in sorted_classes:
             self._print_class(clazz)
 

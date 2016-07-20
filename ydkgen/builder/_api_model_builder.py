@@ -53,7 +53,6 @@ class ApiModelBuilder(object):
             package = Package()
             module.i_package = package
             package.stmt = module
-            package.is_deviation = True
             deviation_packages.append(package)
 
         for module in only_modules:

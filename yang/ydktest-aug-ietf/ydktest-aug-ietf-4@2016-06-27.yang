@@ -1,0 +1,95 @@
+module ydktest-aug-ietf-4 {
+
+  namespace "http://cisco.com/ns/yang/yaug-four";
+
+  prefix "yaug-four";
+
+  import ietf-aug-base-1 { prefix "base-one"; }
+  import ietf-aug-base-2 { prefix "base-two"; }
+
+  organization "Cisco Systems, Inc.";
+
+  contact
+    "Cisco Systems, Inc.
+     Customer Service
+
+     Postal: 170 West Tasman Drive
+     San Jose, CA 95134
+
+     Tel: +1 800 553-NETS
+
+     E-mail: cs-yang@cisco.com";
+
+  description
+    "This module contains augmentation for ietf-netconf module,
+    for testing purpose.
+
+     Copyright (c) 2013-2014 by Cisco Systems, Inc.
+     All rights reserved.";
+
+  revision "2016-06-27" {
+    description
+      "Initial revision.";
+  }
+
+  grouping four-aug-level-w-list {
+    container four-aug-list {
+      description "config for four_aug_list data";
+      list ldata {
+        description "four aug list data";
+        key "number";
+        leaf number {
+          description "integer value type";
+          type int32;
+        }
+        leaf name {
+          description "this is string value";
+          type string;
+        }
+      }
+    }
+  }
+
+  augment /base-one:cpython/base-one:doc {
+    container ydktest-aug-4 {
+      leaf aug-four {
+        description "ydktest augmentation four";
+        type string;
+      }
+    }
+  }
+
+  augment /base-one:cpython/base-one:lib {
+    container ydktest-aug-4 {
+      container ydktest-aug-nested-4 {
+        leaf aug-four {
+          description "ydktest augmentation four";
+          type string;
+        }
+      }
+    }
+  }
+
+  augment /base-two:cpython/base-two:tools {
+    leaf aug-four {
+      description "ydktest augmentation four";
+      type string;
+    }
+  }
+
+  augment /base-one:cpython/base-one:doc/base-one:disutils {
+    description "augment to one";
+    uses four-aug-level-w-list;
+  }
+
+  // 2 level augment
+  augment "/base-one:cpython/base-one:doc/base-one:disutils/yaug-four:four-aug-list" {
+    description "2 level augment";
+    leaf enabled {
+      description "integer value type";
+      type boolean;
+    }
+  }
+
+
+}

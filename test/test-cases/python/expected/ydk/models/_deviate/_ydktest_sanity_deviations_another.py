@@ -21,6 +21,16 @@ _deviation_table = {
         'keyword_value' : [
             ('max_elements', 7),
             ('min_elements', 0),
+            ('max_elements', 7),
+            ('min_elements', 0),
+            ('max_elements', 7),
+            ('min_elements', 0),
+            ('max_elements', 7),
+            ('min_elements', 0),
+            ('max_elements', 7),
+            ('min_elements', 0),
+            ('max_elements', 7),
+            ('min_elements', 0),
         ]
     },
 }

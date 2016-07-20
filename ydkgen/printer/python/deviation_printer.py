@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_printer.py 
- 
+class_printer.py
+
  YANG model driven API, class emitter.
- 
+
 """
 # add inline enum to deviation module itself
 from ydkgen.api_model import Bits
@@ -31,12 +31,13 @@ from .enum_printer import EnumPrinter
 
 
 class DeviationPrinter(object):
-    def __init__(self, ctx):
+    def __init__(self, ctx, sort_clazz):
         self.ctx = ctx
         self.collected_enum_meta = []
+        self.sort_clazz = sort_clazz
 
     def print_deviation(self, package):
-        self.print_deviation_header()
+        self.print_deviation_header(package)
         deviations = package.owned_elements
         deviations = sorted(deviations, key= lambda d:d.qn())
         for deviation in deviations:
@@ -47,16 +48,20 @@ class DeviationPrinter(object):
         self.print_collected_enum_meta()
         self.print_deviation_table_trailer()
 
-    def print_deviation_header(self):
+    def print_deviation_header(self, package):
+        if package.bundle_name == '':
+            ns_imp_stmt = "from ydk.models import _yang_ns"
+        else:
+            ns_imp_stmt = "from ydk.providers._importer import _yang_ns"
         self.ctx.writeln("""
 from enum import Enum
 from ydk._core._dm_meta_info import _MetaInfoClassMember, _MetaInfoClass, _MetaInfoEnum
 from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, \
     REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION
-from ydk.models import _yang_ns
+{0}
 
-""")
+""".format(ns_imp_stmt))
 
     def print_collected_enum_meta(self):
         for e in self.collected_enum_meta:
@@ -111,7 +116,7 @@ from ydk.models import _yang_ns
                     meta = get_meta_info_data(prop, prop.property_type, prop.stmt.search_one('type'))
                     self.ctx.bline()
                     self.ctx.lvl_inc()
-                    ClassMetaPrinter(self.ctx).print_meta_class_member(meta, self.ctx)
+                    ClassMetaPrinter(self.ctx, self.sort_clazz).print_meta_class_member(meta, self.ctx)
                     self.ctx.lvl_dec()
                     self.ctx.writeln("),")
                 else:

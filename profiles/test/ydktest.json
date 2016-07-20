@@ -1,4 +1,5 @@
 {
+    "name": "ydktest",
     "version": "0.4.0",
     "Author": "Cisco",
     "Copyright": "Cisco",
@@ -8,6 +9,5 @@
 	    "/yang/ydktest",
 	    "/yang/ietf"
         ]
-     
     }
 }

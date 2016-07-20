@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_common_path_printer.py 
- 
+class_common_path_printer.py
+
  Printer for the common path method.
- 
+
 """
 from ydkgen.api_model import Class
 from ydkgen.common import get_module_name
