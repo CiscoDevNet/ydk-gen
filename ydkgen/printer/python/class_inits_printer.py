@@ -67,7 +67,7 @@ class ClassInitsPrinter(object):
             self._print_class_inits_unique(prop)
 
     def _print_class_inits_is_many(self, prop):
-        if isinstance(prop.property_type, Class):
+        if prop.stmt.keyword == 'list':
             self.ctx.writeln('self.%s = YList()' % prop.name)
             self.ctx.writeln('self.%s.parent = self' % prop.name)
             self.ctx.writeln("self.%s.name = '%s'" % (prop.name, prop.name))

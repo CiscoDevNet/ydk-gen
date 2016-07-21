@@ -190,7 +190,10 @@ def get_meta_info_data(prop, property_type, type_stmt):
         meta_info_data.doc_link = ':py:class:`%s <%s.%s>`' % (
             property_type.name, property_type.get_py_mod_name(), property_type.qn())
 
-        if prop.is_many:
+        if prop.stmt.keyword == 'leaf-list':
+            meta_info_data.mtype = 'REFERENCE_LEAFLIST'
+            meta_info_data.doc_link = 'list of %s' % meta_info_data.doc_link
+        elif prop.stmt.keyword == 'list':
             meta_info_data.mtype = 'REFERENCE_LIST'
             meta_info_data.doc_link = 'list of %s' % meta_info_data.doc_link
         elif property_type.is_identity():

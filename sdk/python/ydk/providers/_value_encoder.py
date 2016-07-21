@@ -31,7 +31,7 @@ import ydk.models._yang_ns as _yang_ns
 class ValueEncoder(object):
     def encode(self, member, NSMAP, value):
         text = ''
-        if member.mtype == REFERENCE_IDENTITY_CLASS:
+        if member.mtype == REFERENCE_IDENTITY_CLASS or 'Identity' in member.ptype:
             module = importlib.import_module(member.pmodule_name)
             clazz = reduce(getattr, member.clazz_name.split('.'), module)
 

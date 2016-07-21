@@ -105,7 +105,12 @@ def set_parent_imeta(entity, child_meta=None):
     elif entity:
         entity.i_meta = entity._meta_info()
         if hasattr(entity, 'parent'):
-            set_parent_imeta(entity.parent, entity.i_meta)
+            if entity.parent is entity:
+                err_msg = ("YDK object is not created correctly,"
+                           "parent pointer should not point to itself.")
+                raise YPYServiceError(error_msg=err_msg)
+            else:
+                set_parent_imeta(entity.parent, entity.i_meta)
 
 def get_active_deviation_module_names(capabilities, entity):
     """ Return active deviation module names """
@@ -175,7 +180,7 @@ def modify_member_meta(full_name, deviation_table, member):
 
 def inject_imeta_helper(entity, deviation_table, parent=None):
     """ Inject i_meta field to entity """
-    # leaflist could be a lsit a primitive types
+    # leaflist could be a list of primitive types
     if isinstance(entity, YListItem):
         entity = entity.item
         if not hasattr(entity, '_meta_info'):
@@ -219,9 +224,19 @@ def inject_imeta_helper(entity, deviation_table, parent=None):
             continue
         elif isinstance(value, READ) or isinstance(value, DELETE):
             continue
+        elif member.mtype == REFERENCE_LEAFLIST:
+            if not isinstance(value, YLeafList):
+                raise YPYServiceError(error_msg="Assigned object to YLeafList {}. "
+                                      "Use list append or extend method instead."
+                                      .format(entity.i_meta.name))
         elif member.mtype == REFERENCE_LIST:
-            for v in value:
-                inject_imeta_helper(v, deviation_table, entity.i_meta)
+            if not isinstance(value, YList):
+                raise YPYServiceError(error_msg="Assigned object to YList {}. "
+                                      "Use list append or extend method instead."
+                                      .format(entity.i_meta.name))
+            else:
+                for v in value:
+                    inject_imeta_helper(v, deviation_table, entity.i_meta)
         elif member.mtype in (REFERENCE_CLASS, ANYXML_CLASS):
             inject_imeta_helper(value, deviation_table, entity.i_meta)
 

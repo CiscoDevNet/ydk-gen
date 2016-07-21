@@ -94,10 +94,12 @@ class XmlEncoder(object):
                     self.encode_to_xml(child, elem, optype)
             elif member.mtype == REFERENCE_LEAFLIST and isinstance(value, list):
                 for child in value:
-                    member_elem = etree.SubElement(elem, member.name, nsmap=NSMAP)
+
                     if entity.i_meta.namespace is not None and entity.i_meta.namespace != _yang_ns._namespaces[member.module_name]:
                         NSMAP[None] = _yang_ns._namespaces[member.module_name]
-                    member_elem.text = self.encode_value(member, NSMAP, child.item)
+                    text = self.encode_value(member, NSMAP, child.item)
+                    member_elem = etree.SubElement(elem, member.name, nsmap=NSMAP)
+                    member_elem.text = text
             elif member.mtype == REFERENCE_UNION:
                 for contained_member in member.members:
                     NSMAP={}
