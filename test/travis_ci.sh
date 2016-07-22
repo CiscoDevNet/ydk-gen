@@ -73,22 +73,25 @@ function setup_env {
     sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libcurl4-openssl-dev libtool
 
     cd ~
-    git clone https://github.com/Kitware/CMake.git
+    git clone https://github.com/Kitware/CMake.git 
     git clone https://github.com/unittest-cpp/unittest-cpp.git
     git clone https://git.libssh.org/projects/libssh.git libssh
     git clone https://github.com/CESNET/libnetconf
 
     printf "\nMaking CMake...\n"
     cd CMake
+    git checkout 8842a501cffe67a665b6fe70956e207193b3f76d
     ./bootstrap && make && make install
 
     printf "\nMaking unittest-cpp...\n"
     cd ~/unittest-cpp/builds
+    git checkout 510903c880bc595cc6a2085acd903f3c3d956c54
     cmake ..
     cmake --build ./ --target install
 
     printf "\nMaking libssh...\n"
     cd ~/libssh
+    git checkout 47d21b642094286fb22693cac75200e8e670ad78
     mkdir builds
     cd builds
     cmake ..
@@ -96,6 +99,7 @@ function setup_env {
 
     printf "\nMaking libnetconf...\n"
     cd ~/libnetconf
+    git checkout d4585969d71b7d7dec181955a6753b171b4a8424
     ./configure && make && make install
 
     cd $YDKGEN_HOME
