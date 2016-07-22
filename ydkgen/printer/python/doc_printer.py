@@ -30,7 +30,8 @@ class DocPrinter(object):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    def print_module_documentation(self, named_element):
+    def print_module_documentation(self, named_element, identity_subclasses):
+        self.identity_subclasses = identity_subclasses
         self.lines = []
         
         if isinstance(named_element, Enum):
@@ -69,7 +70,7 @@ class DocPrinter(object):
         self._print_class_hierarchy(clazz)
         if clazz.stmt.search_one('presence') is not None:
             self._append('This class is a :ref:`presence class<presence-class>`\n')
-        self._print_docstring(clazz, get_class_docstring(clazz))
+        self._print_docstring(clazz, get_class_docstring(clazz, self.identity_subclasses))
         if not clazz.is_identity() and not clazz.is_grouping():
             self._print_class_config_method()
         self.ctx.lvl_dec()

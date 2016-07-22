@@ -48,6 +48,7 @@ class MetaInfoData:
         self.clazz_name = None
         self.is_many = prop.is_many
         self.doc_link = None
+        self.doc_link_description = ''
         self.children = []
         self.comment = prop.comment
         self.is_key = prop.is_key()
@@ -57,7 +58,7 @@ class MetaInfoData:
         self.mandatory = False
 
 
-def get_class_docstring(clazz):
+def get_class_docstring(clazz, identity_subclasses=None):
     class_description = ''
     if clazz.comment is not None:
         class_description = clazz.comment
@@ -69,8 +70,15 @@ def get_class_docstring(clazz):
             prop_comment = prop.comment.replace('\n', ' ')
             if prop_comment.endswith('.'):
                 prop_comment = prop_comment[:-1]
+
+        id_subclasses = None
+        if (hasattr(prop.property_type, 'is_identity') and 
+            prop.property_type.is_identity() and identity_subclasses is not None):
+            id_subclasses = identity_subclasses
+
         meta_info_data = get_meta_info_data(
-            prop, prop.property_type, prop.stmt.search_one('type'))
+            prop, prop.property_type, prop.stmt.search_one('type'), id_subclasses)
+
         if meta_info_data is None:
             continue
 
@@ -101,7 +109,13 @@ def get_type_doc(meta_info_data, type_depth):
             properties_description.extend(get_type_doc(child, type_depth + 1))
             properties_description.append('\n----\n')
     else:
-        properties_description.append('\t**type**\: %s\n\n' % (meta_info_data.doc_link))
+        target = meta_info_data.doc_link
+        if isinstance(meta_info_data.doc_link, list):
+            doc_link = map(lambda l: '\n\n\t\t%s' % l, meta_info_data.doc_link)
+            target = ''.join(doc_link)
+        properties_description.append('\t**type**\: %s %s\n\n' % 
+            (meta_info_data.doc_link_description, target))
+
         prop_restriction = get_property_restriction(meta_info_data)
         if prop_restriction is not None and len(prop_restriction) > 0:
             properties_description.append('\t%s\n\n' % (prop_restriction))
@@ -166,7 +180,7 @@ def format_range_string(ranges):
     return range_string
 
 
-def get_meta_info_data(prop, property_type, type_stmt):
+def get_meta_info_data(prop, property_type, type_stmt, identity_subclasses=None):
     """ Gets an instance of MetaInfoData that has the useful information about the property.
 
         Args:
@@ -187,12 +201,27 @@ def get_meta_info_data(prop, property_type, type_stmt):
         meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name()
         meta_info_data.clazz_name = "'%s'" % property_type.qn()
 
-        meta_info_data.doc_link = ':py:class:`%s <%s.%s>`' % (
-            property_type.name, property_type.get_py_mod_name(), property_type.qn())
+        doc_link_template = ':py:class:`%s <%s.%s>`'
+
+        if identity_subclasses is None:
+            meta_info_data.doc_link = doc_link_template % (
+                property_type.name, 
+                property_type.get_py_mod_name(), 
+                property_type.qn()
+            )
+        else:
+            meta_info_data.doc_link = []
+            for subclass in identity_subclasses[property_type]:
+                meta_info_data.doc_link.append(doc_link_template % (
+                    subclass.name, 
+                    subclass.get_py_mod_name(), 
+                    subclass.qn()
+                ))
+            meta_info_data.doc_link_description = 'one of the below types:'
 
         if prop.is_many:
             meta_info_data.mtype = 'REFERENCE_LIST'
-            meta_info_data.doc_link = 'list of %s' % meta_info_data.doc_link
+            meta_info_data.doc_link_description = 'list of %s' % meta_info_data.doc_link_description
         elif property_type.is_identity():
             meta_info_data.mtype = 'REFERENCE_IDENTITY_CLASS'
         else:
