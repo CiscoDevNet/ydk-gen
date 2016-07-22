@@ -1,14 +1,13 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.6)
 cmake_policy(SET CMP0048 NEW)
 project(ydk_cpp VERSION 0.4.2)
 message ("Generating project ${PROJECT_NAME} ${PROJECT_VERSION}")
 
 set (CMAKE_CXX_FLAGS "-Wall -std=c++0x")
-set (YDK_DIR .)
-# set (TESTS_DIR ${CMAKE_SOURCE_DIR}/tests)
+set (YDK_DIR ${CMAKE_SOURCE_DIR}/ydk)
 set (src_files ${YDK_DIR}/netconf_client.h ${YDK_DIR}/netconf_client.cpp)
 
-find_package(Boost COMPONENTS filesystem system date_time python REQUIRED)
+find_package(Boost COMPONENTS python REQUIRED)
 find_package(PythonLibs 2.7 REQUIRED)
 
 find_library(netconf_location netconf)
