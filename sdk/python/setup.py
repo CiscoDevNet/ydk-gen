@@ -26,7 +26,9 @@ from os import path
 import platform
 import shutil
 import subprocess
+import os
 
+from git import Repo
 
 __version__ = ''
 here = path.abspath(path.dirname(__file__))
@@ -41,12 +43,14 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 ydk_packages = find_packages(exclude=['contrib', 'docs*', 'tests*', 'ncclient', 'samples'])
 ext = []
 
-'''lib_path = here + '/.libs'
+
+lib_path = here + '/.libs'
 libnetconf_include_path = here + '/.includes/'
 lib_paths = [lib_path]
 if platform.system() == 'Darwin' and subprocess.call(['brew info python &> /dev/null'], shell=True) == 0:
     python_homebrew_path='/usr/local/opt/python/Frameworks/Python.framework/Versions/2.7/lib'
-    lib_paths = [lib_path, python_homebrew_path]
+    if os.path.isdir(python_homebrew_path) and os.path.exists(python_homebrew_path):
+        lib_paths = [lib_path, python_homebrew_path]
 
 
 def _build_ydk_client_using_prebuilt_libnetconf():
@@ -58,23 +62,31 @@ def _build_ydk_client_using_prebuilt_libnetconf():
 
 
 # Compile the YDK C++ code
-exit_status = subprocess.call(['cd ' + here + '/.libs/libnetconf/ && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a .. '], shell=True)
-if exit_status != 0:
-    exit_status = _build_ydk_client_using_prebuilt_libnetconf()
+if platform.system() != 'Windows':
+    libnetconf_path=here + '/.libs/libnetconf/'
+    if os.listdir(libnetconf_path) == []:
+        print 'Checking out libnetconf'
+        repo = Repo.clone_from("https://github.com/abhikeshav/libnetconf.git", libnetconf_path)
+        repo.git.checkout('57f44ce2425bfb17d231a111995d6537ae4dd7cb')
+    exit_status = subprocess.call(['cd ' + here + '/.libs/libnetconf/ && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a .. '], shell=True)
+    if exit_status != 0:
+        exit_status = _build_ydk_client_using_prebuilt_libnetconf()
 
-if exit_status != 0:
-    print('\nFailed to build libnetconf. Install all the dependencies mentioned in the README. No native code is being built.')
-    ext = []
-else:
-    ext = [extension.Extension(
-                              'ydk_client',
-                              sources=[here + '/ydk/providers/_cpp_files/netconf_client.cpp'],
-                              language='c++',
-                              libraries=['netconf', 'python2.7', 'boost_python', 'xml2', 'curl', 'ssh', 'ssh_threads', 'xslt'],
-                              extra_compile_args=['-Wall', '-std=c++0x'],
-                              include_dirs=['/usr/include/python2.7', '/usr/include/boost', libnetconf_include_path],
-                              library_dirs=lib_paths
-                              )]'''
+
+    if exit_status != 0:
+        print('\nFailed to build libnetconf. Install all the dependencies mentioned in the README. No native code is being built.')
+        ext = []
+    else:
+        ext = [extension.Extension(
+                                  'ydk_client',
+                                  sources=[here + '/ydk/providers/_cpp_files/netconf_client.cpp'],
+                                  language='c++',
+                                  libraries=['netconf', 'python2.7', 'boost_python', 'xml2', 'curl', 'ssh', 'ssh_threads', 'xslt'],
+                                  extra_compile_args=['-Wall', '-std=c++0x'],
+                                  include_dirs=['/usr/include/python2.7', '/usr/include/boost', libnetconf_include_path],
+                                  library_dirs=lib_paths
+                                  )]
+
 
 setup(
     name='ydk',

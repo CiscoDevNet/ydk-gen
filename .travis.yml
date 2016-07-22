@@ -10,7 +10,7 @@ os:
 before_install:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update && sudo apt-get install -y python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install python boost-python libssh jq; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew unlink pkg-config && brew install python boost-python libssh jq pkg-config; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker pull ydkdev/confd; fi
 
 script:
@@ -25,6 +25,8 @@ script:
     - pip install gen-api/python/dist/*
     - export PYTHONPATH=gen-api/python:$PYTHONPATH
     - python gen-api/python/tests/test_sanity_codec.py
-#    - sudo ./test_native_ydk.py
-#    - cd ../../..
+#    - cd test && sudo ./test_native_ydk.py
+#    - cd ..
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run -v $PWD/test/:/root/test/ ydkdev/confd /root/test/travis_ci.sh -r https://github.com/$REPO.git -b $BRANCH ; fi
+
+
