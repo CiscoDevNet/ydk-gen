@@ -31,7 +31,7 @@ import ydk.models._yang_ns as _yang_ns
 class ValueEncoder(object):
     def encode(self, member, NSMAP, value):
         text = ''
-        if member.mtype == REFERENCE_IDENTITY_CLASS or 'Identity' in member.ptype:
+        if member.mtype == REFERENCE_IDENTITY_CLASS or member.ptype.endswith('Identity'):
             module = importlib.import_module(member.pmodule_name)
             clazz = reduce(getattr, member.clazz_name.split('.'), module)
 
@@ -43,7 +43,7 @@ class ValueEncoder(object):
                 else:
                     NSMAP['idx'] = _yang_ns._namespaces[identity_inst._meta_info().module_name]
                     text = 'idx:%s' % identity_inst._meta_info().yang_name
-        elif member.mtype == REFERENCE_BITS:
+        elif member.mtype == REFERENCE_BITS or member.ptype.endswith('Bits'):
             module = importlib.import_module(member.pmodule_name)
             clazz = reduce(getattr, member.clazz_name.split('.'), module)
             if isinstance(value, clazz):
@@ -51,7 +51,7 @@ class ValueEncoder(object):
                 value = " ".join([k for k in bits_value._dictionary if bits_value._dictionary[k] == True])
                 if (len(value) > 1):
                     text = value
-        elif member.mtype == REFERENCE_ENUM_CLASS or 'Enum' in member.ptype:
+        elif member.mtype == REFERENCE_ENUM_CLASS or member.ptype.endswith('Enum'):
             enum_value = value
             module = importlib.import_module(member.pmodule_name)
             enum_clazz = reduce(getattr, member.clazz_name.split('.'), module)

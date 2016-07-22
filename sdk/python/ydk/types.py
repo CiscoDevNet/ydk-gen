@@ -220,10 +220,23 @@ class YListItem(object):
         self.name = name
 
     def __eq__(self, other):
-        return ( isinstance(other ,self.__class__) and self.item == other.item)
+        if isinstance(other, self.__class__):
+            if self.item.__class__.__name__.endswith('Identity'):
+                return type(self.item) == type(other.item)
+            else:
+                return self.item == other.item
+        else:
+            return False
 
     def __repr__(self):
         return str(self.item)
+
+    def _has_data(self):
+        if hasattr(self.item, '_has_data'):
+            return self.item._has_data()
+        else:
+            # Enum, Identity, Python primitive types.
+            return True
 
 class YLeafList(YList):
     """ Represents an associate list with support for hanging a parent

@@ -354,7 +354,27 @@ class SanityTest(unittest.TestCase):
         result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
-    def test_enum_list(self):
+    @unittest.skip('ConfD internal error.')
+    def test_bits_leaflist(self):
+        # User needs to append Bits instance manually to bits leaflist.
+        runner = self._create_runner()
+        bits_0 = runner.ytypes.built_in_t.BitsLlist_Bits()
+        bits_1 = runner.ytypes.built_in_t.BitsLlist_Bits()
+        bits_0['disable-nagle'] = True
+        bits_1['auto-sense-speed'] = True
+        runner.ytypes.built_in_t.bits_llist.extend([bits_0, bits_1])
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner1
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner ,runner1)
+        self.assertEqual(result, True)
+
+
+    def test_enum_leaflist(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.enum_llist.append(YdkEnumTestEnum.LOCAL)
         runner.ytypes.built_in_t.enum_llist.append(YdkEnumTestEnum.REMOTE)
@@ -368,8 +388,7 @@ class SanityTest(unittest.TestCase):
         result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
-    @unittest.skip("Doesn't work")
-    def test_identity_list(self):
+    def test_identity_leaflist(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildIdentityIdentity())
         runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildChildIdentityIdentity())

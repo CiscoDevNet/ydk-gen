@@ -23,7 +23,7 @@ from ydk.models.ydktest import ydktest_sanity_types as ysanity_types
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from tests.compare import is_equal
-from ydk.errors import YPYError, YPYModelError
+from ydk.errors import YPYError, YPYModelError, YPYServiceError
 
 from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
 
@@ -211,6 +211,31 @@ class SanityTest(unittest.TestCase):
             self.assertEqual(err.message.strip(), expected_msg)
         else:
             raise Exception('YPYModelError not raised')
+
+    def test_yleaflist_assignment(self):
+        try:
+            runner = self._create_runner()
+            runner.ytypes.built_in_t.llstring = ['invalid', 'leaf-list', 'assignment']
+            self.crud.create(self.ncc, runner)
+        except YPYServiceError as err:
+            expected_msg = "Assigned object to YLeafList Runner.Ytypes.BuiltInT. Use list append or extend method instead."
+            self.assertEqual(err.message.strip(), expected_msg)
+
+
+    def test_ylist_assignment(self):
+        try:
+            runner = self._create_runner()
+            elems, n = [], 10
+            for i in range(n):
+                l = ysanity.Runner.OneList.Ldata()
+                l.number = i
+                l.name = str(i)
+                elems.append(l)
+            runner.one_list.ldata = elems
+            self.crud.create(self.ncc, runner)
+        except YPYServiceError as err:
+            expected_msg = "Assigned object to YList Runner.OneList. Use list append or extend method instead."
+            self.assertEqual(err.message.strip(), expected_msg)
 
 if __name__ == '__main__':
     import sys
