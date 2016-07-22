@@ -88,7 +88,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         def _walk_n_print(named_element, p):
             self.print_file(get_python_module_documentation_file_name(p, named_element),
                             emit_module_documentation,
-                            _EmitArgs(self.ypy_ctx, named_element))
+                            _EmitArgs(self.ypy_ctx, named_element, self.identity_subclasses))
 
             for owned_element in named_element.owned_elements:
                 if isinstance(owned_element, Class) or isinstance(owned_element, Enum):
@@ -188,8 +188,8 @@ def emit_importests(ctx, packages):
     ImportTestPrinter(ctx).print_import_tests(packages)
 
 
-def emit_module_documentation(ctx, named_element):
-    DocPrinter(ctx).print_module_documentation(named_element)
+def emit_module_documentation(ctx, named_element, identity_subclasses):
+    DocPrinter(ctx).print_module_documentation(named_element, identity_subclasses)
 
 
 def emit_table_of_contents(ctx, packages):

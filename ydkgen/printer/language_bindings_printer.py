@@ -24,6 +24,7 @@ import os
 import shutil
 
 from ydkgen.printer import printer_context
+from ydkgen.api_model import Class
 
 
 class _EmitArgs:
@@ -50,6 +51,7 @@ class LanguageBindingsPrinter(object):
         self.packages = sorted(self.packages, key=lambda package: package.name)
         self.deviation_packages = [p for p in self.packages if hasattr(p, 'is_deviation')]
         self.packages = [p for p in self.packages if not hasattr(p, 'is_deviation')]
+        self.identity_subclasses = self._get_identity_subclasses_map()
 
         self.initialize_print_environment()
         self.print_files()
@@ -91,3 +93,32 @@ class LanguageBindingsPrinter(object):
         if not os.path.isdir(path):
             os.mkdir(path)
         return path
+
+    def _get_identity_subclasses_map(self):
+        identity_subclasses = {}
+        identity_tuples = self._get_identity_tuples()
+        for (child_identity, base_identities) in identity_tuples:
+            for base_identity in base_identities:
+                if base_identity in identity_subclasses:
+                    existing_child_identities = identity_subclasses[base_identity]
+                    existing_child_identities.append(child_identity)
+                    identity_subclasses[base_identity] = existing_child_identities
+                else:
+                    identity_subclasses[base_identity] = [child_identity]
+        return identity_subclasses
+
+    def _get_identity_tuples(self):
+        identity_subclasses = []
+        for package in self.packages:
+            identity_subclasses.extend(self._get_identity_subclasses_for_package(package))
+        return identity_subclasses
+
+    def _get_identity_subclasses_for_package(self, element):
+        identity_subclasses = []
+        for subelement in element.owned_elements:
+            if isinstance(subelement, Class):
+                if subelement.is_identity():
+                    identity_subclasses.append((subelement, subelement.extends))
+                else:
+                    identity_subclasses.extend(self._get_identity_subclasses_for_package(subelement))
+        return identity_subclasses

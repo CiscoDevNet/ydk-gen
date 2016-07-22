@@ -22,6 +22,7 @@ Mac
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     $ xcode-select --install
 
+
 Install Tips:
 -------------
 Create a shared library::
@@ -41,6 +42,44 @@ Notes:
 - YANG Development Kit is a C++ SDK that provides an API to access/modify configuration and operational entities that are modeled using YANG
 - The modules under the package ydk.models are derived from YANG models
 - YDK provides a simple CRUD (Create/Read/Update/Delete) api that allows the developer to perform these operations on entities on a server that supports them
+
+Using CMake
+===========
+This requires need CMake v3.6 or later
+
+To configure the build environment and build the project:
+    cd sdk/cpp/builds
+    cmake ..
+    make install or cmake --build .
+
+ydk_client will be built as a static library in sdk/cpp/builds/ydk
+tests will be built as executable(s) in sdk/cpp/builds/tests
+
+Building for IDEs
+-----------------
+
+To build for a specific IDE (makefile is used by default):
+    cmake -G "<generator_name>" ..
+
+List generators names available with:
+    cmake help
+
+Tests
+-----
+
+To run all tests:
+    cmake .. -DBUILD_TESTS=ON
+    make install or cmake --build .
+    make test
+
+To run individual tests:
+    ctest <test_name>
+
+To run individual tests verbosely:
+    ctest -R <test_name> -VV
+or:
+    cd sdk/cpp/builds/tests
+    ./<test_file_name>
 
 
 Example Usage

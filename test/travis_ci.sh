@@ -70,7 +70,39 @@ function set_root {
 
 function setup_env {
     sudo apt-get update
-    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool
+    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libcurl4-openssl-dev libtool
+
+    cd ~
+    git clone https://github.com/Kitware/CMake.git 
+    git clone https://github.com/unittest-cpp/unittest-cpp.git
+    git clone https://git.libssh.org/projects/libssh.git libssh
+    git clone https://github.com/CESNET/libnetconf
+
+    printf "\nMaking CMake...\n"
+    cd CMake
+    git checkout 8842a501cffe67a665b6fe70956e207193b3f76d
+    ./bootstrap && make && make install
+
+    printf "\nMaking unittest-cpp...\n"
+    cd ~/unittest-cpp/builds
+    git checkout 510903c880bc595cc6a2085acd903f3c3d956c54
+    cmake ..
+    cmake --build ./ --target install
+
+    printf "\nMaking libssh...\n"
+    cd ~/libssh
+    git checkout 47d21b642094286fb22693cac75200e8e670ad78
+    mkdir builds
+    cd builds
+    cmake ..
+    make install
+
+    printf "\nMaking libnetconf...\n"
+    cd ~/libnetconf
+    git checkout d4585969d71b7d7dec181955a6753b171b4a8424
+    ./configure && make && make install
+
+    cd $YDKGEN_HOME
     virtualenv myenv
     source myenv/bin/activate
     pip install coverage
@@ -185,10 +217,21 @@ function run_cpp_gen_tests {
 
 # cpp sanity tests
 function run_cpp_sanity_tests {
-    sudo apt install libunittest++-dev
     cd $YDK_ROOT/sdk/cpp/tests
     run_exec_test make clean all
     cd $YDK_ROOT
+}
+
+# cmake tests
+function run_cmake_tests {
+    printf "\nRunning CMake\n"
+    cd $YDK_ROOT/sdk/cpp/builds
+    cmake ..
+    make install
+    
+    cmake .. -DBUILD_TESTS=ON
+    make install
+    make test
 }
 
 # deviation tests
@@ -251,19 +294,34 @@ while getopts "r:b:" o; do
 done
 
 clone_repo
+printf "\nIn Method set_root\n"
 set_root
+printf "\nIn Method setup_env\n"
 setup_env
+printf "\nIn Method compile_yang_to_fxs\n"
 compile_yang_to_fxs
+printf "\nIn Method init_confd\n"
 init_confd
+printf "\nIn Method run_pygen_test\n"
 run_pygen_test
+printf "\nIn Method generate_ydktest_package\n"
 generate_ydktest_package
+printf "\nIn Method run_sanity_tests\n"
 run_sanity_tests
+printf "\nIn Method submit_coverage\n"
 submit_coverage
+printf "\nIn Method run_cpp_gen_tests\n"
 run_cpp_gen_tests
+printf "\nIn Method run_cpp_sanity_tests\n"
 run_cpp_sanity_tests
+printf "\nIn Method run_cmake_tests\n"
+run_cmake_tests
 
+printf "\nIn Method setup_deviation_sanity_models\n"
 setup_deviation_sanity_models
+printf "\nIn Method run_deviation_sanity\n"
 run_deviation_sanity
+printf "\nIn Method teardown_env\n"
 teardown_env
 
 exit
