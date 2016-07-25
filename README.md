@@ -41,6 +41,9 @@ user-machine# xcode-select --install
 user-machine# brew install boost boost-python pkg-config cmake libssh
 ```
 
+####Windows
+It is recommended to install a python distribution like [PythonXY](https://python-xy.github.io/) on your system before installing YDK-Py
+
 ## Installation
 
 ```
