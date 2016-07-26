@@ -26,6 +26,7 @@ from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LEAFLI
 from ydk.types import Empty, Decimal64, YLeafList, YListItem
 from ydk.models import _yang_ns
 from ydk.services.meta_service import MetaService
+from ydk.errors import YPYServiceProviderError, YPYErrorCode
 
 import logging
 import re
@@ -37,7 +38,7 @@ class XmlDecoder(object):
         payload_tree = etree.fromstring(payload)
         top_entity = self._get_top_entity(payload_tree)
         rt = payload_tree.getroottree().getroot()
-        curr_rt = get_root(rt, top_entity._common_path, _yang_ns._namespaces)
+        curr_rt = get_root(rt, top_entity, _yang_ns._namespaces)
         XmlDecoder._bind_to_object_helper(curr_rt, top_entity)
         return top_entity
 
@@ -53,14 +54,14 @@ class XmlDecoder(object):
         return self.get_top_container_for_namespace(namespace, root.tag.split('}')[1])
 
     @staticmethod
-    def _bind_to_object(payload, entity, capabilities, pretty_p='|-'):
-        active_deviation_tables = MetaService.get_active_deviation_tables(capabilities, entity)
+    def _bind_to_object(payload, top_entity, capabilities, pretty_p='|-'):
+        active_deviation_tables = MetaService.get_active_deviation_tables(capabilities, top_entity)
         payload = payload_convert(payload)
         if payload is None:
-            return entity
+            return top_entity
         rt = etree.fromstring(payload).getroottree().getroot()
-        curr_rt = get_root(rt, entity._common_path, _yang_ns._namespaces)
-        XmlDecoder._bind_to_object_helper(curr_rt, entity, active_deviation_tables, pretty_p='|-')
+        curr_rt = get_root(rt, top_entity, _yang_ns._namespaces)
+        XmlDecoder._bind_to_object_helper(curr_rt, top_entity, active_deviation_tables, pretty_p='|-')
 
     @staticmethod
     def _bind_to_object_helper(root, entity, deviation_tables={}, pretty_p='|-'):
@@ -282,80 +283,19 @@ def get_class_instance(py_mod_name, clazz_name):
     return get_class(py_mod_name, clazz_name)()
 
 
-def get_root(root, common_path, module_nmsp):
-    common_path = common_path[1:]
-    pathlist = []
-    while len(common_path) > 0:
-        i_l = common_path.find('[')
-        if i_l == -1:
-            break
-        elif i_l != 0:
-            pathlist += common_path[:i_l].split('/')
-        common_path = common_path[i_l + 1:]
-        i_r = common_path.find(']')
-        # append it to last path element
-        pathlist[-1] += '[' + common_path[:i_r] + ']'
-        common_path = common_path[i_r + 1:]
-    if len(common_path):
-        pathlist += common_path.split('/')
-    pathlist = [path for path in pathlist if path != '']
+def get_root(payload_root, top_entity, NSMAP):
+    prefix = top_entity._meta_info().module_name
+    tag = top_entity._meta_info().yang_name
+    namespace = NSMAP[prefix]
+    if payload_root.tag == 'rpc-reply':
+        root =  payload_root.find('{}:{}'.format(prefix, tag),
+                                  namespaces=NSMAP)
+    elif payload_root.tag == '{{{}}}{}'.format(namespace, tag):
+        root = payload_root
+    else:
+        raise YPYServiceProviderError(error_code=YPYErrorCode.INVALID_DECODE_VALUE)
 
-    # XXX:YYY[XXX:ZZZ = abc] => (XXX, YYY[XXX:ZZZ = abc])
-    pathlist = [tuple(path.split(':', 1)) for path in pathlist]
-    def update_prefix(tu):
-        return (module_nmsp[tu[0]],) + tu[1:]
-    # replace prefix with actual namespace
-    pathlist = map(lambda tu: update_prefix(tu), pathlist)
-    # tuple have multiple keys
-    def update_tuple(tu):
-        if not '[' in tu[1]:
-            return tu
-        else:
-            segs = re.split('[\[\]]', tu[1])
-            segs = [seg for seg in segs if seg != '']
-            tag_name, key_vals = segs[0], segs[1:]
-            key_vals = map(lambda s: s.replace(' ', '').split('='), key_vals)
-            key_vals = map(lambda lst: [lst[0].split(':')[1], lst[1]], key_vals)
-            _dict = {}
-            for k, v in key_vals:
-                _dict[k] = v
-            return tuple((tu[0], tag_name, _dict))
-    # (XXX, YYY[XXX:ZZZ = abc]) => (XXX, YYY, ZZZ, abc)
-    # unpack key_val to a key_val dict (prefix, tag_name, key_val_dict)
-    pathlist = map(lambda tu: update_tuple(tu), pathlist)
-    return get_root_helper(root, pathlist)
-
-
-def get_root_helper(curr_rt, pathlist):
-    while pathlist != []:
-        _hd, _tl = pathlist[0], pathlist[1:]
-        tag_name = '{' + _hd[0] + '}' + _hd[1]
-        if len(_hd) == 2:
-            rt_new = [rt for rt in curr_rt.getchildren() if rt.tag == tag_name]
-        else:
-            # match each key
-            for ch in curr_rt.getchildren():
-                # multiple ch candidates,
-                # return the ch which its ch matches dict specific
-                _dict = _hd[2]
-
-                def matches(chch):
-                    t = chch.tag.split('}')[1]
-                    if t in _dict.keys() and chch.text != _dict[t]:
-                        return False
-                    else:
-                        return True
-                _match = reduce(lambda init, chch: matches(chch) and init, ch.getchildren(), True)
-
-                if _match:
-                    break
-            rt_new = [ch]
-        if len(rt_new) == 0:
-            return curr_rt
-        if len(rt_new) == 1:
-            curr_rt = rt_new[0]
-        pathlist = _tl
-    return curr_rt
+    return root
 
 
 def payload_convert(payload):

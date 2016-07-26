@@ -19,7 +19,7 @@ sanity test for ydktest-sanity.yang
 """
 
 import unittest
-from tests.compare import is_equal
+from compare import is_equal
 
 from ydk.models.ydktest import ydktest_sanity as ysanity 
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider

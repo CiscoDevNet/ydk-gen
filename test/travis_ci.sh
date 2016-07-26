@@ -188,7 +188,6 @@ function run_sanity_native_tests {
 
 function run_sanity_tests {
     pip install gen-api/python/dist/ydk*.tar.gz
-    source sdk/python/env.sh
 
     printf "\nRunning sanity tests\n"
     export PYTHONPATH=./sdk/python:$PYTHONPATH
@@ -250,7 +249,6 @@ function setup_deviation_sanity_models {
 # sanity deviation
 function run_deviation_sanity {
     cd $YDK_ROOT
-    source gen-api/python/env.sh
     export PYTHONPATH=./gen-api/python:$PYTHONPATH
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py native
@@ -259,7 +257,6 @@ function run_deviation_sanity {
     printf "\nGenerating ydktest deviation model APIs\n"
     python generate.py --python --profile profiles/test/deviation/deviation.json
     pip install gen-api/python/dist/ydk*.tar.gz
-    source gen-api/python/env.sh
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py native
 }

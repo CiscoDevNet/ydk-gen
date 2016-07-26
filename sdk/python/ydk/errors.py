@@ -27,6 +27,7 @@ class YPYErrorCode(Enum):
     ''' Exception Enum for YDK errors '''
     INVALID_UNION_VALUE = 'Cannot translate union value'
     INVALID_ENCODE_VALUE = 'Cannot encode value'
+    INVALID_DECODE_RPC = 'Cannout decode value'
 
     INVALID_HIERARCHY_PARENT = 'Parent is not set. \
                     Parent Hierarchy cannot be determined'

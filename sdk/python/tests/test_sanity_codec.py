@@ -19,9 +19,10 @@ sanity test for CodecService
 """
 
 import unittest
-from tests.compare import is_equal
+from compare import is_equal
 
 from ydk.models.ydktest import ydktest_sanity as ysanity
+from ydk.models.oc import oc_pattern
 from ydk.providers import CodecServiceProvider
 from ydk.services import CodecService
 from ydk.errors import YPYServiceError
@@ -33,41 +34,53 @@ class SanityYang(unittest.TestCase):
         self.codec = CodecService()
         self.provider = CodecServiceProvider(type='xml')
 
-        self._enum_payload_1 = \
-'<built-in-t xmlns="http://cisco.com/ns/yang/ydktest-sanity">\n  <enum-value>local</enum-value>\n</built-in-t>\n'
+        self._enum_payload_1 = '''<built-in-t xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+  <enum-value>local</enum-value>
+</built-in-t>
+'''
 
-        self._enum_payload_2 = \
-'<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">\n  <ytypes>\n    <built-in-t>\n      <enum-value>local</enum-value>\n    </built-in-t>\n  </ytypes>\n</runner>\n'
+        self._enum_payload_2 = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+  <ytypes>
+    <built-in-t>
+      <enum-value>local</enum-value>
+    </built-in-t>
+  </ytypes>
+</runner>
+'''
 
-        self._runner_payload = \
-'<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">\n\
-  <two-list>\n\
-    <ldata>\n\
-      <number>21</number>\n\
-      <name>runner:twolist:ldata[21]:name</name>\n\
-      <subl1>\n\
-        <number>211</number>\n\
-        <name>runner:twolist:ldata[21]:subl1[211]:name</name>\n\
-      </subl1>\n\
-      <subl1>\n\
-        <number>212</number>\n\
-        <name>runner:twolist:ldata[21]:subl1[212]:name</name>\n\
-      </subl1>\n\
-    </ldata>\n\
-    <ldata>\n\
-      <number>22</number>\n\
-      <name>runner:twolist:ldata[22]:name</name>\n\
-      <subl1>\n\
-        <number>221</number>\n\
-        <name>runner:twolist:ldata[22]:subl1[221]:name</name>\n\
-      </subl1>\n\
-      <subl1>\n\
-        <number>222</number>\n\
-        <name>runner:twolist:ldata[22]:subl1[222]:name</name>\n\
-      </subl1>\n\
-    </ldata>\n\
-  </two-list>\n\
-</runner>\n'
+        self._runner_payload = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+  <two-list>
+    <ldata>
+      <number>21</number>
+      <name>runner:twolist:ldata[21]:name</name>
+      <subl1>
+        <number>211</number>
+        <name>runner:twolist:ldata[21]:subl1[211]:name</name>
+      </subl1>
+      <subl1>
+        <number>212</number>
+        <name>runner:twolist:ldata[21]:subl1[212]:name</name>
+      </subl1>
+    </ldata>
+    <ldata>
+      <number>22</number>
+      <name>runner:twolist:ldata[22]:name</name>
+      <subl1>
+        <number>221</number>
+        <name>runner:twolist:ldata[22]:subl1[221]:name</name>
+      </subl1>
+      <subl1>
+        <number>222</number>
+        <name>runner:twolist:ldata[22]:subl1[222]:name</name>
+      </subl1>
+    </ldata>
+  </two-list>
+</runner>
+'''
+        self._oc_pattern_payload = '''<A xmlns="http://cisco.com/ns/yang/oc-pattern">
+  <a>Hello</a>
+</A>
+'''
 
     @classmethod
     def tearDownClass(self):
@@ -193,6 +206,13 @@ class SanityYang(unittest.TestCase):
         for module in entity:
             self.assertEqual(is_equal(r_entity[module], entity[module]), True)
         self.assertEqual(payload, self.codec.encode(self.provider, entity))
+
+    def test_decode_oc_pattern(self):
+        obj_A = oc_pattern.A()
+        obj_A.a = 'Hello'
+        entity = self.codec.decode(self.provider, self._oc_pattern_payload)
+
+        self.assertEqual(is_equal(obj_A, entity), True)
 
 if __name__ == '__main__':
     unittest.main()

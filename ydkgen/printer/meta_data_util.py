@@ -93,8 +93,8 @@ def get_class_docstring(clazz, identity_subclasses=None):
 
         properties_description.extend(get_type_doc(meta_info_data, type_depth=1))
 
-        if clazz.stmt.search_one('presence'):
-            properties_description.append(add_presence_property_docstring(clazz))
+    if clazz.stmt.search_one('presence'):
+        properties_description.append(add_presence_property_docstring(clazz))
 
     return convert_to_reStructuredText(class_description) + '\n\n' + ''.join(properties_description)
 

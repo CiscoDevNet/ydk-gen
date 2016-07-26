@@ -20,7 +20,7 @@ import unittest
 from ydk.services import CRUDService
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
-from tests.compare import is_equal
+from compare import is_equal
 from ydk.errors import YPYError, YPYModelError
 from ydk.models.bgp import bgp
 from ydk.models.routing.routing_policy import DefaultPolicyTypeEnum, RoutingPolicy

@@ -19,7 +19,7 @@
 """
 
 import unittest
-from tests.compare import is_equal
+from compare import is_equal
 
 from ydk.services import NetconfService
 from ydk.providers import NativeNetconfServiceProvider, NetconfServiceProvider
