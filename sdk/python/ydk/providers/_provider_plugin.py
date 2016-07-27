@@ -24,7 +24,7 @@ from lxml import etree
 
 from ydk._core._dm_meta_info import REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS
 from ydk.errors import YPYServiceProviderError, YPYErrorCode
-from ydk.types import YList, YListItem, YLeafList
+from ydk.types import YList, YListItem, YLeafList, Empty
 
 from ._decoder import XmlDecoder
 from ._encoder import XmlEncoder
@@ -527,10 +527,13 @@ class _ClientSPPlugin(_SPPlugin):
         raise YPYServiceProviderError(error_code=YPYErrorCode.INVALID_RPC)
 
     def _encode_items(self, root, entity, meta_info):
+        if entity is None:
+            return root
         for key in meta_info.key_members():
             self._encode_key(root, entity, meta_info, key)
         for member in meta_info.meta_info_class_members:
-            if member.ptype == 'Empty':
+            value = getattr(entity, member.presentation_name)
+            if isinstance(value, Empty) and member.ptype == 'Empty':
                 self._encode_empty(root, entity, member)
         return root
 
