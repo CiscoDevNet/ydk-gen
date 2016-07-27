@@ -195,7 +195,7 @@ class _ClientSPPlugin(_SPPlugin):
         module = importlib.import_module(top_entity_meta_info.pmodule_name)
         entity = getattr(module, top_entity_meta_info.name)()
         return entity
-    
+
     def _get_capabilities(self):
         if self.use_native_client:
             return self.ydk_client.get_capabilities()
@@ -279,7 +279,7 @@ class _ClientSPPlugin(_SPPlugin):
 
     def connect(self, session_config):
         assert session_config.transportMode == _SessionTransportMode.SSH
-        if self.use_native_client:            
+        if self.use_native_client:
             self.ydk_client = YdkClient(
                 username=session_config.username,
                 password=session_config.password,
@@ -498,7 +498,7 @@ class _ClientSPPlugin(_SPPlugin):
             if ns is not None and parent_ns != ns:
                 root.set('xmlns', ns)
                 parent_ns = ns
-            root = self._encode_keys(root, parent, meta_info)
+            root = self._encode_items(root, parent, meta_info)
         return root
 
     def _entity_is_abstract(self, entity, meta_info):
@@ -526,10 +526,21 @@ class _ClientSPPlugin(_SPPlugin):
         self.netconf_sp_logger.error(YPYErrorCode.INVALID_RPC)
         raise YPYServiceProviderError(error_code=YPYErrorCode.INVALID_RPC)
 
-    def _encode_keys(self, root, entity, meta_info):
+    def _encode_items(self, root, entity, meta_info):
         for key in meta_info.key_members():
             self._encode_key(root, entity, meta_info, key)
+        for member in meta_info.meta_info_class_members:
+            if member.ptype == 'Empty':
+                self._encode_empty(root, entity, member)
         return root
+
+    def _encode_empty(self, root, entity, member):
+        entity_ns = entity.i_meta.namespaces
+        empty_ns = _yang_ns._namespaces[member.module_name]
+        NSMAP = {}
+        if entity_ns is not None and entity_ns != empty_ns:
+            NSMAP[None] = empty_ns
+        member_elem = etree.SubElement(root, member.name, nsmap=NSMAP)
 
     def _encode_key(self, root, entity, meta_info, key):
         key_value = getattr(entity, key.presentation_name)

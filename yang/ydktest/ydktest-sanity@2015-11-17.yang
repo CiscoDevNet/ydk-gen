@@ -214,6 +214,9 @@ module ydktest-sanity {
     description "testing for couple of leaves";
     container ytypes {
       description "config for one_level data types";
+      leaf enabled {
+        type empty;
+      }
       container built-in-t {
         description "config for built-in types";
 
