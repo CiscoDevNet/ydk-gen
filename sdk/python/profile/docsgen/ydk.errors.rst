@@ -1,0 +1,1 @@
+../../core/docsgen/ydk.errors.rst

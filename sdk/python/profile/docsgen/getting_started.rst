@@ -1,0 +1,1 @@
+../../core/docsgen/getting_started.rst

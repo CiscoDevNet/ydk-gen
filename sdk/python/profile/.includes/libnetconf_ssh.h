@@ -1,0 +1,122 @@
+/**
+ * \file libnetconf_ssh.h
+ * \author Radek Krejci <rkrejci@cesnet.cz>
+ * \brief libnetconf's header for control libssh.
+ *
+ * Copyright (c) 2012-2014 CESNET, z.s.p.o.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of the Company nor the names of its contributors
+ *    may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ *
+ * ALTERNATIVELY, provided that this notice is retained in full, this
+ * product may be distributed under the terms of the GNU General Public
+ * License (GPL) version 2 or later, in which case the provisions
+ * of the GPL apply INSTEAD OF those given above.
+ *
+ * This software is provided ``as is, and any express or implied
+ * warranties, including, but not limited to, the implied warranties of
+ * merchantability and fitness for a particular purpose are disclaimed.
+ * In no event shall the company or contributors be liable for any
+ * direct, indirect, incidental, special, exemplary, or consequential
+ * damages (including, but not limited to, procurement of substitute
+ * goods or services; loss of use, data, or profits; or business
+ * interruption) however caused and on any theory of liability, whether
+ * in contract, strict liability, or tort (including negligence or
+ * otherwise) arising in any way out of the use of this software, even
+ * if advised of the possibility of such damage.
+ *
+ */
+
+#ifndef LIBNETCONF_SSH_H_
+#define LIBNETCONF_SSH_H_
+
+
+
+#include "libnetconf/callbacks_ssh.h"
+#include "libnetconf/transport.h"
+#include "libnetconf/callhome.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @ingroup session
+ * @brief Available SSH authentication mechanisms.
+ *
+ */
+typedef enum
+{
+	NC_SSH_AUTH_PUBLIC_KEYS = 1, /**< SSH user authorization via publickeys */
+	NC_SSH_AUTH_PASSWORD = 2,   /**< SSH user authorization via password */
+	NC_SSH_AUTH_INTERACTIVE = 4 /**< interactive SSH user authorization */
+} NC_SSH_AUTH_TYPE;
+
+/**
+ * @ingroup session
+ * @brief Set the preference of the SSH authentication methods.
+ *
+ * Allowed authentication types are defined as NC_SSH_AUTH_TYPE type.
+ * The default preferences are:
+ * 1. interactive (3)
+ * 2. password (2)
+ * 3. public keys (1)
+ *
+ * This function has no effect with configure's --disable-libssh option.
+ *
+ * @param[in] type Setting preference for the given authentication type.
+ * @param[in] preference Preference value. Higher value means higher preference.
+ * Negative value disables the given authentication type. On equality of values,
+ * the last set authentication type is preferred.
+ */
+void nc_ssh_pref(NC_SSH_AUTH_TYPE type, short int preference);
+
+#ifndef DISABLE_LIBSSH
+
+/**
+ * @ingroup session
+ * @brief Create NETCONF session to the specified server using a custom SSH session.
+ *
+ * This function works only if libnetconf is compiled with using libssh.
+ *
+ * It shares all the functionality of nc_session_connect(), but also enables to use
+ * a customized SSH session with some specific options set.
+ *
+ * @param[in] host Hostname or address (both Ipv4 and IPv6 are accepted). 'localhost'
+ * is used by default if NULL is specified.
+ * @param[in] port Port number of the server. Default value 830 is used if 0 is
+ * specified.
+ * @param[in] username Name of the user to login to the server. The user running the
+ * application (detected from the effective UID) is used if NULL is specified.
+ * @param[in] cpblts NETCONF capabilities structure with capabilities supported
+ * by the client. Client can use nc_session_get_cpblts_default() to get the
+ * structure with the list of all the capabilities supported by libnetconf (this is
+ * used in case of a NULL parameter).
+ * @param[in] ssh_sess Customized libssh SSH session structure. Options SSH_OPTIONS_HOST,
+ * SSH_OPTIONS_USER, SSH_OPTIONS_FD, and SSH_OPTIONS_TIMEOUT should not be set as they
+ * will get set internally and previous values will be ignored. The structure will get
+ * freed and it should not be manipulated after passed as a parameter.
+ * @return Structure describing the NETCONF session or NULL in case of an error.
+ */
+struct nc_session *nc_session_connect_libssh_sess(const char *host, unsigned short port, const char *username, const struct nc_cpblts* cpblts, ssh_session ssh_sess);
+
+struct nc_session *nc_session_accept_libssh_channel(const struct nc_cpblts* capabilities, const char* username, ssh_channel ssh_chan);
+
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* LIBNETCONF_H_ */
+

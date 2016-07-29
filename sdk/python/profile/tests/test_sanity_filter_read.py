@@ -23,7 +23,6 @@ from compare import is_equal
 from ydk.types import READ, YList
 from ydk.services import CRUDService
 from ydk.models import ydktest_filterread as ysanity
-from ydk.models import os_pattern
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 
 
@@ -198,12 +197,12 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(is_equal(a_read, preconfig_a), True)
 
     def test_read_oc_patttern(self):
-        obj_A = oc_pattern.OcA()
+        obj_A = oc_pattern.A()
         obj_A.a = 'hello'
         obj_A.b.b = obj_A.a # 'world' --> YPYServiceProviderError: illegal reference
         self.crud.create(self.ncc, obj_A)
 
-        obj_A_read = self.crud.read(self.ncc, oc_pattern.OcA(), True)
+        obj_A_read = self.crud.read(self.ncc, oc_pattern.A(), True)
 
         self.assertEqual(is_equal(obj_A, obj_A_read), True)
 
