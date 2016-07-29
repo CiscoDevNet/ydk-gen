@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_is_config_printer.py 
- 
+class_is_config_printer.py
+
  YANG model driven API, class emitter.
- 
+
 """
 from ydkgen.api_model import Class
 

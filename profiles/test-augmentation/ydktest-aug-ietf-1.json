@@ -1,0 +1,24 @@
+{
+   "name":"ydktest-aug-ietf-1",
+   "version":"0.1.0",
+   "ydk_version":"0.4.1",
+   "Author":"Cisco",
+   "Copyright":"Cisco",
+   "Description":"YDK Test Profile",
+   "models":{
+      "dir":[
+         "yang/ydktest"
+      ],
+      "file": [
+         "yang/ydktest-aug-ietf/ydktest-aug-ietf-1@2016-06-17.yang"
+      ]
+   },
+   "dependency":[
+      {
+         "name":"ietf",
+         "version":"0.1.0",
+         "ydk_version":"0.4.1",
+         "uri":"file://profiles/test-augmentation/ietf.json"
+      }
+   ]
+}

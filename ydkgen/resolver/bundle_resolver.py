@@ -1,3 +1,22 @@
+#  ----------------------------------------------------------------
+# Copyright 2016 Cisco Systems
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------
+""" bundle_resolver.py
+    Resolve bundle description file.
+    Returns current bundle being processed and list of dependency bundles.
+"""
 import re
 import os
 import json
@@ -6,69 +25,65 @@ import tempfile
 from git import Repo
 from shutil import rmtree, copy
 from collections import namedtuple, defaultdict
-from ..common import iskeyword
+from .bundle_translator import translate
+from ..common import iskeyword, YdkGenException
+
 
 logger = logging.getLogger('ydkgen')
 logger.addHandler(logging.NullHandler())
 
-VALID_URI = re.compile(r"(?P<url>.+)\?commit-id=(?P<id>.+)&path=(?P<path>.+)")
-Local_URI = namedtuple('Local_URI', ['url'])
-Remote_URI = namedtuple('RemoveURI', ['url', 'commitid', 'path'])
-Repo_Dir_Pair = namedtuple('Repo_Dir_Pair', ['repo', 'dir'])
+URI = re.compile(r"(?P<url>.+)\?commit-id=(?P<id>.+)&path=(?P<path>.+)")
+Local = namedtuple('Local', ['url'])
+Remote = namedtuple('Remote', ['url', 'commitid', 'path'])
+RepoDir = namedtuple('RepoDir', ['repo', 'dir'])
+Bundles = namedtuple('Bundles', ['curr_bundle', 'bundles'])
 Version = namedtuple('Version', ['major', 'minor', 'patch'])
 
-dd = lambda: defaultdict(dd)
+
+def nested_defaultdict():
+    return defaultdict(nested_defaultdict)
+
 
 def parse_uri(uri):
-    """ Return Local_URI if uri is local else Remote_URI.
+    """ Return Local or Remote uri.
 
-        For example:
-            >>> remote_uri = 'http://repository?commit-id=commitid&path=path'.
-            >>> parse_uri(remote_uri)
-            RemoveURI(url='http://repository', commitid='commitid', path='path')
-            >>> local_uri = 'file://relative/path/to/file'
-            >>> parse_uri(local_uri)
-            Local_URI(url='relative/path/to/file')
+        Args:
+            uri (str): String representation for URI
 
         Raises:
             YdkGenException if uri is malformed.
     """
     if uri.startswith('http'):
-        p = VALID_URI.match(uri)
+        p = URI.match(uri)
         if p:
-            return Remote_URI(*p.groups())
+            return Remote(*p.groups())
         else:
             raise YdkGenException('Invalid file uri')
 
     elif uri.startswith('file'):
-        return Local_URI(uri.split('file://')[-1])
+        return Local(uri.split('file://')[-1])
 
 
 class BundleDefinition(object):
-    """ Base class for Bundle and BundleDependency, it has following attributes
+    """ Base class for Bundle and BundleDependency, with following attributes
 
-        name (str): bundle name.
-        _version (Version): bundle version.
-        _ydk_version (Version): ydk core library used.
-
-        For example:
-            >>> d = {
-            ...     'name' : 'name',
-            ...     'version' : '0.3.0',
-            ...     'ydk-version' : '0.4.0'
-            ...     }
-            >>> b = BundleDefinition(d)
-            >>> b.fqn
-            'ydk_name@0.3.0'
+        Attributes:
+            name (str): bundle name.
+            _version (Version): bundle version.
+            _ydk_version (Version): ydk core library version.
 
         Raises:
             KeyError if data is malformed.
     """
 
     def __init__(self, data):
-        self._name = 'ydk_' + data['name']
+        self._name = data['name'].replace('-', '_')
         self._version = Version(*tuple(data['version'].split('.')))
         self._ydk_version = Version(*tuple(data['ydk-version'].split('.')))
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def fqn(self):
@@ -97,10 +112,14 @@ class BundleDefinition(object):
 
 
 class BundleDependency(BundleDefinition):
-    """ BundleDependency class represent a possible unresolved bundle, an extra attribute
-    uri is added to locate this dependency file.
+    """ BundleDependency class represent a possible unresolved bundle,
+    an extra attribute uri.
 
-        uri (Remote_URI or Local_URI): URI for a remote bundle file or a local bundle file.
+        Attributes:
+            uri (Remote_URI or Local_URI): URI for a remote bundle file
+                                       or a local bundle file.
+        Raises:
+            KeyError if data if malformed.
     """
 
     def __init__(self, data):
@@ -108,13 +127,15 @@ class BundleDependency(BundleDefinition):
         self.uri = parse_uri(data['uri'])
 
 
-class Module(object):
-    """ Module class for modules listed in bundle description file, it has following attributes:
+class Model(object):
+    """ Model class for models listed in bundle description file, with
+        following attributes:
 
-        _name (str): module name.
-        _revision (str): latest revision for this module.
-        _kind (str): module type, could be 'MODULE' or 'SUBMODULE'.
-        _uri (LocalURI or RemoteURI): URI to locate this module.
+        Attributes:
+            _name (str): model name.
+            _revision (str): latest revision for this model.
+            _kind (str): model type, could be 'MODULE' or 'SUBMODULE'.
+            _uri (LocalURI or RemoteURI): URI to locate this model.
 
         Raises:
             KeyError if data if malformed.
@@ -147,66 +168,88 @@ class Module(object):
 
     @property
     def uri(self):
-        """ Return module uri."""
+        """ Return model uri."""
         return self._uri
 
 
 class Bundle(BundleDefinition):
-    """ Bundle class for a resolved bundle, it consumes a local bundle file, and
-        has following additional attributes:
+    """ Bundle class consumes a local bundle file, with following attributes:
 
-        modules (list of Module): list of modules defined in this bundle.
-        dependencies (list of BundelDependencies): lsit of dependencies for
-            this bundle, this could be an empty list.
+        Attributes:
+            models (list of Model): list of models defined in this bundle.
+            dependencies (list of BundelDependencies): list of dependencies for
+                this bundle, this could be an empty list.
+            _uri (str): uri for bundle description file.
+            _resolved_models_root (str): resolved models caching directory.
 
         Raises:
             KeyError if data is malformed.
     """
 
-    def __init__(self, uri):
+    def __init__(self, uri, resolved_models_root):
+        self.models = []
+        self.dependencies = []
+        self._uri = uri
+        self._resolved_models_root = resolved_models_root
+
         try:
             with open(uri) as json_file:
                 data = json.load(json_file)
-        except IOError as e:
+        except IOError as error:
             raise YdkGenException('Cannot open bundle file %s.' % uri)
 
         try:
             super(Bundle, self).__init__(data['bundle'])
-            self.modules = []
-            self.dependencies = []
             if 'modules' in data:
                 for m in data['modules']:
-                    self.modules.append(Module(m))
+                    self.models.append(Model(m))
             if 'dependencies' in data['bundle']:
                 for d in data['bundle']['dependencies']:
                     self.dependencies.append(BundleDependency(d))
-        except KeyError as e:
+
+        except KeyError as error:
             raise YdkGenException('Bundle file is not well formatted.')
 
         self.children = []
 
+    @property
+    def uri(self):
+        return self._uri
+
+    @property
+    def resolved_models_dir(self):
+        resolved_dir = os.path.join(self._resolved_models_root, self.fqn)
+        if not os.path.isdir(resolved_dir):
+            os.makedirs(resolved_dir)
+        return resolved_dir
+
 
 class Resolver(object):
-    """ Bundle resolver class, it will resolve all the module files and bundle files
-        referred to by current bundle file and its dependencies.
+    """ Bundle resolver class, it will resolve all the model files and
+        bundle files referred to by current bundle file and its dependencies.
 
-        output_dir (str) : output directory for generated API.
-        cached_models_dir (str) : path to resolved model files.
-        cached_bundles_dir(str) : path to resolved bundle files.
-        tree (dict): dictionary to hold Bunlde instances.
-        module_repos (nested defaultdict): holder for remote repositories.
-        bundle_repos (dict): dictionary of temporary folders created, will be cleaned after
-                                executing resolve function.
+        Attributes:
+            cached_models_dir (str) : path to resolved model files.
+            cached_bundles_dir(str) : path to resolved bundle files.
+            bundles (dict): dictionary to hold Bunlde instances.
+            repos (defaultdict): holder for models in remote repositories.
 
     """
 
-    def __init__(self, output_dir, reuse_module=False, reuse_bundle=False):
-        self.output_dir = output_dir
+    def __init__(self, output_dir, reuse_model=False, reuse_bundle=False):
+        """ Initialize cached file directories.
+        """
+        self.cached_models_dir = ''
+        self.cached_bundles_dir = ''
+        self.bundles = {}
+        self.repos = nested_defaultdict()
+        self._init_cached_directories(output_dir, reuse_model, reuse_bundle)
 
+    def _init_cached_directories(self, output_dir, reuse_model, reuse_bundle):
+        """Initialize cached directory."""
         cached_models_dir = os.path.join(output_dir, '.cache', 'models')
         cached_bundles_dir = os.path.join(output_dir, '.cache', 'bundles')
-
-        if not reuse_module and os.path.isdir(cached_models_dir):
+        if not reuse_model and os.path.isdir(cached_models_dir):
             rmtree(cached_models_dir)
         if not reuse_bundle and os.path.isdir(cached_bundles_dir):
             rmtree(cached_bundles_dir)
@@ -218,91 +261,97 @@ class Resolver(object):
         self.cached_models_dir = cached_models_dir
         self.cached_bundles_dir = cached_bundles_dir
 
-        self.tree = {}
-        self.module_repos = dd()
-        self.bundle_repos = {}
-
     def resolve(self, bundle_file):
-        """ Resolve modules defined in bundle file and its dependency files,
-        return list of Bundle instances, and folder for resolved modules.
+        """ Resolve models defined in bundle file and its dependency files,
+        return current bundle and list of related bundles.
         """
         uri = 'file://' + bundle_file
         bundle_file = self._resolve_bundle_file(parse_uri(uri))
-        root = Bundle(bundle_file)
-        self.tree[root.fqn] = root
-        self._expand_tree(root)
+        root = Bundle(bundle_file, self.cached_models_dir)
+        self.bundles[root.fqn] = root
+        self._resolve_bundles(root)
 
-        self._resolve_modules()
-        self._clean_up()
+        self._resolve_models()
+        return Bundles(root, self.bundles.values())
 
-        return self.tree.values(), self.cached_models_dir
-
-    def _expand_tree(self, root):
-        """ Populate uri to module_repos."""
-        for m in root.modules:
-            if isinstance(m.uri, Remote_URI):
-                self.module_repos[m.uri.url][m.uri.commitid][m.uri.path] = m.fqn
-            elif isinstance(m.uri, Local_URI):
-                fname = os.path.basename(m.uri.url)
-                dst = os.path.join(self.cached_models_dir, fname)
-                logger.debug('Resolving module %s --> %s' % (fname, dst))
-                copy(m.uri.url, dst)
-
+    def _resolve_bundles(self, root):
+        """ Populate model uri."""
+        for m in root.models:
+            uri = m.uri
+            if isinstance(uri, Remote):
+                entry = self.repos[uri.url][uri.commitid][uri.path]
+                if isinstance(entry, defaultdict):
+                    self.repos[uri.url][uri.commitid][uri.path] = [root]
+                elif isinstance(entry, list):
+                    entry.append(root)
+            elif isinstance(uri, Local):
+                self._resolve_file(uri.url, root.resolved_models_dir)
         for d in root.dependencies:
-            if d.fqn not in self.tree:
-                file = self._resolve_bundle_file(d.uri)
-                node = Bundle(file)
-                self.tree[d.fqn] = node
-            root.children.append(self.tree[d.fqn])
-            self._expand_tree(node)
+            if d.fqn not in self.bundles:
+                node = Bundle(self._resolve_bundle_file(d.uri),
+                              self.cached_models_dir)
+                self.bundles[d.fqn] = node
+                self._add_symlink(root, node)
+                self._resolve_bundles(node)
 
-    def _resolve_bundle_file(self, uri):
-        """ Resolve a remote or local bundle file, return the location for resolved file."""
-        if isinstance(uri, Local_URI):
-            src = uri.url
-        elif isinstance(uri, Remote_URI):
-            # fetch src from remote repository
-            if uri.url not in self.bundle_repos:
-                tmp_dir = tempfile.mkdtemp('.bundle')
-                repo = Repo.clone_from(uri.url, tmp_dir)
-                self.bundle_repos[uri.url] = Repo_Dir_Pair(repo, tmp_dir)
+    def _add_symlink(self, bundle, dependency):
+        source = dependency.resolved_models_dir
+        link_name = os.path.basename(source)
+        link_name = os.path.join(bundle.resolved_models_dir, link_name)
+        os.symlink(source, link_name)
 
-            repo = self.bundle_repos[uri.url].repo
-            repo.git.checkout(uri.commitid)
-            src = os.path.join(tmp_dir, uri.path)
+    def _clone_repo(self, url, suffix=''):
+        tmp_dir = tempfile.mkdtemp(suffix)
+        repo = Repo.clone_from(url, tmp_dir)
+        return RepoDir(repo, tmp_dir)
 
+    def _resolve_file(self, src, dst_dir, rename=''):
+        """ Resolve file from src to dst directory.
+        """
         fname = os.path.basename(src)
-        dst = os.path.join(self.cached_bundles_dir, fname)
-        logger.debug('Resolving bundle %s --> %s' % (fname, dst))
+        logger.debug('Resolving file {} --> {}'.format(fname, dst_dir))
+        if rename == '':
+            dst = os.path.join(dst_dir, fname)
+        else:
+            dst = os.path.join(dst_dir, rename)
         copy(src, dst)
         return dst
 
-    def _resolve_modules(self):
+    def _translate(self, description_file):
+        """ Try to translate description file to bundle description file syntax.
+        """
+        tmp_file = tempfile.mkstemp('')[-1]
+        try:
+            translate(description_file, tmp_file)
+        except KeyError:
+            os.remove(tmp_file)
+            return description_file
+        return tmp_file
+
+    def _resolve_bundle_file(self, uri):
+        """ Resolve a remote or local bundle file,
+        return the location for resolved file.
+        """
+        if isinstance(uri, Local):
+            src = uri.url
+        elif isinstance(uri, Remote):
+            repo, tmp_dir = self._clone_repo(uri.url, suffix='.bundle')
+            repo.git.checkout(uri.commitid)
+            src = os.path.join(tmp_dir, uri.path)
+
+        resolved_file = self._resolve_file(src, self.cached_bundles_dir)
+        return self._translate(resolved_file)
+
+    def _resolve_models(self):
         """ Resolve module files."""
-        for url in self.module_repos:
-            tmp_dir = tempfile.mkdtemp('.yang')
-            logger.debug('Cloning from %s --> %s' % (url, tmp_dir))
-            repo = Repo.clone_from(url, tmp_dir)
-            for commitid in self.module_repos[url]:
+        for url in self.repos:
+            repo, tmp_dir = self._clone_repo(url, suffix='.yang')
+            for commitid in self.repos[url]:
                 repo.git.checkout(commitid)
-                for path in self.module_repos[url][commitid]:
-                    module_fqn = self.module_repos[url][commitid][path]
-                    fname = module_fqn + '.yang'
-                    dst = os.path.join(self.cached_models_dir, fname)
-                    logger.debug('Resolving module %s --> %s' % (module_fqn, dst))
-                    copy(os.path.join(tmp_dir, path),
-                        os.path.join(self.cached_models_dir, fname))
-            logger.debug('Cleaning folder %s' % tmp_dir)
+                for path in self.repos[url][commitid]:
+                    src = os.path.join(tmp_dir, path)
+                    bundles = self.repos[url][commitid][path]
+                    for bundle in bundles:
+                        self._resolve_file(src, bundle.resolved_models_dir)
+
             rmtree(tmp_dir)
-
-    def _clean_up(self):
-        """ Remove all temporary directories created while cloning repositories."""
-        for url in self.bundle_repos:
-            repo_dir = self.bundle_repos[url]
-            logger.debug('Cleaning folder %s' % repo_dir.dir)
-            rmtree(repo_dir.dir)
-
-if __name__ == '__main__':
-
-    import doctest
-    doctest.testmod()

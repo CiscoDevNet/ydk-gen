@@ -3,8 +3,123 @@ from enum import Enum
 from ydk._core._dm_meta_info import _MetaInfoClassMember, _MetaInfoClass, _MetaInfoEnum
 from ydk.types import Empty, YList, DELETE, Decimal64, FixedBitsDict
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST,     REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION
-from ydk.models import _yang_ns
+from ydk.providers._importer import _yang_ns
 
+
+class YdktestSanityDeviationsTypes_Bits(FixedBitsDict):
+    """
+    YdktestSanityDeviationsTypes_Bits
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+    
+    Copyright (c) 2015 by Cisco Systems, Inc.
+    All rights reserved.
+    Keys are:- disable\-nagle , auto\-sense\-speed
+
+    """
+
+    def __init__(self):
+        self._dictionary = { 
+            'disable-nagle':False,
+            'auto-sense-speed':False,
+        }
+        self._pos_map = { 
+            'disable-nagle':0,
+            'auto-sense-speed':1,
+        }
+
+class YdktestSanityDeviationsTypes_Bits(FixedBitsDict):
+    """
+    YdktestSanityDeviationsTypes_Bits
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+    
+    Copyright (c) 2015 by Cisco Systems, Inc.
+    All rights reserved.
+    Keys are:- disable\-nagle , auto\-sense\-speed
+
+    """
+
+    def __init__(self):
+        self._dictionary = { 
+            'disable-nagle':False,
+            'auto-sense-speed':False,
+        }
+        self._pos_map = { 
+            'disable-nagle':0,
+            'auto-sense-speed':1,
+        }
+
+class YdktestSanityDeviationsTypes_Bits(FixedBitsDict):
+    """
+    YdktestSanityDeviationsTypes_Bits
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+    
+    Copyright (c) 2015 by Cisco Systems, Inc.
+    All rights reserved.
+    Keys are:- disable\-nagle , auto\-sense\-speed
+
+    """
+
+    def __init__(self):
+        self._dictionary = { 
+            'disable-nagle':False,
+            'auto-sense-speed':False,
+        }
+        self._pos_map = { 
+            'disable-nagle':0,
+            'auto-sense-speed':1,
+        }
+
+class YdktestSanityDeviationsTypes_Bits(FixedBitsDict):
+    """
+    YdktestSanityDeviationsTypes_Bits
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+    
+    Copyright (c) 2015 by Cisco Systems, Inc.
+    All rights reserved.
+    Keys are:- disable\-nagle , auto\-sense\-speed
+
+    """
+
+    def __init__(self):
+        self._dictionary = { 
+            'disable-nagle':False,
+            'auto-sense-speed':False,
+        }
+        self._pos_map = { 
+            'disable-nagle':0,
+            'auto-sense-speed':1,
+        }
+
+class YdktestSanityDeviationsTypes_Bits(FixedBitsDict):
+    """
+    YdktestSanityDeviationsTypes_Bits
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+    
+    Copyright (c) 2015 by Cisco Systems, Inc.
+    All rights reserved.
+    Keys are:- disable\-nagle , auto\-sense\-speed
+
+    """
+
+    def __init__(self):
+        self._dictionary = { 
+            'disable-nagle':False,
+            'auto-sense-speed':False,
+        }
+        self._pos_map = { 
+            'disable-nagle':0,
+            'auto-sense-speed':1,
+        }
 
 class YdktestSanityDeviationsTypes_Bits(FixedBitsDict):
     """
@@ -61,12 +176,172 @@ class YdktestSanityDeviationsTypesEnum(Enum):
         return _deviation_table['Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum']
 
 
+class YdktestSanityDeviationsTypesEnum(Enum):
+    """
+    YdktestSanityDeviationsTypesEnum
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+
+    Copyright (c) 2015 by Cisco Systems, Inc.
+
+    All rights reserved.
+
+    .. data:: ZERO = 0
+
+    .. data:: ONE = 1
+
+    .. data:: SEVEN = 7
+
+    """
+
+    ZERO = 0
+
+    ONE = 1
+
+    SEVEN = 7
+
+
+    @staticmethod
+    def _meta_info():
+        return _deviation_table['Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum']
+
+
+class YdktestSanityDeviationsTypesEnum(Enum):
+    """
+    YdktestSanityDeviationsTypesEnum
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+
+    Copyright (c) 2015 by Cisco Systems, Inc.
+
+    All rights reserved.
+
+    .. data:: ZERO = 0
+
+    .. data:: ONE = 1
+
+    .. data:: SEVEN = 7
+
+    """
+
+    ZERO = 0
+
+    ONE = 1
+
+    SEVEN = 7
+
+
+    @staticmethod
+    def _meta_info():
+        return _deviation_table['Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum']
+
+
+class YdktestSanityDeviationsTypesEnum(Enum):
+    """
+    YdktestSanityDeviationsTypesEnum
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+
+    Copyright (c) 2015 by Cisco Systems, Inc.
+
+    All rights reserved.
+
+    .. data:: ZERO = 0
+
+    .. data:: ONE = 1
+
+    .. data:: SEVEN = 7
+
+    """
+
+    ZERO = 0
+
+    ONE = 1
+
+    SEVEN = 7
+
+
+    @staticmethod
+    def _meta_info():
+        return _deviation_table['Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum']
+
+
+class YdktestSanityDeviationsTypesEnum(Enum):
+    """
+    YdktestSanityDeviationsTypesEnum
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+
+    Copyright (c) 2015 by Cisco Systems, Inc.
+
+    All rights reserved.
+
+    .. data:: ZERO = 0
+
+    .. data:: ONE = 1
+
+    .. data:: SEVEN = 7
+
+    """
+
+    ZERO = 0
+
+    ONE = 1
+
+    SEVEN = 7
+
+
+    @staticmethod
+    def _meta_info():
+        return _deviation_table['Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum']
+
+
+class YdktestSanityDeviationsTypesEnum(Enum):
+    """
+    YdktestSanityDeviationsTypesEnum
+
+    This module contains a set of deviations for ydktest\-sanity module, it replaces
+
+    type for every leaf under path /ydkut\:runner/ydkut\:ytypes/ydkut\:built\-in\-t/ydkut.
+
+    Copyright (c) 2015 by Cisco Systems, Inc.
+
+    All rights reserved.
+
+    .. data:: ZERO = 0
+
+    .. data:: ONE = 1
+
+    .. data:: SEVEN = 7
+
+    """
+
+    ZERO = 0
+
+    ONE = 1
+
+    SEVEN = 7
+
+
+    @staticmethod
+    def _meta_info():
+        return _deviation_table['Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum']
+
+
 _deviation_table = {
     'Runner.Ytypes.BuiltInT.bincoded' : {
         'deviation_typ' : 'replace',
         'keyword_value' : [
             ('type', 
-                _MetaInfoClassMember('bincoded', REFERENCE_BITS, 'YdktestSanityDeviationsTypes_Bits' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypes_Bits', 
+                _MetaInfoClassMember('bincoded', REFERENCE_BITS, 'YdktestSanityDeviationsTypes_Bits' , 'ydk.models.ydktest_sanity', 'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypes_Bits', 
                     [], [], 
                     '''                    this is binary value
                     ''',
@@ -85,7 +360,7 @@ _deviation_table = {
                     ''',
                     'bits_value',
                     'ydktest-sanity', False, [
-                        _MetaInfoClassMember('bits-value', REFERENCE_ENUM_CLASS, 'YdkEnumTestEnum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumTestEnum', 
+                        _MetaInfoClassMember('bits-value', REFERENCE_ENUM_CLASS, 'YdkEnumTestEnum' , 'ydk.models.ydktest_sanity', 'YdkEnumTestEnum', 
                             [], [], 
                             '''                            this is bits type value
                             ''',
@@ -111,7 +386,7 @@ _deviation_table = {
         'deviation_typ' : 'replace',
         'keyword_value' : [
             ('type', 
-                _MetaInfoClassMember('bool-value', REFERENCE_ENUM_CLASS, 'YdkEnumTestEnum' , 'ydk.models.ydktest.ydktest_sanity', 'YdkEnumTestEnum', 
+                _MetaInfoClassMember('bool-value', REFERENCE_ENUM_CLASS, 'YdkEnumTestEnum' , 'ydk.models.ydktest_sanity', 'YdkEnumTestEnum', 
                     [], [], 
                     '''                    this is boolean type value
                     ''',
@@ -137,7 +412,7 @@ _deviation_table = {
         'deviation_typ' : 'replace',
         'keyword_value' : [
             ('type', 
-                _MetaInfoClassMember('embeded-enum', REFERENCE_IDENTITY_CLASS, 'ChildChildIdentity_Identity' , 'ydk.models.ydktest.ydktest_sanity', 'ChildChildIdentity_Identity', 
+                _MetaInfoClassMember('embeded-enum', REFERENCE_IDENTITY_CLASS, 'ChildChildIdentityIdentity' , 'ydk.models.ydktest_sanity', 'ChildChildIdentityIdentity', 
                     [], [], 
                     '''                    enum embeded in leaf
                     ''',
@@ -150,7 +425,7 @@ _deviation_table = {
         'deviation_typ' : 'replace',
         'keyword_value' : [
             ('type', 
-                _MetaInfoClassMember('enum-value', REFERENCE_ENUM_CLASS, 'YdktestSanityDeviationsTypesEnum' , 'ydk.models.ydktest.ydktest_sanity', 'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum', 
+                _MetaInfoClassMember('enum-value', REFERENCE_ENUM_CLASS, 'YdktestSanityDeviationsTypesEnum' , 'ydk.models.ydktest_sanity', 'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum', 
                     [], [], 
                     '''                    this is enum type value
                     ''',
@@ -288,7 +563,37 @@ _deviation_table = {
             ),
         ]
     },
-    'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum' : _MetaInfoEnum('YdktestSanityDeviationsTypesEnum', 'ydk.models.ydktest.ydktest_sanity',
+    'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum' : _MetaInfoEnum('YdktestSanityDeviationsTypesEnum', 'ydk.models.ydktest_sanity',
+        {
+            'zero':'ZERO',
+            'one':'ONE',
+            'seven':'SEVEN',
+        }, 'ydktest-sanity-deviations-types', _yang_ns._namespaces['ydktest-sanity-deviations-types']),
+    'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum' : _MetaInfoEnum('YdktestSanityDeviationsTypesEnum', 'ydk.models.ydktest_sanity',
+        {
+            'zero':'ZERO',
+            'one':'ONE',
+            'seven':'SEVEN',
+        }, 'ydktest-sanity-deviations-types', _yang_ns._namespaces['ydktest-sanity-deviations-types']),
+    'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum' : _MetaInfoEnum('YdktestSanityDeviationsTypesEnum', 'ydk.models.ydktest_sanity',
+        {
+            'zero':'ZERO',
+            'one':'ONE',
+            'seven':'SEVEN',
+        }, 'ydktest-sanity-deviations-types', _yang_ns._namespaces['ydktest-sanity-deviations-types']),
+    'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum' : _MetaInfoEnum('YdktestSanityDeviationsTypesEnum', 'ydk.models.ydktest_sanity',
+        {
+            'zero':'ZERO',
+            'one':'ONE',
+            'seven':'SEVEN',
+        }, 'ydktest-sanity-deviations-types', _yang_ns._namespaces['ydktest-sanity-deviations-types']),
+    'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum' : _MetaInfoEnum('YdktestSanityDeviationsTypesEnum', 'ydk.models.ydktest_sanity',
+        {
+            'zero':'ZERO',
+            'one':'ONE',
+            'seven':'SEVEN',
+        }, 'ydktest-sanity-deviations-types', _yang_ns._namespaces['ydktest-sanity-deviations-types']),
+    'Runner.Ytypes.BuiltInT.YdktestSanityDeviationsTypesEnum' : _MetaInfoEnum('YdktestSanityDeviationsTypesEnum', 'ydk.models.ydktest_sanity',
         {
             'zero':'ZERO',
             'one':'ONE',

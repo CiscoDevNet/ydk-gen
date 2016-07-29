@@ -24,13 +24,13 @@ module main-aug1 {
 
      E-mail: cs-yang@cisco.com";
 
-  description 
+  description
     "This module contains a collection of YANG definitions
      for sanity package.
 
      This module contains definitions
      for the following management objects:
-    
+
 
      Copyright (c) 2013-2014 by Cisco Systems, Inc.
      All rights reserved.";
@@ -40,13 +40,13 @@ module main-aug1 {
       "Initial revision.";
   }
 
-  augment /main:A {
+  augment /main:main-A {
   	container C {
 
       leaf two {
       	description "blah";
       	type string;
-      }   
+      }
     }
   }
 }

@@ -31,7 +31,7 @@ logger = logging.getLogger('ydkgen')
 
 
 def resolve_dir(p, models_dir, ydk_root=None):
-    '''Resolve a list of directories. 
+    '''Resolve a list of directories.
 
     For a directory we traverse the
     entire hierarchy (may add a depth otion later). Only .yang files
@@ -117,7 +117,7 @@ def resolve_git(p, models_dir, ydk_root=None):
 
 
 def resolve_profile(p, ydk_root=None):
-    '''Resolve a profile data object. 
+    '''Resolve a profile data object.
 
     Goal is to pull together all the
     models specified to a temporary directory that will then be
@@ -130,7 +130,7 @@ def resolve_profile(p, ydk_root=None):
     # check for basic validity
     if 'models' not in p:
         return None
-    
+
     # we think we have models, so let's go...firt order of business is
     # to create a temporary directory name to store all the models in
     # as we will be pulling them all together for a brief period of

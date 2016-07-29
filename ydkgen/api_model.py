@@ -115,7 +115,7 @@ class Deviation(Element):
 
 class NamedElement(Element):
 
-    ''' 
+    '''
 
         An abstract element that may have a name
         The name is used for identification of the named element
@@ -136,21 +136,13 @@ class NamedElement(Element):
             Get the python module name that contains this
             NamedElement.
         """
-        pkg = self
-        while pkg is not None and not isinstance(pkg, Package):
-            pkg = pkg.owner
-        if pkg is None:
-            return ''
-        t = pkg.name.split('_')
-        t = [n for n in t if n.lower() not in ['cisco', 'ios', 'xr']]
-        if t:
-            sub = t[0].lower()
-            if iskeyword(sub):
-                sub = '%s_' % sub
-            sub = '.%s' % sub
+        pkg = get_top_pkg(self)
+        if not pkg.bundle_name:
+            py_mod_name = 'ydk.models.%s' % pkg.name
+        elif hasattr(pkg, 'aug_bundle_name'):
+            py_mod_name = 'ydk.models.%s.%s' % (pkg.aug_bundle_name, pkg.name)
         else:
-            sub = ''
-        py_mod_name = 'ydk.models%s.%s' % (sub, pkg.name)
+            py_mod_name = 'ydk.models.%s.%s' % (pkg.bundle_name, pkg.name)
         return py_mod_name
 
     def get_cpp_header_name(self):
@@ -158,22 +150,12 @@ class NamedElement(Element):
             Get the c++ header that contains this
             NamedElement.
         """
-        pkg = self
-        while pkg is not None and not isinstance(pkg, Package):
-            pkg = pkg.owner
-        if pkg is None:
-            return ''
-        t = pkg.name.split('_')
-        t = [n for n in t if n.lower() not in ['cisco', 'ios', 'xr']]
-        if t:
-            sub = t[0].lower()
-            if iskeyword(sub):
-                sub = '%s_' % sub
-            sub = '%s' % sub
+        pkg = get_top_pkg(self)
+        if not pkg.bundle_name:
+            cpp_header_name = 'ydk/models/%s.h' % pkg.name
         else:
-            sub = ''
-        py_mod_name = 'ydk/models/%s/%s.h' % (sub, pkg.name)
-        return py_mod_name
+            cpp_header_name = 'ydk/models/%s/%s.h' % (pkg.bundle_name, pkg.name)
+        return cpp_header_name
 
     def get_meta_py_mod_name(self):
         """
@@ -181,22 +163,14 @@ class NamedElement(Element):
             information about this NamedElement.
 
         """
-        pkg = self
-        while pkg is not None and not isinstance(pkg, Package):
-            pkg = pkg.owner
-        if pkg is None:
-            return ''
-        t = pkg.name.split('_')
-        t = [n for n in t if n.lower() not in ['cisco', 'ios', 'xr']]
-        if t:
-            sub = t[0].lower()
-            if iskeyword(sub):
-                sub = '%s_' % sub
-            sub = '.%s' % sub
+        pkg = get_top_pkg(self)
+        if not pkg.bundle_name:
+            meta_py_mod_name = 'ydk.models._meta'
+        elif hasattr(pkg, 'aug_bundle_name'):
+            meta_py_mod_name = 'ydk.models.%s._meta' % pkg.aug_bundle_name
         else:
-            sub = ''
-        py_meta_mod_name = 'ydk.models%s._meta' % sub
-        return py_meta_mod_name
+            meta_py_mod_name = 'ydk.models.%s._meta' % pkg.bundle_name
+        return meta_py_mod_name
 
     def fqn(self):
         ''' get the Fully Qualified Name '''
@@ -243,11 +217,47 @@ class Package(NamedElement):
     def __init__(self):
         super(Package, self).__init__()
         self._stmt = None
+        self._sub_name = ''
+        self._bundle_name = ''
+        self._augments_other = False
         self.identity_subclasses = {}
 
     def qn(self):
         """ Return the qualified name """
         return self.name
+
+    @property
+    def is_deviation(self):
+        return hasattr(self.stmt, 'is_deviation_module')
+
+    @property
+    def is_augment(self):
+        return hasattr(self.stmt, 'is_augmented_module')
+
+    @property
+    def augments_other(self):
+        return self._augments_other
+    @augments_other.setter
+    def augments_other(self, augments_other):
+        self._augments_other = augments_other
+
+    @property
+    def bundle_name(self):
+        return self._bundle_name
+
+    @bundle_name.setter
+    def bundle_name(self, bundle_name):
+        self._bundle_name = bundle_name
+
+    @property
+    def sub_name(self):
+        if self.bundle_name != '':
+            sub = self.bundle_name
+        else:
+            py_mod_name = self.get_py_mod_name()
+            sub = py_mod_name[len('ydk.models.'): py_mod_name.rfind('.')]
+
+        return sub
 
     @property
     def stmt(self):
@@ -300,7 +310,7 @@ class DataType(NamedElement):
 class Class(NamedElement):
 
     """
-       Represents a Class in the api. 
+       Represents a Class in the api.
     """
 
     def __init__(self):
@@ -781,6 +791,16 @@ class EnumLiteral(NamedElement):
         desc = stmt.search_one('description')
         if desc is not None:
             self.comment = desc.arg
+
+
+def get_top_pkg(pkg):
+    """
+    Get top level Package instance of current NamedElement instance.
+    """
+    while pkg is not None and not isinstance(pkg, Package):
+        pkg = pkg.owner
+
+    return pkg
 
 
 def get_properties(owned_elements):

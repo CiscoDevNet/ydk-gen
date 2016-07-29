@@ -15,12 +15,12 @@ module ydktest-sanity-deviations-types {
 
        E-mail: cs-yang@cisco.com";
 
-    description 
+    description
       "This module contains a set of deviations for ydktest-sanity module, it replaces
        type for every leaf under path /ydkut:runner/ydkut:ytypes/ydkut:built-in-t/ydkut.
 
        Copyright (c) 2015 by Cisco Systems, Inc.
-       All rights reserved.";    
+       All rights reserved.";
 
     revision "2015-11-17" {
         description

@@ -1,11 +1,12 @@
 {
+	"name": "ydk",
     "_descr": "A profile file contains the metadata for generating a number of SDKs of varying languages from a single set of yang models.",
     "version": "0.1.0",
     "Author": "Cisco",
     "Copyright": "Cisco",
-    
+
     "models": {
-	
+
 	"file": [
 	    "profiles/ydk/yang/openconfig/bgp@2015-05-15.yang",
 	    "profiles/ydk/yang/openconfig/bgp-multiprotocol@2015-05-15.yang",
@@ -16,13 +17,13 @@
 	    "profiles/ydk/yang/openconfig/routing-policy@2015-05-15.yang"
         ]
     ,
-    
+
 	"_descr_git": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
 	"git": [
 	    {
-		"url": "http://gitlab.cisco.com/ydk-dev/YangModels.git",
+		"url": "https://github.com/YangModels/yang.git",
 		"commits": [
-					{  
+					{
 						"commitid": "ddf208f3fa265e9eb7656abe3fc3f110479d329b",
 						"file": [
 		    					"vendor/cisco/xr/600/Cisco-IOS-XR-Ethernet-SPAN-cfg.yang",
@@ -412,33 +413,33 @@
 								"vendor/cisco/xr/600/Cisco-IOS-XR-wdsysmon-fd-oper.yang"
 								]
 	    			},
-	    			
+
 	    			{
-		
+
 						"commitid": "6a9316e7b527ff8225b6a0f03685e0977aedf736",
 						"file": [
 		    					"vendor/cisco/xr/600/Cisco-IOS-XR-mpls-te-oper-sub8.yang",
 		    					"vendor/cisco/xr/600/Cisco-IOS-XR-ncs1k-mxp-lldp-oper-sub1.yang"
-		    
+
 								]
 	    			},
-	    			
+
 	    			{
-		
+
 						"commitid": "3c86e8a69f99fea2472aedb87ed2728712a38b67",
 						"dir": [
 		    					"vendor/cisco/xe",
 		    					"vendor/cisco/xe/mibs",
 		    					"vendor/cisco/tailf"
-		    
+
 								],
 						"file": [
 								"experimental/ietf/ietf-interfaces-ext.yang"
 								]
 	    			},
-	    			
+
 	    			{
-		
+
 						"commitid": "a5e3d7f27e0e846cac6b6357ff460b8facc810a8",
 						"file": [
 		    					"standard/ietf/RFC/ietf-inet-types.yang",
@@ -447,41 +448,41 @@
 		    					"standard/ietf/RFC/ietf-yang-smiv2.yang",
 		    					"standard/ietf/RFC/ietf-yang-types.yang",
 		    					"standard/ietf/RFC/iana-if-type.yang"
-		    
+
 								]
 	    			},
-	    			
-	    			
-	    			
-	    			
+
+
+
+
 	    			{
-		
+
 						"commitid": "be8ff2197e1179c2193433c38ba766a65aca5828",
 						"file": [
 		    					"standard/ietf/RFC/iana-crypt-hash.yang"
-		    
+
 								]
 	    			},
-	    			
+
 	    			{
-		
+
 						"commitid": "f6b4e2d59d4eedf31ae8b2fa3119468e4c38259c",
 						"file": [
 		    					"experimental/openconfig/structure/model-structure.yang"
-		    
+
 								]
 	    			}
-	    			
+
 	    			]
 	    },
-	    
+
 	    {
-	    "url": "http://gitlab.cisco.com/ydk-dev/openconfig.git",
+	    "url": "https://github.com/openconfig/public.git",
 	    "commits": [
 	    			{
 						"commitid": "4ab22755c2484e893b2c2b6d88f800b8dd41bb09",
 						"dir": [
-		    					
+
 		    					"release/models/interfaces",
 		    					"release/models/inventory",
 		    					"release/models/mpls",
@@ -489,19 +490,19 @@
 		    					"release/models/rpc",
 		    					"release/models/telemetry",
 		    					"release/models/vlan"
-		    
+
 								],
 						"file": [
 		    					"release/models/openconfig-extensions.yang",
 		    					"release/models/openconfig-types.yang"
-		    				
+
 								]
 					}
 				   ]
-        
+
      }
      ],
-    
+
     "targets": [
 	{
 	    "python": {
@@ -512,4 +513,3 @@
     ]
 }
 }
-

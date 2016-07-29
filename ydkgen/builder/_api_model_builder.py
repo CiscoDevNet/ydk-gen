@@ -53,7 +53,6 @@ class ApiModelBuilder(object):
             package = Package()
             module.i_package = package
             package.stmt = module
-            package.is_deviation = True
             deviation_packages.append(package)
 
         for module in only_modules:
@@ -151,11 +150,11 @@ class ApiModelBuilder(object):
             d_obj.d_type = d_type
             d_obj.d_target = target
             d_obj.owner = parent_element
-            d_obj.d_stmts = []
+            d_obj.d_stmts = set()
             for (d_module, d_stmt) in i_deviation[d_type]:
                 d_module_name = d_module.arg
                 target_package = [p for p in deviation_packages if p.stmt.arg == d_module_name][0]
-                d_obj.d_stmts.append(d_stmt)
+                d_obj.d_stmts.add(d_stmt)
                 if d_stmt.keyword == 'type':
                     d_obj.d_target = target.copy()
                     d_target = d_obj.d_target

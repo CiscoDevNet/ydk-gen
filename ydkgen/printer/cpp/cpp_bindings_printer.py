@@ -26,8 +26,8 @@ from .source_printer import SourcePrinter
 
 class CppBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir):
-        super(CppBindingsPrinter, self).__init__(ydk_root_dir)
+    def __init__(self, ydk_root_dir, bundle_name, sort_clazz):
+        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle_name, sort_clazz)
 
     def print_files(self):
         only_modules = [package.stmt for package in self.packages]
@@ -40,23 +40,19 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
         print 'Processing %d of %d %s' % (index + 1, size, package.stmt.pos.ref)
 
         py_mod_name = package.get_py_mod_name()
-        sub = py_mod_name[len('ydk.models.'): py_mod_name.rfind('.')]
 
-        module_dir = self.initialize_output_directory(
-            '%s/%s' % (self.models_dir, sub))
-
-        self._print_header_file(package, module_dir)
-        self._print_source_file(package, module_dir)
+        self._print_header_file(package, self.models_dir)
+        self._print_source_file(package, self.models_dir)
 
     def _print_header_file(self, package, path):
         self.print_file(get_header_file_name(path, package),
                         emit_header,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
     def _print_source_file(self, package, path):
         self.print_file(get_source_file_name(path, package),
                         emit_source,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
 
 def get_source_file_name(path, package):
@@ -67,9 +63,9 @@ def get_header_file_name(path, package):
     return '%s/%s.h' % (path, package.name)
 
 
-def emit_header(ctx, package):
-    HeaderPrinter(ctx).print_output(package)
+def emit_header(ctx, package, sort_clazz):
+    HeaderPrinter(ctx, sort_clazz).print_output(package)
 
 
-def emit_source(ctx, package):
-    SourcePrinter(ctx).print_output(package)
+def emit_source(ctx, package, sort_clazz):
+    SourcePrinter(ctx, sort_clazz).print_output(package)

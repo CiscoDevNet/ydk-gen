@@ -15,10 +15,10 @@
 # ------------------------------------------------------------------
 
 """
-class_meta_printer.py 
- 
+class_meta_printer.py
+
  YANG model driven API, class emitter.
- 
+
 """
 from ydkgen.api_model import Class, Enum, Property
 from ydkgen.common import sort_classes_at_same_level, get_module_name
@@ -28,31 +28,33 @@ from .enum_printer import EnumPrinter
 
 class ClassMetaPrinter(object):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx, sort_clazz):
         self.ctx = ctx
         self.is_rpc = False
+        self.sort_clazz = sort_clazz
 
     def print_output(self, unsorted_classes):
-        ''' This arranges the classes at the same level 
-            so that super references are printed before 
+        ''' This arranges the classes at the same level
+            so that super references are printed before
             the subclassess'''
-        sorted_classes = sort_classes_at_same_level(unsorted_classes)
+        sorted_classes = sort_classes_at_same_level(unsorted_classes, self.sort_clazz)
 
         for clazz in sorted_classes:
             self.print_class_meta(clazz)
 
     def print_parents(self, unsorted_classes):
-        ''' This arranges the classes at the same level 
-            so that super references are printed before 
+        ''' This arranges the classes at the same level
+            so that super references are printed before
             the subclassess'''
-        sorted_classes = sort_classes_at_same_level(unsorted_classes)
+        sorted_classes = sort_classes_at_same_level(unsorted_classes, self.sort_clazz)
 
         for clazz in sorted_classes:
             self._print_meta_parents(clazz)
 
     def _print_meta_parents(self, clazz):
         nested_classes = sort_classes_at_same_level(
-            [nested_class for nested_class in clazz.owned_elements if isinstance(nested_class, Class)])
+            [nested_class for nested_class in clazz.owned_elements if isinstance(nested_class, Class)],
+            self.sort_clazz)
         self.print_parents(nested_classes)
         for nested_class in nested_classes:
             self.ctx.writeln('_meta_table[\'%s\'][\'meta_info\'].parent =_meta_table[\'%s\'][\'meta_info\']' % (

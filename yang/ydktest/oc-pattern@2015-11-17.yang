@@ -23,13 +23,13 @@ module oc-pattern {
 
      E-mail: cs-yang@cisco.com";
 
-  description 
+  description
     "This module contains a collection of YANG definitions
      for sanity package.
 
      This module contains definitions
      for the following management objects:
-    
+
 
      Copyright (c) 2013-2014 by Cisco Systems, Inc.
      All rights reserved.";
@@ -39,14 +39,14 @@ module oc-pattern {
       "Initial revision.";
   }
 
-  list A {
+  list oc-A {
 
     key a;
-    
+
     leaf a {
       description "blah";
       type leafref{
-        path "/oc:A/oc:B/oc:b";
+        path "/oc:oc-A/oc:B/oc:b";
       }
     }
 

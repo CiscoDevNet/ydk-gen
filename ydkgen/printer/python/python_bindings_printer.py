@@ -16,7 +16,7 @@
 
 '''
    YDK PY converter
-   
+
 '''
 
 
@@ -32,13 +32,14 @@ from .module_printer import ModulePrinter
 from .module_meta_printer import ModuleMetaPrinter
 from .test_case_printer import TestCasePrinter
 from .namespace_printer import NamespacePrinter
+from .init_file_printer import InitPrinter
 from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _EmitArgs
 
 
 class PythonBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir):
-        super(PythonBindingsPrinter, self).__init__(ydk_root_dir)
+    def __init__(self, ydk_root_dir, bundle_name, sort_clazz):
+        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle_name, sort_clazz)
 
     def print_files(self):
         self.print_init_file(self.models_dir)
@@ -46,6 +47,13 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         self.print_modules()
         self.print_import_tests_file()
         self.print_deviate_file()
+
+        # Sub package
+        if self.sub_dir != '':
+            self.print_nmsp_declare_init(self.ydk_dir)
+            self.print_nmsp_declare_init(self.models_dir)
+            self.print_nmsp_augment_finder_init(self.sub_dir)
+            self.print_nmsp_augment_finder_init(os.path.join(self.sub_dir, '_meta'), True)
 
         # RST Documentation
         if self.ydk_doc_dir is not None:
@@ -65,11 +73,16 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         if len(package.owned_elements) == 0:
             return
 
-        py_mod_name = package.get_py_mod_name()
-        sub = py_mod_name[len('ydk.models.'): py_mod_name.rfind('.')]
+        sub = package.sub_name
 
-        module_dir = self.initialize_output_directory(
-            '%s/%s' % (self.models_dir, sub))
+        if hasattr(package, 'aug_bundle_name'):
+            package.augments_other = True
+            module_dir = self.initialize_output_directory(
+                '%s/%s/%s' % (self.models_dir, self.bundle_name, '_aug'))
+        else:
+            module_dir = self.initialize_output_directory(
+                '%s/%s' % (self.models_dir, sub))
+
         meta_dir = self.initialize_output_directory(module_dir + '/_meta')
         test_output_dir = self.initialize_output_directory(
             '%s/%s' % (self.test_dir, sub))
@@ -103,7 +116,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
         self.print_file(get_table_of_contents_file_name(self.ydk_doc_dir),
                         emit_table_of_contents,
-                        _EmitArgs(self.ypy_ctx, packages))
+                        _EmitArgs(self.ypy_ctx, packages, self.bundle_name))
 
     def print_python_module(self, package, index, path, size, sub):
         self.print_init_file(path)
@@ -111,13 +124,13 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         package.parent_pkg_name = sub
         self.print_file(get_python_module_file_name(path, package),
                         emit_module,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
     def print_meta_module(self, package, path):
         self.print_init_file(path)
         self.print_file(get_meta_module_file_name(path, package),
                         emit_meta,
-                        _EmitArgs(self.ypy_ctx, package))
+                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
     def print_test_module(self, package, path):
         self.print_init_file(self.test_dir)
@@ -127,16 +140,18 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
     def print_yang_ns_file(self):
         packages = self.packages + self.deviation_packages
-        self.print_file(get_yang_ns_file_name(self.models_dir),
+        target_dir = self.models_dir if self.sub_dir == '' else self.sub_dir
+
+        self.print_file(get_yang_ns_file_name(target_dir),
                         emit_yang_ns,
                         _EmitArgs(self.ypy_ctx, packages))
 
     def print_deviate_file(self):
-        self.print_init_file(self.deviation_dir)
+        self.print_nmsp_declare_init(self.deviation_dir)
         for package in self.deviation_packages:
             self.print_file(get_meta_module_file_name(self.deviation_dir, package),
                             emit_deviation,
-                            _EmitArgs(self.ypy_ctx, package))
+                            _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
     def print_import_tests_file(self):
         self.print_file(get_import_test_file_name(self.test_dir),
@@ -147,6 +162,18 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         file_name = get_init_file_name(path)
         if not os.path.isfile(file_name):
             self.print_file(file_name)
+
+    def print_nmsp_declare_init(self, path):
+        file_name = get_init_file_name(path)
+        self.print_file(file_name,
+                        emit_nmsp_declare_init,
+                        _EmitArgs(self.ypy_ctx, self.packages))
+
+    def print_nmsp_augment_finder_init(self, path, is_meta=False):
+        file_name = get_init_file_name(path)
+        self.print_file(file_name,
+                        emit_nmsp_augment_finder_init,
+                        _EmitArgs(self.ypy_ctx, self.packages, is_meta))
 
 
 def get_init_file_name(path):
@@ -193,22 +220,29 @@ def emit_module_documentation(ctx, named_element, identity_subclasses):
     DocPrinter(ctx).print_module_documentation(named_element, identity_subclasses)
 
 
-def emit_table_of_contents(ctx, packages):
-    DocPrinter(ctx).print_table_of_contents(packages)
+def emit_table_of_contents(ctx, packages, bundle_name):
+    DocPrinter(ctx).print_table_of_contents(packages, bundle_name)
 
 
-def emit_module(ctx, package):
-    ModulePrinter(ctx).print_output(package)
+def emit_module(ctx, package, sort_clazz):
+    ModulePrinter(ctx, sort_clazz).print_output(package)
 
 
 def emit_test_module(ctx, package, identity_subclasses):
     TestCasePrinter(ctx).print_testcases(package, identity_subclasses)
 
 
-def emit_meta(ctx, package):
-    ModuleMetaPrinter(ctx).print_output(package)
+def emit_meta(ctx, package, sort_clazz):
+    ModuleMetaPrinter(ctx, sort_clazz).print_output(package)
 
 
-def emit_deviation(ctx, package):
-    DeviationPrinter(ctx).print_deviation(package)
+def emit_deviation(ctx, package, sort_clazz):
+    DeviationPrinter(ctx, sort_clazz).print_deviation(package)
 
+
+def emit_nmsp_declare_init(ctx, package):
+    InitPrinter(ctx).print_nmsp_declare_init(package)
+
+
+def emit_nmsp_augment_finder_init(ctx, package, is_meta):
+    InitPrinter(ctx).print_nmsp_augment_finder_init(package, is_meta)

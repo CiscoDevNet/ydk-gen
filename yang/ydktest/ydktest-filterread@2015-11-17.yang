@@ -6,7 +6,7 @@
 //      |  +--rw b1   string
 //      |  +--rw b2   string
 //      |  +--rw b3   string
-//      |  +--rw c   
+//      |  +--rw c
 //      |  +--rw d
 //      |     +--rw d1  string
 //      |     +--rw d1  string

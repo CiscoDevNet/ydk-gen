@@ -37,22 +37,26 @@ class _EmitArgs:
 
 class LanguageBindingsPrinter(object):
 
-    def __init__(self, ydk_root_dir):
-        self.ydk_dir = ydk_root_dir + '/ydk/'
-        self.ydk_doc_dir = ydk_root_dir + '/docsgen'
+    def __init__(self, ydk_root_dir, bundle_name, sort_clazz=False):
+        self.ydk_dir = os.path.join(ydk_root_dir, 'ydk')
+        self.ydk_doc_dir = os.path.join(ydk_root_dir, 'docsgen')
+        self.bundle_name = bundle_name
+        self.sort_clazz = sort_clazz
 
     def emit(self, packages):
         self.ypy_ctx = None
         self.packages = []
         self.models_dir = ''
         self.test_dir = ''
+        self.sub_dir = ''
+        self.aug_dir = ''
 
         self.packages = packages
         self.packages = sorted(self.packages, key=lambda package: package.name)
-        self.deviation_packages = [p for p in self.packages if hasattr(p, 'is_deviation')]
-        self.packages = [p for p in self.packages if not hasattr(p, 'is_deviation')]
+        self.deviation_packages = [p for p in self.packages if p.is_deviation is True]
+        self.packages = [p for p in self.packages if p.is_deviation is not True]
         self.identity_subclasses = self._get_identity_subclasses_map()
-
+        self.packages = self._filter_bundle_pkgs()
         self.initialize_print_environment()
         self.print_files()
 
@@ -63,6 +67,11 @@ class LanguageBindingsPrinter(object):
     def initialize_top_level_directories(self):
         self.models_dir = self.initialize_output_directory(
             self.ydk_dir + '/models', True)
+        if self.bundle_name:
+            self.sub_dir = self.initialize_output_directory(
+                self.models_dir + '/%s' % self.bundle_name, True)
+            self.aug_dir = self.initialize_output_directory(
+                self.sub_dir + '/_aug', True)
         self.test_dir = self.initialize_output_directory(
             self.ydk_dir + '/tests', True)
         self.deviation_dir = self.initialize_output_directory(
@@ -122,3 +131,20 @@ class LanguageBindingsPrinter(object):
                 else:
                     identity_subclasses.extend(self._get_identity_subclasses_for_package(subelement))
         return identity_subclasses
+
+    def _filter_bundle_pkgs(self):
+        bundle_pkgs = set()
+        for pkg in self.packages:
+            if pkg.bundle_name == self.bundle_name:
+                # we have multiple models being augmented.
+                if hasattr(pkg.stmt, 'i_aug_targets'):
+                    for target in pkg.stmt.i_aug_targets:
+                        aug_pkg = target.i_package
+                        if aug_pkg.bundle_name != self.bundle_name:
+                            # augmenting models in existing bundle.
+                            aug_pkg.aug_bundle_name = aug_pkg.bundle_name
+                            aug_pkg.bundle_name = self.bundle_name
+                            bundle_pkgs.add(aug_pkg)
+                bundle_pkgs.add(pkg)
+
+        return list(bundle_pkgs)

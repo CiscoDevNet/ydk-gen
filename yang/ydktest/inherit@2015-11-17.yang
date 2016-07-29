@@ -28,13 +28,13 @@ module inherit {
 
      E-mail: cs-yang@cisco.com";
 
-  description 
+  description
     "This module contains a collection of YANG definitions
      for sanity package.
 
      This module contains definitions
      for the following management objects:
-    
+
 
      Copyright (c) 2013-2014 by Cisco Systems, Inc.
      All rights reserved.";
@@ -45,7 +45,7 @@ module inherit {
   }
 
 
- 
+
 
   grouping one-level {
     description "testing for couple of leaves";
@@ -64,18 +64,18 @@ module inherit {
   }
 
 
- 
 
-  container runner {
+
+  container inherit-runner {
 
     //container at 1,2,3 nested level
     uses one-level;
-   
+
     leaf jumper {
       type int32;
     }
-    
-    
+
+
 
   }
 }

@@ -33,7 +33,7 @@ class DocPrinter(object):
     def print_module_documentation(self, named_element, identity_subclasses):
         self.identity_subclasses = identity_subclasses
         self.lines = []
-        
+
         if isinstance(named_element, Enum):
             self._print_enum_rst(named_element)
         elif isinstance(named_element, Class):
@@ -42,19 +42,22 @@ class DocPrinter(object):
             self._print_package_rst(named_element)
         else:
             raise EmitError('Unrecognized named_element')
-        
+
         self.ctx.writelns(self.lines)
         del self.lines
 
-    def print_table_of_contents(self, packages):
+    def print_table_of_contents(self, packages, bundle_name):
         self.lines = []
-
-        self._print_title('YDK Model API')
+        if bundle_name == '':
+            title = 'YDK Model API'
+        else:
+            title = 'YDK {0} bundle API'.format(bundle_name)
+        self._print_title(title)
         self._print_toctree(packages, is_package=True)
 
         self.ctx.writelns(self.lines)
         del self.lines
-    
+
     def _print_package_rst(self, package):
         self._print_header(package)
         # Body / Package Comment
@@ -82,7 +85,7 @@ class DocPrinter(object):
         self._print_bases()
         self._print_docstring(enumz, get_enum_class_docstring(enumz))
         self.ctx.lvl_dec()
-    
+
     def _append(self, line):
         _line = '%s%s' % (self.ctx.get_indent(), line)
         self.lines.append(_line)
@@ -97,7 +100,7 @@ class DocPrinter(object):
         # TOC Tree
         if not isinstance(named_element, Enum):
             self._print_toctree(named_element.owned_elements)
-        
+
         # Tagging
         if isinstance(named_element, Package):
             self._append('.. py:module:: %s.%s\n' %

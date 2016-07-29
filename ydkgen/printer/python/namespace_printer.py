@@ -16,7 +16,7 @@
 
 '''
    YDK PY converter
-   
+
 '''
 
 from ydkgen.common import yang_id
@@ -46,7 +46,7 @@ class NamespacePrinter(object):
             if ns is not None:
                 self.namespace_list.append((m.arg.replace('-', '_'), ns.arg, yang_id(m)))
                 module_map[m.arg] = ns.arg
-    
+
         for m in [p.stmt for p in packages]:
             if m.keyword == 'submodule':
                 including_module = m.i_including_modulename
@@ -61,6 +61,7 @@ class NamespacePrinter(object):
                     self.namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
 
     def _print_namespaces(self, ns):
+        ns = sorted(ns)
         for n in ns:
             self.ctx.writeln("_global_%s_nsp = '%s'" % (n[0], n[1]))
         self.ctx.writeln("_namespaces = { \\")
@@ -71,12 +72,13 @@ class NamespacePrinter(object):
 
     def _print_namespaces_map(self, namespace_map):
         self.ctx.writeln("_namespace_package_map = { \\")
-        for namespace, python_import in namespace_map.iteritems():
+        for namespace, python_import in sorted(namespace_map.iteritems()):
             self.ctx.writeln("('%s', '%s') : 'from %s import %s', " % (namespace[0], namespace[1], python_import[0], python_import[1]))
         self.ctx.writeln("}")
         self.ctx.bline()
 
     def _print_identity_map(self, packages):
+        packages = sorted(packages, key=lambda p:p.name)
         self.ctx.writeln("_identity_map = { \\")
         self.ctx.lvl_inc()
         for package in packages:
