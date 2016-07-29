@@ -515,7 +515,7 @@ class Class(NamedElement):
                 for prop in [p for p in self.owned_elements if isinstance(p, Property)]:
                     if prop.stmt in key_stmts:
                         key_props.append(prop)
-        return key_props
+        return sorted(key_props, key=lambda k: k.name)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -811,9 +811,9 @@ def get_properties(owned_elements):
 
     # first get the key properties
     key_props = [p for p in all_props if p.is_key()]
-    props.extend(key_props)
+    props.extend(sorted(key_props, key=lambda p:p. name))
 
     non_key_props = [p for p in all_props if not p.is_key()]
-    props.extend(non_key_props)
+    props.extend(sorted(non_key_props, key=lambda p: p.name))
 
     return props
