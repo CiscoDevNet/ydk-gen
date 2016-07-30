@@ -188,29 +188,29 @@ function generate_ydktest_package {
 # sanity tests
 function run_sanity_ncclient_tests {
     printf "\nRunning sanity tests on NCClient client\n"
-    run_test gen-api/python/tests/test_sanity_types.py
-    run_test gen-api/python/tests/test_sanity_errors.py
-    run_test gen-api/python/tests/test_sanity_filters.py
-    run_test gen-api/python/tests/test_sanity_levels.py
-    run_test gen-api/python/tests/test_sanity_filter_read.py
-    run_test gen-api/python/tests/test_sanity_netconf.py
-    run_test gen-api/python/tests/test_sanity_rpc.py
-    run_test gen-api/python/tests/test_sanity_delete.py
-    run_test gen-api/python/tests/test_sanity_service_errors.py
+    run_test sdk/python/tests/test_sanity_types.py
+    run_test sdk/python/tests/test_sanity_errors.py
+    run_test sdk/python/tests/test_sanity_filters.py
+    run_test sdk/python/tests/test_sanity_levels.py
+    run_test sdk/python/tests/test_sanity_filter_read.py
+    run_test sdk/python/tests/test_sanity_netconf.py
+    run_test sdk/python/tests/test_sanity_rpc.py
+    run_test sdk/python/tests/test_sanity_delete.py
+    run_test sdk/python/tests/test_sanity_service_errors.py
 }
 
 function run_sanity_native_tests {
     printf "\nRunning sanity tests on native client\n"
-    run_test gen-api/python/tests/test_sanity_types.py native
-    run_test gen-api/python/tests/test_sanity_errors.py native
-    run_test gen-api/python/tests/test_sanity_filters.py native
-    run_test gen-api/python/tests/test_sanity_levels.py native
-    run_test gen-api/python/tests/test_sanity_filter_read.py native
-    run_test gen-api/python/tests/test_sanity_netconf.py native
-    run_test gen-api/python/tests/test_sanity_rpc.py native
-    run_test gen-api/python/tests/test_sanity_delete.py native
-    run_test gen-api/python/tests/test_sanity_service_errors.py native
-    run_test gen-api/python/tests/test_ydk_client.py
+    run_test sdk/python/tests/test_sanity_types.py native
+    run_test sdk/python/tests/test_sanity_errors.py native
+    run_test sdk/python/tests/test_sanity_filters.py native
+    run_test sdk/python/tests/test_sanity_levels.py native
+    run_test sdk/python/tests/test_sanity_filter_read.py native
+    run_test sdk/python/tests/test_sanity_netconf.py native
+    run_test sdk/python/tests/test_sanity_rpc.py native
+    run_test sdk/python/tests/test_sanity_delete.py native
+    run_test sdk/python/tests/test_sanity_service_errors.py native
+    run_test sdk/python/tests/test_ydk_client.py
 }
 
 function run_sanity_tests {
@@ -218,7 +218,9 @@ function run_sanity_tests {
     pip install gen-api/python/dist/ydk*.tar.gz
 
     printf "\nRunning sanity tests\n"
-    run_test gen-api/python/tests/test_sanity_codec.py
+    export PYTHONPATH=./sdk/python:$PYTHONPATH
+    cp -r gen-api/python/tests sdk/python/tests
+    run_test sdk/python/tests/test_sanity_codec.py
 
     run_sanity_ncclient_tests
     run_sanity_native_tests
@@ -352,7 +354,7 @@ function install_ydktest_augm_packages {
 function run_sanity_ydktest_augm_tests {
     # TODO: test case wrapper.
     print_msg "In Method: run_sanity_ydktest_augm_tests"
-    run_test gen-api/python/ydk/tests/test_sanity_bundle_aug.py
+    run_test_no_coverage gen-api/python/ydk/tests/test_sanity_bundle_aug.py
 }
 
 
