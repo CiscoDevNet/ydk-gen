@@ -3,26 +3,31 @@
     "version": "0.4.2",
     "Author": "Cisco",
     "Copyright": "Cisco",
-    
+
     "models": {
-	
+
+    "file":[
+        "yang/ietf/ietf-netconf@2011-06-01.yang",
+        "yang/ietf/ietf-netconf-with-defaults@2011-06-01.yang"
+    ],
+
 	"_descr_git": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
 	"git": [
 	    {
 		"url": "https://github.com/abhikeshav/ydk-test-yang.git",
 		"commits": [
-					
-	    		
-	    			
+
+
+
 	    			{
-		
+
 						"commitid": "master",
 						"dir": [
 		    					"yang"
 							]
 	    			}
-	    			
-	    			
+
+
 	    			]
 	    }
      ]

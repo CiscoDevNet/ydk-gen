@@ -27,6 +27,8 @@ NOCOLOR="\033[0m"
 ROOT=/root
 CONFD_RC=/root/confd/confdrc
 YDKTEST_DEST_FXS=/root/confd/etc/ydktest
+YDKTEST_MODEL_FXS=/root/confd/etc/ydk_model_test
+YDKTEST_MODEL_DEST_FXS=/root/confd/etc/model_test_fxs
 AUGMENTATION_DEST_FXS=/root/confd/etc/augmentation
 DEVIATION_DEST_FXS=/root/confd/etc/deviation
 YDKTEST_DEVIATION_SOURCE_FXS=/root/confd/src/confd/yang/ydktest/fxs/ydktest_deviation
@@ -65,7 +67,7 @@ function run_test {
 
 
 function setup_env {
-
+    print_msg "In Method: setup_env"
     cd $ROOT
     printf "\nCloning from: %s, branch: %s\n" "$REPO" "$BRANCH"
     git clone -b $BRANCH $REPO
@@ -76,18 +78,12 @@ function setup_env {
 
     printf "\nInstalling packages...\n"
     sudo apt-get update
-    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libcurl4-openssl-dev libtool
+    sudo apt-get --assume-yes install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libtool libssh-dev libcurl4-gnutls-dev cmake
 
     cd ~
-    git clone https://github.com/Kitware/CMake.git
     git clone https://github.com/unittest-cpp/unittest-cpp.git
-    git clone https://git.libssh.org/projects/libssh.git libssh
-    git clone https://github.com/CESNET/libnetconf
+    git clone https://github.com/abhikeshav/libnetconf
 
-    printf "\nMaking CMake...\n"
-    cd CMake
-    git checkout 8842a501cffe67a665b6fe70956e207193b3f76d
-    ./bootstrap && make && make install
 
     printf "\nMaking unittest-cpp...\n"
     cd ~/unittest-cpp/builds
@@ -95,17 +91,8 @@ function setup_env {
     cmake ..
     cmake --build ./ --target install
 
-    printf "\nMaking libssh...\n"
-    cd ~/libssh
-    git checkout 47d21b642094286fb22693cac75200e8e670ad78
-    mkdir builds
-    cd builds
-    cmake ..
-    make install
-
     printf "\nMaking libnetconf...\n"
     cd ~/libnetconf
-    git checkout d4585969d71b7d7dec181955a6753b171b4a8424
     ./configure && make && make install
 
     cd $YDKGEN_HOME
@@ -116,13 +103,40 @@ function setup_env {
 }
 
 function teardown_env {
+    print_msg "In Method: teardown_env"
     deactivate
+}
+
+# clone YDK model test YANG models
+function compile_model_test_yang_to_fxs {
+    rm -rf $YDKTEST_MODEL_FXS
+    mkdir $YDKTEST_MODEL_FXS
+    cd $YDKTEST_MODEL_FXS
+    source $CONFD_RC
+
+    git clone https://github.com/abhikeshav/ydk-test-yang.git
+    cd ydk-test-yang/yang
+    printf "\n"
+    for YANG_FILE in *.yang
+    do
+        `grep "^submodule.*{" $YANG_FILE &> /dev/null`
+        local status=$?
+        if [ $status -eq 1 ]; then
+            printf "Compiling %s to fxs\n" "$YANG_FILE"
+            confdc -c $YANG_FILE
+        fi
+    done
+
+    mv *.fxs $YDKTEST_MODEL_DEST_FXS
+
+    cd $YDKGEN_HOME
 }
 
 # compile YANG files from $1 to fxs
 function compile_yang_to_fxs {
     source $CONFD_RC
     cd $1
+    print_msg "In Method: compile_yang_to_fxs"
     for YANG_FILE in *.yang
     do
         if [[ ${YANG_FILE} != *"submodule"* ]];then
@@ -130,12 +144,13 @@ function compile_yang_to_fxs {
             confdc -c $YANG_FILE
         fi
     done
-    cd $YDKGEN_HOME
+    cd -
 }
 
 # move fxs files from $1 to $2
 function cp_fxs {
     cp $1/*.fxs $2
+    print_msg "In Method: cp_fxs"
 }
 
 # init confd using confd.conf in $1
@@ -143,6 +158,7 @@ function init_confd {
     source $CONFD_RC
     confd --stop
     cd $1
+    print_msg "In Method: init_confd"
     printf "\nInitializing confd...\n"
     confd -c confd.conf
     cd $YDKGEN_HOME
@@ -150,6 +166,7 @@ function init_confd {
 
 # pygen test
 function run_pygen_test {
+    print_msg "In Method: run_pygen_test"
     cd $YDKGEN_HOME
     export PYTHONPATH=$YDKGEN_HOME
     run_test test/pygen_tests.py --aug-base profiles/test-augmentation/ietf.json \
@@ -160,6 +177,7 @@ function run_pygen_test {
 
 # generate ydktest package based on proile
 function generate_ydktest_package {
+    print_msg "In Method: generate_ydktest_package"
     printf "\nGenerating ydktest model APIs with grouping classes\n"
     run_test generate.py --profile profiles/test/ydktest.json --python --verbose --groupings-as-class
 
@@ -196,6 +214,7 @@ function run_sanity_native_tests {
 }
 
 function run_sanity_tests {
+    print_msg "In Method: run_sanity_tests"
     pip install gen-api/python/dist/ydk*.tar.gz
 
     printf "\nRunning sanity tests\n"
@@ -208,8 +227,47 @@ function run_sanity_tests {
     run_test gen-api/python/ydk/tests/import_tests.py
 }
 
+# ydk model tests
+function run_ydk_model_tests {
+    print_msg "In Method: run_ydk_model_tests"
+    cd $YDKGEN_HOME
+
+    virtualenv myenv
+    source myenv/bin/activate
+    pip install coverage
+    pip install -r requirements.txt
+
+    printf "\nGenerating ydk model APIs for testing\n"
+    python generate.py --profile profiles/test/ydk-models-test.json --verbose
+    cd $YDKGEN_HOME/gen-api/python
+    pip uninstall -y ydk
+    pip install dist/*.tar.gz
+    export PYTHONPATH=.:$PYTHONPATH
+    for file in $(find ydk/tests -name '*.py'); do
+        source $CONFD_RC
+        confd --status &> /dev/null
+        local status=$?
+        if [ $status -ne 0 ]; then
+            printf "\nRestarting confd\n"
+            source $CONFD_RC
+            cd $YDKTEST_MODEL_DEST_FXS
+            confd -c confd.conf
+            local c_status=$?
+            if [ $c_status -ne 0 ]; then
+                return $c_status
+            fi
+            cd -
+        fi
+        printf "\nRunning %s python model test\n" "$file"
+        python $file
+    done
+
+    cd $YDKGEN_HOME
+}
+
 # cpp tests
 function run_cpp_gen_tests {
+    print_msg "In Method: run_cpp_gen_tests"
     printf "\nGenerating ydktest C++ model APIs\n"
     run_test generate.py --profile profiles/test/ydktest.json --cpp --verbose
     cd gen-api/cpp
@@ -223,6 +281,7 @@ function run_cpp_gen_tests {
 
 # cpp sanity tests
 function run_cpp_sanity_tests {
+    print_msg "In Method: run_cpp_sanity_tests"
     cd $YDKGEN_HOME/sdk/cpp/tests
     run_exec_test make clean all
     cd $YDKGEN_HOME
@@ -230,6 +289,7 @@ function run_cpp_sanity_tests {
 
 # cmake tests
 function run_cmake_tests {
+    print_msg "In Method: run_cmake_tests"
     printf "\nRunning CMake\n"
     cd $YDKGEN_HOME/sdk/cpp/builds
     cmake ..
@@ -242,6 +302,7 @@ function run_cmake_tests {
 
 # sanity deviation
 function run_deviation_sanity {
+    print_msg "In Method: run_deviation_sanity"
     cd $YDKGEN_HOME
     rm -rf gen-api/python/*
     # ydktest deviation
@@ -276,6 +337,8 @@ function generate_ydktest_augm_packages {
 }
 # install ydktest augmentation packages
 function install_ydktest_augm_packages {
+    print_msg "In Method: install_ydktest_augm_packages"
+    pip uninstall ydk -y
     CORE_PKG=$(find gen-api/python/ydk/dist -name "ydk*.tar.gz")
     AUGM_BASE_PKG=$(find gen-api/python/ietf/dist -name "ydk*.tar.gz")
     AUGM_CONTRIB_PKGS=$(find gen-api/python/ydktest_aug_ietf_*/dist -name "ydk*.tar.gz")
@@ -288,12 +351,14 @@ function install_ydktest_augm_packages {
 # run sanity tests for ydktest augmentation package
 function run_sanity_ydktest_augm_tests {
     # TODO: test case wrapper.
+    print_msg "In Method: run_sanity_ydktest_augm_tests"
     run_test gen-api/python/ydk/tests/test_sanity_bundle_aug.py
 }
 
 
 # submit coverage
 function submit_coverage {
+    print_msg "In Method: submit_coverage"
     if [[ "$BRANCH" == "master" ]] &&  [[ "$REPO" == *"CiscoDevNet/ydk-gen"* ]]
     then
         coverage report
@@ -320,52 +385,41 @@ while getopts "r:b:" o; do
     esac
 done
 
-print_msg "In Method: setup_env"
+
 setup_env
-print_msg "In Method: compile_yang_to_fxs"
+
+# ydktest
 compile_yang_to_fxs $YDKGEN_HOME/yang/ydktest
-print_msg "In Method: cp_fxs"
 cp_fxs $YDKGEN_HOME/yang/ydktest $YDKTEST_DEST_FXS
-print_msg "In Method: cp_fxs"
 cp_fxs $YDKGEN_HOME/yang/ydktest $DEVIATION_DEST_FXS
-print_msg "In Method: cp_fxs"
 cp_fxs $YDKGEN_HOME/yang/ydktest $AUGMENTATION_DEST_FXS
-print_msg "In Method: init_confd"
+cp_fxs $YDKGEN_HOME/yang/ydktest $YDKTEST_MODEL_DEST_FXS
 init_confd $YDKTEST_DEST_FXS
-print_msg "In Method: run_pygen_test"
 run_pygen_test
-print_msg "In Method: generate_ydktest_package"
 generate_ydktest_package
-print_msg "In Method: run_sanity_tests"
 run_sanity_tests
-print_msg "In Method: submit_coverage"
 submit_coverage
-print_msg "In Method: run_cpp_gen_tests"
 run_cpp_gen_tests
-print_msg "In Method: run_cpp_sanity_tests"
 run_cpp_sanity_tests
-print_msg "In Method: run_cmake_tests"
 run_cmake_tests
 
-print_msg "In Method: cp_fxs"
+# deviaiton
 cp_fxs $DEVIATION_SOURCE_FXS $DEVIATION_DEST_FXS
-print_msg "In Method: run_deviation_sanity"
 run_deviation_sanity
 
-print_msg "In Method: compile_yang_to_fxs"
+# ydk model test
+compile_model_test_yang_to_fxs
+init_confd $YDKTEST_MODEL_DEST_FXS
+run_ydk_model_tests
+
+# ydk namespace package augmentation
 compile_yang_to_fxs $YDKGEN_HOME/yang/ydktest-aug-ietf
-print_msg "In Method: cp_fxs"
 cp_fxs $YDKGEN_HOME/yang/ydktest-aug-ietf $AUGMENTATION_DEST_FXS
-print_msg "In Method: init_confd"
 init_confd $AUGMENTATION_DEST_FXS
-print_msg "In Method: generate_ydktest_augm_fxs"
 generate_ydktest_augm_packages
-print_msg "In Method: install_ydktest_augm_packages"
 install_ydktest_augm_packages
-print_msg "In Method: run_sanity_ydktest_augm_tests"
 run_sanity_ydktest_augm_tests
 
-print_msg "In Method: teardown_env"
 teardown_env
 
 exit
