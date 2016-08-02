@@ -1,6 +1,6 @@
 Delete operation
 ****************
-This document explains how to use YDK object to delete nodes. Examples below use `ydktest.json <https://raw.githubusercontent.com/CiscoDevNet/ydk-gen/master/profiles/test/ydktest.json>`_ profile file to generate YDK test package.
+This document explains how to use YDK ``delete`` operation to delete nodes. Examples below use `ydktest.json <https://raw.githubusercontent.com/CiscoDevNet/ydk-gen/master/profiles/test/ydktest.json>`_ profile file to generate YDK test package.
 
 Let's write some boilerplate code for device connection:
 
@@ -16,14 +16,14 @@ Let's write some boilerplate code for device connection:
                                  port=12022)
     crud = CRUDService()
 
-Delete operation could be executed on YANG container, list and items in  YANG list or leaf-list, to delete a container:
+The delete operation can be executed on YANG containers and lists. Specific items in YANG list or leaf-list can also be deleted. To delete a container:
 
 .. code-block:: python
 
 	runner = ysanity.Runner()
 	crud.delete(ncc, runner)
 
-to delete a list:
+To delete a list:
 
 .. code-block:: python
 
@@ -40,13 +40,13 @@ to delete a list:
     runner.one_list.ldata.extend([foo, bar, baz])
 	crud.delete(ncc, runner.one_list.ldata)
 
-to delete a slice of above list:
+To delete a slice of above list:
 
 .. code-block:: python
 
 	crud.delete(ncc, runner.one_list.ldata[1:])
 
-the same syntax could be used to delete items in leaf-list.
+The same syntax could be used to delete items in leaf-list.
 
 
 
