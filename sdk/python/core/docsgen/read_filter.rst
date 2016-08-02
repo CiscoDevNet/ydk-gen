@@ -1,45 +1,56 @@
 Read Using Object Filter
 ************************
-This document will explain and give examples to read operation using object filter.
-Types of read operation explained will include:
+In read operation, YDK object is used as read filter. This document explains how to use YDK object as a read filter. Examples below use `ydktest.json <https://raw.githubusercontent.com/CiscoDevNet/ydk-gen/master/profiles/test/ydktest.json>`_ profile file to generate YDK test package.
+Let's write some boilerplate code for device connection:
 
-- Read everything.
-- Read using READ class.
-- Read on lists.
+.. code-block:: python
 
-Structure of example object
-===========================
+    from ydk.services import CRUDService
+    from ydk.providers import NetconfServiceProvider
+    from ydk.models import ydktest_filterread as ysanity
+    ncc = NetconfServiceProvider(address='127.0.0.1',
+                                 username='admin',
+                                 password='admin',
+                                 protocol='ssh',
+                                 port=12022)
+    crud = CRUDService()
 
-The example will based on the structure and data defined below. 
+and :py:class:`ydk.services.CodecService` to simplify payload comparison:
 
-- The structure of A is:
+.. code-block:: python
+
+    from ydk.services.codec_service import CodecService
+    from ydk.providers.codec_provider import CodecServiceProvider
+    codec = CodecService()
+    codec_provider = CodecServiceProvider(type='xml')
+
+and configure the device with the initial data below:
+
+.. code-block:: python
+
+    a = ysanity.A()
+    a.a1, a.a2, a.a3 = "some value", "value of a2", "value of a3"
+    a.b.b1, a.b.b2, a.b.b3 = "some value", "value of b2", "value of b3"
+    a.b.f = a.b.F()
+    a.b.f.f1 = 'f'
+    a.b.c = a.b.C()
+    a.b.d.d1 = "some value d1"
+    a.b.d.d2 = "value of d2"
+    a.b.d.d3 = "value of d3"
+    a.b.d.e.e1, a.b.d.e.e2 = "some value e1", "value of e2"
+    l1, l2, l3 = a.Lst(), a.Lst(), a.Lst()
+    l1.number, l1.value = 1, "one"
+    l2.number, l2.value = 2, "two"
+    l3.number, l3.value = 3, "three"
+    a.lst.extend([l1, l2, l3])
+
+    crud.create(ncc, a)
+
+The configuration above will config following data in device:
+
 .. code-block:: xml
 
-   +--rw a
-      +--rw a1  string
-      +--rw a2  string
-      +--rw a3  string
-      +--rw b
-      |  +--rw b1   string
-      |  +--rw b2   string
-      |  +--rw b3   string
-      |  +--rw c   
-      |  +--rw d
-      |     +--rw d1  string
-      |     +--rw d1  string
-      |     +--rw d1  string
-      |     +--rw e
-      |           +--rw e1 string
-      |           +--rw e2 string
-      +--rw lst* [number]
-         +--rw number int32
-         +--value string
-
-- The data stored in the device is:
-
-.. code-block:: xml
-
-    <a>
+    <a xmlns="http://cisco.com/ns/yang/ydk-filter">
       <a1>some value</a1>
       <a2>value of a2</a2>
       <a3>value of a3</a3>
@@ -57,6 +68,9 @@ The example will based on the structure and data defined below.
             <e2>value of e2</e2>
           </e>
         </d>
+        <f>
+          <f1>f</f1>
+        </f>
       </b>
       <lst>
         <number>1</number>
@@ -71,28 +85,23 @@ The example will based on the structure and data defined below.
         <value>three</value>
       </lst>
     </a>
+
+where `<c>` and `<f>` are presence container.
 
 Read everything
 ===============
-To read everything, simply initiated an instance of top level object A.
+The simplest filter is the top level container:
 
 .. code-block:: python
 
-    obja = A()
+    a_read = crud.read(ncc, ysanity.A())
+    print codec.encode(codec_provider, a_read)
 
-This will be encoded as,
-
-.. code-block:: xml
-
-    <filter type="subtree">
-        <a/>
-    </filter>
-
-And the exptected return value should be,
+the top level container filters nothing and return every data under current level:
 
 .. code-block:: xml
 
-    <a>
+    <a xmlns="http://cisco.com/ns/yang/ydk-filter">
       <a1>some value</a1>
       <a2>value of a2</a2>
       <a3>value of a3</a3>
@@ -110,6 +119,9 @@ And the exptected return value should be,
             <e2>value of e2</e2>
           </e>
         </d>
+        <f>
+          <f1>f</f1>
+        </f>
       </b>
       <lst>
         <number>1</number>
@@ -126,197 +138,78 @@ And the exptected return value should be,
     </a>
 
 
-Read using READ class
+Filter out more stuff
 =====================
-Explicitly assign READ instance to object leaf will get a more strcting filter, cases include:
 
-- Read on leaf.
-    To read on a particular leaf, assign READ instance to that attribute:
-
-    .. code-block:: python
-
-        obja = A()
-        obja.a1 = READ()
-
-    This will be translated to:
-
-    .. code-block:: xml
-
-        <filter type="subtree">
-            <a>
-                </a1>
-            </a>
-        </filter>
-
-    The expected return value will only contain value for this leaf:
-
-    .. code-block:: xml
-
-        <a>
-          <a1>some value</a1>
-        </a>
-
-- Read on presence container.
-    To read a presence container like c, assign instance of READ class to it.
-
-    .. code-block:: python
-
-        obja = A()
-        c = obja.b.c
-        c = READ()
-
-    This will be encoded as:
-
-    .. code-block:: xml
-
-        <filter type="subtree">
-            <a>
-                <b>
-                    <c/>
-                </b>
-            </a>
-        </filter>
-    And the expected return value for this should be:
-
-    .. code-block:: xml
-
-        <a>
-          <b>
-            <c/>
-          </b>
-        </a>
-
-- Read on nested container.
-    Assign instance of READ class will make filter more strict, below are two examples.
-
-    - Example1:
-
-        If the filter is configured as follow,
-
-        .. code-block:: python
-
-            obja = A()
-            obja.b.b1 = "some value"
-
-        Then it will be encoded as:
-
-        .. code-block:: xml
-
-            <filter type="subtree">
-                <a>
-                    <b>
-                        <b1>some value</b1>
-                    </b>
-                </a>
-            </filter> 
-
-        Since the value of ``<b1>`` matches the value stored in the device, it will return all the value stored in the nested container under ``<b>``:
-
-        .. code-block:: xml
-
-            <a>
-              <b>
-                <b1>some value</b1>
-                <b2>value of b2</b2>
-                <b3>value of b3</b3>
-                <c/>
-                <d>
-                  <d1>some value d1</d1>
-                  <d2>value of d2</d2>
-                  <d3>value of d3</d3>
-                  <e>
-                    <e1>some value e1</e1>
-                    <e2>value of e2</e2>
-                  </e>
-                </d>
-              </b>
-            </a>
-
-    - Example2:
-
-        If the filter is set as follows,
-
-        .. code-block:: python
-
-            obja = A()
-            e = obja.b.d.e
-            e.e1 = "some value e1"
-            d = obja.b.d
-            d.d1 = "some value d1"
-
-        The filter will be encoded as,
-
-        .. code-block:: xml
-
-            <filter type="substree">
-                <a>
-                    <b>
-                        <d>
-                            <d1>some value d1</d1>
-                            <e>
-                                <e1>some value e1</e1>
-                            </e>
-                        </d>
-                    </b>
-                </a>
-            </filter>
-
-
-        And the expected return value should be,
-
-        .. code-block:: xml
-
-            <a>
-              <b>
-                <d>
-                  <d1>some value d1</d1>
-                  <e>
-                    <e1>some value e1</e1>
-                    <e2>value of e2</e2>
-                  </e>
-                </d>
-              </b>
-            </a>
-
-Read on lists
-=============
-To read on list, assign key value that matches the value in the device, if the filter is configured as follows,
+To make the filter more strict, you could assign more value to it. For example, if you are only interested in presence container `C`:
 
 .. code-block:: python
 
-    l1, l2 = A.Lst(), A.Lst()
-    l1.number, l2.number =  1, 2
-    obja = A()
-    obja.lst.extend([l1, l2])
-
-It will be encoded as,
+    a = ysanity.A()
+    a.b.c = a.b.C()
+    a_read = crud.read(ncc, a)
+    print codec.encode(a_read)
 
 .. code-block:: xml
 
-    <filter type="subtree">
-        <a>
-            <lst>
-                <number>1</number>
-                <value>one</value>
-            </lst>
-            <lst>
-                <number>2</number>
-                <value>two</value>
-            </lst>
-        </a>
-    </filter>
+    <a xmlns="http://cisco.com/ns/yang/ydk-filter">
+      <b>
+        <c/>
+      </b>
+    </a>
 
-And the exptected return value should be,
+
+Content match nodes
+===================
+According to `NETCONF RFC <https://tools.ietf.org/html/rfc6241#section-6.2.5>`_, a "content match node" is used to select sibling nodes for filter output. Let's try this concept with the following example:
+
+.. code-block:: python
+
+    a = ysanity.A()
+    a.b.b1 = "some value"
+    a_read = crud.read(ncc, a)
+    print codec.encode(codec_provider, a_read)
+
+In the example show above, the `a.b.b1` leaf serves as a content match node, therefore its siblings `<b2>` , `<b3>`, `<c>`, `<d>`, `<f>` and their children are all being kept.
 
 .. code-block:: xml
 
-    <a>
-      <lst>
-        <number>1</number>
-        <value>one</value>
-      </lst>
-      <lst>
-        <number>2</number>
-        <value>two</value>
-      </lst>
+    <a xmlns="http://cisco.com/ns/yang/ydk-filter">
+      <b>
+        <b1>some value</b1>
+        <b2>value of b2</b2>
+        <b3>value of b3</b3>
+        <c/>
+        <d>
+          <d1>some value d1</d1>
+          <d2>value of d2</d2>
+          <d3>value of d3</d3>
+          <e>
+            <e1>some value e1</e1>
+            <e2>value of e2</e2>
+          </e>
+        </d>
+        <f>
+          <f1>f</f1>
+        </f>
+      </b>
+    </a>
+
+
+Read on leaf
+============
+YDK also provides you with a `READ` class that could be used to read the value on a particular leaf. Let's use this `READ` class and import it from `ydk.types`:
+
+.. code-block:: python
+
+    from ydk.types import READ
+    a = ysanity.A()
+    a.a1 = READ()
+    a_read = crud.read(ncc, a)
+    print codec.encode(codec_provider, a_read)
+
+.. code-block:: xml
+
+    <a xmlns="http://cisco.com/ns/yang/ydk-filter">
+      <a1>some value</a1>
     </a>

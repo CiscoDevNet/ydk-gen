@@ -14,10 +14,11 @@ Contents:
    :maxdepth: 2
 
    getting_started.rst
+   ydk.rst
+   ydk.models.rst
+   about_ydk.rst
    read_filter.rst
+   delete_operation.rst
    presence_class.rst
    types_doc.rst
    deviation.rst
-   about_ydk.rst
-   ydk.rst
-   ydk.models.rst

@@ -213,6 +213,14 @@ class YList(list):
             ret.append(item)
         return ret
 
+    def append(self, item):
+       super(YList, self).append(item)
+       item.parent = self.parent
+
+    def extend(self, items):
+       for item in items:
+           self.append(item)
+
 class YListItem(object):
     def __init__(self, item, parent, name):
         self.item = item

@@ -34,19 +34,17 @@ class SanityYang(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         if SanityYang.PROVIDER_TYPE == "native":
-            self.ncc = NativeNetconfServiceProvider(
-                address='127.0.0.1',
-                username='admin',
-                password='admin',
-                protocol='ssh',
-                port=12022)
+            self.ncc = NativeNetconfServiceProvider(address='127.0.0.1',
+                                                    username='admin',
+                                                    password='admin',
+                                                    protocol='ssh',
+                                                    port=12022)
         else:
-            self.ncc = NetconfServiceProvider(
-                address='127.0.0.1',
-                username='admin',
-                password='admin',
-                protocol='ssh',
-                port=12022)
+            self.ncc = NetconfServiceProvider(address='127.0.0.1',
+                                              username='admin',
+                                              password='admin',
+                                              protocol='ssh',
+                                              port=12022)
         self.crud = CRUDService()
 
     @classmethod
@@ -71,26 +69,26 @@ class SanityYang(unittest.TestCase):
         e_1 = ysanity.Runner.InbtwList.Ldata()
         e_2 = ysanity.Runner.InbtwList.Ldata()
         e_1.number = 11
-        e_1.name = 'runner:inbtwlist:['+str(e_1.number)+']:name'
+        e_1.name = 'runner:inbtwlist:[11]:name'
         e_1.subc.number = 111
-        e_1.subc.name = 'runner:inbtwlist:['+str(e_1.number)+']:subc:name'
+        e_1.subc.name = 'runner:inbtwlist:[11]:subc:name'
         e_2.number = 12
-        e_2.name = 'runner:inbtwlist:['+str(e_2.number)+']:name'
+        e_2.name = 'runner:inbtwlist:[12]:name'
         e_2.subc.number = 121
-        e_2.subc.name = 'runner:inbtwlist:['+str(e_2.number)+']:name'
-        e_11 = ysanity.Runner.InbtwList.Ldata.Subc.SubcSubl1()
+        e_2.subc.name = 'runner:inbtwlist:[12]:name'
+        e_11 = e_1.subc.SubcSubl1()
         e_11.number = 111
-        e_11.name = 'runner:inbtwlist:['+str(e_1.number)+']:subc:subcsubl1['+str(e_11.number)+']:name'
+        e_11.name = 'runner:inbtwlist:[11]:subc:subcsubl1[111]:name'
         e_12 = ysanity.Runner.InbtwList.Ldata.Subc.SubcSubl1()
         e_12.number = 112
-        e_12.name = 'runner:inbtwlist:['+str(e_1.number)+']:subc:subcsubl1['+str(e_12.number)+']:name'
+        e_12.name = 'runner:inbtwlist:[11]:subc:subcsubl1[112]:name'
         e_1.subc.subc_subl1.extend([e_11, e_12])
         e_21 = ysanity.Runner.InbtwList.Ldata.Subc.SubcSubl1()
         e_21.number = 121
-        e_21.name = 'runner:inbtwlist:['+str(e_2.number)+']:subc:subcsubl1['+str(e_21.number)+']:name'
+        e_21.name = 'runner:inbtwlist:[12]:subc:subcsubl1[121]:name'
         e_22 = ysanity.Runner.InbtwList.Ldata.Subc.SubcSubl1()
         e_22.number = 122
-        e_22.name = 'runner:inbtwlist:['+str(e_2.number)+']:subc:subcsubl1['+str(e_22.number)+']:name'
+        e_22.name = 'runner:inbtwlist:[12]:subc:subcsubl1[122]:name'
         e_2.subc.subc_subl1.extend([e_21, e_22])
         runner_create.inbtw_list.ldata.extend([e_1, e_2])
 
@@ -189,7 +187,7 @@ class SanityYang(unittest.TestCase):
 
         runner_read = self.read_from_empty_filter()
 
-        self.crud.delete(self.ncc, runner_read.inbtw_list.ldata[1].subc.subc_subl1[1])
+        self.crud.delete(self.ncc, runner_create.inbtw_list.ldata[1].subc.subc_subl1[1])
         # get object after a crud delete operation
         runner_read = self.read_from_empty_filter()
         runner_left = runner_create
