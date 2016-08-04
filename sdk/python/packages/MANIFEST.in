@@ -1,5 +1,1 @@
-include README.rst
-include ydk/providers/_cpp_files/netconf_client.cpp
-include ydk/providers/_cpp_files/netconf_client.h
-recursive-include .includes *
-recursive-include .libs *
+../core/MANIFEST.in

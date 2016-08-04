@@ -17,13 +17,17 @@
 """Setup for YDK
 """
 import os
-import shutil
+'''import shutil
 import platform
 import subprocess
-from git import Repo
+from git import Repo'''
 from codecs import open as copen
+
 from setuptools import setup, find_packages, extension
 
+NMSP_PKG_NAME = "$PACKAGE$"
+NMSP_PKG_VERSION = "$VERSION$"
+NMSP_PKG_DEPENDENCIES = ["$DEPENDENCY$"]
 
 # Define and modify version number and package name here,
 # Namespace packages are share same prefix: "ydk-models"
@@ -39,14 +43,10 @@ INSTALL_REQUIREMENTS = ['ecdsa==0.13',
                         'protobuf==3.0.0b2.post2',
                         'ncclient>=0.4.7']
 
-NMSP_PKG_NAME = "$PACKAGE$"
-NMSP_PKG_VERION = "$VERSION$"
-NMSP_PKG_DEPENDENCIES = ["$DEPENDENCY$"]
-
 if NMSP_PKG_NAME != "$PACKAGE$":
     NAME = NMSP_PKG_NAME
-if NMSP_PKG_VERION != "$VERSION$":
-    VERSION = NMSP_PKG_VERION
+if NMSP_PKG_VERSION != "$VERSION$":
+    VERSION = NMSP_PKG_VERSION
 if NMSP_PKG_DEPENDENCIES != ["$DEPENDENCY$"]:
     INSTALL_REQUIREMENTS.extend(NMSP_PKG_DEPENDENCIES)
 
@@ -60,7 +60,7 @@ with copen(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
 YDK_PACKAGES = find_packages(exclude=['contrib', 'docs*', 'tests*',
                                       'ncclient', 'samples'])
 ext = []
-
+'''
 
 lib_path = here + '/.libs'
 libnetconf_include_path = here + '/.includes/'
@@ -104,7 +104,7 @@ if platform.system() != 'Windows':
                                   include_dirs=['/usr/include/python2.7', '/usr/include/boost', libnetconf_include_path],
                                   library_dirs=lib_paths
                                   )]
-
+'''
 setup(
     name=NAME,
     version=VERSION,

@@ -223,7 +223,7 @@ function run_sanity_tests {
     run_test sdk/python/tests/test_sanity_codec.py
 
     run_sanity_ncclient_tests
-    run_sanity_native_tests
+#    run_sanity_native_tests
 
     export PYTHONPATH=./gen-api/python:$PYTHONPATH
     run_test gen-api/python/ydk/tests/import_tests.py
@@ -314,7 +314,7 @@ function run_deviation_sanity {
     run_test_no_coverage generate.py --profile profiles/test/ydktest.json --python --verbose
     pip install gen-api/python/dist/*.tar.gz
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py
-    run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py native
+#    run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py native
 
     # bgp deviation
     cp_fxs $BGP_DEVIATION_SOURCE_FXS $DEVIATION_DEST_FXS
@@ -323,7 +323,8 @@ function run_deviation_sanity {
     run_test_no_coverage generate.py --python --profile profiles/test/deviation/deviation.json
     pip install gen-api/python/dist/ydk*.tar.gz
     run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py
-    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py native
+#    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py 
+#    native
 
     pip uninstall ydk -y
 }
@@ -412,7 +413,7 @@ run_deviation_sanity
 # ydk model test
 compile_model_test_yang_to_fxs
 init_confd $YDKTEST_MODEL_DEST_FXS
-run_ydk_model_tests
+#run_ydk_model_tests
 
 # ydk namespace package augmentation
 compile_yang_to_fxs $YDKGEN_HOME/yang/ydktest-aug-ietf

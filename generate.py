@@ -39,13 +39,14 @@ def init_verbose_logger():
     logger.addHandler(ch)
 
 
-def print_about_page(ydk_root, py_api_doc_gen):
+def print_about_page(ydk_root, py_api_doc_gen, bundle):
+    if bundle:
+        return
     repo = Repo(ydk_root)
     remote = repo.remote().name
     branch = repo.active_branch.name
     url = repo.remote().url.split('://')[-1].split('.git')[0]
     commit_id = repo.rev_parse(remote + '/' + branch).hexsha
-
     # modify about_ydk.rst page
     for line in fileinput.input(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'r+w'):
        if 'git clone repo-url' in line:
@@ -56,27 +57,19 @@ def print_about_page(ydk_root, py_api_doc_gen):
            print line,
 
 
-def print_bundle_landing_page(py_api_doc_gen, bundle):
-    if bundle:
-        bundle_name = os.path.basename(bundle).rstrip('.json')
-        for line in fileinput.input(os.path.join(py_api_doc_gen, 'index.rst'), 'r+w'):
-            if '<bundle_name>' in line:
-                print line.replace('<bundle_name>', bundle_name),
-                print len(line) * '='
-            else:
-                print line,
-
-
 def get_release_version(output_directory):
     version = ''
     release = ''
     setup_file = os.path.join(output_directory, 'setup.py')
     with open(setup_file, 'r') as f:
         for line in f:
-            if 'version=' in line or 'version =' in line:
-                rv = line[line.find('=') + 1:line.rfind(",")]
+            if ('version=' in line or 'version =' in line or
+                'NMSP_PKG_VERSION' in line and '$VERSION$' not in line or
+                line.startswith('VERSION =')):
+                rv = line[line.find('=')+1:].strip(' \'"\n')
                 release = "release=" + rv
-                version = "version=" + rv[:rv.rfind(".")] + "'"
+                version = "version=" + rv[:rv.rfind(".")]
+                break
     return release, version
 
 
@@ -87,8 +80,7 @@ def generate_documentations(output_directory, ydk_root, language, bundle):
     release, version = get_release_version(output_directory)
     os.mkdir(py_api_doc)
     # print about YDK page
-    print_about_page(ydk_root, py_api_doc_gen)
-    print_bundle_landing_page(py_api_doc_gen, bundle)
+    print_about_page(ydk_root, py_api_doc_gen, bundle)
     # build docs
     print('\nBuilding docs using sphinx-build...\n')
     p = subprocess.Popen(['sphinx-build',
