@@ -13,11 +13,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   getting_started.rst
-   ydk.rst
-   about_ydk.rst
-   read_filter.rst
-   delete_operation.rst
-   presence_class.rst
-   types_doc.rst
-   deviation.rst
+   ydk.models.rst
+
+
