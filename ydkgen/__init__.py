@@ -55,7 +55,7 @@ class YdkGenerator(object):
             YdkGenException: If an error has occurred
     """
 
-    def __init__(self, output_dir, ydk_root, groupings_as_class, language, pkg_type, sort_clazz=False):
+    def __init__(self, output_dir, ydk_root, groupings_as_class, generate_tests, language, pkg_type, sort_clazz=False):
 
         _check_generator_args(output_dir, ydk_root, language, pkg_type)
 
@@ -64,6 +64,7 @@ class YdkGenerator(object):
         self.groupings_as_class = groupings_as_class
         self.language = language
         self.pkg_type = pkg_type
+        self.generate_tests = generate_tests
         self.sort_clazz = sort_clazz
 
     def generate(self, description_file=None):
@@ -84,6 +85,9 @@ class YdkGenerator(object):
 
         elif self.pkg_type == 'core':
             return self._generate_core()
+
+        else:
+            raise YdkGenException('Invalid package type specified: %s' % self.pkg_type)
 
     def _generate_profile(self, profile_file):
         """ Generate ydk profile package.
@@ -118,9 +122,9 @@ class YdkGenerator(object):
 
         tmp_file = tempfile.mkstemp(suffix='.bundle')[-1]
 
-        bundle_translator.translate(profile_file, tmp_file)
+        bundle_translator.translate(profile_file, tmp_file, self.ydk_root)
 
-        resolver = bundle_resolver.Resolver(self.output_dir)
+        resolver = bundle_resolver.Resolver(self.output_dir, self.ydk_root)
         curr_bundle, all_bundles = resolver.resolve(tmp_file)
 
         api_pkgs = self._get_api_pkgs(curr_bundle.resolved_models_dir)
@@ -177,7 +181,7 @@ class YdkGenerator(object):
                             For example 'ydk_bgp', 'ydk_ietf'.
         """
         factory = printer_factory.PrinterFactory()
-        ydk_printer = factory.get_printer(self.language)(output_dir, bundle_name, self.sort_clazz)
+        ydk_printer = factory.get_printer(self.language)(output_dir, bundle_name, self.generate_tests, self.sort_clazz)
         ydk_printer.emit(pkgs)
 
     def _get_profile_resolved_model_dir(self, profile_file, gen_api_root):
@@ -258,7 +262,7 @@ class YdkGenerator(object):
         Returns:
             gen_api_root (str): Root directory for generated APIs.
         """
-        gen_api_root = self._init_gen_api_dirs(bundle.name, 'packages')
+        gen_api_root = self._init_gen_api_dirs(bundle.name + '-bundle', 'packages')
 
         _modify_python_setup(gen_api_root,
                              'ydk-models-%s' % bundle.name,

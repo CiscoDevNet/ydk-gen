@@ -37,11 +37,12 @@ class _EmitArgs:
 
 class LanguageBindingsPrinter(object):
 
-    def __init__(self, ydk_root_dir, bundle_name, sort_clazz=False):
+    def __init__(self, ydk_root_dir, bundle_name, generate_tests, sort_clazz=False):
         self.ydk_dir = os.path.join(ydk_root_dir, 'ydk')
         self.ydk_doc_dir = os.path.join(ydk_root_dir, 'docsgen')
         self.bundle_name = bundle_name
         self.sort_clazz = sort_clazz
+        self.generate_tests = generate_tests
 
     def emit(self, packages):
         self.ypy_ctx = None

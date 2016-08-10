@@ -236,9 +236,10 @@ class Resolver(object):
 
     """
 
-    def __init__(self, output_dir, reuse_model=False, reuse_bundle=False):
+    def __init__(self, output_dir, root_dir, reuse_model=False, reuse_bundle=False):
         """ Initialize cached file directories.
         """
+        self.root_dir = root_dir
         self.cached_models_dir = ''
         self.cached_bundles_dir = ''
         self.bundles = {}
@@ -322,7 +323,7 @@ class Resolver(object):
         """
         tmp_file = tempfile.mkstemp('')[-1]
         try:
-            translate(description_file, tmp_file)
+            translate(description_file, tmp_file, self.root_dir)
         except KeyError:
             os.remove(tmp_file)
             return description_file

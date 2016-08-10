@@ -1,7 +1,9 @@
 About YDK
 =========
 
-This ydk-py is generated using `ydk-gen <https://github.com/CiscoDevNet/ydk-gen>`_
+Version : version-id
+
+This ydk-py is generated using `ydk-gen <https://github.com/CiscoDevNet/ydk-gen>`_.
 
 To check out the version of ydk-gen used to generate this ydk-py, use the below commands:
 

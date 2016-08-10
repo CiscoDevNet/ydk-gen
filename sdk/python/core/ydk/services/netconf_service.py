@@ -26,8 +26,11 @@ try:
     from ydk.models.ietf import ietf_netconf
     from ydk.models.ietf import ietf_netconf_with_defaults
 except:
-    from ydk.models import ietf_netconf
-    from ydk.models import ietf_netconf_with_defaults
+    try:
+        from ydk.models import ietf_netconf
+        from ydk.models import ietf_netconf_with_defaults
+    except:
+        pass
 
 from ydk.types import Empty
 import logging

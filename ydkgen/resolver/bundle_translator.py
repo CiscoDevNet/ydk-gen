@@ -162,13 +162,6 @@ def get_git_attrs(repos, root, remote=None):
         rmtree(tmp_dir)
 
 
-def check_envs():
-    if 'YDKGEN_HOME' not in os.environ:
-        logger.error('YDKGEN_HOME not set.')
-        print >> sys.stderr, "Need to have YDKGEN_HOME set!"
-        sys.exit(1)
-
-
 def load_profile_attr(profile_file, attr):
     with open(profile_file) as f:
         data = json.load(f)
@@ -184,12 +177,11 @@ def load_profile_attr(profile_file, attr):
         return None
 
 
-def translate(in_file, out_file):
+def translate(in_file, out_file, root_dir):
     """ Generate bundle file using profile file(in_file).
     in_file is a relative path to a local profile file.
     """
-    check_envs()
-    ydk_root = os.path.expandvars('$YDKGEN_HOME')
+    ydk_root = root_dir
 
     with open(in_file) as f:
         data = json.load(f)
@@ -216,8 +208,6 @@ def translate(in_file, out_file):
 
 if __name__ == '__main__':
 
-    check_envs()
-
     # init option parser
     parser = OptionParser(usage="usage: %prog [options]")
 
@@ -226,6 +216,10 @@ if __name__ == '__main__':
                       dest="verbose",
                       default=False,
                       help="Verbose mode")
+    parser.add_option("-r", "--root",
+                      type=str,
+                      dest="root",
+                      help="Root directory")
 
     (options, args) = parser.parse_args()
 
@@ -236,7 +230,7 @@ if __name__ == '__main__':
         logger.setLevel(logging.DEBUG)
 
     # init dirs
-    ydk_root = os.path.expandvars('$YDKGEN_HOME')
+    ydk_root = options.root
     profiles_root = os.path.join(ydk_root, 'profiles')
     bundles_root = os.path.join(ydk_root, 'bundles')
     if os.path.isdir(bundles_root):

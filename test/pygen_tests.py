@@ -76,12 +76,13 @@ def get_test_suite_kwargs(args):
 class PyGenTest(TestCase):
     """PyGenTest class, generate and compare new APIs with expected APIs."""
 
-    def __init__(self, profile, ydk_root, test_cases_root, groupings_as_class,
+    def __init__(self, profile, ydk_root, test_cases_root, groupings_as_class, generate_tests,
                  language='python'):
         self.profile = profile
         self.ydk_root = ydk_root
         self.test_cases_root = test_cases_root
         self.groupings_as_class = groupings_as_class
+        self.generate_tests = generate_tests
         self.language = language
         setattr(self, self.language + " Gen", self.translate_and_check)
         self.actual_dir = self.test_cases_root + '/' + self.language + '/actual'
@@ -139,24 +140,25 @@ class PyGenTest(TestCase):
         ydkgen.YdkGenerator(self.actual_dir,
                             self.ydk_root,
                             self.groupings_as_class,
+                            self.generate_tests,
                             self.language,
                             'profile',
                             True).generate(self.profile)
         actual_dir = self.actual_dir + '/' + self.language + '/ydk/models'
         expected_dir = self.expected_dir + '/ydk/models'
         ignore = ['.gitignore']
-
         self.assertTrue(self.equal_dirs(actual_dir, expected_dir, ignore))
 
 
 class PyBundlePatchTest(TestCase):
     """PyBundlePatchTest class, generate, patch and compare APIs."""
 
-    def __init__(self, profile, ydk_root, groupings_as_class, test_cases_root,
+    def __init__(self, profile, ydk_root, groupings_as_class, generate_tests, test_cases_root,
                  aug_base, aug_contrib, aug_compare):
         self.profile = profile
         self.ydk_root = ydk_root
         self.groupings_as_class = groupings_as_class
+        self.generate_tests = generate_tests
         self.test_cases_root = test_cases_root
         self.aug_base = aug_base
         self.aug_contrib = aug_contrib
@@ -166,10 +168,13 @@ class PyBundlePatchTest(TestCase):
         self.actual_dir = self.test_cases_root + '/python/actual/bundle_aug'
         self.expected_dir = self.test_cases_root + '/python/expected/bundle_aug'
 
-    def generate_pkg(self, profile, bundle_name, target_dir, *args):
+    def generate_pkg(self, profile, bundle_name, target_dir, pkg_type, ydk_root,
+                              groupings_as_class, generate_tests, language, sort_clazz):
         """Generate YDK distribution tarball based on profile file."""
-        py_sdk_root = target_dir + '/python/%s' % bundle_name
-        ydkgen.YdkGenerator(target_dir, *args).generate(profile)
+        py_sdk_root = target_dir + '/python/%s%s' % (bundle_name, '-bundle' if pkg_type == 'bundle' else '')
+
+        ydkgen.YdkGenerator(target_dir, ydk_root, groupings_as_class, generate_tests, language, pkg_type, sort_clazz).generate(profile)
+
         cwd = os.getcwd()
         os.chdir(py_sdk_root)
         args = [sys.executable, 'setup.py', 'sdist']
@@ -230,7 +235,7 @@ class PyBundlePatchTest(TestCase):
 
     def get_cmp_aug_path(self, compare, actual_dir):
         """Get path for generated augmentation modules."""
-        return os.path.join(actual_dir, 'python', compare, 'ydk', 'models', compare, '_aug')
+        return os.path.join(actual_dir, 'python', compare + '-bundle', 'ydk', 'models', compare, '_aug')
 
     def translate_and_check(self):
         """Generate YDK core library, augmentation bundles, import module from
@@ -241,23 +246,23 @@ class PyBundlePatchTest(TestCase):
             return os.path.basename(profile).split('.')[0].replace('-', '_')
         # TODO: add wrapper function to get arguments for YdkGenerator
         # ydk core
-        self.generate_pkg(None, 'ydk', self.actual_dir, self.ydk_root,
-                          self.groupings_as_class, 'python', 'core', True)
+        self.generate_pkg(None, 'ydk', self.actual_dir, 'core', self.ydk_root,
+                          self.groupings_as_class, self.generate_tests, 'python', True)
         # bundle packages, augmentation base bundle and augmentation contributors
         base = get_bundle_name(self.aug_base)
         patch = []
         for profile in self.aug_contrib + [self.aug_base]:
             bundle_name = get_bundle_name(profile)
             patch.append(bundle_name)
-            self.generate_pkg(profile, bundle_name, self.actual_dir, self.ydk_root,
-                              self.groupings_as_class, 'python', 'bundle', True)
         # bundle package for comparison
         compare = bundle_name = get_bundle_name(self.aug_compare)
-        self.generate_pkg(self.aug_compare, bundle_name, self.actual_dir, self.ydk_root,
-                          self.groupings_as_class, 'python', 'bundle', True)
+        self.generate_pkg(self.aug_compare, bundle_name, self.actual_dir, 'bundle', self.ydk_root,
+                          self.groupings_as_class, self.generate_tests, 'python', True)
 
         patch_pkgs = []
         for p in ['ydk'] + sorted(patch):
+            if p != 'ydk':
+                p = p + '-bundle'
             # installation order should be: 0. ydk core library 1. ietf, 2. ydktest_aug_ietf_[0-9]
             patch_pkgs.extend(glob.glob(self.actual_dir + '/python/%s/dist/*.tar.gz' % p))
 
@@ -304,6 +309,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--groupings-as-class", action="store_true",
                         help="Consider yang groupings as classes.")
+
+    parser.add_argument("--generate-tests", action="store_true",
+                        help="Generate tests.")
 
     parser.add_argument("--aug-base", type=str,
                         help="Path to profile file for augmentation bundle "

@@ -14,16 +14,19 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-import sys
+from distutils import dir_util, file_util
 from optparse import OptionParser
-from ydkgen import YdkGenerator
-import os
-import shutil
-import logging
+
 import fileinput
+import logging
+import os
 import subprocess
+import sys
+import time
+
 from git import Repo
-from itertools import izip_longest
+from ydkgen import YdkGenerator
+
 
 logger = logging.getLogger('ydkgen')
 
@@ -39,22 +42,22 @@ def init_verbose_logger():
     logger.addHandler(ch)
 
 
-def print_about_page(ydk_root, py_api_doc_gen, bundle):
-    if bundle:
+def print_about_page(ydk_root, py_api_doc_gen, release, is_bundle):
+    if is_bundle:
         return
     repo = Repo(ydk_root)
-    remote = repo.remote().name
-    branch = repo.active_branch.name
     url = repo.remote().url.split('://')[-1].split('.git')[0]
-    commit_id = repo.rev_parse(remote + '/' + branch).hexsha
+    commit_id = str(repo.head.commit)
     # modify about_ydk.rst page
     for line in fileinput.input(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'r+w'):
-       if 'git clone repo-url' in line:
-           print line.replace('repo-url', 'https://{0}.git'.format(url)),
-       elif 'git checkout commit-id' in line:
-           print line.replace('commit-id', '{}'.format(commit_id))
-       else:
-           print line,
+        if 'git clone repo-url' in line:
+            print line.replace('repo-url', 'https://{0}.git'.format(url)),
+        elif 'git checkout commit-id' in line:
+            print line.replace('commit-id', '{}'.format(commit_id))
+        elif 'version-id' in line:
+            print line.replace('version-id', '{}'.format(release.replace('release=', '')))
+        else:
+            print line,
 
 
 def get_release_version(output_directory):
@@ -73,14 +76,41 @@ def get_release_version(output_directory):
     return release, version
 
 
-def generate_documentations(output_directory, ydk_root, language, bundle):
+def copy_docs_from_bundles(ydk_root, language, destination_dir):
+    output_root_dir = os.path.join(ydk_root, 'gen-api')
+    output_root_dir = os.path.join(output_root_dir, language)
+    bundle_dirs = os.listdir(output_root_dir)
+    index_file = os.path.join(destination_dir, 'index.rst')
+    backup_index_file = os.path.join(destination_dir, 'index_bkp.rst')
+    file_util.copy_file(index_file, backup_index_file)
+    for bundle_dir in bundle_dirs:
+        if '-bundle' in bundle_dir:
+            bundle_dir_path = os.path.join(output_root_dir, bundle_dir)
+            bundle_docsgen_dir = os.path.join(bundle_dir_path, 'docsgen')
+            ydk_bundle_models_file_name = 'ydk.models.{0}.rst'.format(bundle_dir.replace('-bundle', ''))
+
+            ydk_models_file = os.path.join(bundle_docsgen_dir, 'ydk.models.rst')
+            ydk_bundle_models_file = os.path.join(bundle_docsgen_dir, ydk_bundle_models_file_name)
+            file_util.copy_file(ydk_models_file, ydk_bundle_models_file)
+
+            dir_util.copy_tree(bundle_docsgen_dir, destination_dir)
+            with open(backup_index_file, 'a') as myfile:
+                myfile.write('   {0}\n'.format(ydk_bundle_models_file_name))
+
+    file_util.copy_file(backup_index_file, index_file)
+    os.remove(backup_index_file)
+
+
+def generate_documentations(output_directory, ydk_root, language, is_bundle, is_core):
     py_api_doc_gen = os.path.join(output_directory, 'docsgen')
     py_api_doc = os.path.join(output_directory, 'docs_expanded')
     # if it is package type
     release, version = get_release_version(output_directory)
     os.mkdir(py_api_doc)
     # print about YDK page
-    print_about_page(ydk_root, py_api_doc_gen, bundle)
+    print_about_page(ydk_root, py_api_doc_gen, release, is_bundle)
+    if is_core:
+        copy_docs_from_bundles(ydk_root, language, py_api_doc_gen)
     # build docs
     print('\nBuilding docs using sphinx-build...\n')
     p = subprocess.Popen(['sphinx-build',
@@ -134,7 +164,20 @@ def create_shared_libraries(output_directory):
     print('Please read %sREADME.rst for information on how to install the package in your environment\n' % (
         cpp_sdk_root,))
 
+
+def _get_time_taken(start_time):
+    end_time = time.time()
+    uptime = end_time - start_time
+    minutes = int(uptime / 60) if int(uptime) > 60 else 0
+    seconds = int(uptime) % (60 * minutes) if int(uptime) > 60 else int(uptime)
+    minutes_str = str(minutes) + ' minutes' if int(uptime) > 60 else ''
+    seconds_str = str(seconds) + ' seconds'
+    return minutes_str, seconds_str
+
+
 if __name__ == '__main__':
+    start_time = time.time()
+
     parser = OptionParser(usage="usage: %prog [options]",
                           version="%prog 0.4.0")
 
@@ -182,6 +225,12 @@ if __name__ == '__main__':
                       default=False,
                       help="Generate documentation")
 
+    parser.add_option("--generate-tests",
+                      action="store_true",
+                      dest="gentests",
+                      default=False,
+                      help="Generate tests")
+
     parser.add_option("--groupings-as-class",
                       action="store_true",
                       dest="groupings_as_class",
@@ -223,6 +272,7 @@ if __name__ == '__main__':
                            output_directory,
                            ydk_root,
                            options.groupings_as_class,
+			               options.gentests,
                            language,
                            'profile').generate(options.profile))
 
@@ -231,6 +281,7 @@ if __name__ == '__main__':
                            output_directory,
                            ydk_root,
                            options.groupings_as_class,
+			               options.gentests,
                            language,
                            'bundle').generate(options.bundle))
 
@@ -239,16 +290,19 @@ if __name__ == '__main__':
                            output_directory,
                            ydk_root,
                            options.groupings_as_class,
+                           options.gentests,
                            language,
                            'core').generate())
 
 
     if options.gendoc:
-        generate_documentations(output_directory, ydk_root, language, options.bundle)
+        generate_documentations(output_directory, ydk_root, language, options.bundle, options.core)
 
     if options.cpp:
         create_shared_libraries(output_directory)
     else:
         create_pip_packages(output_directory)
 
-    print 'Code generation completed successfully!'
+    minutes_str, seconds_str = _get_time_taken(start_time)
+    print 'Code generation completed successfully!\nTime taken: {0} {1}\n'.format(minutes_str, seconds_str)
+

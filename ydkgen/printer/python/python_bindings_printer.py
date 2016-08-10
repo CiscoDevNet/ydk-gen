@@ -38,8 +38,8 @@ from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _E
 
 class PythonBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle_name, sort_clazz):
-        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle_name, sort_clazz)
+    def __init__(self, ydk_root_dir, bundle_name, generate_tests, sort_clazz):
+        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle_name, generate_tests, sort_clazz)
 
     def print_files(self):
         self.print_init_file(self.models_dir)
@@ -90,7 +90,8 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         # RST Documentation
         self.print_python_module(package, index, module_dir, size, sub)
         self.print_meta_module(package, meta_dir)
-        self.print_test_module(package, test_output_dir)
+        if self.generate_tests:
+            self.print_test_module(package, test_output_dir)
         if self.ydk_doc_dir is not None:
             self.print_python_rst_module(package)
 

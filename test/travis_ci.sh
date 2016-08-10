@@ -398,7 +398,7 @@ cp_fxs $YDKGEN_HOME/yang/ydktest $DEVIATION_DEST_FXS
 cp_fxs $YDKGEN_HOME/yang/ydktest $AUGMENTATION_DEST_FXS
 cp_fxs $YDKGEN_HOME/yang/ydktest $YDKTEST_MODEL_DEST_FXS
 init_confd $YDKTEST_DEST_FXS
-run_pygen_test
+#run_pygen_test
 generate_ydktest_package
 run_sanity_tests
 submit_coverage

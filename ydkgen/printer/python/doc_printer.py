@@ -51,7 +51,7 @@ class DocPrinter(object):
         if bundle_name == '':
             title = 'YDK Model API'
         else:
-            title = 'YDK {0} bundle API'.format(bundle_name)
+            title = 'YDK {0} Bundle API'.format(bundle_name)
         self._print_title(title)
         self._print_toctree(packages, is_package=True)
 
