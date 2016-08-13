@@ -23,7 +23,7 @@ import subprocess
 from git import Repo'''
 from codecs import open as copen
 
-from setuptools import setup, find_packages, extension
+from setuptools import setup, find_packages
 
 NMSP_PKG_NAME = "$PACKAGE$"
 NMSP_PKG_VERSION = "$VERSION$"
@@ -32,7 +32,7 @@ NMSP_PKG_DEPENDENCIES = ["$DEPENDENCY$"]
 # Define and modify version number and package name here,
 # Namespace packages are share same prefix: "ydk-models"
 NAME = 'ydk'
-VERSION = '0.4.2'
+VERSION = '0.5.0'
 INSTALL_REQUIREMENTS = ['ecdsa==0.13',
                         'enum34==1.1.3',
                         'lxml==3.4.4',

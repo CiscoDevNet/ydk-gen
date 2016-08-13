@@ -7,7 +7,7 @@ Overview:
 YDK or YANG Development Kit is a Software Development Kit that provides API's that are modeled
 in YANG. The main goal of YDK is to reduce the learning curve by expressing the model semantics
 in API and abstracting protocol/encoding details. The API's are generated from YANG models found
-in this profile file `https://github.com/CiscoDevNet/ydk-gen/blob/master/profiles/ydk/ydk_0_4_2.json` using the ydk-gen tool `https://github.com/CiscoDevNet/ydk-gen` .
+in the profile files under `https://github.com/CiscoDevNet/ydk-gen/blob/master/profiles/bundles` using the ydk-gen tool `https://github.com/CiscoDevNet/ydk-gen` .
 
 System Requirements:
 --------------------
@@ -40,7 +40,7 @@ Create a new virtual environment::
 
 Install YDK-Py::
 
-    (ydk-py)$ pip install dist/ydk-0.4.2.tar.gz
+    (ydk-py)$ pip install dist/ydk-0.5.0.tar.gz
 
 Notes:
 ------
@@ -56,8 +56,8 @@ In this example we are going to set some configuration on the openconfig bgp mod
 The complete sample is available in samples/bgp.py. The sample can be run with the below steps.
 ::
 
-    (ydk-py)$ export PYTHONPATH=$PYTHONPATH:`pwd`
-    (ydk-py)$ python ./samples/bgp.py -h
+    (ydk-py)$ cd samples 
+    (ydk-py)$ ./bgp.py -h
     Usage: bgp.py [-h | --help] [options]
 
     Options:
@@ -71,7 +71,7 @@ The complete sample is available in samples/bgp.py. The sample can be run with t
     --host=HOST           NETCONF agent hostname
     --port=PORT           NETCONF agent SSH port
 
-    (ydk-py)$ python ./samples/bgp.py --host <ip-address-of-netconf-server> -u <username> -p <password> --port <port-number>
+    (ydk-py)$ ./bgp.py --host <ip-address-of-netconf-server> -u <username> -p <password> --port <port-number>
 
 
 Service Providers
@@ -98,7 +98,7 @@ After establishing the connection, it's time to instantiate the entities and set
 
 First import the types from the module::
 
- from ydk.models.bgp import bgp
+ from ydk.models.openconfig import bgp
 
 Next set the attributes ::
 
@@ -148,7 +148,7 @@ Uses common Python logging.  All modules are based off "ydk" log::
 
 Release Notes
 --------------
-The current release version is 0.4.2 (beta). YDK-Py is licensed under the Apache 2.0 License.
+The current release version is 0.5.0 (beta). YDK-Py is licensed under the Apache 2.0 License.
 
 Documentation and Support
 --------------------------

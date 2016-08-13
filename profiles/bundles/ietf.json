@@ -1,7 +1,7 @@
 {
    "name":"ietf",
    "version":"0.1.0",
-   "ydk_version":"0.4.1",
+   "ydk_version":"0.5.0",
    "Author":"Cisco",
    "Copyright":"Cisco",
    "Description":"YDK Test Profile",

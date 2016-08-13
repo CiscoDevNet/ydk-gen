@@ -71,7 +71,7 @@ def get_release_version(output_directory):
                 line.startswith('VERSION =')):
                 rv = line[line.find('=')+1:].strip(' \'"\n')
                 release = "release=" + rv
-                version = "version=" + rv[:rv.rfind(".")]
+                version = "version=" + rv
                 break
     return release, version
 
@@ -114,8 +114,8 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
     # build docs
     print('\nBuilding docs using sphinx-build...\n')
     p = subprocess.Popen(['sphinx-build',
-                          '-D', version,
                           '-D', release,
+                          '-D', version,
                           py_api_doc_gen, py_api_doc],
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
