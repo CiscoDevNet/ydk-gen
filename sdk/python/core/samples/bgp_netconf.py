@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #  ----------------------------------------------------------------
 # Copyright 2016 Cisco Systems
 #
@@ -29,7 +30,7 @@ from ydk.services import CRUDService, NetconfService, CodecService, Datastore
 from ydk.models.openconfig import bgp
 from ydk.models.openconfig.routing_policy import RoutingPolicy
 
-from samples._config_builder import _get_bgp_config, _get_routing_cfg, _get_bgp_routing_multiple_object
+from _config_builder import _get_bgp_config, _get_routing_cfg, _get_bgp_routing_multiple_object
 
 
 

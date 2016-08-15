@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #  ----------------------------------------------------------------
 # Copyright 2016 Cisco Systems
 #
@@ -25,7 +26,7 @@
 from ydk.providers import CodecServiceProvider
 from ydk.services import CodecService
 
-from samples._config_builder import _get_bgp_config, _get_routing_cfg, _get_bgp_routing_multiple_object
+from _config_builder import _get_bgp_config, _get_routing_cfg, _get_bgp_routing_multiple_object
 
 
 def bgp_run(codec_service, provider):

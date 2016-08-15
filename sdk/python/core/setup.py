@@ -54,7 +54,7 @@ if NMSP_PKG_DEPENDENCIES != ["$DEPENDENCY$"]:
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with copen(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+with copen(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
 YDK_PACKAGES = find_packages(exclude=['contrib', 'docs*', 'tests*',

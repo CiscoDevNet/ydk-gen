@@ -34,7 +34,7 @@ INSTALL_REQUIREMENTS = ['ecdsa==0.13',
                         'Twisted>=16.0.0',
                         'protobuf==3.0.0b2.post2',
                         'ncclient>=0.4.7',
-                        'ydk>=0.4.2']
+                        'ydk>=0.5.0']
 
 NMSP_PKG_NAME = "$PACKAGE$"
 NMSP_PKG_VERSION = "$VERSION$"
@@ -48,7 +48,7 @@ YDK_PACKAGES = find_packages(exclude=['contrib', 'docs*', 'tests*',
                                       'ncclient', 'samples'])
 
 
-with copen(path.join(HERE, 'README.rst'), encoding='utf-8') as f:
+with copen(path.join(HERE, 'README.md'), encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
 setup(

@@ -1,3 +1,8 @@
+.. image::  https://travis-ci.org/CiscoDevNet/ydk-py.svg?branch=master
+    :target: https://travis-ci.org/CiscoDevNet/ydk-py
+
+.. contents:: Table of Contents
+
 Getting Started
 ===============
 
@@ -24,11 +29,6 @@ Mac
 
 Install Tips:
 -------------
-Create a source distribution::
-
-    $ cd <ydk_py_git_root>
-    $ python setup.py sdist
-
 We recommend that you perform the installation under a Python virtual environment (virtualenv).  To install virtualenv, execute::
 
   $ pip install virtualenv
@@ -38,9 +38,14 @@ Create a new virtual environment::
     $ virtualenv -p python2.7 ydk-py
     $ source ydk-py/bin/activate
 
+Create a source distribution for YDK and bundle packages::
+
+    $ cd <package-dir> # package-dir is one of core, openconfig, ietf or cisco-ios-xr 
+    $ (ydk-py)$ python setup.py sdist
+
 Install YDK-Py::
 
-    (ydk-py)$ pip install dist/ydk-0.5.0.tar.gz
+    (ydk-py)$ pip install dist/ydk-*.tar.gz
 
 Notes:
 ------
@@ -148,7 +153,7 @@ Uses common Python logging.  All modules are based off "ydk" log::
 
 Release Notes
 --------------
-The current release version is 0.5.0 (beta). YDK-Py is licensed under the Apache 2.0 License.
+The current YDK release version is 0.5.0 (beta). YDK-Py is licensed under the Apache 2.0 License.
 
 Documentation and Support
 --------------------------
