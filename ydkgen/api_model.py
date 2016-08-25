@@ -762,7 +762,7 @@ class EnumLiteral(NamedElement):
     @stmt.setter
     def stmt(self, stmt):
         self._stmt = stmt
-        self.name = stmt.arg.upper().replace('-', '_')
+        self.name = stmt.arg.replace('-', '_')
         self.name = self.name.replace('+', '__PLUS__')
         self.name = self.name.replace('/', '__FWD_SLASH__')
         self.name = self.name.replace('\\', '__BACK_SLASH__')

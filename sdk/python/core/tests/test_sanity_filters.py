@@ -93,7 +93,7 @@ class SanityYang(unittest.TestCase):
     def test_read_on_ref_enum_class(self):
         from ydk.models.ydktest_sanity import YdkEnumTestEnum
         r_1 = ysanity.Runner.Ytypes.BuiltInT()
-        r_1.enum_value = YdkEnumTestEnum.LOCAL
+        r_1.enum_value = YdkEnumTestEnum.local
         self.crud.create(self.ncc, r_1)
 
         r_2 = ysanity.Runner.Ytypes.BuiltInT()
@@ -102,13 +102,13 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(is_equal(r_1, r_2), True)
 
         r_2 = ysanity.Runner.Ytypes.BuiltInT()
-        r_2.enum_value = YdkEnumTestEnum.LOCAL
+        r_2.enum_value = YdkEnumTestEnum.local
         r_2 = self.crud.read(self.ncc, r_2)
         self.assertEqual(is_equal(r_1, r_2), True)
 
         # no such value, nothing returned
         r_2 = ysanity.Runner.Ytypes.BuiltInT()
-        r_2.enum_value = YdkEnumTestEnum.REMOTE
+        r_2.enum_value = YdkEnumTestEnum.remote
         r_2 = self.crud.read(self.ncc, r_2)
         self.assertNotEqual(is_equal(r_1, r_2), True)
 
