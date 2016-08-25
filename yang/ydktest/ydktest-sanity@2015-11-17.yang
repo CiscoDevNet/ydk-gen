@@ -74,6 +74,10 @@ module ydktest-sanity {
         value 3;
         description "Remote";
       }
+      enum REMOTE {
+        value 4;
+        description "Remote";
+      }
     }
     description "YDK Enum test";
   }
