@@ -43,7 +43,7 @@ echo ""
 if [ -f "$MY_ENV/bin/activate" ]; then
     source $MY_ENV/bin/activate
 else
-    virtualenv -p python2.7 $MY_ENV
+    virtualenv -p python3 $MY_ENV
     source $MY_ENV/bin/activate
 fi
 
