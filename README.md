@@ -46,7 +46,7 @@ It is recommended to install a python distribution like [PythonXY](https://pytho
 
 
 ##Python Requirements:
-* Python 2.7, 3.4
+* Python 2.7 or 3.4
 
 
 ## Installation
@@ -179,6 +179,8 @@ YANG Development Kit Generator:
 
 
 ### Python Notes
+
+- If your environment has both python 2 and python 3 and uses python 2 by default, you may need to use 'python3' and 'pip3' instead of 'python' and 'pip' in the commands mentioned in this document.
 
 For Python entities and netconf session, CRUD service invoked on python class will:
 
