@@ -453,7 +453,29 @@ module ydktest-sanity {
           type string;
         }
       }
+      
+      list identity-list {
+        description "one list data";
+        key "id-ref";
+        max-elements 5;
+        leaf id-ref {
+          description "leafref key";
+          type leafref {
+            path "../config/id";
+          }
+        }
+
+        container config {
+          leaf id{
+            description "base id id ref";
+            type identityref {
+              base base-identity;
+            }
+          }
+        }
+      }
     }
+  
   }
 
 

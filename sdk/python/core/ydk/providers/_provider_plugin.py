@@ -349,6 +349,12 @@ class _ClientSPPlugin(_SPPlugin):
             key_value = getattr(entity, key.presentation_name)
             if key.mtype == REFERENCE_ENUM_CLASS:
                 key_value = key_value.name.replace('_', '-').lower()
+            elif key.mtype == REFERENCE_IDENTITY_CLASS:
+                identity_inst = getattr(entity, key.presentation_name)
+                if _yang_ns._namespaces[key.module_name] == _yang_ns._namespaces[identity_inst._meta_info().module_name]:
+                    key_value = identity_inst._meta_info().yang_name
+                else:
+                    key_value = 'idx:%s' % identity_inst._meta_info().yang_name
             key_value = str(key_value)
             for ch in chs:
                 if key.name == ch.tag and key_value == ch.text:
