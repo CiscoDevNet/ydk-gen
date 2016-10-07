@@ -64,8 +64,8 @@ class ModulePrinter(FilePrinter):
         imports_to_print = set()
 
         for imported_type in package.imported_types():
-            if all(imported_type in self.identity_subclasses and
-                   self._is_derived_identity(package, imported_type)):
+            if all((imported_type in self.identity_subclasses,
+                    self._is_derived_identity(package, imported_type))):
                 imported_stmt = 'from %s import %s' % (
                     imported_type.get_py_mod_name(),
                     imported_type.qn().split('.')[0])
