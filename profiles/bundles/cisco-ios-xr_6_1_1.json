@@ -563,7 +563,15 @@
                      "vendor/cisco/xr/611/Cisco-IOS-XR-wdsysmon-fd-oper.yang",
                      "vendor/cisco/xr/611/cisco-xr-ietf-interfaces-deviations.yang",
                      "vendor/cisco/xr/611/cisco-xr-netconf-monitoring-deviations.yang",
-                     "vendor/cisco/xr/611/cisco-xr-openconfig-telemetry-deviations.yang"
+                     "vendor/cisco/xr/611/cisco-xr-openconfig-bgp-deviations.yang",
+                     "vendor/cisco/xr/611/cisco-xr-openconfig-bgp-policy-deviations.yang",
+                     "vendor/cisco/xr/611/cisco-xr-openconfig-if-aggregate-deviations.yang",
+                     "vendor/cisco/xr/611/cisco-xr-openconfig-if-ethernet-deviations.yang",
+                     "vendor/cisco/xr/611/cisco-xr-openconfig-if-ip-deviations.yang",
+                     "vendor/cisco/xr/611/cisco-xr-openconfig-interfaces-deviations.yang",
+                     "vendor/cisco/xr/611/cisco-xr-openconfig-mpls-deviations.yang",
+                     "vendor/cisco/xr/611/cisco-xr-openconfig-telemetry-deviations.yang",
+                     "vendor/cisco/xr/611/cisco-xr-routing-policy-deviations.yang"
                   ]
                }
             ]
