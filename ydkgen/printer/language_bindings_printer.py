@@ -109,12 +109,12 @@ class LanguageBindingsPrinter(object):
         identity_tuples = self._get_identity_tuples()
         for (child_identity, base_identities) in identity_tuples:
             for base_identity in base_identities:
-                if id(base_identity) in identity_subclasses:
-                    existing_child_identities = identity_subclasses[id(base_identity)]
+                if base_identity in identity_subclasses:
+                    existing_child_identities = identity_subclasses[base_identity]
                     existing_child_identities.append(child_identity)
-                    identity_subclasses[id(base_identity)] = existing_child_identities
+                    identity_subclasses[base_identity] = existing_child_identities
                 else:
-                    identity_subclasses[id(base_identity)] = [child_identity]
+                    identity_subclasses[base_identity] = [child_identity]
         return identity_subclasses
 
     def _get_identity_tuples(self):

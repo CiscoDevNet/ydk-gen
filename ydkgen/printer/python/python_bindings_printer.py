@@ -124,9 +124,11 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         self.print_init_file(path)
 
         package.parent_pkg_name = sub
+        extra_args = {'sort_clazz': False,
+                      'identity_subclasses': self.identity_subclasses}
         self.print_file(get_python_module_file_name(path, package),
                         emit_module,
-                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
+                        _EmitArgs(self.ypy_ctx, package, extra_args))
 
     def print_meta_module(self, package, path):
         self.print_init_file(path)
@@ -226,8 +228,8 @@ def emit_table_of_contents(ctx, packages, bundle_name):
     DocPrinter(ctx).print_table_of_contents(packages, bundle_name)
 
 
-def emit_module(ctx, package, sort_clazz):
-    ModulePrinter(ctx, sort_clazz).print_output(package)
+def emit_module(ctx, package, extra_args):
+    ModulePrinter(ctx, extra_args).print_output(package)
 
 
 def emit_test_module(ctx, package, identity_subclasses):
