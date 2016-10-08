@@ -411,7 +411,7 @@ class Class(NamedElement):
                 [c for c in nested_class.imported_types() if not c in imported_types])
 
         return imported_types
-    
+
     def _get_union_types(self, type_stmt, p):
         from .builder import TypesExtractor
         prop_type = TypesExtractor().get_property_type(type_stmt)
@@ -762,7 +762,7 @@ class EnumLiteral(NamedElement):
     @stmt.setter
     def stmt(self, stmt):
         self._stmt = stmt
-        self.name = stmt.arg.upper().replace('-', '_')
+        self.name = stmt.arg.replace('-', '_')
         self.name = self.name.replace('+', '__PLUS__')
         self.name = self.name.replace('/', '__FWD_SLASH__')
         self.name = self.name.replace('\\', '__BACK_SLASH__')
@@ -787,6 +787,9 @@ class EnumLiteral(NamedElement):
         self.name = self.name.replace('?', '__QUESTION__')
         self.name = self.name.replace('!', '__BANG__')
         self.name = self.name.replace(';', '__SEMICOLON__')
+
+        if iskeyword(self.name):
+            self.name += '_literal'
 
         if self.name[0:1].isdigit():
             self.name = 'Y_%s' % self.name

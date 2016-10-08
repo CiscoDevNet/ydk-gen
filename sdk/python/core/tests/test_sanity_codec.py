@@ -122,7 +122,7 @@ class SanityYang(unittest.TestCase):
     def test_encode_2(self):
         from ydk.models.ydktest_sanity import YdkEnumTestEnum
         r_1 = ysanity.Runner.Ytypes.BuiltInT()
-        r_1.enum_value = YdkEnumTestEnum.LOCAL
+        r_1.enum_value = YdkEnumTestEnum.local
 
         payload = self.codec.encode(self.provider, r_1)
         self.assertEqual(self._enum_payload_1, payload)

@@ -186,7 +186,7 @@ class SanityTest(unittest.TestCase):
     # changed to type YdkEnumTestEnum
     def test_boolean(self):
         runner = self._create_runner()
-        runner.ytypes.built_in_t.bool_value = YdkEnumTestEnum.NONE
+        runner.ytypes.built_in_t.bool_value = YdkEnumTestEnum.none
         self.crud.create(self.ncc, runner)
 
         runner1 = ysanity.Runner()
