@@ -30,11 +30,10 @@ from ydk.types import Empty
 from ydk.services import CRUDService
 import logging
 
-from .session_mgr import establish_session, init_logging
-from ydk.models.openconfig import bgp
-from ydk.models.openconfig.bgp_types import Ipv4UnicastIdentity
-from ydk.models.openconfig.bgp_types import Ipv6UnicastIdentity
-from ydk.models.openconfig.routing_policy import RoutingPolicy
+from session_mgr import establish_session, init_logging
+from ydk.models.openconfig import openconfig_bgp
+from ydk.models.openconfig import openconfig_bgp_types
+from ydk.models.openconfig.openconfig_routing_policy import RoutingPolicy
 from ydk.errors import YPYError
 
 
@@ -80,7 +79,7 @@ from ydk.errors import YPYError
 def bgp_run(crud_service, session):
 
     # Global config
-    bgp_cfg = bgp.Bgp()
+    bgp_cfg = openconfig_bgp.Bgp()
 
     try:
         crud_service.delete(session, bgp_cfg)
@@ -103,20 +102,17 @@ def bgp_run(crud_service, session):
     routing_policy.policy_definitions.policy_definition.append(pass_all_policy_defn)
     pass_all_policy_defn._parent = routing_policy.policy_definitions
 
-    crud_service.create(session, routing_policy)
 
     bgp_cfg.global_.config.as_ = 65001
 
-    # afi-safi config fails name verification on netsim
-    # I think there needs to be some init data to fix that
     ipv4_afsf = bgp_cfg.global_.afi_safis.AfiSafi()
-    ipv4_afsf.afi_safi_name = 'ipv4-unicast'
-    ipv4_afsf.config.afi_safi_name = 'ipv4-unicast'
+    ipv4_afsf.afi_safi_name = openconfig_bgp_types.Ipv4UnicastIdentity()
+    ipv4_afsf.config.afi_safi_name = openconfig_bgp_types.Ipv4UnicastIdentity()
     ipv4_afsf.config.enabled = True
 
     ipv6_afsf = bgp_cfg.global_.afi_safis.AfiSafi()
-    ipv6_afsf.afi_safi_name = 'ipv6-unicast'
-    ipv6_afsf.config.afi_safi_name = 'ipv6-unicast'
+    ipv6_afsf.afi_safi_name = openconfig_bgp_types.Ipv6UnicastIdentity()
+    ipv6_afsf.config.afi_safi_name = openconfig_bgp_types.Ipv6UnicastIdentity()
     ipv6_afsf.config.enabled = True
 
     bgp_cfg.global_.afi_safis.afi_safi.append(ipv4_afsf)
@@ -130,15 +126,15 @@ def bgp_run(crud_service, session):
     nbr_ipv4.config.peer_as = 65002
 
     nbr_ipv4_afsf = nbr_ipv4.afi_safis.AfiSafi()
-    nbr_ipv4_afsf.afi_safi_name = 'ipv4-unicast'
+    nbr_ipv4_afsf.afi_safi_name = openconfig_bgp_types.Ipv4UnicastIdentity()
     nbr_ipv4_afsf.config.peer_as = 65002
-    nbr_ipv4_afsf.config.afi_safi_name = 'ipv4-unicast'
+    nbr_ipv4_afsf.config.afi_safi_name = openconfig_bgp_types.Ipv4UnicastIdentity()
     nbr_ipv4_afsf.config.enabled = True
 
     # Create afi-safi policy instances
-    #nbr_ipv4_afsf.apply_policy.config.import_policy.append('PASS-ALL')
+    nbr_ipv4_afsf.apply_policy.config.import_policy.append('PASS-ALL')
 
-    #nbr_ipv4_afsf.apply_policy.config.export_policy.append('PASS-ALL')
+    nbr_ipv4_afsf.apply_policy.config.export_policy.append('PASS-ALL')
 
     nbr_ipv4.afi_safis.afi_safi.append(nbr_ipv4_afsf)
 
@@ -149,6 +145,7 @@ def bgp_run(crud_service, session):
     # IPv4 Neighbor instance config done
 
     crud_service.create(session, bgp_cfg)
+#    crud_service.create(session, routing_policy)
 
     bgp_cfg_read = crud_service.read(session, bgp.Bgp())
 
@@ -164,15 +161,15 @@ def bgp_run(crud_service, session):
     nbr_ipv6.config.peer_as = 65002
 
     nbr_ipv6_afsf = nbr_ipv6.afi_safis.AfiSafi()
-    nbr_ipv6_afsf.afi_safi_name = 'ipv6-unicast'
+    nbr_ipv6_afsf.afi_safi_name = openconfig_bgp_types.Ipv6UnicastIdentity()
     nbr_ipv6_afsf.config.peer_as = 65002
-    nbr_ipv6_afsf.config.afi_safi_name = 'ipv6-unicast'
+    nbr_ipv6_afsf.config.afi_safi_name = openconfig_bgp_types.Ipv6UnicastIdentity()
     nbr_ipv6_afsf.config.enabled = True
 
     # Create afi-safi policy instances
-    #nbr_ipv6_afsf.apply_policy.config.import_policy.append('PASS-ALL')
+    nbr_ipv6_afsf.apply_policy.config.import_policy.append('PASS-ALL')
 
-    #nbr_ipv6_afsf.apply_policy.config.export_policy.append('PASS-ALL')
+    nbr_ipv6_afsf.apply_policy.config.export_policy.append('PASS-ALL')
 
     nbr_ipv6.afi_safis.afi_safi.append(nbr_ipv6_afsf)
 
