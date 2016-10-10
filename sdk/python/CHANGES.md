@@ -1,19 +1,24 @@
 **2016-08-03 version 0.5.1:**
+
 * Support for Python3
   * Introduced support for Python 3 ([#60](https://github.com/CiscoDevNet/ydk-gen/issues/60))
   * Both Python 2 and Python 3 are now supported for `ydk-gen` and `ydk-py`
+
 * Bundle improvements
   * Removed `cisco-ios-xr` bundle dependency on openconfig bundle ([#238](https://github.com/CiscoDevNet/ydk-gen/pull/238))
   * Improved usage of import statements in YDK model API to reduce chances of circular import dependency ([#216](https://github.com/CiscoDevNet/ydk-gen/issues/216))
   * Updated `cisco-ios-xr` bundle to support Cisco IOS XR 6.1.1 release ([#258](https://github.com/CiscoDevNet/ydk-gen/pull/258))
+
 * Documentation improvements
   * Improved documentation for bundle installation ([#244](https://github.com/CiscoDevNet/ydk-gen/pull/244))
   * Added documentation for executor service ([#263](https://github.com/CiscoDevNet/ydk-gen/pull/263))
 
 **2016-08-03 version 0.5.0:**
- * Introduced YDK bundles ([#43](https://github.com/CiscoDevNet/ydk-gen/issues/43), [#148](https://github.com/CiscoDevNet/ydk-gen/issues/148), [#149](https://github.com/CiscoDevNet/ydk-gen/issues/149))
+
+* Introduced YDK bundles ([#43](https://github.com/CiscoDevNet/ydk-gen/issues/43), [#148](https://github.com/CiscoDevNet/ydk-gen/issues/148), [#149](https://github.com/CiscoDevNet/ydk-gen/issues/149))
   * Created YDK core library and pluggable namespace packages that share the same module prefix `ydk.models`
   * Generated documentation for YDK core and bundles
+
 * CRUD service / Codec service / Netconf service improvements
   * Improved support for presence containers, nested enum and identity classes ([#169](https://github.com/CiscoDevNet/ydk-gen/pull/169))
   * Improved support for lists with multiple keys by ensuring that the order of keys is preserved ([#179](https://github.com/CiscoDevNet/ydk-gen/issues/179))
@@ -21,8 +26,10 @@
   * Added check for user error which can occur when self-referencing YDK object as parent object ([#184](https://github.com/CiscoDevNet/ydk-gen/issues/184))
   * Improved error-reporting for commit-time error ([#190](https://github.com/CiscoDevNet/ydk-gen/issues/190))
   * Fixed CRUD read support for modules containing top-level list ([#194](https://github.com/CiscoDevNet/ydk-gen/issues/194))
+
 * Testing improvements
   * Added Mac OS X installation and running codec service sanity tests to CI ([#175](https://github.com/CiscoDevNet/ydk-gen/pull/175))
+
 * Documentation improvements
   * Indicated mandatory leafs in the documentation ([#177](https://github.com/CiscoDevNet/ydk-gen/issues/177))
   * Specified path to referred leaf for leafrefs ([#177](https://github.com/CiscoDevNet/ydk-gen/issues/177))
