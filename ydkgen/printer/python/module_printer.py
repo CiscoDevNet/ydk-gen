@@ -32,9 +32,10 @@ from ydkgen.printer.file_printer import FilePrinter
 
 class ModulePrinter(FilePrinter):
 
-    def __init__(self, ctx, sort_clazz):
+    def __init__(self, ctx, extra_args):
         super(ModulePrinter, self).__init__(ctx)
-        self.sort_clazz = sort_clazz
+        self.sort_clazz = extra_args.get('sort_clazz', False)
+        self.identity_subclasses = extra_args.get('identity_subclasses', {})
 
     def print_header(self, package):
         self._print_module_description(package)
@@ -60,21 +61,28 @@ class ModulePrinter(FilePrinter):
 
     def _print_imports(self, package):
         self._print_static_imports()
-        imports_to_print = []
+        imports_to_print = set()
 
         for imported_type in package.imported_types():
-            import_stmt = 'from %s import %s' % (
-                imported_type.get_py_mod_name(), imported_type.qn().split('.')[0])
-            if import_stmt in imports_to_print:
-                continue
-            else:
-                imports_to_print.append(import_stmt)
+            if all((imported_type in self.identity_subclasses,
+                    self._is_derived_identity(package, imported_type))):
+                imported_stmt = 'from %s import %s' % (
+                    imported_type.get_py_mod_name(),
+                    imported_type.qn().split('.')[0])
+                imports_to_print.add(imported_stmt)
 
-        imports_to_print = sorted(imports_to_print)
-        for import_to_print in imports_to_print:
-            self.ctx.writeln('%s' % import_to_print)
+        for imported_stmt in sorted(imports_to_print):
+            self.ctx.writeln(imported_stmt)
 
         self.ctx.bline()
+
+    def _is_derived_identity(self, package, identity):
+        for ne in package.owned_elements:
+            if isinstance(ne, Class) and ne.is_identity():
+                for ext in ne.extends:
+                    if ext == identity:
+                        return True
+        return False
 
     def _print_static_imports(self):
         self.ctx.str('''
