@@ -10,7 +10,7 @@
   
 * Other improvements
   * Removed cisco-ios-xr bundle dependency on openconfig bundle ([#238](https://github.com/CiscoDevNet/ydk-gen/pull/238))
-  * Improved usage of import statements in generated API to reduce chances of Circular import dependency ([#216](https://github.com/CiscoDevNet/ydk-gen/issues/216))
+  * Improved usage of import statements in YDK model API to reduce chances of circular import dependency ([#216](https://github.com/CiscoDevNet/ydk-gen/issues/216))
 
 **2016-08-03 version 0.5.0:**
  * Introduced YDK bundles ([#43](https://github.com/CiscoDevNet/ydk-gen/issues/43), [#148](https://github.com/CiscoDevNet/ydk-gen/issues/148), [#149](https://github.com/CiscoDevNet/ydk-gen/issues/149))
