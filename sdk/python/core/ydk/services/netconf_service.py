@@ -18,6 +18,7 @@
    The Netconf Service class.
 
 """
+from .._core._dm_meta_info import ANYXML_CLASS
 from .executor_service import ExecutorService
 from .service import Service
 from enum import Enum
@@ -178,6 +179,8 @@ class NetconfService(Service):
         self.service_logger.info('Executing copy-config RPC')
 
         rpc = ietf_netconf.CopyConfigRpc()
+        _validate_datastore_options(source, 'copy-config:source')
+        _validate_datastore_options(target, 'copy-config:target')
         rpc.input.source = _get_rpc_datastore_object(source, rpc.input.source)
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
         rpc.input.with_defaults_option = with_defaults_option
@@ -205,6 +208,7 @@ class NetconfService(Service):
         self.service_logger.info('Executing delete-config RPC')
 
         rpc = ietf_netconf.DeleteConfigRpc()
+        _validate_datastore_options(target, 'delete-config:target')
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
 
         return self.executor.execute_rpc(provider, rpc)
@@ -267,6 +271,7 @@ class NetconfService(Service):
         self.service_logger.info('Executing edit-config RPC')
 
         rpc = ietf_netconf.EditConfigRpc()
+        _validate_datastore_options(target, 'edit-config:target')
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
         rpc.input.config = config
         rpc.input.default_operation = default_operation
@@ -304,6 +309,7 @@ class NetconfService(Service):
 
         rpc = ietf_netconf.GetConfigRpc()
         rpc.input.filter = get_filter
+        _validate_datastore_options(source, 'get-config:source')
         rpc.input.source = _get_rpc_datastore_object(source, rpc.input.source)
         rpc.input.with_defaults_option = with_defaults_option
 
@@ -384,6 +390,7 @@ class NetconfService(Service):
         self.service_logger.info('Executing lock RPC')
 
         rpc = ietf_netconf.LockRpc()
+        _validate_datastore_options(target, 'lock:target')
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
 
         return self.executor.execute_rpc(provider, rpc)
@@ -410,6 +417,7 @@ class NetconfService(Service):
         self.service_logger.info('Executing unlock RPC')
 
         rpc = ietf_netconf.UnlockRpc()
+        _validate_datastore_options(target, 'unlock:target')
         rpc.input.target = _get_rpc_datastore_object(target, rpc.input.target)
 
         return self.executor.execute_rpc(provider, rpc)
@@ -437,6 +445,7 @@ class NetconfService(Service):
 
         rpc = ietf_netconf.ValidateRpc()
         if source is not None:
+            _validate_datastore_options(source, 'validate:source')
             rpc.input.source = _get_rpc_datastore_object(source, rpc.input.source)
         if config is not None:
             rpc.input.source.config = config
@@ -467,3 +476,43 @@ def payload_convert(payload):
     rt = etree.fromstring(payload.encode('utf-8'))
     chchs = rt.getchildren()[0].getchildren()
     return etree.tostring(chchs[0], pretty_print=True, encoding='utf-8').decode('utf-8')
+
+
+def _validate_datastore_options(datastore, option):
+    res = True
+    if option == 'copy-config:target':
+        res = isinstance(datastore, (str, Datastore))
+    elif option == 'copy-config:source':
+        res = isinstance(datastore, (str, Datastore)) or _is_anyxml(datastore)
+    elif option == 'delete-config:target':
+        res = isinstance(datastore, str) or datastore == Datastore.startup
+    elif option == 'edit-config:target':
+        res = datastore in (Datastore.candidate, Datastore.running)
+    elif option == 'get-config:source':
+        res = isinstance(datastore, Datastore)
+    elif option == 'lock:target':
+        res = isinstance(datastore, Datastore)
+    elif option == 'unlock:target':
+        res = isinstance(datastore, Datastore)
+    elif option == 'validate:source':
+        res = isinstance(datastore, (str, Datastore)) or _is_anyxml(datastore)
+
+    if not res:
+        err_msg = _get_datastore_errmsg(option, datastore)
+        raise YPYServiceError(error_msg=err_msg)
+
+
+def _is_anyxml(datastore):
+    return hasattr(datastore, 'i_meta') and datastore.i_meta.mtype == ANYXML_CLASS
+
+
+def _get_datastore_errmsg(option, datastore):
+    if isinstance(datastore, Datastore):
+        pass
+    elif isinstance(datastore, str):
+        datastore = 'url'
+    elif _is_anyxml(datastore):
+        datastore = 'anyxml'
+    if ':' in option:
+        option = option[:option.find(':')]
+    return "%s datastore is not supported by Netconf %s operation" % (datastore, option)

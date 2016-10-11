@@ -22,7 +22,7 @@ from __future__ import absolute_import
 import unittest
 from compare import is_equal
 
-from ydk.errors import YPYModelError, YPYError
+from ydk.errors import YPYModelError, YPYError, YPYServiceError
 from ydk.models import ydktest_sanity as ysanity
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import NetconfService
@@ -144,6 +144,22 @@ class SanityNetconf(unittest.TestCase):
     def test_copy_config(self):
         op = self.netconf_service.copy_config(self.ncc, Datastore.candidate, Datastore.running)
         self.assertIn('ok', op)
+
+    def test_delete_config(self):
+        pass
+        # startup and candidate cannot be both enabled in ConfD
+        # op = self.netconf_service.delete_config(self.ncc, Datastore.startup)
+        # self.assertIn('ok', op)
+
+    def test_delete_config_fail(self):
+        self.assertRaises(YPYServiceError,
+                          self.netconf_service.delete_config,
+                          self.ncc,
+                          Datastore.running)
+        self.assertRaises(YPYServiceError,
+                          self.netconf_service.delete_config,
+                          self.ncc,
+                          Datastore.candidate)
 
 
 if __name__ == '__main__':
