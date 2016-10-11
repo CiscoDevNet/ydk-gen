@@ -22,6 +22,7 @@
 
 """
 from lxml import etree
+from xml.dom import minidom
 
 from ydk._core._dm_meta_info import REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS
 from ydk.errors import YPYServiceProviderError, YPYErrorCode
@@ -210,17 +211,18 @@ class _ClientSPPlugin(_SPPlugin):
         reply_str = "FAILED!"
         if len(payload) == 0:
             return reply_str
-        self.netconf_sp_logger.debug('\n%s\n%s', self.separator, payload)
 
         if self.use_native_client:
             assert self.ydk_client is not None
             reply_str = self.ydk_client.execute_payload(payload)
+            self.netconf_sp_logger.debug(_get_pretty(reply_str.xml))
             return self._handle_rpc_reply(operation, payload, reply_str)
         else:
             service_provider_rpc = self._create_rpc_instance(self.timeout)
             payload = payload.replace("101", service_provider_rpc._id, 1)
             self.netconf_sp_logger.debug('\n%s\n%s', self.separator, payload)
             reply_str = service_provider_rpc._request(payload)
+            self.netconf_sp_logger.debug(_get_pretty(reply_str.xml))
             return self._handle_rpc_reply(operation, payload, reply_str.xml)
 
     def _create_rpc_instance(self, timeout):
@@ -252,10 +254,7 @@ class _ClientSPPlugin(_SPPlugin):
     def _handle_rpc_ok(self, optype, payload, reply_str):
 #         assert self._nc_manager is not None
         if operation_is_edit(optype) and confirmed_commit_supported(self._get_capabilities()):
-            self.netconf_sp_logger.debug('\n%s' , reply_str)
             self._handle_commit(payload, reply_str)
-        else:
-            self.netconf_sp_logger.debug('\n%s\n%s' , reply_str, self.separator)
 
     def _handle_rpc_error(self, payload, reply_str, pathlist):
         self.netconf_sp_logger.error('%s\n%s\n%s\n%s' , self.separator, payload, reply_str, self.separator)
@@ -276,7 +275,7 @@ class _ClientSPPlugin(_SPPlugin):
                                     payload, reply_str, rep, self.separator)
             raise YPYServiceProviderError(error_code=YPYErrorCode.SERVER_COMMIT_ERR, error_msg=rep)
         else:
-            self.netconf_sp_logger.debug('\n%s\n%s' , reply_str, self.separator)
+            self.netconf_sp_logger.debug('\n%s' % _get_pretty(reply_str))
 
     def connect(self, session_config):
         assert session_config.transportMode == _SessionTransportMode.SSH
@@ -647,3 +646,8 @@ def check_errors(payload):
                 pathlist.append(path3)
 
     return err, pathlist
+
+
+def _get_pretty(string):
+    return minidom.parseString(string).toprettyxml(indent='  ')
+
