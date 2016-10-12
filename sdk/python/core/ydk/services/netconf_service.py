@@ -483,7 +483,7 @@ def _validate_datastore_options(datastore, option):
     if option == 'copy-config:target':
         res = isinstance(datastore, (str, Datastore))
     elif option == 'copy-config:source':
-        res = isinstance(datastore, (str, Datastore)) or _is_anyxml(datastore)
+        res = isinstance(datastore, (str, Datastore))
     elif option == 'delete-config:target':
         res = isinstance(datastore, str) or datastore == Datastore.startup
     elif option == 'edit-config:target':
@@ -495,15 +495,11 @@ def _validate_datastore_options(datastore, option):
     elif option == 'unlock:target':
         res = isinstance(datastore, Datastore)
     elif option == 'validate:source':
-        res = isinstance(datastore, (str, Datastore)) or _is_anyxml(datastore)
+        res = isinstance(datastore, (str, Datastore))
 
     if not res:
         err_msg = _get_datastore_errmsg(option, datastore)
         raise YPYServiceError(error_msg=err_msg)
-
-
-def _is_anyxml(datastore):
-    return hasattr(datastore, 'i_meta') and datastore.i_meta.mtype == ANYXML_CLASS
 
 
 def _get_datastore_errmsg(option, datastore):
@@ -511,8 +507,6 @@ def _get_datastore_errmsg(option, datastore):
         pass
     elif isinstance(datastore, str):
         datastore = 'url'
-    elif _is_anyxml(datastore):
-        datastore = 'anyxml'
     if ':' in option:
         option = option[:option.find(':')]
     return "%s datastore is not supported by Netconf %s operation" % (datastore, option)

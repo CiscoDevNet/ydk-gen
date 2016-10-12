@@ -161,6 +161,46 @@ class SanityNetconf(unittest.TestCase):
                           self.ncc,
                           Datastore.candidate)
 
+    def test_copy_config_fail(self):
+        self.assertRaises(YPYServiceError,
+                          self.netconf_service.copy_config,
+                          self.ncc,
+                          target=123,
+                          source=456)
+
+    def test_edit_config_fail(self):
+        self.assertRaises(YPYServiceError,
+                          self.netconf_service.edit_config,
+                          self.ncc,
+                          Datastore.startup,
+                          Datastore.candidate)
+
+    def test_get_config_fail(self):
+        runner = ysanity.Runner()
+        self.assertRaises(YPYServiceError,
+                        self.netconf_service.get_config,
+                        self.ncc,
+                        "invalid-input",
+                        runner)
+
+    def test_lock_fail(self):
+        self.assertRaises(YPYServiceError,
+                          self.netconf_service.lock,
+                          self.ncc,
+                          "invalid-input")
+
+    def test_unlock_fail(self):
+        self.assertRaises(YPYServiceError,
+                          self.netconf_service.unlock,
+                          self.ncc,
+                          "invalid-input")
+
+    def test_validate_fail(self):
+        self.assertRaises(YPYServiceError,
+                          self.netconf_service.validate,
+                          self.ncc,
+                          source=123)
+
 
 if __name__ == '__main__':
     import sys
