@@ -18,7 +18,6 @@
    The Netconf Service class.
 
 """
-from .._core._dm_meta_info import ANYXML_CLASS
 from .executor_service import ExecutorService
 from .service import Service
 from enum import Enum
