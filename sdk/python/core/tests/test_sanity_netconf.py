@@ -81,10 +81,6 @@ class SanityNetconf(unittest.TestCase):
         result = self.netconf_service.get(self.ncc, get_filter)
         self.assertEqual(is_equal(runner, result), True)
 
-    def test_copy(self):
-        op = self.netconf_service.copy_config(self.ncc, target=Datastore.candidate, source=Datastore.running)
-        self.assertIn('ok', op)
-
     def test_lock_unlock(self):
         op = self.netconf_service.lock(self.ncc, Datastore.running)
         self.assertIn('ok', op)
@@ -108,17 +104,12 @@ class SanityNetconf(unittest.TestCase):
         runner = ysanity.Runner()
         runner.one.number = 1
         runner.one.name = 'runner:one:name'
-        op = self.netconf_service.validate(self.ncc, config=runner)
+        op = self.netconf_service.validate(self.ncc, source=runner)
         self.assertIn('ok', op)
 
     def test_validate_fail(self):
-        runner = ysanity.Runner()
-        runner.one.number = 1
-        runner.one.name = 2
-        try:
-            self.netconf_service.validate(self.ncc, config=runner)
-        except Exception as e:
-            self.assertIsInstance(e, YPYModelError)
+        # should have been handled by YDK local validation
+        pass
 
     def test_commit_discard(self):
         runner = ysanity.Runner()
@@ -141,9 +132,49 @@ class SanityNetconf(unittest.TestCase):
         result = self.netconf_service.get(self.ncc, get_filter)
         self.assertEqual(is_equal(runner, result), True)
 
+    def test_confirmed_commit(self):
+        runner = ysanity.Runner()
+        runner.two.number = 2
+        runner.two.name = 'runner:two:name'
+        get_filter = ysanity.Runner()
+
+        op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
+        self.assertIn('ok', op)
+
+        op = self.netconf_service.commit(self.ncc, confirmed=True, confirm_timeout=120)
+        self.assertIn('ok', op)
+
+        result = self.netconf_service.get(self.ncc, get_filter)
+        self.assertEqual(is_equal(runner, result), True)
+
+        op = self.netconf_service.cancel_commit(self.ncc)
+        self.assertIn('ok', op)
+
     def test_copy_config(self):
         op = self.netconf_service.copy_config(self.ncc, Datastore.candidate, Datastore.running)
         self.assertIn('ok', op)
+
+        runner = ysanity.Runner()
+        runner.two.number = 2
+        runner.two.name = 'runner:two:name'
+        get_filter = ysanity.Runner()
+
+        op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
+        self.assertIn('ok', op)
+
+        op = self.netconf_service.copy_config(self.ncc, Datastore.running, Datastore.candidate)
+        self.assertIn('ok', op)
+
+        result = self.netconf_service.get_config(self.ncc, Datastore.running, get_filter)
+        self.assertEqual(is_equal(result, runner), True)
+
+        runner.two.name += 'modified'
+
+        op = self.netconf_service.copy_config(self.ncc, Datastore.running, runner)
+        self.assertIn('ok', op)
+
+        result = self.netconf_service.get_config(self.ncc, Datastore.running, get_filter)
+        self.assertEqual(is_equal(result, runner), True)
 
     def test_delete_config(self):
         pass
@@ -178,10 +209,10 @@ class SanityNetconf(unittest.TestCase):
     def test_get_config_fail(self):
         runner = ysanity.Runner()
         self.assertRaises(YPYServiceError,
-                        self.netconf_service.get_config,
-                        self.ncc,
-                        "invalid-input",
-                        runner)
+                          self.netconf_service.get_config,
+                          self.ncc,
+                          "invalid-input",
+                          runner)
 
     def test_lock_fail(self):
         self.assertRaises(YPYServiceError,
@@ -194,12 +225,6 @@ class SanityNetconf(unittest.TestCase):
                           self.netconf_service.unlock,
                           self.ncc,
                           "invalid-input")
-
-    def test_validate_fail(self):
-        self.assertRaises(YPYServiceError,
-                          self.netconf_service.validate,
-                          self.ncc,
-                          source=123)
 
 
 if __name__ == '__main__':
