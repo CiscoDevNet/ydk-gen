@@ -27,8 +27,9 @@ from __future__ import print_function
 from ydk.types import Empty
 from ydk.providers import NetconfServiceProvider, CodecServiceProvider
 from ydk.services import CRUDService, NetconfService, CodecService, Datastore
-from ydk.models.openconfig import bgp
-from ydk.models.openconfig.routing_policy import RoutingPolicy
+from ydk.models.openconfig import openconfig_bgp
+from ydk.models.openconfig import openconfig_bgp_types
+from ydk.models.openconfig.openconfig_routing_policy import RoutingPolicy
 
 from _config_builder import _get_bgp_config, _get_routing_cfg, _get_bgp_routing_multiple_object
 
@@ -54,9 +55,9 @@ def bgp_run(netconf_service, session):
     nbr_ipv6.config.peer_as = 65002
 
     nbr_ipv6_afsf = nbr_ipv6.afi_safis.AfiSafi()
-    nbr_ipv6_afsf.afi_safi_name = 'ipv6-unicast'
+    nbr_ipv6_afsf.afi_safi_name = openconfig_bgp_types.Ipv6UnicastIdentity()
     nbr_ipv6_afsf.config.peer_as = 65002
-    nbr_ipv6_afsf.config.afi_safi_name = 'ipv6-unicast'
+    nbr_ipv6_afsf.config.afi_safi_name = openconfig_bgp_types.Ipv6UnicastIdentity()
     nbr_ipv6_afsf.config.enabled = True
 
     nbr_ipv6.afi_safis.afi_safi.append(nbr_ipv6_afsf)
@@ -106,7 +107,7 @@ def init_logging():
 
 if __name__ == "__main__":
     init_logging()
-    provider = NetconfServiceProvider(address='127.0.0.1', username='admin', password='admin', protocol='ssh', port=12022)
+    provider = NetconfServiceProvider(address='localhost', username='admin', password='admin', protocol='ssh', port=1220)
     netconf_service = NetconfService()
     bgp_run(netconf_service, provider)
     # run_multiple_routing_bgp(netconf_service, provider)
