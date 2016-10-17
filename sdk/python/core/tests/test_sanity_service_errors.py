@@ -703,19 +703,11 @@ class SanityNetconf(unittest.TestCase):
         try:
             op = self.netconf_service.validate(self.ncc)
         except YPYServiceError as err:
-            expected_msg = "'source' and 'config' cannot be None"
+            expected_msg = "'source' cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
-    def test_something(self):
-        try:
-            op = self.netconf_service.validate(self.ncc)
-        except YPYServiceError as err:
-            expected_msg = "'source' and 'config' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not raised')
 
 if __name__ == '__main__':
     import sys
