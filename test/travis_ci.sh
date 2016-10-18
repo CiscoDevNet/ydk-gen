@@ -221,6 +221,7 @@ function run_sanity_ncclient_tests {
     run_test sdk/python/tests/test_sanity_rpc.py
     run_test sdk/python/tests/test_sanity_delete.py
     run_test sdk/python/tests/test_sanity_service_errors.py
+    run_test sdk/python/tests/test_sanity_type_mismatch_errors.py
 }
 
 function run_sanity_native_tests {
@@ -336,7 +337,7 @@ function run_deviation_sanity {
     init_confd $YDKTEST_DEST_FXS
     printf "\nGenerating ydktest model APIs\n"
     run_test_no_coverage generate.py --profile profiles/test/ydktest.json --python --verbose
-    
+
     source test_env/bin/activate
     pip uninstall ydk -y
 
@@ -348,7 +349,7 @@ function run_deviation_sanity {
     cp_fxs $BGP_DEVIATION_SOURCE_FXS $DEVIATION_DEST_FXS
     init_confd $DEVIATION_DEST_FXS
     printf "\nGenerating ydktest deviation model APIs\n"
-    
+
     source gen_env/bin/activate
     rm -rf gen-api/python/*
     run_test_no_coverage generate.py --python --profile profiles/test/deviation/deviation.json

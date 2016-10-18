@@ -219,7 +219,7 @@ class SanityTest(unittest.TestCase):
             runner.ytypes.built_in_t.llstring = ['invalid', 'leaf-list', 'assignment']
             self.crud.create(self.ncc, runner)
         except YPYServiceError as err:
-            expected_msg = "Assigned object to YLeafList Runner.Ytypes.BuiltInT. Use list append or extend method instead."
+            expected_msg = "Attempt to assign object of type list to YLeafList llstring. Please use list append or extend method."
             self.assertEqual(err.message.strip(), expected_msg)
 
     def test_ylist_assignment(self):
@@ -234,7 +234,7 @@ class SanityTest(unittest.TestCase):
             runner.one_list.ldata = elems
             self.crud.create(self.ncc, runner)
         except YPYServiceError as err:
-            expected_msg = "Assigned object to YList Runner.OneList. Use list append or extend method instead."
+            expected_msg = "Attempt to assign object of type list to YList ldata. Please use list append or extend method."
             self.assertEqual(err.message.strip(), expected_msg)
 
 if __name__ == '__main__':
