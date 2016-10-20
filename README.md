@@ -144,12 +144,12 @@ Only directory examples are shown below.
 
 ### Bundles
 
-1. Construct a bundle profile file, specify its dependencies, see example [```openconfig.json```](profiles/bundles/openconfig.json)
+1. Construct a bundle profile file, specify its dependencies, see example [```openconfig_0_1_1.json```](profiles/bundles/openconfig_0_1_1.json)
 
 2. Generate the SDK using a command of the form:
 
 ```
-python generate.py --python --bundle profiles/bundles/openconfig.json
+python generate.py --python --bundle profiles/bundles/openconfig_0_1_1.json
 ```
 
 The generated SDK will in ```ydk-gen/gen-api/python```.
@@ -164,7 +164,7 @@ The core library package will in ```ydk-gen/gen-api/python```.
 
 #### Details
 
-The dependency relationships defined in bundle profile file are expressed in pip, to install above bundle, the user need to generate and install its dependency [```ietf.json```](profiles/bundles/ietf.json) first.
+The dependency relationships defined in bundle profile file are expressed in pip, to install above bundle, the user need to generate and install its dependency [```ietf_0_1_1.json```](profiles/bundles/ietf_0_1_1.json) first.
 
 ## Notes
 
