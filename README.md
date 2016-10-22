@@ -2,7 +2,7 @@
 
 # YDK-GEN
 
-[![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-gen)
+ [![License](https://cloud.githubusercontent.com/assets/17089095/19458582/dd626d2c-9481-11e6-8019-8227c5c66a06.png)](https://github.com/CiscoDevNet/ydk-gen/blob/master/LICENSE) [![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-gen)
 [![Coverage Status](https://coveralls.io/repos/github/CiscoDevNet/ydk-gen/badge.svg?branch=master)](https://coveralls.io/github/CiscoDevNet/ydk-gen?branch=master)
 
 
