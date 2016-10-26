@@ -649,5 +649,5 @@ def check_errors(payload):
 
 def _get_pretty(string):
     parser = etree.XMLParser(remove_blank_text=True)
-    element = etree.XML(string, parser)
-    return etree.tostring(element, pretty_print=True)
+    element = etree.XML(string.encode('UTF-8'), parser)
+    return etree.tostring(element, encoding='UTF-8', pretty_print=True).decode('UTF-8')
