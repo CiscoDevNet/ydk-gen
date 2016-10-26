@@ -105,7 +105,6 @@ class _ClientSPPlugin(_SPPlugin):
         else:
             self._nc_manager = None
         self.netconf_sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
-        self.separator = '*' * 28
         self.timeout = timeout
 
     def encode(self, entity, operation, only_config):
@@ -214,16 +213,16 @@ class _ClientSPPlugin(_SPPlugin):
 
         if self.use_native_client:
             assert self.ydk_client is not None
-            reply_str = self.ydk_client.execute_payload(payload)
-            self.netconf_sp_logger.debug(_get_pretty(reply_str.xml))
-            return self._handle_rpc_reply(operation, payload, reply_str)
+            reply = self.ydk_client.execute_payload(payload)
+            self.netconf_sp_logger.debug('\n%s', _get_pretty(reply.xml))
+            return self._handle_rpc_reply(operation, payload, reply)
         else:
             service_provider_rpc = self._create_rpc_instance(self.timeout)
             payload = payload.replace("101", service_provider_rpc._id, 1)
-            self.netconf_sp_logger.debug('\n%s\n%s', self.separator, payload)
-            reply_str = service_provider_rpc._request(payload)
-            self.netconf_sp_logger.debug(_get_pretty(reply_str.xml))
-            return self._handle_rpc_reply(operation, payload, reply_str.xml)
+            self.netconf_sp_logger.debug('\n%s', payload)
+            reply = service_provider_rpc._request(payload)
+            self.netconf_sp_logger.debug('\n%s', _get_pretty(reply.xml))
+            return self._handle_rpc_reply(operation, payload, reply.xml)
 
     def _create_rpc_instance(self, timeout):
         assert self._nc_manager is not None
@@ -257,25 +256,25 @@ class _ClientSPPlugin(_SPPlugin):
             self._handle_commit(payload, reply_str)
 
     def _handle_rpc_error(self, payload, reply_str, pathlist):
-        self.netconf_sp_logger.error('%s\n%s\n%s\n%s' , self.separator, payload, reply_str, self.separator)
+        self.netconf_sp_logger.error('\n%s\n%s' , payload, reply_str)
         raise YPYServiceProviderError(error_code=YPYErrorCode.SERVER_REJ, error_msg=reply_str)
 
     def _handle_commit(self, payload, reply_str):
-        self.netconf_sp_logger.debug('\n<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">\n  <commit/>\n</rpc>')
+        commit = '<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">\n  <commit/>\n</rpc>\n'
+        self.netconf_sp_logger.debug('\n%s', _get_pretty(commit))
         if self.use_native_client:
             assert self.ydk_client is not None
-            rep = self.ydk_client.execute_payload('\n<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">\n  <commit/>\n</rpc>')
+            rep = self.ydk_client.execute_payload(commit)
         else:
             assert self._nc_manager is not None
             rep = self._nc_manager.commit()
             rep = rep.xml
 
         if 'ok' not in rep:
-            self.netconf_sp_logger.error('%s\n%s\n%s\ncommit-reply\n%s\n%s', self.separator,
-                                    payload, reply_str, rep, self.separator)
+            self.netconf_sp_logger.error('\n%s\n%s\ncommit-reply\n%s', payload, reply_str, rep)
             raise YPYServiceProviderError(error_code=YPYErrorCode.SERVER_COMMIT_ERR, error_msg=rep)
         else:
-            self.netconf_sp_logger.debug('\n%s' % _get_pretty(reply_str))
+            self.netconf_sp_logger.debug('\n%s', _get_pretty(reply_str))
 
     def connect(self, session_config):
         assert session_config.transportMode == _SessionTransportMode.SSH
@@ -649,5 +648,6 @@ def check_errors(payload):
 
 
 def _get_pretty(string):
-    return minidom.parseString(string).toprettyxml(indent='  ')
-
+    parser = etree.XMLParser(remove_blank_text=True)
+    element = etree.XML(string, parser)
+    return etree.tostring(element, pretty_print=True)
