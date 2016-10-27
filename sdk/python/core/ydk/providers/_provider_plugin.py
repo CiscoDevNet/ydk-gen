@@ -104,7 +104,7 @@ class _ClientSPPlugin(_SPPlugin):
             self.ydk_client = None
         else:
             self._nc_manager = None
-        self.netconf_sp_logger = logging.getLogger('ydk.providers.NetconfServiceProvider')
+        self.netconf_sp_logger = logging.getLogger(__name__)
         self.timeout = timeout
 
     def encode(self, entity, operation, only_config):
