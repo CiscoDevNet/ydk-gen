@@ -28,7 +28,7 @@ import logging
 class ExecutorService(Service):
     """ Executor Service class for executing RPCs containing entities """
     def __init__(self):
-        self.service_logger = logging.getLogger('ydk.services.NetconfService')
+        self.service_logger = logging.getLogger(__name__)
 
     def execute_rpc(self, provider, rpc):
         """ Execute the RPC
