@@ -52,9 +52,10 @@ class ExecutorService(Service):
             raise YPYServiceError(error_msg=err_msg)
         try:
             rpc = MetaService.normalize_meta(provider._get_capabilities(), rpc)
+            self.service_logger.info('Executor operation initiated')
             return provider.execute(
                                     provider.sp_instance.encode_rpc(rpc),
                                     ''
                                     )
         finally:
-            self.service_logger.info('Netconf operation completed')
+            self.service_logger.info('Executor operation completed')
