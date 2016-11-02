@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 cmake_policy(SET CMP0048 NEW)
-project(ydk VERSION 0.5.0)
+project(ydk VERSION 0.5.0 LANGUAGES C CXX)
 
 
 set(YDK_DESCRIPTION "YANG Development Kit Library. The library for  YDK API.")
@@ -67,7 +67,7 @@ set(libydk_src
     src/core/schema_value_type.cpp
     src/core/statement.cpp)
 
-set(libydk_headers 
+set(libydk_headers
     src/netconf_provider.hpp
     src/netconf_client.hpp
     src/codec_service.hpp
@@ -80,7 +80,7 @@ set(libydk_headers
     src/validation_service.hpp
     src/service.hpp)
 
-set(libydk_install_headers 
+set(libydk_install_headers
     src/netconf_provider.hpp
     src/codec_service.hpp
     src/codec_provider.hpp
@@ -211,6 +211,7 @@ set(Boost_USE_STATIC_LIBS        OFF)
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME     OFF)
 set(BOOST_ALL_DYN_LINK           ON)   # force dynamic linking for all libraries
+set(Boost_NO_BOOST_CMAKE         ON)
 #set(Boost_USE_STATIC_LIBS ON)
 
 # Find dependent libraries
@@ -219,12 +220,14 @@ find_library(curl_location curl)
 find_library(ssh_threads_location ssh_threads)
 find_library(xslt_location xslt)
 find_library(pcre_location pcre)
-find_package(BOOST REQUIRED)
+find_library(pthread_location pthread)
+find_library(dl_location dl)
+find_package(Boost REQUIRED)
 find_package(Boost COMPONENTS log_setup log thread date_time system filesystem REQUIRED)
 find_package(LibSSH REQUIRED)
 
 message("xml2 location " ${xml2_location})
-message("curl location " ${curl_location})      
+message("curl location " ${curl_location})
 message("ssh threads location " ${ssh_threads_location})
 message("xslt location " ${xslt_location})
 message("BOOST location " ${Boost_INCLUDE_DIRS})
@@ -333,6 +336,8 @@ target_link_libraries(ydk
     ${pcre_location}
     ${xslt_location}
     ${LIBSSH_LIBRARIES}
+    ${pthread_location}
+    ${dl_location}
     libnetconf
     libyang
 )

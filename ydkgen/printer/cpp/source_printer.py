@@ -42,6 +42,7 @@ class SourcePrinter(FilePrinter):
         self.ctx.bline()
         self.ctx.writeln('#include <sstream>')
         self.ctx.writeln('#include <iostream>')
+        self.ctx.writeln('#include <algorithm>')
         self.ctx.writeln('#include "{0}.hpp"'.format(package.name))
         self.ctx.bline()
         self.ctx.writeln('namespace ydk {')
@@ -122,7 +123,7 @@ class SourcePrinter(FilePrinter):
 
     def _print_class_get_segment_path(self, clazz):
         GetSegmentPathPrinter(self.ctx).print_output(clazz)
-    
+
     def _print_class_get_path(self, clazz, leafs):
         GetEntityPathPrinter(self.ctx).print_output(clazz, leafs)
 

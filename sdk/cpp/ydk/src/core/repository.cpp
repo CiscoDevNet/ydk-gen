@@ -25,6 +25,7 @@
 #include "core_private.hpp"
 #include "../ydk_yang.hpp"
 #include <boost/log/trivial.hpp>
+#include <fstream>
 
 namespace fs = boost::filesystem;
 
