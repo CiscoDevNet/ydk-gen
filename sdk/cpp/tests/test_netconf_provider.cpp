@@ -29,7 +29,7 @@ using namespace std;
 BOOST_AUTO_TEST_CASE(Create)
 {
 	ydk::core::Repository repo{};
-	NetconfServiceProvider provider{&repo, "localhost", "admin", "admin", 1220};
+	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 
 	auto root_schema = provider.get_root_schema();
 	BOOST_REQUIRE(root_schema != nullptr);

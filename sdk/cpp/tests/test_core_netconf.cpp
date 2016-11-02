@@ -177,7 +177,7 @@ void print_tree(ydk::core::DataNode* dn, const std::string& indent)
 
 BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
 {
-    ydk::core::Repository repo{};
+    ydk::core::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
     ydk::core::RootSchemaNode* schema = sp.get_root_schema();
@@ -336,11 +336,11 @@ BOOST_AUTO_TEST_CASE(bits)
 
 
 
-BOOST_AUTO_TEST_CASE( bgp_xr  )
+BOOST_AUTO_TEST_CASE( bgp_xr )
 {
-    ydk::core::Repository repo{};
+    ydk::core::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"localhost", "admin", "admin",  1220};
+    ydk::NetconfServiceProvider sp{&repo,"localhost", "admin", "admin",  12022};
     ydk::core::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);

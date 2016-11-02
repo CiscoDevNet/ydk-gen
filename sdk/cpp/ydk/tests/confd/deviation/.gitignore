@@ -1,0 +1,8 @@
+confd-cdb/
+*.fxs
+ssh-keydir
+confd_candidate.db
+global.data
+*.yang
+
+

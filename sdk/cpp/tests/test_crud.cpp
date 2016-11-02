@@ -23,11 +23,10 @@
 #include "../ydk/src/netconf_provider.hpp"
 #include "../ydk/src/crud_service.hpp"
 #include "ydk_ydktest/openconfig_bgp.hpp"
+#include "config.hpp"
 
 using namespace ydk;
 using namespace std;
-
-#define MODELS_DIR "/Users/abhirame/Cisco/003/ydk-gen/sdk/cpp/ydk/tests/models"
 
 
 void config_bgp(openconfig_bgp::Bgp* bgp)
@@ -68,7 +67,7 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
 
 BOOST_AUTO_TEST_CASE(bgp_create_delete)
 {
-	ydk::core::Repository repo{MODELS_DIR};
+	ydk::core::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp = make_unique<openconfig_bgp::Bgp>();
@@ -82,7 +81,7 @@ BOOST_AUTO_TEST_CASE(bgp_create_delete)
 
 BOOST_AUTO_TEST_CASE(bgp_read_delete)
 {
-	ydk::core::Repository repo{MODELS_DIR};
+	ydk::core::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp_set = make_unique<openconfig_bgp::Bgp>();
@@ -112,7 +111,7 @@ BOOST_AUTO_TEST_CASE(bgp_read_delete)
 
 BOOST_AUTO_TEST_CASE(bgp_update_delete)
 {
-	ydk::core::Repository repo{MODELS_DIR};
+	ydk::core::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp = make_unique<openconfig_bgp::Bgp>();
@@ -131,7 +130,7 @@ BOOST_AUTO_TEST_CASE(bgp_update_delete)
 
 BOOST_AUTO_TEST_CASE(bgp_set_leaf)
 {
-	ydk::core::Repository repo{MODELS_DIR};
+	ydk::core::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp = make_unique<openconfig_bgp::Bgp>();

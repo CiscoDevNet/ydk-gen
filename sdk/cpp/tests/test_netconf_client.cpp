@@ -19,7 +19,7 @@
 #include "../ydk/src/netconf_client.hpp"
 #include "../ydk/src/errors.hpp"
 #include <iostream>
-#include <sys/time.h>  
+#include <sys/time.h>
 
 using namespace ydk;
 using namespace std;
@@ -27,7 +27,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE(xr)
 {
-	NetconfClient client{ "admin", "admin", "localhost", 1220, 0};
+	NetconfClient client{ "admin", "admin", "localhost", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();

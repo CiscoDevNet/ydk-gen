@@ -303,7 +303,7 @@ class YdkGenerator(object):
         shutil.rmtree(gen_api_root)
         _copytree(target_dir,
                   gen_api_root,
-                  ignore=shutil.ignore_patterns('.gitignore', 'ncclient'))
+                  ignore=shutil.ignore_patterns('.gitignore', 'ncclient', 'confd'))
 
 
 def _set_api_pkg_sub_name(bundles, api_pkgs, curr_bundle):

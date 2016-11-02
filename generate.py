@@ -167,7 +167,7 @@ def create_pip_packages(output_directory):
 
     if exit_code == 0:
         print('\nSuccessfully created source distribution at %s/dist' %
-              (py_sdk_root,))
+              py_sdk_root)
     else:
         print('\nFailed to create source distribution')
         sys.exit(exit_code)
@@ -177,25 +177,22 @@ def create_pip_packages(output_directory):
         py_sdk_root,))
 
 
-def create_shared_libraries(output_directory):
+def create_shared_libraries(output_directory, sudo):
     cpp_sdk_root = os.path.join(output_directory)
     cmake_build_dir = os.path.join(output_directory, 'build')
     if os.path.exists(cmake_build_dir):
         shutil.rmtree(cmake_build_dir)
     os.makedirs(cmake_build_dir)
     os.chdir(cmake_build_dir)
-    args = ['cmake ..']
-    exit_code1 = subprocess.call(args, env=os.environ.copy(), shell=True)
-    args = ['make -j5 &> /dev/null']
-    exit_code2 = subprocess.call(args, env=os.environ.copy(), shell=True)
-    args = ['make install']
-    exit_code3 = subprocess.call(args, env=os.environ.copy(), shell=True)
-
-    if exit_code1 == 0 and exit_code2 == 0 and exit_code3 == 0 :
-        print('\nSuccessfully created and installed shared libraries')
-    else:
+    sudo_cmd = 'sudo' if sudo else ''
+    try:
+        subprocess.check_call(['%s' % sudo_cmd, 'cmake', '..'])
+        subprocess.check_call(['%s' % sudo_cmd, 'make', '-j5'])
+        subprocess.check_call(['%s' % sudo_cmd, 'make', 'install'])
+    except subprocess.CalledProcessError as e:
         print('\nERROR: Failed to create shared library!\n')
-        sys.exit(exit_code1)
+        sys.exit(e.returncode)
+    print('\nSuccessfully created and installed shared libraries')
     print('\n=================================================')
     print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
     print('Please read %s/README.rst for information on how to install the package in your environment\n' % (
@@ -274,6 +271,12 @@ if __name__ == '__main__':
                       default=False,
                       help="Consider yang groupings as classes.")
 
+    parser.add_option("--sudo",
+                      action="store_true",
+                      dest="sudo",
+                      default=False,
+                      help="Use sudo for C++ core library installation.")
+
     try:
         arg = sys.argv[1]
     except IndexError:
@@ -303,34 +306,32 @@ if __name__ == '__main__':
     elif options.python:
         language = 'python'
 
-
     if options.profile:
         output_directory = (YdkGenerator(
-                           output_directory,
-                           ydk_root,
-                           options.groupings_as_class,
-			               options.gentests,
-                           language,
-                           'profile').generate(options.profile))
+                            output_directory,
+                            ydk_root,
+                            options.groupings_as_class,
+                            options.gentests,
+                            language,
+                            'profile').generate(options.profile))
 
     elif options.bundle:
         output_directory = (YdkGenerator(
-                           output_directory,
-                           ydk_root,
-                           options.groupings_as_class,
-			               options.gentests,
-                           language,
-                           'bundle').generate(options.bundle))
+                            output_directory,
+                            ydk_root,
+                            options.groupings_as_class,
+                            options.gentests,
+                            language,
+                            'bundle').generate(options.bundle))
 
     if options.core:
         output_directory = (YdkGenerator(
-                           output_directory,
-                           ydk_root,
-                           options.groupings_as_class,
-                           options.gentests,
-                           language,
-                           'core').generate())
-
+                            output_directory,
+                            ydk_root,
+                            options.groupings_as_class,
+                            options.gentests,
+                            language,
+                            'core').generate())
 
     if options.gendoc:
         generate_documentations(output_directory, ydk_root, language, options.bundle, options.core)
@@ -340,8 +341,7 @@ if __name__ == '__main__':
     print('\nPerforming compilation and/or installation...\n')
 
     if options.cpp:
-        pass
-        #create_shared_libraries(output_directory)
+        create_shared_libraries(output_directory, options.sudo)
     else:
         create_pip_packages(output_directory)
 

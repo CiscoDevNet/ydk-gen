@@ -39,7 +39,7 @@ module main-aug2 {
       "Initial revision.";
   }
 
-  augment /main:main-A {
+  augment /main:A {
   	container C {
 
       leaf three {

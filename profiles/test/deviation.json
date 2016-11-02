@@ -6,7 +6,7 @@
     "Description": "YDK Test Profile",
     "models": {
     "dir": [
-        "/profiles/test/deviation/yang",
+        "/yang/deviation",
         "/yang/ietf"
         ]
     }

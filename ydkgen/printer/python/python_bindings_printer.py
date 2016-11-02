@@ -76,7 +76,6 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
         sub = package.sub_name
 
-        # if hasattr(package, 'aug_bundle_name'):
         if package.aug_bundle_name != '':
             package.augments_other = True
             module_dir = self.initialize_output_directory(
@@ -129,7 +128,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         package.parent_pkg_name = sub
         extra_args = {'sort_clazz': False,
                       'identity_subclasses': self.identity_subclasses}
-        # from ipdb import set_trace; set_trace()
+
         self.print_file(get_python_module_file_name(path, package),
                         emit_module,
                         _EmitArgs(self.ypy_ctx, package, extra_args))
