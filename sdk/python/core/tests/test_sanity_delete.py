@@ -150,14 +150,14 @@ class SanityYang(unittest.TestCase):
 
     def test_delete_on_list_with_identitykey(self):
         runner = ysanity.Runner()
-        
+
         a1 = ysanity.Runner.OneList.IdentityList()
         a1.config.id = ysanity.ChildIdentityIdentity()
         a1.id_ref =  a1.config.id
         runner.one_list.identity_list.extend([a1])
-        
+
         self.crud.create(self.ncc, runner)
-        
+
         empty_runner = ysanity.Runner()
         runner_read = self.crud.read(self.ncc, empty_runner)
         self.crud.delete(self.ncc, runner_read.one_list.identity_list)
