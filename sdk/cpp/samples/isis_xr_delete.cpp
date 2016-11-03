@@ -17,20 +17,22 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
 
+#include "ydk/types.hpp"
 #include "ydk/netconf_provider.hpp"
 #include "ydk/crud_service.hpp"
-#include "ydk_ydktest/openconfig_bgp.hpp"
+
+#include "ydk_cisco_ios_xr/Cisco_IOS_XR_clns_isis_cfg.hpp"
 
 #include "args_parser.h"
 
 using namespace ydk;
+using namespace ydk::Cisco_IOS_XR_clns_isis_cfg;
 using namespace std;
 
 int main(int argc, char* argv[])
 {
 	vector<string> args = parse_args(argc, argv);
 	if(args.empty()) return 1;
-
 	string host, username, password;
 	int port;
 
@@ -50,10 +52,16 @@ int main(int argc, char* argv[])
 					    );
 	}
 
-	NetconfServiceProvider provider{host, username, password, port};
-	CrudService crud{};
+	try {
+		NetconfServiceProvider provider{host, username, password, port};
+		CrudService crud{};
 
-	auto bgp = make_unique<openconfig_bgp::Bgp>();
-	bool reply = crud.delete_(provider, *bgp);
-	if(reply) cout << "Delete operation success" << endl; else cout << "Operation failed" << endl;
+		auto isis = make_unique<Isis>();
+		bool reply = crud.delete_(provider, *isis);
+		if(reply) cout << "Delete operation success" << endl << endl; else cout << "Operation failed" << endl << endl;
+	}
+	catch(YDKException & e)
+	{
+		cerr << "Error details: "<<boost::diagnostic_information(e)<<endl;
+	}
 }

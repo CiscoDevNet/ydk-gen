@@ -1398,6 +1398,7 @@ namespace ydk {
             /// probably cannot be provided
             ///
             virtual std::string get_model(const std::string& name, const std::string& version, Format format) = 0;
+            virtual std::string get_hostname_port()=0;
 
 
         };
@@ -1440,7 +1441,7 @@ namespace ydk {
             /// @param[in] capabilities vector of Capability
             /// @return pointer to the RootSchemaNode or nullptr if one could not be created.
             ///
-            RootSchemaNode* create_root_schema(const std::vector<core::Capability> & capabilities) const;
+            RootSchemaNode* create_root_schema(const std::vector<core::Capability> & capabilities) ;
 
             ///
             /// @brief Adds a model provider.
@@ -1474,6 +1475,7 @@ namespace ydk {
             boost::filesystem::path path;
          private:
             std::vector<ModelProvider*> model_providers;
+            bool using_temp_directory;
         };
 
 

@@ -65,96 +65,7 @@ const char* expected_bgp_output ="\
 </bgp>";
 
 
-const char* expected_bgp_read ="\
-<bgp xmlns=\"http://openconfig.net/yang/bgp\">\
-<global>\
-<config>\
-<as>65172</as>\
-</config>\
-<use-multiple-paths>\
-<state/>\
-<ebgp>\
-<state/>\
-</ebgp>\
-<ibgp>\
-<state/>\
-</ibgp>\
-</use-multiple-paths>\
-<route-selection-options>\
-<state/>\
-</route-selection-options>\
-<afi-safis>\
-<afi-safi>\
-<afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name>\
-<config>\
-<afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name>\
-<enabled>true</enabled>\
-</config>\
-<state/>\
-<graceful-restart>\
-<state/>\
-</graceful-restart>\
-<route-selection-options>\
-<state/>\
-</route-selection-options>\
-<use-multiple-paths>\
-<state/>\
-<ebgp>\
-<state/>\
-</ebgp>\
-<ibgp>\
-<state/>\
-</ibgp>\
-</use-multiple-paths>\
-<apply-policy>\
-<state/>\
-</apply-policy>\
-</afi-safi>\
-</afi-safis>\
-<apply-policy>\
-<state/>\
-</apply-policy>\
-</global>\
-<neighbors>\
-<neighbor>\
-<neighbor-address>172.16.255.2</neighbor-address>\
-<config>\
-<neighbor-address>172.16.255.2</neighbor-address>\
-<peer-as>65172</peer-as>\
-</config>\
-<state/>\
-<timers>\
-<state>\
-<connect-retry>30.0</connect-retry>\
-<hold-time>90.0</hold-time>\
-<keepalive-interval>30.0</keepalive-interval>\
-<minimum-advertisement-interval>30.0</minimum-advertisement-interval>\
-</state>\
-</timers>\
-<transport>\
-<state/>\
-</transport>\
-<error-handling><state/></error-handling>\
-<logging-options><state/></logging-options>\
-<ebgp-multihop><state/></ebgp-multihop>\
-<route-reflector><state/></route-reflector>\
-<as-path-options><state/></as-path-options>\
-<add-paths><state/></add-paths>\
-<use-multiple-paths><state/>\
-<ebgp><state/></ebgp>\
-</use-multiple-paths><apply-policy><state/></apply-policy>\
-<afi-safis>\
-<afi-safi>\
-<afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name>\
-<config>\
-<afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name>\
-<enabled>true</enabled>\
-</config>\
-<state/>\
-<graceful-restart><state/></graceful-restart>\
-<apply-policy><state/></apply-policy>\
-<use-multiple-paths><state/><ebgp><state/></ebgp></use-multiple-paths>\
-</afi-safi></afi-safis></neighbor></neighbors></bgp>";
+const char* expected_bgp_read ="<bgp xmlns=\"http://openconfig.net/yang/bgp\"><global><config><as>65172</as></config><use-multiple-paths><state><enabled>false</enabled></state><ebgp><state><allow-multiple-as>false</allow-multiple-as><maximum-paths>1</maximum-paths></state></ebgp><ibgp><state><maximum-paths>1</maximum-paths></state></ibgp></use-multiple-paths><route-selection-options><state><always-compare-med>false</always-compare-med><ignore-as-path-length>false</ignore-as-path-length><external-compare-router-id>true</external-compare-router-id><advertise-inactive-routes>false</advertise-inactive-routes><enable-aigp>false</enable-aigp><ignore-next-hop-igp-metric>false</ignore-next-hop-igp-metric></state></route-selection-options><afi-safis><afi-safi><afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name><config><afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name><enabled>true</enabled></config><state><enabled>false</enabled></state><graceful-restart><state><enabled>false</enabled></state></graceful-restart><route-selection-options><state><always-compare-med>false</always-compare-med><ignore-as-path-length>false</ignore-as-path-length><external-compare-router-id>true</external-compare-router-id><advertise-inactive-routes>false</advertise-inactive-routes><enable-aigp>false</enable-aigp><ignore-next-hop-igp-metric>false</ignore-next-hop-igp-metric></state></route-selection-options><use-multiple-paths><state><enabled>false</enabled></state><ebgp><state><allow-multiple-as>false</allow-multiple-as><maximum-paths>1</maximum-paths></state></ebgp><ibgp><state><maximum-paths>1</maximum-paths></state></ibgp></use-multiple-paths><apply-policy><state><default-import-policy>REJECT_ROUTE</default-import-policy><default-export-policy>REJECT_ROUTE</default-export-policy></state></apply-policy></afi-safi></afi-safis><apply-policy><state><default-import-policy>REJECT_ROUTE</default-import-policy><default-export-policy>REJECT_ROUTE</default-export-policy></state></apply-policy></global><neighbors><neighbor><neighbor-address>172.16.255.2</neighbor-address><config><neighbor-address>172.16.255.2</neighbor-address><peer-as>65172</peer-as></config><state><enabled>true</enabled><route-flap-damping>false</route-flap-damping><send-community>NONE</send-community></state><timers><state><connect-retry>30.0</connect-retry><hold-time>90.0</hold-time><keepalive-interval>30.0</keepalive-interval><minimum-advertisement-interval>30.0</minimum-advertisement-interval></state></timers><transport><state><mtu-discovery>false</mtu-discovery><passive-mode>false</passive-mode></state></transport><error-handling><state><treat-as-withdraw>false</treat-as-withdraw></state></error-handling><logging-options><state><log-neighbor-state-changes>true</log-neighbor-state-changes></state></logging-options><ebgp-multihop><state><enabled>false</enabled></state></ebgp-multihop><route-reflector><state><route-reflector-client>false</route-reflector-client></state></route-reflector><as-path-options><state><allow-own-as>0</allow-own-as><replace-peer-as>false</replace-peer-as></state></as-path-options><add-paths><state><receive>false</receive></state></add-paths><use-multiple-paths><state><enabled>false</enabled></state><ebgp><state><allow-multiple-as>false</allow-multiple-as></state></ebgp></use-multiple-paths><apply-policy><state><default-import-policy>REJECT_ROUTE</default-import-policy><default-export-policy>REJECT_ROUTE</default-export-policy></state></apply-policy><afi-safis><afi-safi><afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name><config><afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name><enabled>true</enabled></config><state><enabled>false</enabled></state><graceful-restart><state><enabled>false</enabled></state></graceful-restart><apply-policy><state><default-import-policy>REJECT_ROUTE</default-import-policy><default-export-policy>REJECT_ROUTE</default-export-policy></state></apply-policy><use-multiple-paths><state><enabled>false</enabled></state><ebgp><state><allow-multiple-as>false</allow-multiple-as></state></ebgp></use-multiple-paths></afi-safi></afi-safis></neighbor></neighbors></bgp>";
 
 void print_tree(ydk::core::DataNode* dn, const std::string& indent)
 {
@@ -282,8 +193,6 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
 
     xml = s.encode(read_result, ydk::core::CodecService::Format::XML, false);
 
-    std::cout << xml << std::endl;
-
     BOOST_REQUIRE(xml == expected_bgp_read);
 
     peer_as->set("6500");
@@ -302,7 +211,7 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
 
 BOOST_AUTO_TEST_CASE(bits)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::core::Repository repo{};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
     ydk::core::RootSchemaNode* schema = sp.get_root_schema();
@@ -336,7 +245,7 @@ BOOST_AUTO_TEST_CASE(bits)
 
 
 
-BOOST_AUTO_TEST_CASE( bgp_xr )
+BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 {
     ydk::core::Repository repo{TEST_HOME};
 
@@ -355,19 +264,111 @@ BOOST_AUTO_TEST_CASE( bgp_xr )
     std::unique_ptr<const ydk::core::DataNode> data_root{bgp->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
-//call read
+
+    //call create
+    auto as = bgp->create("global/config/as", "65172");
+	BOOST_REQUIRE( as != nullptr );
+	auto router_id = bgp->create("global/config/router-id", "1.2.3.4");
+	BOOST_REQUIRE( router_id != nullptr );
+	auto l3vpn_ipv4_unicast = bgp->create("global/afi-safis/afi-safi[afi-safi-name='openconfig-bgp-types:L3VPN_IPV4_UNICAST']", "");
+	BOOST_REQUIRE( l3vpn_ipv4_unicast != nullptr );
+	auto afi_safi_name = l3vpn_ipv4_unicast->create("config/afi-safi-name", "openconfig-bgp-types:L3VPN_IPV4_UNICAST");
+	BOOST_REQUIRE( afi_safi_name != nullptr );
+	auto enable = l3vpn_ipv4_unicast->create("config/enabled","true");
+	BOOST_REQUIRE( enable != nullptr );
+
+	//bgp/neighbors/neighbor
+	auto neighbor = bgp->create("neighbors/neighbor[neighbor-address='172.16.255.2']", "");
+	BOOST_REQUIRE( neighbor != nullptr );
+	auto neighbor_address = neighbor->create("config/neighbor-address", "172.16.255.2");
+	BOOST_REQUIRE( neighbor_address != nullptr );
+	auto peer_as = neighbor->create("config/peer-as","65172");
+	BOOST_REQUIRE( peer_as != nullptr );
+	auto peer_group = neighbor->create("config/peer-group","IBGP");
+	BOOST_REQUIRE( peer_group != nullptr );
+
+	//bgp/peer-groups/peer-group
+	peer_group = bgp->create("peer-groups/peer-group[peer-group-name='IBGP']", "");
+	BOOST_REQUIRE( peer_group != nullptr );
+	auto peer_group_name = peer_group->create("config/peer-group-name", "IBGP");
+	BOOST_REQUIRE( peer_group_name != nullptr );
+	peer_as = peer_group->create("config/peer-as","65172");
+	BOOST_REQUIRE( peer_as != nullptr );
+
+	std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+	auto xml = s.encode(bgp, ydk::core::CodecService::Format::XML, false);
+	BOOST_REQUIRE( !xml.empty() );
+	create_rpc->input()->create("entity", xml);
+
+	auto res = (*create_rpc)(sp);
+
+	//call read
     std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto bgp_read = schema->create("openconfig-bgp:bgp", "");
     BOOST_REQUIRE( bgp_read != nullptr );
     std::unique_ptr<const ydk::core::DataNode> data_root2{bgp_read->root()};
 
-    auto xml = s.encode(bgp_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(bgp_read, ydk::core::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
+    read_rpc->input()->create("only-config");
 
     auto read_result = (*read_rpc)(sp);
 
     BOOST_REQUIRE(read_result != nullptr);
-
-
 }
+//
+//BOOST_AUTO_TEST_CASE( bgp_xr_native  )
+//{
+//    ydk::core::Repository repo{};
+//
+//    ydk::NetconfServiceProvider sp{&repo,"localhost", "admin", "admin",  1220};
+//    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+//
+//    BOOST_REQUIRE(schema != nullptr);
+//
+//    auto s = ydk::core::CodecService{};
+//
+//    auto bgp = schema->create("Cisco-IOS-XR-ipv4-bgp-cfg:bgp", "");
+//    BOOST_REQUIRE( bgp != nullptr );
+//    //get the root
+//    std::unique_ptr<const ydk::core::DataNode> data_root{bgp->root()};
+//    BOOST_REQUIRE( data_root != nullptr );
+//
+//    //call create
+//    auto instance = bgp->create("instance[instance-name='65172']");
+//    BOOST_REQUIRE( instance != nullptr );
+//
+//    auto instance_as = instance->create("instance-as[as='65172']");
+//    BOOST_REQUIRE( instance_as != nullptr );
+//
+//    auto four_instance_as = instance_as->create("four-byte-as[as='65172']");
+//    BOOST_REQUIRE( four_instance_as != nullptr );
+//
+//    auto vrf = four_instance_as->create("vrfs/vrf[vrf-name='red']");
+//    BOOST_REQUIRE( vrf != nullptr );
+//
+//	std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+//	auto xml = s.encode(bgp, ydk::core::CodecService::Format::XML, false);
+//	BOOST_REQUIRE( !xml.empty() );
+//	create_rpc->input()->create("entity", xml);
+//
+//	auto res = (*create_rpc)(sp);
+//
+//	//call read
+//    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+//    auto bgp_read = schema->create("Cisco-IOS-XR-ipv4-bgp-cfg:bgp", "");
+//    BOOST_REQUIRE( bgp_read != nullptr );
+//    std::unique_ptr<const ydk::core::DataNode> data_root2{bgp_read->root()};
+//
+//    xml = s.encode(bgp_read, ydk::core::CodecService::Format::XML, false);
+//    BOOST_REQUIRE( !xml.empty() );
+//    read_rpc->input()->create("filter", xml);
+//    read_rpc->input()->create("only-config");
+//
+//    auto read_result = (*read_rpc)(sp);
+//
+//    BOOST_REQUIRE(read_result != nullptr);
+//
+//
+//}

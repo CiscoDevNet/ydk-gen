@@ -34,19 +34,22 @@ namespace fs = boost::filesystem;
 //////////////////////////////////////////////////////////////////////////
 
 ydk::core::Repository::Repository()
+  : using_temp_directory(true)
 {
     path = fs::temp_directory_path();
+    ly_verb(LY_LLSILENT);
 }
 
 
-ydk::core::Repository::Repository(const std::string& search_dir) : path{search_dir}
+ydk::core::Repository::Repository(const std::string& search_dir)
+  : path{search_dir}, using_temp_directory(false)
 {
     if(!fs::exists(path) || !fs::is_directory(path)) {
-        BOOST_LOG_TRIVIAL(debug) << "Path " << search_dir << " is not a valid directory.";
-        throw YDKInvalidArgumentException{"path is not a valid directory"};
+        BOOST_LOG_TRIVIAL(error) << "Path " << search_dir << " is not a valid directory.";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"path is not a valid directory"});
     }
 
-    ly_verb(LY_LLDBG);
+    ly_verb(LY_LLSILENT);
 }
 
 
@@ -74,45 +77,37 @@ namespace ydk {
             }
         }
 
-        extern "C" char* get_module_callback(const char* name, const char* revision, void* user_data,
-                                       LYS_INFORMAT* format, void (**free_module_data)(void *model_data))
+        extern "C" char* get_module_callback(const char* module_name, const char* module_rev, const char *submod_name, const char *sub_rev,
+        							   void* user_data, LYS_INFORMAT* format, void (**free_module_data)(void *model_data))
         {
-            BOOST_LOG_TRIVIAL(trace) << "Getting module " << name;
+            BOOST_LOG_TRIVIAL(trace) << "Getting module " << module_name <<" submodule "<<(submod_name?submod_name:"none");
 
             if(user_data != nullptr){
                 ModelProvider::Format m_format = ModelProvider::Format::YANG;
                 *format = LYS_IN_YANG;
-                auto pair = reinterpret_cast<std::pair<struct ly_ctx* , const ydk::core::Repository*>*>(user_data);
-                struct ly_ctx* ctx = pair->first;
-                const Repository* repo = pair->second;
+                auto repo = reinterpret_cast<const Repository*>(user_data);
 
-                //check if the module is avaliable
-                const struct lys_module* module = ly_ctx_get_module(ctx, name, revision);
-                if(module != nullptr){
-                    char* strp = nullptr;
-                    if(!lys_print_mem(&strp, module, LYS_OUT_YANG, nullptr)){
-                        *free_module_data = nullptr;
-                        return strp;
-                    }
-
-                }
-
-                //first check our directory for a file of the form <module-name>@<revision-date>.yang
-
+                //first check our directory for a file of the form <module-module_name>@<module_rev-date>.yang
+                BOOST_LOG_TRIVIAL(trace) << "Looking for file in folder: " << repo->path.string();
                 std::string yang_file_path_str{repo->path.string()};
                 std::string yang_file_path_no_revision_str{repo->path.string()};
                 yang_file_path_str += '/';
-                yang_file_path_str += name;
+                yang_file_path_str += (submod_name?submod_name:module_name);
                 yang_file_path_no_revision_str += yang_file_path_str;
-                if(revision){
+                if(module_rev){
                     yang_file_path_str += "@";
-                    yang_file_path_str += revision;
+                    yang_file_path_str += module_rev;
+                }
+                else if(sub_rev){
+                    yang_file_path_str += "@";
+                    yang_file_path_str += sub_rev;
                 }
                 yang_file_path_str += ".yang";
-                BOOST_LOG_TRIVIAL(debug) << "Opening file " << yang_file_path_str;
+                BOOST_LOG_TRIVIAL(trace) << "Opening file " << yang_file_path_str;
 
                 fs::path yang_file_path{yang_file_path_str};
                 fs::path yang_file_path_no_revision{yang_file_path_no_revision_str};
+                BOOST_LOG_TRIVIAL(trace) << "Path found with rev: " << fs::is_regular_file(yang_file_path) << ". Path without rev: " << fs::is_regular_file(yang_file_path_no_revision);
                 if(fs::is_regular_file(yang_file_path) || fs::is_regular_file(yang_file_path_no_revision)) {
                     //open the file read the data and return it
                     std::string model_data {""};
@@ -133,21 +128,31 @@ namespace ydk {
                         auto len = std::strlen(data);
                         enlarged_data = static_cast<char*>(std::malloc((len + 2) * sizeof *enlarged_data));
                         if (!enlarged_data) {
-                            throw std::bad_alloc{};
+                            BOOST_THROW_EXCEPTION(std::bad_alloc{});
                         }
                         memcpy(enlarged_data, data, len);
                         enlarged_data[len] = enlarged_data[len + 1] = '\0';
                         return enlarged_data;
                     } else {
-                        BOOST_LOG_TRIVIAL(debug) << "Cannot open file " << yang_file_path_str;
-                        throw YDKIllegalStateException("Cannot open file");
+                        BOOST_LOG_TRIVIAL(error) << "Cannot open file " << yang_file_path_str;
+                        BOOST_THROW_EXCEPTION(YDKIllegalStateException("Cannot open file"));
                     }
 
                 }
 
 
                 for(auto model_provider : repo->get_model_providers()) {
-                    std::string model_data = model_provider->get_model(name, revision != nullptr ? revision : "", m_format);
+                	std::string model_data{};
+                	if(submod_name)
+                	{
+                		BOOST_LOG_TRIVIAL(trace) << "Getting submodule using get-schema " << submod_name;
+                		model_data = model_provider->get_model(submod_name, sub_rev != nullptr ? sub_rev : "", m_format);
+                	}
+                	else
+                	{
+                		BOOST_LOG_TRIVIAL(trace) << "Getting module using get-schema " << module_name;
+                		model_data = model_provider->get_model(module_name, module_rev != nullptr ? module_rev : "", m_format);
+                	}
                     if(!model_data.empty()){
 
                         sink_to_file(yang_file_path_str, model_data);
@@ -158,44 +163,50 @@ namespace ydk {
                         auto len = std::strlen(data);
                         enlarged_data = static_cast<char*>(std::malloc((len + 2) * sizeof *enlarged_data));
                         if (!enlarged_data) {
-                            throw std::bad_alloc{};
+                            BOOST_THROW_EXCEPTION(std::bad_alloc{});
                         }
                         memcpy(enlarged_data, data, len);
                         enlarged_data[len] = enlarged_data[len + 1] = '\0';
                         return enlarged_data;
                     } else {
-                        BOOST_LOG_TRIVIAL(error) << "Cannot find model with name:- " << name << " revision:-" << (revision !=nullptr ? revision : "");
-//                        throw YDKIllegalStateException{"Cannot find model"};
-                        return "";
+                        BOOST_LOG_TRIVIAL(trace) << "Cannot find model with module_name:- " << module_name << " module_rev:-" << (module_rev !=nullptr ? module_rev : "");
+//                        BOOST_THROW_EXCEPTION(YDKIllegalStateException{"Cannot find model"});
+                        return {};
                     }
                 }
             }
-//            BOOST_LOG_TRIVIAL(error) << "Cannot find model with name:- " << name;
-//            throw YDKIllegalStateException{"Cannot find model"};
-            return "";
+            BOOST_LOG_TRIVIAL(trace) << "Cannot find model with module_name:- " << module_name;
+//            BOOST_THROW_EXCEPTION(YDKIllegalStateException{"Cannot find model"});
+            return {};
         }
     }
 
 }
 
 ydk::core::RootSchemaNode*
-ydk::core::Repository::create_root_schema(const std::vector<core::Capability> & capabilities) const
+ydk::core::Repository::create_root_schema(const std::vector<core::Capability> & capabilities)
 {
+	if(using_temp_directory)
+	{
+		for(auto model_provider : get_model_providers()) {
+			path+="/"+model_provider->get_hostname_port();
+			boost::filesystem::create_directory(path);
+			BOOST_LOG_TRIVIAL(debug) << "Path where models are to be downloaded: " << path.string();
+			break;
+		}
+	}
     std::string path_str = path.string();
-    BOOST_LOG_TRIVIAL(trace) << "creating libyang context in path "<<path_str;
+    BOOST_LOG_TRIVIAL(trace) << "Creating libyang context in path "<<path_str;
     struct ly_ctx* ctx = ly_ctx_new(path_str.c_str());
 
     if(!ctx) {
-        throw std::bad_alloc{};
+        BOOST_THROW_EXCEPTION(std::bad_alloc{});
     }
-    auto pair = new std::pair<struct ly_ctx* , const ydk::core::Repository*>{};
-    pair->first = ctx;
-    pair->second = this;
 
     //set module callback (only if there is a model provider)
     if(!model_providers.empty())
     {
-        ly_ctx_set_module_clb(ctx, get_module_callback, pair);
+        ly_ctx_set_module_clb(ctx, get_module_callback, this);
     }
 
     for (auto c : capabilities)
@@ -212,7 +223,7 @@ ydk::core::Repository::create_root_schema(const std::vector<core::Capability> & 
         }
 
         if (!p) {
-            BOOST_LOG_TRIVIAL(debug) << "Unable to parse module " << c.module;
+            BOOST_LOG_TRIVIAL(trace) << "Unable to parse module " << c.module;
             continue;
         }
         for (auto f : c.features)

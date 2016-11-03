@@ -46,12 +46,21 @@ NetconfModelProvider::~NetconfModelProvider()
 {
 }
 
+std::string NetconfModelProvider::get_hostname_port()
+{
+	return client.get_hostname_port();
+}
+
 string NetconfModelProvider::get_model(const string& name, const string& version, Format format)
 {
     string model{};
 
     if(name == ydk::core::YDK_MODULE_NAME && version == ydk::core::YDK_MODULE_REVISION) {
        return ydk::core::YDK_MODULE;
+    }
+
+    if(name == ydk::IETF_NETCONF_MODULE_NAME && version == ydk::IETF_NETCONF_MODULE_REVISION) {
+       return ydk::IETF_NETCONF_MODULE;
     }
 
     //have to craft and send the raw payload since the schema might
@@ -80,9 +89,9 @@ string NetconfModelProvider::get_model(const string& name, const string& version
     payload+="</get-schema>";
     payload+="</rpc>";
 
-    BOOST_LOG_TRIVIAL(debug) << "Get schema request " << payload;
+    BOOST_LOG_TRIVIAL(trace) << "Get schema request " << payload;
     string reply = client.execute_payload(payload);
-    BOOST_LOG_TRIVIAL(debug) << "Get schema reply " << reply;
+    BOOST_LOG_TRIVIAL(trace) << "Get schema reply " << reply;
 
 
     auto data_start = reply.find("<data ");
@@ -114,7 +123,7 @@ string NetconfModelProvider::get_model(const string& name, const string& version
         }
     }
 
-    BOOST_LOG_TRIVIAL(debug) << "Model " << model;
+    BOOST_LOG_TRIVIAL(trace) << "Model " << model;
 
     return model;
 }

@@ -5,7 +5,7 @@ using namespace std;
 
 void show_usage(string name)
 {
-	cerr << "\nUsage:\n\t"<< name << " ssh://user:password@host:port" <<endl<<endl;
+	cerr << "\nUsage:\n\t"<< name << " ssh://user:password@host:port [-v]" <<endl<<endl;
 }
 
 vector<string> parse_args(int argc, char* argv[])
@@ -28,5 +28,22 @@ vector<string> parse_args(int argc, char* argv[])
 	ret.push_back(arg.substr(col1+1, amp-col1));
 	ret.push_back(arg.substr(amp+2, col2-amp-2));
 	ret.push_back(arg.substr(col2+1));
+
+	bool verb = false;
+	if(argc == 3)
+	{
+		string v = argv[2];
+		if(v=="-v")
+			verb = true;
+	}
+
+	if(verb)
+	{
+		ret.push_back("--verbose");
+	}
+	else
+	{
+		ret.push_back("--silent");
+	}
 	return ret;
 }

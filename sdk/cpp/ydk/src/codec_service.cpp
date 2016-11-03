@@ -55,8 +55,8 @@ CodecService::encode(CodecServiceProvider & provider, Entity & entity)
     catch (const YDKInvalidArgumentException& e)
     {
         std::string error_msg{boost::str(boost::format(REPO_ERROR_MSG) % provider.m_repo->path.string())};
-        BOOST_LOG_TRIVIAL(debug) << error_msg;
-        throw YDKServiceProviderException(error_msg);
+        BOOST_LOG_TRIVIAL(error) << error_msg;
+        BOOST_THROW_EXCEPTION(YDKServiceProviderException(error_msg));
     }
 }
 
@@ -81,8 +81,8 @@ CodecService::decode(CodecServiceProvider & provider, std::string & payload)
     core::DataNode* root_data_node = m_core_codec_service.decode(root_schema, payload, m_core_format);
     if (root_data_node->children().size() != 1)
     {
-        BOOST_LOG_TRIVIAL(debug) << PAYLOAD_ERROR_MSG;
-        throw YDKServiceProviderException(PAYLOAD_ERROR_MSG);
+        BOOST_LOG_TRIVIAL(error) << PAYLOAD_ERROR_MSG;
+        BOOST_THROW_EXCEPTION(YDKServiceProviderException(PAYLOAD_ERROR_MSG));
     }
     else
     {

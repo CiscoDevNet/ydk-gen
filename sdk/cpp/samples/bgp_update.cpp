@@ -26,14 +26,8 @@
 using namespace ydk;
 using namespace std;
 
-#define MODELS_DIR "/Users/abhirame/Cisco/003/ydk-gen/sdk/cpp/ydk/tests/models"
-
 int main(int argc, char* argv[])
 {
-	boost::log::core::get()->set_filter(
-		        boost::log::trivial::severity >= boost::log::trivial::debug
-		    );
-
 	vector<string> args = parse_args(argc, argv);
 	if(args.empty()) return 1;
 
@@ -42,12 +36,25 @@ int main(int argc, char* argv[])
 
 	username = args[0]; password = args[1]; host = args[2]; port = stoi(args[3]);
 
-	ydk::core::Repository repo{MODELS_DIR};
-	NetconfServiceProvider provider{&repo, host, username, password, port};
+	bool verbose=(args[4]=="--verbose");
+	if(verbose)
+	{
+		boost::log::core::get()->set_filter(
+			        boost::log::trivial::severity >= boost::log::trivial::debug
+			    );
+	}
+	else
+	{
+		boost::log::core::get()->set_filter(
+					        boost::log::trivial::severity >= boost::log::trivial::error
+					    );
+	}
+
+	NetconfServiceProvider provider{host, username, password, port};
 	CrudService crud{};
 
 	auto bgp = make_unique<openconfig_bgp::Bgp>();
-	bgp->global->config->as = 65021;
+	bgp->global->config->as = 65172;
 	bgp->global->config->router_id = "1.2.1.4";
 
 	bool reply = crud.update(provider, *bgp);

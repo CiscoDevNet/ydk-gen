@@ -61,7 +61,7 @@ public:
 	std::string execute_payload(const std::string & payload);
 	int close();
 	std::vector<std::string> get_capabilities();
-	int get_status();
+	std::string get_hostname_port();
 
 private:
 

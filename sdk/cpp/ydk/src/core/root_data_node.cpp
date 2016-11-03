@@ -54,40 +54,54 @@ ydk::core::RootDataImpl::path() const
 ydk::core::DataNode*
 ydk::core::RootDataImpl::create(const std::string& path, const std::string& value)
 {
-    if(path.empty()){
-        BOOST_LOG_TRIVIAL(debug) << "Path is empty";
-        throw YDKInvalidArgumentException{"Path is empty"};
-
+    if(path.empty())
+    {
+        BOOST_LOG_TRIVIAL(error) << "Path is empty";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"Path is empty"});
     }
 
     //path should not start with /
-    if(path.at(0) == '/'){
-        BOOST_LOG_TRIVIAL(debug) << "Path " << path << " starts with /";
-        throw YDKInvalidArgumentException{"Path starts with /"};
+    if(path.at(0) == '/')
+    {
+        BOOST_LOG_TRIVIAL(error) << "Path " << path << " starts with /";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"Path starts with /"});
     }
     std::vector<std::string> segments = segmentalize(path);
+    if(segments.size()<=0)
+    {
+		BOOST_LOG_TRIVIAL(error) << "Could not segmentalize";
+		BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"Could not segmentalize"});
+    }
 
     std::string start_seg = m_path + segments[0];
+    BOOST_LOG_TRIVIAL(trace) << "Creating root data node with path '"<<start_seg<<"'";
     struct lyd_node* dnode = lyd_new_path(m_node, m_ctx, start_seg.c_str(),
-                                          segments.size() == 1 ? value.c_str():nullptr,0);
+                                          segments.size() == 1 ? (void*)value.c_str():nullptr, LYD_ANYDATA_SXML, 0);
 
-    if( dnode == nullptr){
-        BOOST_LOG_TRIVIAL(debug) << "Path " << path << " is invalid";
-        throw YDKInvalidArgumentException{"Path is invalid."};
+    if( dnode == nullptr)
+    {
+        BOOST_LOG_TRIVIAL(error) << "Path " << path << " is invalid";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"Path is invalid."});
     }
 
     DataNodeImpl* dn = nullptr;
-    if(m_node == nullptr){
+    if(m_node == nullptr)
+    {
         m_node = dnode;
         dn = new DataNodeImpl{this, m_node};
         child_map.insert(std::make_pair(m_node, dn));
-    } else {
+    }
+    else
+    {
         //dnode is one of the siblings of m_node
         auto iter = child_map.find(dnode);
-        if(iter != child_map.end()) {
+        if(iter != child_map.end())
+        {
             dn = iter->second;
 
-        } else {
+        }
+        else
+        {
             dn = new DataNodeImpl{this, m_node};
             child_map.insert(std::make_pair(m_node, dn));
         }
@@ -96,15 +110,19 @@ ydk::core::RootDataImpl::create(const std::string& path, const std::string& valu
 
     DataNode* rdn = dn;
     // created data node is the last child
-    while(!rdn->children().empty()) {
+    while(!rdn->children().empty())
+    {
         rdn = rdn->children()[0];
     }
 
     //at this stage we have dn so for the remaining segments use dn as the parent
-    if(segments.size() > 1) {
+    if(segments.size() > 1)
+    {
         std::string remaining_path;
-        for(size_t i =1; i< segments.size(); i++) {
-            if(i!=1){
+        for(size_t i =1; i< segments.size(); i++)
+        {
+            if(i!=1)
+            {
                 remaining_path+="/";
             }
             remaining_path+=segments[i];
@@ -122,8 +140,8 @@ void
 ydk::core::RootDataImpl::set(const std::string& value)
 {
     if(!value.empty()) {
-        BOOST_LOG_TRIVIAL(debug) << "Invalid value being assigned to root";
-        throw YDKInvalidArgumentException{"Invalid value being assigned to root."};
+        BOOST_LOG_TRIVIAL(error) << "Invalid value being assigned to root";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"Invalid value being assigned to root."});
     }
 }
 
@@ -183,14 +201,17 @@ ydk::core::RootDataImpl::find(const std::string& path) const
 
     schema_path+=path;
 
-    const struct lys_node* found_snode =
-    ly_ctx_get_node(m_node->schema->module->ctx, nullptr, schema_path.c_str());
+    BOOST_LOG_TRIVIAL(trace) << "Looking for schema nodes path in root: '"<<schema_path<<"'";
+    const struct lys_node* found_snode = ly_ctx_get_node(m_node->schema->module->ctx, nullptr, schema_path.c_str());
 
     if(found_snode) {
-        struct ly_set* result_set = lyd_get_node2(m_node, found_snode);
-        if( result_set ){
-            if (result_set->number > 0){
-                for(size_t i=0; i < result_set->number; i++){
+        struct ly_set* result_set = lyd_find_instance(m_node, found_snode);
+        if( result_set )
+        {
+            if (result_set->number > 0)
+            {
+                for(size_t i=0; i < result_set->number; i++)
+                {
                     struct lyd_node* node_result = result_set->set.d[i];
                     results.push_back(get_dn_for_desc_node(node_result));
                 }

@@ -34,3 +34,12 @@ BOOST_AUTO_TEST_CASE(Create)
 	auto root_schema = provider.get_root_schema();
 	BOOST_REQUIRE(root_schema != nullptr);
 }
+
+
+BOOST_AUTO_TEST_CASE(CreateNoRepo)
+{
+	NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
+
+	auto root_schema = provider.get_root_schema();
+	BOOST_REQUIRE(root_schema != nullptr);
+}

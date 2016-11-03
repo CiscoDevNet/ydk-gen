@@ -22,7 +22,7 @@ core::DataNode* get_data_node_from_entity(Entity & entity, const ydk::core::Root
 {
 	EntityPath root_path = get_top_entity_path(entity);
 	auto root_data_node = root_schema.create(root_path.path);
-	BOOST_LOG_TRIVIAL(debug) <<"Root entity: "<<root_path.path;
+	BOOST_LOG_TRIVIAL(trace) <<"Root entity: "<<root_path.path;
 	populate_name_values(root_data_node, root_path);
 	walk_children(entity, root_data_node);
 	return root_data_node;
@@ -38,12 +38,12 @@ void get_entity_from_data_node(core::DataNode * node, Entity* entity)
 		std::string path = strip_keys(child_data_node->path());
 		if(data_node_is_leaf(child_data_node))
 		{
-			BOOST_LOG_TRIVIAL(error)  << "Creating leaf "<<path << " of value "<< child_data_node->get() <<" in parent " << node->path();
+			BOOST_LOG_TRIVIAL(trace)  << "Creating leaf "<<path << " of value "<< child_data_node->get() <<" in parent " << node->path();
 			entity->set_value(path, child_data_node->get());
 		}
 		else
 		{
-			BOOST_LOG_TRIVIAL(error)  << "Creating child "<<path <<" in parent " << node->path();
+			BOOST_LOG_TRIVIAL(trace)  << "Creating child "<<path <<" in parent " << node->path();
 			Entity * child_entity = entity->set_child(path);
 			if(child_entity == nullptr)
 			    BOOST_LOG_TRIVIAL(error)  << "Couln't find child entity "<<path<< " in parent "<<node->path() <<"!";
@@ -82,7 +82,7 @@ static void populate_name_values(core::DataNode* data_node, EntityPath & path)
 	for(const std::pair<std::string, std::string> & name_value : path.value_paths)
 	{
 		auto result = data_node->create(name_value.first, name_value.second);
-		BOOST_LOG_TRIVIAL(debug)  <<"Creating child "<<name_value.first<<" of "<<data_node->path()<<" with value: \""<<name_value.second<<"\" . Result: "<<(result?"success":"failure");
+		BOOST_LOG_TRIVIAL(trace)  <<"Creating child "<<name_value.first<<" of "<<data_node->path()<<" with value: \""<<name_value.second<<"\" . Result: "<<(result?"success":"failure");
 	}
 }
 

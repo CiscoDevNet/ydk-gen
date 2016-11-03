@@ -102,8 +102,9 @@ ydk::core::SchemaValueBitsType::validate(const std::string& value) const
 {
     DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
 
-    if(value.empty()){
-        BOOST_LOG_TRIVIAL(debug) << "Empty attribute error for SchemaValueBits";
+    if(value.empty())
+    {
+        BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueBits";
         diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
     } else {
         //tokenize and make sure all tokens are accounted for
@@ -114,7 +115,7 @@ ydk::core::SchemaValueBitsType::validate(const std::string& value) const
         }
         for(auto token : tokens) {
             if(name_bit_map.find(token) == name_bit_map.end()){
-                BOOST_LOG_TRIVIAL(debug) << "Invalid bits value " << value;
+                BOOST_LOG_TRIVIAL(error) << "Invalid bits value " << value;
                 diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
             }
         }
@@ -139,7 +140,7 @@ ydk::core::SchemaValueDec64Type::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
 
     if(value.empty()){
-        BOOST_LOG_TRIVIAL(debug) << "Empty attribute error for SchemaValueDec64Type";
+        BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueDec64Type";
         diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
     }
     return diag;
@@ -170,7 +171,7 @@ ydk::core::SchemaValueEnumerationType::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
 
     if(value.empty()){
-         BOOST_LOG_TRIVIAL(debug) << "Empty attribute error for SchemaValueEnumerationType";
+         BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueEnumerationType";
         diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
 
     } else {
@@ -181,7 +182,7 @@ ydk::core::SchemaValueEnumerationType::validate(const std::string& value) const
             }
         }
     }
-     BOOST_LOG_TRIVIAL(debug) << "Invalid enum value " << value;
+     BOOST_LOG_TRIVIAL(error) << "Invalid enum value " << value;
     diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
 
     return diag;
@@ -204,7 +205,7 @@ ydk::core::SchemaValueIdentityType::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
 
     if(value.empty()){
-         BOOST_LOG_TRIVIAL(debug) << "Empty attribute error for SchemaValueIdentityType";
+         BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueIdentityType";
         diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
         return diag;
     }
@@ -225,7 +226,7 @@ ydk::core::SchemaValueIdentityType::validate(const std::string& value) const
         }
     }
 
-    BOOST_LOG_TRIVIAL(debug) << "Invalid identity" << value;
+    BOOST_LOG_TRIVIAL(error) << "Invalid identity" << value;
     diag.errors.push_back(ydk::core::ValidationError::INVALID_IDENTITY);
     return diag;
 }
@@ -245,7 +246,7 @@ ydk::core::SchemaValueInstanceIdType::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
 
     if(value.empty()){
-        BOOST_LOG_TRIVIAL(debug) << "Empty attribute error for SchemaValueInstanceIdType";
+        BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueInstanceIdType";
         diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
     }
 
@@ -274,7 +275,7 @@ ydk::core::SchemaValueStringType::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
 
     if(value.empty()){
-        BOOST_LOG_TRIVIAL(debug) << "Empty attribute error for SchemaStringType";
+        BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaStringType";
         diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
     }
 
@@ -282,7 +283,7 @@ ydk::core::SchemaValueStringType::validate(const std::string& value) const
     auto size = value.length();
     if(length.intervals.empty()){
         if(size < length.default_range.min || size > length.default_range.max) {
-            BOOST_LOG_TRIVIAL(debug) << "Invalid length for string size is " << size;
+            BOOST_LOG_TRIVIAL(error) << "Invalid length for string size is " << size;
             diag.errors.push_back(ValidationError::INVALID_LENGTH);
 
         }
@@ -296,7 +297,7 @@ ydk::core::SchemaValueStringType::validate(const std::string& value) const
         }
 
         if(!constraint_satisfied){
-            BOOST_LOG_TRIVIAL(debug) << "Invalid length for string size is " << size;
+            BOOST_LOG_TRIVIAL(error) << "Invalid length for string size is " << size;
             diag.errors.push_back(ValidationError::INVALID_LENGTH);
         }
     }
@@ -307,7 +308,7 @@ ydk::core::SchemaValueStringType::validate(const std::string& value) const
     for(auto p : patterns) {
         std::regex r {p};
         if(!std::regex_match(p, r)){
-           BOOST_LOG_TRIVIAL(debug) << "String " << value << " failed pattern " << p << " match";
+           BOOST_LOG_TRIVIAL(error) << "String " << value << " failed pattern " << p << " match";
             diag.errors.push_back(ValidationError::INVALID_PATTERN);
         }
     }
@@ -340,7 +341,7 @@ ydk::core::SchemaValueUnionType::validate(const std::string& value) const
     }
 
     DiagnosticNode<std::string, ydk::core::ValidationError> diag{};
-    BOOST_LOG_TRIVIAL(debug) << "Union type validation failed for value " << value;
+    BOOST_LOG_TRIVIAL(error) << "Union type validation failed for value " << value;
     diag.errors.push_back(ValidationError::INVALATTR);
 
     return diag;
@@ -367,10 +368,10 @@ ydk::core::SchemaValueEmptyType::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
 
     if(value.empty()){
-        BOOST_LOG_TRIVIAL(debug) << "Value is empty for SchemaValueEmptyType" ;
+        BOOST_LOG_TRIVIAL(error) << "Value is empty for SchemaValueEmptyType" ;
         diag.errors.push_back(ydk::core::ValidationError::INVALID_EMPTY_VAL);
     } else if(value != leaf_name){
-        BOOST_LOG_TRIVIAL(debug) << "Mismatch between leaf name " << leaf_name << " and value " << value;
+        BOOST_LOG_TRIVIAL(error) << "Mismatch between leaf name " << leaf_name << " and value " << value;
         diag.errors.push_back(ydk::core::ValidationError::INVALID_EMPTY_VAL);
     }
     return diag;
@@ -392,12 +393,12 @@ ydk::core::SchemaValueBoolType::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
 
     if(value.empty()){
-        BOOST_LOG_TRIVIAL(debug) << "Value is empty for SchemaValueBoolType" ;
+        BOOST_LOG_TRIVIAL(error) << "Value is empty for SchemaValueBoolType" ;
         diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
     } else {
 
         if(value != "true" && value != "false") {
-            BOOST_LOG_TRIVIAL(debug) << "Invalid boolean value " << value;
+            BOOST_LOG_TRIVIAL(error) << "Invalid boolean value " << value;
             diag.errors.push_back(ValidationError::INVALID_BOOL_VAL);
         }
     }

@@ -99,75 +99,121 @@ ydk::core::DataNodeImpl::path() const
 ydk::core::DataNode*
 ydk::core::DataNodeImpl::create(const std::string& path, const std::string& value)
 {
-    if(path.empty()){
-        BOOST_LOG_TRIVIAL(debug) << "Path is empty.";
-        throw YDKInvalidArgumentException{"Path is empty."};
+    if(path.empty())
+    {
+        BOOST_LOG_TRIVIAL(error) << "Path is empty.";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"Path is empty."});
     }
 
     std::vector<std::string> segments = segmentalize(path);
 
     DataNodeImpl* dn = this;
 
+    struct lyd_node* root_node = m_node;
+    while(root_node->parent)
+    {
+    	root_node = root_node->parent;
+    }
+    std::ostringstream os;
+    os << root_node->schema->module->name << ":" << root_node->schema->name;
+    std::string top_container_path = os.str();
+
     size_t start_index = 0;
     auto iter = segments.begin();
 
-    while (iter != segments.end()) {
+    BOOST_LOG_TRIVIAL(trace) << "Current path: "<<this->schema()->path();
+    BOOST_LOG_TRIVIAL(trace) << "Top container path: "<<top_container_path;
+
+    while (iter != segments.end())
+    {
+    	if((*iter) == top_container_path || (*iter) == m_node->schema->name)
+    	{
+    		BOOST_LOG_TRIVIAL(trace) << "Skipping segment same as "<<top_container_path;
+    		++iter;
+    		continue;
+    	}
         auto r = dn->find(*iter);
-        if(r.empty()){
+        if(r.empty())
+        {
             break;
-        } else if(r.size() != 1){
-            BOOST_LOG_TRIVIAL(debug) << "Path " << path << " is ambiguous";
-            throw YDKPathException{YDKPathException::Error::PATH_AMBIGUOUS};
-        } else {
+        }
+        else if(r.size() != 1)
+        {
+            BOOST_LOG_TRIVIAL(error) << "Path " << path << " is ambiguous";
+            BOOST_THROW_EXCEPTION(YDKPathException{YDKPathException::Error::PATH_AMBIGUOUS});
+        }
+        else
+        {
             dn = dynamic_cast<DataNodeImpl*>(r[0]);
-            if (dn == nullptr) {
-                BOOST_LOG_TRIVIAL(debug) << "Invalid data node";
-                throw YDKCoreException{"Invalid data node"};
-	    }
-	    ++iter;
+            if (dn == nullptr)
+            {
+                BOOST_LOG_TRIVIAL(error) << "Invalid data node";
+                BOOST_THROW_EXCEPTION(YDKCoreException{"Invalid data node"});
+            }
+            ++iter;
             start_index++;
         }
     }
 
-    if (segments.empty()) {
-        BOOST_LOG_TRIVIAL(debug) << "path " << path << " points to existing node";
-	throw YDKInvalidArgumentException{"path points to existing node."};
+    if (segments.empty())
+    {
+        BOOST_LOG_TRIVIAL(error) << "path " << path << " points to existing node";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"path points to existing node."});
     }
 
     std::vector<struct lyd_node*> nodes_created;
     struct lyd_node* first_node_created = nullptr;
     struct lyd_node* cn = dn->m_node;
 
-    for(size_t i=start_index; i< segments.size(); i++){
-        if (i != segments.size() - 1) {
-            cn = lyd_new_path(cn, nullptr, segments[i].c_str(), nullptr, 0);
-	} else {
-            cn = lyd_new_path(cn, nullptr, segments[i].c_str(), value.c_str(), 0);
-	}
+    for(size_t i=start_index; i< segments.size(); i++)
+    {
+    	if(segments[i] == top_container_path || segments[i] == m_node->schema->name)
+		{
+    		BOOST_LOG_TRIVIAL(trace) << "Skipping segment same as "<<top_container_path;
+			continue;
+		}
+        if (i != segments.size() - 1)
+        {
+        	BOOST_LOG_TRIVIAL(trace) << "Creating new data path '" << segments[i] <<"' in '"<<cn->schema->name<<"'";
+            cn = lyd_new_path(cn, nullptr, segments[i].c_str(), nullptr, LYD_ANYDATA_SXML, 0);
+		}
+        else
+        {
+			BOOST_LOG_TRIVIAL(trace) << "Creating new data path '" << segments[i] <<"', with value '"<<value<<"' in '"<<cn->schema->name<<"'";
+			cn = lyd_new_path(cn, nullptr, segments[i].c_str(), (void*)value.c_str(), LYD_ANYDATA_SXML, 0);
+		}
 
-	if (cn == nullptr) {
-            if(first_node_created) {
-		lyd_unlink(first_node_created);
-		lyd_free(first_node_created);
+		if (cn == nullptr)
+		{
+            if(first_node_created)
+            {
+				lyd_unlink(first_node_created);
+				lyd_free(first_node_created);
             }
-            throw YDKInvalidArgumentException{"invalid path"};
-        } else if (!first_node_created) {
+            BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"invalid path"});
+        }
+		else if (!first_node_created)
+        {
             first_node_created = cn;
         }
     }
 
-    if (first_node_created) {
+    if (first_node_created)
+    {
         auto p = new DataNodeImpl{dn, first_node_created};
         dn->child_map.insert(std::make_pair(first_node_created, p));
 
         DataNodeImpl* rdn = p;
 
-        while(!rdn->children().empty() && rdn->m_node != cn){
+        while(!rdn->children().empty() && rdn->m_node != cn)
+        {
             rdn = dynamic_cast<DataNodeImpl*>(rdn->children()[0]);
         }
 
         return rdn;
-    } else {
+    }
+    else
+    {
         return dn;
     }
 }
@@ -178,19 +224,25 @@ ydk::core::DataNodeImpl::set(const std::string& value)
     //set depends on the kind of the node
     struct lys_node* s_node = m_node->schema;
 
-    if (s_node->nodetype == LYS_LEAF || s_node->nodetype == LYS_LEAFLIST) {
+    if (s_node->nodetype == LYS_LEAF || s_node->nodetype == LYS_LEAFLIST)
+    {
         struct lyd_node_leaf_list* leaf= reinterpret_cast<struct lyd_node_leaf_list *>(m_node);
-        if(lyd_change_leaf(leaf, value.c_str())) {
-            BOOST_LOG_TRIVIAL(debug) << "Invalid value " << value;
-            throw YDKInvalidArgumentException{"Invalid value"};
+        BOOST_LOG_TRIVIAL(trace) << "Setting leaf value '" << value <<"'";
+        if(lyd_change_leaf(leaf, value.c_str()))
+        {
+            BOOST_LOG_TRIVIAL(error) << "Invalid value " << value;
+            BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"Invalid value"});
         }
-    } else if (s_node->nodetype == LYS_ANYXML) {
-        struct lyd_node_anyxml* anyxml = reinterpret_cast<struct lyd_node_anyxml *>(m_node);
-        anyxml->xml_struct = 0;
+    }
+    else if (s_node->nodetype == LYS_ANYXML)
+    {
+        struct lyd_node_anydata* anyxml = reinterpret_cast<struct lyd_node_anydata *>(m_node);
         anyxml->value.str = value.c_str();
-    }else {
-        BOOST_LOG_TRIVIAL(debug) << "Trying to set value " << value << " for a non leaf non anyxml node.";
-        throw YDKInvalidArgumentException{"Cannot set value for this Data Node"};
+    }
+    else
+    {
+        BOOST_LOG_TRIVIAL(error) << "Trying to set value " << value << " for a non leaf non anyxml node.";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"Cannot set value for this Data Node"});
     }
 }
 
@@ -203,10 +255,8 @@ ydk::core::DataNodeImpl::get() const
         struct lyd_node_leaf_list* leaf= reinterpret_cast<struct lyd_node_leaf_list *>(m_node);
         return leaf->value_str;
     } else if (s_node->nodetype == LYS_ANYXML ){
-        struct lyd_node_anyxml* anyxml = reinterpret_cast<struct lyd_node_anyxml *>(m_node);
-        if(!anyxml->xml_struct){
-            return anyxml->value.str;
-        }
+        struct lyd_node_anydata* anyxml = reinterpret_cast<struct lyd_node_anydata *>(m_node);
+        return anyxml->value.str;
     }
     return ret;
 }
@@ -225,14 +275,20 @@ ydk::core::DataNodeImpl::find(const std::string& path) const
     if(s.keyword == "rpc"){
         spath="input/" + spath;
     }
+    BOOST_LOG_TRIVIAL(trace) << "Getting child schema with path '" << spath <<"' in "<< m_node->schema->name;
     const struct lys_node* found_snode =
         ly_ctx_get_node(m_node->schema->module->ctx, m_node->schema, spath.c_str());
 
-    if(found_snode) {
-        struct ly_set* result_set = lyd_get_node(m_node, path.c_str());
-        if( result_set ){
-            if (result_set->number > 0){
-                for(size_t i=0; i < result_set->number; i++){
+    if(found_snode)
+    {
+    	BOOST_LOG_TRIVIAL(trace) << "Getting data nodes with path '" << path <<"'";
+        struct ly_set* result_set = lyd_find_xpath(m_node, path.c_str());
+        if( result_set )
+        {
+            if (result_set->number > 0)
+            {
+                for(size_t i=0; i < result_set->number; i++)
+                {
                     struct lyd_node* node_result = result_set->set.d[i];
                     results.push_back(get_dn_for_desc_node(node_result));
                 }
@@ -259,7 +315,8 @@ ydk::core::DataNodeImpl::children() const
     struct lyd_node *iter;
     if(m_node && m_node->child && !(m_node->schema->nodetype == LYS_LEAF ||
                           m_node->schema->nodetype == LYS_LEAFLIST ||
-                          m_node->schema->nodetype == LYS_ANYXML)){
+                          m_node->schema->nodetype == LYS_ANYXML))
+    {
         LY_TREE_FOR(m_node->child, iter){
             auto p = child_map.find(iter);
             if (p != child_map.end()) {
@@ -302,9 +359,10 @@ ydk::core::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
 	std::vector<struct lyd_node*> nodes{};
 	struct lyd_node* node = desc_node;
 
-	while (node != nullptr && node != m_node) {
+	while (node != nullptr && node != m_node)
+	{
 		nodes.push_back(node);
-		node= node->parent;
+		node = node->parent;
 	}
 
 	//reverse
@@ -312,34 +370,43 @@ ydk::core::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
 
 	const DataNodeImpl* parent = this;
 
-        if(nodes[0] == m_node){
-            nodes.erase(nodes.begin());
-        }
+	if(nodes[0] == m_node)
+	{
+		nodes.erase(nodes.begin());
+	}
 
-	for( auto p : nodes) {
-            auto res = parent->child_map.find(p);
-
-	   if(res != parent->child_map.end()) {
+	for( auto p : nodes)
+	{
+       auto res = parent->child_map.find(p);
+	   if(res != parent->child_map.end())
+	   {
 		   //DataNode is already present
 		   dn = res->second;
+	   }
+	   else
+	   {
+		   if(!m_node->parent)
+		   {
+			   //special case the root is the first node
+			   parent = child_map.begin()->second;
+			   res = parent->child_map.find(p);
 
-	   } else {
-               if(!m_node->parent) {
-                   //special case the root is the first node
-                   parent = child_map.begin()->second;
-                   res = parent->child_map.find(p);
-
-                   if(res != parent->child_map.end()){
-                       dn = res->second;
-                   } else {
-                       BOOST_LOG_TRIVIAL(error) << "Cannot find child DataNode";
-                       throw YDKCoreException{"Cannot find child!"};
-                   }
-               } else {
-                   BOOST_LOG_TRIVIAL(error) << "Parent is nullptr";
-                   throw YDKCoreException{"Parent is nullptr"};
-               }
-           }
+			   if(res != parent->child_map.end())
+			   {
+				   dn = res->second;
+			   }
+			   else
+			   {
+				   BOOST_LOG_TRIVIAL(error) << "Cannot find child DataNode";
+				   BOOST_THROW_EXCEPTION(YDKCoreException{"Cannot find child!"});
+			   }
+		   }
+		   else
+		   {
+			   BOOST_LOG_TRIVIAL(error) << "Parent is nullptr";
+			   BOOST_THROW_EXCEPTION(YDKCoreException{"Parent is nullptr"});
+		   }
+       }
 	   parent = dn;
 	}
 
@@ -347,22 +414,22 @@ ydk::core::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
 }
 
 
-void
-ydk::core::DataNodeImpl::add_annotation(const ydk::core::Annotation& an)
+void ydk::core::DataNodeImpl::add_annotation(const ydk::core::Annotation& an)
 {
-
-    if(!m_node) {
+    if(!m_node)
+    {
         BOOST_LOG_TRIVIAL(error) << "Cannot annotate uninitialized node";
-        throw YDKIllegalStateException{"Cannot annotate node"};
+        BOOST_THROW_EXCEPTION(YDKIllegalStateException{"Cannot annotate node"});
     }
 
     std::string name { an.m_ns + ":" + an.m_name };
 
     struct lyd_attr* attr = lyd_insert_attr(m_node, nullptr, name.c_str(), an.m_val.c_str());
 
-    if(attr == nullptr) {
-        BOOST_LOG_TRIVIAL(debug) << "Cannot find module " << name.c_str();
-        throw YDKInvalidArgumentException("Cannot find module with given namespace.");
+    if(attr == nullptr)
+    {
+        BOOST_LOG_TRIVIAL(error) << "Cannot find module " << name.c_str();
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException("Cannot find module with given namespace."));
     }
 }
 

@@ -33,7 +33,10 @@ public:
                                std::string username,
                                std::string password,
                                int port);
-
+        NetconfServiceProvider(std::string address,
+                               std::string username,
+                               std::string password,
+                               int port);
         ~NetconfServiceProvider();
 
         virtual core::RootSchemaNode* get_root_schema() const;
@@ -46,8 +49,10 @@ public:
 private:
         core::DataNode* handle_edit(core::Rpc* rpc, core::Annotation ann) const;
         core::DataNode* handle_read(core::Rpc* rpc) const;
+        void initialize();
 
 private:
+        std::unique_ptr<core::Repository> m_repo_ptr;
         core::Repository* m_repo;
         std::unique_ptr<NetconfClient> client;
         std::unique_ptr<core::ModelProvider> model_provider;

@@ -15,7 +15,7 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 #
-# Script for running ydk CI on docker via travis-ci.org
+# Script for running ydk CI on travis-ci.org
 #
 # ------------------------------------------------------------------
 
@@ -380,16 +380,15 @@ function submit_coverage {
 }
 
 function py_tests {
-    for GEN_ENV in "python2" "python3"; do
-        for TEST_ENV in "python2" "python3"; do
-            init_env $GEN_ENV $TEST_ENV
-            py_sanity_ydktest
-            py_sanity_deviation
-            py_sanity_augmentation
-            teardown_env
-            submit_coverage
-        done
-    done
+    GEN_ENV="python3"
+    TEST_ENV="python3"
+
+    init_env $GEN_ENV $TEST_ENV
+    py_sanity_ydktest
+    py_sanity_deviation
+    py_sanity_augmentation
+    teardown_env
+    submit_coverage
 }
 
 function cpp_tests {

@@ -23,6 +23,7 @@
 
 
 #include <iostream>
+#include <sstream>
 #include <stdio.h>
 
 #include <libnetconf.h>
@@ -63,6 +64,13 @@ int NetconfClient::connect()
 	perform_session_check("Could not connect to " + hostname);
 	init_capabilities();
 	return EXIT_SUCCESS;
+}
+
+std::string NetconfClient::get_hostname_port()
+{
+	ostringstream os;
+	os<<hostname<<":"<<port;
+	return os.str();
 }
 
 void NetconfClient::init_capabilities()
@@ -107,13 +115,16 @@ nc_rpc* NetconfClient::build_rpc_request(const string & payload)
 {
 	nc_rpc* rpc = nc_rpc_build(payload.c_str(), session);
 
-	if (rpc == NULL) {
-              BOOST_LOG_TRIVIAL(debug) << "Could not build rpc payload:-" << payload ;
-	      throw YDKClientException{"Could not build payload"};
-	} else if(NC_RPC_UNKNOWN==nc_rpc_get_type(rpc)) {
+	if (rpc == NULL)
+	{
+          BOOST_LOG_TRIVIAL(error) << "Could not build rpc payload:-" << payload ;
+	      BOOST_THROW_EXCEPTION(YDKClientException{"Could not build payload"});
+	}
+	else if(NC_RPC_UNKNOWN==nc_rpc_get_type(rpc))
+	{
 		nc_rpc_free(rpc);
-                BOOST_LOG_TRIVIAL(debug)<< "Rpc type is unknown";
-		throw YDKClientException{"Could not build payload"};
+        BOOST_LOG_TRIVIAL(error)<< "Rpc type is unknown";
+		BOOST_THROW_EXCEPTION(YDKClientException{"Could not build payload"});
 	}
 	return rpc;
 }
@@ -128,8 +139,8 @@ string NetconfClient::process_rpc_reply(int reply_type, const nc_reply* reply)
 		default:
 		case NC_MSG_NONE:
 		case NC_MSG_UNKNOWN:
-                        BOOST_LOG_TRIVIAL(debug) << "RPC error occurred";
-			throw YDKClientException{"RPC error occured"};
+            BOOST_LOG_TRIVIAL(error) << "RPC error occurred";
+			BOOST_THROW_EXCEPTION(YDKClientException{"RPC error occured"});
 	}
 }
 
@@ -180,7 +191,7 @@ void NetconfClient::perform_session_check(string message)
 	if (session == NULL)
 	{
         BOOST_LOG_TRIVIAL(error) << message;
-		throw YDKClientException{message};
+		BOOST_THROW_EXCEPTION(YDKClientException{message});
 	}
 }
 

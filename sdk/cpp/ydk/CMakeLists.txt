@@ -226,13 +226,6 @@ find_package(Boost REQUIRED)
 find_package(Boost COMPONENTS log_setup log thread date_time system filesystem REQUIRED)
 find_package(LibSSH REQUIRED)
 
-message("xml2 location " ${xml2_location})
-message("curl location " ${curl_location})
-message("ssh threads location " ${ssh_threads_location})
-message("xslt location " ${xslt_location})
-message("BOOST location " ${Boost_INCLUDE_DIRS})
-message("LibSSH " ${LIBSSH_INCLUDE_DIRS})
-
 # Add LibNetconf
 set(libnetconf_include_location include/libnetconf)
 set(libnetconf_headers_location ${CMAKE_CURRENT_BINARY_DIR}/project_libnetconf/headers)
@@ -250,7 +243,6 @@ install(FILES ${libnetconf_headers} DESTINATION ${libnetconf_include_location})
 
 ExternalProject_Get_Property(project_libnetconf install_dir)
 set(libnetconf_archive ${install_dir}/.libs/libnetconf.a)
-message("INSTALLING NETCONF TO: " ${install_dir})
 
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/project_libnetconf/objs
@@ -278,7 +270,7 @@ set(libyang_include_location include/libyang)
 set(libyang_headers_location ${CMAKE_CURRENT_BINARY_DIR}/project_libyang/headers)
 ExternalProject_Add(project_libyang
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/project_libyang"
-    URL "https://github.com/manradhaCisco/libyang/archive/ydk_core.zip"
+    URL "https://github.com/manradhaCisco/libyang/archive/ydk_core_devel.zip"
     INSTALL_DIR "${libyang_location}"
     INSTALL_COMMAND mkdir -p ${libyang_headers_location}/libyang && cp ${libyang_headers} ${libyang_headers_location}/libyang
 )

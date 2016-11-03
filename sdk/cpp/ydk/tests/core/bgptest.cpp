@@ -415,7 +415,7 @@ BOOST_AUTO_TEST_CASE( decode_remove_as )
     BOOST_REQUIRE(xml == new_xml);
 
 }
-/*
+
 BOOST_AUTO_TEST_CASE( bits_order )
 {
     std::string searchdir{TEST_HOME};
@@ -435,14 +435,13 @@ BOOST_AUTO_TEST_CASE( bits_order )
 
     BOOST_REQUIRE( data_root != nullptr );
 
-    auto bits = runner->create("ytypes/built-in-t/bits-value", "auto-sense-speed disable-nagle"); //TODO: this fails
-///    auto bits = runner->create("ytypes/built-in-t/bits-value", "disable-nagle auto-sense-speed"); //TODO: this works
+    auto bits = runner->create("ytypes/built-in-t/bits-value", "auto-sense-speed disable-nagle");
 
     BOOST_REQUIRE( bits != nullptr );
 
     auto new_xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
 
-    auto expected = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><ytypes><built-in-t><bits-value>auto-sense-speed disable-nagle</bits-value></built-in-t></ytypes></runner>\n";
+    auto expected = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><ytypes><built-in-t><bits-value>disable-nagle auto-sense-speed</bits-value></built-in-t></ytypes></runner>";
     BOOST_REQUIRE( new_xml == expected );
 }
 
@@ -473,7 +472,6 @@ BOOST_AUTO_TEST_CASE( submodule )
 
     auto new_xml = s.encode(subtest, ydk::core::CodecService::Format::XML, false);
 
-    //TODO: this fails
-    auto expected = "<sub-test xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one-aug><name>test</name><number>3</number></one-aug></sub-test>\n";
+    auto expected = "<sub-test xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one-aug><name>test</name></one-aug><one-aug><number>3</number></one-aug></sub-test>";
     BOOST_REQUIRE( new_xml == expected );
-}*/
+}

@@ -26,22 +26,28 @@
 using namespace ydk;
 using namespace std;
 
-#define MODELS_DIR "/Users/abhirame/Cisco/003/ydk-gen/sdk/cpp/ydk/tests/models"
-
 int main(int argc, char* argv[])
 {
-	boost::log::core::get()->set_filter(
-		        boost::log::trivial::severity > boost::log::trivial::trace
-		    );
-
 	vector<string> args = parse_args(argc, argv);
 	if(args.empty()) return 1;
 	string host, username, password;
 	int port;
 	username = args[0]; password = args[1]; host = args[2]; port = stoi(args[3]);
+	bool verbose=(args[4]=="--verbose");
+	if(verbose)
+	{
+		boost::log::core::get()->set_filter(
+			        boost::log::trivial::severity >= boost::log::trivial::debug
+			    );
+	}
+	else
+	{
+		boost::log::core::get()->set_filter(
+					        boost::log::trivial::severity >= boost::log::trivial::error
+					    );
+	}
 
-	ydk::core::Repository repo{MODELS_DIR};
-	NetconfServiceProvider provider{&repo, host, username, password, port};
+	NetconfServiceProvider provider{host, username, password, port};
 	CrudService crud{};
 
 	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();

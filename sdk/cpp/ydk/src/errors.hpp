@@ -28,6 +28,8 @@
 #ifndef _EXCEPTION_HPP_
 #define _EXCEPTION_HPP_
 
+#include <boost/exception/all.hpp>
+#include <exception>
 #include <string>
 
 
@@ -37,7 +39,7 @@ namespace ydk {
 ///
 /// The subclasses give a specialized view of the error that has occurred.
 ///
-struct YDKException
+struct YDKException : public std::exception, public boost::exception
 {
 	YDKException(const std::string& msg) : err_msg{msg}
 	{

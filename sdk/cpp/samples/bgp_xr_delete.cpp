@@ -17,13 +17,17 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
 
+#include "ydk/types.hpp"
 #include "ydk/netconf_provider.hpp"
 #include "ydk/crud_service.hpp"
-#include "ydk_ydktest/openconfig_bgp.hpp"
+
+#include "ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_cfg.hpp"
+#include "ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_datatypes.hpp"
 
 #include "args_parser.h"
 
 using namespace ydk;
+using namespace ydk::Cisco_IOS_XR_ipv4_bgp_cfg;
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -53,7 +57,7 @@ int main(int argc, char* argv[])
 	NetconfServiceProvider provider{host, username, password, port};
 	CrudService crud{};
 
-	auto bgp = make_unique<openconfig_bgp::Bgp>();
+	auto bgp = make_unique<Bgp>();
 	bool reply = crud.delete_(provider, *bgp);
 	if(reply) cout << "Delete operation success" << endl; else cout << "Operation failed" << endl;
 }

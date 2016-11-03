@@ -182,7 +182,7 @@ void ValueList::append(Bits val)
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);	
+	values.push_back(value);
 }
 
 void ValueList::append(std::string val)
@@ -208,7 +208,7 @@ Value & ValueList::operator [] (size_t key)
 {
 	if(key >= values.size())
 	{
-		throw YDKInvalidArgumentException{"List index out of range"};
+		BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"List index out of range"});
 	}
 	return values[key];
 }

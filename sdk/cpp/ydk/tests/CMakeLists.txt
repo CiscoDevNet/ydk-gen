@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 cmake_policy(SET CMP0048 NEW)
 
-set(core_tests bgptest)
+set(core_tests bgptest;core_test)
 set(entity_tests test_entity;test_value;test_value_list)
 
 

@@ -28,8 +28,6 @@
 using namespace ydk;
 using namespace std;
 
-#define MODELS_DIR "/Users/abhirame/Cisco/003/ydk-gen/sdk/cpp/ydk/tests/models"
-
 void config_bgp(openconfig_bgp::Bgp* bgp)
 {
 	// Set the Global AS
@@ -89,8 +87,7 @@ int main(int argc, char* argv[])
 	int port;
 	username = args[0]; password = args[1]; host = args[2]; port = stoi(args[3]);
 
-	ydk::core::Repository repo{MODELS_DIR};
-	NetconfServiceProvider provider{&repo, host, username, password, port};
+	NetconfServiceProvider provider{host, username, password, port};
 	CrudService crud{};
 
 	auto bgp = make_unique<openconfig_bgp::Bgp>();

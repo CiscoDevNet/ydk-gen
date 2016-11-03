@@ -33,7 +33,7 @@ public:
         ~NetconfModelProvider();
 
         std::string get_model(const std::string& name, const std::string& version, Format format);
-
+        std::string get_hostname_port();
 
 private:
         NetconfClient & client;

@@ -108,15 +108,17 @@ ydk::core::SchemaNodeImpl::path() const
 std::vector<ydk::core::SchemaNode*>
 ydk::core::SchemaNodeImpl::find(const std::string& path) const
 {
-    if(path.empty()) {
-        BOOST_LOG_TRIVIAL(debug) << "Path is empty";
-	throw YDKInvalidArgumentException{"path is empty"};
+    if(path.empty())
+    {
+        BOOST_LOG_TRIVIAL(error) << "Path is empty";
+        BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"path is empty"});
     }
 
     //has to be a relative path
-    if(path.at(0) == '/') {
-        BOOST_LOG_TRIVIAL(debug) << "path must be a relative path";
-	throw YDKInvalidArgumentException{"path must be a relative path"};
+    if(path.at(0) == '/')
+    {
+        BOOST_LOG_TRIVIAL(error) << "path must be a relative path";
+	BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"path must be a relative path"});
     }
 
     std::vector<SchemaNode*> ret;
@@ -206,6 +208,10 @@ ydk::core::SchemaNodeImpl::statement() const
     case LYS_ANYXML:
         s.keyword = "anyxml";
         break;
+    case LYS_ACTION:
+    	s.keyword = "action";
+    	break;
+    case LYS_ANYDATA:
     case LYS_UNKNOWN:
         break;
     }
@@ -227,8 +233,8 @@ ydk::core::SchemaNodeImpl::keys() const
     if(stmt.keyword == "list") {
         //sanity check
         if(m_node->nodetype != LYS_LIST) {
-            BOOST_LOG_TRIVIAL(debug) << "Mismatch in schema";
-            throw YDKIllegalStateException{"Mismatch in schema"};
+            BOOST_LOG_TRIVIAL(error) << "Mismatch in schema";
+            BOOST_THROW_EXCEPTION(YDKIllegalStateException{"Mismatch in schema"});
         }
         struct lys_node_list *slist = (struct lys_node_list *)m_node;
         for(uint8_t i=0; i < slist->keys_size; ++i) {

@@ -186,8 +186,8 @@ def create_shared_libraries(output_directory, sudo):
     os.chdir(cmake_build_dir)
     sudo_cmd = 'sudo' if sudo else ''
     try:
-        subprocess.check_call(['%s' % sudo_cmd, 'cmake', '..'])
-        subprocess.check_call(['%s' % sudo_cmd, 'make', '-j5'])
+        subprocess.check_call(['cmake', '..'])
+        subprocess.check_call(['make', '-j5'])
         subprocess.check_call(['%s' % sudo_cmd, 'make', 'install'])
     except subprocess.CalledProcessError as e:
         print('\nERROR: Failed to create shared library!\n')

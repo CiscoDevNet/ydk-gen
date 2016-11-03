@@ -1,8 +1,4 @@
-//
-// @file ydk_yang.hpp
-// @brief The ydk model.
-//
-// YANG Development Kit
+/// YANG Development Kit
 // Copyright 2016 Cisco Systems. All rights reserved
 //
 ////////////////////////////////////////////////////////////////
@@ -25,18 +21,21 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#ifndef YDK_YANG_HPP
-#define YDK_YANG_HPP
+#define BOOST_TEST_MODULE CoreTest
+#include <boost/test/unit_test.hpp>
+#include <iostream>
+#include "../../src/core.hpp"
+#include "../../src/core/core_private.hpp"
+#include "../config.hpp"
 
-namespace ydk {
-    namespace core {
-       extern const char* YDK_MODULE_NAME;
-       extern const char* YDK_MODULE_REVISION;
-       extern const char* YDK_MODULE;
-    }
+BOOST_AUTO_TEST_CASE( test_segmentalize  )
+{
+	std::string test_string = "Cisco-IOS-XR-clns-isis-cfg:isis/instances/instance/interfaces[interface-name='GigabitEthernet0/0/0/0']";
+	std::vector<std::string> segments = ydk::core::segmentalize(test_string);
+	std::vector<std::string> expected {"Cisco-IOS-XR-clns-isis-cfg:isis", "instances", "instance", "interfaces[interface-name='GigabitEthernet0/0/0/0']"};
 
-    extern const char* IETF_NETCONF_MODULE_NAME;
-    extern const char* IETF_NETCONF_MODULE_REVISION;
-    extern const char* IETF_NETCONF_MODULE;
+	for (size_t index = 0;index<segments.size();index++)
+	{
+		BOOST_REQUIRE(segments[index] == expected[index]);
+	}
 }
-#endif //YDK_YANG_H
