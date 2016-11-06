@@ -20,19 +20,19 @@ import unittest
 
 from ydk.services import CRUDService, ExecutorService
 from ydk.services.meta_service import MetaService
-from ydk.models import ydktest_sanity as ysanity
-from ydk.models import ydktest_sanity_types as ysanity_types
-from ydk.models import ydktest_types as y_types
+from ydk.models.ydktest import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity_types as ysanity_types
+from ydk.models.ydktest import ydktest_types as y_types
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from compare import is_equal
 from ydk.errors import YPYServiceError
 try:
-    from ydk.models import ietf_netconf
+    from ydk.models.ydktest import ietf_netconf
 except:
     pass
 
-from ydk.models.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
+from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
 
 class SanityCodec(unittest.TestCase):
     @classmethod

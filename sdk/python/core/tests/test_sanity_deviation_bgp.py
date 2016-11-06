@@ -23,8 +23,8 @@ from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from compare import is_equal
 from ydk.errors import YPYError, YPYModelError
-from ydk.models import bgp, bgp_types
-from ydk.models.routing_policy import DefaultPolicyTypeEnum, RoutingPolicy
+from ydk.models.deviation import bgp, bgp_types
+from ydk.models.deviation.routing_policy import DefaultPolicyTypeEnum, RoutingPolicy
 
 
 class SanityTest(unittest.TestCase):

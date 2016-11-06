@@ -25,7 +25,7 @@ set(CMAKE_CXX_FLAGS_DEBUG   "-g -O0")
 
 # Find dependent libraries
 find_library(ydk_location ydk)
-find_library(ydk_ydktest_location ydk_ydktest)
+find_library(ydk_openconfig_location ydk_openconfig)
 find_library(ydk_cisco_ios_xr_location ydk_cisco_ios_xr)
 find_library(xml2_location xml2)
 find_library(curl_location curl)
@@ -49,7 +49,7 @@ foreach(sample IN LISTS samples)
 
     target_link_libraries(${sample}
             ${ydk_location} 
-            ${ydk_ydktest_location} 
+            ${ydk_openconfig_location}
             ${ydk_cisco_ios_xr_location} 
             ${xml2_location}
             ${curl_location}

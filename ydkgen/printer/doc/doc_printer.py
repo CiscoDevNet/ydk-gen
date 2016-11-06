@@ -29,10 +29,7 @@ from ydkgen.printer.meta_data_util import (get_bits_class_docstring,
                                            get_class_docstring,
                                            get_class_tag,
                                            get_enum_class_docstring,
-                                           get_langage_spec_tags,
-                                           get_primitive_type_tag,
-                                           get_py_module_tag,
-                                           get_py_currentmodule_tag,
+                                           get_langage_spec_tags
                                            )
 
 
@@ -63,9 +60,12 @@ class DocPrinter(object):
         self.lines = []
         if bundle_name == '':
             title = 'YDK Model API'
+            description = '\nThis is the YDK model API\n'
         else:
-            title = 'YDK {0} Bundle API'.format(bundle_name)
+            title = '{0} bundle API'.format(bundle_name)
+            description = '\nModel API documentation for the {0} bundle\n'.format(bundle_name)
         self._print_title(title)
+        self._append(description)
         self._print_toctree(packages, is_package=True)
 
         self.ctx.writelns(self.lines)
@@ -87,6 +87,7 @@ class DocPrinter(object):
         self.ctx.lvl_dec()
 
     def _print_class_rst(self, clazz):
+        self._print_namespace(clazz)
         self._print_header(clazz)
         # Body
         self.ctx.lvl_inc()
@@ -96,7 +97,7 @@ class DocPrinter(object):
             self._append('This class is a :ref:`presence class<presence-class>`\n')
         self._print_docstring(clazz, get_class_docstring(
             clazz, self.lang, identity_subclasses=self.identity_subclasses))
-        if not clazz.is_identity() and not clazz.is_grouping():
+        if not clazz.is_identity() and not clazz.is_grouping() and self.lang == 'py':
             self._print_class_config_method()
         self.ctx.lvl_dec()
 
@@ -155,6 +156,10 @@ class DocPrinter(object):
 
         self._append('')
         self.ctx.lvl_dec()
+
+    def _print_namespace(self, clazz):
+        if self.lang == 'cpp':
+            self._append('\n.. cpp:namespace:: ydk::{0}\n'.format(clazz.get_package().name))
 
     def _print_bases(self, clazz):
         bases = get_class_bases(clazz, self.lang)

@@ -12,11 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
-sys.path.insert(0, os.path.abspath('_ext'))
-import shlex
-import sphinx_rtd_theme
+
 
 if 'YDKGEN_HOME' not in os.environ:
     ydk_root = os.getcwd()
@@ -36,7 +33,6 @@ else:
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-'edit_on_github'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -298,5 +294,3 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 # edit on GitHub
-edit_on_github_project = 'manradhaCisco/ydk-gen'
-edit_on_github_branch = 'ydk_core/sdk/cpp/ydk/docsgen'

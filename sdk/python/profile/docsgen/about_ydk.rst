@@ -1,1 +1,0 @@
-../../core/docsgen/about_ydk.rst

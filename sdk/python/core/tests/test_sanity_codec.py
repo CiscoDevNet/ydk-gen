@@ -21,8 +21,8 @@ from __future__ import absolute_import
 import unittest
 from compare import is_equal
 
-from ydk.models import ydktest_sanity as ysanity
-from ydk.models import oc_pattern
+from ydk.models.ydktest import ydktest_sanity as ysanity
+from ydk.models.ydktest import oc_pattern
 from ydk.providers import CodecServiceProvider
 from ydk.services import CodecService
 from ydk.errors import YPYServiceError
@@ -120,7 +120,7 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(self._runner_payload, payload)
 
     def test_encode_2(self):
-        from ydk.models.ydktest_sanity import YdkEnumTestEnum
+        from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum
         r_1 = ysanity.Runner.Ytypes.BuiltInT()
         r_1.enum_value = YdkEnumTestEnum.local
 

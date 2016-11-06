@@ -93,7 +93,7 @@ def get_class_docstring(clazz, language, identity_subclasses=None):
 
         properties_description.extend(get_type_doc(meta_info_data, type_depth=1))
 
-    if clazz.stmt.search_one('presence'):
+    if clazz.stmt.search_one('presence') and language == 'py':
         properties_description.append(add_presence_property_docstring(clazz))
 
     return convert_to_reStructuredText(class_description) + '\n\n' + ''.join(properties_description)
@@ -216,11 +216,11 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
         if prop.stmt.keyword == 'leaf-list':
             meta_info_data.mtype = 'REFERENCE_LEAFLIST'
             meta_info_data.doc_link = _get_list_doc_link_tag(
-                meta_info_data, 'doc_link', language)
+                meta_info_data, 'doc_link', language, meta_info_data.mtype)
         elif prop.stmt.keyword == 'list':
             meta_info_data.mtype = 'REFERENCE_LIST'
             meta_info_data.doc_link_description = _get_list_doc_link_tag(
-                meta_info_data, 'doc_link_description', language)
+                meta_info_data, 'doc_link_description', language, meta_info_data.mtype)
         elif property_type.is_identity():
             meta_info_data.mtype = 'REFERENCE_IDENTITY_CLASS'
         else:
@@ -242,7 +242,7 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
         if prop.is_many:
             meta_info_data.mtype = 'REFERENCE_LEAFLIST'
             meta_info_data.doc_link = _get_list_doc_link_tag(
-                meta_info_data, 'doc_link', language)
+                meta_info_data, 'doc_link', language, meta_info_data.mtype)
 
         if prop.property_type in clazz.owned_elements:
             meta_info_data.ptype = property_type.name
@@ -257,7 +257,7 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
         if prop.is_many:
             meta_info_data.mtype = 'REFERENCE_LEAFLIST'
             meta_info_data.doc_link = _get_list_doc_link_tag(
-                meta_info_data, 'doc_link', language)
+                meta_info_data, 'doc_link', language, meta_info_data.mtype)
 
         if prop.property_type in clazz.owned_elements:
             meta_info_data.ptype = property_type.name
@@ -267,7 +267,7 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
     else:
         if prop.stmt.keyword == 'leaf-list':
             meta_info_data.mtype = 'REFERENCE_LEAFLIST'
-            meta_info_data.doc_link = _get_list_tag(language)
+            meta_info_data.doc_link = _get_list_tag(language, meta_info_data.mtype)
         elif prop.stmt.keyword == 'anyxml':
             meta_info_data.mtype = 'ANYXML_CLASS'
             meta_info_data.doc_link = 'anyxml'
@@ -300,15 +300,15 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
             raise EmitError('Illegal Code path')
         elif isinstance(type_spec, BooleanTypeSpec):
             meta_info_data.ptype = 'bool'
-            meta_info_data.doc_link += get_primitive_type_tag('str', language)
+            meta_info_data.doc_link += get_primitive_type_tag('bool', language)
         elif isinstance(type_spec, Decimal64TypeSpec):
             meta_info_data.ptype = 'Decimal64'
             meta_info_data.prange.append(
                 ('%s' % str(type_spec.min.s), '%s' % str(type_spec.max.s)))
-            meta_info_data.doc_link += get_primitive_type_tag('str', language)
+            meta_info_data.doc_link += get_primitive_type_tag('Decimal64', language)
         elif isinstance(type_spec, EmptyTypeSpec):
             meta_info_data.ptype = 'Empty'
-            meta_info_data.doc_link += get_primitive_type_tag('str', language)
+            meta_info_data.doc_link += get_primitive_type_tag('Empty', language)
         elif isinstance(prop.property_type, Enum):
             raise EmitError('Illegal Code path')
         elif isinstance(type_spec, IdentityrefTypeSpec):
@@ -463,13 +463,13 @@ def get_primitive_type_tag(typ, language):
         ('py', 'Enum'): ':py:class:`enum.Enum`',
         ('py', 'Identity'): ':py:class:`object`',
 
-        ('cpp', 'int'): 'int',
+        ('cpp', 'int'): '``int``',
         ('cpp', 'str'): '``std::string``',
-        ('cpp', 'bool'): 'bool',
-        ('cpp', 'Decimal64'): '``ydk::Decimal64``',
-        ('cpp', 'Empty'): '``ydk::Empty``',
-        ('cpp', 'Enum'): '``ydk::Enum``',
-        ('cpp', 'Identity'): '``ydk::Identity``',
+        ('cpp', 'bool'): '``bool``',
+        ('cpp', 'Decimal64'): '``std::string``',
+        ('cpp', 'Empty'): ':cpp:class:`Empty<ydk::Empty>`',
+        ('cpp', 'Enum'): ':cpp:class:`Enum<ydk::Enum>`',
+        ('cpp', 'Identity'): ':cpp:class:`Identity<ydk::Identity>`',
     }
     try:
         return TYPE_TAG_MAP[(language, typ)]
@@ -491,20 +491,22 @@ def get_tag_template(language, domain, crossref):
     try:
         return TEMPLATES[(language, domain, crossref)]
     except KeyError:
-        raise EmitError("Invalid language, domain, croessref combination for"
+        raise EmitError("Invalid language, domain, crossref combination for"
                         "rst documentation\n"
                         "language = %s, type = %s" % (language, domain, crossref))
 
 
-def _get_list_tag(language):
+def _get_list_tag(language, mtype):
     if language == 'py':
         return 'list of '
     elif language == 'cpp':
-        return 'vector of '
+        if mtype == 'REFERENCE_LEAFLIST':
+            return ':cpp:class:`ValueList<ydk::ValueList>` of '
+        else:
+            return '``std::vector`` of '
 
-
-def _get_list_doc_link_tag(meta_info_data, attribute, language):
-    template = '%s %%s' % _get_list_tag(language)
+def _get_list_doc_link_tag(meta_info_data, attribute, language, mtype):
+    template = '%s %%s' % _get_list_tag(language, mtype)
     return template % (getattr(meta_info_data, attribute))
 
 
@@ -537,7 +539,7 @@ def get_class_crossref_tag(name, named_element, language):
     elif language == 'cpp':
         template = get_tag_template('cpp', 'class', True)
         return template % (name,
-                           named_element.qualified_cpp_name())
+                           named_element.fully_qualified_cpp_name())
 
 
 def get_bits_class_docstring(bitz):
@@ -556,7 +558,7 @@ def get_bits_doc_link(bitz, language):
     if language == 'py':
         return get_class_crossref_tag(bitz.name, bitz, language)
     elif language == 'cpp':
-        return '``ydk::Value``\n\t%s' % get_bits_class_docstring(bitz)
+        return ':cpp:class:`Bits<ydk::Bits>`\n\t%s' % get_bits_class_docstring(bitz)
 
 
 def get_langage_spec_tags(named_element, language):
@@ -573,13 +575,13 @@ def get_class_bases(clazz, language):
     if language == 'py':
         bases.append(':class:`object`')
     if isinstance(clazz, Enum):
-        base_tag = get_primitive_type_tag('Enum', language)
+        bases.append(get_primitive_type_tag('Enum', language))
     elif clazz.is_identity():
-        base_tag = get_primitive_type_tag('Identity', language)
-    else:
-        base_tag = get_class_crossref_tag(clazz.name, clazz, language)
-    bases.append(base_tag)
+        bases.append(get_primitive_type_tag('Identity', language))
+    elif language == 'cpp':
+        bases.append(':cpp:class:`Entity<ydk::Entity>`')
+
     if hasattr(clazz, 'extends'):
         for item in clazz.extends:
-            base_tag = get_class_crossref_tag(item.name, item, language)
+            bases.append(get_class_crossref_tag(item.name, item, language))
     return bases

@@ -22,10 +22,10 @@ from __future__ import print_function
 import unittest
 
 from ydk.errors import YPYError, YPYErrorCode
-from ydk.models import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity as ysanity
 try:
-    from ydk.models import ietf_netconf
-    from ydk.models import ietf_netconf_monitoring
+    from ydk.models.ydktest import ietf_netconf
+    from ydk.models.ydktest import ietf_netconf_monitoring
 except:
     pass
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider

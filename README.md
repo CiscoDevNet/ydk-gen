@@ -6,17 +6,16 @@
 [![Coverage Status](https://coveralls.io/repos/github/CiscoDevNet/ydk-gen/badge.svg?branch=master)](https://coveralls.io/github/CiscoDevNet/ydk-gen?branch=master)
 
 
-**ydk-gen** is a developer tool that can generate API bindings to YANG data models for, today, Python. Work is underway to support C++, and the ydk-gen may be used as the starting point for supporting bindings to any language.
+**ydk-gen** is a developer tool that can generate API bindings to YANG data models for, today, Python and C++, with planned future support for other language bindings.
 
 Other tools and libraries are used to deliver ydk-gen's functionality. In particular:
 
-* YANG model analysis and code generation is implemented as an extension to [pyang](https://github.com/mbj4668/pyang)
-* Core libraries are built on [ncclient](https://github.com/ncclient/ncclient)
+* YANG model analysis and code generation is implemented using APIs from the [pyang](https://github.com/mbj4668/pyang) library
 * Documentation is generated using [Sphinx](http://www.sphinx-doc.org/en/stable/)
 
 Of course, many other libraries are used as an integral part of ydk-gen and its dependencies, too many to mention!
 
-Developers can either use pre-packaged generated code (e.g. [ydk-py](http://cs.co/ydk-py)), or they can define the YANG models that code is to be generated for are specified in a profile file. This gives a developer the ability to customize the scope of their SDK based on their requirements.
+The output of ydk-gen is either a core package, that defines services and providers, or a module bundle, consisting of APIs based on YANG models. Each module bundle is generated using a bundle profile and the ydk-gen tool. Developers can either use pre-packaged generated bundles (e.g. [ydk-py](http://cs.co/ydk-py)), or they can define their own bundle, consisting of a set of YANG models, using a bundle profile (e.g. [```ietf_0_1_1.json```](profiles/bundles/ietf_0_1_1.json)). This gives a developer the ability to customize the scope of their bundle based on their requirements.
 
 
 ##System Requirements:
@@ -55,7 +54,7 @@ $ pip install -r requirements
 ## Usage
 
 ```
-$ python generate.py --help
+$ ./generate.py --help
 Usage: generate.py [options]
 
 Options:
@@ -64,7 +63,7 @@ Options:
   -p, --python        Generate Python bundle/core. This is currently the default option
   -c, --cpp           Generate C++ bundle/core
   --core              Install the python/C++ core
-  --bundle=PROFILE    Take options from a profile file
+  --bundle=PROFILE    Take options from a bundle profile file describing YANG
   --sudo              Use superuser permission (during C++ bundle/core generation if necessary)
   -v, --verbose       Verbose mode
   --generate-doc      Generation documentation
@@ -74,7 +73,7 @@ Options:
 ### Installing the YDK core
 
 ```
-python generate.py --core
+ ./generate.py --core
 ```
 
 ### Bundle profiles
@@ -84,7 +83,7 @@ python generate.py --core
 2. Generate the bundle using a command of the form:
 
 ```
-python generate.py --python --bundle profiles/bundles/ietf_0_1_1.json
+./generate.py --python --bundle profiles/bundles/ietf_0_1_1.json
 ```
 
 The generated bundle will in ```ydk-gen/gen-api/python``` or ```ydk-gen/gen-api/cpp```.
@@ -117,7 +116,7 @@ The sample below shows the use of git sources only.
 We have a list of git sources. Each source must specify a URL. This URL should be one that allows the repository to be cloned without requiring user intervention, so please use a public URL such as the example below. There are three further options that can be specified:
 
 - ```commitid``` - Optional specification of a commit in string form. The files identified will be copied from the context of this commit.
-- ```dir``` - List of **relative** directory paths within git repository. All .yang files in this directory **and any sub-directories** will be pulled into the generated SDK.
+- ```dir``` - List of **relative** directory paths within git repository. All .yang files in this directory **and any sub-directories** will be pulled into the generated bundle.
 - ```file```- List of **relative** file paths within the git repository.
 
 Only directory examples are shown below.
@@ -143,30 +142,16 @@ Only directory examples are shown below.
 
 ## Notes
 
-YANG Development Kit Generator:
-
-- This is a tool that generates different language bindings (Python, C++ etc). Developers can use these objects/APIs, to write applications
-- Also provided are runtime libraries including "services" and "service providers".
-    - ServiceProvider: Provides concrete implementation that abstracts underlying protocol details (e.g. `NetconfServiceProvider`, which is based on the NETCONF protocol) 
-    - Services: Provides simple API interface to be used with the bindings and providers
-
-
 ### Python version
 
 - If your environment has both python 2 and python 3 and uses python 2 by default, you may need to use 'python3' and 'pip3' instead of 'python' and 'pip' in the commands mentioned in this document.
 
-For Python entities and netconf session, CRUD service invoked on python class will:
 
-- Encode python data objects to netconf XML payload
-- Perform transport operation with device, collect the netconf response,
-- Decode netconf response in python class, return result to python app.
-
-
-## Directory Structure
+### Directory Structure
 
 ```
 README          - install and usage notes
-gen-api         - generated SDK
+gen-api         - generated bundle/core
 					- python (Python SDK)
 					- cpp (C++ SDK)
 
@@ -183,10 +168,10 @@ test            - test code
 ### Python
 First, generate and install the [test](profiles/test/ydktest.json) bundle and core package
 ```
-$ python generate.py --core
+$ ./generate.py --core
 $ pip install gen-api/python/core/dist/ydk*.tar.gz
 
-$ python generate.py --bundle profiles/test/ydktest.json
+$ ./generate.py --bundle profiles/test/ydktest.json
 $ pip install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
 ```
 
@@ -202,8 +187,8 @@ $ python test/test_sanity_filters.py
 ### C++
 First, install the [test](profiles/test/ydktest-cpp.json) bundle and core package
 ```
-$ python generate.py --core --cpp
-$ python generate.py --bundle profiles/test/ydktest-cpp.json --cpp
+$./generate.py --core --cpp
+$./generate.py --bundle profiles/test/ydktest-cpp.json --cpp
 ```
 
 To run the core and bundle tests, do the following

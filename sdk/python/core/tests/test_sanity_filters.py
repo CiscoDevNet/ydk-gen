@@ -22,7 +22,7 @@ from __future__ import absolute_import
 import unittest
 from compare import is_equal
 
-from ydk.models import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import CRUDService
 from ydk.types import READ
@@ -91,7 +91,7 @@ class SanityYang(unittest.TestCase):
         self.assertNotEqual(r_2.one.number, r_1.one.number)
 
     def test_read_on_ref_enum_class(self):
-        from ydk.models.ydktest_sanity import YdkEnumTestEnum
+        from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum
         r_1 = ysanity.Runner.Ytypes.BuiltInT()
         r_1.enum_value = YdkEnumTestEnum.local
         self.crud.create(self.ncc, r_1)

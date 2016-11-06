@@ -23,8 +23,8 @@ import unittest
 from compare import is_equal
 from ydk.types import READ, YList
 from ydk.services import CRUDService
-from ydk.models import ydktest_filterread as ysanity
-from ydk.models import oc_pattern
+from ydk.models.ydktest import ydktest_filterread as ysanity
+from ydk.models.ydktest import oc_pattern
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 
 

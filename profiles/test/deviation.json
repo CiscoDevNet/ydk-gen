@@ -1,6 +1,7 @@
 {
     "name": "deviation",
     "version": "0.1.0",
+    "ydk_version":"0.5.1",
     "Author": "Cisco",
     "Copyright": "Cisco",
     "Description": "YDK Test Profile",

@@ -67,6 +67,7 @@ NetconfServiceProvider::NetconfServiceProvider(string address, string username, 
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
     initialize();
+    BOOST_LOG_TRIVIAL(debug) << "Connected to " << address << " on port "<< port <<" using ssh";
 }
 
 NetconfServiceProvider::NetconfServiceProvider(core::Repository* repo, string address, string username, string password, int port)
@@ -74,6 +75,7 @@ NetconfServiceProvider::NetconfServiceProvider(core::Repository* repo, string ad
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
     initialize();
+    BOOST_LOG_TRIVIAL(debug) << "Connected to " << address << " on port "<< port <<" using ssh";
 }
 
 void NetconfServiceProvider::initialize()
@@ -113,6 +115,7 @@ void NetconfServiceProvider::initialize()
 NetconfServiceProvider::~NetconfServiceProvider()
 {
 	client->close();
+	BOOST_LOG_TRIVIAL(debug) << "Disconnected from device";
 	if(ietf_nc_monitoring_available){
 		m_repo->remove_model_provider(model_provider.get());
 	}
@@ -463,7 +466,7 @@ static std::vector<ydk::core::Capability> get_core_capabilities(const std::vecto
 	std::vector<core::Capability> yang_caps {};
 	for(std::string c : server_capabilities )
 	{
-		if(c.find("calvados") != std::string::npos || c.find("tailf") != std::string::npos)
+		if(c.find("calvados") != std::string::npos || c.find("tailf") != std::string::npos || c.find("tail-f") != std::string::npos)
 		{
 			continue;
 		}

@@ -6,6 +6,10 @@
 Welcome to Yang Development Kit's documentation!
 ================================================
 
+.. image::  https://cloud.githubusercontent.com/assets/17089095/14834057/2e1fe270-0bb7-11e6-9e94-73dd7d71e87d.png
+    :target: https://travis-ci.org/CiscoDevNet/ydk-cpp
+    :width: 240px
+    :height: 240px
 
 Contents:
 ---------
@@ -14,10 +18,7 @@ Contents:
    :maxdepth: 2
 
    getting_started.rst
-   ydk.rst
+   developer_guide.rst
+   api_guide.rst
    about_ydk.rst
-   read_filter.rst
-   delete_operation.rst
-   presence_class.rst
-   types_doc.rst
-   deviation.rst
+

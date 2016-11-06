@@ -101,22 +101,25 @@ function py_sanity_ydktest {
 }
 
 function py_sanity_ydktest_gen {
-    print_msg "py_sanity_ydktest_gen"
+    print_msg "Generating ydk core and ydktest bundle"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
 
-    print_msg "py_sanity_ydktest_gen: grouping as class"
-    run_test generate.py --profile profiles/test/ydktest.json --python --groupings-as-class
+    run_test generate.py --core    
 
-    print_msg "py_sanity_ydktest_gen: grouping expansion, generate documentation"
-    run_test generate.py --profile profiles/test/ydktest.json --python --generate-doc
+    print_msg "py_sanity_ydktest_gen: testing grouping as class"
+    run_test generate.py --bundle profiles/test/ydktest.json --python --groupings-as-class
+
+    print_msg "py_sanity_ydktest_gen: testing documentation generation"
+    run_test generate.py --bundle profiles/test/ydktest.json --python --generate-doc
 }
 
 function py_sanity_ydktest_install {
     print_msg "py_sanity_ydktest_install"
-
+    print_msg "Installing"
     cd $YDKGEN_HOME && source test_env/bin/activate
-    pip install gen-api/python/dist/ydk*.tar.gz
+    pip install gen-api/python/ydk/dist/ydk*.tar.gz
+    pip install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
 }
 
 function py_sanity_ydktest_test {
@@ -126,11 +129,9 @@ function py_sanity_ydktest_test {
 
     cd $YDKGEN_HOME && cp -r gen-api/python/tests sdk/python/tests
 
-    export PYTHONPATH=./gen-api/python:$PYTHONPATH
-    run_test gen-api/python/ydk/tests/import_tests.py
+    run_test gen-api/python/ydktest-bundle/ydk/tests/import_tests.py
 
-    export PYTHONPATH=./sdk/python:$PYTHONPATH
-    run_test sdk/python/tests/test_sanity_codec.py
+    run_test sdk/python/core/tests/test_sanity_codec.py
 
     py_sanity_ydktest_test_ncclient
     # py_sanity_ydktest_test_native
@@ -138,29 +139,29 @@ function py_sanity_ydktest_test {
 
 function py_sanity_ydktest_test_ncclient {
     print_msg "py_sanity_ydktest_test_ncclient"
-    run_test sdk/python/tests/test_sanity_types.py
-    run_test sdk/python/tests/test_sanity_errors.py
-    run_test sdk/python/tests/test_sanity_filters.py
-    run_test sdk/python/tests/test_sanity_levels.py
-    run_test sdk/python/tests/test_sanity_filter_read.py
-    run_test sdk/python/tests/test_sanity_netconf.py
-    run_test sdk/python/tests/test_sanity_rpc.py
-    run_test sdk/python/tests/test_sanity_delete.py
-    run_test sdk/python/tests/test_sanity_service_errors.py
+    run_test sdk/python/core/tests/test_sanity_types.py
+    run_test sdk/python/core/tests/test_sanity_errors.py
+    run_test sdk/python/core/tests/test_sanity_filters.py
+    run_test sdk/python/core/tests/test_sanity_levels.py
+    run_test sdk/python/core/tests/test_sanity_filter_read.py
+    run_test sdk/python/core/tests/test_sanity_netconf.py
+    run_test sdk/python/core/tests/test_sanity_rpc.py
+    run_test sdk/python/core/tests/test_sanity_delete.py
+    run_test sdk/python/core/tests/test_sanity_service_errors.py
 }
 
 function py_sanity_ydktest_test_native {
     print_msg "py_sanity_ydktest_test_native"
-    run_test sdk/python/tests/test_sanity_types.py native
-    run_test sdk/python/tests/test_sanity_errors.py native
-    run_test sdk/python/tests/test_sanity_filters.py native
-    run_test sdk/python/tests/test_sanity_levels.py native
-    run_test sdk/python/tests/test_sanity_filter_read.py native
-    run_test sdk/python/tests/test_sanity_netconf.py native
-    run_test sdk/python/tests/test_sanity_rpc.py native
-    run_test sdk/python/tests/test_sanity_delete.py native
-    run_test sdk/python/tests/test_sanity_service_errors.py native
-    run_test sdk/python/tests/test_ydk_client.py
+    run_test sdk/python/core/tests/test_sanity_types.py native
+    run_test sdk/python/core/tests/test_sanity_errors.py native
+    run_test sdk/python/core/tests/test_sanity_filters.py native
+    run_test sdk/python/core/tests/test_sanity_levels.py native
+    run_test sdk/python/core/tests/test_sanity_filter_read.py native
+    run_test sdk/python/core/tests/test_sanity_netconf.py native
+    run_test sdk/python/core/tests/test_sanity_rpc.py native
+    run_test sdk/python/core/tests/test_sanity_delete.py native
+    run_test sdk/python/core/tests/test_sanity_service_errors.py native
+    run_test sdk/python/core/tests/test_ydk_client.py
 }
 
 function py_sanity_deviation {
@@ -180,21 +181,21 @@ function py_sanity_deviation_ydktest_gen {
 
     rm -rf gen-api/python/*
     cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test_no_coverage generate.py --profile profiles/test/ydktest.json --python
+    run_test_no_coverage generate.py --bundle profiles/test/ydktest.json --python
 }
 
 function py_sanity_deviation_ydktest_install {
     print_msg "py_sanity_deviation_ydktest_install"
 
     source test_env/bin/activate
-    pip uninstall ydk -y && pip install gen-api/python/dist/ydk*.tar.gz
+    pip uninstall ydk-models-ydktest -y && pip install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
 }
 
 function py_sanity_deviation_ydktest_test {
     print_msg "py_sanity_deviation_ydktest_test"
 
     init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/deviation
-    run_test_no_coverage gen-api/python/tests/test_sanity_deviation.py
+    run_test_no_coverage sdk/python/core/tests/test_sanity_deviation.py
 }
 
 function py_sanity_deviation_bgp_gen {
@@ -202,20 +203,20 @@ function py_sanity_deviation_bgp_gen {
 
     rm -rf gen-api/python/*
     cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test_no_coverage generate.py --profile profiles/test/deviation.json --verbose
+    run_test_no_coverage generate.py --bundle profiles/test/deviation.json --verbose
 }
 
-function py_sanity_deviation_bgp_insall {
+function py_sanity_deviation_bgp_install {
     print_msg "py_sanity_deviation_bgp_install"
 
     cd $YDKGEN_HOME && source test_env/bin/activate
-    pip uninstall ydk -y && pip install gen-api/python/dist/*.tar.gz
+    pip install gen-api/python/deviation-bundle/dist/*.tar.gz
 }
 
 function py_sanity_deviation_bgp_test {
     print_msg "py_sanity_deviation_bgp_test"
 
-    run_test_no_coverage gen-api/python/tests/test_sanity_deviation_bgp.py
+    run_test_no_coverage sdk/python/core/tests/test_sanity_deviation_bgp.py
 }
 
 function py_sanity_augmentation {
@@ -254,7 +255,7 @@ function py_sanity_augmentation_test {
     print_msg "py_sanity_augmentation_test"
 
     init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/augmentation
-    run_test_no_coverage gen-api/python/ydk/tests/test_sanity_bundle_aug.py
+    run_test_no_coverage sdk/python/core/tests/test_sanity_bundle_aug.py
 }
 
 function cpp_sanity_core {
@@ -299,7 +300,16 @@ function cpp_sanity_ydktest_test {
     mkdir -p $YDKGEN_HOME/sdk/cpp/tests/build && cd sdk/cpp/tests/build
     run_exec_test cmake ..
     run_exec_test make
-    run_exec_test make test
+    make test
+    local status=$?
+    if [ $status -ne 0 ]; then
+        for test_name in `ls test*`;
+        do
+            echo "Running $test_name"
+            ./$test_name -l all > /dev/null
+        done
+        exit $status
+    fi
 }
 
 # # clone YDK model test YANG models

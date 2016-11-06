@@ -22,15 +22,8 @@ from .executor_service import ExecutorService
 from .service import Service
 from enum import Enum
 from ydk.errors import YPYModelError, YPYServiceError
-try:
-    from ydk.models.ietf import ietf_netconf
-    from ydk.models.ietf import ietf_netconf_with_defaults
-except:
-    try:
-        from ydk.models import ietf_netconf
-        from ydk.models import ietf_netconf_with_defaults
-    except:
-        pass
+from ydk.models.ydktest import ietf_netconf
+from ydk.models.ydktest import ietf_netconf_with_defaults
 
 from ydk.types import Empty
 import logging

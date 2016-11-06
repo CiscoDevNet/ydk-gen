@@ -1,1 +1,0 @@
-../../core/docsgen/types_doc.rst

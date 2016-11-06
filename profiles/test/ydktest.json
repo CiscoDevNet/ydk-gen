@@ -1,6 +1,7 @@
 {
     "name": "ydktest",
-    "version": "0.4.0",
+    "version": "0.5.1",
+    "ydk_version":"0.5.1",
     "Author": "Cisco",
     "Copyright": "Cisco",
     "Description": "YDK Test Profile",

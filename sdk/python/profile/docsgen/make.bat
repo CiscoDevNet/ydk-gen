@@ -1,1 +1,0 @@
-../../core/docsgen/make.bat

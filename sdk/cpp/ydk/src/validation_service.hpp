@@ -37,8 +37,9 @@
 namespace ydk {
 
 
-struct EntityDiagnostic : public ydk::core::DiagnosticNode<Entity*, ydk::core::ValidationError>
+class EntityDiagnostic : public ydk::core::DiagnosticNode<Entity*, ydk::core::ValidationError>
 {
+  public:
 
     std::vector<DiagnosticNode<std::string, ydk::core::ValidationError>> attrs;
 

@@ -55,7 +55,8 @@ function install_dependencies {
                             software-properties-common \
                             unzip \
                             wget \
-                            zlib1g-dev > /dev/null
+                            zlib1g-dev\
+                            cmake > /dev/null
 
     # gcc-5 and g++5 for modern c++
     sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -63,12 +64,6 @@ function install_dependencies {
     sudo apt-get install gcc-5 g++-5 -y
     sudo ln -f -s /usr/bin/g++-5 /usr/bin/g++
     sudo ln -f -s /usr/bin/gcc-5 /usr/bin/gcc
-
-    # CMake 3.6.2
-    wget https://cmake.org/files/v3.6/cmake-3.6.2.tar.gz
-    tar xf cmake-3.6.2.tar.gz && cd cmake-3.6.2
-    sudo ./bootstrap > /dev/null && sudo make > /dev/null && sudo make install
-    cd -
 }
 
 function install_confd {

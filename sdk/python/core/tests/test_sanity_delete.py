@@ -26,7 +26,7 @@ from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64, YLeafList
 from compare import is_equal
 from ydk.errors import YPYError
-from ydk.models import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity as ysanity
 
 
 class SanityYang(unittest.TestCase):

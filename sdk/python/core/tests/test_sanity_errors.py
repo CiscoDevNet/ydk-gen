@@ -19,14 +19,14 @@ import ydk.types as ytypes
 import unittest
 
 from ydk.services import CRUDService
-from ydk.models import ydktest_sanity as ysanity
-from ydk.models import ydktest_sanity_types as ysanity_types
+from ydk.models.ydktest import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity_types as ysanity_types
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from compare import is_equal
 from ydk.errors import YPYError, YPYModelError, YPYServiceError
 
-from ydk.models.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
+from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
 
 
 class SanityTest(unittest.TestCase):

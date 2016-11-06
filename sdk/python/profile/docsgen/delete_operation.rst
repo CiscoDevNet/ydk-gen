@@ -1,1 +1,0 @@
-../../core/docsgen/delete_operation.rst

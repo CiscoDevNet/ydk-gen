@@ -1,1 +1,0 @@
-../../core/docsgen/ydk.providers.rst

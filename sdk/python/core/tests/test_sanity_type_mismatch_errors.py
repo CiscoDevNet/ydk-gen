@@ -21,8 +21,8 @@ Test type mismatch errors not covered by test_sanity_types.py
 from __future__ import absolute_import
 
 import unittest
-from ydk.models import ydktest_sanity as ysanity
-from ydk.models import ydktest_sanity_types as ytypes
+from ydk.models.ydktest import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity_types as ytypes
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import CRUDService
 

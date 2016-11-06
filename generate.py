@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#
 #  ----------------------------------------------------------------
 # Copyright 2016 Cisco Systems
 #
@@ -186,8 +188,9 @@ def create_shared_libraries(output_directory, sudo):
     os.chdir(cmake_build_dir)
     sudo_cmd = 'sudo' if sudo else ''
     try:
-        subprocess.check_call(['cmake', '..'])
-        subprocess.check_call(['make', '-j5'])
+        FNULL = open(os.devnull, 'w')
+        subprocess.check_call(['cmake', '..'], stdout=FNULL, stderr=FNULL)
+        subprocess.check_call(['make', '-j5'], stdout=FNULL, stderr=FNULL)
         subprocess.check_call(['%s' % sudo_cmd, 'make', 'install'])
     except subprocess.CalledProcessError as e:
         print('\nERROR: Failed to create shared library!\n')
@@ -215,20 +218,15 @@ if __name__ == '__main__':
     parser = OptionParser(usage="usage: %prog [options]",
                           version="%prog 0.4.0")
 
-    parser.add_option("--profile",
-                      type=str,
-                      dest="profile",
-                      help="Take options from a profile file, any CLI targets ignored")
-
     parser.add_option("--bundle",
                       type=str,
                       dest="bundle",
-                      help="Take options from a bundle file, any CLI targets ignored")
+                      help="Specify a bundle profile file to generate a bundle from")
 
     parser.add_option("--core",
                       action='store_true',
                       dest="core",
-                      help="Take options from a bundle file, any CLI targets ignored")
+                      help="Generate and/or install core library")
 
     parser.add_option("--output-directory",
                       type=str,
@@ -306,16 +304,7 @@ if __name__ == '__main__':
     elif options.python:
         language = 'python'
 
-    if options.profile:
-        output_directory = (YdkGenerator(
-                            output_directory,
-                            ydk_root,
-                            options.groupings_as_class,
-                            options.gentests,
-                            language,
-                            'profile').generate(options.profile))
-
-    elif options.bundle:
+    if options.bundle:
         output_directory = (YdkGenerator(
                             output_directory,
                             ydk_root,

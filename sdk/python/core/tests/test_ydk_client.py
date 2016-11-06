@@ -25,7 +25,7 @@ from compare import is_equal
 from ydk.services import NetconfService
 from ydk.providers import NativeNetconfServiceProvider, NetconfServiceProvider
 from ydk.errors import YPYServiceProviderError, YPYErrorCode
-from ydk.models import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity as ysanity
 
 
 class SanityTest(unittest.TestCase):

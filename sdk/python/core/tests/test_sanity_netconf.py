@@ -23,7 +23,7 @@ import unittest
 from compare import is_equal
 
 from ydk.errors import YPYModelError, YPYError, YPYServiceError
-from ydk.models import ydktest_sanity as ysanity
+from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import NetconfService
 from ydk.services import Datastore

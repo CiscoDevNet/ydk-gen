@@ -28,6 +28,17 @@ uses ncclient (a Netconf client library) to provide CRUD services.
 
 		Closes the netconf session.
 
+
+.. py:class:: ydk.providers.CodecServiceProvider(**kwargs)
+
+    Bases: :class:`ydk.providers.ServiceProvider`
+    
+    Codec Service Provider.
+    
+    Initialization parameter of NetconfServiceProvider
+    
+    :param type: Type of encoding. Currently, 'xml' type is supported
+
 	
 .. py:class:: ydk.providers.ServiceProvider
 
