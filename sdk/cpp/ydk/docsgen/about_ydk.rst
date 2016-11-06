@@ -1,18 +1,7 @@
 About YDK
 =========
 
-A generic API for working with YANG modelled data.
-
-Main Features
--------------
-.. cpp:namespace:: core::ydk
-
-- A :ref:`ServiceProvider <ref-serviceprovider>` interface, for ServiceProviders.
-- A :ref:`Repository <ref-repository>` class, to help create a :ref:`SchemaNode <ref-schemanode>` Tree based on capabilities.
-- Creation of :ref:`DataNode <ref-datanode>` Tree's for config and oper.
-- Create and Invoke :ref:`Rpc <ref-rpc>`.
-- :ref:`ValidationService <ref-validationservice>` that validates :ref:`DataNode <ref-datanode>` tree's based on criteria.
-- A :ref:`CodecService <ref-codecservice>`, that can encode a :ref:`DataNode <ref-datanode>` to XML/JSON and decode from XML/JSON to a :ref:`DataNode <ref-datanode>` tree.
+A Software Development Kit that provides API's that are modeled in YANG.
 
 License
 -------

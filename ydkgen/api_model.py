@@ -833,13 +833,10 @@ class EnumLiteral(NamedElement):
         self.name = self.name.replace(';', '__SEMICOLON__')
 
         if self.iskeyword(self.name):
-            self.name += '_literal'
+            self.name += '_'
 
         if self.name[0:1].isdigit():
             self.name = 'Y_%s' % self.name
-
-        if self.iskeyword(self.name.lower()):
-            self.name = self.name + '_'
 
         if self.name[0] == '_':
             self.name = 'Y%s' % self.name
