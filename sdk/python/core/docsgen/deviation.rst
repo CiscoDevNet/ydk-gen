@@ -1,7 +1,7 @@
 Deviation
 =========
 
-Overview:
+Overview
 ---------
 
 Not all devices faithfully support features defined in the standard yang module. For a particular device, it could support only part of features or the feature it supported varies from the standard module. In YANG, we use `deviation statement <https://tools.ietf.org/html/rfc6020#section-7.18.3>`_ to specify it.
@@ -16,7 +16,7 @@ For example, in cisco-xr-bgp-deviations.yang,
 apply-policy is not supported.
 
 
-How to use deviation with YDK:
+How to use deviation with YDK
 ------------------------------
 
 When using YDK to program a device which has some unsupported features, YDK will raise a validation error before sending payload to device. In the example below, the device has published a deviation ``cisco-xr-bgp-deviations.yang`` on a standard bgp module.
@@ -40,7 +40,7 @@ YDK will raise an error if an app tries to assign a value to this feature:
 YDK will raise YPYDataValidationError when processing the above python object.
 
 
-Behind the Scenes:
+Behind the Scenes
 ------------------
 
 YDK use pyang to compile yang module to intermediate tree structured python objects(pyang statements), and feed those objects to YDK’s API module to generate python objects(YDK packages) suitable for language binding.

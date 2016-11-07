@@ -1,1 +1,0 @@
-../../../cpp/ydk/docsgen/core_repository.rst

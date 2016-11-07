@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#
 #  ----------------------------------------------------------------
 # Copyright 2016 Cisco Systems
 #
@@ -186,9 +188,10 @@ def create_shared_libraries(output_directory, sudo):
     os.chdir(cmake_build_dir)
     sudo_cmd = 'sudo' if sudo else ''
     try:
-        subprocess.check_call(['cmake', '..'])
-        subprocess.check_call(['make', '-j5'])
-        subprocess.check_call(['%s' % sudo_cmd, 'make', 'install'])
+        FNULL = open(os.devnull, 'w')
+        subprocess.check_call(['cmake', '..'], stdout=FNULL, stderr=FNULL)
+        subprocess.check_call(['make', '-j5'], stdout=FNULL, stderr=FNULL)
+        subprocess.check_call(['%s' % sudo_cmd, 'make', 'install'], stdout=FNULL, stderr=FNULL)
     except subprocess.CalledProcessError as e:
         print('\nERROR: Failed to create shared library!\n')
         sys.exit(e.returncode)
