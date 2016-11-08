@@ -35,7 +35,24 @@
             "yang/ietf/ietf-inet-types@2013-07-15.yang",
             "yang/ietf/ietf-yang-types@2013-07-15.yang",
             "yang/ydktest/oc-pattern@2015-11-17.yang"
-        ]
+        ],
+
+    "git":
+    [
+        {
+            "url": "https://github.com/YangModels/yang.git",
+            "commits":
+            [
+                {
+                    "commitid": "a5e3d7f27e0e846cac6b6357ff460b8facc810a8",
+                    "file":
+                    [
+                        "standard/ietf/RFC/iana-if-type.yang"
+                    ]
+                }
+            ]
+        }
+    ]
     }
 }
 

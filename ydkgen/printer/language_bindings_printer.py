@@ -109,12 +109,12 @@ class LanguageBindingsPrinter(object):
         identity_tuples = self._get_identity_tuples()
         for (child_identity, base_identities) in identity_tuples:
             for base_identity in base_identities:
-                if base_identity in identity_subclasses:
-                    existing_child_identities = identity_subclasses[base_identity]
+                if id(base_identity) in identity_subclasses:
+                    existing_child_identities = identity_subclasses[id(base_identity)]
                     existing_child_identities.append(child_identity)
-                    identity_subclasses[base_identity] = existing_child_identities
+                    identity_subclasses[id(base_identity)] = existing_child_identities
                 else:
-                    identity_subclasses[base_identity] = [child_identity]
+                    identity_subclasses[id(base_identity)] = [child_identity]
         return identity_subclasses
 
     def _get_identity_tuples(self):
@@ -134,7 +134,7 @@ class LanguageBindingsPrinter(object):
         return identity_subclasses
 
     def _filter_bundle_pkgs(self):
-        bundle_pkgs = set()
+        bundle_pkgs = {}
         for pkg in self.packages:
             if pkg.bundle_name == self.bundle_name:
                 # we have multiple models being augmented.
@@ -145,7 +145,7 @@ class LanguageBindingsPrinter(object):
                             # augmenting models in existing bundle.
                             aug_pkg.aug_bundle_name = aug_pkg.bundle_name
                             aug_pkg.bundle_name = self.bundle_name
-                            bundle_pkgs.add(aug_pkg)
-                bundle_pkgs.add(pkg)
+                            bundle_pkgs[id(aug_pkg)] = aug_pkg
+                bundle_pkgs[id(pkg)] = pkg
 
-        return list(bundle_pkgs)
+        return list(bundle_pkgs.values())
