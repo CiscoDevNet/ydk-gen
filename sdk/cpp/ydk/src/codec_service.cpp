@@ -22,7 +22,6 @@
 //////////////////////////////////////////////////////////////////
 
 #include <iostream>
-#include <boost/format.hpp>
 #include <boost/log/trivial.hpp>
 
 #include "codec_service.hpp"
@@ -31,42 +30,44 @@
 namespace ydk
 {
 
-std::string REPO_ERROR_MSG{"YANG models stored in repository: \n\t%1%\nis not consistent with"
+std::string REPO_ERROR_MSG{"YANG models stored in repository is not consistent with"
                            " bundle capabilities, please make sure all YANG models used"
                            " to generate bundle is stored in this repository."};
 
 std::string PAYLOAD_ERROR_MSG{"Codec Service only support one entity per payload, please split paylaod"};
 
 CodecService::CodecService()
-    : m_core_codec_service{core::CodecService{}}, m_core_format{core::CodecService::Format::XML} {}
+{
+}
 
-CodecService::~CodecService() {}
+CodecService::~CodecService()
+{
+}
 
 std::string
-CodecService::encode(CodecServiceProvider & provider, Entity & entity)
+CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pretty)
 {
-    convert_format(provider);
-    core::RootSchemaNode* root_schema = provider.get_root_schema();
+    path::RootSchemaNode* root_schema = provider.get_root_schema();
     try
     {
-        core::DataNode* data_node = get_data_node_from_entity(entity, *root_schema);
-        return m_core_codec_service.encode(data_node, m_core_format, provider.m_pretty);
+        path::DataNode* data_node = get_data_node_from_entity(entity, *root_schema);
+        path::CodecService core_codec_service{};
+        return core_codec_service.encode(data_node, provider.m_encoding, pretty);
     }
     catch (const YDKInvalidArgumentException& e)
     {
-        std::string error_msg{boost::str(boost::format(REPO_ERROR_MSG) % provider.m_repo->path.string())};
-        BOOST_LOG_TRIVIAL(error) << error_msg;
-        BOOST_THROW_EXCEPTION(YDKServiceProviderException(error_msg));
+        BOOST_LOG_TRIVIAL(error) << REPO_ERROR_MSG;
+        BOOST_THROW_EXCEPTION(YDKServiceProviderException(REPO_ERROR_MSG));
     }
 }
 
 std::map<std::string, std::string>
-CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity_map)
+CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity_map, bool pretty)
 {
     std::map<std::string, std::string> payload_map;
     for (auto it = entity_map.begin(); it != entity_map.end(); ++it)
     {
-        std::string payload = encode(provider, *(it->second));
+        std::string payload = encode(provider, *(it->second), pretty);
         payload_map[it->first] = payload;
     }
     return payload_map;
@@ -75,10 +76,11 @@ CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std:
 std::unique_ptr<Entity>
 CodecService::decode(CodecServiceProvider & provider, std::string & payload)
 {
-    convert_format(provider);
+	BOOST_LOG_TRIVIAL(debug) << "Decoding " << payload;
     std::unique_ptr<Entity> entity = provider.get_top_entity(payload);
-    core::RootSchemaNode* root_schema = provider.get_root_schema();
-    core::DataNode* root_data_node = m_core_codec_service.decode(root_schema, payload, m_core_format);
+    path::RootSchemaNode* root_schema = provider.get_root_schema();
+    path::CodecService core_codec_service{};
+    path::DataNode* root_data_node = core_codec_service.decode(root_schema, payload, provider.m_encoding);
     if (root_data_node->children().size() != 1)
     {
         BOOST_LOG_TRIVIAL(error) << PAYLOAD_ERROR_MSG;
@@ -100,23 +102,12 @@ CodecService::decode(CodecServiceProvider & provider, std::map<std::string, std:
     std::map<std::string, std::unique_ptr<Entity>> entity_map;
     for (auto it: payload_map)
     {
+    	BOOST_LOG_TRIVIAL(debug) << "Decoding " << it.second;
         std::unique_ptr<Entity> entity = decode(provider, it.second);
         entity_map[it.first] = std::move(entity);
     }
     return entity_map;
 }
 
-void
-CodecService::convert_format(CodecServiceProvider & provider)
-{
-    if (provider.m_encoding == CodecServiceProvider::Encoding::JSON)
-    {
-        m_core_format = core::CodecService::Format::JSON;
-    }
-    else if (provider.m_encoding == CodecServiceProvider::Encoding::XML)
-    {
-        m_core_format = core::CodecService::Format::XML;
-    }
-}
 
 }

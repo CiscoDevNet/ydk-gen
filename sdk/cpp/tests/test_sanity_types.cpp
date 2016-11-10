@@ -32,7 +32,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE(test_int8)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(test_int8)
 
 BOOST_AUTO_TEST_CASE(test_int16)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(test_int16)
 
 BOOST_AUTO_TEST_CASE(test_int32)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(test_int32)
 
 BOOST_AUTO_TEST_CASE(test_int64)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(test_int64)
 
 BOOST_AUTO_TEST_CASE(test_uint8)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(test_uint8)
 
 BOOST_AUTO_TEST_CASE(test_uint16)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE(test_uint16)
 
 BOOST_AUTO_TEST_CASE(test_uint32)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE(test_uint32)
 
 BOOST_AUTO_TEST_CASE(test_uint64)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -224,7 +224,7 @@ BOOST_AUTO_TEST_CASE(test_uint64)
 
 BOOST_AUTO_TEST_CASE(test_bits)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -249,7 +249,7 @@ BOOST_AUTO_TEST_CASE(test_bits)
 
 BOOST_AUTO_TEST_CASE(test_deci64)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -259,7 +259,7 @@ BOOST_AUTO_TEST_CASE(test_deci64)
 	BOOST_REQUIRE(reply);
 
 	//CREATE
-	r_1->ytypes->built_in_t->deci64 = "23.14";
+	r_1->ytypes->built_in_t->deci64 = Decimal64("23.14");
 	reply = crud.create(provider, *r_1);
 	BOOST_REQUIRE(reply);
 
@@ -273,7 +273,7 @@ BOOST_AUTO_TEST_CASE(test_deci64)
 
 BOOST_AUTO_TEST_CASE(test_string)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -292,12 +292,12 @@ BOOST_AUTO_TEST_CASE(test_string)
 	auto r_read = crud.read(provider, *filter);
 	BOOST_REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->deci64 == r_2->ytypes->built_in_t->deci64);
+	BOOST_REQUIRE(r_1->ytypes->built_in_t->name == r_2->ytypes->built_in_t->name);
 }
 
 BOOST_AUTO_TEST_CASE(test_empty)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -321,7 +321,7 @@ BOOST_AUTO_TEST_CASE(test_empty)
 
 BOOST_AUTO_TEST_CASE(test_bool)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -347,7 +347,7 @@ BOOST_AUTO_TEST_CASE(test_bool)
 
 BOOST_AUTO_TEST_CASE(test_embeded_enum)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -371,7 +371,7 @@ BOOST_AUTO_TEST_CASE(test_embeded_enum)
 
 BOOST_AUTO_TEST_CASE(test_enum)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -395,7 +395,7 @@ BOOST_AUTO_TEST_CASE(test_enum)
 
 BOOST_AUTO_TEST_CASE(test_younion)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -419,7 +419,7 @@ BOOST_AUTO_TEST_CASE(test_younion)
 
 BOOST_AUTO_TEST_CASE(test_identity)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -445,7 +445,7 @@ BOOST_AUTO_TEST_CASE(test_identity)
 
 BOOST_AUTO_TEST_CASE(test_submodule)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -473,7 +473,7 @@ BOOST_AUTO_TEST_CASE(test_submodule)
 
 BOOST_AUTO_TEST_CASE(test_identity_other_module)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -497,7 +497,7 @@ BOOST_AUTO_TEST_CASE(test_identity_other_module)
 
 BOOST_AUTO_TEST_CASE(test_enum_leaflist)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -522,7 +522,7 @@ BOOST_AUTO_TEST_CASE(test_enum_leaflist)
 
 BOOST_AUTO_TEST_CASE(test_identity_leaflist)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -547,7 +547,7 @@ BOOST_AUTO_TEST_CASE(test_identity_leaflist)
 
 BOOST_AUTO_TEST_CASE(test_union_complex_list)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -571,7 +571,7 @@ BOOST_AUTO_TEST_CASE(test_union_complex_list)
 
 BOOST_AUTO_TEST_CASE(test_list)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -605,7 +605,7 @@ BOOST_AUTO_TEST_CASE(test_list)
 
 BOOST_AUTO_TEST_CASE(test_bits_list)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 

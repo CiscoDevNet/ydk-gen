@@ -37,11 +37,11 @@
 namespace ydk {
 
 
-class EntityDiagnostic : public ydk::core::DiagnosticNode<Entity*, ydk::core::ValidationError>
+class EntityDiagnostic : public ydk::path::DiagnosticNode<Entity*, ydk::path::ValidationError>
 {
   public:
 
-    std::vector<DiagnosticNode<std::string, ydk::core::ValidationError>> attrs;
+    std::vector<DiagnosticNode<std::string, ydk::path::ValidationError>> attrs;
 
     bool has_errors()
     {
@@ -82,7 +82,7 @@ class ValidationService {
     }
     ~ValidationService(){}
 
-    EntityDiagnostic validate(const ydk::core::ServiceProvider& sp, ydk::Entity& entity, ydk::ValidationService::Option option);
+    EntityDiagnostic validate(const ydk::path::ServiceProvider& sp, ydk::Entity& entity, ydk::ValidationService::Option option);
 };
 
 

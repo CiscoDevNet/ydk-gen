@@ -28,7 +28,7 @@
 #include "ydk_yang.hpp"
 
 namespace ydk {
-    namespace core {
+    namespace path {
     const char* YDK_MODULE_NAME = "ydk";
     const char* YDK_MODULE_REVISION = "2016-02-26";
     const char* YDK_MODULE = R"(

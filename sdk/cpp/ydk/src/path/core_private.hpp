@@ -50,7 +50,7 @@
 
 
 namespace ydk {
-    namespace core {
+    namespace path {
 
         std::vector<std::string> segmentalize(const std::string& path);
 

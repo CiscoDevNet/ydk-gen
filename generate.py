@@ -175,7 +175,7 @@ def create_pip_packages(output_directory):
         sys.exit(exit_code)
     print('=================================================')
     print('Successfully generated Python YDK at %s' % (py_sdk_root,))
-    print('Please read %s/README.rst for information on how to install the package in your environment' % (
+    print('Please read %s/README.md for information on how to install the package in your environment' % (
         py_sdk_root,))
 
 
@@ -198,7 +198,7 @@ def create_shared_libraries(output_directory, sudo):
     print('\nSuccessfully created and installed shared libraries')
     print('\n=================================================')
     print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
-    print('Please read %s/README.rst for information on how to install the package in your environment\n' % (
+    print('Please read %s/README.md for information on how to install the package in your environment\n' % (
         cpp_sdk_root,))
 
 

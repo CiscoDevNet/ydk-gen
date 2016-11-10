@@ -234,6 +234,15 @@ void Value::operator = (std::string val)
 	store_value(value_buffer.str());
 }
 
+void Value::operator = (Decimal64 val)
+{
+	std::ostringstream value_buffer;
+
+	value_buffer << val.value;
+	BOOST_LOG_TRIVIAL(trace)<<"setting string";
+	store_value(value_buffer.str());
+}
+
 void Value::store_value(std::string && val)
 {
 	is_set=true;

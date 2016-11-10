@@ -33,7 +33,7 @@ namespace fs = boost::filesystem;
 // class ydk::Repository
 //////////////////////////////////////////////////////////////////////////
 
-ydk::core::Repository::Repository()
+ydk::path::Repository::Repository()
   : using_temp_directory(true)
 {
     path = fs::temp_directory_path();
@@ -41,7 +41,7 @@ ydk::core::Repository::Repository()
 }
 
 
-ydk::core::Repository::Repository(const std::string& search_dir)
+ydk::path::Repository::Repository(const std::string& search_dir)
   : path{search_dir}, using_temp_directory(false)
 {
     if(!fs::exists(path) || !fs::is_directory(path)) {
@@ -54,7 +54,7 @@ ydk::core::Repository::Repository(const std::string& search_dir)
 
 
 namespace ydk {
-    namespace core {
+    namespace path {
 
         extern "C" void cpp_free_data(void *model_data)
         {
@@ -183,8 +183,8 @@ namespace ydk {
 
 }
 
-ydk::core::RootSchemaNode*
-ydk::core::Repository::create_root_schema(const std::vector<core::Capability> & capabilities)
+ydk::path::RootSchemaNode*
+ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & capabilities)
 {
 	if(using_temp_directory)
 	{
@@ -246,7 +246,7 @@ ydk::core::Repository::create_root_schema(const std::vector<core::Capability> & 
 /// @param[in] module_provider The Module Provider to add
 ///
 void
-ydk::core::Repository::add_model_provider(ydk::core::ModelProvider* model_provider)
+ydk::path::Repository::add_model_provider(ydk::path::ModelProvider* model_provider)
 {
     model_providers.push_back(model_provider);
 }
@@ -257,7 +257,7 @@ ydk::core::Repository::add_model_provider(ydk::core::ModelProvider* model_provid
 /// Removes the given model provider from this Repository.
 ///
 void
-ydk::core::Repository::remove_model_provider(ydk::core::ModelProvider* model_provider)
+ydk::path::Repository::remove_model_provider(ydk::path::ModelProvider* model_provider)
 {
     auto item = std::find(model_providers.begin(), model_providers.end(), model_provider);
     if(item != model_providers.end()) {
@@ -272,7 +272,7 @@ ydk::core::Repository::remove_model_provider(ydk::core::ModelProvider* model_pro
 ///
 /// @return vector of ModelProvider's
 ///
-std::vector<ydk::core::ModelProvider*> ydk::core::Repository::get_model_providers() const
+std::vector<ydk::path::ModelProvider*> ydk::path::Repository::get_model_providers() const
 {
     return model_providers;
 }

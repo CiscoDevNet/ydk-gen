@@ -29,30 +29,30 @@
 ///////////////////////////////////////////////////////////////////////////////
 // class ydk::RootDataImpl
 //////////////////////////////////////////////////////////////////////////
-ydk::core::RootDataImpl::RootDataImpl(const SchemaNode* schema, struct ly_ctx* ctx, const std::string path) : DataNodeImpl{nullptr, nullptr}, m_schema{schema}, m_ctx{ctx}, m_path{path}
+ydk::path::RootDataImpl::RootDataImpl(const SchemaNode* schema, struct ly_ctx* ctx, const std::string path) : DataNodeImpl{nullptr, nullptr}, m_schema{schema}, m_ctx{ctx}, m_path{path}
 {
 
 }
 
-ydk::core::RootDataImpl::~RootDataImpl()
+ydk::path::RootDataImpl::~RootDataImpl()
 {
     m_node = nullptr;
 }
 
-const ydk::core::SchemaNode*
-ydk::core::RootDataImpl::schema() const
+const ydk::path::SchemaNode*
+ydk::path::RootDataImpl::schema() const
 {
     return m_schema;
 }
 
 std::string
-ydk::core::RootDataImpl::path() const
+ydk::path::RootDataImpl::path() const
 {
     return m_schema->path();
 }
 
-ydk::core::DataNode*
-ydk::core::RootDataImpl::create(const std::string& path, const std::string& value)
+ydk::path::DataNode*
+ydk::path::RootDataImpl::create(const std::string& path, const std::string& value)
 {
     if(path.empty())
     {
@@ -137,7 +137,7 @@ ydk::core::RootDataImpl::create(const std::string& path, const std::string& valu
  }
 
 void
-ydk::core::RootDataImpl::set(const std::string& value)
+ydk::path::RootDataImpl::set(const std::string& value)
 {
     if(!value.empty()) {
         BOOST_LOG_TRIVIAL(error) << "Invalid value being assigned to root";
@@ -146,14 +146,14 @@ ydk::core::RootDataImpl::set(const std::string& value)
 }
 
 std::string
-ydk::core::RootDataImpl::get() const
+ydk::path::RootDataImpl::get() const
 {
     return "";
 }
 
 
-std::vector<ydk::core::DataNode*>
-ydk::core::RootDataImpl::children() const
+std::vector<ydk::path::DataNode*>
+ydk::path::RootDataImpl::children() const
 {
     std::vector<DataNode*> ret{};
 
@@ -174,14 +174,14 @@ ydk::core::RootDataImpl::children() const
     return ret;
 }
 
-const ydk::core::DataNode*
-ydk::core::RootDataImpl::root() const
+const ydk::path::DataNode*
+ydk::path::RootDataImpl::root() const
 {
     return this;
 }
 
-std::vector<ydk::core::DataNode*>
-ydk::core::RootDataImpl::find(const std::string& path) const
+std::vector<ydk::path::DataNode*>
+ydk::path::RootDataImpl::find(const std::string& path) const
 {
     std::vector<DataNode*> results;
 

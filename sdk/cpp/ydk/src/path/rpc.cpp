@@ -29,7 +29,7 @@
 /////////////////////////////////////////////////////////////////////////
 /// Rpc
 ////////////////////////////////////////////////////////////////////////
-ydk::core::Rpc::~Rpc()
+ydk::path::Rpc::~Rpc()
 {
 
 }
@@ -38,7 +38,7 @@ ydk::core::Rpc::~Rpc()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-ydk::core::RpcImpl::RpcImpl(SchemaNodeImpl* sn, struct ly_ctx* ctx) : m_sn{sn}
+ydk::path::RpcImpl::RpcImpl(SchemaNodeImpl* sn, struct ly_ctx* ctx) : m_sn{sn}
 {
 
     struct lyd_node* dnode = lyd_new_path(nullptr, ctx, sn->path().c_str(), (void*)"", LYD_ANYDATA_SXML, 0);
@@ -52,7 +52,7 @@ ydk::core::RpcImpl::RpcImpl(SchemaNodeImpl* sn, struct ly_ctx* ctx) : m_sn{sn}
 
 }
 
-ydk::core::RpcImpl::~RpcImpl()
+ydk::path::RpcImpl::~RpcImpl()
 {
     if(m_input_dn){
         delete m_input_dn;
@@ -61,21 +61,21 @@ ydk::core::RpcImpl::~RpcImpl()
 
 }
 
-ydk::core::DataNode*
-ydk::core::RpcImpl::operator()(const ydk::core::ServiceProvider& provider)
+ydk::path::DataNode*
+ydk::path::RpcImpl::operator()(const ydk::path::ServiceProvider& provider)
 {
     return provider.invoke(this);
 }
 
 
-ydk::core::DataNode*
-ydk::core::RpcImpl::input() const
+ydk::path::DataNode*
+ydk::path::RpcImpl::input() const
 {
     return m_input_dn;
 }
 
-ydk::core::SchemaNode*
-ydk::core::RpcImpl::schema() const
+ydk::path::SchemaNode*
+ydk::path::RpcImpl::schema() const
 {
     return m_sn;
 }

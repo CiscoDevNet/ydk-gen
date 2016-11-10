@@ -54,8 +54,7 @@ int main(int argc, char* argv[])
 					    );
 	}
 
-	ydk::core::Repository repo{};
-	NetconfServiceProvider provider{&repo, host, username, password, port};
+	NetconfServiceProvider provider{host, username, password, port};
 	CrudService crud{};
 
 	auto bgp = make_unique<Bgp>();

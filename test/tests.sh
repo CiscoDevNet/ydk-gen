@@ -49,7 +49,7 @@ function run_test_no_coverage {
 }
 
 function run_test {
-    coverage run --source=ydkgen,sdk -a $@
+    coverage run --source=ydkgen,sdk,generate --branch --parallel-mode $@
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -105,13 +105,14 @@ function py_sanity_ydktest_gen {
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
 
-    run_test generate.py --core    
-
     print_msg "py_sanity_ydktest_gen: testing grouping as class"
     run_test generate.py --bundle profiles/test/ydktest.json --python --groupings-as-class
 
-    print_msg "py_sanity_ydktest_gen: testing documentation generation"
+    print_msg "py_sanity_ydktest_gen: testing bundle and documentation generation"
     run_test generate.py --bundle profiles/test/ydktest.json --python --generate-doc
+
+    "py_sanity_ydktest_gen: testing core and documentation generation"
+    run_test generate.py --core  --generate-doc
 }
 
 function py_sanity_ydktest_install {
@@ -127,14 +128,26 @@ function py_sanity_ydktest_test {
 
     init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/ydktest
 
-    cd $YDKGEN_HOME && cp -r gen-api/python/tests sdk/python/tests
+    cd $YDKGEN_HOME && cp -r gen-api/python/ydktest-bundle/ydk/models/* sdk/python/core/ydk/models
 
     run_test gen-api/python/ydktest-bundle/ydk/tests/import_tests.py
+
+    print_msg "deactivate virtualenv to gather coverage"
+    deactivate
+    pip install -r requirements.txt
+    pip install coverage
+    export PYTHONPATH=$PYTHONPATH:sdk/python/core
 
     run_test sdk/python/core/tests/test_sanity_codec.py
 
     py_sanity_ydktest_test_ncclient
     # py_sanity_ydktest_test_native
+
+    git checkout .
+    export PYTHONPATH=
+
+    print_msg "reactivate virtualenv"
+    source test_env/bin/activate
 }
 
 function py_sanity_ydktest_test_ncclient {
@@ -181,7 +194,7 @@ function py_sanity_deviation_ydktest_gen {
 
     rm -rf gen-api/python/*
     cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test_no_coverage generate.py --bundle profiles/test/ydktest.json --python
+    run_test generate.py --bundle profiles/test/ydktest.json --python
 }
 
 function py_sanity_deviation_ydktest_install {
@@ -195,7 +208,7 @@ function py_sanity_deviation_ydktest_test {
     print_msg "py_sanity_deviation_ydktest_test"
 
     init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/deviation
-    run_test_no_coverage sdk/python/core/tests/test_sanity_deviation.py
+    run_test sdk/python/core/tests/test_sanity_deviation.py
 }
 
 function py_sanity_deviation_bgp_gen {
@@ -203,7 +216,7 @@ function py_sanity_deviation_bgp_gen {
 
     rm -rf gen-api/python/*
     cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test_no_coverage generate.py --bundle profiles/test/deviation.json --verbose
+    run_test generate.py --bundle profiles/test/deviation.json --verbose
 }
 
 function py_sanity_deviation_bgp_install {
@@ -216,7 +229,7 @@ function py_sanity_deviation_bgp_install {
 function py_sanity_deviation_bgp_test {
     print_msg "py_sanity_deviation_bgp_test"
 
-    run_test_no_coverage sdk/python/core/tests/test_sanity_deviation_bgp.py
+    run_test sdk/python/core/tests/test_sanity_deviation_bgp.py
 }
 
 function py_sanity_augmentation {
@@ -255,7 +268,7 @@ function py_sanity_augmentation_test {
     print_msg "py_sanity_augmentation_test"
 
     init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/augmentation
-    run_test_no_coverage sdk/python/core/tests/test_sanity_bundle_aug.py
+    run_test sdk/python/core/tests/test_sanity_bundle_aug.py
 }
 
 function cpp_sanity_core {
@@ -269,7 +282,7 @@ function cpp_sanity_core_gen_install {
     print_msg "cpp_sanity_core_gen_install"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test_no_coverage generate.py --core --cpp --verbose --sudo
+    run_test generate.py --core --cpp --verbose --sudo --generate-doc
 }
 
 function cpp_sanity_core_test {
@@ -291,7 +304,7 @@ function cpp_sanity_ydktest_gen_install {
     print_msg "cpp_sanity_ydktest_gen"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test generate.py --bundle profiles/test/ydktest-cpp.json --cpp --sudo
+    run_test generate.py --bundle profiles/test/ydktest-cpp.json --cpp --sudo --generate-doc
 }
 
 function cpp_sanity_ydktest_test {
@@ -303,90 +316,25 @@ function cpp_sanity_ydktest_test {
     make test
     local status=$?
     if [ $status -ne 0 ]; then
-        for test_name in `ls test*`;
+    # If the tests fail, try to run them individually to get more details for debug
+        for test_name in $(ls test*);
         do
             echo "Running $test_name"
-            ./$test_name -l all > /dev/null
+            ./$test_name -l all > output 
+            local test_status=$?
+            if [ $test_status -ne 0 ]; then
+                cat output
+                exit $test_status
+            fi 
         done
         exit $status
     fi
 }
 
-# # clone YDK model test YANG models
-# function compile_model_test_yang_to_fxs {
-#     print_msg "In Method: compile_model_test_yang_to_fxs"
-#     rm -rf $YDKTEST_MODEL_FXS
-#     mkdir $YDKTEST_MODEL_FXS
-#     cd $YDKTEST_MODEL_FXS
-#     source $CONFD_RC
-
-#     git clone https://github.com/abhikeshav/ydk-test-yang.git
-#     cd ydk-test-yang/yang
-#     printf "\n"
-#     for YANG_FILE in *.yang
-#     do
-#         `grep "^submodule.*{" $YANG_FILE &> /dev/null`
-#         local status=$?
-#         if [ $status -eq 1 ]; then
-#             printf "Compiling %s to fxs\n" "$YANG_FILE"
-#             confdc -c $YANG_FILE
-#         fi
-#     done
-
-#     mv *.fxs $YDKTEST_MODEL_DEST_FXS
-
-#     cd $YDKGEN_HOME
-# }
-
-# # ydk model tests
-# function run_ydk_model_tests {
-#     print_msg "run_ydk_model_tests"
-#     cd $YDKGEN_HOME
-#     source test_env/bin/activate
-
-#     printf "\nGenerating ydk model APIs for testing\n"
-#     python generate.py --profile profiles/test/ydk-models-test.json --verbose
-#     cd $YDKGEN_HOME/gen-api/python
-#     pip uninstall -y ydk
-#     pip install dist/*.tar.gz
-#     export PYTHONPATH=.:$PYTHONPATH
-#     for file in $(find ydk/tests -name '*.py'); do
-#         source $CONFD_RC
-#         confd --status &> /dev/null
-#         local status=$?
-#         if [ $status -ne 0 ]; then
-#             printf "\nRestarting confd\n"
-#             source $CONFD_RC
-#             cd $YDKTEST_MODEL_DEST_FXS
-#             confd -c confd.conf
-#             local c_status=$?
-#             if [ $c_status -ne 0 ]; then
-#                 return $c_status
-#             fi
-#             cd -
-#         fi
-#         printf "\nRunning %s python model test\n" "$file"
-#         python $file
-#     done
-
-#     cd $YDKGEN_HOME
-# }
-
 function teardown_env {
     print_msg "teardown_env"
     deactivate
     cd $YDKGEN_HOME && rm -rf gen_env test_env
-}
-
-function submit_coverage {
-    print_msg "submit_coverage"
-    if [[ "$BRANCH" == "master" ]] &&  [[ "$REPO" == *"CiscoDevNet/ydk-gen"* ]]
-    then
-        coverage report
-        pip install coveralls
-        export COVERALLS_REPO_TOKEN=MO7qRNCbd9uovAEK2w8Z41lRUgVMi0tbF
-        coveralls
-    fi
 }
 
 function py_tests {
@@ -398,7 +346,6 @@ function py_tests {
     py_sanity_deviation
     py_sanity_augmentation
     teardown_env
-    submit_coverage
 }
 
 function cpp_tests {
@@ -415,3 +362,6 @@ cd $DIR/..
 
 py_tests
 cpp_tests
+cd $YDKGEN_HOME
+print_msg "combining coverage"
+coverage combine

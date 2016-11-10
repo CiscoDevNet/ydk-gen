@@ -33,14 +33,11 @@ namespace ydk
     {
     public:
 
-        core::CodecService m_core_codec_service;
-        core::CodecService::Format m_core_format;
-
         CodecService();
         ~CodecService();
 
-        std::string encode(CodecServiceProvider & provider, Entity & entity);
-        std::map<std::string, std::string> encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity);
+        std::string encode(CodecServiceProvider & provider, Entity & entity, bool pretty);
+        std::map<std::string, std::string> encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity, bool pretty);
 
         std::unique_ptr<Entity> decode(CodecServiceProvider & provider, std::string & payload);
         std::map<std::string, std::unique_ptr<Entity>> decode(CodecServiceProvider & provider, std::map<std::string, std::string> & payload_map);

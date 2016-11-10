@@ -33,28 +33,28 @@
 BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -67,24 +67,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
     BOOST_REQUIRE( number8 != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -107,28 +107,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -141,24 +141,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
     BOOST_REQUIRE( number16 != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -181,28 +181,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -215,24 +215,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
     BOOST_REQUIRE( number32 != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -253,28 +253,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -287,24 +287,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
     BOOST_REQUIRE( number64 != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -325,28 +325,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -359,24 +359,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
     BOOST_REQUIRE( unumber8 != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -397,28 +397,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -430,23 +430,23 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
     BOOST_REQUIRE( unumber16 != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -467,28 +467,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -499,24 +499,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
 
     BOOST_REQUIRE( unumber32 != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -537,28 +537,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -569,24 +569,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
 
     BOOST_REQUIRE( unumber64 != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -609,28 +609,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_bits )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -641,24 +641,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_bits )
 
     BOOST_REQUIRE( bits != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -679,28 +679,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_bits )
 BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -713,24 +713,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
     BOOST_REQUIRE( deci64 != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -754,28 +754,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
 BOOST_AUTO_TEST_CASE( test_sanity_types_string)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -788,24 +788,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_string)
     BOOST_REQUIRE( str != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -828,28 +828,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_string)
 BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -862,24 +862,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
     BOOST_REQUIRE( emptee != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -900,28 +900,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
 BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -934,24 +934,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
     BOOST_REQUIRE( bool_val != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -973,28 +973,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
 BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1005,24 +1005,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
 
     BOOST_REQUIRE( embedded_enum != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1043,28 +1043,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
 BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1075,23 +1075,23 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
 
     BOOST_REQUIRE( enum_value != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1113,28 +1113,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
 BOOST_AUTO_TEST_CASE( test_sanity_types_union)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1147,24 +1147,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union)
     BOOST_REQUIRE( union_value != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1186,28 +1186,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union)
 BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1218,23 +1218,23 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
 
     BOOST_REQUIRE( enum_int_value != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1258,28 +1258,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
 BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1292,24 +1292,24 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
     BOOST_REQUIRE( enum_int_value != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1332,28 +1332,28 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
 BOOST_AUTO_TEST_CASE( test_union_leaflist)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1369,24 +1369,24 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
 
     BOOST_REQUIRE(llunion2 != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1407,28 +1407,28 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
 BOOST_AUTO_TEST_CASE( test_enum_leaflist)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1444,24 +1444,24 @@ BOOST_AUTO_TEST_CASE( test_enum_leaflist)
 
     BOOST_REQUIRE(remote != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1482,28 +1482,28 @@ BOOST_AUTO_TEST_CASE( test_enum_leaflist)
 BOOST_AUTO_TEST_CASE( test_identity_leaflist)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1519,24 +1519,24 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
 
     BOOST_REQUIRE(child_child_identity != nullptr );
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1558,28 +1558,28 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
 BOOST_AUTO_TEST_CASE( test_union_complex_list)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1591,24 +1591,24 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
     BOOST_REQUIRE( younion != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1625,28 +1625,28 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
 BOOST_AUTO_TEST_CASE( test_identityref)
 {
     std::string searchdir{TEST_HOME};
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 
     BOOST_REQUIRE(schema != nullptr);
 
-    auto s = ydk::core::CodecService{};
+    auto s = ydk::path::CodecService{};
 
     auto runner = schema->create("ydktest-sanity:runner", "");
 
     BOOST_REQUIRE( runner != nullptr );
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{runner->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
 
     BOOST_REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::core::Rpc> delete_rpc { schema->rpc("ydk:delete") };
+    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1658,24 +1658,24 @@ BOOST_AUTO_TEST_CASE( test_identityref)
     BOOST_REQUIRE( identity_ref_value != nullptr );
 
 
-    xml = s.encode(runner, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
 
 
     //call create
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
     auto runner_read = schema->create("ydktest-sanity:runner", "");
     BOOST_REQUIRE( runner_read != nullptr );
-    std::unique_ptr<const ydk::core::DataNode> data_root2{runner_read->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::core::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 

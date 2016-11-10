@@ -21,6 +21,9 @@ Data Structures
 | struct | | :cpp:class:`DiagnosticNode <DiagnosticNode>`                             |
 |        | | Template class for Diagnostic.                                           |
 +--------+----------------------------------------------------------------------------+
+| class  | | :cpp:class:`ModelProvider <ModelProvider>`                               |
+|        | | Interface for all ModelProvider implementations.                         |
++--------+----------------------------------------------------------------------------+
 | class  | | :cpp:class:`Repository <Repository>`                                     |
 |        | | Represents the Repository of YANG models.                                |
 +--------+----------------------------------------------------------------------------+
@@ -65,7 +68,7 @@ Data Structures
 |        | | Interface for all ServiceProvider implementations.                       |
 +--------+----------------------------------------------------------------------------+
 | struct | | :cpp:class:`Statement <Statement>`                                       |
-|        | | Represents the YANG Statemen                                             |
+|        | | Represents the YANG Statement                                            |
 +--------+----------------------------------------------------------------------------+
 | struct | | :cpp:class:`ValidationService <ValidationService>`                       |
 +--------+----------------------------------------------------------------------------+

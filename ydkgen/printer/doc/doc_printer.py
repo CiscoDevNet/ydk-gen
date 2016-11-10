@@ -102,6 +102,7 @@ class DocPrinter(object):
         self.ctx.lvl_dec()
 
     def _print_enum_rst(self, enumz):
+        self._print_namespace(enumz)
         self._print_header(enumz)
         # Body
         self.ctx.lvl_inc()

@@ -11,14 +11,14 @@ using namespace std;
 
 namespace ydk {
 
-static void populate_data_node(Entity & entity, core::DataNode* data_node);
+static void populate_data_node(Entity & entity, path::DataNode* data_node);
 static EntityPath get_top_entity_path(Entity & entity);
-static void walk_children(Entity & entity, core::DataNode* data_node);
-static void populate_name_values(core::DataNode* parent_data_node, EntityPath & path);
-static bool data_node_is_leaf(core::DataNode* data_node);
+static void walk_children(Entity & entity, path::DataNode* data_node);
+static void populate_name_values(path::DataNode* parent_data_node, EntityPath & path);
+static bool data_node_is_leaf(path::DataNode* data_node);
 static string strip_keys(string path);
 
-core::DataNode* get_data_node_from_entity(Entity & entity, const ydk::core::RootSchemaNode & root_schema)
+path::DataNode* get_data_node_from_entity(Entity & entity, const ydk::path::RootSchemaNode & root_schema)
 {
 	EntityPath root_path = get_top_entity_path(entity);
 	auto root_data_node = root_schema.create(root_path.path);
@@ -28,12 +28,12 @@ core::DataNode* get_data_node_from_entity(Entity & entity, const ydk::core::Root
 	return root_data_node;
 }
 
-void get_entity_from_data_node(core::DataNode * node, Entity* entity)
+void get_entity_from_data_node(path::DataNode * node, Entity* entity)
 {
 	if (entity == nullptr || node == nullptr)
 		return;
 
-	for(core::DataNode* child_data_node:node->children())
+	for(path::DataNode* child_data_node:node->children())
 	{
 		std::string path = strip_keys(child_data_node->path());
 		if(data_node_is_leaf(child_data_node))
@@ -52,7 +52,7 @@ void get_entity_from_data_node(core::DataNode * node, Entity* entity)
 	}
 }
 
-static void populate_data_node(Entity & entity, core::DataNode* parent_data_node)
+static void populate_data_node(Entity & entity, path::DataNode* parent_data_node)
 {
 	EntityPath path = entity.get_entity_path(entity.parent);
 	auto data_node = parent_data_node->create(path.path);
@@ -61,7 +61,7 @@ static void populate_data_node(Entity & entity, core::DataNode* parent_data_node
 	walk_children(entity, data_node);
 }
 
-static void walk_children(Entity & entity, core::DataNode* data_node)
+static void walk_children(Entity & entity, path::DataNode* data_node)
 {
 	std::vector<Entity*> & children = entity.get_children();
 	BOOST_LOG_TRIVIAL(trace) <<"Children count for: " <<entity.get_entity_path(entity.parent).path<<": "<<children.size();
@@ -76,7 +76,7 @@ static void walk_children(Entity & entity, core::DataNode* data_node)
 	}
 }
 
-static void populate_name_values(core::DataNode* data_node, EntityPath & path)
+static void populate_name_values(path::DataNode* data_node, EntityPath & path)
 {
 	BOOST_LOG_TRIVIAL(trace) <<"Leaf count: "<<path.value_paths.size();
 	for(const std::pair<std::string, std::string> & name_value : path.value_paths)
@@ -96,7 +96,7 @@ static EntityPath get_top_entity_path(Entity & entity)
 	return get_top_entity_path(*entity.parent);
 }
 
-static bool data_node_is_leaf(core::DataNode* data_node)
+static bool data_node_is_leaf(path::DataNode* data_node)
 {
 	return (data_node->schema()->statement().keyword == "leaf"
 			|| data_node->schema()->statement().keyword == "leaf-list");

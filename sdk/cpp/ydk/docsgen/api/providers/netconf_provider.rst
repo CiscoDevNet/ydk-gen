@@ -11,7 +11,7 @@ Implementation of :cpp:class:`ServiceProvider<path::ServiceProvider>` for the ne
                              std::string username,\
                                  std::string password, int port)
 
-        Constructs an instance of the ``NetconfServiceProvider``
+        Constructs an instance of the ``NetconfServiceProvider`` to connect to a server which **has** to support model download
         
         :param address: IP address of the device supporting a netconf interface
         :param username: Username to log in to the device
@@ -23,7 +23,7 @@ Implementation of :cpp:class:`ServiceProvider<path::ServiceProvider>` for the ne
                              std::string username,\
                                  std::string password, int port)
 
-        Constructs an instance of the ``NetconfServiceProvider``
+        Constructs an instance of the ``NetconfServiceProvider`` using the provided :cpp:class:`repository<path::Repository>`
 
         :param repository: Pointer to an instance of :cpp:class:`path::Repository<ydk::path::Repository>`
         :param address: IP address of the device supporting a netconf interface
@@ -31,13 +31,13 @@ Implementation of :cpp:class:`ServiceProvider<path::ServiceProvider>` for the ne
         :param password: Password to log in to the device
         :param port: Device port used to access the netconf interface
 
-    .. cpp:function:: virtual path::RootSchemaNode* get_root_schema() const
+    .. cpp:function:: path::RootSchemaNode* get_root_schema() const
 
-        Returns the :cpp:class:`SchemaNode<SchemaNode>` tree supported by this instance of the :cpp:class:`ServiceProvider<ServiceProvider>`.
+        Returns the :cpp:class:`RootSchemaNode<path::RootSchemaNode>` tree supported by this instance of the :cpp:class:`ServiceProvider<ServiceProvider>`.
 
-        :return: Pointer to the :cpp:class:`RootSchemaNode<RootSchemaNode>` or ``nullptr`` if one could not be created.
+        :return: Pointer to the :cpp:class:`RootSchemaNode<path::RootSchemaNode>` or ``nullptr`` if one could not be created.
 
-    .. cpp:function:: virtual path::DataNode* invoke(path::Rpc* rpc) const
+    .. cpp:function:: path::DataNode* invoke(path::Rpc* rpc) const
 
          Invokes or executes the given rpc and returns a :cpp:class:`DataNode<DataNode>` pointer if the Rpc has an output modelled in YANG.
 

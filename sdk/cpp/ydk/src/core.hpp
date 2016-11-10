@@ -35,7 +35,7 @@
 #include <boost/filesystem.hpp>
 
 namespace ydk {
-    namespace core {
+    namespace path {
 
         ///
         /// @mainpage About
@@ -880,7 +880,7 @@ namespace ydk {
                 DiagnosticNode<std::string, ValidationError> diag{};
 
                 if(value.empty()){
-                    diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+                    diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
                     return diag;
                 }
 
@@ -888,7 +888,7 @@ namespace ydk {
                 if(range.intervals.empty()){
                     //use the default
                     if(number < range.default_range.min || number > range.default_range.max) {
-                        diag.errors.push_back(ydk::core::ValidationError::RANGE_VIOLATION);
+                        diag.errors.push_back(ydk::path::ValidationError::RANGE_VIOLATION);
                         return diag;
                     }
                 } else {
@@ -899,7 +899,7 @@ namespace ydk {
                         }
                     }
 
-                    diag.errors.push_back(ydk::core::ValidationError::RANGE_VIOLATION);
+                    diag.errors.push_back(ydk::path::ValidationError::RANGE_VIOLATION);
                 }
 
                 return diag;
@@ -1441,7 +1441,7 @@ namespace ydk {
             /// @param[in] capabilities vector of Capability
             /// @return pointer to the RootSchemaNode or nullptr if one could not be created.
             ///
-            RootSchemaNode* create_root_schema(const std::vector<core::Capability> & capabilities) ;
+            RootSchemaNode* create_root_schema(const std::vector<path::Capability> & capabilities) ;
 
             ///
             /// @brief Adds a model provider.

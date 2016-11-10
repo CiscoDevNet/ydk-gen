@@ -26,7 +26,7 @@ namespace ydk {
 
 class NetconfClient;
 
-class NetconfModelProvider : public core::ModelProvider {
+class NetconfModelProvider : public path::ModelProvider {
 public:
 		NetconfModelProvider(NetconfClient & client);
 

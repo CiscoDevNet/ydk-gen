@@ -29,37 +29,37 @@
 //////////////////////////////////////////////////////////////////////////////
 /// RootSchemaNode
 /////////////////////////////////////////////////////////////////////////////
-ydk::core::RootSchemaNode::~RootSchemaNode()
+ydk::path::RootSchemaNode::~RootSchemaNode()
 {
 
 }
 
 std::string
-ydk::core::RootSchemaNode::path() const
+ydk::path::RootSchemaNode::path() const
 {
     return "/";
 }
 
-ydk::core::SchemaNode*
-ydk::core::RootSchemaNode::parent() const noexcept
+ydk::path::SchemaNode*
+ydk::path::RootSchemaNode::parent() const noexcept
 {
     return nullptr;
 }
 
-const ydk::core::SchemaNode*
-ydk::core::RootSchemaNode::root() const noexcept
+const ydk::path::SchemaNode*
+ydk::path::RootSchemaNode::root() const noexcept
 {
     return this;
 }
 
-ydk::core::Statement
-ydk::core::RootSchemaNode::statement() const
+ydk::path::Statement
+ydk::path::RootSchemaNode::statement() const
 {
     return Statement{};
 }
 
-std::vector<ydk::core::Statement>
-ydk::core::RootSchemaNode::keys() const
+std::vector<ydk::path::Statement>
+ydk::path::RootSchemaNode::keys() const
 {
     return std::vector<Statement>{};
 
@@ -69,7 +69,7 @@ ydk::core::RootSchemaNode::keys() const
 /////////////////////////////////////////////////////////////////////////////////////
 // class RootSchemaNodeImpl
 /////////////////////////////////////////////////////////////////////////////////////
-ydk::core::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx) : m_ctx{ctx}
+ydk::path::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx) : m_ctx{ctx}
 {
     //populate the tree
     uint32_t idx = 0;
@@ -83,7 +83,7 @@ ydk::core::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx) : m_ctx{ct
 
 }
 
-ydk::core::RootSchemaNodeImpl::~RootSchemaNodeImpl()
+ydk::path::RootSchemaNodeImpl::~RootSchemaNodeImpl()
 {
     if(m_ctx){
         ly_ctx_destroy(m_ctx, nullptr);
@@ -91,8 +91,8 @@ ydk::core::RootSchemaNodeImpl::~RootSchemaNodeImpl()
     }
 }
 
-std::vector<ydk::core::SchemaNode*>
-ydk::core::RootSchemaNodeImpl::find(const std::string& path) const
+std::vector<ydk::path::SchemaNode*>
+ydk::path::RootSchemaNodeImpl::find(const std::string& path) const
 {
     if(path.empty()) {
         BOOST_LOG_TRIVIAL(error) << "path is empty";
@@ -122,20 +122,20 @@ ydk::core::RootSchemaNodeImpl::find(const std::string& path) const
     return ret;
 }
 
-std::vector<ydk::core::SchemaNode*>
-ydk::core::RootSchemaNodeImpl::children() const
+std::vector<ydk::path::SchemaNode*>
+ydk::path::RootSchemaNodeImpl::children() const
 {
     return m_children;
 }
 
-ydk::core::DataNode*
-ydk::core::RootSchemaNodeImpl::create(const std::string& path) const
+ydk::path::DataNode*
+ydk::path::RootSchemaNodeImpl::create(const std::string& path) const
 {
     return create(path, "");
 }
 
-ydk::core::DataNode*
-ydk::core::RootSchemaNodeImpl::create(const std::string& path, const std::string& value) const
+ydk::path::DataNode*
+ydk::path::RootSchemaNodeImpl::create(const std::string& path, const std::string& value) const
 {
     RootDataImpl* rd = new RootDataImpl{this, m_ctx, "/"};
 
@@ -146,8 +146,8 @@ ydk::core::RootSchemaNodeImpl::create(const std::string& path, const std::string
     return nullptr;
 }
 
-ydk::core::DataNode*
-ydk::core::RootSchemaNodeImpl::from_xml(const std::string& xml) const
+ydk::path::DataNode*
+ydk::path::RootSchemaNodeImpl::from_xml(const std::string& xml) const
 {
     struct lyd_node *root = lyd_parse_mem(m_ctx, xml.c_str(), LYD_XML, 0);
     RootDataImpl* rd = new RootDataImpl{this, m_ctx, "/"};
@@ -159,8 +159,8 @@ ydk::core::RootSchemaNodeImpl::from_xml(const std::string& xml) const
 
 
 
-ydk::core::Rpc*
-ydk::core::RootSchemaNodeImpl::rpc(const std::string& path) const
+ydk::path::Rpc*
+ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
 {
     auto c = find(path);
     if(c.empty()){

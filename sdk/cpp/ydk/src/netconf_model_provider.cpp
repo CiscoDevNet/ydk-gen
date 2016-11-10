@@ -55,8 +55,8 @@ string NetconfModelProvider::get_model(const string& name, const string& version
 {
     string model{};
 
-    if(name == ydk::core::YDK_MODULE_NAME && version == ydk::core::YDK_MODULE_REVISION) {
-       return ydk::core::YDK_MODULE;
+    if(name == ydk::path::YDK_MODULE_NAME && version == ydk::path::YDK_MODULE_REVISION) {
+       return ydk::path::YDK_MODULE;
     }
 
     if(name == ydk::IETF_NETCONF_MODULE_NAME && version == ydk::IETF_NETCONF_MODULE_REVISION) {
@@ -71,7 +71,7 @@ string NetconfModelProvider::get_model(const string& name, const string& version
         file_format = "yin";
     }
 
-    core::CodecService codec_service{};
+    path::CodecService codec_service{};
 
     string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     payload+= R"(<get-schema xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring">)";

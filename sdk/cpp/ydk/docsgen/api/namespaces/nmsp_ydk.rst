@@ -25,6 +25,8 @@ List of all nested namespaces with brief descriptions
 +-------+---------------------------------------------------------------+
 | class | | :cpp:class:`NetconfServiceProvider<NetconfServiceProvider>` |
 +-------+---------------------------------------------------------------+
+| class | | :cpp:class:`NetconfModelProvider<NetconfModelProvider>`     |
++-------+---------------------------------------------------------------+
 | class | | :cpp:class:`Entity<Entity>`                                 |
 +-------+---------------------------------------------------------------+
 | class | | :cpp:class:`Value<Value>`                                   |
@@ -38,6 +40,8 @@ List of all nested namespaces with brief descriptions
 | class | | :cpp:class:`Enum<Enum>`                                     |
 +-------+---------------------------------------------------------------+
 | class | | :cpp:class:`Identity<Identity>`                             |
++-------+---------------------------------------------------------------+
+| class | | :cpp:class:`Decimal64<Decimal64>`                           |
 +-------+---------------------------------------------------------------+
 
 +--------+--------------------------------------------------------------------------+

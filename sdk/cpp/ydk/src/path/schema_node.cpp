@@ -29,7 +29,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// SchemaNode
 ///////////////////////////////////////////////////////////////////////////////
-ydk::core::SchemaNode::~SchemaNode()
+ydk::path::SchemaNode::~SchemaNode()
 {
 
 }
@@ -38,7 +38,7 @@ ydk::core::SchemaNode::~SchemaNode()
 /////////////////////////////////////////////////////////////////////
 // ydk::SchemaNodeImpl
 ////////////////////////////////////////////////////////////////////
-ydk::core::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_node* node):m_parent{parent}, m_node{node}, m_children{}, m_type{nullptr}
+ydk::path::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_node* node):m_parent{parent}, m_node{node}, m_children{}, m_type{nullptr}
 {
     node->priv = this;
     if(node->nodetype != LYS_LEAF && node->nodetype != LYS_LEAFLIST) {
@@ -51,13 +51,13 @@ ydk::core::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_n
         }
     } else {
         struct lys_node_leaf* node_leaf = reinterpret_cast<struct lys_node_leaf*>(m_node);
-        m_type = ydk::core::create_schema_value_type(node_leaf);
+        m_type = ydk::path::create_schema_value_type(node_leaf);
 
     }
 
 }
 
-ydk::core::SchemaNodeImpl::~SchemaNodeImpl()
+ydk::path::SchemaNodeImpl::~SchemaNodeImpl()
 {
     //delete all the children
     for(auto p : children()) {
@@ -71,7 +71,7 @@ ydk::core::SchemaNodeImpl::~SchemaNodeImpl()
 }
 
 std::string
-ydk::core::SchemaNodeImpl::path() const
+ydk::path::SchemaNodeImpl::path() const
 {
     std::string ret{};
 
@@ -105,8 +105,8 @@ ydk::core::SchemaNodeImpl::path() const
     return ret;
 }
 
-std::vector<ydk::core::SchemaNode*>
-ydk::core::SchemaNodeImpl::find(const std::string& path) const
+std::vector<ydk::path::SchemaNode*>
+ydk::path::SchemaNodeImpl::find(const std::string& path) const
 {
     if(path.empty())
     {
@@ -136,21 +136,21 @@ ydk::core::SchemaNodeImpl::find(const std::string& path) const
     return ret;
 }
 
-const ydk::core::SchemaNode*
-ydk::core::SchemaNodeImpl::parent() const noexcept
+const ydk::path::SchemaNode*
+ydk::path::SchemaNodeImpl::parent() const noexcept
 {
     return m_parent;
 }
 
-std::vector<ydk::core::SchemaNode*>
-ydk::core::SchemaNodeImpl::children() const
+std::vector<ydk::path::SchemaNode*>
+ydk::path::SchemaNodeImpl::children() const
 {
 
     return m_children;
 }
 
-const ydk::core::SchemaNode*
-ydk::core::SchemaNodeImpl::root() const noexcept
+const ydk::path::SchemaNode*
+ydk::path::SchemaNodeImpl::root() const noexcept
 {
     if(m_parent == nullptr){
 	return this;
@@ -159,8 +159,8 @@ ydk::core::SchemaNodeImpl::root() const noexcept
     }
 }
 
-ydk::core::Statement
-ydk::core::SchemaNodeImpl::statement() const
+ydk::path::Statement
+ydk::path::SchemaNodeImpl::statement() const
 {
     Statement s{};
     s.arg = m_node->name;
@@ -224,8 +224,8 @@ ydk::core::SchemaNodeImpl::statement() const
 /// Returns the vector of Statement keys
 /// @return vector of Statement that represent keys
 ///
-std::vector<ydk::core::Statement>
-ydk::core::SchemaNodeImpl::keys() const
+std::vector<ydk::path::Statement>
+ydk::path::SchemaNodeImpl::keys() const
 {
     std::vector<Statement> stmts{};
 
@@ -250,8 +250,8 @@ ydk::core::SchemaNodeImpl::keys() const
 
 
 
-ydk::core::SchemaValueType*
-ydk::core::SchemaNodeImpl::type() const
+ydk::path::SchemaValueType*
+ydk::path::SchemaNodeImpl::type() const
 {
 
     return m_type;

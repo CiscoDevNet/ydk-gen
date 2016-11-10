@@ -194,6 +194,15 @@ void ValueList::append(std::string val)
 	values.push_back(value);
 }
 
+void ValueList::append(Decimal64 val)
+{
+	Value value {type, name};
+	value = val.value;
+	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+	values.push_back(value);
+}
+
 bool ValueList::operator == (ValueList & other) const
 {
 	return type == other.type && name == other.name && values == other.getValues();

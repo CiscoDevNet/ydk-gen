@@ -47,7 +47,7 @@ BOOST_FIXTURE_TEST_SUITE(sanity_levels, YdkTest )
 
 BOOST_AUTO_TEST_CASE(one_level_pos_set)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE(one_level_pos_set)
 
 BOOST_AUTO_TEST_CASE(one_level_pos)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE(one_level_pos)
 
 BOOST_AUTO_TEST_CASE(two_level_pos)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(two_level_pos)
 
 BOOST_AUTO_TEST_CASE(three_level_pos)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE(three_level_pos)
 
 BOOST_AUTO_TEST_CASE(onelist_neg_dupkey)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -242,7 +242,7 @@ BOOST_AUTO_TEST_CASE(onelist_neg_dupkey)
 
 BOOST_AUTO_TEST_CASE(test_onelist_neg_update_key_nonexist)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -276,7 +276,7 @@ BOOST_AUTO_TEST_CASE(test_onelist_neg_update_key_nonexist)
 
 BOOST_AUTO_TEST_CASE(test_twolist_pos)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -334,7 +334,7 @@ BOOST_AUTO_TEST_CASE(test_twolist_pos)
 
 BOOST_AUTO_TEST_CASE(test_threelist_pos)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -406,7 +406,7 @@ BOOST_AUTO_TEST_CASE(test_threelist_pos)
 
 BOOST_AUTO_TEST_CASE(test_InbtwList_pos)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -464,7 +464,7 @@ BOOST_AUTO_TEST_CASE(test_InbtwList_pos)
 
 BOOST_AUTO_TEST_CASE(test_leafref_simple_pos)
 {
-    ydk::core::Repository repo{TEST_HOME};
+    ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -494,7 +494,7 @@ BOOST_AUTO_TEST_CASE(test_leafref_simple_pos)
 
 BOOST_AUTO_TEST_CASE(test_leafref_pos)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -566,7 +566,7 @@ BOOST_AUTO_TEST_CASE(test_leafref_pos)
 
 BOOST_AUTO_TEST_CASE(aug_one_pos)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
@@ -599,7 +599,7 @@ BOOST_AUTO_TEST_CASE(aug_one_pos)
 
 BOOST_AUTO_TEST_CASE(aug_onelist_pos)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
@@ -634,7 +634,7 @@ BOOST_AUTO_TEST_CASE(aug_onelist_pos)
 
 BOOST_AUTO_TEST_CASE(parent_empty)
 {
-	ydk::core::Repository repo{TEST_HOME};
+	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 

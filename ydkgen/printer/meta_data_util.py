@@ -215,7 +215,12 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
 
         if prop.stmt.keyword == 'leaf-list':
             meta_info_data.mtype = 'REFERENCE_LEAFLIST'
-            meta_info_data.doc_link = _get_list_doc_link_tag(
+            target = ''
+            if isinstance(meta_info_data.doc_link, list):
+                doc_link = map(lambda l: '\n\n\t\t%s' % l, meta_info_data.doc_link)
+                target = ''.join(doc_link)
+            meta_info_data.doc_link = target
+            meta_info_data.doc_link = '\n\t\t' + _get_list_doc_link_tag(
                 meta_info_data, 'doc_link', language, meta_info_data.mtype)
         elif prop.stmt.keyword == 'list':
             meta_info_data.mtype = 'REFERENCE_LIST'
@@ -466,7 +471,7 @@ def get_primitive_type_tag(typ, language):
         ('cpp', 'int'): '``int``',
         ('cpp', 'str'): '``std::string``',
         ('cpp', 'bool'): '``bool``',
-        ('cpp', 'Decimal64'): '``std::string``',
+        ('cpp', 'Decimal64'): ':cpp:class:`Decimal64<ydk::Decimal64>`',
         ('cpp', 'Empty'): ':cpp:class:`Empty<ydk::Empty>`',
         ('cpp', 'Enum'): ':cpp:class:`Enum<ydk::Enum>`',
         ('cpp', 'Identity'): ':cpp:class:`Identity<ydk::Identity>`',
@@ -569,6 +574,7 @@ def get_langage_spec_tags(named_element, language):
         else:
             tags.append(get_py_currentmodule_tag(named_element))
     return tags
+
 
 def get_class_bases(clazz, language):
     bases = []

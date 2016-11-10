@@ -14,7 +14,7 @@
 #include "../src/netconf_provider.hpp"
 
 
-void print_paths(ydk::core::SchemaNode* sn)
+void print_paths(ydk::path::SchemaNode* sn)
 {
     std::cout << sn->path() << std::endl;
     for(auto p : sn->children())
@@ -23,17 +23,17 @@ void print_paths(ydk::core::SchemaNode* sn)
 
 void test_bgp_create()
 {
-    ydk::core::Repository repo{};
+    ydk::path::Repository repo{};
     
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  2022};
     
-    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
     print_paths(schema);
         
     auto bgp = schema->create("openconfig-bgp:bgp", "");
 
     //get the root
-    std::unique_ptr<const ydk::core::DataNode> data_root{bgp->root()};
+    std::unique_ptr<const ydk::path::DataNode> data_root{bgp->root()};
 
     bgp->create("global/config/as", "65172");
     
@@ -56,9 +56,9 @@ void test_bgp_create()
     neighbor_af->create("config/afi-safi-name" , "openconfig-bgp-types:L3VPN_IPV4_UNICAST");
     neighbor_af->create("config/enabled","true");
 
-    auto s = ydk::core::CodecService{};
-    auto xml = s.encode(bgp, ydk::core::CodecService::Format::XML, true);
-    //auto json = s.encode(bgp, ydk::core::CodecService::Format::JSON, true);
+    auto s = ydk::path::CodecService{};
+    auto xml = s.encode(bgp, ydk::path::CodecService::Format::XML, true);
+    //auto json = s.encode(bgp, ydk::path::CodecService::Format::JSON, true);
     
     std::cout << "Testing encoding" << std::endl;
     
@@ -76,12 +76,12 @@ void test_bgp_create()
     //todo enable after fixing bugs
     
     //codec service bugs
-    auto new_bgp = s.decode(schema, xml, ydk::core::CodecService::Format::XML);
+    auto new_bgp = s.decode(schema, xml, ydk::path::CodecService::Format::XML);
     if (new_bgp) {
         std::cout << "deserialized successfully" << std::endl;
     }
     
-    auto new_xml = s.encode(new_bgp, ydk::core::CodecService::Format::XML, true);
+    auto new_xml = s.encode(new_bgp, ydk::path::CodecService::Format::XML, true);
     std::cout << "*********************************************************" << std::endl;
     std::cout << "*********************************************************" << std::endl;
     std::cout <<  new_xml << std::endl;
@@ -90,7 +90,7 @@ void test_bgp_create()
     
 
     //TODO fix rpc
-    std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
+    std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
     create_rpc->input()->create("entity", xml);
 
     //call create

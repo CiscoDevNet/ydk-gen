@@ -166,9 +166,9 @@ BOOST_AUTO_TEST_CASE(test_bits_assign)
 BOOST_AUTO_TEST_CASE(test_deci64)
 {
 	Value test_value{YType::decimal64, "value"};
-	test_value = "3.2";
+	test_value = Decimal64("3.2");
 	BOOST_REQUIRE(test_value.get()=="3.2");
 
-	test_value = "1.2";
+	test_value = Decimal64("1.2");
 	BOOST_REQUIRE(test_value.get()=="1.2");
 }

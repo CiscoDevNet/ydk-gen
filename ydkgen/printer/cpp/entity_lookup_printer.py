@@ -133,7 +133,7 @@ class EntityLookUpPrinter(FilePrinter):
 
     def _print_emplace_statement(self, module_name, revision):
         self.ctx.writeln("ydk_global_caps.emplace_back("
-                         "core::Capability{std::string{\"%s\"},"
+                         "path::Capability{std::string{\"%s\"},"
                          "\"%s\", {}, {}});"
                          % (module_name, revision))
 

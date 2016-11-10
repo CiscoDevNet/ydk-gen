@@ -32,31 +32,25 @@
 namespace ydk
 {
     extern TopEntityLookUp ydk_global_entities;
-    extern std::vector<core::Capability> ydk_global_caps;
+    extern std::vector<path::Capability> ydk_global_caps;
 
     class CodecServiceProvider
     {
     public:
-        enum class Encoding
-        {
-            XML,
-            JSON
-        };
-
-        bool m_pretty;
-        Encoding m_encoding;
-        std::unique_ptr<core::Repository> m_repo;
-
-        CodecServiceProvider(const char * path, Encoding encoding, bool pretty);
+        CodecServiceProvider(path::Repository * repo, EncodingFormat encoding);
         ~CodecServiceProvider();
 
         void add_lookup_table(TopEntityLookUp & lookup);
-        core::RootSchemaNode* get_root_schema();
+        path::RootSchemaNode* get_root_schema();
         std::unique_ptr<Entity> get_top_entity(std::string & payload);
+
+    public:
+        path::CodecService::Format m_encoding;
 
     private:
         TopEntityLookUp m_lookup;
-        std::unique_ptr<core::RootSchemaNode> m_root_schema;
+        std::unique_ptr<path::RootSchemaNode> m_root_schema;
+        path::Repository* m_repo;
 
     };
 }

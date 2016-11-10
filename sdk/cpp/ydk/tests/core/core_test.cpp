@@ -25,13 +25,13 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include "../../src/core.hpp"
-#include "../../src/core/core_private.hpp"
+#include "../../src/path/core_private.hpp"
 #include "../config.hpp"
 
 BOOST_AUTO_TEST_CASE( test_segmentalize  )
 {
 	std::string test_string = "Cisco-IOS-XR-clns-isis-cfg:isis/instances/instance/interfaces[interface-name='GigabitEthernet0/0/0/0']";
-	std::vector<std::string> segments = ydk::core::segmentalize(test_string);
+	std::vector<std::string> segments = ydk::path::segmentalize(test_string);
 	std::vector<std::string> expected {"Cisco-IOS-XR-clns-isis-cfg:isis", "instances", "instance", "interfaces[interface-name='GigabitEthernet0/0/0/0']"};
 
 	for (size_t index = 0;index<segments.size();index++)

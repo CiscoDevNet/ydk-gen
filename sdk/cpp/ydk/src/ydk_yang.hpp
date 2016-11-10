@@ -29,7 +29,7 @@
 #define YDK_YANG_HPP
 
 namespace ydk {
-    namespace core {
+    namespace path {
        extern const char* YDK_MODULE_NAME;
        extern const char* YDK_MODULE_REVISION;
        extern const char* YDK_MODULE;

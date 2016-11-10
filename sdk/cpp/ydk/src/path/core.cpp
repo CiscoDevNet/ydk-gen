@@ -33,7 +33,7 @@
 /// Function segmentalize()
 ////////////////////////////////////////////////////////////////////
 std::vector<std::string>
-ydk::core::segmentalize(const std::string& path)
+ydk::path::segmentalize(const std::string& path)
 {
     const std::string token {"/"};
     std::vector<std::string> output;
@@ -58,7 +58,7 @@ ydk::core::segmentalize(const std::string& path)
 ////////////////////////////////////////////////////////////////////
 /// ServiceProvider
 ///////////////////////////////////////////////////////////////////
-ydk::core::ServiceProvider::~ServiceProvider()
+ydk::path::ServiceProvider::~ServiceProvider()
 {
 
 }
@@ -67,7 +67,7 @@ ydk::core::ServiceProvider::~ServiceProvider()
 
 /////////////////////////////////////////////////////////////////////////
 namespace ydk {
-    namespace core {
+    namespace path {
 
         template<typename T>
         void parse_range_intervals(LengthRangeIntervals<T>& intervals, const char* str_restr)
@@ -476,7 +476,7 @@ namespace ydk {
 // class ydk::ValidationService
 //////////////////////////////////////////////////////////////////////////
 void
-ydk::core::ValidationService::validate(const ydk::core::DataNode* dn, ydk::core::ValidationService::Option option)
+ydk::path::ValidationService::validate(const ydk::path::DataNode* dn, ydk::path::ValidationService::Option option)
 {
     std::string option_str = "";
     int ly_option = 0;
@@ -504,13 +504,13 @@ ydk::core::ValidationService::validate(const ydk::core::DataNode* dn, ydk::core:
     BOOST_LOG_TRIVIAL(debug) << "Validation called on " << dn->path() << " with option " << option_str;
 
     //what kind of a DataNode is this
-    const ydk::core::DataNodeImpl* dn_impl = dynamic_cast<const ydk::core::DataNodeImpl*>(dn);
+    const ydk::path::DataNodeImpl* dn_impl = dynamic_cast<const ydk::path::DataNodeImpl*>(dn);
     if(dn_impl){
         struct lyd_node* lynode = dn_impl->m_node;
         int rc = lyd_validate(&lynode,ly_option, NULL);
         if(rc) {
             BOOST_LOG_TRIVIAL(error) << "Data validation failed";
-            BOOST_THROW_EXCEPTION(ydk::core::YDKDataValidationException{});
+            BOOST_THROW_EXCEPTION(ydk::path::YDKDataValidationException{});
         }
 
     } else {
@@ -527,7 +527,7 @@ ydk::core::ValidationService::validate(const ydk::core::DataNode* dn, ydk::core:
 // class ydk::CodecService
 //////////////////////////////////////////////////////////////////////////
 std::string
-ydk::core::CodecService::encode(const ydk::core::DataNode* dn, ydk::core::CodecService::Format format, bool pretty)
+ydk::path::CodecService::encode(const ydk::path::DataNode* dn, ydk::path::CodecService::Format format, bool pretty)
 {
     std::string ret{};
 
@@ -535,7 +535,7 @@ ydk::core::CodecService::encode(const ydk::core::DataNode* dn, ydk::core::CodecS
     LYD_FORMAT scheme = LYD_XML;
 
 
-    if(format == ydk::core::CodecService::Format::JSON) {
+    if(format == ydk::path::CodecService::Format::JSON) {
         scheme = LYD_JSON;
     }
 
@@ -570,8 +570,8 @@ ydk::core::CodecService::encode(const ydk::core::DataNode* dn, ydk::core::CodecS
 
 }
 
-ydk::core::DataNode*
-ydk::core::CodecService::decode(const RootSchemaNode* root_schema, const std::string& buffer, CodecService::Format format)
+ydk::path::DataNode*
+ydk::path::CodecService::decode(const RootSchemaNode* root_schema, const std::string& buffer, CodecService::Format format)
 {
     LYD_FORMAT scheme = LYD_XML;
     if (format == CodecService::Format::JSON) {

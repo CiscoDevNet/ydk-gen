@@ -50,7 +50,7 @@ typedef struct Empty {
     bool set;
 } Empty;
 
-namespace core {
+namespace path {
 class DataNode;
 class RootSchemaNode;
 }
@@ -142,6 +142,19 @@ class Bits {
 	std::map<std::string, bool> bitmap;
 };
 
+class Decimal64 {
+  public:
+	Decimal64(std::string value)
+     : value(value)
+    {
+    }
+	virtual ~Decimal64()
+	{
+	}
+
+	std::string value;
+};
+
 class Identity {
   public:
 	Identity(std::string tag) : tag(tag)
@@ -224,6 +237,7 @@ class Value {
 	void operator = (Bits val);
 	void operator = (std::string val);
 	void operator = (Enum::Value val);
+	void operator = (Decimal64 val);
 
 	operator std::string() const;
 	bool operator == (Value & other) const;
@@ -268,6 +282,7 @@ class ValueList {
 	void append(Bits val);
 	void append(std::string val);
 	void append(Enum::Value val);
+	void append(Decimal64 val);
 
 	Value & operator [] (size_t index);
 
@@ -285,6 +300,11 @@ class ValueList {
 };
 
 std::ostream& operator<< (std::ostream& stream, const Value& value);
+
+enum class EncodingFormat {
+	XML,
+	JSON
+};
 
 }
 

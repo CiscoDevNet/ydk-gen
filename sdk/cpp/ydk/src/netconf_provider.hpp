@@ -26,9 +26,9 @@ namespace ydk {
 
 class NetconfClient;
 
-class NetconfServiceProvider : public core::ServiceProvider {
+class NetconfServiceProvider : public path::ServiceProvider {
 public:
-        NetconfServiceProvider(core::Repository* repo,
+        NetconfServiceProvider(path::Repository* repo,
                                 std::string address,
                                std::string username,
                                std::string password,
@@ -39,24 +39,24 @@ public:
                                int port);
         ~NetconfServiceProvider();
 
-        virtual core::RootSchemaNode* get_root_schema() const;
+        virtual path::RootSchemaNode* get_root_schema() const;
 
-        virtual core::DataNode* invoke(core::Rpc* rpc) const;
+        virtual path::DataNode* invoke(path::Rpc* rpc) const;
 
         static const char* CANDIDATE;
         static const char* MODULE_NAME;
 
 private:
-        core::DataNode* handle_edit(core::Rpc* rpc, core::Annotation ann) const;
-        core::DataNode* handle_read(core::Rpc* rpc) const;
+        path::DataNode* handle_edit(path::Rpc* rpc, path::Annotation ann) const;
+        path::DataNode* handle_read(path::Rpc* rpc) const;
         void initialize();
 
 private:
-        std::unique_ptr<core::Repository> m_repo_ptr;
-        core::Repository* m_repo;
+        std::unique_ptr<path::Repository> m_repo_ptr;
+        path::Repository* m_repo;
         std::unique_ptr<NetconfClient> client;
-        std::unique_ptr<core::ModelProvider> model_provider;
-        std::unique_ptr<ydk::core::RootSchemaNode> root_schema;
+        std::unique_ptr<path::ModelProvider> model_provider;
+        std::unique_ptr<ydk::path::RootSchemaNode> root_schema;
 
         std::vector<std::string> server_capabilities;
 

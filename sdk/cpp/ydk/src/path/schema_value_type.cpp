@@ -29,35 +29,35 @@
 /// SchemaValueType
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueType::~SchemaValueType()
+ydk::path::SchemaValueType::~SchemaValueType()
 {
 
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueBinaryType
+// ydk::path::SchemaValueBinaryType
 /////////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueBinaryType::SchemaValueBinaryType(): length{Range<uint64_t>{0,18446744073709551615UL}}
+ydk::path::SchemaValueBinaryType::SchemaValueBinaryType(): length{Range<uint64_t>{0,18446744073709551615UL}}
 {
 
 }
 
 
 
-ydk::core::SchemaValueBinaryType::~SchemaValueBinaryType()
+ydk::path::SchemaValueBinaryType::~SchemaValueBinaryType()
 {
 
 }
 
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueBinaryType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueBinaryType::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
-        diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+        diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
     }
     return diag;
 };
@@ -65,16 +65,16 @@ ydk::core::SchemaValueBinaryType::validate(const std::string& value) const
 
 
 ///////////////////////////////////////////////////////////////////////////////////
-/// ydk::core::SchemaValueBitsType::Bit
+/// ydk::path::SchemaValueBitsType::Bit
 //////////////////////////////////////////////////////////////////////////////////
-ydk::core::SchemaValueBitsType::Bit::Bit(std::string m_name, uint32_t m_pos) : name{m_name} ,
+ydk::path::SchemaValueBitsType::Bit::Bit(std::string m_name, uint32_t m_pos) : name{m_name} ,
 pos{m_pos} {
 
 }
 
 
 namespace ydk {
-    namespace core {
+    namespace path {
         static std::vector<std::string> split(const std::string &s, char delim) {
             std::stringstream ss(s);
             std::string item;
@@ -89,34 +89,34 @@ namespace ydk {
 
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueBitsType
+// ydk::path::SchemaValueBitsType
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueBitsType::~SchemaValueBitsType()
+ydk::path::SchemaValueBitsType::~SchemaValueBitsType()
 {
 
 }
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueBitsType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueBitsType::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty())
     {
         BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueBits";
-        diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+        diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
     } else {
         //tokenize and make sure all tokens are accounted for
-        auto tokens = ydk::core::split(value, ' ');
-        std::map<std::string, ydk::core::SchemaValueBitsType::Bit*> name_bit_map{};
+        auto tokens = ydk::path::split(value, ' ');
+        std::map<std::string, ydk::path::SchemaValueBitsType::Bit*> name_bit_map{};
         for(auto bit : bits){
             name_bit_map.insert(std::make_pair(bit.name,&bit));
         }
         for(auto token : tokens) {
             if(name_bit_map.find(token) == name_bit_map.end()){
                 BOOST_LOG_TRIVIAL(error) << "Invalid bits value " << value;
-                diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+                diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
             }
         }
 
@@ -125,31 +125,31 @@ ydk::core::SchemaValueBitsType::validate(const std::string& value) const
 }
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueDec64Type
+// ydk::path::SchemaValueDec64Type
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueDec64Type::~SchemaValueDec64Type()
+ydk::path::SchemaValueDec64Type::~SchemaValueDec64Type()
 {
 
 }
 
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueDec64Type::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueDec64Type::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
         BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueDec64Type";
-        diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+        diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
     }
     return diag;
 }
 
 //////////////////////////////////////////////////////////////////////
-/// ydk::core::SchemaValueEnumerationType::Enum
+/// ydk::path::SchemaValueEnumerationType::Enum
 /////////////////////////////////////////////////////////////////////
-ydk::core::SchemaValueEnumerationType::Enum::Enum(std::string m_name, int32_t m_value) : name{m_name}, value{m_value}
+ydk::path::SchemaValueEnumerationType::Enum::Enum(std::string m_name, int32_t m_value) : name{m_name}, value{m_value}
 {
 
 }
@@ -157,22 +157,22 @@ ydk::core::SchemaValueEnumerationType::Enum::Enum(std::string m_name, int32_t m_
 
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueEnumerationType
+// ydk::path::SchemaValueEnumerationType
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueEnumerationType::~SchemaValueEnumerationType()
+ydk::path::SchemaValueEnumerationType::~SchemaValueEnumerationType()
 {
 
 }
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueEnumerationType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueEnumerationType::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
          BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueEnumerationType";
-        diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+        diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
 
     } else {
 
@@ -183,34 +183,34 @@ ydk::core::SchemaValueEnumerationType::validate(const std::string& value) const
         }
     }
      BOOST_LOG_TRIVIAL(error) << "Invalid enum value " << value;
-    diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+    diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
 
     return diag;
 }
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueIdentityType
+// ydk::path::SchemaValueIdentityType
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueIdentityType::~SchemaValueIdentityType()
+ydk::path::SchemaValueIdentityType::~SchemaValueIdentityType()
 {
     for(auto identity : derived) {
         delete identity;
     }
 }
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueIdentityType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueIdentityType::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
          BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueIdentityType";
-        diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+        diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
         return diag;
     }
 
-    auto tokens = ydk::core::split(value, ':');
+    auto tokens = ydk::path::split(value, ':');
     if(tokens.size() == 1) {
         //no module name just compare the name
         if(tokens[0] == name) {
@@ -227,27 +227,27 @@ ydk::core::SchemaValueIdentityType::validate(const std::string& value) const
     }
 
     BOOST_LOG_TRIVIAL(error) << "Invalid identity" << value;
-    diag.errors.push_back(ydk::core::ValidationError::INVALID_IDENTITY);
+    diag.errors.push_back(ydk::path::ValidationError::INVALID_IDENTITY);
     return diag;
 }
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueInstanceIdType
+// ydk::path::SchemaValueInstanceIdType
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueInstanceIdType::~SchemaValueInstanceIdType()
+ydk::path::SchemaValueInstanceIdType::~SchemaValueInstanceIdType()
 {
 
 }
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueInstanceIdType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueInstanceIdType::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
         BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaValueInstanceIdType";
-        diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+        diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
     }
 
 
@@ -255,28 +255,28 @@ ydk::core::SchemaValueInstanceIdType::validate(const std::string& value) const
 }
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueStringType
+// ydk::path::SchemaValueStringType
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueStringType::SchemaValueStringType(): length{Range<uint64_t>{0,18446744073709551615UL}}
+ydk::path::SchemaValueStringType::SchemaValueStringType(): length{Range<uint64_t>{0,18446744073709551615UL}}
 {
 
 }
 
 
-ydk::core::SchemaValueStringType::~SchemaValueStringType()
+ydk::path::SchemaValueStringType::~SchemaValueStringType()
 {
 
 }
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueStringType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueStringType::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
         BOOST_LOG_TRIVIAL(error) << "Empty attribute error for SchemaStringType";
-        diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+        diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
     }
 
     /// first do a length check
@@ -317,11 +317,11 @@ ydk::core::SchemaValueStringType::validate(const std::string& value) const
 }
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueUnionType
+// ydk::path::SchemaValueUnionType
 ////////////////////////////////////////////////////////////////////////
 
 
-ydk::core::SchemaValueUnionType::~SchemaValueUnionType()
+ydk::path::SchemaValueUnionType::~SchemaValueUnionType()
 {
     for(auto type : types) {
         delete type;
@@ -329,8 +329,8 @@ ydk::core::SchemaValueUnionType::~SchemaValueUnionType()
 }
 
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueUnionType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueUnionType::validate(const std::string& value) const
 {
 
     for(auto type : types){
@@ -340,7 +340,7 @@ ydk::core::SchemaValueUnionType::validate(const std::string& value) const
         }
     }
 
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag{};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag{};
     BOOST_LOG_TRIVIAL(error) << "Union type validation failed for value " << value;
     diag.errors.push_back(ValidationError::INVALATTR);
 
@@ -348,53 +348,53 @@ ydk::core::SchemaValueUnionType::validate(const std::string& value) const
 }
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueEmptyType
+// ydk::path::SchemaValueEmptyType
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueEmptyType::SchemaValueEmptyType(const std::string& mleaf_name) : leaf_name{mleaf_name}
+ydk::path::SchemaValueEmptyType::SchemaValueEmptyType(const std::string& mleaf_name) : leaf_name{mleaf_name}
 {
 
 }
 
 
-ydk::core::SchemaValueEmptyType::~SchemaValueEmptyType()
+ydk::path::SchemaValueEmptyType::~SchemaValueEmptyType()
 {
 
 }
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueEmptyType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueEmptyType::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
         BOOST_LOG_TRIVIAL(error) << "Value is empty for SchemaValueEmptyType" ;
-        diag.errors.push_back(ydk::core::ValidationError::INVALID_EMPTY_VAL);
+        diag.errors.push_back(ydk::path::ValidationError::INVALID_EMPTY_VAL);
     } else if(value != leaf_name){
         BOOST_LOG_TRIVIAL(error) << "Mismatch between leaf name " << leaf_name << " and value " << value;
-        diag.errors.push_back(ydk::core::ValidationError::INVALID_EMPTY_VAL);
+        diag.errors.push_back(ydk::path::ValidationError::INVALID_EMPTY_VAL);
     }
     return diag;
 }
 
 ////////////////////////////////////////////////////////////////////
-// ydk::core::SchemaValueBoolType
+// ydk::path::SchemaValueBoolType
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::SchemaValueBoolType::~SchemaValueBoolType()
+ydk::path::SchemaValueBoolType::~SchemaValueBoolType()
 {
 
 }
 
 
-ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError>
-ydk::core::SchemaValueBoolType::validate(const std::string& value) const
+ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
+ydk::path::SchemaValueBoolType::validate(const std::string& value) const
 {
-    DiagnosticNode<std::string, ydk::core::ValidationError> diag {};
+    DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
         BOOST_LOG_TRIVIAL(error) << "Value is empty for SchemaValueBoolType" ;
-        diag.errors.push_back(ydk::core::ValidationError::INVALATTR);
+        diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
     } else {
 
         if(value != "true" && value != "false") {

@@ -31,7 +31,7 @@ namespace ydk
 {
 
 TopEntityLookUp ydk_global_entities;
-std::vector<core::Capability> ydk_global_caps;
+std::vector<path::Capability> ydk_global_caps;
 
 re::sregex XML_LOOKUP_KEY = re::sregex::compile("<(?P<entity>[^ ]+) xmlns=\"(?P<ns>[^\"]+)\"");
 re::sregex JSON_LOOKUP_KEY = re::sregex::compile("{[^\"]+\"(?P<key>[^\"]+)\"");
@@ -76,16 +76,29 @@ std::string get_json_lookup_key(std::string & payload)
     return lookup_key;
 }
 
-CodecServiceProvider::CodecServiceProvider(const char * path, Encoding encoding, bool pretty)
-    : m_pretty{pretty}, m_encoding{encoding}
+CodecServiceProvider::CodecServiceProvider(path::Repository * repo, EncodingFormat encoding)
+    : m_repo{repo}
 {
+	if(encoding == EncodingFormat::XML)
+	{
+		m_encoding = path::CodecService::Format::XML;
+	}
+	else if(encoding == EncodingFormat::JSON)
+	{
+		m_encoding = path::CodecService::Format::JSON;
+	}
+	else
+	{
+		BOOST_THROW_EXCEPTION(YDKServiceProviderException("Encoding format not supported"));
+	}
     augment_lookup_tables();
     m_lookup = ydk_global_entities;
-    m_repo = std::make_unique<core::Repository>(path);
-    m_root_schema = std::unique_ptr<ydk::core::RootSchemaNode>(m_repo->create_root_schema(ydk::ydk_global_caps));
+    m_root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(m_repo->create_root_schema(ydk::ydk_global_caps));
 }
 
-CodecServiceProvider::~CodecServiceProvider() {}
+CodecServiceProvider::~CodecServiceProvider()
+{
+}
 
 void
 CodecServiceProvider::add_lookup_table(TopEntityLookUp & lookup)
@@ -93,7 +106,7 @@ CodecServiceProvider::add_lookup_table(TopEntityLookUp & lookup)
     m_lookup += lookup;
 }
 
-core::RootSchemaNode*
+path::RootSchemaNode*
 CodecServiceProvider::get_root_schema()
 {
     return m_root_schema.get();
@@ -102,7 +115,7 @@ CodecServiceProvider::get_root_schema()
 std::unique_ptr<Entity>
 CodecServiceProvider::get_top_entity(std::string & payload)
 {
-    if (m_encoding == Encoding::XML)
+    if (m_encoding == path::CodecService::Format::XML)
     {
         return m_lookup.lookup(get_xml_lookup_key(payload));
     }

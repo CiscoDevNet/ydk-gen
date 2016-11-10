@@ -29,41 +29,41 @@
 /// Statement
 ///////////////////////////////////////////////////////////////////////////
 
-ydk::core::Statement::Statement(): keyword{}, arg{}
+ydk::path::Statement::Statement(): keyword{}, arg{}
 {
 
 }
 
-ydk::core::Statement::Statement(const std::string& mkeyword, const std::string& marg) : keyword{mkeyword}, arg{marg}
+ydk::path::Statement::Statement(const std::string& mkeyword, const std::string& marg) : keyword{mkeyword}, arg{marg}
 {
 
 }
 
-ydk::core::Statement::Statement(const ydk::core::Statement& stmt): keyword{stmt.keyword}, arg{stmt.arg}
+ydk::path::Statement::Statement(const ydk::path::Statement& stmt): keyword{stmt.keyword}, arg{stmt.arg}
 {
 
 }
 
-ydk::core::Statement::Statement(ydk::core::Statement&& stmt): keyword{std::move(stmt.keyword)}, arg{std::move(stmt.arg)}
+ydk::path::Statement::Statement(ydk::path::Statement&& stmt): keyword{std::move(stmt.keyword)}, arg{std::move(stmt.arg)}
 {
 
 }
 
-ydk::core::Statement::~Statement()
+ydk::path::Statement::~Statement()
 {
 
 }
 
-ydk::core::Statement&
-ydk::core::Statement::operator=(const ydk::core::Statement& stmt)
+ydk::path::Statement&
+ydk::path::Statement::operator=(const ydk::path::Statement& stmt)
 {
     keyword = stmt.keyword;
     arg = stmt.arg;
     return *this;
 }
 
-ydk::core::Statement&
-ydk::core::Statement::operator=(ydk::core::Statement&& stmt)
+ydk::path::Statement&
+ydk::path::Statement::operator=(ydk::path::Statement&& stmt)
 {
     keyword = std::move(stmt.keyword);
     arg = std::move(stmt.arg);

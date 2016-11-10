@@ -256,9 +256,10 @@ config_runner_1(ydktest_sanity::Runner *runner)
     runner->two_list->ldata.push_back(std::move(l_2));
 }
 
-BOOST_AUTO_TEST_CASE(test_single_encode)
+BOOST_AUTO_TEST_CASE(single_encode)
 {
-    CodecServiceProvider codec_provider{TEST_HOME, CodecServiceProvider::Encoding::XML, true};
+	path::Repository repo{TEST_HOME};
+    CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
 
     CodecService codec_service{};
 
@@ -266,13 +267,14 @@ BOOST_AUTO_TEST_CASE(test_single_encode)
 
     config_runner_1(runner.get());
 
-    std::string xml = codec_service.encode(codec_provider, *runner);
+    std::string xml = codec_service.encode(codec_provider, *runner, true);
     std::cout << xml << std::endl;
 }
 
-BOOST_AUTO_TEST_CASE(test_multiple_encode)
+BOOST_AUTO_TEST_CASE(multiple_encode)
 {
-    CodecServiceProvider codec_provider{TEST_HOME, CodecServiceProvider::Encoding::XML, true};
+    path::Repository repo{TEST_HOME};
+    CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
     CodecService codec_service{};
 
     auto runner1 = std::make_unique<ydktest_sanity::Runner>();
@@ -287,7 +289,7 @@ BOOST_AUTO_TEST_CASE(test_multiple_encode)
     entity_map["runner1"] = std::move(runner1);
     entity_map["runner2"] = std::move(runner2);
 
-    std::map<std::string, std::string> payload_map = codec_service.encode(codec_provider, entity_map);
+    std::map<std::string, std::string> payload_map = codec_service.encode(codec_provider, entity_map, true);
 
     BOOST_CHECK_EQUAL(payload_map["runner1"], XML_RUNNER_PAYLOAD_1);
     BOOST_CHECK_EQUAL(payload_map["runner2"], XML_RUNNER_PAYLOAD_2);
@@ -295,7 +297,8 @@ BOOST_AUTO_TEST_CASE(test_multiple_encode)
 
 BOOST_AUTO_TEST_CASE(test_oc_pattern)
 {
-    CodecServiceProvider codec_provider{TEST_HOME, CodecServiceProvider::Encoding::XML, true};
+    path::Repository repo{TEST_HOME};
+    CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, XML_OC_PATTERN_PAYLOAD);
@@ -304,9 +307,10 @@ BOOST_AUTO_TEST_CASE(test_oc_pattern)
     BOOST_CHECK_EQUAL(entity_ptr->a.get(), "Hello");
 }
 
-BOOST_AUTO_TEST_CASE(test_enum_2)
+BOOST_AUTO_TEST_CASE(enum_2)
 {
-    CodecServiceProvider codec_provider{TEST_HOME, CodecServiceProvider::Encoding::XML, true};
+    path::Repository repo{TEST_HOME};
+    CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, XML_ENUM_PAYLOAD_2);
@@ -315,21 +319,23 @@ BOOST_AUTO_TEST_CASE(test_enum_2)
 }
 
 
-BOOST_AUTO_TEST_CASE(test_single_encode_decode)
+BOOST_AUTO_TEST_CASE(encode_decode)
 {
-    // CodecServiceProvider codec_provider{TEST_HOME, CodecServiceProvider::Encoding::JSON, true};
-    // CodecService codec_service{};
-
-    // auto entity = codec_service.decode(codec_provider, JSON_RUNNER_PAYLOAD_1);
-    // std::string json = codec_service.encode(codec_provider, *entity);
-
-    // std::cout << json << std::endl;
-    // BOOST_CHECK_EQUAL(json,JSON_RUNNER_PAYLOAD_1);
+//     path::Repository repo{TEST_HOME};
+//     CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
+//     CodecService codec_service{};
+//
+//     auto entity = codec_service.decode(codec_provider, XML_RUNNER_PAYLOAD_1);
+//     std::string json = codec_service.encode(codec_provider, *entity);
+//
+//     std::cout << json << std::endl;
+//     BOOST_CHECK_EQUAL(json,JSON_RUNNER_PAYLOAD_1);
 }
 
-BOOST_AUTO_TEST_CASE(test_single_decode)
+BOOST_AUTO_TEST_CASE(single_decode)
 {
-    CodecServiceProvider codec_provider{TEST_HOME, CodecServiceProvider::Encoding::JSON, true};
+    path::Repository repo{TEST_HOME};
+    CodecServiceProvider codec_provider{&repo,EncodingFormat::JSON};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, JSON_RUNNER_PAYLOAD_1);

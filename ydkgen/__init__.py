@@ -14,7 +14,7 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 """
-Generate YDK core library, profile package and bundle packages.
+Generate YDK core library, bundle packages.
 """
 from __future__ import print_function
 import os, sys, shutil
@@ -27,7 +27,7 @@ from subprocess import call
 from .common import YdkGenException, iscppkeyword, ispythonkeyword
 from ydkgen.builder import (ApiModelBuilder, GroupingClassApiModelBuilder,
                             PyangModelBuilder, SubModuleBuilder)
-from .resolver import resolve_profile, bundle_resolver, bundle_translator
+from .resolver import bundle_resolver, bundle_translator
 from ydkgen.printer import printer_factory
 
 
@@ -47,7 +47,6 @@ class YdkGenerator(object):
                                        converted to a class.
             language (str): Language for generated APIs
             pkg_type (str): Package type for generated APIs.
-                            Valid option for profile approach is: 'profile'.
                             Valid options for bundle approach are: 'core',
                                                                    'bundle'.
             sort_clazz (bool): Option to sort generated classes at same leve.
@@ -73,7 +72,7 @@ class YdkGenerator(object):
             self.iskeyword = ispythonkeyword
 
     def generate(self, description_file=None):
-        """ Generate ydk profile package, bundle packages or ydk core library.
+        """ Generate ydk bundle packages or ydk core library.
 
         Args:
             description_file (str): Path to description file.
@@ -82,10 +81,7 @@ class YdkGenerator(object):
             Generated APIs root directory for core and profile package.
             List of Generated APIs root directories for bundle packages.
         """
-        if self.pkg_type == 'profile':
-            return self._generate_profile(description_file)
-
-        elif self.pkg_type == 'bundle':
+        if self.pkg_type == 'bundle':
             return self._generate_bundle(description_file)
 
         elif self.pkg_type == 'core':
@@ -93,25 +89,6 @@ class YdkGenerator(object):
 
         else:
             raise YdkGenException('Invalid package type specified: %s' % self.pkg_type)
-
-    def _generate_profile(self, profile_file):
-        """ Generate ydk profile package.
-
-        Args:
-            profile_file (str): Path to profile description file.
-
-        Returns:
-            gen_api_root (str): Root directory for generated APIs.
-        """
-        _check_description_file(profile_file)
-
-        gen_api_root = self._init_dirs(pkg_type='profile')
-        resolved_models_dir = self._get_profile_resolved_model_dir(
-                                        profile_file, gen_api_root)
-        api_pkgs = self._get_api_pkgs(resolved_models_dir)
-        self._print_pkgs(api_pkgs, gen_api_root)
-
-        return gen_api_root
 
     def _generate_bundle(self, profile_file):
         """ Generate ydk bundle package. First translate profile file to
@@ -187,36 +164,6 @@ class YdkGenerator(object):
         factory = printer_factory.PrinterFactory()
         ydk_printer = factory.get_printer(self.language)(output_dir, bundle_name, self.generate_tests, self.sort_clazz)
         ydk_printer.emit(pkgs)
-
-    def _get_profile_resolved_model_dir(self, profile_file, gen_api_root):
-        """ Return resolve models directory for profile package.
-
-        Args:
-            profile_file (str): Path to a profile description file.
-            gen_api_root (str): Path to generated APIs root directory.
-
-        Returns:
-            (str) Path to resolved yang modules.
-
-        Raises:
-            YdkGenException: If path to profile file is invalid.
-        """
-        try:
-            with open(profile_file) as json_file:
-                data = json.load(json_file)
-                if self.language == 'python':
-                    _modify_python_setup(gen_api_root, 'ydk', data['version'])
-
-                return resolve_profile.resolve_profile(data, self.ydk_root)
-
-        except IOError as err:
-            err_msg = 'Cannot open profile file (%s)' % err.strerror
-            logger.error(err_msg)
-            raise YdkGenException(err_msg)
-        except ValueError as err:
-            err_msg = 'Cannot parse profile file (%s)' % err.message
-            logger.error(err_msg)
-            raise YdkGenException(err_msg)
 
     # Initialize generated API directory ######################################
     def _init_dirs(self, api_pkgs=None, pkg_name=None, pkg_type=None, bundle=None):
@@ -402,7 +349,6 @@ def _check_generator_args(output_dir, ydk_root, language, pkg_type):
         ydk_root (str): The ydk root directory.
         language (str): Language for generated APIs.
         pkg_type (str): Package type for generated APIs.
-                        Valid option for profile approach is: 'profile'.
                         Valid options for bundle approach are: 'core',
                                                                'bundle'.
     Raises:

@@ -3,11 +3,7 @@ CodecServiceProvider
 
 .. cpp:namespace:: ydk
 
-.. cpp:class:: CodecServiceProvider : public path::ServiceProvider
-
-Implementation of :cpp:class:`ServiceProvider<path::ServiceProvider>` for the netconf protocol.
-
-    .. cpp:enum:: Encoding
+.. cpp:enum:: EncodingFormat
 
         Type of encoding of the payload
 
@@ -15,11 +11,15 @@ Implementation of :cpp:class:`ServiceProvider<path::ServiceProvider>` for the ne
 
         .. cpp:enumerator:: JSON
 
-    .. cpp:function:: CodecServiceProvider(const path::Repository* repo, Encoding encoding)
+.. cpp:class:: CodecServiceProvider : public path::ServiceProvider
+
+Implementation of :cpp:class:`ServiceProvider<path::ServiceProvider>` for performing encoding and decoding.
+
+    .. cpp:function:: CodecServiceProvider(const path::Repository* repo, EncodingFormat encoding)
 
         Constructs an instance of the ``CodecServiceProvider``
 
         :param repository: Pointer to an instance of :cpp:class:`path::Repository<ydk::path::Repository>`
-        :param encoding: Indicates type of encoding (currently, either :cpp:enumerator:`JSON<Encoding::JSON>` or :cpp:enumerator:`XML<Encoding::XML>`)        
+        :param encoding: Indicates type of encoding (currently, either :cpp:enumerator:`JSON<EncodingFormat::JSON>` or :cpp:enumerator:`XML<EncodingFormat::XML>`)        
 
     .. cpp:function:: ~CodecServiceProvider()

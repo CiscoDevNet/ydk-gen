@@ -27,23 +27,23 @@
 ////////////////////////////////////////////////////////////////////////////
 /// Annotation
 ///////////////////////////////////////////////////////////////////////////
-ydk::core::Annotation::Annotation(const std::string& ns, const std::string& name, const std::string& val) : m_ns{ns}, m_name{name}, m_val{val}
+ydk::path::Annotation::Annotation(const std::string& ns, const std::string& name, const std::string& val) : m_ns{ns}, m_name{name}, m_val{val}
 {
 
 }
 
-ydk::core::Annotation::Annotation(const Annotation& an) : m_ns{an.m_ns}, m_name{an.m_name}, m_val{an.m_val}
+ydk::path::Annotation::Annotation(const Annotation& an) : m_ns{an.m_ns}, m_name{an.m_name}, m_val{an.m_val}
 {
 
 }
 
-ydk::core::Annotation::Annotation(Annotation&& an) : m_ns{std::move(an.m_ns)}, m_name{std::move(an.m_name)}, m_val{std::move(an.m_val)}
+ydk::path::Annotation::Annotation(Annotation&& an) : m_ns{std::move(an.m_ns)}, m_name{std::move(an.m_name)}, m_val{std::move(an.m_val)}
 {
 
 }
 
-ydk::core::Annotation&
-ydk::core::Annotation::operator=(const ydk::core::Annotation& an)
+ydk::path::Annotation&
+ydk::path::Annotation::operator=(const ydk::path::Annotation& an)
 {
     m_ns = an.m_ns;
     m_name = an.m_name;
@@ -52,8 +52,8 @@ ydk::core::Annotation::operator=(const ydk::core::Annotation& an)
     return *this;
 }
 
-ydk::core::Annotation&
-ydk::core::Annotation::operator=(ydk::core::Annotation&& an)
+ydk::path::Annotation&
+ydk::path::Annotation::operator=(ydk::path::Annotation&& an)
 {
     m_ns = std::move(an.m_ns);
     m_name = std::move(an.m_name);
@@ -63,7 +63,7 @@ ydk::core::Annotation::operator=(ydk::core::Annotation&& an)
 }
 
 bool
-ydk::core::Annotation::operator==(const Annotation& an) const
+ydk::path::Annotation::operator==(const Annotation& an) const
 {
     return m_ns == an.m_ns && m_name == an.m_name;
 }

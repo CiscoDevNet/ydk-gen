@@ -32,7 +32,7 @@ namespace ydk {
 
 static void
 validate_missing_keys(const EntityPath& entity_path,
-                      const ydk::core::SchemaNode& schema_node,
+                      const ydk::path::SchemaNode& schema_node,
                       EntityDiagnostic& diagnostic)
 {
     auto keys = schema_node.keys();
@@ -46,9 +46,9 @@ validate_missing_keys(const EntityPath& entity_path,
     for(auto key : keys) {
         //check if the value list has the value's
         if(name_value_map.find(key.arg) == name_value_map.end()) {
-            ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError> attr{};
+            ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError> attr{};
             attr.source = key.arg;
-            attr.errors.push_back(ydk::core::ValidationError::MISSELEM);
+            attr.errors.push_back(ydk::path::ValidationError::MISSELEM);
             diagnostic.attrs.push_back(std::move(attr));
         }
     }
@@ -56,7 +56,7 @@ validate_missing_keys(const EntityPath& entity_path,
 }
 
 static void
-validate_attributes(const EntityPath& entity_path, const ydk::core::SchemaNode& schema_node,
+validate_attributes(const EntityPath& entity_path, const ydk::path::SchemaNode& schema_node,
                     EntityDiagnostic& diagnostic)
 {
     //now validate the values in the value_path that have some values in them
@@ -66,14 +66,14 @@ validate_attributes(const EntityPath& entity_path, const ydk::core::SchemaNode& 
         auto leaf_schema_node_list = schema_node.find(value_path.first);
         if(leaf_schema_node_list.empty()) {
             //the leaf is invalid or not present in the schema
-            ydk::core::DiagnosticNode<std::string, ydk::core::ValidationError> attr{};
+            ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError> attr{};
             attr.source = value_path.first;
-            attr.errors.push_back(ydk::core::ValidationError::SCHEMA_NOT_FOUND);
+            attr.errors.push_back(ydk::path::ValidationError::SCHEMA_NOT_FOUND);
             diagnostic.attrs.push_back(std::move(attr));
         } else {
-            ydk::core::SchemaNode* leaf_schema_node = leaf_schema_node_list[0];
+            ydk::path::SchemaNode* leaf_schema_node = leaf_schema_node_list[0];
             //now test to see if the value is correct
-            ydk::core::SchemaValueType* type = leaf_schema_node->type();
+            ydk::path::SchemaValueType* type = leaf_schema_node->type();
 
             if(type == nullptr) {
                 BOOST_LOG_TRIVIAL(error) << "Cannot derive type for leaf " << leaf_schema_node->statement().arg;
@@ -102,7 +102,7 @@ keyword_is_leaf(std::string & keyword)
 }
 
 static EntityDiagnostic
-validate(const ydk::core::ServiceProvider& sp, ydk::Entity& entity, ydk::Entity* parent,
+validate(const ydk::path::ServiceProvider& sp, ydk::Entity& entity, ydk::Entity* parent,
              ydk::ValidationService::Option option)
 {
 
@@ -119,17 +119,17 @@ validate(const ydk::core::ServiceProvider& sp, ydk::Entity& entity, ydk::Entity*
     diagnostic.source = &entity;
 
     if(schema_node_list.empty()) {
-        diagnostic.errors.push_back(ydk::core::ValidationError::SCHEMA_NOT_FOUND);
+        diagnostic.errors.push_back(ydk::path::ValidationError::SCHEMA_NOT_FOUND);
         //no point processing children
         return diagnostic;
 
     }
 
     //schema node cannot be leaf, leaf-list or anyxml
-    ydk::core::SchemaNode* schema_node = schema_node_list[0];
+    ydk::path::SchemaNode* schema_node = schema_node_list[0];
     auto stmt = schema_node->statement();
     if(keyword_is_leaf(stmt.keyword)) {
-        diagnostic.errors.push_back(ydk::core::ValidationError::INVALID_USE_OF_SCHEMA);
+        diagnostic.errors.push_back(ydk::path::ValidationError::INVALID_USE_OF_SCHEMA);
 
     } else {
         // there is no error with the schema for this node
@@ -158,7 +158,7 @@ validate(const ydk::core::ServiceProvider& sp, ydk::Entity& entity, ydk::Entity*
 }
 
 EntityDiagnostic
-ValidationService::validate(const core::ServiceProvider& sp, Entity& entity,
+ValidationService::validate(const path::ServiceProvider& sp, Entity& entity,
                             ValidationService::Option option)
 {
 

@@ -30,30 +30,30 @@
 /// Capability
 /////////////////////////////////////////////////////////////////////////////
 
-ydk::core::Capability::Capability(const std::string& mod, const std::string& rev): module{mod}, revision{rev}
+ydk::path::Capability::Capability(const std::string& mod, const std::string& rev): module{mod}, revision{rev}
 {
 
 }
 
-ydk::core::Capability::Capability(const std::string& mod, const std::string& rev, const std::vector<std::string>& f,
+ydk::path::Capability::Capability(const std::string& mod, const std::string& rev, const std::vector<std::string>& f,
            const std::vector<std::string>& d): module{mod}, revision{rev}, features{f}, deviations({d})
 {
 
 }
 
-ydk::core::Capability::Capability(const Capability& cap): module{cap.module}, revision{cap.revision}, features{cap.features}, deviations{cap.deviations}
+ydk::path::Capability::Capability(const Capability& cap): module{cap.module}, revision{cap.revision}, features{cap.features}, deviations{cap.deviations}
 {
 
 }
 
-ydk::core::Capability::Capability(ydk::core::Capability&& cap): module{std::move(cap.module)}, revision{std::move(cap.revision)},
+ydk::path::Capability::Capability(ydk::path::Capability&& cap): module{std::move(cap.module)}, revision{std::move(cap.revision)},
 features{std::move(cap.features)}, deviations{std::move(cap.deviations)}
 {
 
 }
 
-ydk::core::Capability&
-ydk::core::Capability::operator=(const ydk::core::Capability& cap)
+ydk::path::Capability&
+ydk::path::Capability::operator=(const ydk::path::Capability& cap)
 {
     module = cap.module;
     revision = cap.revision;
@@ -64,8 +64,8 @@ ydk::core::Capability::operator=(const ydk::core::Capability& cap)
 }
 
 
-ydk::core::Capability&
-ydk::core::Capability::operator=(ydk::core::Capability&& cap)
+ydk::path::Capability&
+ydk::path::Capability::operator=(ydk::path::Capability&& cap)
 {
     module = std::move(cap.module);
     revision = std::move(cap.revision);
@@ -76,7 +76,7 @@ ydk::core::Capability::operator=(ydk::core::Capability&& cap)
 }
 
 bool
-ydk::core::Capability::operator==(const ydk::core::Capability& cap)
+ydk::path::Capability::operator==(const ydk::path::Capability& cap)
 {
     if( cap.module != module || cap.revision != revision ) {
         return false;

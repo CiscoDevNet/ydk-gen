@@ -31,19 +31,19 @@
 using namespace std;
 
 namespace ydk {
-static string get_data_payload(Entity & entity, core::RootSchemaNode & root_schema);
-static core::DataNode* execute_rpc(core::ServiceProvider & provider, Entity & entity,
+static string get_data_payload(Entity & entity, path::RootSchemaNode & root_schema);
+static path::DataNode* execute_rpc(path::ServiceProvider & provider, Entity & entity,
 		const string & operation, const string & data_tag, bool set_config_flag=false);
-static core::DataNode* execute_rpc(core::ServiceProvider & provider, map<string, Entity*> entity_map,
+static path::DataNode* execute_rpc(path::ServiceProvider & provider, map<string, Entity*> entity_map,
 		const string & operation, const string & data_tag, bool set_config_flag=false);
 static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter);
-static bool operation_succeeded(core::DataNode * node);
+static bool operation_succeeded(path::DataNode * node);
 
 CrudService::CrudService()
 {
 }
 
-bool CrudService::create(core::ServiceProvider & provider, Entity & entity)
+bool CrudService::create(path::ServiceProvider & provider, Entity & entity)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD create operation";
 	return operation_succeeded(
@@ -51,7 +51,7 @@ bool CrudService::create(core::ServiceProvider & provider, Entity & entity)
 			);
 }
 
-bool CrudService::create(core::ServiceProvider & provider, map<string, Entity*> entity_map)
+bool CrudService::create(path::ServiceProvider & provider, map<string, Entity*> entity_map)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD create operation";
 	return operation_succeeded(
@@ -59,7 +59,7 @@ bool CrudService::create(core::ServiceProvider & provider, map<string, Entity*> 
 			);
 }
 
-bool CrudService::update(core::ServiceProvider & provider, Entity & entity)
+bool CrudService::update(path::ServiceProvider & provider, Entity & entity)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD update operation";
 	return operation_succeeded(
@@ -67,7 +67,7 @@ bool CrudService::update(core::ServiceProvider & provider, Entity & entity)
 			);
 }
 
-bool CrudService::update(core::ServiceProvider & provider, map<string, Entity*> entity_map)
+bool CrudService::update(path::ServiceProvider & provider, map<string, Entity*> entity_map)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD update operation";
 	return operation_succeeded(
@@ -75,7 +75,7 @@ bool CrudService::update(core::ServiceProvider & provider, map<string, Entity*> 
 			);
 }
 
-bool CrudService::delete_(core::ServiceProvider & provider, Entity & entity)
+bool CrudService::delete_(path::ServiceProvider & provider, Entity & entity)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD delete operation";
 	return operation_succeeded(
@@ -83,7 +83,7 @@ bool CrudService::delete_(core::ServiceProvider & provider, Entity & entity)
 			);
 }
 
-bool CrudService::delete_(core::ServiceProvider & provider, map<string, Entity*> entity_map)
+bool CrudService::delete_(path::ServiceProvider & provider, map<string, Entity*> entity_map)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD delete operation";
 	return operation_succeeded(
@@ -91,35 +91,35 @@ bool CrudService::delete_(core::ServiceProvider & provider, map<string, Entity*>
 			);
 }
 
-unique_ptr<Entity> CrudService::read(core::ServiceProvider & provider, Entity & filter)
+unique_ptr<Entity> CrudService::read(path::ServiceProvider & provider, Entity & filter)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD read operation";
-	core::DataNode* read_data_node = execute_rpc(provider, filter, "ydk:read", "filter");
+	path::DataNode* read_data_node = execute_rpc(provider, filter, "ydk:read", "filter");
 	return read(filter, read_data_node);
 }
 
-map<string, unique_ptr<Entity> > CrudService::read(core::ServiceProvider & provider, map<string, Entity*> filter_map)
+map<string, unique_ptr<Entity> > CrudService::read(path::ServiceProvider & provider, map<string, Entity*> filter_map)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD read operation";
-	core::DataNode* read_data_node = execute_rpc(provider, filter_map, "ydk:read", "filter");
+	path::DataNode* read_data_node = execute_rpc(provider, filter_map, "ydk:read", "filter");
 	return read(filter_map, read_data_node);
 }
 
-unique_ptr<Entity> CrudService::read_config(core::ServiceProvider & provider, Entity & filter)
+unique_ptr<Entity> CrudService::read_config(path::ServiceProvider & provider, Entity & filter)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD config read operation";
-	core::DataNode* read_data_node = execute_rpc(provider, filter, "ydk:read", "filter", true);
+	path::DataNode* read_data_node = execute_rpc(provider, filter, "ydk:read", "filter", true);
 	return read(filter, read_data_node);
 }
 
-map<string, unique_ptr<Entity> > CrudService::read_config(core::ServiceProvider & provider, map<string, Entity*> filter_map)
+map<string, unique_ptr<Entity> > CrudService::read_config(path::ServiceProvider & provider, map<string, Entity*> filter_map)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD config read operation";
-	core::DataNode* read_data_node = execute_rpc(provider, filter_map, "ydk:read", "filter", true);
+	path::DataNode* read_data_node = execute_rpc(provider, filter_map, "ydk:read", "filter", true);
 	return read(filter_map, read_data_node);
 }
 
-unique_ptr<Entity> CrudService::read(Entity & filter, core::DataNode* read_data_node)
+unique_ptr<Entity> CrudService::read(Entity & filter, path::DataNode* read_data_node)
 {
 	if (read_data_node == nullptr)
 		return {};
@@ -128,7 +128,7 @@ unique_ptr<Entity> CrudService::read(Entity & filter, core::DataNode* read_data_
 	return top_entity;
 }
 
-map<string, unique_ptr<Entity> > CrudService::read(map<string, Entity*> filter_map, core::DataNode* read_data_node)
+map<string, unique_ptr<Entity> > CrudService::read(map<string, Entity*> filter_map, path::DataNode* read_data_node)
 {
 	if (read_data_node == nullptr)
 		return {};
@@ -143,7 +143,7 @@ map<string, unique_ptr<Entity> > CrudService::read(map<string, Entity*> filter_m
     return entity_map;
 }
 
-static bool operation_succeeded(core::DataNode * node)
+static bool operation_succeeded(path::DataNode * node)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Operation " << ((node == nullptr)?"succeeded":"failed");
 	return node == nullptr;
@@ -157,11 +157,11 @@ static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)
 	return get_top_entity_from_filter(*(filter.parent));
 }
 
-static core::DataNode* execute_rpc(core::ServiceProvider & provider, Entity & entity,
+static path::DataNode* execute_rpc(path::ServiceProvider & provider, Entity & entity,
 		const string & operation, const string & data_tag, bool set_config_flag)
 {
-	core::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::core::Rpc> ydk_rpc { root_schema->rpc(operation) };
+	path::RootSchemaNode* root_schema = provider.get_root_schema();
+	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
 	string data = get_data_payload(entity, *root_schema);
 
 	if(set_config_flag)
@@ -172,11 +172,11 @@ static core::DataNode* execute_rpc(core::ServiceProvider & provider, Entity & en
 	return (*ydk_rpc)(provider);
 }
 
-static core::DataNode* execute_rpc(core::ServiceProvider & provider, map<string, Entity*> entity_map,
+static path::DataNode* execute_rpc(path::ServiceProvider & provider, map<string, Entity*> entity_map,
 		const string & operation, const string & data_tag, bool set_config_flag)
 {
-	core::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::core::Rpc> ydk_rpc { root_schema->rpc(operation) };
+	path::RootSchemaNode* root_schema = provider.get_root_schema();
+	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
 	string data;
 
 	for(auto entry : entity_map)
@@ -193,21 +193,21 @@ static core::DataNode* execute_rpc(core::ServiceProvider & provider, map<string,
 	}
 	ydk_rpc->input()->create(data_tag, data);
 
-    core::CodecService codec{};
-    string pl = codec.encode(ydk_rpc->input(), ydk::core::CodecService::Format::XML, true);
+    path::CodecService codec{};
+    string pl = codec.encode(ydk_rpc->input(), ydk::path::CodecService::Format::XML, true);
     BOOST_LOG_TRIVIAL(debug) << "Payload to be sent in RPC";
     BOOST_LOG_TRIVIAL(debug) << data<<endl;
 
 	return (*ydk_rpc)(provider);
 }
 
-static string get_data_payload(Entity & entity, core::RootSchemaNode & root_schema)
+static string get_data_payload(Entity & entity, path::RootSchemaNode & root_schema)
 {
-	const ydk::core::DataNode* data_node = get_data_node_from_entity(entity, root_schema);
+	const ydk::path::DataNode* data_node = get_data_node_from_entity(entity, root_schema);
 	if (data_node==nullptr)
 		return "";
-	core::CodecService codec{};
-	return codec.encode(data_node, ydk::core::CodecService::Format::XML, true);
+	path::CodecService codec{};
+	return codec.encode(data_node, ydk::path::CodecService::Format::XML, true);
 }
 
 }

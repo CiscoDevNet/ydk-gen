@@ -22,12 +22,12 @@
 //////////////////////////////////////////////////////////////////
 
 
-#include "core/core_private.hpp"
+#include "path/core_private.hpp"
 
 /////////////////////////////////////////////////////////////////////////
 /// YDKCoreException
 /////////////////////////////////////////////////////////////////////////
-ydk::core::YDKCoreException::YDKCoreException(const std::string& msg) : ydk::YDKException{msg}
+ydk::path::YDKCoreException::YDKCoreException(const std::string& msg) : ydk::YDKException{msg}
 {
 
 }
@@ -59,7 +59,7 @@ ydk::YDKOperationNotSupportedException::YDKOperationNotSupportedException(const 
 //////////////////////////////////////////////////////////////////////////
 /// YDKDataValidationException
 //////////////////////////////////////////////////////////////////////////
-ydk::core::YDKDataValidationException::YDKDataValidationException() : ydk::core::YDKCoreException{"Data Validation Exception"}
+ydk::path::YDKDataValidationException::YDKDataValidationException() : ydk::path::YDKCoreException{"Data Validation Exception"}
 {
 
 }
@@ -67,7 +67,7 @@ ydk::core::YDKDataValidationException::YDKDataValidationException() : ydk::core:
 //////////////////////////////////////////////////////////////////////////
 /// YDKPathException
 //////////////////////////////////////////////////////////////////////////
-ydk::core::YDKPathException::YDKPathException(ydk::core::YDKPathException::Error error_code) : ydk::core::YDKCoreException{"Data Validation Exception"}, err{error_code}
+ydk::path::YDKPathException::YDKPathException(ydk::path::YDKPathException::Error error_code) : ydk::path::YDKCoreException{"Data Validation Exception"}, err{error_code}
 {
 
 }
@@ -77,7 +77,7 @@ ydk::core::YDKPathException::YDKPathException(ydk::core::YDKPathException::Error
 /////////////////////////////////////////////////////////////////////////
 /// YDKCodecException
 /////////////////////////////////////////////////////////////////////////
-ydk::core::YDKCodecException::YDKCodecException(YDKCodecException::Error ec) : YDKCoreException(ly_errmsg()), err{ec}
+ydk::path::YDKCodecException::YDKCodecException(YDKCodecException::Error ec) : YDKCoreException(ly_errmsg()), err{ec}
 {
 
 }

@@ -55,17 +55,17 @@ set(libydk_src
     src/value.cpp
     src/value_list.cpp
     src/ydk_yang.cpp
-    src/core/annotation.cpp
-    src/core/capability.cpp
-    src/core/core.cpp
-    src/core/data_node.cpp
-    src/core/repository.cpp
-    src/core/root_data_node.cpp
-    src/core/root_schema_node.cpp
-    src/core/rpc.cpp
-    src/core/schema_node.cpp
-    src/core/schema_value_type.cpp
-    src/core/statement.cpp)
+    src/path/annotation.cpp
+    src/path/capability.cpp
+    src/path/core.cpp
+    src/path/data_node.cpp
+    src/path/repository.cpp
+    src/path/root_data_node.cpp
+    src/path/root_schema_node.cpp
+    src/path/rpc.cpp
+    src/path/schema_node.cpp
+    src/path/schema_value_type.cpp
+    src/path/statement.cpp)
 
 set(libydk_headers
     src/netconf_provider.hpp
@@ -270,7 +270,8 @@ set(libyang_include_location include/libyang)
 set(libyang_headers_location ${CMAKE_CURRENT_BINARY_DIR}/project_libyang/headers)
 ExternalProject_Add(project_libyang
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/project_libyang"
-    URL "https://github.com/manradhaCisco/libyang/archive/ydk_core_devel.zip"
+    URL "https://github.com/manradhaCisco/libyang/archive/master.zip"
+    CMAKE_ARGS -DSTATIC=true
     INSTALL_DIR "${libyang_location}"
     INSTALL_COMMAND mkdir -p ${libyang_headers_location}/libyang && cp ${libyang_headers} ${libyang_headers_location}/libyang
 )

@@ -30,13 +30,13 @@
 /// DataNode
 ////////////////////////////////////////////////////////////////////////
 
-ydk::core::DataNode::~DataNode()
+ydk::path::DataNode::~DataNode()
 {
 
 }
 
-ydk::core::DataNode*
-ydk::core::DataNode::create(const std::string& path)
+ydk::path::DataNode*
+ydk::path::DataNode::create(const std::string& path)
 {
     return create(path, "");
 }
@@ -45,7 +45,7 @@ ydk::core::DataNode::create(const std::string& path)
 ////////////////////////////////////////////////////////////////////////////
 // class ydk::DataNodeImpl
 //////////////////////////////////////////////////////////////////////////
-ydk::core::DataNodeImpl::DataNodeImpl(DataNode* parent, struct lyd_node* node): m_parent{parent}, m_node{node}
+ydk::path::DataNodeImpl::DataNodeImpl(DataNode* parent, struct lyd_node* node): m_parent{parent}, m_node{node}
 {
 	//add the children
     if(m_node && m_node->child && !(m_node->schema->nodetype == LYS_LEAF ||
@@ -60,7 +60,7 @@ ydk::core::DataNodeImpl::DataNodeImpl(DataNode* parent, struct lyd_node* node): 
 
 }
 
-ydk::core::DataNodeImpl::~DataNodeImpl()
+ydk::path::DataNodeImpl::~DataNodeImpl()
 {
     //first destroy the children
     for (auto p : child_map) {
@@ -78,14 +78,14 @@ ydk::core::DataNodeImpl::~DataNodeImpl()
     }
 }
 
-const ydk::core::SchemaNode*
-ydk::core::DataNodeImpl::schema() const
+const ydk::path::SchemaNode*
+ydk::path::DataNodeImpl::schema() const
 {
     return reinterpret_cast<const SchemaNode*>(m_node->schema->priv);
 }
 
 std::string
-ydk::core::DataNodeImpl::path() const
+ydk::path::DataNodeImpl::path() const
 {
     char* path = lyd_path(m_node);
     if (!path) {
@@ -96,8 +96,8 @@ ydk::core::DataNodeImpl::path() const
     return str;
 }
 
-ydk::core::DataNode*
-ydk::core::DataNodeImpl::create(const std::string& path, const std::string& value)
+ydk::path::DataNode*
+ydk::path::DataNodeImpl::create(const std::string& path, const std::string& value)
 {
     if(path.empty())
     {
@@ -219,7 +219,7 @@ ydk::core::DataNodeImpl::create(const std::string& path, const std::string& valu
 }
 
 void
-ydk::core::DataNodeImpl::set(const std::string& value)
+ydk::path::DataNodeImpl::set(const std::string& value)
 {
     //set depends on the kind of the node
     struct lys_node* s_node = m_node->schema;
@@ -247,7 +247,7 @@ ydk::core::DataNodeImpl::set(const std::string& value)
 }
 
 std::string
-ydk::core::DataNodeImpl::get() const
+ydk::path::DataNodeImpl::get() const
 {
     struct lys_node* s_node = m_node->schema;
     std::string ret {};
@@ -261,8 +261,8 @@ ydk::core::DataNodeImpl::get() const
     return ret;
 }
 
-std::vector<ydk::core::DataNode*>
-ydk::core::DataNodeImpl::find(const std::string& path) const
+std::vector<ydk::path::DataNode*>
+ydk::path::DataNodeImpl::find(const std::string& path) const
 {
     std::vector<DataNode*> results;
 
@@ -301,14 +301,14 @@ ydk::core::DataNodeImpl::find(const std::string& path) const
     return results;
 }
 
-ydk::core::DataNode*
-ydk::core::DataNodeImpl::parent() const
+ydk::path::DataNode*
+ydk::path::DataNodeImpl::parent() const
 {
     return m_parent;
 }
 
-std::vector<ydk::core::DataNode*>
-ydk::core::DataNodeImpl::children() const
+std::vector<ydk::path::DataNode*>
+ydk::path::DataNodeImpl::children() const
 {
     std::vector<DataNode*> ret{};
     //the ordering should be determined by the lyd_node
@@ -329,8 +329,8 @@ ydk::core::DataNodeImpl::children() const
     return ret;
 }
 
-const ydk::core::DataNode*
-ydk::core::DataNodeImpl::root() const
+const ydk::path::DataNode*
+ydk::path::DataNodeImpl::root() const
 {
     if(m_parent){
         return m_parent->root();
@@ -339,7 +339,7 @@ ydk::core::DataNodeImpl::root() const
 }
 
 std::string
-ydk::core::DataNodeImpl::xml() const
+ydk::path::DataNodeImpl::xml() const
 {
 	std::string ret;
 	char* xml = nullptr;
@@ -350,8 +350,8 @@ ydk::core::DataNodeImpl::xml() const
 	return ret;
 }
 
-ydk::core::DataNodeImpl*
-ydk::core::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
+ydk::path::DataNodeImpl*
+ydk::path::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
 {
 	DataNodeImpl* dn = nullptr;
 
@@ -414,7 +414,7 @@ ydk::core::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
 }
 
 
-void ydk::core::DataNodeImpl::add_annotation(const ydk::core::Annotation& an)
+void ydk::path::DataNodeImpl::add_annotation(const ydk::path::Annotation& an)
 {
     if(!m_node)
     {
@@ -435,7 +435,7 @@ void ydk::core::DataNodeImpl::add_annotation(const ydk::core::Annotation& an)
 
 
 bool
-ydk::core::DataNodeImpl::remove_annotation(const ydk::core::Annotation& an)
+ydk::path::DataNodeImpl::remove_annotation(const ydk::path::Annotation& an)
 {
     if(!m_node) {
         return false;
@@ -456,10 +456,10 @@ ydk::core::DataNodeImpl::remove_annotation(const ydk::core::Annotation& an)
     return false;
 }
 
-std::vector<ydk::core::Annotation>
-ydk::core::DataNodeImpl::annotations()
+std::vector<ydk::path::Annotation>
+ydk::path::DataNodeImpl::annotations()
 {
-    std::vector<ydk::core::Annotation> ann {};
+    std::vector<ydk::path::Annotation> ann {};
 
     if(m_node) {
         struct lyd_attr* attr = m_node->attr;
