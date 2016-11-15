@@ -33,10 +33,10 @@ class ClassMembersPrinter(object):
     def print_class_members(self, clazz):
         self._print_constructor_destructor(clazz)
         self._print_class_method_declarations(clazz)
-        self._print_class_members(clazz)
+        self._print_class_value_members(clazz)
 
-    def print_class_inits(self, clazz):
-        self._print_class_inits(clazz)
+    def print_class_children_members(self, clazz):
+        self._print_class_child_members(clazz)
         self._print_class_enums_forward_declarations(clazz)
 
     def _print_class_method_declarations(self, clazz):
@@ -67,28 +67,21 @@ class ClassMembersPrinter(object):
                 leaf_lists.append(child)
         return leaf_lists
 
-    def _has_list(self, clazz):
-        has_list = False
-        for child in clazz.owned_elements:
-            has_list = has_list or child.stmt.keyword == 'list'
-        return has_list
-
     def _print_common_method_declarations(self, clazz):
         self.ctx.writeln('bool has_data() const;')
         self.ctx.writeln('EntityPath get_entity_path(Entity* parent) const;')
         self.ctx.writeln('std::string get_segment_path() const;')
-        self.ctx.writeln('Entity* set_child(std::string path);')
-        self.ctx.writeln('void set_value(std::string value_path, std::string value);')
+        self.ctx.writeln('Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);')
+        self.ctx.writeln('void set_value(const std::string & value_path, std::string value);')
 
     def _print_clone_ptr_method(self, clazz):
         if clazz.owner is not None and isinstance(clazz.owner, Package):
             self.ctx.writeln('std::unique_ptr<Entity> clone_ptr();')
 
     def _print_get_children_method(self, clazz):
-        if self._has_list(clazz):
-            self.ctx.writeln('std::vector<Entity*> & get_children();')
+        self.ctx.writeln('std::map<std::string, Entity*> & get_children();')
 
-    def _print_class_members(self, clazz):
+    def _print_class_value_members(self, clazz):
         if clazz.is_identity():
             self.ctx.lvl_dec()
             return
@@ -102,14 +95,13 @@ class ClassMembersPrinter(object):
             self.ctx.writeln('ValueList %s;' % leaf.name)
         self.ctx.bline()
 
-    def _print_class_inits(self, clazz):
+    def _print_class_child_members(self, clazz):
         if clazz.is_identity() and len(clazz.extends) == 0:
             self.ctx.bline()
             return
         class_inits_properties = self._get_children(clazz)
         if len(class_inits_properties) > 0:
             self.ctx.bline()
-            self.ctx.writeln('public:')
             self.ctx.lvl_inc()
             self.ctx.writelns(class_inits_properties)
             self.ctx.lvl_dec()
@@ -136,7 +128,6 @@ class ClassMembersPrinter(object):
 
     def _print_class_enums_forward_declarations(self, clazz):
         self.ctx.bline()
-        self.ctx.writeln('public:');
         self.ctx.lvl_inc()
         for prop in clazz.properties():
             if isinstance(prop.property_type, Enum):

@@ -42,11 +42,14 @@ endif()
 
 # Set LibYDK variables
 set(libydk_src
+    src/bits.cpp
     src/codec_provider.cpp
     src/codec_service.cpp
     src/crud_service.cpp
+    src/entity.cpp
     src/entity_data_node_walker.cpp
     src/entity_lookup.cpp
+    src/entity_util.cpp
     src/errors.cpp
     src/netconf_client.cpp
     src/netconf_model_provider.cpp
@@ -85,6 +88,7 @@ set(libydk_install_headers
     src/codec_service.hpp
     src/codec_provider.hpp
     src/entity_lookup.hpp
+    src/entity_util.hpp
     src/core.hpp
     src/crud_service.hpp
     src/errors.hpp

@@ -41,8 +41,6 @@ namespace ydk
 
         std::unique_ptr<Entity> decode(CodecServiceProvider & provider, std::string & payload);
         std::map<std::string, std::unique_ptr<Entity>> decode(CodecServiceProvider & provider, std::map<std::string, std::string> & payload_map);
-    private:
-        void convert_format(CodecServiceProvider & provider);
     };
 }
 

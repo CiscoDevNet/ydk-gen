@@ -26,23 +26,45 @@ class ClassGetChildrenPrinter(object):
         self.ctx = ctx
 
     def print_class_get_children(self, clazz, children):
-        chs = [child  for child in children if child.is_many]
-        if(len(chs) == 0):
-            return
-        self.ctx.writeln('std::vector<Entity*> & %s::get_children()' % clazz.qualified_cpp_name())
+        self.ctx.writeln('std::map<std::string, Entity*> & %s::get_children()' % clazz.qualified_cpp_name())
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
-        for child in chs:
+        for child in children:
             self._print_class_get_child(child)
         self.ctx.writeln('return children;')
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
+        self.ctx.bline()
 
     def _print_class_get_child(self, child):
-        self.ctx.writeln('for (std::size_t index=0; index<%s.size(); index++)' % child.name)
+        if child.is_many:
+            self._print_class_get_child_many(child)
+        else:
+            self._print_class_get_child_unique(child)
+        self.ctx.bline()
+
+    def _print_class_get_child_many(self, child):
+        self.ctx.writeln('for (auto const & c : %s)' % child.name)
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
-        self.ctx.writeln('children.push_back(%s[index].get());' % child.name)
+        self.ctx.writeln('if(children.find(c->get_segment_path()) == children.end())')
+        self.ctx.writeln('{')
+        self.ctx.lvl_inc()
+        self.ctx.writeln('children[c->get_segment_path()] = c.get();')
+        self.ctx.lvl_dec()
+        self.ctx.writeln('}')
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
 
+    def _print_class_get_child_unique(self, child):
+        self.ctx.writeln('if(children.find("%s") == children.end())' % child.stmt.arg)
+        self.ctx.writeln('{')
+        self.ctx.lvl_inc()
+        self.ctx.writeln('if(%s != nullptr)' % child.name)
+        self.ctx.writeln('{')
+        self.ctx.lvl_inc()
+        self.ctx.writeln('children["%s"] = %s.get();' % (child.stmt.arg, child.name))
+        self.ctx.lvl_dec()
+        self.ctx.writeln('}')
+        self.ctx.lvl_dec()
+        self.ctx.writeln('}')

@@ -108,7 +108,7 @@ def get_header_file_name(path, package):
 
 
 def get_entity_lookup_source_file_name(path):
-    return '%s/entity_lookup.cpp' % (path)
+    return '%s/generated_entity_lookup.cpp' % (path)
 
 
 def get_table_of_contents_file_name(path):

@@ -1,4 +1,4 @@
-// YANG Development Kit
+/// YANG Development Kit
 // Copyright 2016 Cisco Systems. All rights reserved
 //
 ////////////////////////////////////////////////////////////////
@@ -20,29 +20,17 @@
 // under the License.
 //
 //////////////////////////////////////////////////////////////////
+#ifndef ENTITY_UTIL_HPP
+#define ENTITY_UTIL_HPP
 
-#include "entity_lookup.hpp"
+#include <sstream>
+#include <algorithm>
+
+#include "types.hpp"
 
 namespace ydk
 {
-
-TopEntityLookUp::TopEntityLookUp ()
-{
-    m_entities = std::map<std::string, std::unique_ptr<Entity>>{};
+void get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::ostringstream & path_buffer);
 }
 
-TopEntityLookUp::~TopEntityLookUp () {}
-
-std::unique_ptr<Entity>
-TopEntityLookUp::lookup(std::string path)
-{
-    return m_entities.at(path)->clone_ptr();
-}
-
-void
-TopEntityLookUp::insert(std::string path, std::unique_ptr<Entity> top_entity)
-{
-    m_entities[path] = std::move(top_entity);
-}
-
-}
+#endif /* ENTITY_UTIL_HPP */

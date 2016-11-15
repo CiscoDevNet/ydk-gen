@@ -315,14 +315,4 @@ std::string get_bool_string(const std::string & value)
 	}
 }
 
-bool & Bits::operator [] (std::string key)
-{
-	return bitmap[key];
-}
-
-const std::map<std::string, bool> & Bits::get_bitmap() const
-{
-	return bitmap;
-}
-
 }

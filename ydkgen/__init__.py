@@ -17,12 +17,14 @@
 Generate YDK core library, bundle packages.
 """
 from __future__ import print_function
+from distutils import dir_util
+from subprocess import call
+
 import os, sys, shutil
 import json
 import logging
 import tempfile
 import fileinput
-from subprocess import call
 
 from .common import YdkGenException, iscppkeyword, ispythonkeyword
 from ydkgen.builder import (ApiModelBuilder, GroupingClassApiModelBuilder,
@@ -249,9 +251,8 @@ class YdkGenerator(object):
             elif pkg_type == 'core':
                 target_dir = os.path.join(target_dir, 'ydk')
         shutil.rmtree(gen_api_root)
-        _copytree(target_dir,
-                  gen_api_root,
-                  ignore=shutil.ignore_patterns('.gitignore', 'ncclient', 'confd'))
+        logger.debug('Copying %s to %s' % (target_dir, gen_api_root))
+        dir_util.copy_tree(target_dir, gen_api_root)
 
 
 def _set_api_pkg_sub_name(bundles, api_pkgs, curr_bundle):
@@ -399,26 +400,3 @@ def _check_description_file(description_file):
         logger.error('Path to description file is not valid.')
         raise YdkGenException('Path to description file is not valid.')
 
-
-def _copytree(src, dst, ignore=None):
-    """For Python3.4. shutil.copytree for symlink directory seems not work."""
-    names = os.listdir(src)
-    if ignore is not None:
-        ignore_names = ignore(src, names)
-    else:
-        ignore_names = set()
-    os.makedirs(dst)
-    for name in names:
-        if name in ignore_names:
-            continue
-        srcname = os.path.join(src, name)
-        dstname = os.path.join(dst, name)
-        if os.path.islink(srcname):
-            if os.path.isdir(srcname):
-                _copytree(srcname, dstname, ignore)
-            else:
-                shutil.copy(srcname, dstname)
-        elif os.path.isdir(srcname):
-            _copytree(srcname, dstname, ignore)
-        else:
-            shutil.copy(srcname, dstname)

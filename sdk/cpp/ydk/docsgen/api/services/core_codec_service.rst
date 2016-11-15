@@ -10,12 +10,24 @@ path::CodecService
 
 Codec Service, part of YDK path API, which deals with generic path-based YANG data nodes
 
+    .. cpp:enum:: Format
+
+        These options can be used for encoding the given tree.
+
+        .. cpp:enumerator:: XML
+
+            XML
+
+        .. cpp:enumerator:: JSON
+
+            JSON
+
     .. cpp:function:: virtual std::string encode(const DataNode* datanode, Format format, bool pretty)
 
         Encode the given DataNode Tree
 
         :param datanode: The :cpp:class:`DataNode<path::DataNode>` to encode
-        :param format: :cpp:enum:`Format<Format>` to encode to
+        :param format: format to encode to, either :cpp:enumerator:`JSON<Format::JSON>` or :cpp:enumerator:`XML<Format::XML>`
         :param pretty: The output is indented for human consumption if pretty is ``true``
         :return: The encoded string
         :raises: :cpp:class:`YDKInvalidArgumentException<YDKInvalidArgumentException>` if the arguments are invalid
@@ -29,17 +41,5 @@ Codec Service, part of YDK path API, which deals with generic path-based YANG da
         :param format: Decode format
         :return: The :cpp:class:`DataNode<DataNode>` instantiated or ``nullptr`` in case of error.
         :raises: :cpp:class:`YDKInvalidArgumentException<YDKInvalidArgumentException>` if the arguments are invalid.
-
-    .. cpp:enum:: Format
-
-        These options can be used for encoding the given tree.
-
-        .. cpp:enumerator:: XML
-
-            XML
-
-        .. cpp:enumerator:: JSON
-
-            JSON
 
     .. cpp:function:: virtual ~CodecService()

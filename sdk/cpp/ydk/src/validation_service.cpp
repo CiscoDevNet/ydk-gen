@@ -148,8 +148,8 @@ validate(const ydk::path::ServiceProvider& sp, ydk::Entity& entity, ydk::Entity*
         }
     }
 
-    for(auto child_entity : entity.get_children()){
-        EntityDiagnostic child_diagnostic = validate(sp, *child_entity, &entity, option);
+    for(auto const & child_entity : entity.get_children()){
+        EntityDiagnostic child_diagnostic = validate(sp, *(child_entity.second), &entity, option);
         diagnostic.children.push_back(child_diagnostic);
     }
 

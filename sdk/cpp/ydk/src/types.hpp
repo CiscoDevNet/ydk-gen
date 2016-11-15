@@ -50,18 +50,13 @@ typedef struct Empty {
     bool set;
 } Empty;
 
-namespace path {
-class DataNode;
-class RootSchemaNode;
-}
-
 class Entity;
 
 struct EntityPath {
 	std::string path;
 	std::vector<std::pair<std::string, std::string>> value_paths;
 
-	EntityPath(std::string path, std::vector<std::pair<std::string, std::string>> value_paths)
+	EntityPath(std::string path, std::vector<std::pair<std::string, std::string> > value_paths)
 		: path(path), value_paths(value_paths)
 	{
 	}
@@ -83,58 +78,44 @@ struct EntityPath {
 
 class Entity {
   public:
-	Entity():parent(nullptr){}
-	virtual ~Entity(){}
+	Entity();
+	virtual ~Entity();
 
   public:
-	virtual bool has_data() const = 0;
-
     //
     // @brief Get the EntityPath relative to the parent passed in
     //
-    // Returns the EntityPath relative to the parent passed in.
-    // The parent must either be null in which case the absolute path
-    // from the root is returned or some parent that is an ancestor of this Entity.
+    // Returns the EntityPath relative to the ancestor passed in.
+    // The ancestor must either be null, in which case the absolute path
+    // from the root is returned, or some other ancestor of this Entity.
     //
     // @param[in] parent The ancestor relative to which the path is calculated or nullptr
     // @return EntityPath
     // @throws YDKInvalidArgumentException if the parent is invalid
-    virtual EntityPath get_entity_path(Entity* parent) const = 0;
-
+    virtual EntityPath get_entity_path(Entity* ancestor) const = 0;
     virtual std::string get_segment_path() const = 0;
 
-    virtual Entity* set_child(std::string path) = 0;
+    virtual bool has_data() const = 0;
 
-    virtual void set_value(std::string value_path, std::string value) = 0;
+    virtual void set_value(const std::string & value_path, std::string value) = 0;
+    virtual Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path="") = 0;
 
-    virtual std::vector<Entity*> & get_children()
-    {
-	return children;
-    }
-
-    virtual std::unique_ptr<Entity> clone_ptr()
-    {
-	return nullptr;
-    }
-
-    void add_child(Entity* child)
-    {
-	children.push_back(child);
-    }
+    virtual std::map<std::string, Entity*> & get_children() = 0;
+    virtual std::unique_ptr<Entity> clone_ptr();
 
   public:
 	Entity* parent;
-	std::vector<Entity*> children;
+	std::string yang_name;
+	std::string yang_parent_name;
+
+  protected:
+	std::map<std::string, Entity*> children;
 };
 
 class Bits {
   public:
-	Bits()
-    {
-    }
-	virtual ~Bits()
-	{
-	}
+	Bits();
+	virtual ~Bits();
 	bool & operator [] (std::string key);
     const std::map<std::string, bool> & get_bitmap() const;
 

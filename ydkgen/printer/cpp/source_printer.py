@@ -27,10 +27,10 @@ from ydkgen.printer.file_printer import FilePrinter
 from .class_constructor_printer import ClassConstructorPrinter
 from .class_has_data_printer import ClassHasDataPrinter
 from .class_get_children_printer import ClassGetChildrenPrinter
-from .class_set_child_printer import ClassSetChildPrinter
+from .class_get_child_printer import ClassGetChildPrinter
 from .class_set_value_printer import ClassSetValuePrinter
-from .enum_printer import EnumPrinter
-from .get_entity_path_printer import GetEntityPathPrinter, GetSegmentPathPrinter
+from .class_enum_printer import EnumPrinter
+from .class_get_entity_path_printer import GetEntityPathPrinter, GetSegmentPathPrinter
 
 
 class SourcePrinter(FilePrinter):
@@ -42,7 +42,7 @@ class SourcePrinter(FilePrinter):
         self.ctx.bline()
         self.ctx.writeln('#include <sstream>')
         self.ctx.writeln('#include <iostream>')
-        self.ctx.writeln('#include <algorithm>')
+        self.ctx.writeln('#include "ydk/entity_util.hpp"')
         self.ctx.writeln('#include "{0}.hpp"'.format(package.name))
         self.ctx.bline()
         self.ctx.writeln('namespace ydk {')
@@ -128,22 +128,10 @@ class SourcePrinter(FilePrinter):
         GetEntityPathPrinter(self.ctx).print_output(clazz, leafs)
 
     def _print_class_set_child(self, clazz, children):
-        ClassSetChildPrinter(self.ctx, get_path).print_class_set_child(clazz, children)
+        ClassGetChildPrinter(self.ctx).print_class_get_child(clazz, children)
 
     def _print_class_set_value(self, clazz, leafs):
-        ClassSetValuePrinter(self.ctx, get_path).print_class_set_value(clazz, leafs)
+        ClassSetValuePrinter(self.ctx).print_class_set_value(clazz, leafs)
 
     def _print_enums(self, package):
         EnumPrinter(self.ctx).print_enum_to_string_funcs(package)
-
-
-def get_path(prop):
-        path = prop.stmt.arg
-        current_owner = prop.owner
-        while(current_owner is not None) and not isinstance(current_owner, Package):
-            if current_owner.owner is not None and isinstance(current_owner.owner, Package):
-                path = '/' + current_owner.owner.stmt.arg + ':' + current_owner.stmt.arg + '/' + path
-            else:
-                path = current_owner.stmt.arg + '/' + path
-            current_owner = current_owner.owner
-        return path

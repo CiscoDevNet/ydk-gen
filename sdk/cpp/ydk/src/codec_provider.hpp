@@ -48,7 +48,6 @@ namespace ydk
         path::CodecService::Format m_encoding;
 
     private:
-        TopEntityLookUp m_lookup;
         std::unique_ptr<path::RootSchemaNode> m_root_schema;
         path::Repository* m_repo;
 

@@ -139,6 +139,16 @@ Only directory examples are shown below.
         ]
     },
 ```
+### Generating documentation
+
+When generating the YDK documentation for several bundles and the core, it is recommended to generate the bundles without the `--generate-doc` option. After generating all the bundles, the combined documentation for all the bundles and the core can be generated using the `--core --generate-doc` option. For example, the below sequence of commands will generate the documentation for the three bundles and the core:
+
+```
+./generate.py --python --bundle profiles/bundles/ietf_0_1_1.json
+./generate.py --python --bundle profiles/bundles/openconfig_0_1_1.json
+./generate.py --python --bundle profiles/bundles/cisco_ios_xr_6_1_1.json
+./generate.py --python --core --generate-doc
+```
 
 ## Notes
 

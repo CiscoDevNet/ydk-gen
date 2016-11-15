@@ -38,7 +38,7 @@ class ClassHasDataPrinter(object):
                 self._print_class_has_data_many(child, 'for (std::size_t index=0; index<%s.size(); index++)', 'if(%s[index]->has_data())' % child.name)
         for leaf in ls:
             if leaf.is_many:
-                self._print_class_has_data_many(leaf, 'for (auto leaf : %s.getValues())', 'if(leaf.is_set)')
+                self._print_class_has_data_many(leaf, 'for (auto const & leaf : %s.getValues())', 'if(leaf.is_set)')
         if len(conditions) == 0:
             self.ctx.writeln('return false;')
         else:

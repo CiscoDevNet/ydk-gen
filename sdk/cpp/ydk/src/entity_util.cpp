@@ -1,4 +1,4 @@
-// YANG Development Kit
+/// YANG Development Kit
 // Copyright 2016 Cisco Systems. All rights reserved
 //
 ////////////////////////////////////////////////////////////////
@@ -21,28 +21,45 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include "entity_lookup.hpp"
+#include <vector>
+
+#include "entity_util.hpp"
+#include "errors.hpp"
+
+using namespace std;
 
 namespace ydk
 {
-
-TopEntityLookUp::TopEntityLookUp ()
+void get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::ostringstream & path_buffer)
 {
-    m_entities = std::map<std::string, std::unique_ptr<Entity>>{};
+	if(ancestor == nullptr)
+	{
+		BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"ancestor should not be null."});
+	}
+	auto p = current_node->parent;
+	std::vector<Entity*> parents {};
+	while (p != nullptr && p != ancestor) {
+		parents.push_back(p);
+		p = p->parent;
+	}
+
+	if (p == nullptr) {
+		BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"parent is not in the ancestor hierarchy."});
+	}
+
+	std::reverse(parents.begin(), parents.end());
+
+	p = nullptr;
+	for (auto p1 : parents) {
+		if (p) {
+			path_buffer << "/";
+		} else {
+			 p = p1;
+		}
+		path_buffer << p1->get_segment_path();
+	}
+	if(p)
+		path_buffer << "/";
+	path_buffer<<current_node->get_segment_path();
 }
-
-TopEntityLookUp::~TopEntityLookUp () {}
-
-std::unique_ptr<Entity>
-TopEntityLookUp::lookup(std::string path)
-{
-    return m_entities.at(path)->clone_ptr();
-}
-
-void
-TopEntityLookUp::insert(std::string path, std::unique_ptr<Entity> top_entity)
-{
-    m_entities[path] = std::move(top_entity);
-}
-
 }

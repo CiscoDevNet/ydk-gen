@@ -7,7 +7,7 @@ YDK consists of two main components: core library, which consists of services an
 Core library consists of the below:
 
  * **Service:** Provides simple API interface to be used with the bindings and providers
- * **ServiceProvider:** Provides concrete implementation that abstracts underlying protocol details (e.g. ``NetconfServiceProvider``, which is based on the NETCONF protocol) 
+ * **ServiceProvider:** Provides concrete implementation that abstracts underlying protocol details (e.g. :py:class:`NetconfServiceProvider<ydk.providers.NetconfServiceProvider>`, which is based on the NETCONF protocol) 
 
 Applications can be written using the python model API in conjunction with a service and a provider.
 
@@ -65,7 +65,7 @@ After establishing the connection, we instantiate the entities and set some data
  from ydk.models.openconfig import openconfig_bgp
  from ydk.models.openconfig import openconfig_bgp_types
 
-Next, create a BGP configuration object and set the attributes::
+Next, create a :py:class:`BGP<ydk.openconfig_bgp.Bgp>` configuration object and set the attributes::
 
  # create BGP object
  bgp_cfg = openconfig_bgp.Bgp()
@@ -84,7 +84,7 @@ Next, create a BGP configuration object and set the attributes::
 
 Invoking the CRUD Service
 --------------------------
-The CRUD service provides methods to create, read, update and delete entities on a device making use of the session provided by a service provider (NETCONF in this case).  In order to use the CRUD service, we need to import the ``CRUDService`` class::
+The CRUD service provides methods to create, read, update and delete entities on a device making use of the session provided by a service provider (NETCONF in this case).  In order to use the CRUD service, we need to import the :py:class:`CRUDService<ydk.services.CRUDService>` class::
 
  from ydk.services import CRUDService
 

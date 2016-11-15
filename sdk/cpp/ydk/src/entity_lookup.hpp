@@ -31,33 +31,20 @@
 
 namespace ydk
 {
-    class TopEntityLookUp
-    {
-        public:
+class TopEntityLookUp
+{
+	public:
+		TopEntityLookUp();
+		~TopEntityLookUp();
 
-            std::map<std::string, std::unique_ptr<Entity>> m_entities;
+		std::unique_ptr<Entity> lookup(std::string path);
+		void insert(std::string path, std::unique_ptr<Entity> top_entity);
 
-            TopEntityLookUp();
-            TopEntityLookUp(const TopEntityLookUp & rhs);
-            ~TopEntityLookUp();
+	private:
+		std::map<std::string, std::unique_ptr<Entity>> m_entities;
+};
 
-            TopEntityLookUp& operator=(TopEntityLookUp rhs);
-            TopEntityLookUp& operator+=(const TopEntityLookUp & rhs);
-            TopEntityLookUp operator+(const TopEntityLookUp & rhs);
-
-            std::unique_ptr<Entity> lookup(std::string path);
-            void insert(std::string path, std::unique_ptr<Entity> top_entity);
-
-            friend void swap(TopEntityLookUp & first, TopEntityLookUp & second)
-            {
-                using std::swap;
-                swap(first.m_entities, second.m_entities);
-            }
-
-        private:
-            void copy(const TopEntityLookUp & rhs);
-    };
-    void augment_lookup_tables();
+void augment_lookup_tables(); // function definition is generated
 }
 
 #endif /* ENTITY_LOOKUP_HPP */

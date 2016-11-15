@@ -24,9 +24,8 @@ from ydkgen.api_model import Bits
 
 
 class ClassSetValuePrinter(object):
-    def __init__(self, ctx, get_path):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.get_path = get_path
 
     def print_class_set_value(self, clazz, leafs):
         self._print_class_set_value_header(clazz)
@@ -34,7 +33,7 @@ class ClassSetValuePrinter(object):
         self._print_class_set_value_trailer(clazz)
 
     def _print_class_set_value_header(self, clazz):
-        self.ctx.writeln('void %s::set_value(std::string value_path, std::string value)' % clazz.qualified_cpp_name())
+        self.ctx.writeln('void %s::set_value(const std::string & value_path, std::string value)' % clazz.qualified_cpp_name())
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
 
@@ -43,8 +42,7 @@ class ClassSetValuePrinter(object):
             self._print_class_set_values(leaf)
 
     def _print_class_set_values(self, leaf):
-        child_path = self.get_path(leaf)
-        self.ctx.writeln('if(value_path == "%s")' % (child_path))
+        self.ctx.writeln('if(value_path == "%s")' % (leaf.stmt.arg))
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
         if(isinstance(leaf.property_type, Bits)):

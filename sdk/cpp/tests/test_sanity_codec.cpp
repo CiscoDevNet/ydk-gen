@@ -318,20 +318,6 @@ BOOST_AUTO_TEST_CASE(enum_2)
     BOOST_CHECK_EQUAL(entity_ptr->ytypes->built_in_t->enum_value.get(), "local");
 }
 
-
-BOOST_AUTO_TEST_CASE(encode_decode)
-{
-//     path::Repository repo{TEST_HOME};
-//     CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
-//     CodecService codec_service{};
-//
-//     auto entity = codec_service.decode(codec_provider, XML_RUNNER_PAYLOAD_1);
-//     std::string json = codec_service.encode(codec_provider, *entity);
-//
-//     std::cout << json << std::endl;
-//     BOOST_CHECK_EQUAL(json,JSON_RUNNER_PAYLOAD_1);
-}
-
 BOOST_AUTO_TEST_CASE(single_decode)
 {
     path::Repository repo{TEST_HOME};
@@ -339,6 +325,8 @@ BOOST_AUTO_TEST_CASE(single_decode)
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, JSON_RUNNER_PAYLOAD_1);
+    BOOST_CHECK_EQUAL(entity!=nullptr, true);
+
     ydktest_sanity::Runner * entity_ptr = dynamic_cast<ydktest_sanity::Runner*>(entity.get());
 
     BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[0]->number.get(), "11");
@@ -353,4 +341,28 @@ BOOST_AUTO_TEST_CASE(single_decode)
     BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->subl1[0]->name.get(), "s121name");
     BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->subl1[1]->number.get(), "122");
     BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->subl1[1]->name.get(), "s122name");
+}
+
+BOOST_AUTO_TEST_CASE(encode_decode)
+{
+     path::Repository repo{TEST_HOME};
+     CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
+     CodecService codec_service{};
+
+     std::string test = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one><name>test</name></one></runner>";
+
+     auto entity = codec_service.decode(codec_provider, test) ;
+     BOOST_CHECK_EQUAL(entity!=nullptr, true);
+
+     std::string xml = codec_service.encode(codec_provider, *entity);
+     BOOST_CHECK_EQUAL(xml, test);
+
+     auto redecode = codec_service.decode(codec_provider, xml) ;
+     BOOST_CHECK_EQUAL(redecode!=nullptr, true);
+
+     ydktest_sanity::Runner * entity_ptr = dynamic_cast<ydktest_sanity::Runner*>(redecode.get());
+     auto runner = std::make_unique<ydktest_sanity::Runner>();
+     runner->one->name = "test";
+
+     BOOST_CHECK_EQUAL(entity_ptr->one->name, runner->one->name);
 }

@@ -1,3 +1,7 @@
+//
+// @file value.hpp
+// @brief The main ydk public header.
+//
 // YANG Development Kit
 // Copyright 2016 Cisco Systems. All rights reserved
 //
@@ -21,28 +25,28 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include "entity_lookup.hpp"
+
+#include "types.hpp"
 
 namespace ydk
 {
 
-TopEntityLookUp::TopEntityLookUp ()
+Bits::Bits()
 {
-    m_entities = std::map<std::string, std::unique_ptr<Entity>>{};
 }
 
-TopEntityLookUp::~TopEntityLookUp () {}
-
-std::unique_ptr<Entity>
-TopEntityLookUp::lookup(std::string path)
+Bits::~Bits()
 {
-    return m_entities.at(path)->clone_ptr();
 }
 
-void
-TopEntityLookUp::insert(std::string path, std::unique_ptr<Entity> top_entity)
+bool & Bits::operator [] (std::string key)
 {
-    m_entities[path] = std::move(top_entity);
+	return bitmap[key];
 }
 
+const std::map<std::string, bool> & Bits::get_bitmap() const
+{
+	return bitmap;
 }
+}
+

@@ -27,7 +27,7 @@ from ydkgen.common import sort_classes_at_same_level
 from ydkgen.printer.file_printer import FilePrinter
 
 from .class_members_printer import ClassMembersPrinter
-from .enum_printer import EnumPrinter
+from .class_enum_printer import EnumPrinter
 
 
 class HeaderPrinter(FilePrinter):
@@ -95,7 +95,6 @@ class HeaderPrinter(FilePrinter):
         parents = 'Entity'
         if isinstance(clazz.owner, Class):
             self.ctx.bline()
-            self.ctx.writeln('public:')
         if len(clazz.extends) > 0:
             parents = ', '.join([sup.fully_qualified_cpp_name() for sup in clazz.extends])
             if clazz.is_identity():
@@ -114,7 +113,7 @@ class HeaderPrinter(FilePrinter):
         child_classes = [nested_class for nested_class in clazz.owned_elements if isinstance(nested_class, Class)]
         if len(child_classes) > 0:
             self._print_classes(child_classes)
-        members_printer.print_class_inits(clazz)
+        members_printer.print_class_children_members(clazz)
 
     def _print_class_trailer(self, clazz):
         self.ctx.bline()

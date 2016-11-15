@@ -25,7 +25,7 @@ from ydkgen.api_model import Package
 class GetEntityPathPrinter(object):
 
     """
-        Print get_ydk_path method
+        Print get_entity_path method
 
         :attribute ctx The printer context
 
@@ -41,12 +41,12 @@ class GetEntityPathPrinter(object):
             :param `api_model.Class` clazz The class object.
 
         """
-        self._print_get_ydk_path_header(clazz)
-        self._print_get_ydk_path_func(clazz, leafs)
-        self._print_get_ydk_path_trailer(clazz)
+        self._print_get_entity_path_header(clazz)
+        self._print_get_entity_path_body(clazz, leafs)
+        self._print_get_entity_path_trailer(clazz)
 
-    def _print_get_ydk_path_header(self, clazz):
-        self.ctx.writeln('EntityPath %s::get_entity_path(Entity* parent) const' % clazz.qualified_cpp_name())
+    def _print_get_entity_path_header(self, clazz):
+        self.ctx.writeln('EntityPath %s::get_entity_path(Entity* ancestor) const' % clazz.qualified_cpp_name())
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
 
@@ -64,17 +64,18 @@ class GetEntityPathPrinter(object):
                 return True 
         return False
 
-    def _print_get_ydk_path_func(self, clazz, leafs):
+    def _print_get_entity_path_body(self, clazz, leafs):
         #can this class handle a nullptr
         #in which case it's absolute path can be determined
         
         self.ctx.writeln('std::ostringstream path_buffer;')
 
         if clazz.owner is not None and isinstance(clazz.owner, Package):
-            #the parent is irrelevant here 
-            self.ctx.writeln('if (parent != nullptr) {')
+            # the ancestor is irrelevant here
+            self.ctx.writeln('if (ancestor != nullptr)')
+            self.ctx.writeln('{')
             self.ctx.lvl_inc()
-            self.ctx.writeln('throw YDKInvalidArgumentException{"parent has to be nullptr"};')
+            self.ctx.writeln('BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"ancestor has to be nullptr for top-level node"});')
             self.ctx.lvl_dec()
             self.ctx.writeln('}')
             self.ctx.bline()
@@ -82,11 +83,12 @@ class GetEntityPathPrinter(object):
         else:
             #this is not a top level 
             # is nullptr a valid parameter here
-            self.ctx.writeln('if (parent == nullptr) {')
+            self.ctx.writeln('if (ancestor == nullptr)')
+            self.ctx.writeln('{')
             self.ctx.lvl_inc()
             
             if self._is_parent_needed_for_abs_path(clazz):
-                self.ctx.writeln('throw YDKInvalidArgumentException{"parent cannot be nullptr"};')
+                self.ctx.writeln('BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"ancestor cannot be nullptr as one of the ancestors is a list"});')
             else:
                 parents = []
                 p = clazz
@@ -114,80 +116,33 @@ class GetEntityPathPrinter(object):
                 self.ctx.writeln('path_buffer << "%s%s" << get_segment_path();' % (path, slash))
 
             self.ctx.lvl_dec()
-            self.ctx.writeln('} else { ')
+            self.ctx.writeln('}')
+            self.ctx.writeln('else')
+            self.ctx.writeln('{')
             self.ctx.lvl_inc()
             
-            self.ctx.writeln("// check if the parent is a parent")
-            self.ctx.writeln('auto p = this->parent;')
-            self.ctx.writeln('std::vector<Entity*> parents {};')
-            self.ctx.writeln('while (p != nullptr && p != parent) {')
-            self.ctx.lvl_inc()
-            self.ctx.writeln('parents.push_back(p);')
-            self.ctx.writeln('p = p->parent;')
-            self.ctx.lvl_dec()
-            self.ctx.writeln('}')
-            self.ctx.bline()
-            self.ctx.writeln('if (p == nullptr) {')
-            self.ctx.lvl_inc()
-            self.ctx.writeln('throw YDKInvalidArgumentException{"parent is not in the ancestor hierarchy."};')
-            self.ctx.lvl_dec()
-            self.ctx.writeln('}')
-            self.ctx.bline()
-               
-            self.ctx.writeln('std::reverse(parents.begin(), parents.end());')
-
-            self.ctx.bline()
-            self.ctx.writeln('p = nullptr;')
-            self.ctx.writeln('for (auto p1 : parents) {')
-            self.ctx.lvl_inc()
-
-            self.ctx.writeln('if (p) {')
-            self.ctx.lvl_inc()
-            self.ctx.writeln('path_buffer << "/";')
-            self.ctx.lvl_dec()
-            self.ctx.writeln('} else { ');
-            self.ctx.lvl_inc()
-            self.ctx.writeln(' p = p1;')
-            self.ctx.lvl_dec()
-            self.ctx.writeln('}')
-            self.ctx.writeln('path_buffer << p1->get_segment_path();')  
-            self.ctx.lvl_dec()
-            self.ctx.writeln('}')
-            self.ctx.writeln('if(p)')
-            self.ctx.lvl_inc()
-            self.ctx.writeln('path_buffer << "/";')
-            self.ctx.lvl_dec()
-            self.ctx.writeln('path_buffer<<this->get_segment_path();')
+            self.ctx.writeln("get_relative_entity_path(this, ancestor, path_buffer);")            
 
             self.ctx.lvl_dec()
             self.ctx.writeln('}')
+            self.ctx.bline()
        
         self.ctx.writeln('std::vector<std::pair<std::string, std::string> > leaf_name_values {};')
         for prop in leafs:
             if not prop.is_many:
                 self.ctx.writeln('if (%s.is_set) leaf_name_values.push_back(%s.get_name_value());' % (prop.name, prop.name))
-        self._print_get_ydk_path_leaflists(leafs)
+        self._print_get_entity_path_leaflists(leafs)
+        self.ctx.bline()
         self.ctx.writeln('EntityPath entity_path {path_buffer.str(), leaf_name_values};')
         self.ctx.writeln('return entity_path;')
 
-    def _print_get_ydk_path_leaflists(self, leafs):
+    def _print_get_entity_path_leaflists(self, leafs):
         leaf_lists = [leaf for leaf in leafs if leaf.is_many]
         for leaf in leaf_lists:
             self.ctx.writeln('auto %s_name_values = %s.get_name_values();' % (leaf.name, leaf.name))
             self.ctx.writeln('leaf_name_values.insert(leaf_name_values.end(), %s_name_values.begin(), %s_name_values.end());' % (leaf.name, leaf.name))
 
-    def _get_path_predicate(self, clazz):
-        predicates = ''
-        insert_token = ' << '
-        key_props = clazz.get_key_props()
-        for key_prop in key_props:
-            predicates += insert_token
-            predicates += '"[' + key_prop.stmt.arg + '=\'"'
-            predicates += insert_token
-            predicates += ('%s.get()') % key_prop.name + insert_token + '"\']"'
-        return predicates
-
-    def _print_get_ydk_path_trailer(self, clazz):
+    def _print_get_entity_path_trailer(self, clazz):
         self.ctx.lvl_dec()
         self.ctx.bline()
         self.ctx.writeln('}')

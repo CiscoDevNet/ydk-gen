@@ -1,4 +1,4 @@
-YDKException
+Errors
 ============
 
 .. toctree::

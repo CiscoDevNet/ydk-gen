@@ -45,36 +45,30 @@ class ClassConstructorPrinter(object):
 
     def _print_class_constructor_body(self, clazz, leafs, children):
         self._print_init_children(children)
-        # self._print_init_leafs(leafs)
+        if not clazz.is_identity():
+            self.ctx.writeln('yang_name = "%s"; yang_parent_name = "%s";' % (clazz.stmt.arg, clazz.owner.stmt.arg))
 
     def _print_init_children(self, children):
         for child in children:
-            if child.is_many:
+            if child.is_many or child.stmt.search_one('presence') is not None:
                 continue
             self.ctx.writeln('%s->parent = this;' % child.name)
-            self.ctx.writeln('add_child(%s.get());' % child.name)
+            self.ctx.writeln('children["%s"] = %s.get();' % (child.stmt.arg, child.name))
             self.ctx.bline()
-
-    def _print_init_leafs(self, leafs):
-        for leaf in leafs:
-            if not leaf.is_many and isinstance(leaf.property_type, Enum):
-                self.ctx.writeln('%s.enum_to_string_func = %s::%s_to_string;' % (leaf.name, leaf.property_type.get_package().name, leaf.property_type.qualified_cpp_name().replace('::', '_')))
 
     def _print_class_constructor_trailer(self):
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
         self.ctx.bline()
 
-    def _print_class_inits(self, clazz, ls, children):
-        leafs = [prop for prop in ls]
-        if len(leafs) > 0:
-            self.ctx.writeln(': \n\t%s' % ',\n\t '.join('%s{YType::%s, "%s"}' % (prop.name, get_type_name(prop.property_type), prop.stmt.arg) for prop in leafs))
+    def _print_class_inits(self, clazz, leafs, children):
         children_init = ''
         if len(leafs) > 0:
+            self.ctx.writeln(': \n\t%s' % ',\n\t '.join('%s{YType::%s, "%s"}' % (prop.name, get_type_name(prop.property_type), prop.stmt.arg) for prop in leafs))
             children_init = ', '
         else:
             children_init = ':\n\t '
-        chs = [prop for prop in children if not prop.is_many]
+        chs = [prop for prop in children if (not prop.is_many and (prop.stmt.search_one('presence') is None))]
         children_init += '\t%s' % (',\n '.join('\t%s(std::make_unique<%s>())' % (prop.name, prop.property_type.qualified_cpp_name()) for prop in chs))
         if len(chs) > 0:
             self.ctx.writeln('%s' % (children_init))

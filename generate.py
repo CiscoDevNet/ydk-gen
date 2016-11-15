@@ -124,6 +124,7 @@ def copy_docs_from_bundles(ydk_root, language, destination_dir):
 
             ydk_models_file = os.path.join(bundle_docsgen_dir, 'ydk.models.rst')
             ydk_bundle_models_file = os.path.join(bundle_docsgen_dir, ydk_bundle_models_file_name)
+            logger.debug('Copying %s to %s' % (bundle_docsgen_dir, destination_dir))
             file_util.copy_file(ydk_models_file, ydk_bundle_models_file)
 
             dir_util.copy_tree(bundle_docsgen_dir, destination_dir)
@@ -135,6 +136,7 @@ def copy_docs_from_bundles(ydk_root, language, destination_dir):
 
 
 def generate_documentations(output_directory, ydk_root, language, is_bundle, is_core):
+    print('\nBuilding docs using sphinx-build...\n')
     py_api_doc_gen = os.path.join(output_directory, 'docsgen')
     py_api_doc = os.path.join(output_directory, 'docs_expanded')
     # if it is package type
@@ -145,7 +147,6 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
     if is_core:
         copy_docs_from_bundles(ydk_root, language, py_api_doc_gen)
     # build docs
-    print('\nBuilding docs using sphinx-build...\n')
     p = subprocess.Popen(['sphinx-build',
                           '-D', release,
                           '-D', version,
@@ -187,7 +188,7 @@ def create_shared_libraries(output_directory, sudo):
     os.makedirs(cmake_build_dir)
     os.chdir(cmake_build_dir)
     sudo_cmd = 'sudo' if sudo else ''
-    log_file_name = cmake_build_dir + '/build_log.txt'
+    log_file_name = os.path.join(cmake_build_dir, 'build_log.txt')
     with open(log_file_name, 'w') as BUILD_LOG:
         try:
             subprocess.check_call(['cmake', '..'], stdout=BUILD_LOG, stderr=BUILD_LOG)

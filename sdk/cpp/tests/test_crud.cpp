@@ -141,3 +141,30 @@ BOOST_AUTO_TEST_CASE(bgp_set_leaf)
 	reply = crud.update(provider, *bgp);
 	BOOST_REQUIRE(reply);
 }
+
+BOOST_AUTO_TEST_CASE(bgp_read_create)
+{
+	ydk::path::Repository repo{TEST_HOME};
+	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+	CrudService crud{};
+	auto bgp_set = make_unique<openconfig_bgp::Bgp>();
+	bool reply = crud.delete_(provider, *bgp_set);
+	BOOST_REQUIRE(reply);
+
+	bgp_set->global->config->as = 65001;
+	bgp_set->global->config->router_id = "1.2.3.4";
+	reply = crud.create(provider, *bgp_set);
+
+	BOOST_REQUIRE(reply);
+
+	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
+	auto bgp_read = crud.read_config(provider, *bgp_filter);
+	BOOST_REQUIRE(bgp_read!=nullptr);
+	openconfig_bgp::Bgp * bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
+	BOOST_REQUIRE(bgp_read_ptr!=nullptr);
+
+	bgp_read_ptr->global->config->as = 65210;
+	bgp_read_ptr->global->config->router_id = "6.7.8.9";
+	reply = crud.update(provider, *bgp_read_ptr);
+	BOOST_REQUIRE(reply);
+}
