@@ -39,9 +39,9 @@ public:
                                int port);
         ~NetconfServiceProvider();
 
-        virtual path::RootSchemaNode* get_root_schema() const;
+        path::RootSchemaNode* get_root_schema() const;
 
-        virtual path::DataNode* invoke(path::Rpc* rpc) const;
+        path::DataNode* invoke(path::Rpc* rpc) const;
 
         static const char* CANDIDATE;
         static const char* MODULE_NAME;

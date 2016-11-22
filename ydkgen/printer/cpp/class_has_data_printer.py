@@ -29,7 +29,7 @@ class ClassHasDataPrinter(object):
         leafs = [prop for prop in ls if not prop.is_many]
         chs = [prop for prop in children if not prop.is_many]
         conditions = [ '%s.is_set' % (p.name) for p in leafs ]
-        conditions.extend(['%s->has_data()' % (p.name) for p in chs])
+        conditions.extend([('(%s !=  nullptr && %s->has_data())\n' % (p.name, p.name)) for p in chs])
         self.ctx.writeln('bool %s::has_data() const' % clazz.qualified_cpp_name())
         self.ctx.writeln('{')
         self.ctx.lvl_inc()

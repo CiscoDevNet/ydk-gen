@@ -46,7 +46,7 @@ ydk::path::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_n
         const struct lys_node *last = nullptr;
 
         while( auto q = lys_getnext(last, node, nullptr, 0)) {
-            m_children.emplace_back(new SchemaNodeImpl{this,const_cast<struct lys_node*>(q)});
+            m_children.emplace_back(std::make_unique<SchemaNodeImpl>(this,const_cast<struct lys_node*>(q)));
             last = q;
         }
     } else {
@@ -59,15 +59,6 @@ ydk::path::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_n
 
 ydk::path::SchemaNodeImpl::~SchemaNodeImpl()
 {
-    //delete all the children
-    for(auto p : children()) {
-	delete p;
-    }
-
-    if(m_type){
-        delete m_type;
-    }
-    m_type = nullptr;
 }
 
 std::string
@@ -126,11 +117,13 @@ ydk::path::SchemaNodeImpl::find(const std::string& path) const
 
     const struct lys_node* found_node = ly_ctx_get_node(ctx, m_node, path.c_str());
 
-    if (found_node){
-	auto p = reinterpret_cast<SchemaNode*>(found_node->priv);
-	if(p) {
-            ret.push_back(p);
-	}
+    if (found_node)
+    {
+		auto p = reinterpret_cast<SchemaNode*>(found_node->priv);
+		if(p)
+		{
+			ret.push_back(p);
+		}
     }
 
     return ret;
@@ -142,7 +135,7 @@ ydk::path::SchemaNodeImpl::parent() const noexcept
     return m_parent;
 }
 
-std::vector<ydk::path::SchemaNode*>
+const std::vector<std::unique_ptr<ydk::path::SchemaNode>> &
 ydk::path::SchemaNodeImpl::children() const
 {
 
@@ -152,10 +145,13 @@ ydk::path::SchemaNodeImpl::children() const
 const ydk::path::SchemaNode*
 ydk::path::SchemaNodeImpl::root() const noexcept
 {
-    if(m_parent == nullptr){
-	return this;
-    } else {
-	return m_parent->root();
+    if(m_parent == nullptr)
+    {
+	    return this;
+    }
+    else
+    {
+    	return m_parent->root();
     }
 }
 
@@ -250,11 +246,11 @@ ydk::path::SchemaNodeImpl::keys() const
 
 
 
-ydk::path::SchemaValueType*
+ydk::path::SchemaValueType &
 ydk::path::SchemaNodeImpl::type() const
 {
 
-    return m_type;
+    return *m_type;
 }
 
 

@@ -185,17 +185,20 @@ ydk::path::RootDataImpl::find(const std::string& path) const
 {
     std::vector<DataNode*> results;
 
-    if(m_node == nullptr) {
+    if(m_node == nullptr)
+    {
         return results;
     }
 
     std::string schema_path{ this->path() };
-    if(schema_path.size()!= 1){
+    if(schema_path.size()!= 1)
+    {
         schema_path+="/";
     }
 
     auto s = schema()->statement();
-    if(s.keyword == "rpc") {
+    if(s.keyword == "rpc")
+    {
         schema_path+="input/";
     }
 
@@ -204,7 +207,8 @@ ydk::path::RootDataImpl::find(const std::string& path) const
     BOOST_LOG_TRIVIAL(trace) << "Looking for schema nodes path in root: '"<<schema_path<<"'";
     const struct lys_node* found_snode = ly_ctx_get_node(m_node->schema->module->ctx, nullptr, schema_path.c_str());
 
-    if(found_snode) {
+    if(found_snode)
+    {
         struct ly_set* result_set = lyd_find_instance(m_node, found_snode);
         if( result_set )
         {

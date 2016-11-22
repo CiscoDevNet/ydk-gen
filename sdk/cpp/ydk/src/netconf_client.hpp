@@ -57,9 +57,10 @@ public:
 	NetconfClient(std::string  username, std::string  password,
 			std::string  server_ip, int port, int verbosity);
 
+	~NetconfClient();
+
 	int connect();
 	std::string execute_payload(const std::string & payload);
-	int close();
 	std::vector<std::string> get_capabilities();
 	std::string get_hostname_port();
 

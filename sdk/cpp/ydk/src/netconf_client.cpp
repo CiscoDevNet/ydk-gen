@@ -103,12 +103,9 @@ string NetconfClient::execute_payload(const string & payload)
 	return reply_payload;
 }
 
-int NetconfClient::close()
+NetconfClient::~NetconfClient()
 {
-	perform_session_check("Could not close session. Not connected to " + hostname);
-
 	nc_session_free(session);
-	return EXIT_SUCCESS;
 }
 
 nc_rpc* NetconfClient::build_rpc_request(const string & payload)

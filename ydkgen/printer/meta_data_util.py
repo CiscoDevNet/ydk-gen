@@ -55,6 +55,10 @@ class MetaInfoData:
         self.min_elements = prop.min_elements
         self.target_of_leafref = ''
         self.mandatory = False
+        self.is_presence = False
+        self.units = ''
+        self.default_value = ''
+        self.status = ''
 
 
 def get_class_docstring(clazz, language, identity_subclasses=None):
@@ -63,6 +67,7 @@ def get_class_docstring(clazz, language, identity_subclasses=None):
         class_description = clazz.comment
 
     properties_description = []
+
     for prop in clazz.properties():
         prop_comment = ''
         if prop.comment is not None:
@@ -123,6 +128,14 @@ def get_type_doc(meta_info_data, type_depth):
             properties_description.append('\t**refers to**\: %s\n\n' % (meta_info_data.target_of_leafref))
         if meta_info_data.mandatory:
             properties_description.append('\t**mandatory**\: True\n\n')
+        if meta_info_data.is_presence:
+            properties_description.append('\t**presence node**\: True\n\n')
+        if len(meta_info_data.units) > 0:
+            properties_description.append('\t**units**\: %s\n\n' % meta_info_data.units)
+        if len(meta_info_data.default_value) > 0:
+            properties_description.append('\t**default value**\: %s\n\n' % meta_info_data.default_value)
+        if len(meta_info_data.status) > 0:
+            properties_description.append('\t**status**\: %s\n\n' % meta_info_data.status)
 
     return properties_description
 
@@ -197,9 +210,21 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
     if mandatory is not None and mandatory.arg == 'true':
         meta_info_data.mandatory = True
 
-    mandatory = prop.stmt.search_one('mandatory')
-    if mandatory is not None and mandatory.arg == 'true':
-        meta_info_data.mandatory = True
+    presence = prop.stmt.search_one('presence')
+    if presence is not None:
+        meta_info_data.is_presence = True
+
+    units = prop.stmt.search_one('units')
+    if units is not None:
+        meta_info_data.units = units.arg
+
+    status = prop.stmt.search_one('status')
+    if status is not None:
+        meta_info_data.status = status.arg
+
+    default_value = prop.stmt.search_one('default')
+    if default_value is not None:
+        meta_info_data.default_value = default_value.arg
 
     if isinstance(property_type, Class):
         meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name()

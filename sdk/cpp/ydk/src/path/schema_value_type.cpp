@@ -198,9 +198,7 @@ ydk::path::SchemaValueEnumerationType::validate(const std::string& value) const
 
 ydk::path::SchemaValueIdentityType::~SchemaValueIdentityType()
 {
-    for(auto identity : derived) {
-        delete identity;
-    }
+
 }
 
 ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
@@ -224,7 +222,7 @@ ydk::path::SchemaValueIdentityType::validate(const std::string& value) const
             return diag;
     }
 
-    for(auto ident : derived) {
+    for(auto const& ident : derived) {
         if(!ident->validate(value).has_errors()){
             return diag;
         }
@@ -327,9 +325,7 @@ ydk::path::SchemaValueStringType::validate(const std::string& value) const
 
 ydk::path::SchemaValueUnionType::~SchemaValueUnionType()
 {
-    for(auto type : types) {
-        delete type;
-    }
+
 }
 
 
@@ -337,7 +333,7 @@ ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError>
 ydk::path::SchemaValueUnionType::validate(const std::string& value) const
 {
 
-    for(auto type : types){
+    for(auto const& type : types){
         auto diag = type->validate(value);
         if(!diag.has_errors()){
             return diag;

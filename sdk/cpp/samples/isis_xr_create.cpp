@@ -48,6 +48,8 @@ void config_isis(Isis* isis)
 	auto af = make_unique<Isis::Instances::Instance::Afs::Af>();
 	af->af_name = IsisAddressFamilyEnum::ipv4;
 	af->saf_name = IsisSubAddressFamilyEnum::unicast;
+	af->af_data = make_unique<Isis::Instances::Instance::Afs::Af::AfData>(); // instantiate the presence node
+	af->af_data->parent = af.get(); // set the parent
 	auto metric_style = make_unique<Isis::Instances::Instance::Afs::Af::AfData::MetricStyles::MetricStyle>();
 	metric_style->style = IsisMetricStyleEnum::new_metric_style;
 	metric_style->level = IsisInternalLevelEnum::not_set;

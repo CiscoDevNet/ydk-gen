@@ -107,7 +107,6 @@ const std::string  Value::get() const
 
 std::pair<std::string, std::string> Value::get_name_value() const
 {
-	BOOST_LOG_TRIVIAL(trace) <<name<<" : "<<get();
 	return {name, get()};
 }
 

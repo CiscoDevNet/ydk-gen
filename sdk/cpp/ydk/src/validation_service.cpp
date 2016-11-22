@@ -64,29 +64,25 @@ validate_attributes(const EntityPath& entity_path, const ydk::path::SchemaNode& 
         if(value_path.second.empty())
             continue;
         auto leaf_schema_node_list = schema_node.find(value_path.first);
-        if(leaf_schema_node_list.empty()) {
+        if(leaf_schema_node_list.empty())
+        {
             //the leaf is invalid or not present in the schema
             ydk::path::DiagnosticNode<std::string, ydk::path::ValidationError> attr{};
             attr.source = value_path.first;
             attr.errors.push_back(ydk::path::ValidationError::SCHEMA_NOT_FOUND);
             diagnostic.attrs.push_back(std::move(attr));
-        } else {
+        }
+        else
+        {
             ydk::path::SchemaNode* leaf_schema_node = leaf_schema_node_list[0];
             //now test to see if the value is correct
-            ydk::path::SchemaValueType* type = leaf_schema_node->type();
-
-            if(type == nullptr) {
-                BOOST_LOG_TRIVIAL(error) << "Cannot derive type for leaf " << leaf_schema_node->statement().arg;
-                BOOST_THROW_EXCEPTION(YDKIllegalStateException{"Cannot derive type for "});
-            } else {
-                auto attr = type->validate(value_path.second);
-                if(attr.has_errors()){
-                    attr.source = value_path.first;
-                    diagnostic.attrs.push_back(std::move(attr));
-                }
-
-            }
-
+            ydk::path::SchemaValueType & type = leaf_schema_node->type();
+	    auto attr = type.validate(value_path.second);
+	    if(attr.has_errors())
+            {
+		attr.source = value_path.first;
+		diagnostic.attrs.push_back(std::move(attr));
+	    }
         }
     }
 

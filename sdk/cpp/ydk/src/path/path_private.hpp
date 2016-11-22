@@ -69,7 +69,7 @@ namespace ydk {
 
             const SchemaNode* parent() const noexcept;
 
-            std::vector<SchemaNode*> children() const;
+            const std::vector<std::unique_ptr<SchemaNode>> & children() const;
 
 
             const SchemaNode* root() const noexcept;
@@ -78,13 +78,13 @@ namespace ydk {
 
             std::vector<Statement> keys() const;
 
-            SchemaValueType* type() const;
+            SchemaValueType & type() const;
 
             const SchemaNode* m_parent;
             struct lys_node* m_node;
-            std::vector<SchemaNode*> m_children;
+            std::vector<std::unique_ptr<SchemaNode>> m_children;
 
-            SchemaValueType* m_type;
+            std::unique_ptr<SchemaValueType> m_type;
 
 
         };
@@ -97,7 +97,7 @@ namespace ydk {
 
             std::vector<SchemaNode*> find(const std::string& path) const;
 
-            std::vector<SchemaNode*> children() const;
+            const std::vector<std::unique_ptr<SchemaNode>> & children() const;
             DataNode* create(const std::string& path) const;
             DataNode* create(const std::string& path, const std::string& value) const;
 
@@ -107,17 +107,11 @@ namespace ydk {
 
 
             Rpc* rpc(const std::string& path) const;
-
-
-
-            SchemaValueType* type() const
-            {
-                return nullptr;
-            }
+            SchemaValueType & type() const;
 
 
             struct ly_ctx* m_ctx;
-            std::vector<SchemaNode*> m_children;
+            std::vector<std::unique_ptr<SchemaNode>> m_children;
 
         };
 
@@ -238,9 +232,9 @@ namespace ydk {
 
         };
 
-        SchemaValueType* create_schema_value_type(struct lys_node_leaf* leaf,
+        std::unique_ptr<SchemaValueType> create_schema_value_type(struct lys_node_leaf* leaf,
         												  struct lys_type* type);
-        SchemaValueType* create_schema_value_type(struct lys_node_leaf* leaf);
+        std::unique_ptr<SchemaValueType> create_schema_value_type(struct lys_node_leaf* leaf);
     }
 
 

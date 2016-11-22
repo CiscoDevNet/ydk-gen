@@ -45,7 +45,6 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
 	auto neighbor = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
 	neighbor->neighbor_address = "6.7.8.9";
 	neighbor->config->neighbor_address = "6.7.8.9";
-//	neighbor->config->enabled = true;
 	neighbor->config->peer_as = 65001;
 	neighbor->config->local_as = 65001;
 	neighbor->config->peer_group = "IBGP";

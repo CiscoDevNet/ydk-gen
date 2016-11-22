@@ -192,7 +192,7 @@ def create_shared_libraries(output_directory):
     except subprocess.CalledProcessError as e:
         print('\nERROR: Failed to create shared library!\n')
         sys.exit(e.returncode)
-    print('\nSuccessfully created shared libraries at {0}.\nTo install, run "[sudo] make install" from {0}'.format(output_directory, cmake_build_dir))
+    print('\nSuccessfully created shared libraries at {0}.\nTo install, run "[sudo] make install" from {1}'.format(output_directory, cmake_build_dir))
     print('\n=================================================')
     print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
     print('Please read %s/README.md for information on how to use YDK\n' % (

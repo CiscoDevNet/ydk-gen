@@ -33,6 +33,7 @@
 #include "ydk_yang.hpp"
 #include <memory>
 #include <boost/log/trivial.hpp>
+#include <libyang/libyang.h>
 
 using namespace std;
 using namespace ydk;
@@ -56,7 +57,7 @@ static path::DataNode* handle_edit_reply(string reply, NetconfClient & client, b
 static string get_read_rpc_name(bool config);
 static bool is_config(path::Rpc & rpc);
 static string get_filter_payload(path::Rpc & ydk_rpc);
-static string get_netconf_payload(path::DataNode* input, string data, string data_tag);
+static string get_netconf_payload(path::DataNode* input, string data_tag, string data_value);
 static path::DataNode* handle_read_reply(string reply, path::RootSchemaNode * root_schema);
 
 const char* NetconfServiceProvider::CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
@@ -114,7 +115,6 @@ void NetconfServiceProvider::initialize()
 
 NetconfServiceProvider::~NetconfServiceProvider()
 {
-	client->close();
 	BOOST_LOG_TRIVIAL(debug) << "Disconnected from device";
 	if(ietf_nc_monitoring_available){
 		m_repo->remove_model_provider(model_provider.get());
@@ -135,12 +135,12 @@ path::DataNode* NetconfServiceProvider::handle_read(path::Rpc* ydk_rpc) const
     create_input_source(*input, config);
     std::string filter_value = get_filter_payload(*ydk_rpc);
 
-    string netconf_payload = get_netconf_payload(input, filter_value, "filter");
+    string netconf_payload = get_netconf_payload(input, "filter", filter_value);
 
     std::string reply = client->execute_payload(netconf_payload);
     BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
     BOOST_LOG_TRIVIAL(debug) << reply;
-    BOOST_LOG_TRIVIAL(debug) <<"=========================="<<endl;
+    BOOST_LOG_TRIVIAL(debug) << endl;
     return handle_read_reply(reply, root_schema.get());
 }
 
@@ -155,12 +155,14 @@ path::DataNode* NetconfServiceProvider::handle_edit(path::Rpc* ydk_rpc, path::An
     create_input_error_option(*input);
     string config_payload = get_annotated_config_payload(root_schema.get(), *ydk_rpc, annotation);
 
-    string netconf_payload = get_netconf_payload(input, config_payload, "config");
+    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
+    string netconf_payload = get_netconf_payload(input, "config", config_payload);
+    ly_verb(LY_LLVRB); // enable libyang logging after payload has been created
 
     std::string reply = client->execute_payload(netconf_payload);
     BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
     BOOST_LOG_TRIVIAL(debug) << reply;
-    BOOST_LOG_TRIVIAL(debug) <<"=========================="<<endl;
+    BOOST_LOG_TRIVIAL(debug) << endl;
     return handle_edit_reply(reply, *client, candidate_supported);
 }
 
@@ -312,7 +314,7 @@ static string get_filter_payload(path::Rpc & ydk_rpc)
     return datanode->get();
 }
 
-static string get_netconf_payload(path::DataNode* input, string data_value, string data_tag)
+static string get_netconf_payload(path::DataNode* input, string data_tag, string data_value)
 {
     path::CodecService codec_service{};
     auto config_node = input->create(data_tag, data_value);
@@ -327,7 +329,7 @@ static string get_netconf_payload(path::DataNode* input, string data_value, stri
     payload+="</rpc>";
     BOOST_LOG_TRIVIAL(debug) <<"=============Generating payload=============";
     BOOST_LOG_TRIVIAL(debug) <<payload;
-    BOOST_LOG_TRIVIAL(debug) <<"=========================="<<endl;
+    BOOST_LOG_TRIVIAL(debug) <<endl;
     return payload;
 }
 
@@ -335,7 +337,7 @@ static path::DataNode* handle_edit_reply(string reply, NetconfClient & client, b
 {
 	if(reply.find("<ok/>") == std::string::npos)
 	{
-        BOOST_LOG_TRIVIAL(debug) << "No ok in reply " << reply;
+        BOOST_LOG_TRIVIAL(error) << "No ok in reply ";
 		BOOST_THROW_EXCEPTION(YDKServiceProviderException{reply});
 	}
 
@@ -343,14 +345,18 @@ static path::DataNode* handle_edit_reply(string reply, NetconfClient & client, b
 	{
 		//need to send the commit request
 		string commit_payload = get_commit_rpc_payload();
-		reply = client.execute_payload(commit_payload);
+
 		BOOST_LOG_TRIVIAL(debug) << "Executing commit RPC: " << commit_payload;
+		reply = client.execute_payload(commit_payload);
+
+		BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
+		BOOST_LOG_TRIVIAL(debug) << reply;
+		BOOST_LOG_TRIVIAL(debug) << endl;
 		if(reply.find("<ok/>") == std::string::npos)
 		{
 			BOOST_LOG_TRIVIAL(error) << "RPC error occurred: " << reply;
 		    BOOST_THROW_EXCEPTION(YDKServiceProviderException{reply});
 		}
-		BOOST_LOG_TRIVIAL(debug) <<"=========================="<<endl;
 	}
 
 	//no error no output for edit-config

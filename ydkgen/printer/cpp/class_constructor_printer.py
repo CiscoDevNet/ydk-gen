@@ -62,16 +62,23 @@ class ClassConstructorPrinter(object):
         self.ctx.bline()
 
     def _print_class_inits(self, clazz, leafs, children):
-        children_init = ''
         if len(leafs) > 0:
-            self.ctx.writeln(': \n\t%s' % ',\n\t '.join('%s{YType::%s, "%s"}' % (prop.name, get_type_name(prop.property_type), prop.stmt.arg) for prop in leafs))
-            children_init = ', '
-        else:
-            children_init = ':\n\t '
-        chs = [prop for prop in children if (not prop.is_many and (prop.stmt.search_one('presence') is None))]
-        children_init += '\t%s' % (',\n '.join('\t%s(std::make_unique<%s>())' % (prop.name, prop.property_type.qualified_cpp_name()) for prop in chs))
-        if len(chs) > 0:
-            self.ctx.writeln('%s' % (children_init))
+            self.ctx.writeln(':')
+            self.ctx.writeln('\t%s' % ',\n\t '.join('%s{YType::%s, "%s"}' % (prop.name, get_type_name(prop.property_type), prop.stmt.arg) for prop in leafs))
+
+        init_stmts = []
+        for child in children:
+            if not child.is_many:
+                if (child.stmt.search_one('presence') is None):
+                    init_stmts.append('%s(std::make_unique<%s>())' % (child.name, child.property_type.qualified_cpp_name()))
+                else:
+                    init_stmts.append('%s(nullptr) // presence node' % (child.name))
+        if len(init_stmts) > 0:
+            if len(leafs) == 0:
+                self.ctx.writeln(':')
+            else:
+                self.ctx.writeln('\t,')
+            self.ctx.writeln('\n\t,'.join(init_stmts))
 
 
 def get_type_name(prop_type):

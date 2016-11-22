@@ -14,11 +14,11 @@
 #include "../src/netconf_provider.hpp"
 
 
-void print_paths(ydk::path::SchemaNode* sn)
+void print_paths(ydk::path::SchemaNode & sn)
 {
-    std::cout << sn->path() << std::endl;
-    for(auto p : sn->children())
-        print_paths(p);
+    std::cout << sn.path() << std::endl;
+    for(auto const& p : sn.children())
+        print_paths(*p);
 }
 
 void test_bgp_create()
@@ -28,7 +28,7 @@ void test_bgp_create()
     ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  2022};
 
     ydk::path::RootSchemaNode* schema = sp.get_root_schema();
-    print_paths(schema);
+    print_paths(*schema);
 
     auto bgp = schema->create("openconfig-bgp:bgp", "");
 

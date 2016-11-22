@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(xr)
 
 
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(Create)
 	int result = client.connect();
 	BOOST_REQUIRE(result == OK);
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE(EditgetConfig)
 	 "</rpc>");
 	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(Validate)
 
 	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -182,7 +182,7 @@ BOOST_AUTO_TEST_CASE(LockUnlock)
 
 	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<rpc-error>"));
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -204,24 +204,8 @@ BOOST_AUTO_TEST_CASE(RpcError)
 	 "</rpc>");
 	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<rpc-error>"));
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
-}
-
-BOOST_AUTO_TEST_CASE(DeviceNotConnectedClose)
-{
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
-	int result = 1;
-	try
-	{
-		result = client.close();
-	}
-	catch (YDKException & e)
-	{
-		BOOST_REQUIRE(e.err_msg=="Could not close session. Not connected to 127.0.0.1");
-	}
-
-
 }
 
 BOOST_AUTO_TEST_CASE(DeviceNotConnectedExecute)
@@ -273,7 +257,7 @@ BOOST_AUTO_TEST_CASE(RpcInvalid)
 		BOOST_REQUIRE(e.err_msg=="Could not build payload");
 	}
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -297,7 +281,7 @@ BOOST_AUTO_TEST_CASE(WrongXml)
 		BOOST_REQUIRE(e.err_msg=="Could not build payload");
 	}
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -322,7 +306,7 @@ BOOST_AUTO_TEST_CASE(CorrectXmlWrongRpc)
 	}
 
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -344,7 +328,7 @@ BOOST_AUTO_TEST_CASE(EmptyRpc)
 		BOOST_REQUIRE(e.err_msg=="Could not build payload");
 	}
 
-	result = client.close();
+
 	BOOST_REQUIRE(result == OK);
 }
 
@@ -371,9 +355,5 @@ BOOST_AUTO_TEST_CASE(MultipleClients)
 		 && client11.connect() && client12.connect() && client13.connect() && client14.connect() && client15.connect();
 	BOOST_REQUIRE(result == 0);
 
-	result = client1.close() && client2.close() && client3.close() && client4.close() && client5.close()
-			 && client6.close() && client7.close() && client8.close() && client9.close() && client10.close()
-			 && client11.close() && client12.close() && client13.close() && client14.close() && client15.close();
-	BOOST_REQUIRE(result == 0);
 }
 

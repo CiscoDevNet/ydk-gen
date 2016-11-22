@@ -76,7 +76,7 @@ ydk::path::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx) : m_ctx{ct
     while( auto p = ly_ctx_get_module_iter(ctx, &idx)) {
         const struct lys_node *last = nullptr;
         while( auto q = lys_getnext(last, nullptr, p, 0)) {
-            m_children.push_back(new SchemaNodeImpl{this, const_cast<struct lys_node*>(q)});
+            m_children.push_back(std::make_unique<SchemaNodeImpl>(this, const_cast<struct lys_node*>(q)));
             last = q;
         }
     }
@@ -122,7 +122,7 @@ ydk::path::RootSchemaNodeImpl::find(const std::string& path) const
     return ret;
 }
 
-std::vector<ydk::path::SchemaNode*>
+const std::vector<std::unique_ptr<ydk::path::SchemaNode>> &
 ydk::path::RootSchemaNodeImpl::children() const
 {
     return m_children;
@@ -190,4 +190,11 @@ ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
     }
     return new RpcImpl{sn, m_ctx};
 
+}
+
+ydk::path::SchemaValueType &
+ydk::path::RootSchemaNodeImpl::type() const
+{
+	auto ignored = std::make_unique<SchemaValueBoolType>();
+    return *ignored;
 }

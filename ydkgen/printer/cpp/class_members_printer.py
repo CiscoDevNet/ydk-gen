@@ -24,6 +24,7 @@ from pyang.types import UnionTypeSpec
 
 from ydkgen.api_model import Class, Enum, Package
 from ydkgen.builder import TypesExtractor
+from pyang.types import PathTypeSpec
 
 
 class ClassMembersPrinter(object):
@@ -90,10 +91,48 @@ class ClassMembersPrinter(object):
 
     def _print_value_members(self, clazz):
         for leaf in self._get_leafs(clazz):
-            self.ctx.writeln('Value %s;' % leaf.name)
+            self._print_value_member(leaf, 'Value', '')
         for leaf in self._get_leaf_lists(clazz):
-            self.ctx.writeln('ValueList %s;' % leaf.name)
+            self._print_value_member(leaf, 'ValueList', ' list of ')
         self.ctx.bline()
+
+    def _print_value_member(self, leaf, leaf_type, description):
+        if isinstance(leaf.property_type, UnionTypeSpec):
+            union_types = self._get_union_types(leaf)
+            if len(union_types) == 1:
+                self.ctx.writeln('%s %s; //type:%s %s' % (leaf_type, leaf.name, description, list(union_types)[0]))
+            else:
+                self.ctx.writeln('%s %s; //type:%s one of %s' % (leaf_type, leaf.name, description, ', '.join(union_types)))
+        elif isinstance(leaf.property_type, PathTypeSpec):
+            self._print_leafref(leaf, leaf_type, description)
+        else:
+            self.ctx.writeln('%s %s; //type:%s %s' % (leaf_type, leaf.name, description, leaf.property_type.name))
+
+    def _get_union_types(self, union_leaf):
+        union_type = union_leaf.property_type
+        contained_types = set()
+        for contained_type_stmt in union_type.types:
+            contained_property_type = TypesExtractor().get_property_type(contained_type_stmt)
+            if isinstance(contained_property_type, UnionTypeSpec):
+                contained_types.update(self._get_union_types(contained_property_type))
+            elif isinstance(contained_property_type, PathTypeSpec):
+                contained_types.add('%s' % self._get_leafref_comment(union_leaf))
+            else:
+                contained_types.add(contained_type_stmt.i_type_spec.name)
+        return contained_types
+
+    def _print_leafref(self, leaf, leaf_type, description):
+        self.ctx.writeln('//type:%s %s' % (description, self._get_leafref_comment(leaf)))
+        self.ctx.writeln('%s %s;' % (leaf_type, leaf.name))
+
+    def _get_leafref_comment(self, leaf):
+        if leaf.stmt.i_leafref_ptr is not None:
+            reference_class = leaf.stmt.i_leafref_ptr[0].parent.i_class
+            reference_prop = leaf.stmt.i_leafref_ptr[0].i_property
+            return ('%s (refers to %s::%s)' %
+                             (reference_prop.property_type.name,
+                              reference_class.fully_qualified_cpp_name(),
+                              reference_prop.name))
 
     def _print_class_child_members(self, clazz):
         if clazz.is_identity() and len(clazz.extends) == 0:
@@ -108,7 +147,10 @@ class ClassMembersPrinter(object):
 
     def _get_class_inits_unique(self, prop):
         if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
-            return 'std::unique_ptr<%s> %s;' % (prop.property_type.fully_qualified_cpp_name(), prop.name)
+            presence_stmt = ''
+            if prop.property_type.stmt.search_one('presence') is not None:
+                presence_stmt = ' // presence node'
+            return 'std::unique_ptr<%s> %s;%s' % (prop.property_type.fully_qualified_cpp_name(), prop.name, presence_stmt)
 
     def _get_class_inits_many(self, prop):
         if prop.is_many and isinstance(prop.property_type, Class) and not prop.property_type.is_identity():

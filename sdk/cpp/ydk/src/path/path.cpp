@@ -146,10 +146,9 @@ namespace ydk {
         }
 
 
-        SchemaValueIdentityType* create_identity_type(struct ly_set *ident)
+        std::unique_ptr<SchemaValueIdentityType> create_identity_type(struct ly_set *ident)
         {
-
-            SchemaValueIdentityType* identity_type = new SchemaValueIdentityType{};
+            auto identity_type = std::make_unique<SchemaValueIdentityType>();
             if(!ident) return identity_type;
 
             for(unsigned int i=0;i<ident->number && i<=272;i++) //272 temporary workaround for ietf-interfaces
@@ -166,15 +165,13 @@ namespace ydk {
             }
             return identity_type;
 
-
         }
 
 
-
-        SchemaValueIdentityType* create_identity_type(struct lys_ident **ident, int count)
+        std::unique_ptr<SchemaValueIdentityType> create_identity_type(struct lys_ident **ident, int count)
         {
 
-            SchemaValueIdentityType* identity_type = new SchemaValueIdentityType{};
+            auto identity_type = std::make_unique<SchemaValueIdentityType>();
             if(!ident) return identity_type;
 
             for(int i=0;i<count;i++)
@@ -189,31 +186,26 @@ namespace ydk {
 
             }
             return identity_type;
-
-
         }
 
-
-        SchemaValueType* create_schema_value_type(struct lys_node_leaf* leaf,
+        std::unique_ptr<SchemaValueType> create_schema_value_type(struct lys_node_leaf* leaf,
                                                   struct lys_type* type)
         {
 
-            SchemaValueType* m_type = nullptr;
+            std::unique_ptr<SchemaValueType> m_type = nullptr;
 
             LY_DATA_TYPE data_type = type->base;
 
             switch(data_type){
                 case LY_TYPE_BINARY: {
                     if(type->info.binary.length){
-                        SchemaValueBinaryType* binary = new SchemaValueBinaryType{};
-                        m_type = binary;
+                        auto binary = std::make_unique<SchemaValueBinaryType>();
                         parse_range_intervals(binary->length, type->info.binary.length->expr);
-
+                        m_type = std::move(binary);
                     } else if(type->der){
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueBinaryType* binary = new SchemaValueBinaryType{};
-                        m_type = binary;
+                    	m_type = std::make_unique<SchemaValueBinaryType>();
                     }
 
                     break;
@@ -222,36 +214,40 @@ namespace ydk {
                 	std::vector<SchemaValueBitsType::Bit> bit_values;
                 	for(int index=0; index < type->info.bits.count; index++)
                 	{
-                		bit_values.push_back(SchemaValueBitsType::Bit{type->info.bits.bit[index].name, type->info.bits.bit[index].pos});
+                		bit_values.push_back(
+                				SchemaValueBitsType::Bit{
+                					type->info.bits.bit[index].name,
+                					type->info.bits.bit[index].pos
+                		     }
+                		);
                 	}
 
-                    SchemaValueBitsType* bits = new SchemaValueBitsType{bit_values};
-                    m_type = bits;
+                    m_type = std::make_unique<SchemaValueBitsType>(bit_values);
                     break;
                 }
                 case LY_TYPE_BOOL: {
-                    SchemaValueBoolType* boolean = new SchemaValueBoolType{};
-                    m_type = boolean;
+                    m_type = std::make_unique<SchemaValueBoolType>();
                     break;
                 }
                 case LY_TYPE_DEC64: {
-                    SchemaValueDec64Type* dec64 = new SchemaValueDec64Type{};
-                    m_type = dec64;
+                    m_type = std::make_unique<SchemaValueDec64Type>();
                     break;
                 }
                 case LY_TYPE_EMPTY: {
-                    SchemaValueEmptyType* empty = new SchemaValueEmptyType{leaf->name};
-                    m_type = empty;
+                    m_type = std::make_unique<SchemaValueEmptyType>(leaf->name);
                     break;
                 }
                 case LY_TYPE_ENUM: {
                     if(type->info.enums.count > 0) {
-                        SchemaValueEnumerationType* enum_type = new SchemaValueEnumerationType{};
-                        m_type = enum_type;
-                        for(int i=0; i<type->info.enums.count; i++){
-                            SchemaValueEnumerationType::Enum enum_ {type->info.enums.enm[i].name, type->info.enums.enm[i].value};
+                        auto enum_type = std::make_unique<SchemaValueEnumerationType>();
+                        for(int i=0; i<type->info.enums.count; i++)
+                        {
+                            SchemaValueEnumerationType::Enum enum_ {
+										type->info.enums.enm[i].name, type->info.enums.enm[i].value
+									};
                             enum_type->enums.push_back(enum_);
                         }
+                        m_type = std::move(enum_type);
                     } else if(type->der){
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
@@ -274,8 +270,7 @@ namespace ydk {
                     break;
                 }
                 case LY_TYPE_INST: {
-                    SchemaValueInstanceIdType* instance_id = new SchemaValueInstanceIdType{};
-                    m_type = instance_id;
+                    m_type = std::make_unique<SchemaValueInstanceIdType>();
                     break;
                 }
                 case LY_TYPE_LEAFREF: {
@@ -284,8 +279,7 @@ namespace ydk {
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                    	SchemaValueStringType* stringType = new SchemaValueStringType{};
-                    	m_type = stringType; //TODO temporary workaround
+                    	m_type = std::make_unique<SchemaValueStringType>();//TODO temporary workaround
 //                        BOOST_LOG_TRIVIAL(error) << "Unable to determine leafref type: " << leaf->name <<", module: "<< leaf->module->name;
 //                        std::ostringstream os;
 //                        os << "Unable to determine leafref type: " << leaf->name <<", module: "<< leaf->module->name;
@@ -295,8 +289,7 @@ namespace ydk {
                 }
                 case LY_TYPE_STRING: {
                     if(type->info.str.length) {
-                        SchemaValueStringType* stringType = new SchemaValueStringType{};
-                        m_type = stringType;
+                        auto stringType = std::make_unique<SchemaValueStringType>();
                         parse_range_intervals(stringType->length, type->info.str.length->expr);
 
                         if(type->info.str.pat_count != 0){
@@ -304,12 +297,12 @@ namespace ydk {
                                 stringType->patterns.push_back(type->info.str.patterns[i].expr);
                             }
                         }
+                        m_type = std::move(stringType);
 
                     } else if(type->der){
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueStringType* stringType = new SchemaValueStringType{};
-                        m_type = stringType;
+                        auto stringType = std::make_unique<SchemaValueStringType>();
 
                         if(type->info.str.pat_count != 0){
                             for(int i=0; i < type->info.str.pat_count; i++) {
@@ -317,19 +310,19 @@ namespace ydk {
                             }
                         }
 
+                        m_type = std::move(stringType);
+
                     }
                     break;
                 }
                 case LY_TYPE_UNION: {
 
                     if(type->info.uni.count != 0) {
-                        SchemaValueUnionType* unionType = new SchemaValueUnionType{};
-                        m_type = unionType;
+                        auto unionType = std::make_unique<SchemaValueUnionType>();
                         for(int i=0; i< type->info.uni.count; ++i) {
-                            SchemaValueType* child_type =
-                                create_schema_value_type(leaf,&(type->info.uni.types[i]));
-                            unionType->types.push_back(child_type);
+                            unionType->types.push_back(create_schema_value_type(leaf,&(type->info.uni.types[i])));
                         }
+                        m_type = std::move(unionType);
                     } else if(type->der){
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
@@ -344,30 +337,30 @@ namespace ydk {
                 }
                 case LY_TYPE_INT8: {
                     if(type->info.num.range) {
-                        SchemaValueNumberType<int8_t>* int8_type = new SchemaValueNumberType<int8_t>{ static_cast<int8_t>(-128),
-                            static_cast<int8_t>(127) };
-                        m_type = int8_type;
+                        auto int8_type = std::make_unique<SchemaValueNumberType<int8_t>>(
+                        					static_cast<int8_t>(-128),
+                            				static_cast<int8_t>(127)
+                        				);
                         parse_range_intervals(int8_type->range, type->info.num.range->expr);
+                        m_type = std::move(int8_type);
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueNumberType<int8_t>* int8_type = new SchemaValueNumberType<int8_t>{ static_cast<int8_t>(-128),
-                            static_cast<int8_t>(127) };
-                        m_type = int8_type;
+                        m_type = std::make_unique<SchemaValueNumberType<int8_t>>( static_cast<int8_t>(-128),
+                            static_cast<int8_t>(127) );
                     }
                     break;
                 }
                 case LY_TYPE_UINT8:
                 {
                     if(type->info.num.range) {
-                        SchemaValueNumberType<uint8_t>* uint8_type = new SchemaValueNumberType<uint8_t>{ static_cast<uint8_t>(0),static_cast<uint8_t>(255) };
-                        m_type = uint8_type;
+                        auto uint8_type = std::make_unique<SchemaValueNumberType<uint8_t>>( static_cast<uint8_t>(0),static_cast<uint8_t>(255) );
                         parse_range_intervals(uint8_type->range, type->info.num.range->expr);
+                        m_type = std::move(uint8_type);
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueNumberType<uint8_t>* uint8_type = new SchemaValueNumberType<uint8_t>{ static_cast<uint8_t>(0),static_cast<uint8_t>(255) };
-                        m_type = uint8_type;
+                        m_type = std::make_unique<SchemaValueNumberType<uint8_t>>( static_cast<uint8_t>(0),static_cast<uint8_t>(255) );
                     }
                     break;
                 }
@@ -375,56 +368,52 @@ namespace ydk {
                 case LY_TYPE_INT16:
                 {
                     if(type->info.num.range) {
-                        SchemaValueNumberType<int16_t>* int16_type = new SchemaValueNumberType<int16_t>{ static_cast<int16_t>(-32768),static_cast<int16_t>(32767) };
-                        m_type = int16_type;
+                        auto int16_type = std::make_unique<SchemaValueNumberType<int16_t>>( static_cast<int16_t>(-32768),static_cast<int16_t>(32767) );
                         parse_range_intervals(int16_type->range, type->info.num.range->expr);
+                        m_type = std::move(int16_type);
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueNumberType<int16_t>* int16_type = new SchemaValueNumberType<int16_t>{ static_cast<int16_t>(-32768),static_cast<int16_t>(32767) };
-                        m_type = int16_type;
+                        m_type = std::make_unique<SchemaValueNumberType<int16_t>>( static_cast<int16_t>(-32768),static_cast<int16_t>(32767) );
                     }
                     break;
                 }
                 case LY_TYPE_UINT16:
                 {
                     if(type->info.num.range) {
-                        SchemaValueNumberType<uint16_t>* uint16_type = new SchemaValueNumberType<uint16_t>{ static_cast<uint16_t>(0),static_cast<uint16_t>(65535) };
-                        m_type = uint16_type;
+                        auto uint16_type = std::make_unique<SchemaValueNumberType<uint16_t>>( static_cast<uint16_t>(0),static_cast<uint16_t>(65535) );
                         parse_range_intervals(uint16_type->range, type->info.num.range->expr);
+                        m_type = std::move(uint16_type);
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueNumberType<uint16_t>* uint16_type = new SchemaValueNumberType<uint16_t>{ static_cast<uint16_t>(0),static_cast<uint16_t>(65535) };
-                        m_type = uint16_type;
+                        m_type = std::make_unique<SchemaValueNumberType<uint16_t>>( static_cast<uint16_t>(0),static_cast<uint16_t>(65535) );
                     }
                     break;
                 }
                 case LY_TYPE_INT32:
                 {
                     if(type->info.num.range) {
-                        SchemaValueNumberType<int32_t>* int32_type = new SchemaValueNumberType<int32_t>{ static_cast<int32_t>(-2147483648),static_cast<int32_t>(2147483647) };
-                        m_type = int32_type;
+                        auto int32_type = std::make_unique<SchemaValueNumberType<int32_t>>( static_cast<int32_t>(-2147483648),static_cast<int32_t>(2147483647) );
                         parse_range_intervals(int32_type->range, type->info.num.range->expr);
+                        m_type = std::move(int32_type);
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueNumberType<int32_t>* int32_type = new SchemaValueNumberType<int32_t>{ static_cast<int32_t>(-2147483648),static_cast<int32_t>(2147483647) };
-                        m_type = int32_type;
+                        m_type = std::make_unique<SchemaValueNumberType<int32_t>>( static_cast<int32_t>(-2147483648),static_cast<int32_t>(2147483647) );
                     }
                     break;
                 }
                 case LY_TYPE_UINT32:
                 {
                     if(type->info.num.range) {
-                        SchemaValueNumberType<uint32_t>* uint32_type = new SchemaValueNumberType<uint32_t>{ static_cast<uint32_t>(0),static_cast<uint32_t>(4294967295) };
-                        m_type = uint32_type;
+                        auto uint32_type = std::make_unique<SchemaValueNumberType<uint32_t>>( static_cast<uint32_t>(0),static_cast<uint32_t>(4294967295) );
                         parse_range_intervals(uint32_type->range, type->info.num.range->expr);
+                        m_type = std::move(uint32_type);
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueNumberType<uint32_t>* uint32_type = new SchemaValueNumberType<uint32_t>{ static_cast<uint32_t>(0),static_cast<uint32_t>(4294967295) };
-                        m_type = uint32_type;
+                        m_type = std::make_unique<SchemaValueNumberType<uint32_t>>( static_cast<uint32_t>(0),static_cast<uint32_t>(4294967295) );
                     }
                     break;
                 }
@@ -432,27 +421,25 @@ namespace ydk {
                 case LY_TYPE_INT64:
                 {
                     if(type->info.num.range) {
-                        SchemaValueNumberType<int64_t>* int64_type = new SchemaValueNumberType<int64_t>{ static_cast<int64_t>(-9223372036854775807),static_cast<int64_t>(9223372036854775807) };
-                        m_type = int64_type;
+                        auto int64_type = std::make_unique<SchemaValueNumberType<int64_t>>( static_cast<int64_t>(-9223372036854775807),static_cast<int64_t>(9223372036854775807) );
                         parse_range_intervals(int64_type->range, type->info.num.range->expr);
+                        m_type = std::move(int64_type);
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueNumberType<int64_t>* int64_type = new SchemaValueNumberType<int64_t>{ static_cast<int64_t>(-9223372036854775807),static_cast<int64_t>(9223372036854775807) };
-                        m_type = int64_type;
+                        m_type = std::make_unique<SchemaValueNumberType<int64_t>>( static_cast<int64_t>(-9223372036854775807),static_cast<int64_t>(9223372036854775807) );
                     }
                     break;
                 }
                 case LY_TYPE_UINT64: {
                     if(type->info.num.range) {
-                        SchemaValueNumberType<uint64_t>* uint64_type = new SchemaValueNumberType<uint64_t>{ static_cast<uint64_t>(0),static_cast<uint64_t>(18446744073709551615ULL) };
-                        m_type = uint64_type;
+                        auto uint64_type = std::make_unique<SchemaValueNumberType<uint64_t>>( static_cast<uint64_t>(0),static_cast<uint64_t>(18446744073709551615ULL) );
                         parse_range_intervals(uint64_type->range, type->info.num.range->expr);
+                        m_type = std::move(uint64_type);
                     } else if(type->der) {
                         m_type = create_schema_value_type(leaf, &(type->der->type));
                     } else {
-                        SchemaValueNumberType<uint64_t>* uint64_type = new SchemaValueNumberType<uint64_t>{ static_cast<uint64_t>(0),static_cast<uint64_t>(18446744073709551615ULL) };
-                        m_type = uint64_type;
+                        m_type = std::make_unique<SchemaValueNumberType<uint64_t>>( static_cast<uint64_t>(0),static_cast<uint64_t>(18446744073709551615ULL) );
                     }
                     break;
                 }
@@ -467,7 +454,7 @@ namespace ydk {
             return m_type;
         }
 
-        SchemaValueType* create_schema_value_type(struct lys_node_leaf* leaf)
+        std::unique_ptr<SchemaValueType> create_schema_value_type(struct lys_node_leaf* leaf)
         {
             return create_schema_value_type(leaf, &(leaf->type));
         }
@@ -580,27 +567,33 @@ ydk::path::DataNode*
 ydk::path::CodecService::decode(const RootSchemaNode* root_schema, const std::string& buffer, CodecService::Format format)
 {
     LYD_FORMAT scheme = LYD_XML;
-    if (format == CodecService::Format::JSON) {
+    if (format == CodecService::Format::JSON)
+    {
         scheme = LYD_JSON;
     }
+
     const RootSchemaNodeImpl* rs_impl = dynamic_cast<const RootSchemaNodeImpl*>(root_schema);
-    if(!rs_impl){
+    if(!rs_impl)
+    {
         BOOST_LOG_TRIVIAL(error) << "Root Schema Node is nullptr";
         BOOST_THROW_EXCEPTION(YDKCoreException{"Root Schema Node is null"});
     }
 
     struct lyd_node *root = lyd_parse_mem(rs_impl->m_ctx, buffer.c_str(), scheme, LYD_OPT_TRUSTED |  LYD_OPT_GET);
-    if( root == nullptr || ly_errno ) {
+    if( root == nullptr || ly_errno )
+    {
 
         BOOST_LOG_TRIVIAL(error) << "Parsing failed with message " << ly_errmsg();
         BOOST_THROW_EXCEPTION(YDKCodecException{YDKCodecException::Error::XML_INVAL});
     }
+
     BOOST_LOG_TRIVIAL(trace) << "Performing decode operation";
     RootDataImpl* rd = new RootDataImpl{rs_impl, rs_impl->m_ctx, "/"};
     rd->m_node = root;
 
     struct lyd_node* dnode = root;
-    do{
+    do
+    {
         DataNodeImpl* nodeImpl = new DataNodeImpl{rd, dnode};
         rd->child_map.insert(std::make_pair(root, nodeImpl));
         dnode = dnode->next;
@@ -608,7 +601,4 @@ ydk::path::CodecService::decode(const RootSchemaNode* root_schema, const std::st
 
     return rd;
 }
-
-///////////////////////////////////////////////////////////////////////////
-
 

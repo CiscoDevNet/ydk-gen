@@ -841,7 +841,7 @@ namespace ydk {
 
 
             /// derived identities
-            std::vector<SchemaValueIdentityType*> derived;
+            std::vector<std::unique_ptr<SchemaValueIdentityType>> derived;
 
         };
 
@@ -939,7 +939,7 @@ namespace ydk {
             DiagnosticNode<std::string, ValidationError> validate(const std::string& value) const;
 
             /// types defined
-            std::vector<SchemaValueType*> types;
+            std::vector<std::unique_ptr<SchemaValueType>> types;
         };
 
         ///
@@ -1016,7 +1016,7 @@ namespace ydk {
             ///
             /// Returns the children of this SchemaNode.
             ///@return the children of this node.
-            virtual std::vector<SchemaNode*> children() const = 0;
+            virtual const std::vector<std::unique_ptr<SchemaNode>> & children() const = 0;
 
             ///
             /// @brief get the root of NodeTree this node is part of
@@ -1053,7 +1053,7 @@ namespace ydk {
             /// @return ptr to SchemaValueType or nullptr. User should not free this pointer
             /// it is contained within the SchemaNode so destroying the SchemaNode.
             ///
-            virtual SchemaValueType* type() const = 0;
+            virtual SchemaValueType & type() const = 0;
 
         };
 
@@ -1100,7 +1100,7 @@ namespace ydk {
             ///
             /// Returns the children of this SchemaNode.
             ///@return the children of this node.
-            virtual std::vector<SchemaNode*> children() const = 0;
+            virtual const std::vector<std::unique_ptr<SchemaNode>> & children() const = 0;
 
             ///
             /// @brief get the root of NodeTree this node is part of
