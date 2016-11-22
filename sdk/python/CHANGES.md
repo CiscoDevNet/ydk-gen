@@ -1,5 +1,21 @@
+**2016-08-03 version 0.5.1:**
+
+* Support for Python3
+  * Introduced support for Python 3 ([#60](https://github.com/CiscoDevNet/ydk-gen/issues/60))
+  * Both Python 2 and Python 3 are now supported for `ydk-gen` and `ydk-py`
+
+* Bundle improvements
+  * Removed `cisco-ios-xr` bundle dependency on openconfig bundle ([#238](https://github.com/CiscoDevNet/ydk-gen/pull/238))
+  * Improved usage of import statements in YDK model API to reduce chances of circular import dependency ([#216](https://github.com/CiscoDevNet/ydk-gen/issues/216))
+  * Updated `cisco-ios-xr` bundle to support Cisco IOS XR 6.1.1 release ([#258](https://github.com/CiscoDevNet/ydk-gen/pull/258))
+
+* Documentation improvements
+  * Improved documentation for bundle installation ([#244](https://github.com/CiscoDevNet/ydk-gen/pull/244))
+  * Added documentation for executor service ([#263](https://github.com/CiscoDevNet/ydk-gen/pull/263))
+
 **2016-08-03 version 0.5.0:**
- * Introduced YDK bundles ([#43](https://github.com/CiscoDevNet/ydk-gen/issues/43), [#148](https://github.com/CiscoDevNet/ydk-gen/issues/148), [#149](https://github.com/CiscoDevNet/ydk-gen/issues/149))
+
+* Introduced YDK bundles ([#43](https://github.com/CiscoDevNet/ydk-gen/issues/43), [#148](https://github.com/CiscoDevNet/ydk-gen/issues/148), [#149](https://github.com/CiscoDevNet/ydk-gen/issues/149))
   * Created YDK core library and pluggable namespace packages that share the same module prefix `ydk.models`
   * Generated documentation for YDK core and bundles
 
