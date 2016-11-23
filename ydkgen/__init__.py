@@ -149,7 +149,7 @@ class YdkGenerator(object):
         if not self.groupings_as_class:
             api_pkgs = ApiModelBuilder(self.iskeyword, self.language).generate(modules)
         else:
-            api_pkgs = GroupingClassApiModelBuilder(self.iskeyword).generate(modules)
+            api_pkgs = GroupingClassApiModelBuilder(self.iskeyword, self.language).generate(modules)
         api_pkgs.extend(
             SubModuleBuilder().generate(pyang_builder.get_submodules(), self.iskeyword))
 
