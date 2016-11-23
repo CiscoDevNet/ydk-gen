@@ -43,6 +43,10 @@ endif()
 # Set LibYDK variables
 set(libydk_src
     src/bits.cpp
+    # src/service.cpp
+    src/executor_service.cpp
+    src/netconf_service.cpp
+    src/ietf_netconf.cpp
     src/codec_provider.cpp
     src/codec_service.cpp
     src/crud_service.cpp
@@ -71,6 +75,10 @@ set(libydk_src
     src/path/statement.cpp)
 
 set(libydk_headers
+    src/service.hpp
+    src/executor_service.hpp
+    src/netconf_service.hpp
+    src/ietf_netconf.hpp
     src/netconf_provider.hpp
     src/netconf_client.hpp
     src/codec_service.hpp
@@ -84,6 +92,10 @@ set(libydk_headers
     src/service.hpp)
 
 set(libydk_install_headers
+    src/service.hpp
+    src/executor_service.hpp
+    src/netconf_service.hpp
+    src/ietf_netconf.hpp
     src/netconf_provider.hpp
     src/codec_service.hpp
     src/codec_provider.hpp

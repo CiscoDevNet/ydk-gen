@@ -147,7 +147,7 @@ class YdkGenerator(object):
 
         # build api model packages
         if not self.groupings_as_class:
-            api_pkgs = ApiModelBuilder(self.iskeyword).generate(modules)
+            api_pkgs = ApiModelBuilder(self.iskeyword, self.language).generate(modules)
         else:
             api_pkgs = GroupingClassApiModelBuilder(self.iskeyword).generate(modules)
         api_pkgs.extend(

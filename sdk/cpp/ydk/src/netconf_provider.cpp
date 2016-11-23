@@ -121,7 +121,18 @@ NetconfServiceProvider::~NetconfServiceProvider()
 	}
 }
 
-path::RootSchemaNode* NetconfServiceProvider::get_root_schema() const
+std::string NetconfServiceProvider::execute_payload(std::string payload)
+{
+       std::string reply = client->execute_payload(payload);
+    BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
+    BOOST_LOG_TRIVIAL(debug) << reply;
+    BOOST_LOG_TRIVIAL(debug) <<"=========================="<<endl;
+    // return handle_read_reply(reply, root_schema.get());
+    return reply;
+}
+
+path::RootSchemaNode* NetconfServiceProvider::get_root_schema() const 	//current
+// core::RootSchemaNode* NetconfServiceProvider::get_root_schema() const 	//old
 {
     return root_schema.get();
 }

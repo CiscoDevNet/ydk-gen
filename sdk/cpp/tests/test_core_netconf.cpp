@@ -242,7 +242,39 @@ BOOST_AUTO_TEST_CASE(bits)
     (*create_rpc)(sp);
 }
 
+BOOST_AUTO_TEST_CASE(validate)
+{
+    ydk::path::Repository repo{};
 
+    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
+
+    BOOST_REQUIRE(schema != nullptr);
+
+    auto runner = schema->create("ietf-netconf:validate", "");
+
+    BOOST_REQUIRE( runner != nullptr );
+
+    //get the root
+    std::unique_ptr<const ydk::path::DataNode> data_root{runner->root()};
+    BOOST_REQUIRE( data_root != nullptr );
+
+    auto ysanity = runner->create("source/candidate", "");
+    BOOST_REQUIRE( ysanity != nullptr );
+
+    auto s = ydk::path::CodecService{};
+    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+
+    BOOST_CHECK_MESSAGE( !xml.empty(),
+                        "XML output :" << xml);
+
+    std::cout << xml << std::endl;
+
+    //call create
+    // std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
+    // create_rpc->input()->create("entity", xml);
+    // (*create_rpc)(sp);
+}
 
 
 BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
@@ -320,19 +352,19 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 //
 //BOOST_AUTO_TEST_CASE( bgp_xr_native  )
 //{
-//    ydk::core::Repository repo{};
+//    ydk::path::Repository repo{};
 //
 //    ydk::NetconfServiceProvider sp{&repo,"localhost", "admin", "admin",  1220};
-//    ydk::core::RootSchemaNode* schema = sp.get_root_schema();
+//    ydk::path::RootSchemaNode* schema = sp.get_root_schema();
 //
 //    BOOST_REQUIRE(schema != nullptr);
 //
-//    auto s = ydk::core::CodecService{};
+//    auto s = ydk::path::CodecService{};
 //
 //    auto bgp = schema->create("Cisco-IOS-XR-ipv4-bgp-cfg:bgp", "");
 //    BOOST_REQUIRE( bgp != nullptr );
 //    //get the root
-//    std::unique_ptr<const ydk::core::DataNode> data_root{bgp->root()};
+//    std::unique_ptr<const ydk::path::DataNode> data_root{bgp->root()};
 //    BOOST_REQUIRE( data_root != nullptr );
 //
 //    //call create
@@ -348,20 +380,20 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 //    auto vrf = four_instance_as->create("vrfs/vrf[vrf-name='red']");
 //    BOOST_REQUIRE( vrf != nullptr );
 //
-//	std::unique_ptr<ydk::core::Rpc> create_rpc { schema->rpc("ydk:create") };
-//	auto xml = s.encode(bgp, ydk::core::CodecService::Format::XML, false);
+//	std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
+//	auto xml = s.encode(bgp, ydk::path::CodecService::Format::XML, false);
 //	BOOST_REQUIRE( !xml.empty() );
 //	create_rpc->input()->create("entity", xml);
 //
 //	auto res = (*create_rpc)(sp);
 //
 //	//call read
-//    std::unique_ptr<ydk::core::Rpc> read_rpc { schema->rpc("ydk:read") };
+//    std::unique_ptr<ydk::path::Rpc> read_rpc { schema->rpc("ydk:read") };
 //    auto bgp_read = schema->create("Cisco-IOS-XR-ipv4-bgp-cfg:bgp", "");
 //    BOOST_REQUIRE( bgp_read != nullptr );
-//    std::unique_ptr<const ydk::core::DataNode> data_root2{bgp_read->root()};
+//    std::unique_ptr<const ydk::path::DataNode> data_root2{bgp_read->root()};
 //
-//    xml = s.encode(bgp_read, ydk::core::CodecService::Format::XML, false);
+//    xml = s.encode(bgp_read, ydk::path::CodecService::Format::XML, false);
 //    BOOST_REQUIRE( !xml.empty() );
 //    read_rpc->input()->create("filter", xml);
 //    read_rpc->input()->create("only-config");

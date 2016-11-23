@@ -28,9 +28,10 @@ from ydkgen.api_model import Enum, Class, Bits, Package, Property, Deviation
 
 
 class ApiModelBuilder(object):
-    def __init__(self, iskeyword):
+    def __init__(self, iskeyword, language):
         self.types_extractor = TypesExtractor()
         self.iskeyword = iskeyword
+        self.language = language
 
     def generate(self, modules):
         """
@@ -294,21 +295,44 @@ class ApiModelBuilder(object):
             self._add_to_deviation_package(stmt, parent_element, deviation_packages)
 
         # walk the children
+        _keywords = statements.data_definition_keywords + ['case', 'rpc', 'input', 'output']
         if hasattr(stmt, 'i_children'):
             self._sanitize_namespace(stmt)
 
             child_stmts=[]
             if hasattr(stmt, 'i_key') and stmt.i_key is not None:
                 child_stmts.extend([s for s in stmt.i_key])
-            child_stmts.extend([child for child in stmt.i_children
-                   if child not in child_stmts
-                   and (child.keyword in statements.data_definition_keywords
-                   or child.keyword == 'case'
-                   or child.keyword == 'rpc'
-                   or child.keyword == 'input'
-                   or child.keyword == 'output')])
+
+            if stmt.keyword == 'rpc' and self.language == 'cpp':
+                child_stmts = self._walk_children(stmt, _keywords)
+
+            else:
+                _children = [child for child in stmt.i_children \
+                    if (child not in child_stmts and child.keyword in _keywords)]
+                child_stmts.extend(_children)
+
             for child_stmt in child_stmts:
                 self._create_expanded_api_model(child_stmt, element, deviation_packages)
+
+    # assumes stmt has attribute 'i_children' and language is 'cpp'
+    def _walk_children(self, stmt, keywords):
+        children = []
+
+        if hasattr(stmt, 'i_key') and stmt.i_key is not None:
+            children.extend([s for s in stmt.i_key if s not in children])
+
+        black_sheep = []
+        for child in stmt.i_children:
+            if child not in children and child.keyword in keywords:
+                if child.keyword == 'input':
+                    black_sheep.append(child)
+                else:
+                    children.append(child)
+
+        for child in black_sheep:
+            children.extend(self._walk_children(child, keywords))
+
+        return children
 
 
     def _sanitize_namespace(self, stmt):

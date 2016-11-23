@@ -38,11 +38,8 @@ public:
                                std::string password,
                                int port);
         ~NetconfServiceProvider();
-
         path::RootSchemaNode* get_root_schema() const;
-
         path::DataNode* invoke(path::Rpc* rpc) const;
-
         static const char* CANDIDATE;
         static const char* MODULE_NAME;
 
