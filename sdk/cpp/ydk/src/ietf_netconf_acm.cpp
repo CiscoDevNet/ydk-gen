@@ -1,7 +1,7 @@
 
 #include <sstream>
 #include <iostream>
-#include "ydk/entity_util.hpp"
+#include "entity_util.hpp"
 #include "ietf_netconf_acm.hpp"
 
 namespace ydk {
