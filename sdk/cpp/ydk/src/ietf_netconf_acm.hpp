@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include "ydk/types.hpp"
-#include "ydk/errors.hpp"
+#include "types.hpp"
+#include "errors.hpp"
 
 namespace ydk {
 namespace ietf_netconf_acm {

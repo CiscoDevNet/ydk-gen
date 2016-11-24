@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include "ydk/types.hpp"
-#include "ydk/errors.hpp"
+#include "types.hpp"
+#include "errors.hpp"
 
 #include "ietf_netconf_with_defaults.hpp"
 
