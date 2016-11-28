@@ -27,28 +27,28 @@
 
 #include "path_api.hpp"
 #include "types.hpp"
-#include "entity_lookup.hpp"
 
 namespace ydk
 {
-    class CodecServiceProvider
-    {
-    public:
-        CodecServiceProvider(path::Repository * repo, EncodingFormat encoding);
-        ~CodecServiceProvider();
+class TopEntityLookUp;
 
-        void add_lookup_table(TopEntityLookUp & lookup);
-        path::RootSchemaNode* get_root_schema();
-        std::unique_ptr<Entity> get_top_entity(std::string & payload);
+class CodecServiceProvider
+{
+public:
+	CodecServiceProvider(path::Repository * repo, EncodingFormat encoding);
+	~CodecServiceProvider();
 
-    public:
-        path::CodecService::Format m_encoding;
+	path::RootSchemaNode* get_root_schema();
+	std::unique_ptr<Entity> get_top_entity(std::string & payload);
 
-    private:
-        std::unique_ptr<path::RootSchemaNode> m_root_schema;
-        path::Repository* m_repo;
+public:
+	path::CodecService::Format m_encoding;
 
-    };
+private:
+	std::unique_ptr<path::RootSchemaNode> m_root_schema;
+	path::Repository* m_repo;
+
+};
 }
 
 #endif /* CODEC_PROVIDER_HPP */

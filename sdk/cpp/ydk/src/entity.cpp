@@ -32,7 +32,7 @@ using namespace std;
 namespace ydk
 {
 Entity::Entity()
-  : parent(nullptr)
+  : parent(nullptr), operation(EditOperation::not_set)
 {
 }
 

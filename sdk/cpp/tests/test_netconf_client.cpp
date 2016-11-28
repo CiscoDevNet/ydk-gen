@@ -27,7 +27,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE(xr)
 {
-	NetconfClient client{ "admin", "admin", "localhost", 12022, 0};
+	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();

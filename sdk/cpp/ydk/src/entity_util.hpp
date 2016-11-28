@@ -24,13 +24,15 @@
 #define ENTITY_UTIL_HPP
 
 #include <sstream>
-#include <algorithm>
-
 #include "types.hpp"
 
 namespace ydk
 {
+class Entity;
+
 void get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::ostringstream & path_buffer);
+bool is_set(const EditOperation & operation);
+
 }
 
 #endif /* ENTITY_UTIL_HPP */

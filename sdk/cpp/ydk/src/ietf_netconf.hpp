@@ -18,14 +18,15 @@ class GetConfigRpc : public Entity
         GetConfigRpc();
         ~GetConfigRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
-        Value with_defaults;
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
+        Value with_defaults; //type: WithDefaultsModeEnum
 
 
     class Output : public Entity
@@ -34,12 +35,13 @@ class GetConfigRpc : public Entity
             Output();
             ~Output();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
 
 
 
@@ -53,15 +55,16 @@ class GetConfigRpc : public Entity
             Source();
             ~Source();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
-            Value candidate;
-            Value running;
-            Value startup;
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
+            Value candidate; //type: empty
+            Value running; //type: empty
+            Value startup; //type: empty
 
 
 
@@ -82,17 +85,18 @@ class EditConfigRpc : public Entity
         EditConfigRpc();
         ~EditConfigRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
-        Value default_operation;
-        Value test_option;
-        Value error_option;
-        Value url;
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
+        Value default_operation; //type: DefaultOperationEnum
+        Value test_option; //type: TestOptionEnum
+        Value error_option; //type: ErrorOptionEnum
+        Value url; //type: string
 
 
     class Target : public Entity
@@ -101,14 +105,15 @@ class EditConfigRpc : public Entity
             Target();
             ~Target();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
-            Value candidate;
-            Value running;
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
+            Value candidate; //type: empty
+            Value running; //type: empty
 
 
 
@@ -130,14 +135,15 @@ class CopyConfigRpc : public Entity
         CopyConfigRpc();
         ~CopyConfigRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
-        Value with_defaults;
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
+        Value with_defaults; //type: WithDefaultsModeEnum
 
 
     class Target : public Entity
@@ -146,16 +152,17 @@ class CopyConfigRpc : public Entity
             Target();
             ~Target();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
-            Value candidate;
-            Value running;
-            Value startup;
-            Value url;
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
+            Value candidate; //type: empty
+            Value running; //type: empty
+            Value startup; //type: empty
+            Value url; //type: string
 
 
 
@@ -169,16 +176,17 @@ class CopyConfigRpc : public Entity
             Source();
             ~Source();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
-            Value candidate;
-            Value running;
-            Value startup;
-            Value url;
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
+            Value candidate; //type: empty
+            Value running; //type: empty
+            Value startup; //type: empty
+            Value url; //type: string
 
 
 
@@ -199,13 +207,14 @@ class DeleteConfigRpc : public Entity
         DeleteConfigRpc();
         ~DeleteConfigRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
 
 
     class Target : public Entity
@@ -214,14 +223,15 @@ class DeleteConfigRpc : public Entity
             Target();
             ~Target();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
-            Value startup;
-            Value url;
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
+            Value startup; //type: empty
+            Value url; //type: string
 
 
 
@@ -240,13 +250,14 @@ class LockRpc : public Entity
         LockRpc();
         ~LockRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
 
 
     class Target : public Entity
@@ -255,15 +266,16 @@ class LockRpc : public Entity
             Target();
             ~Target();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
-            Value candidate;
-            Value running;
-            Value startup;
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
+            Value candidate; //type: empty
+            Value running; //type: empty
+            Value startup; //type: empty
 
 
 
@@ -282,13 +294,14 @@ class UnlockRpc : public Entity
         UnlockRpc();
         ~UnlockRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
 
 
     class Target : public Entity
@@ -297,15 +310,16 @@ class UnlockRpc : public Entity
             Target();
             ~Target();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
-            Value candidate;
-            Value running;
-            Value startup;
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
+            Value candidate; //type: empty
+            Value running; //type: empty
+            Value startup; //type: empty
 
 
 
@@ -324,14 +338,15 @@ class GetRpc : public Entity
         GetRpc();
         ~GetRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
-        Value with_defaults;
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
+        Value with_defaults; //type: WithDefaultsModeEnum
 
 
     class Output : public Entity
@@ -340,12 +355,13 @@ class GetRpc : public Entity
             Output();
             ~Output();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
 
 
 
@@ -365,13 +381,14 @@ class CloseSessionRpc : public Entity
         CloseSessionRpc();
         ~CloseSessionRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
 
 
 
@@ -384,14 +401,15 @@ class KillSessionRpc : public Entity
         KillSessionRpc();
         ~KillSessionRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
-        Value session_id;
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
+        Value session_id; //type: uint32
 
 
 
@@ -404,17 +422,18 @@ class CommitRpc : public Entity
         CommitRpc();
         ~CommitRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
-        Value confirmed;
-        Value confirm_timeout;
-        Value persist;
-        Value persist_id;
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
+        Value confirmed; //type: empty
+        Value confirm_timeout; //type: uint32
+        Value persist; //type: string
+        Value persist_id; //type: string
 
 
 
@@ -427,13 +446,14 @@ class DiscardChangesRpc : public Entity
         DiscardChangesRpc();
         ~DiscardChangesRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
 
 
 
@@ -446,14 +466,15 @@ class CancelCommitRpc : public Entity
         CancelCommitRpc();
         ~CancelCommitRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
-        Value persist_id;
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
+        Value persist_id; //type: string
 
 
 
@@ -466,13 +487,14 @@ class ValidateRpc : public Entity
         ValidateRpc();
         ~ValidateRpc();
 
-        bool has_data() const;
-        EntityPath get_entity_path(Entity* parent) const;
-        std::string get_segment_path() const;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-        void set_value(const std::string & value_path, std::string value);
-        std::unique_ptr<Entity> clone_ptr();
-        std::map<std::string, Entity*> & get_children();
+        bool has_data() const override;
+        bool has_operation() const override;
+        EntityPath get_entity_path(Entity* parent) const override;
+        std::string get_segment_path() const override;
+        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        void set_value(const std::string & value_path, std::string value) override;
+        std::map<std::string, Entity*> & get_children() override;
+        std::unique_ptr<Entity> clone_ptr() override;
 
 
     class Source : public Entity
@@ -481,16 +503,17 @@ class ValidateRpc : public Entity
             Source();
             ~Source();
 
-            bool has_data() const;
-            EntityPath get_entity_path(Entity* parent) const;
-            std::string get_segment_path() const;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);
-            void set_value(const std::string & value_path, std::string value);
-            std::map<std::string, Entity*> & get_children();
-            Value candidate;
-            Value running;
-            Value startup;
-            Value url;
+            bool has_data() const override;
+            bool has_operation() const override;
+            EntityPath get_entity_path(Entity* parent) const override;
+            std::string get_segment_path() const override;
+            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            void set_value(const std::string & value_path, std::string value) override;
+            std::map<std::string, Entity*> & get_children() override;
+            Value candidate; //type: empty
+            Value running; //type: empty
+            Value startup; //type: empty
+            Value url; //type: string
 
 
 

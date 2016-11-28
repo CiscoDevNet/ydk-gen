@@ -59,17 +59,17 @@ std::string to_string(YType t)
 }
 
 ValueList::ValueList(YType type, std::string name)
-	: type(type), name(name)
+	: operation(EditOperation::not_set), type(type), name(name)
 {
 }
 
 ValueList::ValueList(const ValueList& other)
-	: values(other.getValues()), type(other.type), name(other.name)
+	: operation(EditOperation::not_set), values(other.getValues()), type(other.type), name(other.name)
 {
 }
 
 ValueList::ValueList(ValueList&& other)
-	: values(other.getValues()), type(other.type), name(other.name)
+	: operation(EditOperation::not_set), values(other.getValues()), type(other.type), name(other.name)
 {
 }
 
@@ -79,6 +79,7 @@ ValueList::operator=(const ValueList& other)
 	type = other.type;
 	name = other.name;
 	values = other.getValues();
+	operation = other.operation;
     return *this;
 }
 
@@ -88,6 +89,7 @@ ValueList::operator=(ValueList&& other)
 	type = other.type;
 	name = other.name;
 	values = other.getValues();
+	operation = other.operation;
     return *this;
 }
 
@@ -227,12 +229,17 @@ std::vector<Value> ValueList::getValues() const
 	return values;
 }
 
-std::vector<std::pair<std::string, std::string> > ValueList::get_name_values() const
+std::vector<std::pair<std::string, LeafData> > ValueList::get_name_leafdata() const
 {
-	std::vector<std::pair<std::string, std::string> > name_values;
+	std::vector<std::pair<std::string, LeafData> > name_values;
     for (auto value : values)
     {
-    	name_values.push_back({value.get_name_value().first+"[.='"+value.get()+"']", ""});
+    	name_values.push_back(
+    						{
+								(value.get_name_leafdata().first+"[.='"+value.get()+"']"),
+								{"", operation}
+    						}
+    						);
     }
     return name_values;
 }

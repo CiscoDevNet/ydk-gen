@@ -139,6 +139,7 @@ string NetconfClient::process_rpc_reply(int reply_type, const nc_reply* reply)
             BOOST_LOG_TRIVIAL(error) << "RPC error occurred";
 			BOOST_THROW_EXCEPTION(YDKClientException{"RPC error occured"});
 	}
+	return {};
 }
 
 StringVec NetconfClient::get_capabilities()

@@ -45,7 +45,6 @@ class ClassMembersPrinter(object):
             return
         self._print_common_method_declarations(clazz)
         self._print_clone_ptr_method(clazz)
-        self._print_get_children_method(clazz)
 
     def _print_constructor_destructor(self, clazz):
         self.ctx.writeln('public:')
@@ -69,18 +68,17 @@ class ClassMembersPrinter(object):
         return leaf_lists
 
     def _print_common_method_declarations(self, clazz):
-        self.ctx.writeln('bool has_data() const;')
-        self.ctx.writeln('EntityPath get_entity_path(Entity* parent) const;')
-        self.ctx.writeln('std::string get_segment_path() const;')
-        self.ctx.writeln('Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path);')
-        self.ctx.writeln('void set_value(const std::string & value_path, std::string value);')
+        self.ctx.writeln('bool has_data() const override;')
+        self.ctx.writeln('bool has_operation() const override;')
+        self.ctx.writeln('EntityPath get_entity_path(Entity* parent) const override;')
+        self.ctx.writeln('std::string get_segment_path() const override;')
+        self.ctx.writeln('Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;')
+        self.ctx.writeln('void set_value(const std::string & value_path, std::string value) override;')
+        self.ctx.writeln('std::map<std::string, Entity*> & get_children() override;')
 
     def _print_clone_ptr_method(self, clazz):
         if clazz.owner is not None and isinstance(clazz.owner, Package):
-            self.ctx.writeln('std::unique_ptr<Entity> clone_ptr();')
-
-    def _print_get_children_method(self, clazz):
-        self.ctx.writeln('std::map<std::string, Entity*> & get_children();')
+            self.ctx.writeln('std::unique_ptr<Entity> clone_ptr() override;')
 
     def _print_class_value_members(self, clazz):
         if clazz.is_identity():

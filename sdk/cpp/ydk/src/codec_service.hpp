@@ -23,25 +23,27 @@
 #ifndef CODEC_SERVICE_HPP
 #define CODEC_SERVICE_HPP
 
-#include "path_api.hpp"
-#include "types.hpp"
-#include "codec_provider.hpp"
+#include <map>
+#include <memory>
 
 namespace ydk
 {
-    class CodecService
-    {
-    public:
+class CodecServiceProvider;
+class Entity;
 
-        CodecService();
-        ~CodecService();
+class CodecService
+{
+public:
 
-        std::string encode(CodecServiceProvider & provider, Entity & entity, bool pretty=false);
-        std::map<std::string, std::string> encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity, bool pretty=false);
+	CodecService();
+	~CodecService();
 
-        std::unique_ptr<Entity> decode(CodecServiceProvider & provider, std::string & payload);
-        std::map<std::string, std::unique_ptr<Entity>> decode(CodecServiceProvider & provider, std::map<std::string, std::string> & payload_map);
-    };
+	std::string encode(CodecServiceProvider & provider, Entity & entity, bool pretty=false);
+	std::map<std::string, std::string> encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity, bool pretty=false);
+
+	std::unique_ptr<Entity> decode(CodecServiceProvider & provider, std::string & payload);
+	std::map<std::string, std::unique_ptr<Entity>> decode(CodecServiceProvider & provider, std::map<std::string, std::string> & payload_map);
+};
 }
 
 #endif /* CODEC_SERVICE_HPP */

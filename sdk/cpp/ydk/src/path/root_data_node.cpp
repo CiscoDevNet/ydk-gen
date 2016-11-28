@@ -52,6 +52,13 @@ ydk::path::RootDataImpl::path() const
 }
 
 ydk::path::DataNode*
+ydk::path::RootDataImpl::create_filter(const std::string& path, const std::string& value)
+{
+	//TODO
+    return nullptr;
+}
+
+ydk::path::DataNode*
 ydk::path::RootDataImpl::create(const std::string& path, const std::string& value)
 {
     if(path.empty())

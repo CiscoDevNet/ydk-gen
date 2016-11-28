@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(test_uint8)
 	ValueList test_value{YType::uint8, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="name[.='4']");
 }
 
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(test_uint16)
 	ValueList test_value{YType::uint16, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="name[.='4']");
 }
 
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(test_uint32)
 	ValueList test_value{YType::uint32, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="name[.='4']");
 }
 
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE(test_uint64)
 	ValueList test_value{YType::uint64, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="name[.='4']");
 }
 
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE(test_int8)
 	ValueList test_value{YType::int8, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="name[.='4']");
 }
 
@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE(test_int16)
 	ValueList test_value{YType::int16, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="name[.='4']");
 }
 
@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE(test_int32)
 	ValueList test_value{YType::int32, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="name[.='4']");
 }
 
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(test_int64)
 	ValueList test_value{YType::int64, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="name[.='4']");
 }
 
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(test_enum_)
 	test_value.append(TestEnum::two);
 	BOOST_REQUIRE(test_value[1].get()=="two");
 
-	auto nv = test_value.get_name_values();
+	auto nv = test_value.get_name_leafdata();
 	BOOST_REQUIRE(nv[0].first=="enumval[.='one']");
 	BOOST_REQUIRE(nv[1].first=="enumval[.='two']");
 }

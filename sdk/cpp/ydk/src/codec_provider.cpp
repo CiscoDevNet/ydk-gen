@@ -24,6 +24,7 @@
 #include <boost/log/trivial.hpp>
 #include <boost/xpressive/xpressive.hpp>
 #include "codec_provider.hpp"
+#include "entity_lookup.hpp"
 
 namespace re = boost::xpressive;
 

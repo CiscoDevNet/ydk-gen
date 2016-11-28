@@ -42,6 +42,13 @@ ydk::path::DataNode::create(const std::string& path)
 }
 
 
+ydk::path::DataNode*
+ydk::path::DataNode::create_filter(const std::string& path)
+{
+	//TODO
+    return nullptr;
+}
+
 ////////////////////////////////////////////////////////////////////////////
 // class ydk::DataNodeImpl
 //////////////////////////////////////////////////////////////////////////
@@ -94,6 +101,14 @@ ydk::path::DataNodeImpl::path() const
     std::string str{path};
     std::free(path);
     return str;
+}
+
+
+ydk::path::DataNode*
+ydk::path::DataNodeImpl::create_filter(const std::string& path, const std::string& value)
+{
+	//TODO
+    return nullptr;
 }
 
 ydk::path::DataNode*
@@ -423,6 +438,7 @@ void ydk::path::DataNodeImpl::add_annotation(const ydk::path::Annotation& an)
     }
 
     std::string name { an.m_ns + ":" + an.m_name };
+    BOOST_LOG_TRIVIAL(trace) << "Adding annotation '"<<name<<"="<<an.m_val<< "' to "<< m_node->schema->name;
 
     struct lyd_attr* attr = lyd_insert_attr(m_node, nullptr, name.c_str(), an.m_val.c_str());
 

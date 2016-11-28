@@ -62,8 +62,15 @@ std::string to_str(YType t)
     return "";
 }
 
+LeafData::LeafData(std::string value, EditOperation operation)
+	: value(value), operation(operation)
+{
+
+}
+
 Value::Value(YType type, std::string name):
 		is_set(false),
+		operation(EditOperation::not_set),
 		name(name),
 		value(""),
 		type(type)
@@ -72,6 +79,7 @@ Value::Value(YType type, std::string name):
 
 Value::Value(const Value& val):
     is_set{val.is_set},
+	operation(EditOperation::not_set),
     name{val.name},
     value{val.value},
     type{val.type},
@@ -83,6 +91,7 @@ Value::Value(const Value& val):
 
 Value::Value(Value&& val):
     is_set{val.is_set},
+	operation(EditOperation::not_set),
     name{std::move(val.name)},
     value{std::move(val.value)},
     type{val.type},
@@ -105,9 +114,9 @@ const std::string  Value::get() const
 	return value;
 }
 
-std::pair<std::string, std::string> Value::get_name_value() const
+std::pair<std::string, LeafData> Value::get_name_leafdata() const
 {
-	return {name, get()};
+	return {name, {get(), operation}};
 }
 
 void Value::operator = (uint8 val)

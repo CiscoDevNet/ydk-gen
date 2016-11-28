@@ -43,7 +43,6 @@ endif()
 # Set LibYDK variables
 set(libydk_src
     src/bits.cpp
-    # src/service.cpp
     src/executor_service.cpp
     src/netconf_service.cpp
     src/ietf_netconf.cpp
@@ -56,6 +55,7 @@ set(libydk_src
     src/entity_util.cpp
     src/errors.cpp
     src/netconf_client.cpp
+    src/netconf_edit_operations.cpp
     src/netconf_model_provider.cpp
     src/netconf_provider.cpp
     src/validation_service.cpp
@@ -73,23 +73,6 @@ set(libydk_src
     src/path/schema_node.cpp
     src/path/schema_value_type.cpp
     src/path/statement.cpp)
-
-set(libydk_headers
-    src/service.hpp
-    src/executor_service.hpp
-    src/netconf_service.hpp
-    src/ietf_netconf.hpp
-    src/netconf_provider.hpp
-    src/netconf_client.hpp
-    src/codec_service.hpp
-    src/codec_provider.hpp
-    src/entity_lookup.hpp
-    src/path_api.hpp
-    src/entity_data_node_walker.hpp
-    src/types.hpp
-    src/errors.hpp
-    src/validation_service.hpp
-    src/service.hpp)
 
 set(libydk_install_headers
     src/service.hpp

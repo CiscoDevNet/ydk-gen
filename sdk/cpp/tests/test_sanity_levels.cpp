@@ -211,7 +211,7 @@ BOOST_AUTO_TEST_CASE(three_level_pos)
     BOOST_REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(onelist_neg_dupkey)
+BOOST_AUTO_TEST_CASE(onelist)
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(onelist_neg_dupkey)
     auto e_1 = make_unique<ydktest_sanity::Runner::OneList::Ldata>();
     auto e_2 = make_unique<ydktest_sanity::Runner::OneList::Ldata>();
     e_1->number = 1;
-    e_2->name = "foo";
+    e_1->name = "foo";
     e_2->number = 2;
     e_2->name = "bar";
 

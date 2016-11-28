@@ -1,4 +1,8 @@
-/// YANG Development Kit
+//
+// @file netconf_edit_operations.cpp
+// @brief The main ydk public header.
+//
+// YANG Development Kit
 // Copyright 2016 Cisco Systems. All rights reserved
 //
 ////////////////////////////////////////////////////////////////
@@ -21,53 +25,24 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include <algorithm>
-#include <vector>
-
-#include "entity_util.hpp"
-#include "errors.hpp"
-
-using namespace std;
+#include "types.hpp"
 
 namespace ydk
 {
-
-void get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::ostringstream & path_buffer)
+std::string to_string(EditOperation operation)
 {
-	if(ancestor == nullptr)
+	#define TOSTR(a) case EditOperation::a: return #a;
+	switch(operation)
 	{
-		BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"ancestor should not be null."});
+		TOSTR(merge)
+		TOSTR(create)
+		TOSTR(remove)
+		TOSTR(replace)
+		TOSTR(not_set)
+		case EditOperation::delete_:
+		    return "delete";
 	}
-	auto p = current_node->parent;
-	std::vector<Entity*> parents {};
-	while (p != nullptr && p != ancestor) {
-		parents.push_back(p);
-		p = p->parent;
-	}
-
-	if (p == nullptr) {
-		BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"parent is not in the ancestor hierarchy."});
-	}
-
-	std::reverse(parents.begin(), parents.end());
-
-	p = nullptr;
-	for (auto p1 : parents) {
-		if (p) {
-			path_buffer << "/";
-		} else {
-			 p = p1;
-		}
-		path_buffer << p1->get_segment_path();
-	}
-	if(p)
-		path_buffer << "/";
-	path_buffer<<current_node->get_segment_path();
+	#undef TOSTR
+	return {};
 }
-
-bool is_set(const EditOperation & operation)
-{
-	return operation != EditOperation::not_set;
-}
-
 }

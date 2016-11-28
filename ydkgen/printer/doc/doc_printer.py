@@ -22,7 +22,7 @@ Print rst documents for the generated Python api
 """
 
 from ydkgen.api_model import Bits, Class, Enum, Package
-from ydkgen.common import get_rst_file_name
+from ydkgen.common import get_rst_file_name, is_config_stmt
 from ydkgen.printer.meta_data_util import (get_bits_class_docstring,
                                            get_class_bases,
                                            get_class_crossref_tag,
@@ -95,10 +95,13 @@ class DocPrinter(object):
         self._print_class_hierarchy(clazz)
         if clazz.stmt.search_one('presence') is not None:
             self._append('This class is a :ref:`presence class<presence-class>`\n')
+        if clazz.stmt.arg != 'rpc':
+            if is_config_stmt(clazz.stmt):
+                self._append('This class represents configuration data.\n')
+            else:
+                self._append('This class represents state data.\n')
         self._print_docstring(clazz, get_class_docstring(
             clazz, self.lang, identity_subclasses=self.identity_subclasses))
-        if not clazz.is_identity() and not clazz.is_grouping() and self.lang == 'py':
-            self._print_class_config_method()
         self.ctx.lvl_dec()
 
     def _print_enum_rst(self, enumz):
@@ -200,12 +203,3 @@ class DocPrinter(object):
                 if line.strip() != '':
                     self._append(line)
                     self._append('\n')
-
-    def _print_class_config_method(self):
-        self._append('.. method:: is_config()\n')
-        self.ctx.lvl_inc()
-        self._append("Returns True if this instance "
-                     "represents config data else returns False")
-        self.ctx.lvl_dec()
-        self._append('\n')
-

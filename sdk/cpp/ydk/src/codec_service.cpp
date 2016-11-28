@@ -24,8 +24,11 @@
 #include <iostream>
 #include <boost/log/trivial.hpp>
 
+#include "codec_provider.hpp"
 #include "codec_service.hpp"
 #include "entity_data_node_walker.hpp"
+#include "path_api.hpp"
+#include "types.hpp"
 
 namespace ydk
 {
@@ -59,6 +62,7 @@ CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pret
         BOOST_LOG_TRIVIAL(error) << REPO_ERROR_MSG;
         BOOST_THROW_EXCEPTION(YDKServiceProviderException(REPO_ERROR_MSG));
     }
+    return {};
 }
 
 std::map<std::string, std::string>
@@ -79,8 +83,10 @@ CodecService::decode(CodecServiceProvider & provider, std::string & payload)
 	BOOST_LOG_TRIVIAL(debug) << "Decoding " << payload;
     std::unique_ptr<Entity> entity = provider.get_top_entity(payload);
     path::RootSchemaNode* root_schema = provider.get_root_schema();
+
     path::CodecService core_codec_service{};
     path::DataNode* root_data_node = core_codec_service.decode(root_schema, payload, provider.m_encoding);
+
     if (root_data_node->children().size() != 1)
     {
         BOOST_LOG_TRIVIAL(error) << PAYLOAD_ERROR_MSG;

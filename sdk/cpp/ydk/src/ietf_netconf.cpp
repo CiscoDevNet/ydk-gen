@@ -21,6 +21,11 @@ bool GetConfigRpc::Output::has_data() const
     return false;
 }
 
+bool GetConfigRpc::Output::has_operation() const
+{
+    return is_set(operation);
+}
+
 std::string GetConfigRpc::Output::get_segment_path() const
 {
     std::ostringstream path_buffer;
@@ -42,9 +47,11 @@ EntityPath GetConfigRpc::Output::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -73,8 +80,8 @@ void GetConfigRpc::Output::set_value(const std::string & value_path, std::string
 }
 
 GetConfigRpc::Source::Source()
-    : 
-	candidate{YType::empty, "candidate"},
+    :
+    	candidate{YType::empty, "candidate"},
 	 running{YType::empty, "running"},
 	 startup{YType::empty, "startup"}
 {
@@ -87,7 +94,17 @@ GetConfigRpc::Source::~Source()
 
 bool GetConfigRpc::Source::has_data() const
 {
-    return candidate.is_set || running.is_set || startup.is_set;
+    return candidate.is_set
+	|| running.is_set
+	|| startup.is_set;
+}
+
+bool GetConfigRpc::Source::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(candidate.operation)
+	|| is_set(running.operation)
+	|| is_set(startup.operation);
 }
 
 std::string GetConfigRpc::Source::get_segment_path() const
@@ -111,12 +128,14 @@ EntityPath GetConfigRpc::Source::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (candidate.is_set) leaf_name_values.push_back(candidate.get_name_value());
-    if (running.is_set) leaf_name_values.push_back(running.get_name_value());
-    if (startup.is_set) leaf_name_values.push_back(startup.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (candidate.is_set || is_set(candidate.operation)) leaf_name_data.push_back(candidate.get_name_leafdata());
+    if (running.is_set || is_set(running.operation)) leaf_name_data.push_back(running.get_name_leafdata());
+    if (startup.is_set || is_set(startup.operation)) leaf_name_data.push_back(startup.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -157,10 +176,11 @@ void GetConfigRpc::Source::set_value(const std::string & value_path, std::string
 }
 
 GetConfigRpc::GetConfigRpc()
-    : 
-	with_defaults{YType::enumeration, "with-defaults"}
-    , 		output(std::make_unique<GetConfigRpc::Output>()),
- 	source(std::make_unique<GetConfigRpc::Source>())
+    :
+    	with_defaults{YType::enumeration, "with-defaults"}
+    	,
+    output(std::make_unique<GetConfigRpc::Output>())
+	,source(std::make_unique<GetConfigRpc::Source>())
 {
     output->parent = this;
     children["output"] = output.get();
@@ -177,7 +197,17 @@ GetConfigRpc::~GetConfigRpc()
 
 bool GetConfigRpc::has_data() const
 {
-    return with_defaults.is_set || output->has_data() || source->has_data();
+    return with_defaults.is_set
+	|| (output !=  nullptr && output->has_data())
+	|| (source !=  nullptr && source->has_data());
+}
+
+bool GetConfigRpc::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(with_defaults.operation)
+	|| (output !=  nullptr && is_set(output->operation))
+	|| (source !=  nullptr && is_set(source->operation));
 }
 
 std::string GetConfigRpc::get_segment_path() const
@@ -198,10 +228,12 @@ EntityPath GetConfigRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (with_defaults.is_set) leaf_name_values.push_back(with_defaults.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (with_defaults.is_set || is_set(with_defaults.operation)) leaf_name_data.push_back(with_defaults.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -284,8 +316,8 @@ std::unique_ptr<Entity> GetConfigRpc::clone_ptr()
     return std::make_unique<GetConfigRpc>();
 }
 EditConfigRpc::Target::Target()
-    : 
-	candidate{YType::empty, "candidate"},
+    :
+    	candidate{YType::empty, "candidate"},
 	 running{YType::empty, "running"}
 {
     yang_name = "target"; yang_parent_name = "edit-config";
@@ -297,7 +329,15 @@ EditConfigRpc::Target::~Target()
 
 bool EditConfigRpc::Target::has_data() const
 {
-    return candidate.is_set || running.is_set;
+    return candidate.is_set
+	|| running.is_set;
+}
+
+bool EditConfigRpc::Target::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(candidate.operation)
+	|| is_set(running.operation);
 }
 
 std::string EditConfigRpc::Target::get_segment_path() const
@@ -321,11 +361,13 @@ EntityPath EditConfigRpc::Target::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (candidate.is_set) leaf_name_values.push_back(candidate.get_name_value());
-    if (running.is_set) leaf_name_values.push_back(running.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (candidate.is_set || is_set(candidate.operation)) leaf_name_data.push_back(candidate.get_name_leafdata());
+    if (running.is_set || is_set(running.operation)) leaf_name_data.push_back(running.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -362,12 +404,13 @@ void EditConfigRpc::Target::set_value(const std::string & value_path, std::strin
 }
 
 EditConfigRpc::EditConfigRpc()
-    : 
-	default_operation{YType::enumeration, "default-operation"},
+    :
+    	default_operation{YType::enumeration, "default-operation"},
 	 error_option{YType::enumeration, "error-option"},
 	 test_option{YType::enumeration, "test-option"},
 	 url{YType::str, "url"}
-    , 		target(std::make_unique<EditConfigRpc::Target>())
+    	,
+    target(std::make_unique<EditConfigRpc::Target>())
 {
     target->parent = this;
     children["target"] = target.get();
@@ -381,7 +424,21 @@ EditConfigRpc::~EditConfigRpc()
 
 bool EditConfigRpc::has_data() const
 {
-    return default_operation.is_set || error_option.is_set || test_option.is_set || url.is_set || target->has_data();
+    return default_operation.is_set
+	|| error_option.is_set
+	|| test_option.is_set
+	|| url.is_set
+	|| (target !=  nullptr && target->has_data());
+}
+
+bool EditConfigRpc::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(default_operation.operation)
+	|| is_set(error_option.operation)
+	|| is_set(test_option.operation)
+	|| is_set(url.operation)
+	|| (target !=  nullptr && is_set(target->operation));
 }
 
 std::string EditConfigRpc::get_segment_path() const
@@ -402,13 +459,15 @@ EntityPath EditConfigRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (default_operation.is_set) leaf_name_values.push_back(default_operation.get_name_value());
-    if (error_option.is_set) leaf_name_values.push_back(error_option.get_name_value());
-    if (test_option.is_set) leaf_name_values.push_back(test_option.get_name_value());
-    if (url.is_set) leaf_name_values.push_back(url.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (default_operation.is_set || is_set(default_operation.operation)) leaf_name_data.push_back(default_operation.get_name_leafdata());
+    if (error_option.is_set || is_set(error_option.operation)) leaf_name_data.push_back(error_option.get_name_leafdata());
+    if (test_option.is_set || is_set(test_option.operation)) leaf_name_data.push_back(test_option.get_name_leafdata());
+    if (url.is_set || is_set(url.operation)) leaf_name_data.push_back(url.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -480,8 +539,8 @@ std::unique_ptr<Entity> EditConfigRpc::clone_ptr()
     return std::make_unique<EditConfigRpc>();
 }
 CopyConfigRpc::Target::Target()
-    : 
-	candidate{YType::empty, "candidate"},
+    :
+    	candidate{YType::empty, "candidate"},
 	 running{YType::empty, "running"},
 	 startup{YType::empty, "startup"},
 	 url{YType::str, "url"}
@@ -495,7 +554,19 @@ CopyConfigRpc::Target::~Target()
 
 bool CopyConfigRpc::Target::has_data() const
 {
-    return candidate.is_set || running.is_set || startup.is_set || url.is_set;
+    return candidate.is_set
+	|| running.is_set
+	|| startup.is_set
+	|| url.is_set;
+}
+
+bool CopyConfigRpc::Target::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(candidate.operation)
+	|| is_set(running.operation)
+	|| is_set(startup.operation)
+	|| is_set(url.operation);
 }
 
 std::string CopyConfigRpc::Target::get_segment_path() const
@@ -519,13 +590,15 @@ EntityPath CopyConfigRpc::Target::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (candidate.is_set) leaf_name_values.push_back(candidate.get_name_value());
-    if (running.is_set) leaf_name_values.push_back(running.get_name_value());
-    if (startup.is_set) leaf_name_values.push_back(startup.get_name_value());
-    if (url.is_set) leaf_name_values.push_back(url.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (candidate.is_set || is_set(candidate.operation)) leaf_name_data.push_back(candidate.get_name_leafdata());
+    if (running.is_set || is_set(running.operation)) leaf_name_data.push_back(running.get_name_leafdata());
+    if (startup.is_set || is_set(startup.operation)) leaf_name_data.push_back(startup.get_name_leafdata());
+    if (url.is_set || is_set(url.operation)) leaf_name_data.push_back(url.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -570,8 +643,8 @@ void CopyConfigRpc::Target::set_value(const std::string & value_path, std::strin
 }
 
 CopyConfigRpc::Source::Source()
-    : 
-	candidate{YType::empty, "candidate"},
+    :
+    	candidate{YType::empty, "candidate"},
 	 running{YType::empty, "running"},
 	 startup{YType::empty, "startup"},
 	 url{YType::str, "url"}
@@ -585,7 +658,19 @@ CopyConfigRpc::Source::~Source()
 
 bool CopyConfigRpc::Source::has_data() const
 {
-    return candidate.is_set || running.is_set || startup.is_set || url.is_set;
+    return candidate.is_set
+	|| running.is_set
+	|| startup.is_set
+	|| url.is_set;
+}
+
+bool CopyConfigRpc::Source::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(candidate.operation)
+	|| is_set(running.operation)
+	|| is_set(startup.operation)
+	|| is_set(url.operation);
 }
 
 std::string CopyConfigRpc::Source::get_segment_path() const
@@ -609,13 +694,15 @@ EntityPath CopyConfigRpc::Source::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (candidate.is_set) leaf_name_values.push_back(candidate.get_name_value());
-    if (running.is_set) leaf_name_values.push_back(running.get_name_value());
-    if (startup.is_set) leaf_name_values.push_back(startup.get_name_value());
-    if (url.is_set) leaf_name_values.push_back(url.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (candidate.is_set || is_set(candidate.operation)) leaf_name_data.push_back(candidate.get_name_leafdata());
+    if (running.is_set || is_set(running.operation)) leaf_name_data.push_back(running.get_name_leafdata());
+    if (startup.is_set || is_set(startup.operation)) leaf_name_data.push_back(startup.get_name_leafdata());
+    if (url.is_set || is_set(url.operation)) leaf_name_data.push_back(url.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -660,10 +747,11 @@ void CopyConfigRpc::Source::set_value(const std::string & value_path, std::strin
 }
 
 CopyConfigRpc::CopyConfigRpc()
-    : 
-	with_defaults{YType::enumeration, "with-defaults"}
-    , 		source(std::make_unique<CopyConfigRpc::Source>()),
- 	target(std::make_unique<CopyConfigRpc::Target>())
+    :
+    	with_defaults{YType::enumeration, "with-defaults"}
+    	,
+    source(std::make_unique<CopyConfigRpc::Source>())
+	,target(std::make_unique<CopyConfigRpc::Target>())
 {
     source->parent = this;
     children["source"] = source.get();
@@ -680,7 +768,17 @@ CopyConfigRpc::~CopyConfigRpc()
 
 bool CopyConfigRpc::has_data() const
 {
-    return with_defaults.is_set || source->has_data() || target->has_data();
+    return with_defaults.is_set
+	|| (source !=  nullptr && source->has_data())
+	|| (target !=  nullptr && target->has_data());
+}
+
+bool CopyConfigRpc::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(with_defaults.operation)
+	|| (source !=  nullptr && is_set(source->operation))
+	|| (target !=  nullptr && is_set(target->operation));
 }
 
 std::string CopyConfigRpc::get_segment_path() const
@@ -701,10 +799,12 @@ EntityPath CopyConfigRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (with_defaults.is_set) leaf_name_values.push_back(with_defaults.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (with_defaults.is_set || is_set(with_defaults.operation)) leaf_name_data.push_back(with_defaults.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -787,8 +887,8 @@ std::unique_ptr<Entity> CopyConfigRpc::clone_ptr()
     return std::make_unique<CopyConfigRpc>();
 }
 DeleteConfigRpc::Target::Target()
-    : 
-	startup{YType::empty, "startup"},
+    :
+    	startup{YType::empty, "startup"},
 	 url{YType::str, "url"}
 {
     yang_name = "target"; yang_parent_name = "delete-config";
@@ -800,7 +900,15 @@ DeleteConfigRpc::Target::~Target()
 
 bool DeleteConfigRpc::Target::has_data() const
 {
-    return startup.is_set || url.is_set;
+    return startup.is_set
+	|| url.is_set;
+}
+
+bool DeleteConfigRpc::Target::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(startup.operation)
+	|| is_set(url.operation);
 }
 
 std::string DeleteConfigRpc::Target::get_segment_path() const
@@ -824,11 +932,13 @@ EntityPath DeleteConfigRpc::Target::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (startup.is_set) leaf_name_values.push_back(startup.get_name_value());
-    if (url.is_set) leaf_name_values.push_back(url.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (startup.is_set || is_set(startup.operation)) leaf_name_data.push_back(startup.get_name_leafdata());
+    if (url.is_set || is_set(url.operation)) leaf_name_data.push_back(url.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -866,7 +976,7 @@ void DeleteConfigRpc::Target::set_value(const std::string & value_path, std::str
 
 DeleteConfigRpc::DeleteConfigRpc()
     :
-	 		target(std::make_unique<DeleteConfigRpc::Target>())
+    target(std::make_unique<DeleteConfigRpc::Target>())
 {
     target->parent = this;
     children["target"] = target.get();
@@ -880,7 +990,13 @@ DeleteConfigRpc::~DeleteConfigRpc()
 
 bool DeleteConfigRpc::has_data() const
 {
-    return target->has_data();
+    return (target !=  nullptr && target->has_data());
+}
+
+bool DeleteConfigRpc::has_operation() const
+{
+    return is_set(operation)
+	|| (target !=  nullptr && is_set(target->operation));
 }
 
 std::string DeleteConfigRpc::get_segment_path() const
@@ -901,9 +1017,11 @@ EntityPath DeleteConfigRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -959,8 +1077,8 @@ std::unique_ptr<Entity> DeleteConfigRpc::clone_ptr()
     return std::make_unique<DeleteConfigRpc>();
 }
 LockRpc::Target::Target()
-    : 
-	candidate{YType::empty, "candidate"},
+    :
+    	candidate{YType::empty, "candidate"},
 	 running{YType::empty, "running"},
 	 startup{YType::empty, "startup"}
 {
@@ -973,7 +1091,17 @@ LockRpc::Target::~Target()
 
 bool LockRpc::Target::has_data() const
 {
-    return candidate.is_set || running.is_set || startup.is_set;
+    return candidate.is_set
+	|| running.is_set
+	|| startup.is_set;
+}
+
+bool LockRpc::Target::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(candidate.operation)
+	|| is_set(running.operation)
+	|| is_set(startup.operation);
 }
 
 std::string LockRpc::Target::get_segment_path() const
@@ -997,12 +1125,14 @@ EntityPath LockRpc::Target::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (candidate.is_set) leaf_name_values.push_back(candidate.get_name_value());
-    if (running.is_set) leaf_name_values.push_back(running.get_name_value());
-    if (startup.is_set) leaf_name_values.push_back(startup.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (candidate.is_set || is_set(candidate.operation)) leaf_name_data.push_back(candidate.get_name_leafdata());
+    if (running.is_set || is_set(running.operation)) leaf_name_data.push_back(running.get_name_leafdata());
+    if (startup.is_set || is_set(startup.operation)) leaf_name_data.push_back(startup.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1044,7 +1174,7 @@ void LockRpc::Target::set_value(const std::string & value_path, std::string valu
 
 LockRpc::LockRpc()
     :
-	 		target(std::make_unique<LockRpc::Target>())
+    target(std::make_unique<LockRpc::Target>())
 {
     target->parent = this;
     children["target"] = target.get();
@@ -1058,7 +1188,13 @@ LockRpc::~LockRpc()
 
 bool LockRpc::has_data() const
 {
-    return target->has_data();
+    return (target !=  nullptr && target->has_data());
+}
+
+bool LockRpc::has_operation() const
+{
+    return is_set(operation)
+	|| (target !=  nullptr && is_set(target->operation));
 }
 
 std::string LockRpc::get_segment_path() const
@@ -1079,9 +1215,11 @@ EntityPath LockRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1137,8 +1275,8 @@ std::unique_ptr<Entity> LockRpc::clone_ptr()
     return std::make_unique<LockRpc>();
 }
 UnlockRpc::Target::Target()
-    : 
-	candidate{YType::empty, "candidate"},
+    :
+    	candidate{YType::empty, "candidate"},
 	 running{YType::empty, "running"},
 	 startup{YType::empty, "startup"}
 {
@@ -1151,7 +1289,17 @@ UnlockRpc::Target::~Target()
 
 bool UnlockRpc::Target::has_data() const
 {
-    return candidate.is_set || running.is_set || startup.is_set;
+    return candidate.is_set
+	|| running.is_set
+	|| startup.is_set;
+}
+
+bool UnlockRpc::Target::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(candidate.operation)
+	|| is_set(running.operation)
+	|| is_set(startup.operation);
 }
 
 std::string UnlockRpc::Target::get_segment_path() const
@@ -1175,12 +1323,14 @@ EntityPath UnlockRpc::Target::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (candidate.is_set) leaf_name_values.push_back(candidate.get_name_value());
-    if (running.is_set) leaf_name_values.push_back(running.get_name_value());
-    if (startup.is_set) leaf_name_values.push_back(startup.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (candidate.is_set || is_set(candidate.operation)) leaf_name_data.push_back(candidate.get_name_leafdata());
+    if (running.is_set || is_set(running.operation)) leaf_name_data.push_back(running.get_name_leafdata());
+    if (startup.is_set || is_set(startup.operation)) leaf_name_data.push_back(startup.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1222,7 +1372,7 @@ void UnlockRpc::Target::set_value(const std::string & value_path, std::string va
 
 UnlockRpc::UnlockRpc()
     :
-	 		target(std::make_unique<UnlockRpc::Target>())
+    target(std::make_unique<UnlockRpc::Target>())
 {
     target->parent = this;
     children["target"] = target.get();
@@ -1236,7 +1386,13 @@ UnlockRpc::~UnlockRpc()
 
 bool UnlockRpc::has_data() const
 {
-    return target->has_data();
+    return (target !=  nullptr && target->has_data());
+}
+
+bool UnlockRpc::has_operation() const
+{
+    return is_set(operation)
+	|| (target !=  nullptr && is_set(target->operation));
 }
 
 std::string UnlockRpc::get_segment_path() const
@@ -1257,9 +1413,11 @@ EntityPath UnlockRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1328,6 +1486,11 @@ bool GetRpc::Output::has_data() const
     return false;
 }
 
+bool GetRpc::Output::has_operation() const
+{
+    return is_set(operation);
+}
+
 std::string GetRpc::Output::get_segment_path() const
 {
     std::ostringstream path_buffer;
@@ -1349,9 +1512,11 @@ EntityPath GetRpc::Output::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1380,9 +1545,10 @@ void GetRpc::Output::set_value(const std::string & value_path, std::string value
 }
 
 GetRpc::GetRpc()
-    : 
-	with_defaults{YType::enumeration, "with-defaults"}
-    , 		output(std::make_unique<GetRpc::Output>())
+    :
+    	with_defaults{YType::enumeration, "with-defaults"}
+    	,
+    output(std::make_unique<GetRpc::Output>())
 {
     output->parent = this;
     children["output"] = output.get();
@@ -1396,7 +1562,15 @@ GetRpc::~GetRpc()
 
 bool GetRpc::has_data() const
 {
-    return with_defaults.is_set || output->has_data();
+    return with_defaults.is_set
+	|| (output !=  nullptr && output->has_data());
+}
+
+bool GetRpc::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(with_defaults.operation)
+	|| (output !=  nullptr && is_set(output->operation));
 }
 
 std::string GetRpc::get_segment_path() const
@@ -1417,10 +1591,12 @@ EntityPath GetRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (with_defaults.is_set) leaf_name_values.push_back(with_defaults.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (with_defaults.is_set || is_set(with_defaults.operation)) leaf_name_data.push_back(with_defaults.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1493,6 +1669,11 @@ bool CloseSessionRpc::has_data() const
     return false;
 }
 
+bool CloseSessionRpc::has_operation() const
+{
+    return is_set(operation);
+}
+
 std::string CloseSessionRpc::get_segment_path() const
 {
     std::ostringstream path_buffer;
@@ -1511,9 +1692,11 @@ EntityPath CloseSessionRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1546,8 +1729,8 @@ std::unique_ptr<Entity> CloseSessionRpc::clone_ptr()
     return std::make_unique<CloseSessionRpc>();
 }
 KillSessionRpc::KillSessionRpc()
-    : 
-	session_id{YType::uint32, "session-id"}
+    :
+    	session_id{YType::uint32, "session-id"}
 {
     yang_name = "kill-session"; yang_parent_name = "ietf-netconf";
 }
@@ -1559,6 +1742,12 @@ KillSessionRpc::~KillSessionRpc()
 bool KillSessionRpc::has_data() const
 {
     return session_id.is_set;
+}
+
+bool KillSessionRpc::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(session_id.operation);
 }
 
 std::string KillSessionRpc::get_segment_path() const
@@ -1579,10 +1768,12 @@ EntityPath KillSessionRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (session_id.is_set) leaf_name_values.push_back(session_id.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (session_id.is_set || is_set(session_id.operation)) leaf_name_data.push_back(session_id.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1619,8 +1810,8 @@ std::unique_ptr<Entity> KillSessionRpc::clone_ptr()
     return std::make_unique<KillSessionRpc>();
 }
 CommitRpc::CommitRpc()
-    : 
-	confirm_timeout{YType::uint32, "confirm-timeout"},
+    :
+    	confirm_timeout{YType::uint32, "confirm-timeout"},
 	 confirmed{YType::empty, "confirmed"},
 	 persist{YType::str, "persist"},
 	 persist_id{YType::str, "persist-id"}
@@ -1634,7 +1825,19 @@ CommitRpc::~CommitRpc()
 
 bool CommitRpc::has_data() const
 {
-    return confirm_timeout.is_set || confirmed.is_set || persist.is_set || persist_id.is_set;
+    return confirm_timeout.is_set
+	|| confirmed.is_set
+	|| persist.is_set
+	|| persist_id.is_set;
+}
+
+bool CommitRpc::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(confirm_timeout.operation)
+	|| is_set(confirmed.operation)
+	|| is_set(persist.operation)
+	|| is_set(persist_id.operation);
 }
 
 std::string CommitRpc::get_segment_path() const
@@ -1655,13 +1858,15 @@ EntityPath CommitRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (confirm_timeout.is_set) leaf_name_values.push_back(confirm_timeout.get_name_value());
-    if (confirmed.is_set) leaf_name_values.push_back(confirmed.get_name_value());
-    if (persist.is_set) leaf_name_values.push_back(persist.get_name_value());
-    if (persist_id.is_set) leaf_name_values.push_back(persist_id.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (confirm_timeout.is_set || is_set(confirm_timeout.operation)) leaf_name_data.push_back(confirm_timeout.get_name_leafdata());
+    if (confirmed.is_set || is_set(confirmed.operation)) leaf_name_data.push_back(confirmed.get_name_leafdata());
+    if (persist.is_set || is_set(persist.operation)) leaf_name_data.push_back(persist.get_name_leafdata());
+    if (persist_id.is_set || is_set(persist_id.operation)) leaf_name_data.push_back(persist_id.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1723,6 +1928,11 @@ bool DiscardChangesRpc::has_data() const
     return false;
 }
 
+bool DiscardChangesRpc::has_operation() const
+{
+    return is_set(operation);
+}
+
 std::string DiscardChangesRpc::get_segment_path() const
 {
     std::ostringstream path_buffer;
@@ -1741,9 +1951,11 @@ EntityPath DiscardChangesRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1776,8 +1988,8 @@ std::unique_ptr<Entity> DiscardChangesRpc::clone_ptr()
     return std::make_unique<DiscardChangesRpc>();
 }
 CancelCommitRpc::CancelCommitRpc()
-    : 
-	persist_id{YType::str, "persist-id"}
+    :
+    	persist_id{YType::str, "persist-id"}
 {
     yang_name = "cancel-commit"; yang_parent_name = "ietf-netconf";
 }
@@ -1789,6 +2001,12 @@ CancelCommitRpc::~CancelCommitRpc()
 bool CancelCommitRpc::has_data() const
 {
     return persist_id.is_set;
+}
+
+bool CancelCommitRpc::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(persist_id.operation);
 }
 
 std::string CancelCommitRpc::get_segment_path() const
@@ -1809,10 +2027,12 @@ EntityPath CancelCommitRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (persist_id.is_set) leaf_name_values.push_back(persist_id.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (persist_id.is_set || is_set(persist_id.operation)) leaf_name_data.push_back(persist_id.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1849,8 +2069,8 @@ std::unique_ptr<Entity> CancelCommitRpc::clone_ptr()
     return std::make_unique<CancelCommitRpc>();
 }
 ValidateRpc::Source::Source()
-    : 
-	candidate{YType::empty, "candidate"},
+    :
+    	candidate{YType::empty, "candidate"},
 	 running{YType::empty, "running"},
 	 startup{YType::empty, "startup"},
 	 url{YType::str, "url"}
@@ -1864,7 +2084,19 @@ ValidateRpc::Source::~Source()
 
 bool ValidateRpc::Source::has_data() const
 {
-    return candidate.is_set || running.is_set || startup.is_set || url.is_set;
+    return candidate.is_set
+	|| running.is_set
+	|| startup.is_set
+	|| url.is_set;
+}
+
+bool ValidateRpc::Source::has_operation() const
+{
+    return is_set(operation)
+	|| is_set(candidate.operation)
+	|| is_set(running.operation)
+	|| is_set(startup.operation)
+	|| is_set(url.operation);
 }
 
 std::string ValidateRpc::Source::get_segment_path() const
@@ -1888,13 +2120,15 @@ EntityPath ValidateRpc::Source::get_entity_path(Entity* ancestor) const
         get_relative_entity_path(this, ancestor, path_buffer);
     }
 
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
-    if (candidate.is_set) leaf_name_values.push_back(candidate.get_name_value());
-    if (running.is_set) leaf_name_values.push_back(running.get_name_value());
-    if (startup.is_set) leaf_name_values.push_back(startup.get_name_value());
-    if (url.is_set) leaf_name_values.push_back(url.get_name_value());
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+    if (candidate.is_set || is_set(candidate.operation)) leaf_name_data.push_back(candidate.get_name_leafdata());
+    if (running.is_set || is_set(running.operation)) leaf_name_data.push_back(running.get_name_leafdata());
+    if (startup.is_set || is_set(startup.operation)) leaf_name_data.push_back(startup.get_name_leafdata());
+    if (url.is_set || is_set(url.operation)) leaf_name_data.push_back(url.get_name_leafdata());
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }
@@ -1940,7 +2174,7 @@ void ValidateRpc::Source::set_value(const std::string & value_path, std::string 
 
 ValidateRpc::ValidateRpc()
     :
-	 		source(std::make_unique<ValidateRpc::Source>())
+    source(std::make_unique<ValidateRpc::Source>())
 {
     source->parent = this;
     children["source"] = source.get();
@@ -1954,7 +2188,13 @@ ValidateRpc::~ValidateRpc()
 
 bool ValidateRpc::has_data() const
 {
-    return source->has_data();
+    return (source !=  nullptr && source->has_data());
+}
+
+bool ValidateRpc::has_operation() const
+{
+    return is_set(operation)
+	|| (source !=  nullptr && is_set(source->operation));
 }
 
 std::string ValidateRpc::get_segment_path() const
@@ -1975,9 +2215,11 @@ EntityPath ValidateRpc::get_entity_path(Entity* ancestor) const
     }
 
     path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, std::string> > leaf_name_values {};
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_values};
+
+
+    EntityPath entity_path {path_buffer.str(), leaf_name_data};
     return entity_path;
 
 }

@@ -41,8 +41,6 @@ public:
         path::RootSchemaNode* get_root_schema() const;
         path::DataNode* invoke(path::Rpc* rpc) const;
         std::string execute_payload(std::string payload);
-        static const char* CANDIDATE;
-        static const char* MODULE_NAME;
 
 private:
         path::DataNode* handle_edit(path::Rpc* rpc, path::Annotation ann) const;

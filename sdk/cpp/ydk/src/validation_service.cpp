@@ -37,7 +37,7 @@ validate_missing_keys(const EntityPath& entity_path,
 {
     auto keys = schema_node.keys();
     //create a map of the keys
-    std::map<std::string, std::string> name_value_map{};
+    std::map<std::string, LeafData> name_value_map{};
     for(auto value_path : entity_path.value_paths) {
         name_value_map.insert(value_path);
     }
@@ -61,7 +61,7 @@ validate_attributes(const EntityPath& entity_path, const ydk::path::SchemaNode& 
 {
     //now validate the values in the value_path that have some values in them
     for(auto value_path : entity_path.value_paths) {
-        if(value_path.second.empty())
+        if(value_path.second.value.empty())
             continue;
         auto leaf_schema_node_list = schema_node.find(value_path.first);
         if(leaf_schema_node_list.empty())
@@ -77,7 +77,7 @@ validate_attributes(const EntityPath& entity_path, const ydk::path::SchemaNode& 
             ydk::path::SchemaNode* leaf_schema_node = leaf_schema_node_list[0];
             //now test to see if the value is correct
             ydk::path::SchemaValueType & type = leaf_schema_node->type();
-	    auto attr = type.validate(value_path.second);
+	    auto attr = type.validate(value_path.second.value);
 	    if(attr.has_errors())
             {
 		attr.source = value_path.first;

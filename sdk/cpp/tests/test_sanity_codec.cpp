@@ -268,7 +268,7 @@ BOOST_AUTO_TEST_CASE(single_encode)
     config_runner_1(runner.get());
 
     std::string xml = codec_service.encode(codec_provider, *runner, true);
-    std::cout << xml << std::endl;
+    BOOST_CHECK_EQUAL(XML_RUNNER_PAYLOAD_1, xml);
 }
 
 BOOST_AUTO_TEST_CASE(multiple_encode)

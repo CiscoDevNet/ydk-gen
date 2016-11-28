@@ -60,8 +60,7 @@ static string get_filter_payload(path::Rpc & ydk_rpc);
 static string get_netconf_payload(path::DataNode* input, string data_tag, string data_value);
 static path::DataNode* handle_read_reply(string reply, path::RootSchemaNode * root_schema);
 
-const char* NetconfServiceProvider::CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
-const char* NetconfServiceProvider::MODULE_NAME = "ietf-netconf";
+const char* CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
 
 NetconfServiceProvider::NetconfServiceProvider(string address, string username, string password, int port)
     : m_repo_ptr(make_unique<path::Repository>()), m_repo{m_repo_ptr.get()}, client(make_unique<NetconfClient>(username, password, address, port, 0)),
@@ -179,14 +178,10 @@ path::DataNode* NetconfServiceProvider::handle_edit(path::Rpc* ydk_rpc, path::An
 
 path::DataNode* NetconfServiceProvider::invoke(path::Rpc* rpc) const
 {
-	path::SchemaNode* create_schema;
-	path::SchemaNode* read_schema;
-	path::SchemaNode* update_schema;
-	path::SchemaNode* delete_schema;
-	create_schema = get_schema_for_operation(*root_schema, "ydk:create");
-	read_schema = get_schema_for_operation(*root_schema, "ydk:read");
-	update_schema  = get_schema_for_operation(*root_schema, "ydk:update");
-	delete_schema = get_schema_for_operation(*root_schema, "ydk:delete");
+	path::SchemaNode* create_schema = get_schema_for_operation(*root_schema, "ydk:create");
+	path::SchemaNode* read_schema = get_schema_for_operation(*root_schema, "ydk:read");
+	path::SchemaNode* update_schema = get_schema_for_operation(*root_schema, "ydk:update");
+	path::SchemaNode* delete_schema = get_schema_for_operation(*root_schema, "ydk:delete");
 
     //sanity check of rpc
     if(rpc == nullptr)
@@ -202,7 +197,7 @@ path::DataNode* NetconfServiceProvider::invoke(path::Rpc* rpc) const
     if(rpc_schema == create_schema || rpc_schema == delete_schema || rpc_schema == update_schema)
     {
         //for each child node in datanode add the nc:operation attribute
-        path::Annotation an{NetconfServiceProvider::MODULE_NAME, "operation", rpc_schema == delete_schema ? "delete" : "merge"};
+        path::Annotation an{IETF_NETCONF_MODULE_NAME, "operation", rpc_schema == delete_schema ? "delete" : "merge"};
         return handle_edit(rpc, an);
     }
     else if(rpc_schema == read_schema)
@@ -243,7 +238,7 @@ static string get_commit_rpc_payload()
 
 static bool is_candidate_supported(vector<string> capabilities)
 {
-	if(std::find(capabilities.begin(), capabilities.end(), NetconfServiceProvider::CANDIDATE) != capabilities.end()){
+	if(std::find(capabilities.begin(), capabilities.end(), CANDIDATE) != capabilities.end()){
 		//candidate is supported
 		return true;
 	}
@@ -305,9 +300,12 @@ static string get_annotated_config_payload(path::RootSchemaNode* root_schema,
 
     std::string config_payload {};
 
-    for(auto child : datanode->children())
+    for(auto const & child : datanode->children())
     {
-        child->add_annotation(annotation);
+    	if((child->annotations()).size()==0)
+    	{
+    		child->add_annotation(annotation);
+    	}
         config_payload += codec_service.encode(child, path::CodecService::Format::XML, true);
     }
     return config_payload;

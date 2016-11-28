@@ -127,20 +127,22 @@ class GetEntityPathPrinter(object):
             self.ctx.writeln('}')
             self.ctx.bline()
        
-        self.ctx.writeln('std::vector<std::pair<std::string, std::string> > leaf_name_values {};')
+        self.ctx.writeln('std::vector<std::pair<std::string, LeafData> > leaf_name_data {};')
+        self.ctx.bline()
         for prop in leafs:
             if not prop.is_many:
-                self.ctx.writeln('if (%s.is_set) leaf_name_values.push_back(%s.get_name_value());' % (prop.name, prop.name))
+                self.ctx.writeln('if (%s.is_set || is_set(%s.operation)) leaf_name_data.push_back(%s.get_name_leafdata());' % (prop.name, prop.name, prop.name))
         self._print_get_entity_path_leaflists(leafs)
         self.ctx.bline()
-        self.ctx.writeln('EntityPath entity_path {path_buffer.str(), leaf_name_values};')
+        self.ctx.writeln('EntityPath entity_path {path_buffer.str(), leaf_name_data};')
         self.ctx.writeln('return entity_path;')
 
     def _print_get_entity_path_leaflists(self, leafs):
         leaf_lists = [leaf for leaf in leafs if leaf.is_many]
+        self.ctx.bline()
         for leaf in leaf_lists:
-            self.ctx.writeln('auto %s_name_values = %s.get_name_values();' % (leaf.name, leaf.name))
-            self.ctx.writeln('leaf_name_values.insert(leaf_name_values.end(), %s_name_values.begin(), %s_name_values.end());' % (leaf.name, leaf.name))
+            self.ctx.writeln('auto %s_name_datas = %s.get_name_leafdata();' % (leaf.name, leaf.name))
+            self.ctx.writeln('leaf_name_data.insert(leaf_name_data.end(), %s_name_datas.begin(), %s_name_datas.end());' % (leaf.name, leaf.name))
 
     def _print_get_entity_path_trailer(self, clazz):
         self.ctx.lvl_dec()

@@ -82,6 +82,7 @@ class SourcePrinter(FilePrinter):
         if clazz.is_identity():
             return
         self._print_class_has_data(clazz, leafs, children)
+        self._print_class_has_operation(clazz, leafs, children)
         self._print_class_get_segment_path(clazz)
         self._print_class_get_path(clazz, leafs)
         self._print_class_set_child(clazz, children)
@@ -120,6 +121,9 @@ class SourcePrinter(FilePrinter):
 
     def _print_class_has_data(self, clazz, leafs, children):
         ClassHasDataPrinter(self.ctx).print_class_has_data(clazz, leafs, children)
+
+    def _print_class_has_operation(self, clazz, leafs, children):
+        ClassHasDataPrinter(self.ctx).print_class_has_operation(clazz, leafs, children)
 
     def _print_class_get_segment_path(self, clazz):
         GetSegmentPathPrinter(self.ctx).print_output(clazz)

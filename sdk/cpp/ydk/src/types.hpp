@@ -34,7 +34,8 @@
 #include <vector>
 #include <utility>
 
-namespace ydk {
+namespace ydk
+{
 
 typedef unsigned short uint8;
 typedef unsigned int uint16;
@@ -46,17 +47,47 @@ typedef signed int int16;
 typedef signed int int32;
 typedef signed long long int64;
 
+enum class EditOperation
+{
+    merge,
+	create,
+	remove,
+	delete_,
+    replace,
+	not_set
+};
+
 typedef struct Empty {
     bool set;
 } Empty;
 
 class Entity;
 
+class LeafData
+{
+  public:
+	LeafData(std::string value, EditOperation operation);
+
+	inline bool operator == (LeafData & other) const
+	{
+	    return value == other.value && operation == other.operation;
+	}
+
+	inline bool operator == (const LeafData & other) const
+	{
+	    return value == other.value && operation == other.operation;
+	}
+
+  public:
+	std::string value;
+	EditOperation operation;
+};
+
 struct EntityPath {
 	std::string path;
-	std::vector<std::pair<std::string, std::string>> value_paths;
+	std::vector<std::pair<std::string, LeafData>> value_paths;
 
-	EntityPath(std::string path, std::vector<std::pair<std::string, std::string> > value_paths)
+	EntityPath(std::string path, std::vector<std::pair<std::string, LeafData> > value_paths)
 		: path(path), value_paths(value_paths)
 	{
 	}
@@ -96,6 +127,7 @@ class Entity {
     virtual std::string get_segment_path() const = 0;
 
     virtual bool has_data() const = 0;
+    virtual bool has_operation() const = 0;
 
     virtual void set_value(const std::string & value_path, std::string value) = 0;
     virtual Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path="") = 0;
@@ -107,6 +139,7 @@ class Entity {
 	Entity* parent;
 	std::string yang_name;
 	std::string yang_parent_name;
+	EditOperation operation;
 
   protected:
 	std::map<std::string, Entity*> children;
@@ -193,7 +226,8 @@ enum class YType {
 	decimal64
 };
 
-class Value {
+class Value
+{
   public:
 	Value(YType type, std::string name);
 	~Value();
@@ -205,7 +239,7 @@ class Value {
     Value& operator=(Value&& val)=delete;
 
 	const std::string get() const;
-	std::pair<std::string, std::string> get_name_value() const;
+	std::pair<std::string, LeafData> get_name_leafdata() const;
 
 	void operator = (uint8 val);
 	void operator = (uint32 val);
@@ -226,7 +260,9 @@ class Value {
 
 	bool & operator [] (std::string key);
 
+  public:
 	bool is_set;
+	EditOperation operation;
 
   private:
 	void store_value(std::string && val);
@@ -249,9 +285,6 @@ class ValueList {
     ValueList& operator=(const ValueList& val);
     ValueList& operator=(ValueList&& val);
 
-	const std::string get() const;
-	std::pair<std::string, std::string> get_name_value() const;
-
 	void append(uint8 val);
 	void append(uint32 val);
 	void append(uint64 val);
@@ -271,8 +304,11 @@ class ValueList {
 	bool operator == (ValueList & other) const;
 	bool operator == (const ValueList & other) const;
 
-	std::vector<std::pair<std::string, std::string> > get_name_values() const;
+	std::vector<std::pair<std::string, LeafData> > get_name_leafdata() const;
 	std::vector<Value> getValues() const;
+
+  public:
+	EditOperation operation;
 
   private:
 	std::vector<Value> values;
@@ -287,6 +323,7 @@ enum class EncodingFormat {
 	JSON
 };
 
+std::string to_string(EditOperation operation);
 }
 
 #endif /* _TYPES_HPP_ */

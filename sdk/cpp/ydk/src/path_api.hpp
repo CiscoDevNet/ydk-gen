@@ -1230,6 +1230,7 @@ namespace ydk {
             /// @throws YDKPathException In case the path is invalid.
             ///
            virtual DataNode* create(const std::string& path);
+           virtual DataNode* create_filter(const std::string& path);
 
             ///
             /// @brief create a DataNode corresponding to the path and set its value
@@ -1249,6 +1250,7 @@ namespace ydk {
             /// @throws YDKPathException In case the path is invalid.
             ///
             virtual DataNode* create(const std::string& path, const std::string& value) = 0;
+            virtual DataNode* create_filter(const std::string& path, const std::string& value) = 0;
 
             ///
             /// @brief set the value of this DataNode.

@@ -1,3 +1,30 @@
+//
+// @file types.hpp
+// @brief Header for ydk entity
+//
+// YANG Development Kit
+// Copyright 2016 Cisco Systems. All rights reserved
+//
+////////////////////////////////////////////////////////////////
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+//
+//////////////////////////////////////////////////////////////////
+
 #define BOOST_TEST_MODULE EntityTest
 #include <boost/test/unit_test.hpp>
 #include "../../src/types.hpp"
@@ -24,6 +51,11 @@ class TestEntity:public Entity
 		return name.is_set || enabled.is_set;
 	}
 
+	bool has_operation() const
+	{
+		return false;
+	}
+
 	std::string get_segment_path() const
 	{
 		return "test";
@@ -31,7 +63,7 @@ class TestEntity:public Entity
 
 	EntityPath get_entity_path(Entity* parent) const
 	{
-		return {{"test"}, {name.get_name_value(), enabled.get_name_value(), bits_field.get_name_value()}};
+		return {{"test"}, {name.get_name_leafdata(), enabled.get_name_leafdata(), bits_field.get_name_leafdata()}};
 	}
 
 	Entity* get_child_by_name(const std::string & child_name, const std::string & child_path)
@@ -88,6 +120,11 @@ class TestEntity:public Entity
 			return child_val.is_set;
 		}
 
+		bool has_operation() const
+		{
+			return false;
+		}
+
 		std::string get_segment_path() const
 		{
 			return "child";
@@ -95,7 +132,7 @@ class TestEntity:public Entity
 
 		EntityPath get_entity_path(Entity* parent) const
 		{
-			return {{"child"}, {child_val.get_name_value()}};
+			return {{"child"}, {child_val.get_name_leafdata()}};
 		}
 
 		Entity* get_child_by_name(const std::string & child_name, const std::string & child_path)
@@ -153,6 +190,11 @@ class TestEntity:public Entity
 				return child_key.is_set;
 			}
 
+			bool has_operation() const
+			{
+				return false;
+			}
+
 			std::string get_segment_path() const
 			{
 				return "multi-child[multi-key='"+child_key.get()+"']";
@@ -160,7 +202,7 @@ class TestEntity:public Entity
 
 			EntityPath get_entity_path(Entity* parent) const
 			{
-				return {{"multi-child[multi-key='"+child_key.get()+"']"}, {child_key.get_name_value()}};
+				return {{"multi-child[multi-key='"+child_key.get()+"']"}, {child_key.get_name_leafdata()}};
 			}
 
 			Entity* get_child_by_name(const std::string & child_name, const std::string & child_path)
@@ -197,7 +239,10 @@ BOOST_AUTO_TEST_CASE(test_create)
 {
 	TestEntity test{};
 	string test_value = "value for test";
-	EntityPath expected {"test", {{"name", test_value}, {"enabled", "true"}, {"bits-field", "bit1 bit2"}}};
+	EntityPath expected {"test",
+							{{"name", {test_value, EditOperation::not_set}},
+							 {"enabled", {"true", EditOperation::not_set}},
+							 {"bits-field", {"bit1 bit2", EditOperation::not_set}}}};
 
 	BOOST_REQUIRE(test.get_entity_path(nullptr).path == "test");
 	BOOST_REQUIRE(test.has_data() == false);

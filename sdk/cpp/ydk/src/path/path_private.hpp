@@ -143,6 +143,8 @@ namespace ydk {
             // and value is ignored
             //
             // returns the first created or updated node
+            virtual DataNode* create_filter(const std::string& path, const std::string& value);
+
             virtual DataNode* create(const std::string& path, const std::string& value);
 
             virtual void set(const std::string& value);
@@ -189,6 +191,7 @@ namespace ydk {
 
             virtual std::string path() const;
 
+            virtual DataNode* create_filter(const std::string& path, const std::string& value);
             virtual DataNode* create(const std::string& path, const std::string& value);
 
             virtual void set(const std::string& value);

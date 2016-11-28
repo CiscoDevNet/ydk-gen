@@ -131,7 +131,8 @@ def iscppkeyword(word):
                     'private', 'public', 'export' , 'virtual', 'for', 'and',
                     'break', 'case', 'catch', 'float', 'long', 'return',
                     'explicit', 'class', 'if', 'try', 'while', 'and', 'or',
-                    'const', 'continue', 'double', 'else', 'value', 'namespace')
+                    'const', 'continue', 'double', 'else', 'value', 'namespace',
+                    'operation')
 
 
 def get_sphinx_ref_label(named_element):
