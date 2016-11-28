@@ -96,6 +96,7 @@ set(libydk_install_headers
     src/executor_service.hpp
     src/netconf_service.hpp
     src/ietf_netconf.hpp
+    src/ietf_netconf_with_defaults.hpp
     src/netconf_provider.hpp
     src/codec_service.hpp
     src/codec_provider.hpp
