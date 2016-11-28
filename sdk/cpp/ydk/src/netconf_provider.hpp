@@ -40,6 +40,7 @@ public:
         ~NetconfServiceProvider();
         path::RootSchemaNode* get_root_schema() const;
         path::DataNode* invoke(path::Rpc* rpc) const;
+        std::string execute_payload(std::string payload);
         static const char* CANDIDATE;
         static const char* MODULE_NAME;
 
