@@ -111,7 +111,7 @@ function py_sanity_ydktest_gen {
     print_msg "py_sanity_ydktest_gen: testing bundle and documentation generation"
     run_test generate.py --bundle profiles/test/ydktest.json --python --generate-doc
 
-    "py_sanity_ydktest_gen: testing core and documentation generation"
+    print_msg "py_sanity_ydktest_gen: testing core and documentation generation"
     run_test generate.py --core  --generate-doc
 }
 
@@ -126,7 +126,7 @@ function py_sanity_ydktest_install {
 function py_sanity_ydktest_test {
     print_msg "py_sanity_ydktest_test"
 
-    init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/ydktest
+    init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/ydktest
 
     cd $YDKGEN_HOME && cp -r gen-api/python/ydktest-bundle/ydk/models/* sdk/python/core/ydk/models
 
@@ -207,7 +207,7 @@ function py_sanity_deviation_ydktest_install {
 function py_sanity_deviation_ydktest_test {
     print_msg "py_sanity_deviation_ydktest_test"
 
-    init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/deviation
+    init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/deviation
     run_test sdk/python/core/tests/test_sanity_deviation.py
 }
 
@@ -267,7 +267,7 @@ function py_sanity_augmentation_install {
 function py_sanity_augmentation_test {
     print_msg "py_sanity_augmentation_test"
 
-    init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/augmentation
+    init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/augmentation
     run_test sdk/python/core/tests/test_sanity_bundle_aug.py
 }
 
@@ -288,7 +288,7 @@ function cpp_sanity_core_gen_install {
 function cpp_sanity_core_test {
     print_msg "cpp_sanity_core_test"
 
-    init_confd $YDKGEN_HOME/sdk/cpp/ydk/tests/confd/ydktest
+    init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/ydktest
     cd gen-api/cpp/ydk/build
     run_exec_test make install test
 }

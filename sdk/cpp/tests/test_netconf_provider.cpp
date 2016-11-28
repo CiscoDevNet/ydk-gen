@@ -16,8 +16,8 @@
 #define BOOST_TEST_MODULE NetconfProviderTest
 #include <boost/test/unit_test.hpp>
 #include <string.h>
-#include "../ydk/src/netconf_provider.hpp"
-#include "../ydk/src/errors.hpp"
+#include "../core/src/netconf_provider.hpp"
+#include "../core/src/errors.hpp"
 #include <iostream>
 #include "config.hpp"
 

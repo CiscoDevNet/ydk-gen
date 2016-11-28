@@ -1,1 +1,1 @@
-../../../cpp/ydk/docsgen/conf.py
+../../../cpp/core/docsgen/conf.py

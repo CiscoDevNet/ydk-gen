@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 		bool reply = crud.delete_(provider, *isis);
 		if(reply) cout << "Delete operation success" << endl << endl; else cout << "Operation failed" << endl << endl;
 	}
-	catch(YDKException & e)
+	catch(YCPPError & e)
 	{
 		cerr << "Error details: "<<boost::diagnostic_information(e)<<endl;
 	}

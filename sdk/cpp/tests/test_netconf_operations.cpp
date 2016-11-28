@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(test_create)
 	BOOST_REQUIRE(reply);
 
 	//CREATE AGAIN WITH ERROR
-	BOOST_CHECK_THROW(crud.update(provider, *r_1), YDKServiceProviderException);
+	BOOST_CHECK_THROW(crud.update(provider, *r_1), YCPPServiceProviderError);
 }
 
 BOOST_AUTO_TEST_CASE(test_delete)
@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_CASE(test_delete)
 	e_1->number = 1;
 	e_1->operation = EditOperation::delete_;
 	r_1->one_list->ldata.push_back(move(e_1));
-	BOOST_CHECK_THROW(crud.update(provider, *r_1), YDKServiceProviderException);
+	BOOST_CHECK_THROW(crud.update(provider, *r_1), YCPPServiceProviderError);
 }
 
 BOOST_AUTO_TEST_CASE(test_remove)
@@ -230,4 +230,55 @@ BOOST_AUTO_TEST_CASE(test_merge)
 	r_1->operation = EditOperation::merge;
 	reply = crud.update(provider, *r_1);
 	BOOST_REQUIRE(reply);
+}
+
+BOOST_AUTO_TEST_CASE(delete_leaf)
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    BOOST_REQUIRE(reply);
+
+    //CREATE
+    r_1->ytypes->built_in_t->number8 = 10;
+	reply = crud.create(provider, *r_1);
+	BOOST_REQUIRE(reply);
+
+	//DELETE
+	r_1->ytypes->built_in_t->number8.operation = EditOperation::delete_;
+	reply = crud.update(provider, *r_1);
+	BOOST_REQUIRE(reply);
+
+	//DELETE AGAIN WITH ERROR
+	BOOST_CHECK_THROW(crud.update(provider, *r_1), YCPPServiceProviderError);
+}
+
+
+BOOST_AUTO_TEST_CASE(delete_leaflist)
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    BOOST_REQUIRE(reply);
+
+    //CREATE
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::local);
+	reply = crud.create(provider, *r_1);
+	BOOST_REQUIRE(reply);
+
+	//DELETE
+	r_1->ytypes->built_in_t->enum_llist.operation = EditOperation::delete_;
+	reply = crud.update(provider, *r_1);
+	BOOST_REQUIRE(reply);
+
+	//DELETE AGAIN WITH ERROR
+	BOOST_CHECK_THROW(crud.update(provider, *r_1), YCPPServiceProviderError);
 }

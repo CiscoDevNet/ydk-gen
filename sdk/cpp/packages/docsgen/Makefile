@@ -1,1 +1,1 @@
-../../../cpp/ydk/docsgen/Makefile
+../../../cpp/core/docsgen/Makefile

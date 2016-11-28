@@ -1,1 +1,1 @@
-../../../cpp/ydk/docsgen/make.bat
+../../../cpp/core/docsgen/make.bat

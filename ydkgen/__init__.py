@@ -249,7 +249,7 @@ class YdkGenerator(object):
             if pkg_type == 'packages':
                 target_dir = os.path.join(target_dir, pkg_type)
             elif pkg_type == 'core':
-                target_dir = os.path.join(target_dir, 'ydk')
+                target_dir = os.path.join(target_dir, 'core')
         shutil.rmtree(gen_api_root)
         logger.debug('Copying %s to %s' % (target_dir, gen_api_root))
         dir_util.copy_tree(target_dir, gen_api_root)

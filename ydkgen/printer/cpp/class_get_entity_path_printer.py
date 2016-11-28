@@ -75,7 +75,7 @@ class GetEntityPathPrinter(object):
             self.ctx.writeln('if (ancestor != nullptr)')
             self.ctx.writeln('{')
             self.ctx.lvl_inc()
-            self.ctx.writeln('BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"ancestor has to be nullptr for top-level node"});')
+            self.ctx.writeln('BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});')
             self.ctx.lvl_dec()
             self.ctx.writeln('}')
             self.ctx.bline()
@@ -88,7 +88,7 @@ class GetEntityPathPrinter(object):
             self.ctx.lvl_inc()
             
             if self._is_parent_needed_for_abs_path(clazz):
-                self.ctx.writeln('BOOST_THROW_EXCEPTION(YDKInvalidArgumentException{"ancestor cannot be nullptr as one of the ancestors is a list"});')
+                self.ctx.writeln('BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor cannot be nullptr as one of the ancestors is a list"});')
             else:
                 parents = []
                 p = clazz

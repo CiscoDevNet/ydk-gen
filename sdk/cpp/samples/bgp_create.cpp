@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
 
 		if(reply) cout << "Create operation success" << endl << endl; else cout << "Operation failed" << endl << endl;
 	}
-	catch(YDKException & e)
+	catch(YCPPError & e)
 	{
 		cerr << "Error details: "<<boost::diagnostic_information(e)<<endl;
 	}

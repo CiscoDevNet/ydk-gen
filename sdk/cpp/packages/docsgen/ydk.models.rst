@@ -1,1 +1,1 @@
-../../../cpp/ydk/docsgen/ydk.models.rst
+../../../cpp/core/docsgen/ydk.models.rst

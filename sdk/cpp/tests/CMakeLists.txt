@@ -17,7 +17,8 @@ set(netconf_tests
         test_sanity_codec
         test_netconf_operations
         test_executor_service
-        test_netconf_service)
+        test_netconf_service
+        test_errors)
 
 find_library(xml2_location xml2)
 find_library(curl_location curl)

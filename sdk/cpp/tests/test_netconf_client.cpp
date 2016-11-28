@@ -16,8 +16,8 @@
 #define BOOST_TEST_MODULE NetconfClientTest
 #include <boost/test/unit_test.hpp>
 #include <string.h>
-#include "../ydk/src/netconf_client.hpp"
-#include "../ydk/src/errors.hpp"
+#include "../core/src/netconf_client.hpp"
+#include "../core/src/errors.hpp"
 #include <iostream>
 #include <sys/time.h>
 
@@ -224,7 +224,7 @@ BOOST_AUTO_TEST_CASE(DeviceNotConnectedExecute)
 				 "</rpc>");
 		BOOST_REQUIRE(s== "");
 	}
-	catch (YDKException & e)
+	catch (YCPPError & e)
 	{
 		BOOST_REQUIRE(e.err_msg=="Could not execute payload. Not connected to 127.0.0.1");
 	}
@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE(RpcInvalid)
 		BOOST_REQUIRE(NULL != strstr(reply.c_str(), ""));
 
 	}
-	catch (YDKException & e)
+	catch (YCPPError & e)
 	{
 		BOOST_REQUIRE(e.err_msg=="Could not build payload");
 	}
@@ -276,7 +276,7 @@ BOOST_AUTO_TEST_CASE(WrongXml)
 		 );
 		BOOST_REQUIRE(reply== "");
 	}
-	catch (YDKException & e)
+	catch (YCPPError & e)
 	{
 		BOOST_REQUIRE(e.err_msg=="Could not build payload");
 	}
@@ -300,7 +300,7 @@ BOOST_AUTO_TEST_CASE(CorrectXmlWrongRpc)
 		);
 		BOOST_REQUIRE(reply== "");
 	}
-	catch (YDKException & e)
+	catch (YCPPError & e)
 	{
 		BOOST_REQUIRE(e.err_msg=="Could not build payload");
 	}
@@ -323,7 +323,7 @@ BOOST_AUTO_TEST_CASE(EmptyRpc)
 		string reply = client.execute_payload("");
 		BOOST_REQUIRE(reply== "");
 	}
-	catch (YDKException & e)
+	catch (YCPPError & e)
 	{
 		BOOST_REQUIRE(e.err_msg=="Could not build payload");
 	}

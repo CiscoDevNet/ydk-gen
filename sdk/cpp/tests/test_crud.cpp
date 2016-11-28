@@ -20,8 +20,8 @@
 #include <string.h>
 #include <iostream>
 
-#include "../ydk/src/netconf_provider.hpp"
-#include "../ydk/src/crud_service.hpp"
+#include "../core/src/netconf_provider.hpp"
+#include "../core/src/crud_service.hpp"
 #include "ydk_ydktest/openconfig_bgp.hpp"
 #include "config.hpp"
 

@@ -1,1 +1,1 @@
-../../../cpp/ydk/docsgen/index.rst
+../../../cpp/core/docsgen/index.rst

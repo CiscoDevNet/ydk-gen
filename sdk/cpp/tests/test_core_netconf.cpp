@@ -24,8 +24,8 @@
 #define BOOST_TEST_MODULE OCBgpTest
 #include <boost/test/unit_test.hpp>
 #include <iostream>
-#include "../ydk/src/path_api.hpp"
-#include "../ydk/src/netconf_provider.hpp"
+#include "../core/src/path_api.hpp"
+#include "../core/src/netconf_provider.hpp"
 #include "config.hpp"
 
 const char* expected_bgp_output ="\
