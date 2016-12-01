@@ -133,9 +133,10 @@ class DocPrinter(object):
             self._print_toctree(named_element.owned_elements)
 
         # Tagging
-        tags = get_langage_spec_tags(named_element, self.lang)
-        tags.append(get_class_tag(named_element, self.lang))
-        self._extend(tags)
+        if not isinstance(named_element, Package):
+            tags = get_langage_spec_tags(named_element, self.lang)
+            tags.append(get_class_tag(named_element, self.lang))
+            self._extend(tags)
 
     def _print_title(self, title):
         self._append(title)

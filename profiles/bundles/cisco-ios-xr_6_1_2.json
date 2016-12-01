@@ -591,7 +591,6 @@
                      "vendor/cisco/xr/612/cisco-xr-openconfig-if-aggregate-deviations.yang",
                      "vendor/cisco/xr/612/cisco-xr-openconfig-if-ethernet-deviations.yang",
                      "vendor/cisco/xr/612/cisco-xr-openconfig-if-ip-deviations.yang",
-                     "vendor/cisco/xr/612/cisco-xr-openconfig-interfaces-deviations.yang",
                      "vendor/cisco/xr/612/cisco-xr-openconfig-mpls-deviations.yang",
                      "vendor/cisco/xr/612/cisco-xr-openconfig-telemetry-deviations.yang",
                      "vendor/cisco/xr/612/cisco-xr-openconfig-vlan-deviations.yang",
