@@ -1,8 +1,8 @@
-class YdkCore < Formula
+class Ydk < Formula
   desc "generate API bindings to YANG data models"
   homepage "https://github.com/abhikeshav/ydk-cpp/blob/master/README.md"
-  url "https://github.com/abhikeshav/ydk-cpp/archive/0.5.2.tar.gz"
-  sha256 "5b3194f58d52ac08559fba7af2a026bc752cbc6fa1067cf361e54d354ac3c987"
+  url "https://github.com/CiscoDevNet/ydk-cpp/archive/0.5.2.tar.gz"
+  sha256 "39ca26b57e0d784243ebd0c07eb0e35fc0ad8600886fde2be4440eae898b844d"
 
   depends_on "cmake" => :build
   depends_on "boost"
@@ -22,6 +22,6 @@ class YdkCore < Formula
   end
 
   test do
-    system "brew", "ls", "--versions", "ydk-cpp"
+    system "brew", "ls", "--versions", "ydk"
   end
 end
