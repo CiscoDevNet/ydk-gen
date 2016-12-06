@@ -63,7 +63,7 @@ std::string to_str(YType t)
 #undef TOSTRING
 }
 
-Value::Value(YType type, std::string name):
+YLeaf::YLeaf(YType type, std::string name):
 		is_set(false),
 		operation(EditOperation::not_set),
 		name(name),
@@ -72,7 +72,7 @@ Value::Value(YType type, std::string name):
 {
 }
 
-Value::Value(const Value& val):
+YLeaf::YLeaf(const YLeaf& val):
     is_set{val.is_set},
 	operation(EditOperation::not_set),
     name{val.name},
@@ -84,7 +84,7 @@ Value::Value(const Value& val):
 }
 
 
-Value::Value(Value&& val):
+YLeaf::YLeaf(YLeaf&& val):
     is_set{val.is_set},
 	operation(EditOperation::not_set),
     name{std::move(val.name)},
@@ -95,11 +95,11 @@ Value::Value(Value&& val):
 }
 
 
-Value::~Value()
+YLeaf::~YLeaf()
 {
 }
 
-const std::string  Value::get() const
+const std::string  YLeaf::get() const
 {
 	if(type == YType::bits)
 	{
@@ -109,12 +109,12 @@ const std::string  Value::get() const
 	return value;
 }
 
-std::pair<std::string, LeafData> Value::get_name_leafdata() const
+std::pair<std::string, LeafData> YLeaf::get_name_leafdata() const
 {
 	return {name, {get(), operation, is_set}};
 }
 
-void Value::operator = (uint8 val)
+void YLeaf::operator = (uint8 val)
 {
 	std::ostringstream value_buffer;
 
@@ -123,7 +123,7 @@ void Value::operator = (uint8 val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (uint32 val)
+void YLeaf::operator = (uint32 val)
 {
 	std::ostringstream value_buffer;
 
@@ -132,7 +132,7 @@ void Value::operator = (uint32 val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (uint64 val)
+void YLeaf::operator = (uint64 val)
 {
 	std::ostringstream value_buffer;
 
@@ -141,7 +141,7 @@ void Value::operator = (uint64 val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (int8 val)
+void YLeaf::operator = (int8 val)
 {
 	std::ostringstream value_buffer;
 
@@ -150,7 +150,7 @@ void Value::operator = (int8 val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (int32 val)
+void YLeaf::operator = (int32 val)
 {
 	std::ostringstream value_buffer;
 
@@ -159,7 +159,7 @@ void Value::operator = (int32 val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (Enum::Value val)
+void YLeaf::operator = (Enum::YLeaf val)
 {
 	std::ostringstream value_buffer;
 
@@ -168,7 +168,7 @@ void Value::operator = (Enum::Value val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (Bits val)
+void YLeaf::operator = (Bits val)
 {
 	std::ostringstream value_buffer;
 
@@ -177,7 +177,7 @@ void Value::operator = (Bits val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (int64 val)
+void YLeaf::operator = (int64 val)
 {
 	std::ostringstream value_buffer;
 
@@ -186,7 +186,7 @@ void Value::operator = (int64 val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (double val)
+void YLeaf::operator = (double val)
 {
 	std::ostringstream value_buffer;
 
@@ -195,7 +195,7 @@ void Value::operator = (double val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (Empty val)
+void YLeaf::operator = (Empty val)
 {
 	bool purposely_unused_if_condition_to_avoid_compiler_warning = val.set;
 	if(purposely_unused_if_condition_to_avoid_compiler_warning){}
@@ -204,7 +204,7 @@ void Value::operator = (Empty val)
 	store_value(""); // store empty string
 }
 
-void Value::operator = (Identity val)
+void YLeaf::operator = (Identity val)
 {
 	std::ostringstream value_buffer;
 
@@ -213,7 +213,7 @@ void Value::operator = (Identity val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (std::string val)
+void YLeaf::operator = (std::string val)
 {
 	std::ostringstream value_buffer;
 
@@ -222,7 +222,7 @@ void Value::operator = (std::string val)
 	store_value(value_buffer.str());
 }
 
-void Value::operator = (Decimal64 val)
+void YLeaf::operator = (Decimal64 val)
 {
 	std::ostringstream value_buffer;
 
@@ -231,7 +231,7 @@ void Value::operator = (Decimal64 val)
 	store_value(value_buffer.str());
 }
 
-void Value::store_value(std::string && val)
+void YLeaf::store_value(std::string && val)
 {
 	is_set=true;
 	if(type == YType::boolean)
@@ -246,28 +246,28 @@ void Value::store_value(std::string && val)
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_str(type);
 }
 
-Value::operator std::string() const
+YLeaf::operator std::string() const
 {
 	return get();
 }
 
-bool Value::operator == (Value & other) const
+bool YLeaf::operator == (YLeaf & other) const
 {
 	return get() == other.get();
 }
 
-bool Value::operator == (const Value & other) const
+bool YLeaf::operator == (const YLeaf & other) const
 {
 	return get() == other.get();
 }
 
-bool & Value::operator [] (std::string key)
+bool & YLeaf::operator [] (std::string key)
 {
 	is_set = true;
 	return bits_value[key];
 }
 
-std::string Value::get_bits_string() const
+std::string YLeaf::get_bits_string() const
 {
 	std::string value;
 	for(auto const & entry : bits_value.get_bitmap())
@@ -285,7 +285,7 @@ std::string Value::get_bits_string() const
 	return (value);
 }
 
-std::ostream& operator<< (std::ostream& stream, const Value& value)
+std::ostream& operator<< (std::ostream& stream, const YLeaf& value)
 {
 	stream << value.get();
 	return stream;

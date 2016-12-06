@@ -173,7 +173,7 @@ class TestEntity:public Entity
 			}
 		}
 
-		Value child_val;
+		YLeaf child_val;
 
 
 		class MultiChild : public Entity
@@ -223,15 +223,15 @@ class TestEntity:public Entity
 				}
 			}
 
-			Value child_key;
+			YLeaf child_key;
 		};
 
 		vector<unique_ptr<TestEntity::Child::MultiChild> > multi_child;
 	};
 
-  Value name;
-  Value enabled;
-  Value bits_field;
+  YLeaf name;
+  YLeaf enabled;
+  YLeaf bits_field;
   unique_ptr<TestEntity::Child> child;
 };
 

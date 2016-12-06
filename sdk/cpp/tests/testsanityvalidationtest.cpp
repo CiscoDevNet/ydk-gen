@@ -367,14 +367,8 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
     ydk::ValidationService validation_service{};
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
-    ydk::Value value1{ydk::YType::int16, "llunion"};
-    value1 = static_cast<uint16_t>(1);
-
-    ydk::Value value2{ydk::YType::int16, "llunion"};
-    value2 = static_cast<uint16_t>(2);
-
-    builtInT.llunion.append(value1);
-    builtInT.llunion.append(value2);
+    builtInT.llunion.append( static_cast<uint16_t>(1));
+    builtInT.llunion.append( static_cast<uint16_t>(2));
 
     auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
@@ -411,14 +405,9 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
     ydk::ValidationService validation_service{};
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
-    ydk::Value value1{ydk::YType::identityref, "identity-llist"};
-    value1 = ydk::ydktest_sanity::ChildIdentityIdentity{};
 
-    ydk::Value value2{ydk::YType::identityref, "identity-llist"};
-    value2 = ydk::ydktest_sanity::ChildChildIdentityIdentity{};
-
-    builtInT.identity_llist.append(value1);
-    builtInT.identity_llist.append(value2);
+    builtInT.identity_llist.append(ydk::ydktest_sanity::ChildIdentityIdentity{});
+    builtInT.identity_llist.append(ydk::ydktest_sanity::ChildChildIdentityIdentity{});
 
     auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
@@ -437,10 +426,8 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
     ydk::ValidationService validation_service{};
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
-    ydk::Value value{ydk::YType::str, "younion-list"};
-    value = "123:45";
 
-    builtInT.younion_list.append(value);
+    builtInT.younion_list.append("123:45");
 
     auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 

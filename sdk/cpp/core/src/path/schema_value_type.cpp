@@ -368,7 +368,7 @@ ydk::path::SchemaValueEmptyType::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
-        BOOST_LOG_TRIVIAL(error) << "Value is empty for SchemaValueEmptyType" ;
+        BOOST_LOG_TRIVIAL(error) << "YLeaf is empty for SchemaValueEmptyType" ;
         diag.errors.push_back(ydk::path::ValidationError::INVALID_EMPTY_VAL);
     } else if(value != leaf_name){
         BOOST_LOG_TRIVIAL(error) << "Mismatch between leaf name " << leaf_name << " and value " << value;
@@ -393,7 +393,7 @@ ydk::path::SchemaValueBoolType::validate(const std::string& value) const
     DiagnosticNode<std::string, ydk::path::ValidationError> diag {};
 
     if(value.empty()){
-        BOOST_LOG_TRIVIAL(error) << "Value is empty for SchemaValueBoolType" ;
+        BOOST_LOG_TRIVIAL(error) << "YLeaf is empty for SchemaValueBoolType" ;
         diag.errors.push_back(ydk::path::ValidationError::INVALATTR);
     } else {
 

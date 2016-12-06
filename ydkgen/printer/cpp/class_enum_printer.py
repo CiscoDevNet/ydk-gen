@@ -76,7 +76,7 @@ class EnumPrinter(object):
             self._print_enum_literal(enum_literal)
 
     def _print_enum_literal(self, enum_literal):
-        self.ctx.writeln('static const Enum::Value %s;' % (enum_literal.name))
+        self.ctx.writeln('static const Enum::YLeaf %s;' % (enum_literal.name))
 
     def _print_enum_trailer(self, enum_class):
         self.ctx.lvl_dec()
@@ -91,5 +91,5 @@ class EnumPrinter(object):
         self.ctx.bline()
 
     def _print_enum_literal_to_string(self, enum_class, enum_literal):
-        self.ctx.writeln('const Enum::Value %s::%s {%s, "%s"};' % (enum_class.qualified_cpp_name(), enum_literal.name, enum_literal.value, enum_literal.stmt.arg))
+        self.ctx.writeln('const Enum::YLeaf %s::%s {%s, "%s"};' % (enum_class.qualified_cpp_name(), enum_literal.name, enum_literal.value, enum_literal.stmt.arg))
 

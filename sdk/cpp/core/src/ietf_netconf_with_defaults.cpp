@@ -8,10 +8,10 @@ namespace ydk {
 namespace ietf_netconf_with_defaults {
 
 
-const Enum::Value WithDefaultsModeEnum::report_all {0, "report-all"};
-const Enum::Value WithDefaultsModeEnum::report_all_tagged {1, "report-all-tagged"};
-const Enum::Value WithDefaultsModeEnum::trim {2, "trim"};
-const Enum::Value WithDefaultsModeEnum::explicit_ {3, "explicit"};
+const Enum::YLeaf WithDefaultsModeEnum::report_all {0, "report-all"};
+const Enum::YLeaf WithDefaultsModeEnum::report_all_tagged {1, "report-all-tagged"};
+const Enum::YLeaf WithDefaultsModeEnum::trim {2, "trim"};
+const Enum::YLeaf WithDefaultsModeEnum::explicit_ {3, "explicit"};
 
 
 }

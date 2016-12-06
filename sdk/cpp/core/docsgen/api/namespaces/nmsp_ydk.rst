@@ -29,9 +29,9 @@ List of all nested namespaces with brief descriptions
 +-------+---------------------------------------------------------------+
 | class | | :cpp:class:`Entity<Entity>`                                 |
 +-------+---------------------------------------------------------------+
-| class | | :cpp:class:`Value<Value>`                                   |
+| class | | :cpp:class:`YLeaf<YLeaf>`                                   |
 +-------+---------------------------------------------------------------+
-| class | | :cpp:class:`ValueList<ValueList>`                           |
+| class | | :cpp:class:`YLeafList<YLeafList>`                           |
 +-------+---------------------------------------------------------------+
 | class | | :cpp:class:`Bits<Bits>`                                     |
 +-------+---------------------------------------------------------------+

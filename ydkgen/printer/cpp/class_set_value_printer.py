@@ -23,7 +23,7 @@ source_printer.py
 from ydkgen.api_model import Bits
 
 
-class ClassSetValuePrinter(object):
+class ClassSetYLeafPrinter(object):
     def __init__(self, ctx):
         self.ctx = ctx
 

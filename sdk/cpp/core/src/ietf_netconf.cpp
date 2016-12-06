@@ -2275,47 +2275,47 @@ std::unique_ptr<Entity> ValidateRpc::clone_ptr()
     return std::make_unique<ValidateRpc>();
 }
 
-const Enum::Value ErrorSeverityTypeEnum::error {0, "error"};
-const Enum::Value ErrorSeverityTypeEnum::warning {1, "warning"};
+const Enum::YLeaf ErrorSeverityTypeEnum::error {0, "error"};
+const Enum::YLeaf ErrorSeverityTypeEnum::warning {1, "warning"};
 
-const Enum::Value ErrorTagTypeEnum::in_use {0, "in-use"};
-const Enum::Value ErrorTagTypeEnum::invalid_value {1, "invalid-value"};
-const Enum::Value ErrorTagTypeEnum::too_big {2, "too-big"};
-const Enum::Value ErrorTagTypeEnum::missing_attribute {3, "missing-attribute"};
-const Enum::Value ErrorTagTypeEnum::bad_attribute {4, "bad-attribute"};
-const Enum::Value ErrorTagTypeEnum::unknown_attribute {5, "unknown-attribute"};
-const Enum::Value ErrorTagTypeEnum::missing_element {6, "missing-element"};
-const Enum::Value ErrorTagTypeEnum::bad_element {7, "bad-element"};
-const Enum::Value ErrorTagTypeEnum::unknown_element {8, "unknown-element"};
-const Enum::Value ErrorTagTypeEnum::unknown_namespace {9, "unknown-namespace"};
-const Enum::Value ErrorTagTypeEnum::access_denied {10, "access-denied"};
-const Enum::Value ErrorTagTypeEnum::lock_denied {11, "lock-denied"};
-const Enum::Value ErrorTagTypeEnum::resource_denied {12, "resource-denied"};
-const Enum::Value ErrorTagTypeEnum::rollback_failed {13, "rollback-failed"};
-const Enum::Value ErrorTagTypeEnum::data_exists {14, "data-exists"};
-const Enum::Value ErrorTagTypeEnum::data_missing {15, "data-missing"};
-const Enum::Value ErrorTagTypeEnum::operation_not_supported {16, "operation-not-supported"};
-const Enum::Value ErrorTagTypeEnum::operation_failed {17, "operation-failed"};
-const Enum::Value ErrorTagTypeEnum::partial_operation {18, "partial-operation"};
-const Enum::Value ErrorTagTypeEnum::malformed_message {19, "malformed-message"};
+const Enum::YLeaf ErrorTagTypeEnum::in_use {0, "in-use"};
+const Enum::YLeaf ErrorTagTypeEnum::invalid_value {1, "invalid-value"};
+const Enum::YLeaf ErrorTagTypeEnum::too_big {2, "too-big"};
+const Enum::YLeaf ErrorTagTypeEnum::missing_attribute {3, "missing-attribute"};
+const Enum::YLeaf ErrorTagTypeEnum::bad_attribute {4, "bad-attribute"};
+const Enum::YLeaf ErrorTagTypeEnum::unknown_attribute {5, "unknown-attribute"};
+const Enum::YLeaf ErrorTagTypeEnum::missing_element {6, "missing-element"};
+const Enum::YLeaf ErrorTagTypeEnum::bad_element {7, "bad-element"};
+const Enum::YLeaf ErrorTagTypeEnum::unknown_element {8, "unknown-element"};
+const Enum::YLeaf ErrorTagTypeEnum::unknown_namespace {9, "unknown-namespace"};
+const Enum::YLeaf ErrorTagTypeEnum::access_denied {10, "access-denied"};
+const Enum::YLeaf ErrorTagTypeEnum::lock_denied {11, "lock-denied"};
+const Enum::YLeaf ErrorTagTypeEnum::resource_denied {12, "resource-denied"};
+const Enum::YLeaf ErrorTagTypeEnum::rollback_failed {13, "rollback-failed"};
+const Enum::YLeaf ErrorTagTypeEnum::data_exists {14, "data-exists"};
+const Enum::YLeaf ErrorTagTypeEnum::data_missing {15, "data-missing"};
+const Enum::YLeaf ErrorTagTypeEnum::operation_not_supported {16, "operation-not-supported"};
+const Enum::YLeaf ErrorTagTypeEnum::operation_failed {17, "operation-failed"};
+const Enum::YLeaf ErrorTagTypeEnum::partial_operation {18, "partial-operation"};
+const Enum::YLeaf ErrorTagTypeEnum::malformed_message {19, "malformed-message"};
 
-const Enum::Value EditOperationTypeEnum::merge {0, "merge"};
-const Enum::Value EditOperationTypeEnum::replace {1, "replace"};
-const Enum::Value EditOperationTypeEnum::create {2, "create"};
-const Enum::Value EditOperationTypeEnum::delete_ {3, "delete"};
-const Enum::Value EditOperationTypeEnum::remove {4, "remove"};
+const Enum::YLeaf EditOperationTypeEnum::merge {0, "merge"};
+const Enum::YLeaf EditOperationTypeEnum::replace {1, "replace"};
+const Enum::YLeaf EditOperationTypeEnum::create {2, "create"};
+const Enum::YLeaf EditOperationTypeEnum::delete_ {3, "delete"};
+const Enum::YLeaf EditOperationTypeEnum::remove {4, "remove"};
 
-const Enum::Value EditConfigRpc::DefaultOperationEnum::merge {0, "merge"};
-const Enum::Value EditConfigRpc::DefaultOperationEnum::replace {1, "replace"};
-const Enum::Value EditConfigRpc::DefaultOperationEnum::none {2, "none"};
+const Enum::YLeaf EditConfigRpc::DefaultOperationEnum::merge {0, "merge"};
+const Enum::YLeaf EditConfigRpc::DefaultOperationEnum::replace {1, "replace"};
+const Enum::YLeaf EditConfigRpc::DefaultOperationEnum::none {2, "none"};
 
-const Enum::Value EditConfigRpc::TestOptionEnum::test_then_set {0, "test-then-set"};
-const Enum::Value EditConfigRpc::TestOptionEnum::set {1, "set"};
-const Enum::Value EditConfigRpc::TestOptionEnum::test_only {2, "test-only"};
+const Enum::YLeaf EditConfigRpc::TestOptionEnum::test_then_set {0, "test-then-set"};
+const Enum::YLeaf EditConfigRpc::TestOptionEnum::set {1, "set"};
+const Enum::YLeaf EditConfigRpc::TestOptionEnum::test_only {2, "test-only"};
 
-const Enum::Value EditConfigRpc::ErrorOptionEnum::stop_on_error {0, "stop-on-error"};
-const Enum::Value EditConfigRpc::ErrorOptionEnum::continue_on_error {1, "continue-on-error"};
-const Enum::Value EditConfigRpc::ErrorOptionEnum::rollback_on_error {2, "rollback-on-error"};
+const Enum::YLeaf EditConfigRpc::ErrorOptionEnum::stop_on_error {0, "stop-on-error"};
+const Enum::YLeaf EditConfigRpc::ErrorOptionEnum::continue_on_error {1, "continue-on-error"};
+const Enum::YLeaf EditConfigRpc::ErrorOptionEnum::rollback_on_error {2, "rollback-on-error"};
 
 
 }

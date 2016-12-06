@@ -28,21 +28,21 @@ Super class of all classes that represents containers in YANG. YANG lists are re
 YANG leaf and leaf-list
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. cpp:class:: Value
+.. cpp:class:: YLeaf
 
 Concrete class that represents a YANG leaf to which data can be assigned.
 
     .. cpp:member:: EditOperation operation
     
-        Optional attribute of the Value class which can be set to perform various :cpp:class:`operations<EditOperation>`
+        Optional attribute of the YLeaf class which can be set to perform various :cpp:class:`operations<EditOperation>`
 
-.. cpp:class:: ValueList
+.. cpp:class:: YLeafList
 
 Concrete class that represents a YANG leaf-list to which multiple instances of data can be appended to.
 
     .. cpp:member:: EditOperation operation
     
-        Optional attribute of the ValueList class which can be set to perform various :cpp:class:`operations<EditOperation>`
+        Optional attribute of the YLeafList class which can be set to perform various :cpp:class:`operations<EditOperation>`
 
 YANG type
 ~~~~~~~~~~

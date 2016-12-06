@@ -14,10 +14,10 @@ namespace ietf_netconf_with_defaults {
 class WithDefaultsModeEnum : public Enum
 {
     public:
-        static const Enum::Value report_all;
-        static const Enum::Value report_all_tagged;
-        static const Enum::Value trim;
-        static const Enum::Value explicit_;
+        static const Enum::YLeaf report_all;
+        static const Enum::YLeaf report_all_tagged;
+        static const Enum::YLeaf trim;
+        static const Enum::YLeaf explicit_;
 
 };
 

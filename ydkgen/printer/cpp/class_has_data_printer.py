@@ -33,7 +33,7 @@ class ClassHasDataPrinter(object):
                 self._print_class_has_many(child, 'for (std::size_t index=0; index<%s.size(); index++)', 'if(%s[index]->has_data())' % child.name)
         for leaf in leafs:
             if leaf.is_many:
-                self._print_class_has_many(leaf, 'for (auto const & leaf : %s.getValues())', 'if(leaf.is_set)')
+                self._print_class_has_many(leaf, 'for (auto const & leaf : %s.getYLeafs())', 'if(leaf.is_set)')
         if len(conditions) == 0:
             self.ctx.writeln('return false;')
         else:
@@ -48,7 +48,7 @@ class ClassHasDataPrinter(object):
                 self._print_class_has_many(child, 'for (std::size_t index=0; index<%s.size(); index++)', 'if(%s[index]->has_operation())' % child.name)
         for leaf in leafs:
             if leaf.is_many:
-                self._print_class_has_many(leaf, 'for (auto const & leaf : %s.getValues())', 'if(is_set(leaf.operation))')
+                self._print_class_has_many(leaf, 'for (auto const & leaf : %s.getYLeafs())', 'if(is_set(leaf.operation))')
 
         self.ctx.writeln('return %s;' % '\n\t|| '.join(conditions))
         self._print_function_trailer()

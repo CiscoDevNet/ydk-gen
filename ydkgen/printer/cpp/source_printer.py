@@ -28,7 +28,7 @@ from .class_constructor_printer import ClassConstructorPrinter
 from .class_has_data_printer import ClassHasDataPrinter
 from .class_get_children_printer import ClassGetChildrenPrinter
 from .class_get_child_printer import ClassGetChildPrinter
-from .class_set_value_printer import ClassSetValuePrinter
+from .class_set_value_printer import ClassSetYLeafPrinter
 from .class_enum_printer import EnumPrinter
 from .class_get_entity_path_printer import GetEntityPathPrinter, GetSegmentPathPrinter
 
@@ -135,7 +135,7 @@ class SourcePrinter(FilePrinter):
         ClassGetChildPrinter(self.ctx).print_class_get_child(clazz, children)
 
     def _print_class_set_value(self, clazz, leafs):
-        ClassSetValuePrinter(self.ctx).print_class_set_value(clazz, leafs)
+        ClassSetYLeafPrinter(self.ctx).print_class_set_value(clazz, leafs)
 
     def _print_enums(self, package):
         EnumPrinter(self.ctx).print_enum_to_string_funcs(package)

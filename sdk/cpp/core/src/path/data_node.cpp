@@ -195,19 +195,8 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
     	auto child_segment = segments[i];
     	if(is_filter)
 		{
-    		auto child_schemas = dn->schema()->find(child_segment);
-    		auto leaf_keyword = child_schemas[0]->statement().keyword;
-    		BOOST_LOG_TRIVIAL(trace) << "Node type: " << leaf_keyword;
-			if((leaf_keyword == "leaf") || (leaf_keyword == "leaf-list"))
-			{
-				BOOST_LOG_TRIVIAL(trace) << "Creating new filter leaf '" << child_segment <<"' in '"<<cn->schema->name<<"'";
-				cn = lyd_new_output_leaf(cn, nullptr, child_segment.c_str(), "");
-			}
-			else
-			{
-				BOOST_LOG_TRIVIAL(trace) << "Creating new filter path '" << child_segment <<"' in '"<<cn->schema->name<<"'";
-				cn = lyd_new_output(cn, nullptr, child_segment.c_str());
-			}
+			BOOST_LOG_TRIVIAL(trace) << "Creating new filter path '" << child_segment <<"' in '"<<cn->schema->name<<"'";
+			cn = lyd_new_output(cn, nullptr, child_segment.c_str());
 		}
     	else if (i != segments.size() - 1)
         {

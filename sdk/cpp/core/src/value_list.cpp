@@ -58,164 +58,164 @@ std::string to_string(YType t)
     return "";
 }
 
-ValueList::ValueList(YType type, std::string name)
+YLeafList::YLeafList(YType type, std::string name)
 	: operation(EditOperation::not_set), type(type), name(name)
 {
 }
 
-ValueList::ValueList(const ValueList& other)
-	: operation(EditOperation::not_set), values(other.getValues()), type(other.type), name(other.name)
+YLeafList::YLeafList(const YLeafList& other)
+	: operation(EditOperation::not_set), values(other.getYLeafs()), type(other.type), name(other.name)
 {
 }
 
-ValueList::ValueList(ValueList&& other)
-	: operation(EditOperation::not_set), values(other.getValues()), type(other.type), name(other.name)
+YLeafList::YLeafList(YLeafList&& other)
+	: operation(EditOperation::not_set), values(other.getYLeafs()), type(other.type), name(other.name)
 {
 }
 
-ydk::ValueList&
-ValueList::operator=(const ValueList& other)
+ydk::YLeafList&
+YLeafList::operator=(const YLeafList& other)
 {
 	type = other.type;
 	name = other.name;
-	values = other.getValues();
+	values = other.getYLeafs();
 	operation = other.operation;
     return *this;
 }
 
-ydk::ValueList&
-ValueList::operator=(ValueList&& other)
+ydk::YLeafList&
+YLeafList::operator=(YLeafList&& other)
 {
 	type = other.type;
 	name = other.name;
-	values = other.getValues();
+	values = other.getYLeafs();
 	operation = other.operation;
     return *this;
 }
 
-ValueList::~ValueList()
+YLeafList::~YLeafList()
 {
 }
 
-void ValueList::append(uint8 val)
+void YLeafList::append(uint8 val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(uint32 val)
+void YLeafList::append(uint32 val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(uint64 val)
+void YLeafList::append(uint64 val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(int8 val)
+void YLeafList::append(int8 val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(int32 val)
+void YLeafList::append(int32 val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(Enum::Value val)
+void YLeafList::append(Enum::YLeaf val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(int64 val)
+void YLeafList::append(int64 val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(Empty val)
+void YLeafList::append(Empty val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(Identity val)
+void YLeafList::append(Identity val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(Bits val)
+void YLeafList::append(Bits val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(std::string val)
+void YLeafList::append(std::string val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-void ValueList::append(Decimal64 val)
+void YLeafList::append(Decimal64 val)
 {
-	Value value {type, name};
+	YLeaf value {type, name};
 	value = val.value;
 	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
 	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
 	values.push_back(value);
 }
 
-bool ValueList::operator == (ValueList & other) const
+bool YLeafList::operator == (YLeafList & other) const
 {
-	return type == other.type && name == other.name && values == other.getValues();
+	return type == other.type && name == other.name && values == other.getYLeafs();
 }
 
-bool ValueList::operator == (const ValueList & other) const
+bool YLeafList::operator == (const YLeafList & other) const
 {
-	return type == other.type && name == other.name && values == other.getValues();
+	return type == other.type && name == other.name && values == other.getYLeafs();
 }
 
-Value & ValueList::operator [] (size_t key)
+YLeaf & YLeafList::operator [] (size_t key)
 {
 	if(key >= values.size())
 	{
@@ -224,12 +224,12 @@ Value & ValueList::operator [] (size_t key)
 	return values[key];
 }
 
-std::vector<Value> ValueList::getValues() const
+std::vector<YLeaf> YLeafList::getYLeafs() const
 {
 	return values;
 }
 
-std::vector<std::pair<std::string, LeafData> > ValueList::get_name_leafdata() const
+std::vector<std::pair<std::string, LeafData> > YLeafList::get_name_leafdata() const
 {
 	std::vector<std::pair<std::string, LeafData> > name_values;
     for (auto value : values)

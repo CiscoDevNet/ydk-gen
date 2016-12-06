@@ -26,7 +26,7 @@ class GetConfigRpc : public Entity
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
         std::unique_ptr<Entity> clone_ptr() override;
-        Value with_defaults; //type: WithDefaultsModeEnum
+        YLeaf with_defaults; //type: WithDefaultsModeEnum
 
 
     class Output : public Entity
@@ -62,9 +62,9 @@ class GetConfigRpc : public Entity
             Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
             std::map<std::string, Entity*> & get_children() override;
-            Value candidate; //type: empty
-            Value running; //type: empty
-            Value startup; //type: empty
+            YLeaf candidate; //type: empty
+            YLeaf running; //type: empty
+            YLeaf startup; //type: empty
 
 
 
@@ -93,10 +93,10 @@ class EditConfigRpc : public Entity
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
         std::unique_ptr<Entity> clone_ptr() override;
-        Value default_operation; //type: DefaultOperationEnum
-        Value test_option; //type: TestOptionEnum
-        Value error_option; //type: ErrorOptionEnum
-        Value url; //type: string
+        YLeaf default_operation; //type: DefaultOperationEnum
+        YLeaf test_option; //type: TestOptionEnum
+        YLeaf error_option; //type: ErrorOptionEnum
+        YLeaf url; //type: string
 
 
     class Target : public Entity
@@ -112,8 +112,8 @@ class EditConfigRpc : public Entity
             Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
             std::map<std::string, Entity*> & get_children() override;
-            Value candidate; //type: empty
-            Value running; //type: empty
+            YLeaf candidate; //type: empty
+            YLeaf running; //type: empty
 
 
 
@@ -143,7 +143,7 @@ class CopyConfigRpc : public Entity
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
         std::unique_ptr<Entity> clone_ptr() override;
-        Value with_defaults; //type: WithDefaultsModeEnum
+        YLeaf with_defaults; //type: WithDefaultsModeEnum
 
 
     class Target : public Entity
@@ -159,10 +159,10 @@ class CopyConfigRpc : public Entity
             Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
             std::map<std::string, Entity*> & get_children() override;
-            Value candidate; //type: empty
-            Value running; //type: empty
-            Value startup; //type: empty
-            Value url; //type: string
+            YLeaf candidate; //type: empty
+            YLeaf running; //type: empty
+            YLeaf startup; //type: empty
+            YLeaf url; //type: string
 
 
 
@@ -183,10 +183,10 @@ class CopyConfigRpc : public Entity
             Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
             std::map<std::string, Entity*> & get_children() override;
-            Value candidate; //type: empty
-            Value running; //type: empty
-            Value startup; //type: empty
-            Value url; //type: string
+            YLeaf candidate; //type: empty
+            YLeaf running; //type: empty
+            YLeaf startup; //type: empty
+            YLeaf url; //type: string
 
 
 
@@ -230,8 +230,8 @@ class DeleteConfigRpc : public Entity
             Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
             std::map<std::string, Entity*> & get_children() override;
-            Value startup; //type: empty
-            Value url; //type: string
+            YLeaf startup; //type: empty
+            YLeaf url; //type: string
 
 
 
@@ -273,9 +273,9 @@ class LockRpc : public Entity
             Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
             std::map<std::string, Entity*> & get_children() override;
-            Value candidate; //type: empty
-            Value running; //type: empty
-            Value startup; //type: empty
+            YLeaf candidate; //type: empty
+            YLeaf running; //type: empty
+            YLeaf startup; //type: empty
 
 
 
@@ -317,9 +317,9 @@ class UnlockRpc : public Entity
             Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
             std::map<std::string, Entity*> & get_children() override;
-            Value candidate; //type: empty
-            Value running; //type: empty
-            Value startup; //type: empty
+            YLeaf candidate; //type: empty
+            YLeaf running; //type: empty
+            YLeaf startup; //type: empty
 
 
 
@@ -346,7 +346,7 @@ class GetRpc : public Entity
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
         std::unique_ptr<Entity> clone_ptr() override;
-        Value with_defaults; //type: WithDefaultsModeEnum
+        YLeaf with_defaults; //type: WithDefaultsModeEnum
 
 
     class Output : public Entity
@@ -409,7 +409,7 @@ class KillSessionRpc : public Entity
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
         std::unique_ptr<Entity> clone_ptr() override;
-        Value session_id; //type: uint32
+        YLeaf session_id; //type: uint32
 
 
 
@@ -430,10 +430,10 @@ class CommitRpc : public Entity
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
         std::unique_ptr<Entity> clone_ptr() override;
-        Value confirmed; //type: empty
-        Value confirm_timeout; //type: uint32
-        Value persist; //type: string
-        Value persist_id; //type: string
+        YLeaf confirmed; //type: empty
+        YLeaf confirm_timeout; //type: uint32
+        YLeaf persist; //type: string
+        YLeaf persist_id; //type: string
 
 
 
@@ -474,7 +474,7 @@ class CancelCommitRpc : public Entity
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
         std::unique_ptr<Entity> clone_ptr() override;
-        Value persist_id; //type: string
+        YLeaf persist_id; //type: string
 
 
 
@@ -510,10 +510,10 @@ class ValidateRpc : public Entity
             Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
             std::map<std::string, Entity*> & get_children() override;
-            Value candidate; //type: empty
-            Value running; //type: empty
-            Value startup; //type: empty
-            Value url; //type: string
+            YLeaf candidate; //type: empty
+            YLeaf running; //type: empty
+            YLeaf startup; //type: empty
+            YLeaf url; //type: string
 
 
 
@@ -530,72 +530,72 @@ class ValidateRpc : public Entity
 class ErrorSeverityTypeEnum : public Enum
 {
     public:
-        static const Enum::Value error;
-        static const Enum::Value warning;
+        static const Enum::YLeaf error;
+        static const Enum::YLeaf warning;
 
 };
 
 class ErrorTagTypeEnum : public Enum
 {
     public:
-        static const Enum::Value in_use;
-        static const Enum::Value invalid_value;
-        static const Enum::Value too_big;
-        static const Enum::Value missing_attribute;
-        static const Enum::Value bad_attribute;
-        static const Enum::Value unknown_attribute;
-        static const Enum::Value missing_element;
-        static const Enum::Value bad_element;
-        static const Enum::Value unknown_element;
-        static const Enum::Value unknown_namespace;
-        static const Enum::Value access_denied;
-        static const Enum::Value lock_denied;
-        static const Enum::Value resource_denied;
-        static const Enum::Value rollback_failed;
-        static const Enum::Value data_exists;
-        static const Enum::Value data_missing;
-        static const Enum::Value operation_not_supported;
-        static const Enum::Value operation_failed;
-        static const Enum::Value partial_operation;
-        static const Enum::Value malformed_message;
+        static const Enum::YLeaf in_use;
+        static const Enum::YLeaf invalid_value;
+        static const Enum::YLeaf too_big;
+        static const Enum::YLeaf missing_attribute;
+        static const Enum::YLeaf bad_attribute;
+        static const Enum::YLeaf unknown_attribute;
+        static const Enum::YLeaf missing_element;
+        static const Enum::YLeaf bad_element;
+        static const Enum::YLeaf unknown_element;
+        static const Enum::YLeaf unknown_namespace;
+        static const Enum::YLeaf access_denied;
+        static const Enum::YLeaf lock_denied;
+        static const Enum::YLeaf resource_denied;
+        static const Enum::YLeaf rollback_failed;
+        static const Enum::YLeaf data_exists;
+        static const Enum::YLeaf data_missing;
+        static const Enum::YLeaf operation_not_supported;
+        static const Enum::YLeaf operation_failed;
+        static const Enum::YLeaf partial_operation;
+        static const Enum::YLeaf malformed_message;
 
 };
 
 class EditOperationTypeEnum : public Enum
 {
     public:
-        static const Enum::Value merge;
-        static const Enum::Value replace;
-        static const Enum::Value create;
-        static const Enum::Value delete_;
-        static const Enum::Value remove;
+        static const Enum::YLeaf merge;
+        static const Enum::YLeaf replace;
+        static const Enum::YLeaf create;
+        static const Enum::YLeaf delete_;
+        static const Enum::YLeaf remove;
 
 };
 
 class EditConfigRpc::DefaultOperationEnum : public Enum
 {
     public:
-        static const Enum::Value merge;
-        static const Enum::Value replace;
-        static const Enum::Value none;
+        static const Enum::YLeaf merge;
+        static const Enum::YLeaf replace;
+        static const Enum::YLeaf none;
 
 };
 
 class EditConfigRpc::TestOptionEnum : public Enum
 {
     public:
-        static const Enum::Value test_then_set;
-        static const Enum::Value set;
-        static const Enum::Value test_only;
+        static const Enum::YLeaf test_then_set;
+        static const Enum::YLeaf set;
+        static const Enum::YLeaf test_only;
 
 };
 
 class EditConfigRpc::ErrorOptionEnum : public Enum
 {
     public:
-        static const Enum::Value stop_on_error;
-        static const Enum::Value continue_on_error;
-        static const Enum::Value rollback_on_error;
+        static const Enum::YLeaf stop_on_error;
+        static const Enum::YLeaf continue_on_error;
+        static const Enum::YLeaf rollback_on_error;
 
 };
 

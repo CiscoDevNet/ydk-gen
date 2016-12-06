@@ -45,6 +45,7 @@ class ClassMembersPrinter(object):
             return
         self._print_common_method_declarations(clazz)
         self._print_clone_ptr_method(clazz)
+        self.ctx.bline()
 
     def _print_constructor_destructor(self, clazz):
         self.ctx.writeln('public:')
@@ -84,15 +85,15 @@ class ClassMembersPrinter(object):
         if clazz.is_identity():
             self.ctx.lvl_dec()
             return
+        self.ctx.bline()
         self._print_value_members(clazz)
         self.ctx.lvl_dec()
 
     def _print_value_members(self, clazz):
         for leaf in self._get_leafs(clazz):
-            self._print_value_member(leaf, 'Value', '')
+            self._print_value_member(leaf, 'YLeaf', '')
         for leaf in self._get_leaf_lists(clazz):
-            self._print_value_member(leaf, 'ValueList', ' list of ')
-        self.ctx.bline()
+            self._print_value_member(leaf, 'YLeafList', ' list of ')
 
     def _print_value_member(self, leaf, leaf_type, description):
         if isinstance(leaf.property_type, UnionTypeSpec):

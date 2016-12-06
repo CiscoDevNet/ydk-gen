@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE ValueTest
+#define BOOST_TEST_MODULE YLeafTest
 #include <boost/test/unit_test.hpp>
 #include "../../src/types.hpp"
 #include "../../src/errors.hpp"
@@ -20,16 +20,16 @@ class TestEnum : public Enum
 	TestEnum() {}
 	~TestEnum(){}
 
-	static const Enum::Value one;
-	static const Enum::Value two;
+	static const Enum::YLeaf one;
+	static const Enum::YLeaf two;
 };
 
-const Enum::Value TestEnum::one {1, "one"};
-const Enum::Value TestEnum::two {2, "two"};
+const Enum::YLeaf TestEnum::one {1, "one"};
+const Enum::YLeaf TestEnum::two {2, "two"};
 
 BOOST_AUTO_TEST_CASE(test_uint8)
 {
-	ValueList test_value{YType::uint8, "name"};
+	YLeafList test_value{YType::uint8, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
 	auto nv = test_value.get_name_leafdata();
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(test_uint8)
 
 BOOST_AUTO_TEST_CASE(test_uint16)
 {
-	ValueList test_value{YType::uint16, "name"};
+	YLeafList test_value{YType::uint16, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
 	auto nv = test_value.get_name_leafdata();
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(test_uint16)
 
 BOOST_AUTO_TEST_CASE(test_uint32)
 {
-	ValueList test_value{YType::uint32, "name"};
+	YLeafList test_value{YType::uint32, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
 	auto nv = test_value.get_name_leafdata();
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(test_uint32)
 
 BOOST_AUTO_TEST_CASE(test_uint64)
 {
-	ValueList test_value{YType::uint64, "name"};
+	YLeafList test_value{YType::uint64, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
 	auto nv = test_value.get_name_leafdata();
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(test_uint64)
 
 BOOST_AUTO_TEST_CASE(test_int8)
 {
-	ValueList test_value{YType::int8, "name"};
+	YLeafList test_value{YType::int8, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
 	auto nv = test_value.get_name_leafdata();
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(test_int8)
 
 BOOST_AUTO_TEST_CASE(test_int16)
 {
-	ValueList test_value{YType::int16, "name"};
+	YLeafList test_value{YType::int16, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
 	auto nv = test_value.get_name_leafdata();
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE(test_int16)
 
 BOOST_AUTO_TEST_CASE(test_int32)
 {
-	ValueList test_value{YType::int32, "name"};
+	YLeafList test_value{YType::int32, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
 	auto nv = test_value.get_name_leafdata();
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(test_int32)
 
 BOOST_AUTO_TEST_CASE(test_int64)
 {
-	ValueList test_value{YType::int64, "name"};
+	YLeafList test_value{YType::int64, "name"};
 	test_value.append(4);
 	BOOST_REQUIRE(test_value[0].get()=="4");
 	auto nv = test_value.get_name_leafdata();
@@ -107,14 +107,14 @@ BOOST_AUTO_TEST_CASE(test_int64)
 
 BOOST_AUTO_TEST_CASE(test_empty)
 {
-	ValueList test_value{YType::empty, "name"};
+	YLeafList test_value{YType::empty, "name"};
 	test_value.append(Empty{});
 	BOOST_REQUIRE(test_value[0].get()=="");
 }
 
 BOOST_AUTO_TEST_CASE(test_identity)
 {
-	ValueList test_value{YType::identityref, "name"};
+	YLeafList test_value{YType::identityref, "name"};
 	TestIdentity id{};
 	test_value.append(id);
 	BOOST_REQUIRE(test_value[0].get()=="test-identity");
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(test_identity)
 
 BOOST_AUTO_TEST_CASE(test_enum_)
 {
-	ValueList test_value{YType::enumeration, "enumval"};
+	YLeafList test_value{YType::enumeration, "enumval"};
 	test_value.append(TestEnum::one);
 	BOOST_REQUIRE(test_value[0].get()=="one");
 	test_value.append(TestEnum::two);
@@ -135,14 +135,14 @@ BOOST_AUTO_TEST_CASE(test_enum_)
 
 BOOST_AUTO_TEST_CASE(test_str)
 {
-	ValueList test_value{YType::str, "name"};
+	YLeafList test_value{YType::str, "name"};
 	test_value.append("hello");
 	BOOST_REQUIRE(test_value[0].get()=="hello");
 }
 
 BOOST_AUTO_TEST_CASE(test_bool)
 {
-	ValueList test_value{YType::boolean, "name"};
+	YLeafList test_value{YType::boolean, "name"};
 	test_value.append(true);
 	BOOST_REQUIRE(test_value[0].get()=="true");
 
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(test_bool)
 
 BOOST_AUTO_TEST_CASE(test_bits)
 {
-	ValueList test_value{YType::bits, "bits-list"};
+	YLeafList test_value{YType::bits, "bits-list"};
 	Bits test;
 	test["bit1"] = true;
 	test["bit2"] = true;
@@ -168,7 +168,7 @@ BOOST_AUTO_TEST_CASE(test_bits)
 
 BOOST_AUTO_TEST_CASE(test_deci64)
 {
-	ValueList test_value{YType::decimal64, "value"};
+	YLeafList test_value{YType::decimal64, "value"};
 	test_value.append("3.2");
 	BOOST_REQUIRE(test_value[0].get()=="3.2");
 
