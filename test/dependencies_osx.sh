@@ -30,6 +30,7 @@ function install_dependencies {
     print_msg "install_dependencies"
 
     brew install boost \
+                 boost-python \
                  curl \
                  doxygen \
                  libssh \

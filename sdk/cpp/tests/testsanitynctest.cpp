@@ -1690,7 +1690,7 @@ BOOST_AUTO_TEST_CASE( test_identityref)
     auto val = identityref_value_read_vec[0]->get();
     //std::cout <<  val << std::endl;
 
-    BOOST_REQUIRE(val == "child-child-identity");
+    BOOST_REQUIRE(val == "ydktest-sanity:child-child-identity");
 
 }
 

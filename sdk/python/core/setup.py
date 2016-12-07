@@ -18,17 +18,21 @@
 """
 from __future__ import print_function
 import os
-'''import shutil
-import platform
 import subprocess
-from git import Repo'''
-from codecs import open as copen
+import sys
 
+from codecs import open as copen
+from distutils import file_util
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+from setuptools.command.sdist import sdist
 from setuptools import setup, find_packages
+
 
 NMSP_PKG_NAME = "$PACKAGE$"
 NMSP_PKG_VERSION = "$VERSION$"
 NMSP_PKG_DEPENDENCIES = ["$DEPENDENCY$"]
+path_module_name = 'path.so'
 
 # Define and modify version number and package name here,
 # Namespace packages are share same prefix: "ydk-models"
@@ -58,54 +62,46 @@ here = os.path.abspath(os.path.dirname(__file__))
 with copen(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
+
 YDK_PACKAGES = find_packages(exclude=['contrib', 'docs*', 'tests*',
                                       'ncclient', 'samples'])
-ext = []
-'''
-
-lib_path = here + '/.libs'
-libnetconf_include_path = here + '/.includes/'
-lib_paths = [lib_path]
-if platform.system() == 'Darwin' and subprocess.call(['brew info python &> /dev/null'], shell=True) == 0:
-    python_homebrew_path='/usr/local/opt/python/Frameworks/Python.framework/Versions/2.7/lib'
-    if os.path.isdir(python_homebrew_path) and os.path.exists(python_homebrew_path):
-        lib_paths = [lib_path, python_homebrew_path]
 
 
-def _build_ydk_client_using_prebuilt_libnetconf():
-    prebuilt_lib_path = lib_path + '/prebuilt/' + platform.system() + '/libnetconf.a'
-    shutil.copy(prebuilt_lib_path, lib_path)
-    return subprocess.call(['g++ -I/usr/include/python2.7 -I/usr/include/boost -I' + libnetconf_include_path +
-                            ' -shared -fPIC ' + here + '/ydk/providers/_cpp_files/netconf_client.cpp'
-                            ' -L/' + lib_path + ' -lnetconf -lpython2.7 -lboost_python -lxml2 -lcurl -lssh -lssh_threads -lxslt'], shell=True)
+def create_shared_library():
+    root_path = os.getcwd()
+    cmake_build_dir = os.path.join(root_path, 'build_cpp')
+    ydk_path = os.path.join(root_path, 'ydk')
+    if not os.path.exists(cmake_build_dir):
+        os.makedirs(cmake_build_dir)
+    os.chdir(cmake_build_dir)
+    try:
+        subprocess.check_call(['cmake', '..'])
+        subprocess.check_call(['make', '-j5'])
+        file_util.copy_file(path_module_name, os.path.join(ydk_path, path_module_name))
+        os.chdir(root_path)
+    except subprocess.CalledProcessError as e:
+        print('\nERROR: Failed to create shared library!\n')
+        sys.exit(e.returncode)
 
 
-# Compile the YDK C++ code
-if platform.system() != 'Windows':
-    libnetconf_path=here + '/.libs/libnetconf/'
-    if os.listdir(libnetconf_path) == []:
-        print('Checking out libnetconf')
-        repo = Repo.clone_from("https://github.com/abhikeshav/libnetconf.git", libnetconf_path)
-        repo.git.checkout('57f44ce2425bfb17d231a111995d6537ae4dd7cb')
-    exit_status = subprocess.call(['cd ' + here + '/.libs/libnetconf/ && ./configure > /dev/null && make > /dev/null && cp .libs/libnetconf.a .. '], shell=True)
-    if exit_status != 0:
-        exit_status = _build_ydk_client_using_prebuilt_libnetconf()
+class YdkInstall(install):
+    def run(self):
+        create_shared_library()
+        install.run(self)
 
 
-    if exit_status != 0:
-        print('\nFailed to build libnetconf. Install all the dependencies mentioned in the README. No native code is being built.')
-        ext = []
-    else:
-        ext = [extension.Extension(
-                                  'ydk_client',
-                                  sources=[here + '/ydk/providers/_cpp_files/netconf_client.cpp'],
-                                  language='c++',
-                                  libraries=['netconf', 'python2.7', 'boost_python', 'xml2', 'curl', 'ssh', 'ssh_threads', 'xslt'],
-                                  extra_compile_args=['-Wall', '-std=c++0x'],
-                                  include_dirs=['/usr/include/python2.7', '/usr/include/boost', libnetconf_include_path],
-                                  library_dirs=lib_paths
-                                  )]
-'''
+class YdkDevelop(develop):
+    def run(self):
+        create_shared_library()
+        develop.run(self)
+
+
+class YdkSourceDist(sdist):
+    def run(self):
+        create_shared_library()
+        sdist.run(self)
+
+
 setup(
     name=NAME,
     version=VERSION,
@@ -119,11 +115,22 @@ setup(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
-        'License :: OSI Approved :: Apache 2.0 License',
+        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: C++'
     ],
     keywords='yang',
     packages=YDK_PACKAGES,
     install_requires=INSTALL_REQUIREMENTS,
-    ext_modules=ext,
+    cmdclass={
+             'develop' :YdkDevelop,
+             'install' : YdkInstall,
+             'sdist' : YdkSourceDist,
+             },
+    include_package_data=True
 )

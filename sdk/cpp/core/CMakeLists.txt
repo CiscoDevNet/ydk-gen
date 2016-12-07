@@ -313,6 +313,8 @@ include_directories(
     ${libyang_location}/headers
 )
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 add_library(ydk STATIC ${libydk_src} ${libnetconf_inc_objs} ${libyang_inc_objs})
 target_compile_definitions(ydk PRIVATE "BOOST_ALL_DYN_LINK=1")
 target_compile_definitions(ydk PRIVATE "BOOST_LOG_DYN_LINK=1")

@@ -33,11 +33,13 @@ public:
                                std::string username,
                                std::string password,
                                int port);
+
         NetconfServiceProvider(std::string address,
                                std::string username,
                                std::string password,
                                int port);
         ~NetconfServiceProvider();
+
         path::RootSchemaNode* get_root_schema() const;
         path::DataNode* invoke(path::Rpc* rpc) const;
         std::string execute_payload(std::string payload);
