@@ -30,10 +30,10 @@ from .deviation_printer import DeviationPrinter
 from .import_test_printer import ImportTestPrinter
 from .module_printer import ModulePrinter
 from .module_meta_printer import ModuleMetaPrinter
-from .test_case_printer import TestCasePrinter
 from .namespace_printer import NamespacePrinter
 from .init_file_printer import InitPrinter
 from ..doc import DocPrinter
+from ..test import TestCasePrinter
 from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _EmitArgs
 
 
@@ -140,9 +140,14 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
     def print_test_module(self, package, path):
         self.print_init_file(self.test_dir)
-        self.print_file(get_test_module_file_name(path, package),
-                        emit_test_module,
-                        _EmitArgs(self.ypy_ctx, package, self.identity_subclasses))
+        empty = True
+        for element in package.owned_elements:
+            if isinstance(element, Class) and not element.is_identity():
+                empty = False
+        if not empty:
+            self.print_file(get_test_module_file_name(path, package),
+                            emit_test_module,
+                            _EmitArgs(self.ypy_ctx, package, self.identity_subclasses))
 
     def print_yang_ns_file(self):
         packages = self.packages + self.deviation_packages
@@ -235,7 +240,7 @@ def emit_module(ctx, package, extra_args):
 
 
 def emit_test_module(ctx, package, identity_subclasses):
-    TestCasePrinter(ctx).print_testcases(package, identity_subclasses)
+    TestCasePrinter(ctx, 'py').print_testcases(package, identity_subclasses)
 
 
 def emit_meta(ctx, package, sort_clazz):

@@ -8,10 +8,8 @@
     "models": {
 	"file": [
             "sdk/cpp/core/tests/models/ietf-interfaces@2014-05-08.yang",
-            "sdk/cpp/core/tests/models/main-aug1@2015-11-17.yang",
-            "sdk/cpp/core/tests/models/main-aug2@2015-11-17.yang",
-            "sdk/cpp/core/tests/models/main-aug3@2015-11-17.yang",
             "sdk/cpp/core/tests/models/main@2015-11-17.yang",
+            "sdk/cpp/core/tests/models/main-aug1@2015-11-17.yang",
             "sdk/cpp/core/tests/models/openconfig-bgp-common-multiprotocol.yang",
             "sdk/cpp/core/tests/models/openconfig-bgp-common-structure.yang",
             "sdk/cpp/core/tests/models/openconfig-bgp-common.yang",

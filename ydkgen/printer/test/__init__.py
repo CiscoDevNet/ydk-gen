@@ -13,23 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-
-"""
-printer.py
- 
- YANG model driven API, emitter.
- 
-"""
-
-
-from .python.bits_printer import BitsPrinter
-from .python.class_common_path_printer import ClassCommonPathPrinter
-from .python.class_docstring_printer import ClassDocstringPrinter
-from .python.class_has_data_printer import ClassHasDataPrinter
-from .python.class_inits_printer import ClassInitsPrinter
-from .python.class_is_config_printer import ClassIsConfigPrinter
-from .python.class_meta_printer import ClassMetaPrinter
-from .python.class_printer import ClassPrinter
-from .python.enum_printer import EnumPrinter
-from .python.import_test_printer import ImportTestPrinter
-from . import meta_data_util
+from .test_case_printer import TestCasePrinter

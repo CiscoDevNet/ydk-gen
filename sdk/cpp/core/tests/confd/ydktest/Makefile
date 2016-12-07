@@ -28,7 +28,7 @@ START_FLAGS ?=
 all:  ydktest-filterread.fxs ydktest-sanity-augm.fxs ydktest-sanity-types.fxs ydktest-sanity.fxs\
 	ydktest-types.fxs openconfig-bgp-types.fxs openconfig-bgp-policy.fxs openconfig-extensions.fxs openconfig-policy-types.fxs\
 	ietf-interfaces.fxs openconfig-types.fxs openconfig-routing-policy.fxs openconfig-interfaces.fxs openconfig-bgp.fxs\
-	oc-pattern.fxs\
+	oc-pattern.fxs main.fxs main-aug1.fxs\
 		$(CDB_DIR) ssh-keydir
 	@echo "Build complete"
 
@@ -101,7 +101,11 @@ ydktest-sanity.yang: ydktest-types.yang ydktest-sanity-submodule.yang
 ydktest-types.yang:
 	cp ../../models/ydktest-types.yang ydktest-types.yang
 
+main.yang:
+	cp ../../models/main@2015-11-17.yang main.yang
 
+main-aug1.yang:
+	cp ../../models/main-aug1@2015-11-17.yang main-aug1.yang
 
 
 ######################################################################
