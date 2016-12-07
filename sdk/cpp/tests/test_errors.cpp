@@ -44,7 +44,7 @@ bool correct_message(const YCPPError& ex)
 BOOST_AUTO_TEST_CASE(int8_invalid)
 {
 	ydk::path::Repository repo{TEST_HOME};
-	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
 	//DELETE
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(int8_invalid)
 BOOST_AUTO_TEST_CASE(int16_invalid)
 {
 	ydk::path::Repository repo{TEST_HOME};
-	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
 	//DELETE
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(int16_invalid)
 BOOST_AUTO_TEST_CASE(int64_invalid)
 {
 	ydk::path::Repository repo{TEST_HOME};
-	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
 	//DELETE
@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE(int64_invalid)
 BOOST_AUTO_TEST_CASE(bits_invalid)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(bits_invalid)
 BOOST_AUTO_TEST_CASE(deci_invalid)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(deci_invalid)
 BOOST_AUTO_TEST_CASE(empty_invalid)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE(empty_invalid)
 BOOST_AUTO_TEST_CASE(enum_invalid)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(enum_invalid)
 BOOST_AUTO_TEST_CASE(identity_invalid)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE(identity_invalid)
 BOOST_AUTO_TEST_CASE(leaflist_invalid)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE(leaflist_invalid)
 BOOST_AUTO_TEST_CASE(empty_invalid_1)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE(empty_invalid_1)
 BOOST_AUTO_TEST_CASE(enum_leaflist_invalid)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(enum_leaflist_invalid)
 BOOST_AUTO_TEST_CASE(int8_invalid_1)
 {
 	ydk::path::Repository repo{TEST_HOME};
-	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
 	//DELETE
@@ -241,7 +241,7 @@ BOOST_AUTO_TEST_CASE(int8_invalid_1)
 BOOST_AUTO_TEST_CASE(leafref_invalid)
 {
 	ydk::path::Repository repo{TEST_HOME};
-	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 
 	//DELETE

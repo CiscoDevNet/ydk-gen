@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
 {
      ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
 
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE( bits )
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -211,7 +211,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_string)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -230,7 +230,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
     ydk::Empty empty{};
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
     ydk::ValidationService validation_service{};
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
@@ -265,7 +265,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
 
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -285,7 +285,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -305,7 +305,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -325,7 +325,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -343,7 +343,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -362,7 +362,7 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -381,7 +381,7 @@ BOOST_AUTO_TEST_CASE( test_enum_leaflist)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -400,7 +400,7 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -421,7 +421,7 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
 
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 
@@ -440,7 +440,7 @@ BOOST_AUTO_TEST_CASE( test_identityref)
 {
     ydk::path::Repository repo{TEST_HOME};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
 
     ydk::ValidationService validation_service{};
 

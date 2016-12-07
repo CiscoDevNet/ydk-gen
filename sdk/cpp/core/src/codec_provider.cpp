@@ -38,7 +38,7 @@ re::sregex JSON_LOOKUP_KEY = re::sregex::compile("{[^\"]+\"(?P<key>[^\"]+)\"");
 std::string ERROR_MSG{"Failed to find namespace from %1% payload,"
                       " please make sure payload format is consistent with encoding format."};
 
-CodecServiceProvider::CodecServiceProvider(path::Repository * repo, EncodingFormat encoding)
+CodecServiceProvider::CodecServiceProvider(path::Repository & repo, EncodingFormat encoding)
     : m_repo{repo}
 {
 	if(encoding == EncodingFormat::XML)
@@ -54,7 +54,7 @@ CodecServiceProvider::CodecServiceProvider(path::Repository * repo, EncodingForm
 		BOOST_THROW_EXCEPTION(YCPPServiceProviderError("Encoding format not supported"));
 	}
     augment_lookup_tables();
-    m_root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(m_repo->create_root_schema(get_global_capabilities()));
+    m_root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(m_repo.create_root_schema(get_global_capabilities()));
 }
 
 CodecServiceProvider::~CodecServiceProvider()

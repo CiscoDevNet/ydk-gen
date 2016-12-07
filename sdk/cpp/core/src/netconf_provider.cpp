@@ -63,14 +63,14 @@ static path::DataNode* handle_read_reply(string reply, path::RootSchemaNode * ro
 const char* CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
 
 NetconfServiceProvider::NetconfServiceProvider(string address, string username, string password, int port)
-    : m_repo_ptr(make_unique<path::Repository>()), m_repo{m_repo_ptr.get()}, client(make_unique<NetconfClient>(username, password, address, port, 0)),
+    : m_repo_ptr(make_unique<path::Repository>()), m_repo{*m_repo_ptr}, client(make_unique<NetconfClient>(username, password, address, port, 0)),
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
     initialize();
     BOOST_LOG_TRIVIAL(debug) << "Connected to " << address << " on port "<< port <<" using ssh";
 }
 
-NetconfServiceProvider::NetconfServiceProvider(path::Repository* repo, string address, string username, string password, int port)
+NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo, string address, string username, string password, int port)
     : m_repo_ptr(nullptr),m_repo{repo}, client(make_unique<NetconfClient>(username, password, address, port, 0)),
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
@@ -80,12 +80,6 @@ NetconfServiceProvider::NetconfServiceProvider(path::Repository* repo, string ad
 
 void NetconfServiceProvider::initialize()
 {
-	if(m_repo == nullptr)
-	{
-		BOOST_LOG_TRIVIAL(error) << "Repo passed in is nullptr";
-		BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"repo is null"});
-	}
-
 	client->connect();
 	server_capabilities = client->get_capabilities();
 
@@ -94,12 +88,12 @@ void NetconfServiceProvider::initialize()
 		if(c.find("ietf-netconf-monitoring") != std::string::npos)
 		{
 			ietf_nc_monitoring_available = true;
-			m_repo->add_model_provider(model_provider.get());
+			m_repo.add_model_provider(model_provider.get());
 		}
 	}
 
 	root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(
-								m_repo->create_root_schema
+								m_repo.create_root_schema
 									(
 									get_core_capabilities(server_capabilities)
 									)
@@ -116,7 +110,7 @@ NetconfServiceProvider::~NetconfServiceProvider()
 {
 	BOOST_LOG_TRIVIAL(debug) << "Disconnected from device";
 	if(ietf_nc_monitoring_available){
-		m_repo->remove_model_provider(model_provider.get());
+		m_repo.remove_model_provider(model_provider.get());
 	}
 }
 

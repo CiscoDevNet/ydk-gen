@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(cancel_commit)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     bool reply = ns.cancel_commit(provider);
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(close_session)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     bool reply = ns.close_session(provider);
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(commit)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     bool reply = ns.commit(provider);
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(copy_config)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     DataStore target = DataStore::candidate;
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(delete_config)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     DataStore target = DataStore::startup;
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(discard_changes)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     bool reply = ns.discard_changes(provider);
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(edit_config)
 {
 	// provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     DataStore target = DataStore::candidate;
@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(get_config)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     DataStore source = DataStore::candidate;
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(get)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     openconfig_bgp::Bgp filter = {};
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(kill_session)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     std::string session_id = "session-id";
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(lock)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     DataStore target = DataStore::candidate;
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(unlock)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     DataStore target = DataStore::candidate;
@@ -216,7 +216,7 @@ BOOST_AUTO_TEST_CASE(validate)
 {
     // provider
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     DataStore source = DataStore::candidate;

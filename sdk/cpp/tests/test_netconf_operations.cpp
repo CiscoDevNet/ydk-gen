@@ -59,7 +59,7 @@ using namespace std;
 BOOST_AUTO_TEST_CASE(test_replace)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(test_replace)
 BOOST_AUTO_TEST_CASE(test_create)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(test_create)
 BOOST_AUTO_TEST_CASE(test_delete)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE(test_delete)
 BOOST_AUTO_TEST_CASE(test_remove)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE(test_remove)
 BOOST_AUTO_TEST_CASE(test_merge)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -235,7 +235,7 @@ BOOST_AUTO_TEST_CASE(test_merge)
 BOOST_AUTO_TEST_CASE(delete_leaf)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE
@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE(delete_leaf)
 BOOST_AUTO_TEST_CASE(delete_leaflist)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     CrudService crud{};
 
     //DELETE

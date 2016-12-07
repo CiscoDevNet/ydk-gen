@@ -50,7 +50,7 @@ BOOST_FIXTURE_TEST_SUITE(executor_service, YdkTest )
 BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_1)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     ExecutorService es{};
 
     auto r_1 = make_unique<ydktest_sanity::Runner>();
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_1)
 BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_2)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     ExecutorService es{};
 
     auto r_1 = make_unique<ydktest_sanity::Runner>();
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_2)
 BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_3)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     ExecutorService es{};
 
     auto r_1 = make_unique<ydktest_sanity::Runner>();
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_3)
 BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_4)
 {
     ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     ExecutorService es{};
 
     auto r_1 = make_unique<ydktest_sanity::Runner>();
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_4)
 // BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_5)
 // {
 //     ydk::path::Repository repo{TEST_HOME};
-//     NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
+//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 //     ExecutorService es{};
 
 //     auto r_1 = make_unique<ydktest_sanity::Runner>();

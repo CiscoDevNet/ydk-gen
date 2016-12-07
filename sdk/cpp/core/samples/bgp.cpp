@@ -25,7 +25,7 @@ void test_bgp_create()
 {
     ydk::path::Repository repo{};
 
-    ydk::NetconfServiceProvider sp{&repo,"127.0.0.1", "admin", "admin",  2022};
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  2022};
 
     ydk::path::RootSchemaNode* schema = sp.get_root_schema();
     print_paths(*schema);

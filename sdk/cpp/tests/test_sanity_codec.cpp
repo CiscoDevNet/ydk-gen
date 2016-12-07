@@ -259,7 +259,7 @@ config_runner_1(ydktest_sanity::Runner *runner)
 BOOST_AUTO_TEST_CASE(single_encode)
 {
 	path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
+    CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
 
     CodecService codec_service{};
 
@@ -274,7 +274,7 @@ BOOST_AUTO_TEST_CASE(single_encode)
 BOOST_AUTO_TEST_CASE(multiple_encode)
 {
     path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
+    CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
     CodecService codec_service{};
 
     auto runner1 = std::make_unique<ydktest_sanity::Runner>();
@@ -298,7 +298,7 @@ BOOST_AUTO_TEST_CASE(multiple_encode)
 BOOST_AUTO_TEST_CASE(test_oc_pattern)
 {
     path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
+    CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, XML_OC_PATTERN_PAYLOAD);
@@ -310,7 +310,7 @@ BOOST_AUTO_TEST_CASE(test_oc_pattern)
 BOOST_AUTO_TEST_CASE(enum_2)
 {
     path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
+    CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, XML_ENUM_PAYLOAD_2);
@@ -321,7 +321,7 @@ BOOST_AUTO_TEST_CASE(enum_2)
 BOOST_AUTO_TEST_CASE(single_decode)
 {
     path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{&repo,EncodingFormat::JSON};
+    CodecServiceProvider codec_provider{repo,EncodingFormat::JSON};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, JSON_RUNNER_PAYLOAD_1);
@@ -346,7 +346,7 @@ BOOST_AUTO_TEST_CASE(single_decode)
 BOOST_AUTO_TEST_CASE(encode_decode)
 {
      path::Repository repo{TEST_HOME};
-     CodecServiceProvider codec_provider{&repo,EncodingFormat::XML};
+     CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
      CodecService codec_service{};
 
      std::string test = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one><name>test</name></one></runner>";

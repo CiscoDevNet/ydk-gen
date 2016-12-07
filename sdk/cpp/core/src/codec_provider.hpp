@@ -35,7 +35,7 @@ class TopEntityLookUp;
 class CodecServiceProvider
 {
 public:
-	CodecServiceProvider(path::Repository * repo, EncodingFormat encoding);
+	CodecServiceProvider(path::Repository & repo, EncodingFormat encoding);
 	~CodecServiceProvider();
 
 	path::RootSchemaNode* get_root_schema();
@@ -46,7 +46,7 @@ public:
 
 private:
 	std::unique_ptr<path::RootSchemaNode> m_root_schema;
-	path::Repository* m_repo;
+	path::Repository & m_repo;
 
 };
 }

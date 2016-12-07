@@ -28,7 +28,7 @@ class NetconfClient;
 
 class NetconfServiceProvider : public path::ServiceProvider {
 public:
-        NetconfServiceProvider(path::Repository* repo,
+        NetconfServiceProvider(path::Repository & repo,
                                 std::string address,
                                std::string username,
                                std::string password,
@@ -49,7 +49,7 @@ private:
 
 private:
         std::unique_ptr<path::Repository> m_repo_ptr;
-        path::Repository* m_repo;
+        path::Repository & m_repo;
         std::unique_ptr<NetconfClient> client;
         std::unique_ptr<path::ModelProvider> model_provider;
         std::unique_ptr<ydk::path::RootSchemaNode> root_schema;
