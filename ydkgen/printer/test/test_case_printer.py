@@ -133,11 +133,11 @@ class TestCasePrinter(TestFixturePrinter):
                     self._add_list_key_stmt(clazz)
                 # hard code, enable afi-safi
                 if prop.name == 'afi_safi':
-                    self._add_relative_assignment(prop, 'config/enabled')
+                    self._add_relative_prop_stmt(prop, 'config/enabled')
 
             clazz = clazz.owner
 
-    def _add_relative_assignment(self, prop, path):
+    def _add_relative_prop_stmt(self, prop, path):
         path = path.split('/')
         curr_prop = prop
         for seg in path:
@@ -145,6 +145,7 @@ class TestCasePrinter(TestFixturePrinter):
                 if isinstance(prop, Property) and prop.name == seg:
                     curr_prop = prop
                     break
+
         self._add_terminal_prop_stmts(curr_prop)
 
     def _add_list_stmts(self, clazz):
@@ -174,10 +175,9 @@ class TestCasePrinter(TestFixturePrinter):
             value = self._get_prop_value(prop)
             if isinstance(value, BitsValue):
                 return
-                # <-- ConfD internal error for leaflist of bits -->
+                # # ConfD internal error for leaflist of bits
                 # path, value = self._handle_bits_value(path, value.val)
                 # self.stmts.add_assignment(path, value)
-                # <-- ConfD internal error for leaflist of bits -->
             self._add_dec_stmt(prop)
             self._add_leaflist_append_stmt(prop)
         else:
@@ -390,9 +390,10 @@ class TestCasePrinter(TestFixturePrinter):
         qn = self._get_qn(top_class)
         self._print_logging('Reading {}...'.format(top_obj_name))
         self._write_end(self.dec_fmt.format(filter_obj_name, qn))
+
         fmt = self._get_crud_fmt('read')
         stmt = fmt.format(filter_obj_name)
-        fmt = self._get_ret_fmt()
+        fmt = self.read_ret_fmt
         if self.language == 'py':
             self._write_end(fmt.format(read_obj_name, stmt))
         elif self.language == 'cpp':
@@ -404,7 +405,7 @@ class TestCasePrinter(TestFixturePrinter):
         self._print_logging('Comparing leaf/leaf-lists...')
         for prop in clazz.properties():
             if is_ref_prop(prop) or is_terminal_prop(prop):
-                # unable to compare
+                # unable to compare empty
                 # read object will not be assigned to Empty() automatically
                 if not is_empty_prop(prop):
                     self._print_compare_stmt(prop)

@@ -28,10 +28,12 @@ START_FLAGS ?=
 all:  ydktest-filterread.fxs ydktest-sanity-augm.fxs ydktest-sanity-types.fxs ydktest-sanity.fxs\
 	ydktest-types.fxs openconfig-bgp-types.fxs openconfig-bgp-policy.fxs openconfig-extensions.fxs openconfig-policy-types.fxs\
 	ietf-interfaces.fxs openconfig-types.fxs openconfig-routing-policy.fxs openconfig-interfaces.fxs openconfig-bgp.fxs\
-	oc-pattern.fxs main.fxs main-aug1.fxs\
+	oc-pattern.fxs main.fxs main-aug1.fxs iana-if-type.fxs\
 		$(CDB_DIR) ssh-keydir
 	@echo "Build complete"
 
+iana-if-type.yang:
+	cp ../../../../../../yang/ietf/iana-if-type.yang iana-if-type.yang
 
 ietf-interfaces.yang:
 	cp ../../models/ietf-interfaces\@2014-05-08.yang ietf-interfaces.yang

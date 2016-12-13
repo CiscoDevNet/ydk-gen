@@ -92,7 +92,8 @@ class LanguagePrinter(object):
             fmt = 'auto {} = std::make_unique<{}>()'
         return fmt
 
-    def _get_ret_fmt(self):
+    @property
+    def read_ret_fmt(self):
         fmt = ''
         if self.language == 'py':
             fmt = '{} = {}'
