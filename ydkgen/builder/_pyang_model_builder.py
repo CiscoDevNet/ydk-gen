@@ -18,6 +18,7 @@ import logging
 import os
 import pyang
 import re
+import sys
 
 from pyang import error, statements
 from pyang.error import err_add
@@ -34,6 +35,11 @@ class PyangModelBuilder(object):
         self.ctx = pyang.Context(self.repos)
         self.resolved_model_dir = resolved_model_dir
         self.submodules = []
+        try:
+            reload(sys)
+            sys.setdefaultencoding('utf8')
+        except:
+            pass
 
     def parse_and_return_modules(self):
         """ Use pyang to parse the files, validate them and get a list of modules.

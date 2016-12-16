@@ -368,6 +368,15 @@ module ydktest-sanity {
           description "A list of string";
         }
 
+        leaf status {
+            description
+              "Whether cable is connected or not";
+            type enumeration {
+              enum "good";
+              enum "not connected";
+            }
+          }
+
         leaf-list bits-llist {
           type bits {
             bit disable-nagle {

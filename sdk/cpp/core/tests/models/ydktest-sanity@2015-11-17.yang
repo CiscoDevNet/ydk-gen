@@ -351,6 +351,15 @@ module ydktest-sanity {
           }
         }*/
 
+        leaf status {
+            description
+              "Whether cable is connected or not";
+            type enumeration {
+              enum "good";
+              enum "not connected";
+            }
+          }
+
         leaf younion {
           type union {
             type Ydk-Enum-test;

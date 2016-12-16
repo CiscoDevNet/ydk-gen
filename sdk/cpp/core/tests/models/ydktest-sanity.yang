@@ -415,6 +415,15 @@ module ydktest-sanity {
               description
                 "members of the younion";
         }
+        
+        leaf status {
+            description
+              "Whether cable is connected or not";
+            type enumeration {
+              enum "good";
+              enum "not connected";
+            }
+          }
 
 
         //leaf-refs refeerring to different target node

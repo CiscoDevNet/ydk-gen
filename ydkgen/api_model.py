@@ -831,6 +831,7 @@ class EnumLiteral(NamedElement):
         self.name = self.name.replace('?', '__QUESTION__')
         self.name = self.name.replace('!', '__BANG__')
         self.name = self.name.replace(';', '__SEMICOLON__')
+        self.name = self.name.replace(' ', '_')
 
         if self.iskeyword(self.name):
             self.name += '_'

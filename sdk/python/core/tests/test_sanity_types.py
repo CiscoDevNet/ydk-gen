@@ -439,6 +439,20 @@ class SanityTest(unittest.TestCase):
         result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
+    def test_status_enum(self):
+        runner = self._create_runner()
+        runner.ytypes.built_in_t.status = runner.ytypes.built_in_t.StatusEnum.not_connected
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner2
+        runner1 = ysanity.Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
+
     def test_leaflist_unique(self):
         runner = self._create_runner()
         with self.assertRaises(YPYModelError):
