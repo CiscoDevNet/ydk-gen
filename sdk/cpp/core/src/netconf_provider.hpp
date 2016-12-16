@@ -39,8 +39,8 @@ public:
                                int port);
         ~NetconfServiceProvider();
         path::RootSchemaNode* get_root_schema() const;
+        path::DataNode* handle_netconf_operation(path::Rpc* ydk_rpc) const;
         path::DataNode* invoke(path::Rpc* rpc) const;
-        std::string execute_payload(std::string payload);
 
 private:
         path::DataNode* handle_edit(path::Rpc* rpc, path::Annotation ann) const;

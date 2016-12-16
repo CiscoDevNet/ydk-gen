@@ -64,12 +64,12 @@ class NetconfService : public Service
 			std::string confirm_timeout = "", std::string persist = "", std::string persist_id = "");
 		bool copy_config(NetconfServiceProvider & provider, DataStore target, DataStore source);
 		bool copy_config(NetconfServiceProvider & provider, DataStore target, Entity& source);
-		bool delete_config(NetconfServiceProvider & provider, DataStore target);
+		bool delete_config(NetconfServiceProvider & provider, DataStore target, std::string url = "");
 		bool discard_changes(NetconfServiceProvider & provider);
 		bool edit_config(NetconfServiceProvider & provider, DataStore target, Entity& config,
 			std::string default_operation = "", std::string test_option = "", std::string error_option = "");
-		bool get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter);
-		bool get(NetconfServiceProvider & provider, Entity& filter);
+		std::unique_ptr<Entity> get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter);
+		std::unique_ptr<Entity> get(NetconfServiceProvider & provider, Entity& filter);
 		bool kill_session(NetconfServiceProvider & provider, int session_id); //convert session_id to string
 		bool lock(NetconfServiceProvider & provider, DataStore target);
 		bool unlock(NetconfServiceProvider & provider, DataStore target);

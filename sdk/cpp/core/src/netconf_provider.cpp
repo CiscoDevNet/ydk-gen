@@ -23,6 +23,9 @@
 
 #include <iostream>
 #include <sstream>
+#include <memory>
+#include <boost/log/trivial.hpp>
+#include <libyang/libyang.h>
 
 #include "types.hpp"
 #include "netconf_client.hpp"
@@ -31,9 +34,6 @@
 #include "entity_data_node_walker.hpp"
 #include "errors.hpp"
 #include "ydk_yang.hpp"
-#include <memory>
-#include <boost/log/trivial.hpp>
-#include <libyang/libyang.h>
 
 using namespace std;
 using namespace ydk;
@@ -114,16 +114,6 @@ NetconfServiceProvider::~NetconfServiceProvider()
 	}
 }
 
-std::string NetconfServiceProvider::execute_payload(std::string payload)
-{
-       std::string reply = client->execute_payload(payload);
-    BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
-    BOOST_LOG_TRIVIAL(debug) << reply;
-    BOOST_LOG_TRIVIAL(debug) <<"=========================="<<endl;
-    // return handle_read_reply(reply, root_schema.get());
-    return reply;
-}
-
 path::RootSchemaNode* NetconfServiceProvider::get_root_schema() const 	//current
 // core::RootSchemaNode* NetconfServiceProvider::get_root_schema() const 	//old
 {
@@ -170,6 +160,35 @@ path::DataNode* NetconfServiceProvider::handle_edit(path::Rpc* ydk_rpc, path::An
     return handle_edit_reply(reply, *client, candidate_supported);
 }
 
+path::DataNode* NetconfServiceProvider::handle_netconf_operation(path::Rpc* ydk_rpc) const
+{
+    bool candidate_supported = is_candidate_supported(server_capabilities);
+
+    path::CodecService codec_service{};
+    auto netconf_payload = codec_service.encode(ydk_rpc->input(), path::CodecService::Format::XML, true);
+    std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
+    netconf_payload = payload + netconf_payload + "</rpc>";
+
+    BOOST_LOG_TRIVIAL(debug) << netconf_payload;
+
+    std::string reply = client->execute_payload(netconf_payload);
+    BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
+    BOOST_LOG_TRIVIAL(debug) << reply;
+    BOOST_LOG_TRIVIAL(debug) << endl;
+    BOOST_LOG_TRIVIAL(trace) << "Executing rpc " + ydk_rpc->schema()->path();
+    if (ydk_rpc->schema()->path().find("get") != string::npos or ydk_rpc->schema()->path().find("get-config") != string::npos)
+    {
+        return handle_read_reply(reply, root_schema.get());
+    }
+    if(reply.find("<ok/>") == std::string::npos)
+    {
+        BOOST_LOG_TRIVIAL(error) << "No ok in reply ";
+        BOOST_THROW_EXCEPTION(YCPPServiceProviderError{reply});
+    }
+    return nullptr;
+    
+}
+
 path::DataNode* NetconfServiceProvider::invoke(path::Rpc* rpc) const
 {
 	path::SchemaNode* create_schema = get_schema_for_operation(*root_schema, "ydk:create");
@@ -197,7 +216,10 @@ path::DataNode* NetconfServiceProvider::invoke(path::Rpc* rpc) const
     else if(rpc_schema == read_schema)
     {
         return handle_read(rpc);
-
+    }
+    else if(rpc_schema->path().find("ietf-netconf:")!= string::npos)
+    {
+       return handle_netconf_operation(rpc);
     }
     else
     {
