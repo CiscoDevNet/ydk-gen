@@ -47,6 +47,12 @@ struct YdkTest
 
 BOOST_FIXTURE_TEST_SUITE(executor_service, YdkTest )
 
+BOOST_AUTO_TEST_CASE(dummy)
+{
+    bool foo = true;
+    BOOST_REQUIRE(foo);
+}
+
 // BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_1)
 // {
 //     ydk::path::Repository repo{TEST_HOME};
