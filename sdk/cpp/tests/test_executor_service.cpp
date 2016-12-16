@@ -47,63 +47,63 @@ struct YdkTest
 
 BOOST_FIXTURE_TEST_SUITE(executor_service, YdkTest )
 
-BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_1)
-{
-    ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-    ExecutorService es{};
+// BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_1)
+// {
+//     ydk::path::Repository repo{TEST_HOME};
+//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+//     ExecutorService es{};
 
-    auto r_1 = make_unique<ydktest_sanity::Runner>();
-    ydk::ietf_netconf::ValidateRpc rpc{};
-    rpc.source->candidate = "candidate";
-    bool reply = es.execute_rpc(provider, rpc);
-    BOOST_REQUIRE(reply);
-}
+//     auto r_1 = make_unique<ydktest_sanity::Runner>();
+//     ydk::ietf_netconf::ValidateRpc rpc{};
+//     rpc.source->candidate = "candidate";
+//     bool reply = es.execute_rpc(provider, rpc);
+//     BOOST_REQUIRE(reply);
+// }
 
-BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_2)
-{
-    ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-    ExecutorService es{};
+// BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_2)
+// {
+//     ydk::path::Repository repo{TEST_HOME};
+//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+//     ExecutorService es{};
 
-    auto r_1 = make_unique<ydktest_sanity::Runner>();
-    ydk::ietf_netconf::ValidateRpc rpc{};
-    Empty e;
-    e.set = true;
-    rpc.source->running = e;
-    bool reply = es.execute_rpc(provider, rpc);
-    BOOST_REQUIRE(reply);
-}
+//     auto r_1 = make_unique<ydktest_sanity::Runner>();
+//     ydk::ietf_netconf::ValidateRpc rpc{};
+//     Empty e;
+//     e.set = true;
+//     rpc.source->running = e;
+//     bool reply = es.execute_rpc(provider, rpc);
+//     BOOST_REQUIRE(reply);
+// }
 
-BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_3)
-{
-    ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-    ExecutorService es{};
+// BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_3)
+// {
+//     ydk::path::Repository repo{TEST_HOME};
+//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+//     ExecutorService es{};
 
-    auto r_1 = make_unique<ydktest_sanity::Runner>();
-    ydk::ietf_netconf::ValidateRpc rpc{};
-    Empty e;
-    e.set = true;
-    rpc.source->startup = e;
-    bool reply = es.execute_rpc(provider, rpc);
-    BOOST_REQUIRE(reply);
-}
+//     auto r_1 = make_unique<ydktest_sanity::Runner>();
+//     ydk::ietf_netconf::ValidateRpc rpc{};
+//     Empty e;
+//     e.set = true;
+//     rpc.source->startup = e;
+//     bool reply = es.execute_rpc(provider, rpc);
+//     BOOST_REQUIRE(reply);
+// }
 
-BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_4)
-{
-    ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-    ExecutorService es{};
+// BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_4)
+// {
+//     ydk::path::Repository repo{TEST_HOME};
+//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+//     ExecutorService es{};
 
-    auto r_1 = make_unique<ydktest_sanity::Runner>();
-    ydk::ietf_netconf::ValidateRpc rpc{};
-    Empty e;
-    e.set = true;
-    rpc.source->url = e;
-    bool reply = es.execute_rpc(provider, rpc);
-    BOOST_REQUIRE(reply);
-}
+//     auto r_1 = make_unique<ydktest_sanity::Runner>();
+//     ydk::ietf_netconf::ValidateRpc rpc{};
+//     Empty e;
+//     e.set = true;
+//     rpc.source->url = e;
+//     bool reply = es.execute_rpc(provider, rpc);
+//     BOOST_REQUIRE(reply);
+// }
 
 // BOOST_AUTO_TEST_CASE(execute_validate_rpc_source_5)
 // {
