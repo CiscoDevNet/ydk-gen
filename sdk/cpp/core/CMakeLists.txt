@@ -336,7 +336,7 @@ target_link_libraries(ydk
     libyang
 )
 
-set_property(TARGET ydk PROPERTY CXX_STANDARD 14)
+set_property(TARGET ydk PROPERTY CXX_STANDARD 11)
 set_property(TARGET ydk PROPERTY CXX_STANDARD_REQUIRED ON)
 
 install(TARGETS ydk DESTINATION ${LIB_INSTALL_DIR})

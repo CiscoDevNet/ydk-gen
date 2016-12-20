@@ -32,6 +32,7 @@
 #include <vector>
 #include <algorithm>
 #include "errors.hpp"
+#include "types.hpp"
 #include <boost/filesystem.hpp>
 
 namespace ydk {
@@ -338,7 +339,7 @@ namespace ydk {
         /// @brief Error that encapsualtes the validation errors
         ///        on a data tree
         ///
-        struct YCPPDataValidationError : public YCPPCoreError 
+        struct YCPPDataValidationError : public YCPPCoreError
         {
             /// Data Validation Error Enum
             enum class Error {
@@ -383,7 +384,7 @@ namespace ydk {
 
         };
 
-        struct YCPPPathError : public YCPPCoreError 
+        struct YCPPPathError : public YCPPCoreError
         {
             enum class Error {
                 SUCCESS,  /// no error

@@ -55,7 +55,7 @@ target_link_libraries(ydk_@BRIEF_NAME@
     ${LIBYDK_LIBRARIES}
 )
 
-set_property(TARGET ydk_@BRIEF_NAME@ PROPERTY CXX_STANDARD 14)
+set_property(TARGET ydk_@BRIEF_NAME@ PROPERTY CXX_STANDARD 11)
 set_property(TARGET ydk_@BRIEF_NAME@ PROPERTY CXX_STANDARD_REQUIRED ON)
 
 # find YDK library

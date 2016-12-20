@@ -49,7 +49,7 @@ endif()
 
 foreach(test_name IN LISTS netconf_tests)
     add_executable(${test_name} ${test_name}.cpp)
-    set_property(TARGET ${test_name} PROPERTY CXX_STANDARD 14)
+    set_property(TARGET ${test_name} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${test_name} PROPERTY CXX_STANDARD_REQUIRED ON)
     target_include_directories(${test_name} PRIVATE ${BOOST_INCLUDE_DIRS} /opt/local/include /usr/local/include)
     target_compile_definitions(${test_name} PRIVATE "BOOST_TEST_DYN_LINK=1")

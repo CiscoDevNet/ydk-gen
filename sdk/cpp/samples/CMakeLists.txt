@@ -73,7 +73,7 @@ foreach(sample IN LISTS samples)
             -rdynamic
             )
 
-    set_property(TARGET ${sample} PROPERTY CXX_STANDARD 14)
+    set_property(TARGET ${sample} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${sample} PROPERTY CXX_STANDARD_REQUIRED ON)
 endforeach(sample)
 
