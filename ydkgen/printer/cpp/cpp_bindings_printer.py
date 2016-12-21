@@ -62,7 +62,7 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
     def _print_header_file(self, package, path):
         self.print_file(get_header_file_name(path, package),
                         emit_header,
-                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
+                        _EmitArgs(self.ypy_ctx, package, (self.sort_clazz, self.identity_subclasses)))
 
     def _print_source_file(self, package, path):
         self.print_file(get_source_file_name(path, package),
@@ -119,8 +119,8 @@ def get_cpp_doc_file_name(path, named_element):
     return '%s/%s.rst' % (path, get_rst_file_name(named_element))
 
 
-def emit_header(ctx, package, sort_clazz):
-    HeaderPrinter(ctx, sort_clazz).print_output(package)
+def emit_header(ctx, package, extra_args):
+    HeaderPrinter(ctx, extra_args[0], extra_args[1]).print_output(package)
 
 
 def emit_source(ctx, package, sort_clazz):

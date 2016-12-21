@@ -65,7 +65,7 @@ class ModulePrinter(FilePrinter):
 
         for imported_type in package.imported_types():
             if all((id(imported_type) in self.identity_subclasses,
-                    self._is_derived_identity(package, imported_type))):
+                    self.is_derived_identity(package, imported_type))):
                 imported_stmt = 'from %s import %s' % (
                     imported_type.get_py_mod_name(),
                     imported_type.qn().split('.')[0])
@@ -75,14 +75,6 @@ class ModulePrinter(FilePrinter):
             self.ctx.writeln(imported_stmt)
 
         self.ctx.bline()
-
-    def _is_derived_identity(self, package, identity):
-        for ne in package.owned_elements:
-            if isinstance(ne, Class) and ne.is_identity():
-                for ext in ne.extends:
-                    if ext == identity:
-                        return True
-        return False
 
     def _print_static_imports(self):
         self.ctx.str('''

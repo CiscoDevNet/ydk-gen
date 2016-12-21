@@ -169,6 +169,11 @@ class ApiModelBuilder(object):
         prop = Property(self.iskeyword)
         stmt.i_property = prop
         prop.stmt = stmt
+
+        for element in parent_element.owned_elements:
+            if element.name == prop.name:
+                prop.name = prop.name + '_'
+
         parent_element.owned_elements.append(prop)
         prop.owner = parent_element
         # for inlined enum types where leaf { type enumeration {

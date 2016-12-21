@@ -31,9 +31,10 @@ from .class_enum_printer import EnumPrinter
 
 
 class HeaderPrinter(FilePrinter):
-    def __init__(self, ctx, sort_clazz):
+    def __init__(self, ctx, sort_clazz, identity_subclasses):
         super(HeaderPrinter, self).__init__(ctx)
         self.sort_clazz = sort_clazz
+        self.identity_subclasses = identity_subclasses
 
     def print_header(self, package):
         self._print_include_guard_header(package)
@@ -69,13 +70,13 @@ class HeaderPrinter(FilePrinter):
     def _print_unique_imports(self, package):
         if len(package.imported_types()) == 0:
             return
-        imports_to_print = []
+        imports_to_print = set()
         for imported_type in package.imported_types():
-            import_stmt = '#include "{0}"'.format(imported_type.get_cpp_header_name())
-            if import_stmt in imports_to_print:
-                continue
-            else:
-                imports_to_print.append(import_stmt)
+            if all((id(imported_type) in self.identity_subclasses,
+                    self.is_derived_identity(package, imported_type))):
+                import_stmt = '#include "{0}"'.format(imported_type.get_cpp_header_name())
+                imports_to_print.add(import_stmt)
+
         imports_to_print = sorted(imports_to_print)
         for import_to_print in imports_to_print:
             self.ctx.writeln('%s' % import_to_print)

@@ -21,6 +21,7 @@
 
 """
 import abc
+from ydkgen.api_model import Class
 
 
 class _Stack:
@@ -73,3 +74,11 @@ class FilePrinter(object):
 
     def print_trailer(self, packages):
         pass
+
+    def is_derived_identity(self, package, identity):
+        for ne in package.owned_elements:
+            if isinstance(ne, Class) and ne.is_identity():
+                for ext in ne.extends:
+                    if ext == identity:
+                        return True
+        return False

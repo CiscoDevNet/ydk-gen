@@ -170,21 +170,8 @@ class ClassMembersPrinter(object):
     def _print_class_enums_forward_declarations(self, clazz):
         self.ctx.bline()
         self.ctx.lvl_inc()
-        for prop in clazz.properties():
-            if isinstance(prop.property_type, Enum):
-                self.ctx.writeln('class %s;' % prop.property_type.name)
-            elif isinstance(prop.property_type, UnionTypeSpec):
-                for enum_name in self._get_union_contained_enums(prop.property_type):
-                    self.ctx.writeln('class %s;' % enum_name)
+        for child in clazz.owned_elements:
+            if isinstance(child, Enum):
+                self.ctx.writeln('class %s;' % child.name)
         self.ctx.lvl_dec()
         self.ctx.bline()
-
-    def _get_union_contained_enums(self, union_type):
-        contained_enums = set()
-        for contained_type_stmt in union_type.types:
-            contained_property_type = TypesExtractor().get_property_type(contained_type_stmt)
-            if isinstance(contained_property_type, Enum):
-                contained_enums.add(contained_property_type.name)
-            elif isinstance(contained_property_type, UnionTypeSpec):
-                contained_enums.update(self._get_union_contained_enums(contained_property_type))
-        return contained_enums
