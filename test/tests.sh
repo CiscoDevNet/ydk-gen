@@ -83,7 +83,7 @@ function init_env {
 
 function init_confd {
     cd $1
-    print_msg "init_confd in $(pwd)"
+    print_msg "Initializing confd in $(pwd)"
     source $YDKGEN_HOME/../confd/confdrc
     run_exec_test make stop > /dev/null
     run_exec_test make clean > /dev/null
@@ -93,7 +93,7 @@ function init_confd {
 }
 
 function py_sanity_ydktest {
-    print_msg "py_sanity_ydktest"
+    print_msg "Generating, installing and testing python ydktest bundle"
 
     py_sanity_ydktest_gen
     py_sanity_ydktest_install
@@ -101,7 +101,7 @@ function py_sanity_ydktest {
 }
 
 function py_sanity_ydktest_gen {
-    print_msg "Generating ydk core and ydktest bundle"
+    print_msg "Generating python ydk core and ydktest bundle"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
 
@@ -271,37 +271,33 @@ function py_sanity_augmentation_test {
     run_test sdk/python/core/tests/test_sanity_bundle_aug.py
 }
 
-function cpp_sanity_core {
-    print_msg "cpp_sanity_core"
-
-    cpp_sanity_core_gen_install
-    cpp_sanity_core_test
-}
-
-function cpp_sanity_core_gen_install {
-    print_msg "cpp_sanity_core_gen_install"
+function cpp_core_install {
+    print_msg "cpp_core_install"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
     run_test generate.py --core --cpp --verbose --generate-doc
+    cd gen-api/cpp/ydk/build
+    run_exec_test make install
+    cd $YDKGEN_HOME 
 }
 
-function cpp_sanity_core_test {
-    print_msg "cpp_sanity_core_test"
+function cpp_core_test {
+    print_msg "Running cpp core test"
 
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/ydktest
     cd gen-api/cpp/ydk/build
-    run_exec_test make install test
+    run_exec_test make test
 }
 
-function cpp_sanity_ydktest {
-    print_msg "cpp_sanity_ydktest"
+function cpp_bundle_test {
+    print_msg "Generating and testing bundle"
 
-    cpp_sanity_ydktest_gen_install
-    cpp_sanity_ydktest_test
+    cpp_bundle_gen_install
+    cpp_bundle_run_test
 }
 
-function cpp_sanity_ydktest_gen_install {
-    print_msg "cpp_sanity_ydktest_gen"
+function cpp_bundle_gen_install {
+    print_msg "Generating and installing ydktest bundle"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
     run_test generate.py --bundle profiles/test/ydktest-cpp.json --cpp --generate-doc
@@ -310,8 +306,8 @@ function cpp_sanity_ydktest_gen_install {
     cd -
 }
 
-function cpp_sanity_ydktest_test {
-    print_msg "cpp_sanity_ydktest_test"
+function cpp_bundle_run_test {
+    print_msg "Running cpp bundle tests"
 
     mkdir -p $YDKGEN_HOME/sdk/cpp/tests/build && cd sdk/cpp/tests/build
     run_exec_test cmake ..
@@ -345,6 +341,10 @@ function py_tests {
     TEST_ENV="python3"
 
     init_env $GEN_ENV $TEST_ENV
+    
+    # Install ydk-cpp core before starting tests
+    cpp_core_install
+    
     py_sanity_ydktest
     py_sanity_deviation
     py_sanity_augmentation
@@ -353,8 +353,8 @@ function py_tests {
 
 function cpp_tests {
     init_env "python" "python"
-    cpp_sanity_core
-    cpp_sanity_ydktest
+    cpp_core_test
+    cpp_bundle_test
 }
 
 
