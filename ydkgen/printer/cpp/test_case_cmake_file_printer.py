@@ -19,15 +19,22 @@
 
  YANG model driven API, cpp test case emitter.
 '''
-from itertools import chain
-
 from ydkgen.api_model import Class
+
 
 class CMakeListsPrinter(object):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    def print_cmakelists_file(self, packages, bundle_name):
+    def print_cmakelists_file(self, packages, args):
+        bundle_name = args['bundle_name']
+        identity_subclasses = args['identity_subclasses']
+        libs = self._get_cpp_libs(bundle_name, identity_subclasses)
+
+        find_library_stmts = self._get_find_library_stmts(libs)
+        location_stmts = self._get_location_stmts(libs)
+        test_file_names = self._get_test_file_names(packages)
+
         self.ctx.str("""
 cmake_minimum_required(VERSION 2.8.9)
 cmake_policy(SET CMP0048 NEW)
@@ -36,7 +43,7 @@ project(ydk_{0}_test)
 enable_testing()
 
 set(CMAKE_MODULE_PATH ${{CMAKE_MODULE_PATH}} "${{CMAKE_SOURCE_DIR}}/CMakeModules/")
-set(test_cases {4})
+set(test_cases {3})
 
 
 find_library(xml2_location xml2)
@@ -48,7 +55,7 @@ find_library(xslt_location xslt)
 find_library(pthread_location pthread)
 find_library(dl_location dl)
 find_library(ydk_location ydk)
-find_library(ydk_{1}_location ydk_{2})
+{1}
 find_package(Boost REQUIRED)
 find_package(Boost COMPONENTS log_setup log thread date_time system filesystem unit_test_framework REQUIRED)
 
@@ -75,7 +82,7 @@ foreach(test_name IN LISTS test_cases)
     target_compile_definitions(${{test_name}} PRIVATE "BOOST_LOG_DYN_LINK=1")
     target_link_libraries(${{test_name}}
         ${{ydk_location}}
-        ${{ydk_{3}_location}}
+        {2}
         ${{ydk_location}}
         ${{xml2_location}}
         ${{curl_location}}
@@ -99,14 +106,36 @@ foreach(test_name IN LISTS test_cases)
     add_test(NAME ${{test_name}} COMMAND $<TARGET_FILE:${{test_name}}>)
 endforeach(test_name)
 
-""".format(*([bundle_name]*4 + self._get_test_file_names(packages))))
+""".format(bundle_name, find_library_stmts, location_stmts, test_file_names))
 
     def _get_test_file_names(self, packages):
         names = []
         for package in packages:
             if _has_tests(package):
                 names.append('test_%s' % package.name)
-        return [';'.join(names)]
+        return ';'.join(names)
+
+    def _get_cpp_libs(self, bundle_name, identity_subclasses):
+        classes = set()
+        for subclasses in identity_subclasses.values():
+            classes |= set(subclasses)
+        libs = {clazz.get_package().bundle_name for clazz in classes}
+        libs.add(bundle_name)
+        return libs
+
+    def _get_find_library_stmts(self, libs):
+        stmts = set()
+        for lib in libs:
+            stmts.add('find_library(ydk_{}_location ydk_{})'.format(lib, lib))
+
+        return '\n'.join(sorted(list(stmts)))
+
+    def _get_location_stmts(self, libs):
+        stmts = set()
+        for lib in libs:
+            stmts.add('${{ydk_{}_location}}'.format(lib))
+
+        return '\n        '.join(sorted(list(stmts)))
 
 
 def _has_tests(package):

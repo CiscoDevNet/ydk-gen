@@ -248,6 +248,7 @@ class YLeaf
 	void operator = (uint8 val);
 	void operator = (uint32 val);
 	void operator = (uint64 val);
+	void operator = (long val);
 	void operator = (int8 val);
 	void operator = (int32 val);
 	void operator = (int64 val);
@@ -293,6 +294,7 @@ class YLeafList {
 	void append(uint8 val);
 	void append(uint32 val);
 	void append(uint64 val);
+	void append(long val);
 	void append(int8 val);
 	void append(int32 val);
 	void append(int64 val);

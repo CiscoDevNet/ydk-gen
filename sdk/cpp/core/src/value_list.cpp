@@ -124,6 +124,15 @@ void YLeafList::append(uint64 val)
 	values.push_back(value);
 }
 
+void YLeafList::append(long val)
+{
+	YLeaf value {type, name};
+	value = val;
+	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+	values.push_back(value);
+}
+
 void YLeafList::append(int8 val)
 {
 	YLeaf value {type, name};

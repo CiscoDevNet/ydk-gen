@@ -28,7 +28,7 @@ from .source_printer import SourcePrinter
 from .entity_lookup_printer import EntityLookUpPrinter
 from .test_case_cmake_file_printer import CMakeListsPrinter
 from ..doc import DocPrinter
-from ..test import TestCasePrinter
+from ..tests import TestPrinter
 
 
 class CppBindingsPrinter(LanguageBindingsPrinter):
@@ -63,7 +63,7 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
         if self.ydk_doc_dir is not None:
             self._print_cpp_rst_doc(package)
         if self.generate_tests:
-            self._print_test_cases(package, self.test_dir)
+            self._print_tests(package, self.test_dir)
 
     def _print_header_file(self, package, path):
         self.print_file(get_header_file_name(path, package),
@@ -80,20 +80,19 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
                         emit_entity_lookup_source,
                         _EmitArgs(self.ypy_ctx, packages, self.bundle_name))
 
-    def _print_test_cases(self, package, path):
-        empty = True
-        for element in package.owned_elements:
-            if isinstance(element, Class) and not element.is_identity():
-                empty = False
+    def _print_tests(self, package, path):
+        empty = self.is_empty_package(package)
         if not empty:
             self.print_file(get_testcase_file_name(path, package),
                             emit_test_cases,
                             _EmitArgs(self.ypy_ctx, package, self.identity_subclasses))
 
     def _print_cmake_file(self, packages, bundle_name, path):
+        args = {'bundle_name': bundle_name,
+                'identity_subclasses': self.identity_subclasses}
         self.print_file(get_testcase_cmake_file_name(path),
                         emit_cmake_file,
-                        _EmitArgs(self.ypy_ctx, packages, bundle_name))
+                        _EmitArgs(self.ypy_ctx, packages, args))
 
     def _print_cpp_rst_doc(self, package):
         if self.ydk_doc_dir is None:
@@ -169,8 +168,8 @@ def emit_table_of_contents(ctx, packages, bundle_name):
 
 
 def emit_test_cases(ctx, package, identity_subclasses):
-    TestCasePrinter(ctx, 'cpp').print_testcases(package, identity_subclasses)
+    TestPrinter(ctx, 'cpp').print_tests(package, identity_subclasses)
 
 
-def emit_cmake_file(ctx, packages, bundle_name):
-    CMakeListsPrinter(ctx).print_cmakelists_file(packages, bundle_name)
+def emit_cmake_file(ctx, packages, args):
+    CMakeListsPrinter(ctx).print_cmakelists_file(packages, args)

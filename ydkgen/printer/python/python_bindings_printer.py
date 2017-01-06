@@ -33,7 +33,7 @@ from .module_meta_printer import ModuleMetaPrinter
 from .namespace_printer import NamespacePrinter
 from .init_file_printer import InitPrinter
 from ..doc import DocPrinter
-from ..test import TestCasePrinter
+from ..tests import TestPrinter
 from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _EmitArgs
 
 
@@ -92,7 +92,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         self.print_python_module(package, index, module_dir, size, sub)
         self.print_meta_module(package, meta_dir)
         if self.generate_tests:
-            self.print_test_module(package, test_output_dir)
+            self.print_tests(package, test_output_dir)
         if self.ydk_doc_dir is not None:
             self.print_python_rst_module(package)
 
@@ -138,12 +138,9 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
                         emit_meta,
                         _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
-    def print_test_module(self, package, path):
+    def print_tests(self, package, path):
         self.print_init_file(self.test_dir)
-        empty = True
-        for element in package.owned_elements:
-            if isinstance(element, Class) and not element.is_identity():
-                empty = False
+        empty = self.is_empty_package(package)
         if not empty:
             self.print_file(get_test_module_file_name(path, package),
                             emit_test_module,
@@ -240,7 +237,7 @@ def emit_module(ctx, package, extra_args):
 
 
 def emit_test_module(ctx, package, identity_subclasses):
-    TestCasePrinter(ctx, 'py').print_testcases(package, identity_subclasses)
+    TestPrinter(ctx, 'py').print_tests(package, identity_subclasses)
 
 
 def emit_meta(ctx, package, sort_clazz):

@@ -188,7 +188,7 @@ def create_shared_libraries(output_directory):
     os.chdir(cmake_build_dir)
     try:
         subprocess.check_call(['cmake', '..'])
-        subprocess.check_call(['make', '-j5'])
+        # subprocess.check_call(['make', '-j5'])
     except subprocess.CalledProcessError as e:
         print('\nERROR: Failed to create shared library!\n')
         sys.exit(e.returncode)

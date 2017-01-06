@@ -141,6 +141,15 @@ void YLeaf::operator = (uint64 val)
 	store_value(value_buffer.str());
 }
 
+void YLeaf::operator = (long val)
+{
+	std::ostringstream value_buffer;
+
+	value_buffer << val;
+	BOOST_LOG_TRIVIAL(trace)<<"setting long";
+	store_value(value_buffer.str());
+}
+
 void YLeaf::operator = (int8 val)
 {
 	std::ostringstream value_buffer;
