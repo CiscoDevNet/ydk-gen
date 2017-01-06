@@ -191,10 +191,3 @@ ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
     return new RpcImpl{sn, m_ctx};
 
 }
-
-ydk::path::SchemaValueType &
-ydk::path::RootSchemaNodeImpl::type() const
-{
-	auto ignored = std::make_unique<SchemaValueBoolType>();
-    return *ignored;
-}

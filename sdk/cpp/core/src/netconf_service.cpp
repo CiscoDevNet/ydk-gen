@@ -33,37 +33,34 @@ using namespace std;
 
 namespace ydk {
 
-std::string get_data_payload(Entity& entity, path::RootSchemaNode& root_schema);
+static std::string get_data_payload(Entity& entity, path::RootSchemaNode& root_schema);
 static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter);
+static unique_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider, string && operation);
+static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string, string & url);
+static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string);
 
 NetconfService::NetconfService()
 {
-	BOOST_LOG_TRIVIAL(debug) << "ydk.services.NetconfService";
+}
+
+NetconfService::~NetconfService()
+{
 }
 
 //cancel_commit
-bool NetconfService::cancel_commit(NetconfServiceProvider & provider, std::string persist_id)
+bool NetconfService::cancel_commit(NetconfServiceProvider & provider, int persist_id)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing cancel-commit RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:cancel-commit";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:cancel-commit");
 
-	bool is_pass = true;
-	if (persist_id.size() > 0)
+	if (persist_id > -1)
 	{
-		auto result = ydk_rpc->input()->create("persist-id", persist_id);
-		is_pass = is_pass and (result != nullptr);
+		rpc->input()->create("persist-id", std::to_string(persist_id));
 	}
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
@@ -72,133 +69,59 @@ bool NetconfService::close_session(NetconfServiceProvider & provider)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing close-session RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:close-session";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:close-session");
 
-	if (ydk_rpc == nullptr)
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
 //commit
-bool NetconfService::commit(NetconfServiceProvider & provider, std::string confirmed, 
-	std::string confirm_timeout, std::string persist, std::string persist_id)
+bool NetconfService::commit(NetconfServiceProvider & provider, bool confirmed,
+	int confirm_timeout, int persist, int persist_id)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing commit RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:commit";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:commit");
 
-	bool is_pass = true;
-
-	if (confirmed.size() > 0)
+	if (confirmed)
 	{
-		auto result = ydk_rpc->input()->create("confirmed", confirmed);
-		is_pass = is_pass and (result != nullptr);
+		rpc->input()->create("confirmed");
 	}
 
-	if (confirm_timeout.size() > 0)
+	if (confirm_timeout > -1)
 	{
-		auto result = ydk_rpc->input()->create("confirm-timeout", confirm_timeout);
-		is_pass = is_pass and (result != nullptr);
+		rpc->input()->create("confirm-timeout", std::to_string(confirm_timeout));
 	}
 
-	if (persist.size() > 0)
+	if (persist > -1)
 	{
-		auto result = ydk_rpc->input()->create("persist", persist);
-		is_pass = is_pass and (result != nullptr);
+		rpc->input()->create("persist", std::to_string(persist));
 	}
 
-	if (persist_id.size() > 0)
+	if (persist_id > -1)
 	{
-		auto result = ydk_rpc->input()->create("persist-id", persist_id);
-		is_pass = is_pass and (result != nullptr);
+		rpc->input()->create("persist", std::to_string(persist_id));
 	}
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
 //copy_config
-bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore target, DataStore source)
+bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore target, DataStore source, string url)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing copy-config RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:copy-config";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:copy-config");
 
 	// target options: candidate | running | startup | url
-	if (target == DataStore::candidate)
-	{
-		auto result = ydk_rpc->input()->create("target/candidate");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::running)
-	{
-		auto result = ydk_rpc->input()->create("target/running");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::startup)
-	{
-		auto result = ydk_rpc->input()->create("target/startup");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::url)
-	{
-		auto result = ydk_rpc->input()->create("target/url");
-		is_pass = is_pass and (result != nullptr);
-	}
+	create_input_leaf(*(rpc->input()), target, "target", url);
+	create_input_leaf(*(rpc->input()), source, "source", url);
 
-	// source options: candidate | running | startup | url | config
-	if (source == DataStore::candidate)
-	{
-		auto result = ydk_rpc->input()->create("source/candidate");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::running)
-	{
-		auto result = ydk_rpc->input()->create("source/running");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::startup)
-	{
-		auto result = ydk_rpc->input()->create("source/startup");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::url)
-	{
-		auto result = ydk_rpc->input()->create("source/url");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::config)
-	{
-		auto result = ydk_rpc->input()->create("source/config");
-		is_pass = is_pass and (result != nullptr);
-	}
-
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
@@ -206,79 +129,32 @@ bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore ta
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing copy-config RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:copy-config";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:copy-config");
 
 	// target options: candidate | running | startup | url
-	if (target == DataStore::candidate)
-	{
-		auto result = ydk_rpc->input()->create("target/candidate");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::running)
-	{
-		auto result = ydk_rpc->input()->create("target/running");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::startup)
-	{
-		auto result = ydk_rpc->input()->create("target/startup");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::url)
-	{
-		auto result = ydk_rpc->input()->create("target/url");
-		is_pass = is_pass and (result != nullptr);
-	}
+	create_input_leaf(*(rpc->input()), target, "target");
 
 	// source
-	std::string entity_string = get_data_payload(source, *root_schema);
-	auto result = ydk_rpc->input()->create("source/config", entity_string);
-	is_pass = is_pass and (result != nullptr);
+	std::string entity_string = get_data_payload(source, *(provider.get_root_schema()));
+	rpc->input()->create("source/config", entity_string);
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
-//delete_config -- url ??
+//delete_config
 bool NetconfService::delete_config(NetconfServiceProvider & provider, DataStore target, std::string url)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing delete-config RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:delete-config";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:delete-config");
 
 	// target options: startup | url
-	if (target == DataStore::startup)
-	{
-		auto result = ydk_rpc->input()->create("target/startup");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::url)
-	{
-		auto result = ydk_rpc->input()->create("target/url", url);
-		is_pass = is_pass and (result != nullptr);
-	}
+	create_input_leaf(*(rpc->input()), target, "target", url);
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
@@ -287,17 +163,10 @@ bool NetconfService::discard_changes(NetconfServiceProvider & provider)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing discard-changes RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:discard-changes";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:discard-changes");
 
-	if (ydk_rpc == nullptr)
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
@@ -307,128 +176,73 @@ bool NetconfService::edit_config(NetconfServiceProvider & provider, DataStore ta
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing edit-config RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:edit-config";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:edit-config");
 
 	// target options: candidate | running
-	if (target == DataStore::candidate)
-	{
-		auto result = ydk_rpc->input()->create("target/candidate");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::running)
-	{
-		auto result = ydk_rpc->input()->create("target/running");
-		is_pass = is_pass and (result != nullptr);
-	}
+	create_input_leaf(*(rpc->input()), target, "target");
 
 	//config
-	std::string entity_string = get_data_payload(config, *root_schema);
-	auto result = ydk_rpc->input()->create("config", entity_string);
-	is_pass = is_pass and (result != nullptr);
+	std::string entity_string = get_data_payload(config, *(provider.get_root_schema()));
+	rpc->input()->create("config", entity_string);
 
 	if (default_operation.size() > 0)
 	{
-		auto result = ydk_rpc->input()->create("default-operation");
-		is_pass = is_pass and (result != nullptr);
+		rpc->input()->create("default-operation", default_operation);
 	}
 
 	if (test_option.size() > 0)
 	{
-		auto result = ydk_rpc->input()->create("test-option");
-		is_pass = is_pass and (result != nullptr);
+		rpc->input()->create("test-option", test_option);
 	}
 
 	if (error_option.size() > 0)
 	{
-		auto result = ydk_rpc->input()->create("error-option");
-		is_pass = is_pass and (result != nullptr);
+		rpc->input()->create("error-option", error_option);
 	}
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
-//get_config -- needs to return data
+//get_config
 unique_ptr<Entity> NetconfService::get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing get-config RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:get-config";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:get-config");
 
 	// source options: candidate | running | startup
-	if (source == DataStore::candidate)
-	{
-		auto result = ydk_rpc->input()->create("source/candidate");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::running)
-	{
-		auto result = ydk_rpc->input()->create("source/running");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::startup)
-	{
-		auto result = ydk_rpc->input()->create("source/startup");
-		is_pass = is_pass and (result != nullptr);
-	}
+	create_input_leaf(*(rpc->input()), source, "source");
 
 	// filter
-	std::string entity_string = get_data_payload(filter, *root_schema);
-	auto result = ydk_rpc->input()->create("filter", entity_string);
-	is_pass = is_pass and (result != nullptr);
+	std::string entity_string = get_data_payload(filter, *(provider.get_root_schema()));
+	rpc->input()->create("filter", entity_string);
 
-	if(!is_pass || (ydk_rpc == nullptr))
-	{
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-	}
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	if (read_datanode == nullptr)
-		return {};
+		return nullptr;
+
 	unique_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
 	get_entity_from_data_node(read_datanode->children()[0], top_entity.get());
 	return top_entity;
 
 }
 
-//get -- needs to return data
+//get
 unique_ptr<Entity> NetconfService::get(NetconfServiceProvider & provider, Entity& filter)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing get RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:get";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = ydk_rpc != nullptr;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:get");
 
 	// filter
-	std::string entity_string = get_data_payload(filter, *root_schema);
-	auto result = ydk_rpc->input()->create("filter", entity_string);
-	is_pass = is_pass and (result != nullptr);
-	if(!is_pass || (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
+	std::string entity_string = get_data_payload(filter, *(provider.get_root_schema()));
+	rpc->input()->create("filter", entity_string);
 
-	auto result_datanode = (*ydk_rpc)(provider);
+	auto result_datanode = (*rpc)(provider);
 	if (result_datanode == nullptr)
 		return {};
 	unique_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
@@ -441,20 +255,13 @@ bool NetconfService::kill_session(NetconfServiceProvider & provider, int session
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing kill-session RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:kill-session";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:kill-session");
 
 	std::string sid_string = std::to_string(session_id);
-	auto result = ydk_rpc->input()->create("session-id", sid_string);
-	
-	if (result == nullptr or ydk_rpc == nullptr)
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
+	rpc->input()->create("session-id", sid_string);
 
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
@@ -463,36 +270,13 @@ bool NetconfService::lock(NetconfServiceProvider & provider, DataStore target)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing lock RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:lock";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:lock");
 
 	// target options: candidate | running | startup
-	if (target == DataStore::candidate)
-	{
-		auto result = ydk_rpc->input()->create("target/candidate");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::running)
-	{
-		auto result = ydk_rpc->input()->create("target/running");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::startup)
-	{
-		auto result = ydk_rpc->input()->create("target/startup");
-		is_pass = is_pass and (result != nullptr);
-	}
+	create_input_leaf(*(rpc->input()), target, "target");
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
@@ -501,84 +285,28 @@ bool NetconfService::unlock(NetconfServiceProvider & provider, DataStore target)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing unlock RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:unlock";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:unlock");
 
 	// target options: candidate | running | startup
-	if (target == DataStore::candidate)
-	{
-		auto result = ydk_rpc->input()->create("target/candidate");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::running)
-	{
-		auto result = ydk_rpc->input()->create("target/running");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (target == DataStore::startup)
-	{
-		auto result = ydk_rpc->input()->create("target/startup");
-		is_pass = is_pass and (result != nullptr);
-	}
+	create_input_leaf(*(rpc->input()), target, "target");
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
-//validate -- url??
-bool NetconfService::validate(NetconfServiceProvider & provider, DataStore source)
+//validate
+bool NetconfService::validate(NetconfServiceProvider & provider, DataStore source, string url)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing validate RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:validate";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:validate");
 
 	// source options: candidate | running | startup | url
-	if (source == DataStore::candidate)
-	{
-		auto result = ydk_rpc->input()->create("source/candidate");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::running)
-	{
-		auto result = ydk_rpc->input()->create("source/running");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::startup)
-	{
-		auto result = ydk_rpc->input()->create("source/startup");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::url)
-	{
-		auto result = ydk_rpc->input()->create("source/url");
-		is_pass = is_pass and (result != nullptr);
-	}
-	else if (source == DataStore::config)
-	{
-		auto result = ydk_rpc->input()->create("source/config");
-		is_pass = is_pass and (result != nullptr);
-	}
+	create_input_leaf(*(rpc->input()), source, "source", url);
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
@@ -586,34 +314,34 @@ bool NetconfService::validate(NetconfServiceProvider & provider, Entity& source)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing validate RPC";
 
-	// Get the operation
-	auto operation = "ietf-netconf:validate";
-
 	// Get the root schema node
-	path::RootSchemaNode* root_schema = provider.get_root_schema();
-	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-
-	bool is_pass = true;
+	unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:validate");
 
 	// source
-	std::string entity_string = get_data_payload(source, *root_schema);
-	auto result = ydk_rpc->input()->create("source/config", entity_string);
-	is_pass = is_pass and (result != nullptr);
+	std::string entity_string = get_data_payload(source, *(provider.get_root_schema()));
+	rpc->input()->create("source/config", entity_string);
 
-	if (!is_pass or (ydk_rpc == nullptr))
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
-
-	auto read_datanode = (*ydk_rpc)(provider);
+	auto read_datanode = (*rpc)(provider);
 	return read_datanode == nullptr;
 }
 
-std::string get_data_payload(Entity & entity, path::RootSchemaNode & root_schema)
+static unique_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider, string && operation)
 {
-	const ydk::path::DataNode* data_node = get_data_node_from_entity(entity, root_schema);
+	path::RootSchemaNode * root_schema = provider.get_root_schema();
+	auto rpc =  root_schema->rpc(operation);
+	if (rpc == nullptr)
+		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
+
+	return unique_ptr<path::Rpc>(rpc);
+}
+
+static std::string get_data_payload(Entity & entity, path::RootSchemaNode & root_schema)
+{
+	path::DataNode* data_node = get_data_node_from_entity(entity, root_schema);
 	if (data_node==nullptr)
 		return "";
 	path::CodecService codec{};
-	return codec.encode(data_node, ydk::path::CodecService::Format::XML, true);
+	return codec.encode(data_node, path::CodecService::Format::XML, true);
 }
 
 static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)
@@ -622,5 +350,53 @@ static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)
 		return filter.clone_ptr();
 
 	return get_top_entity_from_filter(*(filter.parent));
+}
+
+static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string, string & url)
+{
+	ostringstream os;
+	os << datastore_string;
+
+	if(datastore == DataStore::url)
+	{
+		if(url.size() == 0)
+		{
+			BOOST_THROW_EXCEPTION(YCPPServiceError{"URL needs to be specified"});
+		}
+		os << "/url";
+
+		input_datanode.create(os.str(), url);
+	}
+	else
+	{
+		create_input_leaf(input_datanode, datastore, move(datastore_string));
+	}
+}
+
+static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string)
+{
+	ostringstream os;
+	os << datastore_string;
+
+	switch(datastore)
+	{
+		case DataStore::candidate:
+			os << "/candidate";
+			break;
+
+		case DataStore::running:
+			os << "/running";
+			break;
+
+		case DataStore::startup:
+			os << "/startup";
+			break;
+
+		case DataStore::url:
+			BOOST_THROW_EXCEPTION(YCPPServiceError{"URL needs to be specified"});
+			break;
+	}
+
+	input_datanode.create(os.str());
 }
 }

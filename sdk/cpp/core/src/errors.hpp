@@ -56,6 +56,14 @@ struct YCPPServiceProviderError : public YCPPError
     }
 };
 
+struct YCPPServiceError : public YCPPError
+{
+    YCPPServiceError(const std::string& msg) : YCPPError{msg}
+    {
+
+    }
+};
+
 ///
 /// @brief Illegal State Error.
 ///

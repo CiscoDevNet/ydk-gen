@@ -388,7 +388,7 @@ BOOST_AUTO_TEST_CASE( bgp_validation )
 
     ydk::path::ValidationService validation_service{};
 
-    validation_service.validate(bgp, ydk::path::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(*bgp, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
 

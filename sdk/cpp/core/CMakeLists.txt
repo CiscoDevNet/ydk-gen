@@ -72,7 +72,6 @@ set(libydk_src
     src/path/root_schema_node.cpp
     src/path/rpc.cpp
     src/path/schema_node.cpp
-    src/path/schema_value_type.cpp
     src/path/statement.cpp)
 
 set(libydk_install_headers

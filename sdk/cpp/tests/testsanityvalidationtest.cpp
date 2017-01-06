@@ -45,9 +45,9 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.number8 = static_cast<int8_t>(0);
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 
 }
@@ -63,9 +63,9 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.number16 = static_cast<int16_t>(126);
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -80,9 +80,9 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.number32 = 200000;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -97,9 +97,9 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.number64 = -922337203685477580LL;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -114,10 +114,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.u_number8 =  static_cast<uint8_t>(0);
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 }
 
 BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
@@ -131,10 +131,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.u_number16 = static_cast<uint16_t>(65535);
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -149,9 +149,9 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.u_number32 = static_cast<uint32_t>(5927);
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 }
 
 BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
@@ -166,9 +166,9 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.u_number64 = 18446744073709551615ULL;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 }
 
 
@@ -186,8 +186,8 @@ BOOST_AUTO_TEST_CASE( bits )
     auto r = builtInT.get_entity_path(nullptr);
     BOOST_TEST_MESSAGE(r.path);
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+
 
 }
 
@@ -200,10 +200,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
     ydk::ValidationService validation_service{};
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
-    builtInT.deci64 = ydk::Decimal64("3.2");
+    builtInT.deci64 = ydk::Decimal64("3.12");
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+
 
 }
 
@@ -218,10 +218,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_string)
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.name = "name_str";
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -237,10 +237,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.emptee = empty;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -254,9 +254,9 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.bool_value = true;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 }
 
 
@@ -273,10 +273,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
 
     builtInT.embeded_enum = ydk::ydktest_sanity::Runner::Ytypes::BuiltInT::EmbededEnumEnum::seven;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 
 }
@@ -293,10 +293,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
 
     builtInT.enum_value = ydk::ydktest_sanity::YdkEnumTestEnum::none;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 
 }
@@ -313,10 +313,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union)
 
     builtInT.younion = ydk::ydktest_sanity::YdkEnumTestEnum::none;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 
 }
@@ -333,10 +333,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
 
     builtInT.enum_int_value = ydk::ydktest_sanity::YdkEnumIntTestEnum::any;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 }
 
 BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
@@ -350,10 +350,10 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.enum_int_value = 2;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -370,10 +370,10 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
     builtInT.llunion.append( static_cast<uint16_t>(1));
     builtInT.llunion.append( static_cast<uint16_t>(2));
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -390,10 +390,10 @@ BOOST_AUTO_TEST_CASE( test_enum_leaflist)
     builtInT.enum_llist.append(ydk::ydktest_sanity::YdkEnumTestEnum::local);
     builtInT.enum_llist.append(ydk::ydktest_sanity::YdkEnumTestEnum::remote);
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 }
 
 BOOST_AUTO_TEST_CASE( test_identity_leaflist)
@@ -409,9 +409,9 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
     builtInT.identity_llist.append(ydk::ydktest_sanity::ChildIdentityIdentity{});
     builtInT.identity_llist.append(ydk::ydktest_sanity::ChildChildIdentityIdentity{});
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -429,9 +429,9 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
 
     builtInT.younion_list.append("123:45");
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 
@@ -449,9 +449,9 @@ BOOST_AUTO_TEST_CASE( test_identityref)
     auto identity = ydk::ydktest_sanity::ChildChildIdentityIdentity{};
     builtInT.identity_ref_value = identity;
 
-    auto diagnostic = validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
-    BOOST_REQUIRE( !diagnostic.has_errors() );
+
 
 }
 

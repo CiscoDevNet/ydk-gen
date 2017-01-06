@@ -38,7 +38,7 @@ ydk::path::SchemaNode::~SchemaNode()
 /////////////////////////////////////////////////////////////////////
 // ydk::SchemaNodeImpl
 ////////////////////////////////////////////////////////////////////
-ydk::path::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_node* node):m_parent{parent}, m_node{node}, m_children{}, m_type{nullptr}
+ydk::path::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_node* node):m_parent{parent}, m_node{node}, m_children{}
 {
     node->priv = this;
     if(node->nodetype != LYS_LEAF && node->nodetype != LYS_LEAFLIST) {
@@ -49,10 +49,6 @@ ydk::path::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_n
             m_children.emplace_back(std::make_unique<SchemaNodeImpl>(this,const_cast<struct lys_node*>(q)));
             last = q;
         }
-    } else {
-        struct lys_node_leaf* node_leaf = reinterpret_cast<struct lys_node_leaf*>(m_node);
-        m_type = ydk::path::create_schema_value_type(node_leaf);
-
     }
 
 }
@@ -242,15 +238,6 @@ ydk::path::SchemaNodeImpl::keys() const
     }
 
     return stmts;
-}
-
-
-
-ydk::path::SchemaValueType &
-ydk::path::SchemaNodeImpl::type() const
-{
-
-    return *m_type;
 }
 
 

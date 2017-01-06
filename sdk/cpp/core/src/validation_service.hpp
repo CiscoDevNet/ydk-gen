@@ -30,38 +30,18 @@
 
 #include <string>
 #include <memory>
-#include "service.hpp"
-#include "path_api.hpp"
-#include "types.hpp"
+
 
 namespace ydk {
 
-
-class EntityDiagnostic : public ydk::path::DiagnosticNode<Entity*, ydk::path::ValidationError>
+class Entity;
+namespace path
 {
-  public:
-
-    std::vector<DiagnosticNode<std::string, ydk::path::ValidationError>> attrs;
-
-    bool has_errors()
-    {
-        if(!errors.empty() || !attrs.empty()){
-            return true;
-        }
-
-        for(auto c : children) {
-            if(c.has_errors()){
-                return true;
-            }
-        }
-        return false;
-    }
-};
-
-
-
+class ServiceProvider;
+}
 
 class ValidationService {
+
   public:
 
     ///
@@ -82,7 +62,7 @@ class ValidationService {
     }
     ~ValidationService(){}
 
-    EntityDiagnostic validate(const ydk::path::ServiceProvider& sp, ydk::Entity& entity, ydk::ValidationService::Option option);
+    void validate(const ydk::path::ServiceProvider& sp, ydk::Entity& entity, ydk::ValidationService::Option option);
 };
 
 

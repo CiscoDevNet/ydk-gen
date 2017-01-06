@@ -72,7 +72,7 @@ ydk::YCPPOperationNotSupportedError::YCPPOperationNotSupportedError(const std::s
 //////////////////////////////////////////////////////////////////////////
 /// YCPPDataValidationError
 //////////////////////////////////////////////////////////////////////////
-ydk::path::YCPPDataValidationError::YCPPDataValidationError() : ydk::path::YCPPCoreError{"Data Validation Error"}
+ydk::path::YCPPDataValidationError::YCPPDataValidationError() : ydk::path::YCPPCoreError{ly_errmsg()}
 {
 
 }

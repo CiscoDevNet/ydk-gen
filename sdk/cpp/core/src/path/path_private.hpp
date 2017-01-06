@@ -78,13 +78,9 @@ namespace ydk {
 
             std::vector<Statement> keys() const;
 
-            SchemaValueType & type() const;
-
             const SchemaNode* m_parent;
             struct lys_node* m_node;
             std::vector<std::unique_ptr<SchemaNode>> m_children;
-
-            std::unique_ptr<SchemaValueType> m_type;
 
 
         };
@@ -107,7 +103,6 @@ namespace ydk {
 
 
             Rpc* rpc(const std::string& path) const;
-            SchemaValueType & type() const;
 
 
             struct ly_ctx* m_ctx;
@@ -241,9 +236,6 @@ namespace ydk {
 
         };
 
-        std::unique_ptr<SchemaValueType> create_schema_value_type(struct lys_node_leaf* leaf,
-        												  struct lys_type* type);
-        std::unique_ptr<SchemaValueType> create_schema_value_type(struct lys_node_leaf* leaf);
     }
 
 
