@@ -15,7 +15,7 @@
 # ------------------------------------------------------------------
 
 """
-property_handler.py
+test_value_builder.py
 
 Generate and return property value.
 """
@@ -38,6 +38,8 @@ IdentityValue = namedtuple('IdentityValue', 'val identity')
 
 
 class ValueBuilder(object):
+    """ Return value for terminal nodes (leaf or leaf-list)."""
+
     def __init__(self, lang, identity_subclasses):
         self.lang = lang
         self.identity_subclasses = identity_subclasses
@@ -46,6 +48,16 @@ class ValueBuilder(object):
         self.type_stmt = None
 
     def get_prop_value(self, prop, default=None):
+        """Return value based on prop.
+
+        Args:
+            prop (ydkgen.api_model.Property): Terminal nodes' property.
+            default (str): default value.
+
+        Returns:
+            prop_value: Value get based on YANG constraints. It could be
+                string, integer, BitsValue, or IdentityValue.
+        """
         self._set_prop_type(prop)
         prop_value = None
 
@@ -77,10 +89,14 @@ class ValueBuilder(object):
         return prop_value
 
     def _handle_bits(self):
+        """Chose an set a bit."""
         val = choice(list(self.type_spec._dictionary.keys()))
         return BitsValue(val=val, type_spec=self.type_spec)
 
     def _handle_identity(self):
+        """Chose and return identity from available derived identities.
+        Identity could come from different bundle.
+        """
         identities = set()
         self._collect_identities(self.type_spec, identities)
         identity = choice(list(identities))
@@ -88,11 +104,13 @@ class ValueBuilder(object):
         return IdentityValue(val=identity_value, identity=identity)
 
     def _handle_enum(self):
+        """Chose an return enum literal."""
         literal = choice(self.type_spec.literals)
         qn = utils.get_qn(self.lang, self.type_spec)
         return self.nmsp_sep.join([qn, literal.name])
 
     def _handle_binary(self):
+        """Return binary value."""
         random_string = self._get_string(0)
         if sys.version_info >= (3, 0):
             bin_string = base64.b64encode(str.encode(random_string)).decode()
@@ -101,6 +119,7 @@ class ValueBuilder(object):
         return self._render_string(bin_string)
 
     def _handle_boolean(self, prop):
+        """Chose and return boolean value."""
         boolean = str(bool(getrandbits(1)))
         # hard code to enable
         if prop.name == 'enabled':
@@ -112,6 +131,7 @@ class ValueBuilder(object):
         return boolean
 
     def _handle_decimal64(self, low=None, high=None):
+        """Generate and return decimal64 value based on YANG constraints."""
         low = self.type_spec.min if low is None else low
         high = self.type_spec.max if high is None else high
 
@@ -130,20 +150,27 @@ class ValueBuilder(object):
         return 'Decimal64({})'.format(decimal64)
 
     def _handle_empty(self):
+        """Return empty value."""
         return 'Empty()'
 
     def _handle_length(self):
+        """YANG length statement restrict string or derived string type,
+        return trimmed string."""
         low, high = choice(self._get_length_limits(self.type_spec))
         self.type_spec = self.type_spec.base
         self.type_stmt = utils.get_typedef_stmt(self.type_stmt)
         return self._handle_string(low=low, high=high)
 
     def _handle_int(self, low=None, high=None):
+        """Return integer value based on low and high limit."""
         low = 0 if low is None else low
         high = low if high is None else high
         return self._handle_int_range(low, high)
 
     def _handle_int_range(self, low, high):
+        """Return integer value if the YANG type statement has a `range`
+        substatement.
+        """
         int_value = randint(low, high)
         range_stmt = self.type_stmt.search_one('range')
         if range_stmt is not None:
@@ -159,12 +186,17 @@ class ValueBuilder(object):
         return int_value
 
     def _handle_pattern(self, prop):
-        # YANG regular expression syntax (XSD) is different from Python,
-        # need to use hard code value
+        """Return string value based on YANG pattern statement.
+
+        YANG regular expression syntax (XSD) is different from Python,
+        need to use come hard code value.
+
+        """
         patterns = self._collect_patterns()
 
         pattern = None
         for p in patterns:
+            # ignore ipv4/ipv6 zone id pattern
             if '(%[\\p{N}\\p{L}]+)?' in p.arg:
                 pattern = p.arg.replace('(%[\\p{N}\\p{L}]+)?', '')
                 break
@@ -192,6 +224,8 @@ class ValueBuilder(object):
         return self._render_string(pattern_value)
 
     def _handle_range(self):
+        """Return integer value or decimal64 value based on range statement.
+        """
         low, high = choice(self._get_range_limits(self.type_spec))
         self.type_spec = self.type_spec.base
         self.type_stmt = utils.get_typedef_stmt(self.type_stmt)
@@ -201,12 +235,15 @@ class ValueBuilder(object):
             return self._handle_decimal64(low=low, high=high)
 
     def _handle_string(self, default=None, low=None, high=None, pattern=None):
+        """Return string value."""
         string_value = self._get_string(low, high)
         string_value = default if default is not None else string_value
         return self._render_string(string_value)
 
     def _render_string(self, value):
-        # remove null or control characters
+        """Remove null and control characters from value and trim value by
+        language.
+        """
         value = ''.join(c for c in value if ord(c) >= 32)
         if self.lang == 'py':
             return '"""%s"""' % value
@@ -214,6 +251,13 @@ class ValueBuilder(object):
             return 'R"(%s)"' % value
 
     def _set_prop_type(self, prop):
+        """Set self.type_spec and self.type_stmt:
+
+            - Trace path statement and set destination statement's
+              pyang statement as self.type_stmt, pyang TypeSpec as
+              self.type_spec.
+            - If prop represents union property, chose one.
+        """
         type_spec = prop.property_type
         type_stmt = prop.stmt.search_one('type')
 
@@ -228,6 +272,7 @@ class ValueBuilder(object):
         self.type_stmt = type_stmt
 
     def _get_path_target_type_stmt(self, type_stmt):
+        """Return target pyang statement."""
         type_spec = type_stmt.i_type_spec
         while all([isinstance(type_spec, ptypes.PathTypeSpec),
                    hasattr(type_spec, 'i_target_node')]):
@@ -236,6 +281,7 @@ class ValueBuilder(object):
         return type_stmt
 
     def _get_union_type_spec(self, orig_type_spec):
+        """Return union type_spec and type_stmt."""
         type_spec = orig_type_spec
         while isinstance(type_spec, ptypes.UnionTypeSpec):
             type_stmt = choice(type_spec.types)
@@ -246,6 +292,7 @@ class ValueBuilder(object):
         return type_spec, type_stmt
 
     def _collect_patterns(self):
+        """Collect all patterns for derived string type."""
         patterns = []
         type_stmt = self.type_stmt
         while all([hasattr(type_stmt, 'i_typedef') and
@@ -257,6 +304,7 @@ class ValueBuilder(object):
         return patterns
 
     def _collect_identities(self, identity, identities):
+        """Collect identities and derived identities."""
         identity_id = id(identity)
         if identity_id in self.identity_subclasses:
             derived_identities = set(self.identity_subclasses[identity_id])
@@ -265,12 +313,16 @@ class ValueBuilder(object):
                 self._collect_identities(identity, identities)
 
     def _get_string(self, low=None, high=None, pattern=None):
+        """Return string from `pattern` or a universal pattern
+        [0-9a-zA-Z].
+        """
         low, high = self._render_range(low, high)
         if pattern is None or utils.is_match_all(pattern):
             pattern = r'[0-9a-zA-Z]'
         return rstr.xeger(pattern).rstrip("\\\"")
 
     def _get_length_limits(self, length_type):
+        """Get length limits."""
         lengths = []
         for low, high in length_type.lengths:
             low, high = self._render_range(low, high)
@@ -278,6 +330,7 @@ class ValueBuilder(object):
         return lengths
 
     def _get_range_limits(self, range_type):
+        """Get range limits."""
         ranges = []
         for low, high in range_type.ranges:
             low = self._get_range_min(range_type) if low == 'min' else low
@@ -286,18 +339,21 @@ class ValueBuilder(object):
         return ranges
 
     def _get_range_min(self, range_type):
+        """Get range min value."""
         range_min = range_type.base.min
         if isinstance(range_type, ptypes.Decimal64TypeSpec):
             range_min = range_min.s
         return range_min
 
     def _get_range_max(self, range_type):
+        """Get range max value."""
         range_max = range_type.base.max
         if isinstance(range_type, ptypes.Decimal64TypeSpec):
             range_max = range_max.s
         return range_max
 
     def _render_range(self, low, high):
+        """Change range value to integer value."""
         if low in (None, 'min'):
             low = _LOW
         low = int(low)

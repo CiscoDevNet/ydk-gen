@@ -13,17 +13,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
+
+"""
+test_fixture_builder.py
+
+Build test case fixture.
+"""
 from ydkgen.api_model import Class, Enum, Bits
 from .. import utils
 
 
 class FixtureBuilder(object):
+    """
+    Build test fixture, get necessary information for import statements.
+    """
 
     def __init__(self, lang, identity_subclasses):
         self.lang = lang
         self.identity_subclasses = identity_subclasses
 
     def get_imports(self, package, builder):
+        """Get import statements from package, and information collected
+        in builder.
+
+        Args:
+            package (ydkgen.api_model.Package): ydkgen API Package.
+            builder (ydkgen.printer.tests.test_builder.TestBuilder):
+                Test builder for this test file.
+        """
         self.bundle_name = package.bundle_name
         imports = set()
         for imp in package.imported_types():
@@ -42,6 +59,9 @@ class FixtureBuilder(object):
         return imports
 
     def _add_refclass_imports(self, clazz, imports):
+        """Add import statements for reference classes that might
+        reside in different package.
+        """
         for prop in clazz.properties():
             self._add_prop_imports(prop, imports)
 
@@ -50,6 +70,9 @@ class FixtureBuilder(object):
                 self._add_refclass_imports(element, imports)
 
     def _add_prop_imports(self, prop, imports):
+        """Add necessary import statements for properties that might
+        reside in different package.
+        """
         if utils.is_identity_prop(prop):
             identity = prop.property_type
             imports.add(self._get_import_stmt(identity))
@@ -65,6 +88,7 @@ class FixtureBuilder(object):
             self._add_union_imports(ptype, imports)
 
     def _add_union_imports(self, type_spec, imports):
+        """Add import statement for union type."""
         for type_stmt in type_spec.types:
             type_stmt = utils.get_typedef_stmt(type_stmt)
             if hasattr(type_stmt, 'i_type_spec'):
@@ -77,12 +101,14 @@ class FixtureBuilder(object):
                     self._add_identity_import(id(identity), imports)
 
     def _add_identity_import(self, identity_id, imports):
+        """Add import statement for identity."""
         for subclass in self.identity_subclasses[identity_id]:
             imports.add(self._get_import_stmt(subclass))
             if id(subclass) in self.identity_subclasses:
                 self._add_identity_import(id(subclass), imports)
 
     def _get_import_stmt(self, imp_type):
+        """Get language specific import statements or header."""
         if self.lang == 'py':
             mod_name = imp_type.get_py_mod_name()
             class_name = imp_type.qn().split('.')[0]

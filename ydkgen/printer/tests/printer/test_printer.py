@@ -1,3 +1,25 @@
+#  ----------------------------------------------------------------
+# Copyright 2016 Cisco Systems
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------
+
+"""
+test_printer.py
+
+Test printer.
+"""
+
 from ydkgen.common import iscppkeyword
 
 from ..builder.test_builder import TestBuilder
@@ -7,10 +29,13 @@ from .. import utils
 
 
 class TestPrinter(FixturePrinter):
+    """Test printer."""
+
     def __init__(self, ctx, lang):
         super(TestPrinter, self).__init__(ctx, lang)
 
     def print_tests(self, package, identity_subclasses):
+        """Print all test case."""
         self.package = package
         self.identity_subclasses = identity_subclasses
         test_builder = TestBuilder(self.lang, identity_subclasses)
@@ -22,6 +47,7 @@ class TestPrinter(FixturePrinter):
         self.print_fixture_tail(package)
 
     def _print_test_case(self, package, imports, test_builder):
+        """Print a single test case."""
         for test_case in test_builder.test_cases:
             stmts = test_case.stmts
             test_name = test_case.test_name
@@ -165,9 +191,9 @@ class TestPrinter(FixturePrinter):
 
     def _print_test_case_header(self, test_name):
         if self.lang == 'py':
-            self._writeln('def test_%s(self):' % test_name)
+            self._writeln('def test_{}s(self):'.format(test_name))
         elif self.lang == 'cpp':
-            self._writeln('BOOST_AUTO_TEST_CASE( %s_test )' % test_name)
+            self._writeln('BOOST_AUTO_TEST_CASE( {}_test )'.format(test_name))
             self._writeln('{')
             self._lvl_inc()
         self._lvl_inc()
@@ -201,13 +227,6 @@ class TestPrinter(FixturePrinter):
                 oper = '{}_'.format(oper)
             fmt = 'm_crud.{}(*m_provider, *{{}})'.format(oper)
         return fmt
-
-    def _get_element_path(self, element):
-        return utils.get_element_path(self.lang, element)
-
-    @property
-    def sep(self):
-        return utils.get_path_sep(self.lang)
 
     @property
     def declaration_fmt(self):
@@ -254,3 +273,10 @@ class TestPrinter(FixturePrinter):
         if self.lang == 'cpp':
             fmt = 'auto {} = dynamic_cast<{}*>({}.get())'
         return fmt
+
+    def _get_element_path(self, element):
+        return utils.get_element_path(self.lang, element)
+
+    @property
+    def sep(self):
+        return utils.get_path_sep(self.lang)
