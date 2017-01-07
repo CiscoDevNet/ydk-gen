@@ -83,7 +83,7 @@ function init_env {
 
 function init_confd {
     cd $1
-    print_msg "init_confd in $(pwd)"
+    print_msg "Initializing confd in $(pwd)"
     source $YDKGEN_HOME/../confd/confdrc
     run_exec_test make stop > /dev/null
     run_exec_test make clean > /dev/null
@@ -93,7 +93,7 @@ function init_confd {
 }
 
 function py_sanity_ydktest {
-    print_msg "py_sanity_ydktest"
+    print_msg "Generating, installing and testing python ydktest bundle"
 
     py_sanity_ydktest_gen
     py_sanity_ydktest_install
@@ -101,7 +101,7 @@ function py_sanity_ydktest {
 }
 
 function py_sanity_ydktest_gen {
-    print_msg "Generating ydk core and ydktest bundle"
+    print_msg "Generating python ydk core and ydktest bundle"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
 
@@ -112,7 +112,7 @@ function py_sanity_ydktest_gen {
     run_test generate.py --bundle profiles/test/ydktest.json --python --generate-doc
 
     print_msg "py_sanity_ydktest_gen: testing core and documentation generation"
-    run_test generate.py --core  --generate-doc
+    run_test generate.py --core
 }
 
 function py_sanity_ydktest_install {
@@ -138,10 +138,13 @@ function py_sanity_ydktest_test {
     pip install coverage
     export PYTHONPATH=$PYTHONPATH:sdk/python/core
 
+    print_msg "Copy cpp-wrapper to sdk directory"
+    cd gen-api/python/ydk/ && python setup.py build && cd -
+    cp gen-api/python/ydk/build/lib*/ydk/path.so sdk/python/core/ydk
+
     run_test sdk/python/core/tests/test_sanity_codec.py
 
     py_sanity_ydktest_test_ncclient
-    # py_sanity_ydktest_test_native
 
     git checkout .
     export PYTHONPATH=
@@ -159,22 +162,9 @@ function py_sanity_ydktest_test_ncclient {
     run_test sdk/python/core/tests/test_sanity_filter_read.py
     run_test sdk/python/core/tests/test_sanity_netconf.py
     run_test sdk/python/core/tests/test_sanity_rpc.py
+    run_test sdk/python/core/tests/test_sanity_path.py
     run_test sdk/python/core/tests/test_sanity_delete.py
     run_test sdk/python/core/tests/test_sanity_service_errors.py
-}
-
-function py_sanity_ydktest_test_native {
-    print_msg "py_sanity_ydktest_test_native"
-    run_test sdk/python/core/tests/test_sanity_types.py native
-    run_test sdk/python/core/tests/test_sanity_errors.py native
-    run_test sdk/python/core/tests/test_sanity_filters.py native
-    run_test sdk/python/core/tests/test_sanity_levels.py native
-    run_test sdk/python/core/tests/test_sanity_filter_read.py native
-    run_test sdk/python/core/tests/test_sanity_netconf.py native
-    run_test sdk/python/core/tests/test_sanity_rpc.py native
-    run_test sdk/python/core/tests/test_sanity_delete.py native
-    run_test sdk/python/core/tests/test_sanity_service_errors.py native
-    run_test sdk/python/core/tests/test_ydk_client.py
 }
 
 function py_sanity_deviation {
@@ -273,8 +263,7 @@ function py_sanity_augmentation_test {
 
 function cpp_sanity_core {
     print_msg "cpp_sanity_core"
-
-    cpp_sanity_core_gen_install
+    
     cpp_sanity_core_test
 }
 
@@ -282,14 +271,14 @@ function cpp_sanity_core_gen_install {
     print_msg "cpp_sanity_core_gen_install"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test generate.py --core --cpp --verbose --generate-doc
+    run_test generate.py --core --cpp
     cd $YDKGEN_HOME/gen-api/cpp/ydk/build
     run_exec_test make install
     cd $YDKGEN_HOME
 }
 
 function cpp_sanity_core_test {
-    print_msg "cpp_sanity_core_test"
+    print_msg "Running cpp core test"
 
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/ydktest
     cd gen-api/cpp/ydk/build
@@ -297,14 +286,14 @@ function cpp_sanity_core_test {
 }
 
 function cpp_sanity_ydktest {
-    print_msg "cpp_sanity_ydktest"
+    print_msg "Generating and testing bundle"
 
     cpp_sanity_ydktest_gen_install
     cpp_sanity_ydktest_test
 }
 
 function cpp_sanity_ydktest_gen_install {
-    print_msg "cpp_sanity_ydktest_gen"
+    print_msg "Generating and installing ydktest bundle"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
     run_test generate.py --bundle profiles/test/ydktest-cpp.json --cpp --generate-doc
@@ -314,7 +303,7 @@ function cpp_sanity_ydktest_gen_install {
 }
 
 function cpp_sanity_ydktest_test {
-    print_msg "cpp_sanity_ydktest_test"
+    print_msg "Running cpp bundle tests"
 
     mkdir -p $YDKGEN_HOME/sdk/cpp/tests/build && cd sdk/cpp/tests/build
     run_exec_test cmake ..
@@ -348,6 +337,10 @@ function py_tests {
     TEST_ENV="python3"
 
     init_env $GEN_ENV $TEST_ENV
+    
+    # Install ydk-cpp core before starting tests
+    cpp_sanity_core_gen_install
+    
     py_sanity_ydktest
     py_sanity_deviation
     py_sanity_augmentation
@@ -378,7 +371,7 @@ function cpp_test_gen {
 
     cd $YDKGEN_HOME
     cpp_sanity_core_gen_install
-    run_test generate.py --bundle profiles/test/ydk-models-test.json --verbose --generate-tests --cpp
+    run_test generate.py --bundle profiles/test/ydk-models-test.json --generate-tests --cpp
     cd gen-api/cpp/models_test-bundle/build/
     run_exec_test make install
 
@@ -399,7 +392,7 @@ function py_test_gen {
 
     cd $YDKGEN_HOME
     run_test generate.py --core --python
-    run_test generate.py --bundle profiles/test/ydk-models-test.json --verbose --generate-tests --python
+    run_test generate.py --bundle profiles/test/ydk-models-test.json  --generate-tests --python
     pip install gen-api/python/ydk/dist/ydk*.tar.gz
     pip install gen-api/python/models_test-bundle/dist/ydk*.tar.gz
 

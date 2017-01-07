@@ -30,7 +30,7 @@ endif()
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG   "-g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG   "-ggdb -O0")
 
 if(CMAKE_BUILD_TYPE STREQUAL debug)
     option(ENABLE_BUILD_TESTS "Build tests" ON)
@@ -75,6 +75,7 @@ set(libydk_src
     src/path/statement.cpp)
 
 set(libydk_install_headers
+    src/entity_data_node_walker.hpp
     src/service.hpp
     src/executor_service.hpp
     src/netconf_service.hpp
@@ -271,7 +272,7 @@ set(libyang_headers_location ${CMAKE_CURRENT_BINARY_DIR}/project_libyang/headers
 ExternalProject_Add(project_libyang
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/project_libyang"
     URL "https://github.com/manradhaCisco/libyang/archive/master.zip"
-    CMAKE_ARGS -DSTATIC=true -DCMAKE_BUILD_TYPE:STRING=release
+    CMAKE_ARGS -DSTATIC=true -DCMAKE_BUILD_TYPE=Debug
     INSTALL_DIR "${libyang_location}"
     INSTALL_COMMAND mkdir -p ${libyang_headers_location}/libyang && cp ${libyang_headers} ${libyang_headers_location}/libyang
 )
@@ -279,7 +280,6 @@ install(FILES ${libyang_headers} DESTINATION ${libyang_include_location})
 
 ExternalProject_Get_Property(project_libyang install_dir)
 set(libyang_archive ${CMAKE_CURRENT_BINARY_DIR}/project_libyang/src/project_libyang-build/libyang.a)
-# message("INSTALLING YANG TO: " ${install_dir})
 
 add_library(libyang STATIC IMPORTED)
 set_property(TARGET libyang PROPERTY IMPORTED_LOCATION ${libyang_archive})
@@ -311,6 +311,8 @@ include_directories(
     ${libyang_headers_location}
     ${libyang_location}/headers
 )
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(ydk STATIC ${libydk_src} ${libnetconf_inc_objs} ${libyang_inc_objs})
 target_compile_definitions(ydk PRIVATE "BOOST_ALL_DYN_LINK=1")

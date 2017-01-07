@@ -20,6 +20,8 @@ The output of ydk-gen is either a core package, that defines services and provid
 
 ##System Requirements:
 
+YDK-Py requires ydk-cpp core to be built and installed.
+
 ####Linux
 Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
 ```
@@ -171,6 +173,20 @@ requirements.txt- python dependencies used during installation
 sdk             - sdk core and stubs
 test            - test code
 ```
+
+### Troubleshooting
+Sometimes, developers using ydk-gen may run across errors when generating a YDK bundle using generate.py with some yang models. If there are issues with the .json profile file being used, such errors will be easily evident. Other times, when the problem is not so evident, it is recommended to try running with the `--verbose|-v` flag, which may reveal syntax problems with the yang models being used. For example,
+
+```
+./generate.py --python --bundle profiles/bundles/ietf_0_1_1.json --verbose
+```
+
+Also, it may be a good idea to obtain a local copy of the yang models and compile them using `pyang` to ensure the validity of the models,
+```
+cd /path/to/yang/models
+pyang *.yang
+```
+
 
 ## Running Unit Tests
 
