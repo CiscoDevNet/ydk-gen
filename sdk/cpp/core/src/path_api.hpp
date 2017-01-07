@@ -274,16 +274,6 @@ namespace ydk {
             virtual ~CodecService() {}
 
             ///
-            /// @brief Options for encode
-            ///
-            /// These options can be used for encoding the given tree
-            enum class Format {
-                XML, /// XML
-                JSON /// JSON
-
-            };
-
-            ///
             /// @brief encode the given DataNode Tree
             ///
             /// @param[in] dn The DataNode to encode
@@ -292,7 +282,7 @@ namespace ydk {
             /// @return The encoded string.
             //  @throws YCPPInvalidArgumentError if the arguments are invalid.
             ///
-            virtual std::string encode(const DataNode* dn, Format format, bool pretty);
+            virtual std::string encode(const DataNode* dn, EncodingFormat format, bool pretty);
 
             ///
             /// @brief decode the buffer to return a DataNode
@@ -303,7 +293,7 @@ namespace ydk {
             /// @return The DataNode instantiated or nullptr in case of error.
             /// @throws YCPPInvalidArgumentError if the arguments are invalid.
             ///
-            virtual DataNode* decode(const RootSchemaNode* root_schema, const std::string& buffer, Format format);
+            virtual DataNode* decode(const RootSchemaNode* root_schema, const std::string& buffer, EncodingFormat format);
 
 
         };
@@ -1116,6 +1106,8 @@ namespace ydk {
 
 
             virtual ~ServiceProvider();
+
+            virtual EncodingFormat get_encoding() const = 0;
 
             ///
             /// @brief invoke the Rpc

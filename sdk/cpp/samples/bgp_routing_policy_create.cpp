@@ -94,10 +94,7 @@ int main(int argc, char* argv[])
 	config_bgp(bgp.get());
 	config_routing_policy(routing_policy.get());
 
-	bool reply = crud.create(provider, {
-                                        {"openconfig-bgp", bgp.get()},
-                                        {"openconfig-routing-policy", routing_policy.get()}
-                                       });
+	bool reply = crud.create(provider, *bgp );
 
 	if(reply) cout << "Create operation success" << endl << endl; else cout << "Operation failed" << endl << endl;
 

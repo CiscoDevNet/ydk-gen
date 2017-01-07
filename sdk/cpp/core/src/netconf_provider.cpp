@@ -27,6 +27,7 @@
 #include <boost/log/trivial.hpp>
 #include <libyang/libyang.h>
 
+#include "ietf_parser.hpp"
 #include "types.hpp"
 #include "netconf_client.hpp"
 #include "netconf_provider.hpp"
@@ -41,7 +42,6 @@ using namespace ydk;
 namespace ydk
 {
 static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode& root_schema, string operation);
-static std::vector<ydk::path::Capability> get_core_capabilities(const std::vector<std::string> & server_capabilities);
 
 static unique_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name);
 static path::DataNode* create_rpc_input(path::Rpc & netconf_rpc);
@@ -63,23 +63,25 @@ static path::DataNode* handle_read_reply(string reply, path::RootSchemaNode * ro
 const char* CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
 
 NetconfServiceProvider::NetconfServiceProvider(string address, string username, string password, int port)
-    : m_repo_ptr(make_unique<path::Repository>()), m_repo{*m_repo_ptr}, client(make_unique<NetconfClient>(username, password, address, port, 0)),
+    : client(make_unique<NetconfClient>(username, password, address, port, 0)),
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
-    initialize();
+	path::Repository repo;
+    initialize(repo);
     BOOST_LOG_TRIVIAL(debug) << "Connected to " << address << " on port "<< port <<" using ssh";
 }
 
 NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo, string address, string username, string password, int port)
-    : m_repo_ptr(nullptr),m_repo{repo}, client(make_unique<NetconfClient>(username, password, address, port, 0)),
+    : client(make_unique<NetconfClient>(username, password, address, port, 0)),
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
-    initialize();
+    initialize(repo);
     BOOST_LOG_TRIVIAL(debug) << "Connected to " << address << " on port "<< port <<" using ssh";
 }
 
-void NetconfServiceProvider::initialize()
+void NetconfServiceProvider::initialize(path::Repository & repo)
 {
+	IetfCapabilitiesParser capabilities_parser{};
 	client->connect();
 	server_capabilities = client->get_capabilities();
 
@@ -87,15 +89,14 @@ void NetconfServiceProvider::initialize()
 	{
 		if(c.find("ietf-netconf-monitoring") != std::string::npos)
 		{
-			ietf_nc_monitoring_available = true;
-			m_repo.add_model_provider(model_provider.get());
+			repo.add_model_provider(model_provider.get());
 		}
 	}
 
 	root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(
-								m_repo.create_root_schema
+								repo.create_root_schema
 									(
-									get_core_capabilities(server_capabilities)
+									capabilities_parser.parse(server_capabilities)
 									)
 								);
 
@@ -109,13 +110,14 @@ void NetconfServiceProvider::initialize()
 NetconfServiceProvider::~NetconfServiceProvider()
 {
 	BOOST_LOG_TRIVIAL(debug) << "Disconnected from device";
-	if(ietf_nc_monitoring_available){
-		m_repo.remove_model_provider(model_provider.get());
-	}
 }
 
-path::RootSchemaNode* NetconfServiceProvider::get_root_schema() const 	//current
-// core::RootSchemaNode* NetconfServiceProvider::get_root_schema() const 	//old
+EncodingFormat NetconfServiceProvider::get_encoding() const
+{
+	return EncodingFormat::XML;
+}
+
+path::RootSchemaNode* NetconfServiceProvider::get_root_schema() const
 {
     return root_schema.get();
 }
@@ -165,7 +167,7 @@ path::DataNode* NetconfServiceProvider::handle_netconf_operation(path::Rpc* ydk_
     bool candidate_supported = is_candidate_supported(server_capabilities);
 
     path::CodecService codec_service{};
-    auto netconf_payload = codec_service.encode(ydk_rpc->input(), path::CodecService::Format::XML, true);
+    auto netconf_payload = codec_service.encode(ydk_rpc->input(), EncodingFormat::XML, true);
     std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     netconf_payload = payload + netconf_payload + "</rpc>";
 
@@ -186,7 +188,7 @@ path::DataNode* NetconfServiceProvider::handle_netconf_operation(path::Rpc* ydk_
         BOOST_THROW_EXCEPTION(YCPPServiceProviderError{reply});
     }
     return nullptr;
-    
+
 }
 
 path::DataNode* NetconfServiceProvider::invoke(path::Rpc* rpc) const
@@ -307,7 +309,7 @@ static string get_annotated_config_payload(path::RootSchemaNode* root_schema,
     std::string entity_value = entity_node->get();
 
     //deserialize the entity_value
-    path::DataNode* datanode = codec_service.decode(root_schema, entity_value, path::CodecService::Format::XML);
+    path::DataNode* datanode = codec_service.decode(root_schema, entity_value, EncodingFormat::XML);
 
     if(!datanode){
         BOOST_LOG_TRIVIAL(error) << "Failed to decode entity node";
@@ -322,7 +324,7 @@ static string get_annotated_config_payload(path::RootSchemaNode* root_schema,
     	{
     		child->add_annotation(annotation);
     	}
-        config_payload += codec_service.encode(child, path::CodecService::Format::XML, true);
+        config_payload += codec_service.encode(child, EncodingFormat::XML, true);
     }
     return config_payload;
 }
@@ -350,7 +352,7 @@ static string get_netconf_payload(path::DataNode* input, string data_tag, string
     }
 
     std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
-    payload+=codec_service.encode(input, path::CodecService::Format::XML, true);
+    payload+=codec_service.encode(input, EncodingFormat::XML, true);
     payload+="</rpc>";
     BOOST_LOG_TRIVIAL(debug) <<"=============Generating payload=============";
     BOOST_LOG_TRIVIAL(debug) <<payload;
@@ -414,7 +416,7 @@ static path::DataNode* handle_read_reply(string reply, path::RootSchemaNode * ro
 
 	string data = reply.substr(data_start, data_end-data_start);
 
-	auto datanode = codec_service.decode(root_schema, data, path::CodecService::Format::XML);
+	auto datanode = codec_service.decode(root_schema, data, EncodingFormat::XML);
 
 	if(!datanode){
 		BOOST_LOG_TRIVIAL(debug) << "Codec service failed to decode datanode";
@@ -492,105 +494,5 @@ static std::vector<std::string> get_parameter_list(const std::string & capabilit
 	return c_features;
 }
 */
-static std::vector<ydk::path::Capability> get_core_capabilities(const std::vector<std::string> & server_capabilities)
-{
-	std::vector<path::Capability> yang_caps {};
-	for(std::string c : server_capabilities )
-	{
-		if(c.find("calvados") != std::string::npos || c.find("tailf") != std::string::npos || c.find("tail-f") != std::string::npos)
-		{
-			continue;
-		}
 
-		auto p = std::find(c.begin(), c.end(),'?');
-
-		if(p == c.end())
-			continue;
-
-		auto module_start = c.find("module=");
-
-
-		if(module_start == std::string::npos)
-			continue;
-
-		auto revision_start = c.find("revision=");
-		if(revision_start == std::string::npos)
-			continue;
-
-		std::vector<std::string> c_features{};
-		std::vector<std::string> c_deviations{};
-
-		auto module_end = c.find("&", module_start);
-
-		module_start+=sizeof("module=");
-		auto size = module_end;
-		if(size != string::npos ){
-			size = module_end - module_start + 1;
-		}
-
-		std::string c_module = c.substr( module_start - 1, size );
-
-
-		auto revision_end = c.find("&", revision_start);
-		revision_start+=sizeof("revision=");
-		size = revision_end;
-		if(size!= string::npos) {
-			size= revision_end - revision_start + 1;
-		}
-		std::string c_revision = c.substr(revision_start - 1, size);
-
-		auto features_start = c.find("features=");
-		if(features_start != string::npos){
-			auto features_end = c.find("&", features_start);
-			features_start+=sizeof("features=");
-			size=features_end;
-			if(size!=string::npos){
-				size = features_end - features_start + 1;
-			}
-			std::string features = c.substr(features_start - 1 , size);
-			std::istringstream iss{features};
-			std::string feature;
-			while(std::getline(iss, feature, ',')) {
-				c_features.push_back(std::move(feature));
-			}
-
-		}
-
-		auto deviations_start = c.find("deviations=");
-		if(deviations_start != string::npos){
-			auto deviations_end = c.find("&", deviations_start);
-			deviations_start+=sizeof("deviations=");
-			size=deviations_end;
-			if(size!=string::npos){
-				size = deviations_end - deviations_start + 1;
-			}
-			std::string deviations = c.substr(deviations_start - 1, size);
-			std::istringstream iss{deviations};
-			std::string deviation;
-			while(std::getline(iss, deviation, ',')) {
-				c_deviations.push_back(std::move(deviation));
-			}
-
-		}
-		if(c_module.find("tailf") != std::string::npos) {
-			continue;
-		}
-		path::Capability core_cap{c_module, c_revision, c_features, c_deviations};
-		yang_caps.emplace_back(core_cap);
-	}
-
-	//add ydk capability
-	path::Capability ydk_cap{ydk::path::YDK_MODULE_NAME, ydk::path::YDK_MODULE_REVISION, {}, {}};
-	auto result = std::find(yang_caps.begin(), yang_caps.end(), ydk_cap);
-	if(result == yang_caps.end()){
-		yang_caps.push_back(ydk_cap);
-	}
-	//add ietf-netconf capability
-	path::Capability ietf_netconf_cap{ydk::IETF_NETCONF_MODULE_NAME, ydk::IETF_NETCONF_MODULE_REVISION, {}, {}};
-	result = std::find(yang_caps.begin(), yang_caps.end(), ietf_netconf_cap);
-	if(result == yang_caps.end()){
-		yang_caps.push_back(ietf_netconf_cap);
-	}
-	return yang_caps;
-}
 }

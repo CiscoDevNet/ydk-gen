@@ -13,6 +13,40 @@ The C++ types present in ydk namespace corresponding to YANG types. See below fo
 
 .. cpp:namespace:: ydk
 
+.. cpp:enum-class:: EncodingFormat
+
+    Format of encoding to be used when creating the payload.
+
+    .. cpp:enumerator:: XML
+
+        XML
+
+    .. cpp:enumerator:: JSON
+
+        JSON
+
+
+.. cpp:enum-class:: Protocol
+
+    Type of protocol.
+
+    .. cpp:enumerator:: netconf
+
+        Netconf protocol
+
+    .. cpp:enumerator:: restconf
+
+        Restconf protocol
+
+
+.. cpp:class:: Entity
+
+Super class of all classes that represents containers in YANG. YANG lists are represented as ``std::vector`` of Entity objects, with support for hanging a parent
+
+    .. cpp:member:: EditOperation operation
+    
+        Optional attribute of the Entity class which can be set to perform various :cpp:class:`operations<EditOperation>`
+
 
 YANG container and list
 ~~~~~~~~~~~~~~~~~~~~~~~~~

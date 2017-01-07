@@ -57,8 +57,8 @@ void test_bgp_create()
     neighbor_af->create("config/enabled","true");
 
     auto s = ydk::path::CodecService{};
-    auto xml = s.encode(bgp, ydk::path::CodecService::Format::XML, true);
-    //auto json = s.encode(bgp, ydk::path::CodecService::Format::JSON, true);
+    auto xml = s.encode(bgp, ydk::EncodingFormat::XML, true);
+    //auto json = s.encode(bgp, ydk::EncodingFormat::JSON, true);
 
     std::cout << "Testing encoding" << std::endl;
 
@@ -76,12 +76,12 @@ void test_bgp_create()
     //todo enable after fixing bugs
 
     //codec service bugs
-    auto new_bgp = s.decode(schema, xml, ydk::path::CodecService::Format::XML);
+    auto new_bgp = s.decode(schema, xml, ydk::EncodingFormat::XML);
     if (new_bgp) {
         std::cout << "deserialized successfully" << std::endl;
     }
 
-    auto new_xml = s.encode(new_bgp, ydk::path::CodecService::Format::XML, true);
+    auto new_xml = s.encode(new_bgp, ydk::EncodingFormat::XML, true);
     std::cout << "*********************************************************" << std::endl;
     std::cout << "*********************************************************" << std::endl;
     std::cout <<  new_xml << std::endl;

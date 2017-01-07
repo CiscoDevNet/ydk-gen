@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(bgp, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
 
     BOOST_REQUIRE( neighbor_enabled != nullptr );
 
-    xml = s.encode(bgp, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -181,7 +181,7 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
     BOOST_REQUIRE( bgp_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{bgp_read->root()};
 
-    xml = s.encode(bgp_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
 
     print_tree(read_result,"");
 
-    xml = s.encode(read_result, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(read_result, ydk::EncodingFormat::XML, false);
 
     BOOST_REQUIRE(xml == expected_bgp_read);
 
@@ -199,7 +199,7 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
 
     //call update
     std::unique_ptr<ydk::path::Rpc> update_rpc { schema->rpc("ydk:update") };
-    xml = s.encode(bgp, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     update_rpc->input()->create("entity", xml);
     (*update_rpc)(sp);
@@ -230,7 +230,7 @@ BOOST_AUTO_TEST_CASE(bits)
 	BOOST_REQUIRE( ysanity != nullptr );
 
 	auto s = ydk::path::CodecService{};
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -263,7 +263,7 @@ BOOST_AUTO_TEST_CASE(validate)
     BOOST_REQUIRE( ysanity != nullptr );
 
     auto s = ydk::path::CodecService{};
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -328,7 +328,7 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 	BOOST_REQUIRE( peer_as != nullptr );
 
 	std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
-	auto xml = s.encode(bgp, ydk::path::CodecService::Format::XML, false);
+	auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 	BOOST_REQUIRE( !xml.empty() );
 	create_rpc->input()->create("entity", xml);
 
@@ -340,7 +340,7 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
     BOOST_REQUIRE( bgp_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{bgp_read->root()};
 
-    xml = s.encode(bgp_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
     read_rpc->input()->create("only-config");
@@ -381,7 +381,7 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 //    BOOST_REQUIRE( vrf != nullptr );
 //
 //	std::unique_ptr<ydk::path::Rpc> create_rpc { schema->rpc("ydk:create") };
-//	auto xml = s.encode(bgp, ydk::path::CodecService::Format::XML, false);
+//	auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 //	BOOST_REQUIRE( !xml.empty() );
 //	create_rpc->input()->create("entity", xml);
 //
@@ -393,7 +393,7 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 //    BOOST_REQUIRE( bgp_read != nullptr );
 //    std::unique_ptr<const ydk::path::DataNode> data_root2{bgp_read->root()};
 //
-//    xml = s.encode(bgp_read, ydk::path::CodecService::Format::XML, false);
+//    xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
 //    BOOST_REQUIRE( !xml.empty() );
 //    read_rpc->input()->create("filter", xml);
 //    read_rpc->input()->create("only-config");

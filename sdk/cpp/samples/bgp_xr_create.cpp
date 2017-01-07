@@ -29,6 +29,7 @@
 using namespace ydk;
 using namespace ydk::Cisco_IOS_XR_ipv4_bgp_cfg;
 using namespace ydk::Cisco_IOS_XR_ipv4_bgp_datatypes;
+
 using namespace std;
 
 void config_bgp(Bgp* bgp)

@@ -16,16 +16,19 @@
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 
-#include "ydk/codec_provider.hpp"
-#include "ydk/codec_service.hpp"
-#include "ydk/crud_service.hpp"
-#include "ydk/entity_util.hpp"
-#include "ydk/netconf_provider.hpp"
-#include "ydk/path_api.hpp"
-#include "ydk/types.hpp"
+#include <ydk/codec_provider.hpp>
+#include <ydk/codec_service.hpp>
+#include <ydk/crud_service.hpp>
+#include <ydk/entity_util.hpp>
+#include <ydk/netconf_provider.hpp>
+#include <ydk/opendaylight_provider.hpp>
+#include <ydk/restconf_provider.hpp>
+#include <ydk/path_api.hpp>
+#include <ydk/types.hpp>
 
 using namespace std;
 using namespace pybind11;
+
 
 PYBIND11_PLUGIN(ydk_)
 {
@@ -104,9 +107,9 @@ PYBIND11_PLUGIN(ydk_)
 		.def("encode", &ydk::path::CodecService::encode, return_value_policy::reference)
 		.def("decode", &ydk::path::CodecService::decode, return_value_policy::reference);
 
-	enum_<ydk::path::CodecService::Format>(codec_service, "Format")
-		.value("XML", ydk::path::CodecService::Format::XML)
-		.value("JSON", ydk::path::CodecService::Format::JSON);
+	enum_<ydk::EncodingFormat>(types, "EncodingFormat")
+		.value("XML", ydk::EncodingFormat::XML)
+		.value("JSON", ydk::EncodingFormat::JSON);
 
 	enum_<ydk::YType>(types, "YType")
 		.value("uint8", ydk::YType::uint8)
@@ -209,6 +212,16 @@ PYBIND11_PLUGIN(ydk_)
 		.def(init<string, string, string, int>())
 		.def("invoke", &ydk::NetconfServiceProvider::invoke, return_value_policy::reference)
 		.def("get_root_schema", &ydk::NetconfServiceProvider::get_root_schema, return_value_policy::reference);
+
+	class_<ydk::RestconfServiceProvider>(providers, "RestconfServiceProvider", base<ydk::path::ServiceProvider>())
+		.def(init<ydk::path::Repository&, string, string, string, int>())
+		.def("invoke", &ydk::RestconfServiceProvider::invoke, return_value_policy::reference)
+		.def("get_root_schema", &ydk::RestconfServiceProvider::get_root_schema, return_value_policy::reference);
+
+	class_<ydk::OpenDaylightServiceProvider>(providers, "OpenDaylightServiceProvider")
+		.def(init<ydk::path::Repository&, string, string, string, int, ydk::EncodingFormat>())
+		.def("get_node_provider", &ydk::OpenDaylightServiceProvider::get_node_provider, return_value_policy::reference)
+		.def("get_node_ids", &ydk::OpenDaylightServiceProvider::get_node_ids, return_value_policy::reference);
 
 	class_<ydk::CrudService>(services, "CrudService")
 		.def(init<>())

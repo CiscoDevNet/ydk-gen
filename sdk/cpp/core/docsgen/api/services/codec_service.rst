@@ -21,7 +21,7 @@ Codec Service class for supporting encoding and decoding C++ model API objects o
         :return: Encoded payload in the form of ``std::string``
         :raises YCPPError: If an error has occurred        
 
-    .. cpp:function:: std::unique_ptr<ydk::Entity> decode(path::ServiceProvider & provider, const std::string & payload)
+    .. cpp:function:: std::unique_ptr<ydk::Entity> decode(CodecServiceProvider & provider, const std::string & payload)
 
         Decode the payload to produce an instance of `Entity`
 

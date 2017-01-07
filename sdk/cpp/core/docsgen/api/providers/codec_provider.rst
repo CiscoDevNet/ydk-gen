@@ -3,17 +3,9 @@ CodecServiceProvider
 
 .. cpp:namespace:: ydk
 
-.. cpp:enum:: EncodingFormat
+.. cpp:class:: CodecServiceProvider
 
-        Type of encoding of the payload
-
-        .. cpp:enumerator:: XML
-
-        .. cpp:enumerator:: JSON
-
-.. cpp:class:: CodecServiceProvider : public path::ServiceProvider
-
-Implementation of :cpp:class:`ServiceProvider<path::ServiceProvider>` for performing encoding and decoding.
+A provider to be used with :cpp:class`CodecService<CodecService>` for performing encoding and decoding.
 
     .. cpp:function:: CodecServiceProvider(const path::Repository* repo, EncodingFormat encoding)
 

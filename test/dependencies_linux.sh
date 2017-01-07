@@ -27,7 +27,7 @@ function print_msg {
 }
 
 function install_dependencies {
-    print_msg "install_dependencies"
+    print_msg "Installing dependencies"
 
     sudo apt-get update > /dev/null
     sudo apt-get install -y bison \
@@ -67,14 +67,22 @@ function install_dependencies {
 }
 
 function install_confd {
-    print_msg "install_confd"
+    print_msg "Installing confd"
 
     wget https://github.com/CiscoDevNet/ydk-gen/files/562538/confd-basic-6.2.linux.x86_64.zip
     unzip confd-basic-6.2.linux.x86_64.zip
     ./confd-basic-6.2.linux.x86_64.installer.bin ../confd
 }
 
+function download_moco {
+    print_msg "Downloading moco"
+    cd test
+    wget https://repo1.maven.org/maven2/com/github/dreamhead/moco-runner/0.11.0/moco-runner-0.11.0-standalone.jar
+    cd -
+}
+
 ########################## EXECUTION STARTS HERE #############################
 
 install_dependencies
 install_confd
+download_moco

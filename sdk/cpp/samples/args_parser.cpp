@@ -5,7 +5,7 @@ using namespace std;
 
 void show_usage(string name)
 {
-	cerr << "\nUsage:\n\t"<< name << " ssh://user:password@host:port [-v]" <<endl<<endl;
+	cerr << "\nUsage:\n\t"<< name << " [http|ssh]://user:password@host:port [-v]" <<endl<<endl;
 }
 
 vector<string> parse_args(int argc, char* argv[])
@@ -21,6 +21,10 @@ vector<string> parse_args(int argc, char* argv[])
 	}
 	vector<string> ret;
 	size_t s = arg.find("ssh://") + sizeof("ssh://")-1;
+	if(s==string::npos)
+	{
+		s = arg.find("http://") + sizeof("http://")-1;
+	}
 	size_t col1 = arg.find(":",s);
 	size_t amp = arg.find("@")-1;
 	size_t col2 = arg.find(":",amp);

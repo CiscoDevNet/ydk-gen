@@ -31,9 +31,9 @@
 using namespace std;
 
 namespace ydk {
-static string get_data_payload(Entity & entity, path::RootSchemaNode & root_schema);
+static string get_data_payload(Entity & entity, path::ServiceProvider & provider);
 static path::DataNode* execute_rpc(path::ServiceProvider & provider, Entity & entity,
-		const string & operation, const string & data_tag, bool set_config_flag=false);
+		const string & operation, const string & data_tag, bool set_config_flag);
 static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter);
 static bool operation_succeeded(path::DataNode * node);
 
@@ -45,7 +45,7 @@ bool CrudService::create(path::ServiceProvider & provider, Entity & entity)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD create operation";
 	return operation_succeeded(
-			execute_rpc(provider, entity, "ydk:create", "entity")
+			execute_rpc(provider, entity, "ydk:create", "entity", false)
 			);
 }
 
@@ -53,7 +53,7 @@ bool CrudService::update(path::ServiceProvider & provider, Entity & entity)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD update operation";
 	return operation_succeeded(
-			execute_rpc(provider, entity, "ydk:update", "entity")
+			execute_rpc(provider, entity, "ydk:update", "entity", false)
 			);
 }
 
@@ -61,14 +61,14 @@ bool CrudService::delete_(path::ServiceProvider & provider, Entity & entity)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD delete operation";
 	return operation_succeeded(
-			execute_rpc(provider, entity, "ydk:delete", "entity")
+			execute_rpc(provider, entity, "ydk:delete", "entity", false)
 			);
 }
 
 unique_ptr<Entity> CrudService::read(path::ServiceProvider & provider, Entity & filter)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD read operation";
-	path::DataNode* read_data_node = execute_rpc(provider, filter, "ydk:read", "filter");
+	path::DataNode* read_data_node = execute_rpc(provider, filter, "ydk:read", "filter", true);
 	return read_datanode(filter, read_data_node);
 }
 
@@ -107,23 +107,24 @@ static path::DataNode* execute_rpc(path::ServiceProvider & provider, Entity & en
 {
 	path::RootSchemaNode* root_schema = provider.get_root_schema();
 	unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
-	string data = get_data_payload(entity, *root_schema);
+	string data = get_data_payload(entity, provider);
 
 	if(set_config_flag)
 	{
 		ydk_rpc->input()->create("only-config");
 	}
+
 	ydk_rpc->input()->create(data_tag, data);
 	return (*ydk_rpc)(provider);
 }
 
-static string get_data_payload(Entity & entity, path::RootSchemaNode & root_schema)
+static string get_data_payload(Entity & entity, path::ServiceProvider & provider)
 {
-	const ydk::path::DataNode* data_node = get_data_node_from_entity(entity, root_schema);
+	const ydk::path::DataNode* data_node = get_data_node_from_entity(entity, *(provider.get_root_schema()));
 	if (data_node==nullptr)
 		return "";
 	path::CodecService codec{};
-	return codec.encode(data_node, ydk::path::CodecService::Format::XML, true);
+	return codec.encode(data_node, provider.get_encoding(), false);
 }
 
 }

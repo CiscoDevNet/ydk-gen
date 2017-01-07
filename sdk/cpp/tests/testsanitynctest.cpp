@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
     BOOST_REQUIRE( number8 != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
     BOOST_REQUIRE( number16 != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -215,7 +215,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
     BOOST_REQUIRE( number32 != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -232,7 +232,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -274,7 +274,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -287,7 +287,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
     BOOST_REQUIRE( number64 != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -304,7 +304,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -346,7 +346,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -359,7 +359,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
     BOOST_REQUIRE( unumber8 != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -376,7 +376,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -418,7 +418,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -430,7 +430,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
     BOOST_REQUIRE( unumber16 != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -446,7 +446,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -488,7 +488,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -499,7 +499,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
 
     BOOST_REQUIRE( unumber32 != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -516,7 +516,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -558,7 +558,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -569,7 +569,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
 
     BOOST_REQUIRE( unumber64 != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -586,7 +586,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -630,7 +630,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_bits )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -641,7 +641,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_bits )
 
     BOOST_REQUIRE( bits != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -658,7 +658,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_bits )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -700,7 +700,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -713,7 +713,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
     BOOST_REQUIRE( deci64 != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -730,7 +730,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -775,7 +775,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_string)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -788,7 +788,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_string)
     BOOST_REQUIRE( str != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -805,7 +805,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_string)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -849,7 +849,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -862,7 +862,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
     BOOST_REQUIRE( emptee != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -879,7 +879,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -921,7 +921,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -934,7 +934,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
     BOOST_REQUIRE( bool_val != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -951,7 +951,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -994,7 +994,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1005,7 +1005,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
 
     BOOST_REQUIRE( embedded_enum != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1022,7 +1022,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1064,7 +1064,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1075,7 +1075,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
 
     BOOST_REQUIRE( enum_value != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1091,7 +1091,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1134,7 +1134,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1147,7 +1147,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union)
     BOOST_REQUIRE( union_value != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1164,7 +1164,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1207,7 +1207,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1218,7 +1218,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
 
     BOOST_REQUIRE( enum_int_value != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1234,7 +1234,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1279,7 +1279,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1292,7 +1292,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
     BOOST_REQUIRE( enum_int_value != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1309,7 +1309,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1353,7 +1353,7 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1369,7 +1369,7 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
 
     BOOST_REQUIRE(llunion2 != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1386,7 +1386,7 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1428,7 +1428,7 @@ BOOST_AUTO_TEST_CASE( test_enum_leaflist)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1444,7 +1444,7 @@ BOOST_AUTO_TEST_CASE( test_enum_leaflist)
 
     BOOST_REQUIRE(remote != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1461,7 +1461,7 @@ BOOST_AUTO_TEST_CASE( test_enum_leaflist)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1503,7 +1503,7 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1519,7 +1519,7 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
 
     BOOST_REQUIRE(child_child_identity != nullptr );
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1536,7 +1536,7 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1579,7 +1579,7 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1591,7 +1591,7 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
     BOOST_REQUIRE( younion != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1608,7 +1608,7 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 
@@ -1646,7 +1646,7 @@ BOOST_AUTO_TEST_CASE( test_identityref)
     //first delete
     std::unique_ptr<ydk::path::Rpc> delete_rpc { schema->rpc("ydk:delete") };
 
-    auto xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     delete_rpc->input()->create("entity", xml);
 
@@ -1658,7 +1658,7 @@ BOOST_AUTO_TEST_CASE( test_identityref)
     BOOST_REQUIRE( identity_ref_value != nullptr );
 
 
-    xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output :" << xml);
@@ -1675,7 +1675,7 @@ BOOST_AUTO_TEST_CASE( test_identityref)
     BOOST_REQUIRE( runner_read != nullptr );
     std::unique_ptr<const ydk::path::DataNode> data_root2{runner_read->root()};
 
-    xml = s.encode(runner_read, ydk::path::CodecService::Format::XML, false);
+    xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     BOOST_REQUIRE( !xml.empty() );
     read_rpc->input()->create("filter", xml);
 

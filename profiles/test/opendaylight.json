@@ -1,0 +1,40 @@
+{
+    "name": "network-topology",
+    "version": "0.0.1",
+    "ydk_version":"0.5.3",
+    "Author": "Cisco",
+    "Copyright": "Cisco",
+    "Description": "YDK Test Profile",
+    "models": {
+        "git": [
+          {
+          "url": "https://github.com/opendaylight/mdsal.git",
+          "commits": [
+                      {
+                          "commitid": "061b7374a7b9d70104a675d033c6762cb3c5b5a3",
+                          "file": [
+                                  "model/ietf/ietf-network/src/main/yang/ietf-network-topology@2015-06-08.yang",
+                                  "model/ietf/ietf-network/src/main/yang/ietf-network@2015-06-08.yang",
+                                  "model/ietf/ietf-topology/src/main/yang/network-topology@2013-10-21.yang"
+                                  ]
+                      }
+                      ]
+          },
+          {
+          "url": "https://github.com/opendaylight/netconf.git",
+          "commits": [
+                      {
+                          "commitid": "8f8b49c1f6a113e88672f935c9cb497944af39f8",
+                          "file": [
+                                  "netconf/sal-netconf-connector/src/main/yang/netconf-node-topology.yang",
+                                  "netconf/netconf-console/src/test/resources/schemas/yang-ext.yang"
+                                  ]
+                      }
+                      ]
+          }
+       ],
+        "dir" : [
+            "yang/ietf"
+            ]
+    }
+}

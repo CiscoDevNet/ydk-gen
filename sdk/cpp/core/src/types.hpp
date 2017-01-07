@@ -332,6 +332,12 @@ enum class EncodingFormat {
 };
 
 std::string to_string(EditOperation operation);
+
+enum class Protocol
+{
+	restconf,
+	netconf
+};
 }
 
 #endif /* _TYPES_HPP_ */

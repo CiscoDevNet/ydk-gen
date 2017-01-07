@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE YLeafTest
 #include <boost/test/unit_test.hpp>
-#include "../../src/types.hpp"
-#include "../../src/errors.hpp"
+#include "../src/types.hpp"
+#include "../src/errors.hpp"
 #include <iostream>
 
 using namespace ydk;

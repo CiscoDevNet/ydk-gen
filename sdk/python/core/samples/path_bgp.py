@@ -23,7 +23,10 @@ def execute_path(provider, codec):
     schema = provider.get_root_schema()
     bgp = schema.create("openconfig-bgp:bgp")
     bgp.create("global/config/as", "65321")
-    xml = codec.encode(bgp, CodecService.Format.XML, True)
+
+    runner = schema.create('ydktest-sanity:runner')
+    runner.create('ytypes/built-in-t/number8', '12')
+    xml = codec.encode(runner, EncodingFormat.JSON, True)
     print(xml)
     create_rpc = schema.rpc("ydk:create")
     create_rpc.input().create("entity", xml)
@@ -31,6 +34,7 @@ def execute_path(provider, codec):
 
 
 if __name__ == "__main__":
-    provider = NetconfServiceProvider('127.0.0.1', 'admin', 'admin', 12022)
+    repo = Repository("/var/folders/jt/kfhqscp54dq3gfwdpkbj48zm0000gn/T//127.0.0.1:12022")
+    provider = RestconfServiceProvider(repo, '127.0.0.1', 'admin', 'admin', 8008)
     codec = CodecService()
     execute_path(provider, codec)

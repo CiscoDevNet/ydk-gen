@@ -28,7 +28,6 @@
 #include <sstream>
 #include <boost/log/trivial.hpp>
 
-
 ////////////////////////////////////////////////////////////////////
 /// Function segmentalize()
 ////////////////////////////////////////////////////////////////////
@@ -115,7 +114,7 @@ ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::Vali
 // class ydk::CodecService
 //////////////////////////////////////////////////////////////////////////
 std::string
-ydk::path::CodecService::encode(const ydk::path::DataNode* dn, ydk::path::CodecService::Format format, bool pretty)
+ydk::path::CodecService::encode(const ydk::path::DataNode* dn, ydk::EncodingFormat format, bool pretty)
 {
     std::string ret{};
 
@@ -123,8 +122,14 @@ ydk::path::CodecService::encode(const ydk::path::DataNode* dn, ydk::path::CodecS
     LYD_FORMAT scheme = LYD_XML;
 
 
-    if(format == ydk::path::CodecService::Format::JSON) {
+    if(format == ydk::EncodingFormat::JSON)
+    {
+    	BOOST_LOG_TRIVIAL(trace) << "Performing encode operation on JSON";
         scheme = LYD_JSON;
+    }
+    else
+    {
+    	BOOST_LOG_TRIVIAL(trace) << "Performing encode operation on XML";
     }
 
     struct lyd_node* m_node = nullptr;
@@ -140,7 +145,6 @@ ydk::path::CodecService::encode(const ydk::path::DataNode* dn, ydk::path::CodecS
         BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"No data in data node"});
     }
     char* buffer;
-    BOOST_LOG_TRIVIAL(trace) << "Performing encode operation";
 
     if(!lyd_print_mem(&buffer, m_node,scheme, (pretty ? LYP_FORMAT : 0)|LYP_WD_ALL|LYP_KEEPEMPTYCONT)) {
     	if(!buffer)
@@ -159,12 +163,17 @@ ydk::path::CodecService::encode(const ydk::path::DataNode* dn, ydk::path::CodecS
 }
 
 ydk::path::DataNode*
-ydk::path::CodecService::decode(const RootSchemaNode* root_schema, const std::string& buffer, CodecService::Format format)
+ydk::path::CodecService::decode(const RootSchemaNode* root_schema, const std::string& buffer, EncodingFormat format)
 {
     LYD_FORMAT scheme = LYD_XML;
-    if (format == CodecService::Format::JSON)
+    if (format == EncodingFormat::JSON)
     {
+    	BOOST_LOG_TRIVIAL(trace) << "Performing decode operation on JSON";
         scheme = LYD_JSON;
+    }
+    else
+    {
+    	BOOST_LOG_TRIVIAL(trace) << "Performing decode operation on XML";
     }
 
     const RootSchemaNodeImpl* rs_impl = dynamic_cast<const RootSchemaNodeImpl*>(root_schema);
@@ -182,7 +191,6 @@ ydk::path::CodecService::decode(const RootSchemaNode* root_schema, const std::st
         BOOST_THROW_EXCEPTION(YCPPCodecError{YCPPCodecError::Error::XML_INVAL});
     }
 
-    BOOST_LOG_TRIVIAL(trace) << "Performing decode operation";
     RootDataImpl* rd = new RootDataImpl{rs_impl, rs_impl->m_ctx, "/"};
     rd->m_node = root;
 
@@ -196,4 +204,3 @@ ydk::path::CodecService::decode(const RootSchemaNode* root_schema, const std::st
 
     return rd;
 }
-

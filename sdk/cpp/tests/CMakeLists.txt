@@ -5,20 +5,23 @@ project(ydk_entity_test)
 enable_testing()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
-set(netconf_tests 
+set(netconf_tests
         test_core_netconf
         test_netconf_client
+        test_restconf_client
         testsanitynctest
         test_crud
         test_sanity_levels
         test_sanity_types
         testsanityvalidationtest
         test_netconf_provider
+        test_restconf_provider
         test_sanity_codec
         test_netconf_operations
         test_executor_service
         test_netconf_service
-        test_errors)
+        test_errors
+        test_opendaylight)
 
 find_library(xml2_location xml2)
 find_library(curl_location curl)

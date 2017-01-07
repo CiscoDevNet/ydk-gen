@@ -5,25 +5,12 @@ ValidationService
 
 .. cpp:namespace:: ydk
 
-.. cpp:class:: EntityDiagnostic : public path::DiagnosticNode<Entity*, path::ValidationError>
-
-Contains validation error details, if any
-
-    .. cpp:function:: bool has_errors()
-
-        Indicates if any errors have occurred
-
-        :return: ``true`` if errors have occurred, else, returns ``false``
-
-    .. cpp:member:: std::vector<DiagnosticNode<std::string, path::ValidationError>> attrs
-
-        ``std::vector`` of errors, indicating error paths and error types 
 
 .. cpp:class:: ValidationService
 
 Validation Service class for validating C++ model API objects of type :cpp:class:`Entity<Entity>`
 
-    .. cpp:function:: EntityDiagnostic validate(const path::ServiceProvider & provider, Entity & entity, ValidationService::Option option)
+    .. cpp:function:: void validate(const path::ServiceProvider & provider, Entity & entity, ValidationService::Option option)
 
         Validates an entity based on the option.
 

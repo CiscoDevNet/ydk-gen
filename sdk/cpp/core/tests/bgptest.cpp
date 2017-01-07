@@ -24,8 +24,8 @@
 #define BOOST_TEST_MODULE OCBgpTest
 #include <boost/test/unit_test.hpp>
 #include <iostream>
-#include "../../src/path_api.hpp"
-#include "../config.hpp"
+#include "../src/path_api.hpp"
+#include "config.hpp"
 
 
 namespace mock {
@@ -50,11 +50,16 @@ public:
 		return repo.create_root_schema(m_capabilities);
 	}
 
+	ydk::EncodingFormat get_encoding() const
+	{
+		return ydk::EncodingFormat::XML;
+	}
+
 	ydk::path::DataNode* invoke(ydk::path::Rpc* rpc) const
 	{
         auto s = ydk::path::CodecService{};
 
-        std::cout << s.encode(rpc->input(), ydk::path::CodecService::Format::XML, true) << std::endl;
+        std::cout << s.encode(rpc->input(), ydk::EncodingFormat::XML, true) << std::endl;
 
 		return nullptr;
 	}
@@ -269,18 +274,18 @@ BOOST_AUTO_TEST_CASE( bgp )
 
 
     //XML Codec Test
-    auto xml = s.encode(bgp, ydk::path::CodecService::Format::XML, false);
+    auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(),
                         "XML output is empty");
 
     BOOST_REQUIRE(xml == expected_bgp_output);
 
-    auto new_bgp = s.decode(schema.get(), xml, ydk::path::CodecService::Format::XML);
+    auto new_bgp = s.decode(schema.get(), xml, ydk::EncodingFormat::XML);
 
     BOOST_REQUIRE( new_bgp != nullptr);
 
-    auto new_xml = s.encode(new_bgp, ydk::path::CodecService::Format::XML, false);
+    auto new_xml = s.encode(new_bgp, ydk::EncodingFormat::XML, false);
     BOOST_CHECK_MESSAGE(!new_xml.empty(),
                         "Deserialized XML output is empty.");
 
@@ -288,7 +293,7 @@ BOOST_AUTO_TEST_CASE( bgp )
 
 
     //JSON codec test
-    auto json = s.encode(bgp, ydk::path::CodecService::Format::JSON, false);
+    auto json = s.encode(bgp, ydk::EncodingFormat::JSON, false);
 
     BOOST_CHECK_MESSAGE( !json.empty(),
                            "JSON output :" << json);
@@ -296,11 +301,11 @@ BOOST_AUTO_TEST_CASE( bgp )
 
     BOOST_REQUIRE(json == expected_bgp_json);
 
-    auto new_bgp1 = s.decode(schema.get(), json, ydk::path::CodecService::Format::JSON);
+    auto new_bgp1 = s.decode(schema.get(), json, ydk::EncodingFormat::JSON);
 
     BOOST_REQUIRE( new_bgp1 != nullptr);
 
-    auto new_json = s.encode(new_bgp1, ydk::path::CodecService::Format::JSON, false);
+    auto new_json = s.encode(new_bgp1, ydk::EncodingFormat::JSON, false);
 
 
     BOOST_CHECK_MESSAGE(!new_json.empty(),
@@ -406,11 +411,11 @@ BOOST_AUTO_TEST_CASE( decode_remove_as )
     //XML Codec Test
     auto xml = "<bgp xmlns=\"http://openconfig.net/yang/bgp\"><neighbors><neighbor><neighbor-address>1.2.3.4</neighbor-address><config><neighbor-address>1.2.3.4</neighbor-address><remove-private-as xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:PRIVATE_AS_REMOVE_ALL</remove-private-as></config></neighbor></neighbors></bgp>";
 
-    auto bgp = s.decode(schema.get(), xml, ydk::path::CodecService::Format::XML);
+    auto bgp = s.decode(schema.get(), xml, ydk::EncodingFormat::XML);
 
     BOOST_REQUIRE( bgp != nullptr);
 
-    auto new_xml = s.encode(bgp, ydk::path::CodecService::Format::XML, false);
+    auto new_xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 
     BOOST_REQUIRE(xml == new_xml);
 
@@ -439,7 +444,7 @@ BOOST_AUTO_TEST_CASE( bits_order )
 
     BOOST_REQUIRE( bits != nullptr );
 
-    auto new_xml = s.encode(runner, ydk::path::CodecService::Format::XML, false);
+    auto new_xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
     auto expected = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><ytypes><built-in-t><bits-value>disable-nagle auto-sense-speed</bits-value></built-in-t></ytypes></runner>";
     BOOST_REQUIRE( new_xml == expected );
@@ -471,15 +476,15 @@ BOOST_AUTO_TEST_CASE( submodule )
 //    auto number = subtest->create("ydktest-sanity:sub-test/one-aug/number", "3");
 //    BOOST_REQUIRE( number!= nullptr );
 
-//    auto ne1w_xml = s.encode(subtest, ydk::path::CodecService::Format::XML, false);
+//    auto ne1w_xml = s.encode(subtest, ydk::EncodingFormat::XML, false);
 
 //    auto expected = "<sub-test xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one-aug><name>test</name></one-aug><one-aug><number>3</number></one-aug></sub-test>";
 ////    BOOST_REQUIRE( new_xml == expected );
 //
-//    auto new_bgp = s.decode(schema.get(), expected, ydk::path::CodecService::Format::XML);
+//    auto new_bgp = s.decode(schema.get(), expected, ydk::EncodingFormat::XML);
 //
-//    auto new_xml = s.encode(new_bgp, ydk::path::CodecService::Format::XML, false);
+//    auto new_xml = s.encode(new_bgp, ydk::EncodingFormat::XML, false);
 //    std::cout<<new_xml<<std::endl;
 //
-//    auto bgp = s.decode(schema.get(), new_xml, ydk::path::CodecService::Format::XML);
+//    auto bgp = s.decode(schema.get(), new_xml, ydk::EncodingFormat::XML);
 }

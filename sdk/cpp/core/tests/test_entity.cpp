@@ -27,7 +27,7 @@
 
 #define BOOST_TEST_MODULE EntityTest
 #include <boost/test/unit_test.hpp>
-#include "../../src/types.hpp"
+#include "../src/types.hpp"
 
 using namespace ydk;
 using namespace std;

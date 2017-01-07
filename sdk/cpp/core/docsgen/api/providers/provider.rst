@@ -7,7 +7,9 @@ ServiceProvider
    :maxdepth: 2
 
    netconf_provider.rst
+   restconf_provider.rst
    codec_provider.rst
+   opendaylight_provider.rst
 
 .. cpp:namespace:: ydk::path
 
@@ -29,5 +31,9 @@ Concrete instances of ServiceProviders are expected to extend this interface.
 
         :param rpc: Pointer to the :cpp:class:`Rpc<Rpc>` node.
         :return: Pointer to the :cpp:class:`DataNode<DataNode>` representing the output.
+
+    .. cpp:function:: EncodingFormat get_encoding()
+
+        Returns the type of encoding supported by the service provider.
 
     .. cpp:function:: virtual ~ServiceProvider()

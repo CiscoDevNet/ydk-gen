@@ -57,7 +57,6 @@ NetconfClient::NetconfClient(string  username, string  password,
 }
 
 
-
 int NetconfClient::connect()
 {
 	session = nc_session_connect(hostname.c_str(), port, username.c_str(), NULL);

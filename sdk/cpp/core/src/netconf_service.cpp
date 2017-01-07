@@ -341,7 +341,7 @@ static std::string get_data_payload(Entity & entity, path::RootSchemaNode & root
 	if (data_node==nullptr)
 		return "";
 	path::CodecService codec{};
-	return codec.encode(data_node, path::CodecService::Format::XML, true);
+	return codec.encode(data_node, ydk::EncodingFormat::XML, true);
 }
 
 static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)

@@ -74,6 +74,7 @@ ydk::path::Repository::Repository()
     path = fs::temp_directory_path();
     ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
     ly_set_log_clb(libyang_log_callback, 1);
+
 }
 
 
@@ -114,10 +115,26 @@ namespace ydk {
             }
         }
 
+        char* get_enlarged_data(const std::string & buffer)
+        {
+        	char *enlarged_data = nullptr;
+			/* enlarge data by 2 bytes for flex */
+			auto data = buffer.c_str();
+			auto len = std::strlen(data);
+			enlarged_data = static_cast<char*>(std::malloc((len + 2) * sizeof *enlarged_data));
+			if (!enlarged_data) {
+				BOOST_THROW_EXCEPTION(std::bad_alloc{});
+			}
+			memcpy(enlarged_data, data, len);
+			enlarged_data[len] = enlarged_data[len + 1] = '\0';
+			return enlarged_data;
+        }
+
         extern "C" char* get_module_callback(const char* module_name, const char* module_rev, const char *submod_name, const char *sub_rev,
         							   void* user_data, LYS_INFORMAT* format, void (**free_module_data)(void *model_data))
         {
             BOOST_LOG_TRIVIAL(trace) << "Getting module " << module_name <<" submodule "<<(submod_name?submod_name:"none");
+            *free_module_data = c_free_data;
 
             if(user_data != nullptr){
                 ModelProvider::Format m_format = ModelProvider::Format::YANG;
@@ -158,18 +175,7 @@ namespace ydk {
 
                         yang_file.close();
 
-                        *free_module_data = c_free_data;
-                        char *enlarged_data = nullptr;
-                        /* enlarge data by 2 bytes for flex */
-                        auto data = model_data.c_str();
-                        auto len = std::strlen(data);
-                        enlarged_data = static_cast<char*>(std::malloc((len + 2) * sizeof *enlarged_data));
-                        if (!enlarged_data) {
-                            BOOST_THROW_EXCEPTION(std::bad_alloc{});
-                        }
-                        memcpy(enlarged_data, data, len);
-                        enlarged_data[len] = enlarged_data[len + 1] = '\0';
-                        return enlarged_data;
+                        return get_enlarged_data(model_data);
                     } else {
                         BOOST_LOG_TRIVIAL(error) << "Cannot open file " << yang_file_path_str;
                         BOOST_THROW_EXCEPTION(YCPPIllegalStateError("Cannot open file"));
@@ -193,18 +199,7 @@ namespace ydk {
                     if(!model_data.empty()){
 
                         sink_to_file(yang_file_path_str, model_data);
-                        *free_module_data = c_free_data;
-                        char *enlarged_data = nullptr;
-                        /* enlarge data by 2 bytes for flex */
-                        auto data = model_data.c_str();
-                        auto len = std::strlen(data);
-                        enlarged_data = static_cast<char*>(std::malloc((len + 2) * sizeof *enlarged_data));
-                        if (!enlarged_data) {
-                            BOOST_THROW_EXCEPTION(std::bad_alloc{});
-                        }
-                        memcpy(enlarged_data, data, len);
-                        enlarged_data[len] = enlarged_data[len + 1] = '\0';
-                        return enlarged_data;
+                        return get_enlarged_data(model_data);
                     } else {
                         BOOST_LOG_TRIVIAL(trace) << "Cannot find model with module_name:- " << module_name << " module_rev:-" << (module_rev !=nullptr ? module_rev : "");
 //                        BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"Cannot find model"});
@@ -253,7 +248,8 @@ ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & 
         BOOST_LOG_TRIVIAL(trace) << "Module " << c.module.c_str() << " Revision " << c.revision.c_str();
         auto p = ly_ctx_get_module(ctx, c.module.c_str(), c.revision.empty() ? 0 : c.revision.c_str());
 
-        if(!p) {
+        if(!p)
+        {
             p = ly_ctx_load_module(ctx, c.module.c_str(), c.revision.empty() ? 0 : c.revision.c_str());
         } else {
             BOOST_LOG_TRIVIAL(trace) << "Cache hit module name:-" << c.module;

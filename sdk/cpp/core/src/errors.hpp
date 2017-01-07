@@ -48,6 +48,15 @@ struct YCPPError : public std::exception, public boost::exception
 	std::string err_msg;
 };
 
+struct YCPPClientError : public YCPPError
+{
+	YCPPClientError(const std::string& msg) : YCPPError{msg}, err_msg{msg}
+	{
+	}
+
+	std::string err_msg;
+};
+
 struct YCPPServiceProviderError : public YCPPError
 {
     YCPPServiceProviderError(const std::string& msg) : YCPPError{msg}

@@ -92,6 +92,13 @@ function init_confd {
     cd -
 }
 
+function init_rest_server {
+    cd $YDKGEN_HOME/test
+    print_msg "starting rest server"
+    rest_server_id=$(./start_rest_server.sh)
+    cd -
+}
+
 function py_sanity_ydktest {
     print_msg "Generating, installing and testing python ydktest bundle"
 
@@ -417,6 +424,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR/..
 
 py_tests
+init_rest_server
 cpp_tests
 test_gen_tests
 cd $YDKGEN_HOME

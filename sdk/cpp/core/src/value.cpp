@@ -105,7 +105,6 @@ const std::string  YLeaf::get() const
 	{
 		return get_bits_string();
 	}
-	BOOST_LOG_TRIVIAL(trace) <<"Returning value "<<value<<" for leaf "<<name;
 	return value;
 }
 
@@ -119,7 +118,6 @@ void YLeaf::operator = (uint8 val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting uint8";
 	store_value(value_buffer.str());
 }
 
@@ -128,7 +126,6 @@ void YLeaf::operator = (uint32 val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting uint32";
 	store_value(value_buffer.str());
 }
 
@@ -137,7 +134,6 @@ void YLeaf::operator = (uint64 val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting uint64";
 	store_value(value_buffer.str());
 }
 
@@ -146,7 +142,6 @@ void YLeaf::operator = (long val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting long";
 	store_value(value_buffer.str());
 }
 
@@ -155,7 +150,6 @@ void YLeaf::operator = (int8 val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting int8";
 	store_value(value_buffer.str());
 }
 
@@ -164,7 +158,6 @@ void YLeaf::operator = (int32 val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting int32";
 	store_value(value_buffer.str());
 }
 
@@ -173,7 +166,6 @@ void YLeaf::operator = (Enum::YLeaf val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val.name;
-	BOOST_LOG_TRIVIAL(trace)<<"setting enum";
 	store_value(value_buffer.str());
 }
 
@@ -191,7 +183,6 @@ void YLeaf::operator = (int64 val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting int64";
 	store_value(value_buffer.str());
 }
 
@@ -200,7 +191,6 @@ void YLeaf::operator = (double val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting double";
 	store_value(value_buffer.str());
 }
 
@@ -209,7 +199,6 @@ void YLeaf::operator = (Empty val)
 	bool purposely_unused_if_condition_to_avoid_compiler_warning = val.set;
 	if(purposely_unused_if_condition_to_avoid_compiler_warning){}
 
-	BOOST_LOG_TRIVIAL(trace)<<"setting empty";
 	store_value(""); // store empty string
 }
 
@@ -218,7 +207,6 @@ void YLeaf::operator = (Identity val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val.to_string();
-	BOOST_LOG_TRIVIAL(trace)<<"setting identity: "<<val.to_string();
 	store_value(value_buffer.str());
 }
 
@@ -227,7 +215,6 @@ void YLeaf::operator = (std::string val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val;
-	BOOST_LOG_TRIVIAL(trace)<<"setting string";
 	store_value(value_buffer.str());
 }
 
@@ -236,7 +223,6 @@ void YLeaf::operator = (Decimal64 val)
 	std::ostringstream value_buffer;
 
 	value_buffer << val.value;
-	BOOST_LOG_TRIVIAL(trace)<<"setting string";
 	store_value(value_buffer.str());
 }
 
@@ -251,8 +237,6 @@ void YLeaf::store_value(std::string && val)
 	{
 		value = val;
 	}
-	BOOST_LOG_TRIVIAL(trace)<<"storing "<<value;
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_str(type);
 }
 
 YLeaf::operator std::string() const
@@ -288,8 +272,6 @@ std::string YLeaf::get_bits_string() const
 	}
 
 	value = value.substr(0, value.size()-1);
-
-    BOOST_LOG_TRIVIAL(trace)<<value<<": value of bits";
 
 	return (value);
 }

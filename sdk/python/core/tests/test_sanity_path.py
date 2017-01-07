@@ -18,6 +18,7 @@ from __future__ import absolute_import
 import unittest
 from ydk_.providers import NetconfServiceProvider
 from ydk_.path import CodecService
+from ydk_.types import EncodingFormat
 
 
 class SanityTest(unittest.TestCase):
@@ -33,7 +34,7 @@ class SanityTest(unittest.TestCase):
 
     def _delete_runner(self):
         runner = self.root_schema.create("ydktest-sanity:runner")
-        xml = self.codec.encode(runner, CodecService.Format.XML, True)
+        xml = self.codec.encode(runner, EncodingFormat.XML, True)
         create_rpc = self.root_schema.rpc("ydk:delete")
         create_rpc.input().create("entity", xml)
         create_rpc(self.ncc)
@@ -56,17 +57,17 @@ class SanityTest(unittest.TestCase):
         for (leaf_path, leaf_value) in leaf_path_values:
             runner.create(leaf_path, leaf_value)
 
-        xml = self.codec.encode(runner, CodecService.Format.XML, True)
+        xml = self.codec.encode(runner, EncodingFormat.XML, True)
         create_rpc = self.root_schema.rpc("ydk:create")
         create_rpc.input().create("entity", xml)
         create_rpc(self.ncc)
 
         runner_filter = self.root_schema.create("ydktest-sanity:runner")
-        xml_filter = self.codec.encode(runner_filter, CodecService.Format.XML, False)
+        xml_filter = self.codec.encode(runner_filter, EncodingFormat.XML, False)
         read_rpc = self.root_schema.rpc("ydk:read")
         read_rpc.input().create("filter", xml_filter)
         runner_read = read_rpc(self.ncc)
-        xml_read = self.codec.encode(runner_read, CodecService.Format.XML, True)
+        xml_read = self.codec.encode(runner_read, EncodingFormat.XML, True)
         self.maxDiff = None
         self.assertEqual(xml, xml_read)
 

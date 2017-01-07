@@ -30,7 +30,7 @@ endif()
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG   "-ggdb -O0")
+set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0")
 
 if(CMAKE_BUILD_TYPE STREQUAL debug)
     option(ENABLE_BUILD_TESTS "Build tests" ON)
@@ -43,30 +43,37 @@ endif()
 # Set LibYDK variables
 set(libydk_src
     src/bits.cpp
-    src/executor_service.cpp
-    src/netconf_service.cpp
-    src/ietf_netconf.cpp
     src/codec_provider.cpp
     src/codec_service.cpp
+    src/capabilities_parser.cpp    
     src/crud_service.cpp
     src/entity.cpp
     src/entity_data_node_walker.cpp
     src/entity_lookup.cpp
     src/entity_util.cpp
     src/errors.cpp
+    src/executor_service.cpp
+    src/ietf_parser.cpp
+    src/ietf_netconf.cpp
     src/leaf_data.cpp
     src/netconf_client.cpp
     src/netconf_edit_operations.cpp
     src/netconf_model_provider.cpp
     src/netconf_provider.cpp
+    src/netconf_service.cpp
+    src/network_topology.cpp
+    src/opendaylight_parser.cpp
+    src/opendaylight_provider.cpp
+    src/restconf_client.cpp
+    src/restconf_provider.cpp
     src/validation_service.cpp
     src/value.cpp
     src/value_list.cpp
     src/ydk_yang.cpp
     src/path/annotation.cpp
     src/path/capability.cpp
-    src/path/path.cpp
     src/path/data_node.cpp
+    src/path/path.cpp
     src/path/repository.cpp
     src/path/root_data_node.cpp
     src/path/root_schema_node.cpp
@@ -75,22 +82,27 @@ set(libydk_src
     src/path/statement.cpp)
 
 set(libydk_install_headers
+    src/capabilities_parser.hpp
+    src/codec_provider.hpp
+    src/codec_service.hpp
+    src/crud_service.hpp
     src/entity_data_node_walker.hpp
-    src/service.hpp
+    src/entity_lookup.hpp
+    src/entity_util.hpp
+    src/errors.hpp
     src/executor_service.hpp
-    src/netconf_service.hpp
     src/ietf_netconf.hpp
     src/ietf_netconf_with_defaults.hpp
     src/netconf_provider.hpp
-    src/codec_service.hpp
-    src/codec_provider.hpp
-    src/entity_lookup.hpp
-    src/entity_util.hpp
+    src/network_topology.hpp
+    src/netconf_service.hpp
+    src/opendaylight_parser.hpp
+    src/opendaylight_provider.hpp
     src/path_api.hpp
-    src/crud_service.hpp
-    src/errors.hpp
-    src/types.hpp
+    src/restconf_provider.hpp
     src/service.hpp
+    src/service.hpp
+    src/types.hpp
     src/validation_service.hpp)
 
 # Set LibNetconf variables
@@ -216,13 +228,13 @@ set(Boost_NO_BOOST_CMAKE         ON)
 #set(Boost_USE_STATIC_LIBS ON)
 
 # Find dependent libraries
-find_library(xml2_location xml2)
 find_library(curl_location curl)
 find_library(ssh_threads_location ssh_threads)
 find_library(xslt_location xslt)
 find_library(pcre_location pcre)
 find_library(pthread_location pthread)
 find_library(dl_location dl)
+find_package(LibXml2 REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Boost COMPONENTS log_setup log thread date_time system filesystem REQUIRED)
 find_package(LibSSH REQUIRED)
@@ -306,6 +318,7 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${LIBYANG_INCLUDE_DIRS}
     ${LIBSSH_INCLUDE_DIRS}
+    ${LIBXML2_INCLUDE_DIR}
     ${libnetconf_headers_location}
     ${libnetconf_location}/headers
     ${libyang_headers_location}
@@ -325,12 +338,12 @@ target_link_libraries(ydk
     ${BOOST_DATE_TIME_LIBRARY}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
-    ${xml2_location}
+    ${LIBXML2_LIBRARIES}
+    ${LIBSSH_LIBRARIES}
     ${curl_location}
     ${ssh_threads_location}
     ${pcre_location}
-    ${xslt_location}
-    ${LIBSSH_LIBRARIES}
+    ${xslt_location}    
     ${pthread_location}
     ${dl_location}
     libnetconf
