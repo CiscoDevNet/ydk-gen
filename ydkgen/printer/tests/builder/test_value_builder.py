@@ -210,12 +210,16 @@ class ValueBuilder(object):
             pattern_value = '10.0.0.1'
         if 'ipv6' in self.type_stmt.arg:
             pattern_value = '2001:db8::ff:2'
-        if 'password' in self.type_stmt.arg:
-            pattern_value = '$0$password'
         if 'domain-name' in self.type_stmt.arg:
             pattern_value = 'domain.name'
+        if 'phys-address' in self.type_stmt.arg:
+            pattern_value = '08:56:27:6f:2b:9c'
+        if 'password' in prop.name:
+            pattern_value = '$0$password'
         if 'masklength_range' in prop.name:
             pattern_value = '21..24'
+        if 'access_operations' in prop.name:
+            pattern_value = '*'
         if prop.name in ('ip_prefix', 'address_prefix', 'fec_address'):
             pattern_value = '10.0.0.1/32'
 
