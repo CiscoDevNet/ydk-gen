@@ -128,7 +128,8 @@ class Statements(object):
     def unadjusted_leaflist_appends(self):
         for path in sorted(self.leaflist_append_stmts):
             val = self.leaflist_append_stmts[path]
-            if val in self.assignment_stmts:
+            if any((val in self.assignment_stmts,
+                    val in self.reference_stmts)):
                 self.adjusted_leaflist_appends[path] = val
             else:
                 yield path, val
