@@ -46,13 +46,13 @@ class TestBuilder(object):
 
     def _traverse_and_build(self, clazz):
         """Traverse and build test cases."""
+        if all((utils.has_terminal_nodes(clazz),
+                utils.is_config_prop(clazz))):
+            self._build_test_case(clazz)
         for prop in clazz.properties():
             if utils.is_class_prop(prop):
                 ptype = prop.property_type
                 self._traverse_and_build(ptype)
-                if all((utils.has_terminal_nodes(prop),
-                        utils.is_config_prop(prop))):
-                    self._build_test_case(ptype)
 
     def _build_test_case(self, clazz):
         """Build single test case for target `clazz`."""

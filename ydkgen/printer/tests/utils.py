@@ -2,9 +2,12 @@ from pyang import types as ptypes
 from ydkgen import api_model as atypes
 
 
-def has_terminal_nodes(prop):
+def has_terminal_nodes(element):
     # has leaf or leaflist
-    ptype = prop.property_type
+    if isinstance(element, atypes.Property):
+        ptype = element.property_type
+    else:
+        ptype = element
     for p in ptype.properties():
         if is_terminal_prop(p):
             return True
