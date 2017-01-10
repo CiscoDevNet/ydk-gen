@@ -271,6 +271,12 @@ function py_sanity_augmentation_test {
     run_test sdk/python/core/tests/test_sanity_bundle_aug.py
 }
 
+function py_test_gen {
+    cd $YDKGEN_HOME
+    python generate.py --bundle profiles/bundles/ietf_0_1_1.json --verbose --generate-tests --python
+    python generate.py --bundle profiles/bundles/openconfig_0_1_2.json --verbose --generate-tests --python
+}
+
 function cpp_sanity_core {
     print_msg "cpp_sanity_core"
 
@@ -323,15 +329,21 @@ function cpp_sanity_ydktest_test {
         for test_name in $(ls test*);
         do
             echo "Running $test_name"
-            ./$test_name -l all > output 
+            ./$test_name -l all > output
             local test_status=$?
             if [ $test_status -ne 0 ]; then
                 cat output
                 exit $test_status
-            fi 
+            fi
         done
         exit $status
     fi
+}
+
+function cpp_test_gen {
+    cd $YDKGEN_HOME
+    python generate.py --bundle profiles/bundles/ietf_0_1_1.json --verbose --generate-tests --cpp
+    python generate.py --bundle profiles/bundles/openconfig_0_1_2.json --verbose --generate-tests --cpp
 }
 
 function teardown_env {
@@ -348,6 +360,7 @@ function py_tests {
     py_sanity_ydktest
     py_sanity_deviation
     py_sanity_augmentation
+    py_test_gen
     teardown_env
 }
 
@@ -355,6 +368,7 @@ function cpp_tests {
     init_env "python" "python"
     cpp_sanity_core
     cpp_sanity_ydktest
+    cpp_test_gen
 }
 
 
