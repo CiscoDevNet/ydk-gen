@@ -32,5 +32,4 @@ from .python.class_meta_printer import ClassMetaPrinter
 from .python.class_printer import ClassPrinter
 from .python.enum_printer import EnumPrinter
 from .python.import_test_printer import ImportTestPrinter
-from .python.test_case_printer import TestCasePrinter
 from . import meta_data_util

@@ -8,10 +8,8 @@
     "models": {
 	"file": [
             "sdk/cpp/core/tests/models/ietf-interfaces@2014-05-08.yang",
-            "sdk/cpp/core/tests/models/main-aug1@2015-11-17.yang",
-            "sdk/cpp/core/tests/models/main-aug2@2015-11-17.yang",
-            "sdk/cpp/core/tests/models/main-aug3@2015-11-17.yang",
             "sdk/cpp/core/tests/models/main@2015-11-17.yang",
+            "sdk/cpp/core/tests/models/main-aug1@2015-11-17.yang",
             "sdk/cpp/core/tests/models/openconfig-bgp-common-multiprotocol.yang",
             "sdk/cpp/core/tests/models/openconfig-bgp-common-structure.yang",
             "sdk/cpp/core/tests/models/openconfig-bgp-common.yang",
@@ -35,8 +33,11 @@
             "yang/ietf/ietf-inet-types@2013-07-15.yang",
             "yang/ietf/ietf-yang-types@2013-07-15.yang",
             "yang/ietf/iana-if-type.yang",
-            "yang/ydktest/oc-pattern@2015-11-17.yang"
+            "yang/ydktest/oc-pattern@2015-11-17.yang",
+            "yang/ietf/ietf-netconf-acm@2012-02-22.yang",
+            "yang/ietf/ietf-netconf-with-defaults@2011-06-01.yang",
+            "yang/ietf/ietf-netconf@2011-06-01.yang"
+
         ]
     }
 }
-
