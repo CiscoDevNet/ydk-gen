@@ -21,6 +21,8 @@
 '''
 from ydkgen.api_model import Class
 
+_IGNORE_TESTS = set({'ietf_netconf_acm'})
+
 
 class CMakeListsPrinter(object):
     def __init__(self, ctx):
@@ -111,7 +113,7 @@ endforeach(test_name)
     def _get_test_file_names(self, packages):
         names = []
         for package in packages:
-            if _has_tests(package):
+            if _has_tests(package) and package.name not in _IGNORE_TESTS:
                 names.append('test_%s' % package.name)
         return ';'.join(names)
 

@@ -370,12 +370,7 @@ function cpp_test_gen_test {
     cd gen-api/cpp/models_test-bundle/ydk/tests/build
     run_exec_test cmake ..
     run_exec_test make
-    for f in *; do
-        if [[ "$f" != *acm* ]]; then
-            ./$f
-        fi
-    done
-    ./*acm*
+    ctest --output-on-failure
 }
 
 function cpp_test_gen {
@@ -397,11 +392,8 @@ function py_test_gen_test {
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/testgen/confd
     cd gen-api/python/models_test-bundle/ydk/tests/models_test/
     for f in *; do
-        if [[ "$f" != *acm* ]]; then
-            python $f
-        fi
+        python $f
     done
-    python *acm*
 }
 
 function py_test_gen {

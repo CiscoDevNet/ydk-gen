@@ -82,8 +82,9 @@ class FixturePrinter(Printer):
         macro = package.name.title().replace('_', '')
         self._writeln('#define BOOST_TEST_MODULE {}Test'.format(macro))
         self._writeln('')
-        self._writeln('#include "boost/log/trivial.hpp"')
-        self._writeln('#include "boost/test/unit_test.hpp"')
+        self._writeln('#include <boost/log/trivial.hpp>')
+        self._writeln('#include <boost/test/unit_test.hpp>')
+        self._writeln('#include <boost/log/expressions.hpp>')
         self._writeln('')
         self._writeln('#include "ydk/crud_service.hpp"')
         self._writeln('#include "ydk/netconf_provider.hpp"')
@@ -157,6 +158,9 @@ class FixturePrinter(Printer):
         self._writeln('{')
         self._lvl_inc()
         self._bline()
+        self._writeln("boost::log::core::get()->set_filter("
+                      "boost::log::trivial::severity == "
+                      "boost::log::trivial::error);")
         self._writeln('m_crud = CrudService{};')
         self._writeln("m_provider = "
                       "std::make_unique<NetconfServiceProvider>"
