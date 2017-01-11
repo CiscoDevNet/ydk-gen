@@ -69,9 +69,9 @@ function install_dependencies {
 function install_confd {
     print_msg "install_confd"
 
-    wget https://github.com/CiscoDevNet/ydk-gen/files/700125/confd-basic-6.3.linux.x86_64.zip
-    unzip confd-basic-6.3.linux.x86_64.zip
-    ./confd-basic-6.3.linux.x86_64/confd-basic-6.3.linux.x86_64.installer.bin ../confd
+    wget https://github.com/CiscoDevNet/ydk-gen/files/562538/confd-basic-6.2.linux.x86_64.zip
+    unzip confd-basic-6.2.linux.x86_64.zip
+    ./confd-basic-6.2.linux.x86_64.installer.bin ../confd
 }
 
 ########################## EXECUTION STARTS HERE #############################
