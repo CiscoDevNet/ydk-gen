@@ -1,36 +1,60 @@
 {
+    "name": "models-test",
     "_descr": "A profile file contains the metadata for generating a number of SDKs of varying languages from a single set of yang models.",
     "version": "0.4.2",
     "Author": "Cisco",
     "Copyright": "Cisco",
-
     "models": {
-
-    "file":[
-        "yang/ietf/ietf-netconf@2011-06-01.yang",
-        "yang/ietf/ietf-netconf-with-defaults@2011-06-01.yang"
-    ],
-
-	"_descr_git": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
-	"git": [
-	    {
-		"url": "https://github.com/abhikeshav/ydk-test-yang.git",
-		"commits": [
-
-
-
-	    			{
-
-						"commitid": "master",
-						"dir": [
-		    					"yang"
-							]
-	    			}
-
-
-	    			]
-	    }
-     ]
+        "_descr_git": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
+        "git": [{
+            "url": "https://github.com/psykokwak4/ydk-test-yang.git",
+            "commits": [{
+                "commitid": "master",
+                "file": [
+                    "models/ietf/iana-crypt-hash.yang",
+                    "models/ietf/iana-if-type.yang",
+                    "models/ietf/ietf-inet-types.yang",
+                    "models/ietf/ietf-interfaces-ext.yang",
+                    "models/ietf/ietf-interfaces.yang",
+                    "models/ietf/ietf-netconf-acm.yang",
+                    "models/ietf/ietf-netconf-monitoring@2010-10-04.yang",
+                    "models/ietf/ietf-netconf-with-defaults.yang",
+                    "models/ietf/ietf-netconf.yang",
+                    "models/ietf/ietf-syslog-types.yang",
+                    "models/ietf/ietf-system@2014-08-06.yang",
+                    "models/ietf/ietf-yang-smiv2.yang",
+                    "models/ietf/ietf-yang-types.yang",
+                    "models/openconfig/openconfig-bgp-multiprotocol.yang",
+                    "models/openconfig/openconfig-bgp-operational.yang",
+                    "models/openconfig/openconfig-bgp-policy.yang",
+                    "models/openconfig/openconfig-bgp-types.yang",
+                    "models/openconfig/openconfig-bgp.yang",
+                    "models/openconfig/openconfig-extensions.yang",
+                    "models/openconfig/openconfig-if-aggregate.yang",
+                    "models/openconfig/openconfig-if-ethernet.yang",
+                    "models/openconfig/openconfig-if-ip-ext.yang",
+                    "models/openconfig/openconfig-if-ip.yang",
+                    "models/openconfig/openconfig-interfaces.yang",
+                    "models/openconfig/openconfig-mpls-igp.yang",
+                    "models/openconfig/openconfig-mpls-ldp.yang",
+                    "models/openconfig/openconfig-mpls-rsvp.yang",
+                    "models/openconfig/openconfig-mpls-sr.yang",
+                    "models/openconfig/openconfig-mpls-static.yang",
+                    "models/openconfig/openconfig-mpls-te.yang",
+                    "models/openconfig/openconfig-mpls-types.yang",
+                    "models/openconfig/openconfig-mpls.yang",
+                    "models/openconfig/openconfig-platform-transceiver.yang",
+                    "models/openconfig/openconfig-platform-types.yang",
+                    "models/openconfig/openconfig-platform.yang",
+                    "models/openconfig/openconfig-policy-types.yang",
+                    "models/openconfig/openconfig-routing-policy.yang",
+                    "models/openconfig/openconfig-telemetry.yang",
+                    "models/openconfig/openconfig-transport-types.yang",
+                    "models/openconfig/openconfig-types.yang",
+                    "models/openconfig/openconfig-vlan-types.yang",
+                    "models/openconfig/openconfig-vlan.yang"
+                ]
+            }]
+        }]
+    }
 }
-}
-

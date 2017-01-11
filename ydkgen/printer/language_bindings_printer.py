@@ -104,6 +104,14 @@ class LanguageBindingsPrinter(object):
             os.mkdir(path)
         return path
 
+    def is_empty_package(self, package):
+        empty = True
+        for element in package.owned_elements:
+            if isinstance(element, Class) and not element.is_identity():
+                empty = False
+                break
+        return empty
+
     def _get_identity_subclasses_map(self):
         identity_subclasses = {}
         identity_tuples = self._get_identity_tuples()

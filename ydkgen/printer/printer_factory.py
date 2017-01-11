@@ -16,16 +16,16 @@
 
 """
 printer_factory.py
- 
+
  Returns printer
- 
+
 """
 from ydkgen.printer.cpp.cpp_bindings_printer import CppBindingsPrinter
 from ydkgen.printer.python.python_bindings_printer import PythonBindingsPrinter
 
 
 class PrinterFactory(object):
-        
+
     def get_printer(self, language):
         if language == 'cpp':
             return CppBindingsPrinter

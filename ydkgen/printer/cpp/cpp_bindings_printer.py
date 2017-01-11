@@ -26,7 +26,9 @@ from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _E
 from .header_printer import HeaderPrinter
 from .source_printer import SourcePrinter
 from .entity_lookup_printer import EntityLookUpPrinter
+from .test_case_cmake_file_printer import CMakeListsPrinter
 from ..doc import DocPrinter
+from ..tests import TestPrinter
 
 
 class CppBindingsPrinter(LanguageBindingsPrinter):
@@ -41,11 +43,13 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
         for index, package in enumerate(self.packages):
             self.print_module(index, package, size)
 
-        self._print_entity_lookup_files(self.models_dir, self.packages)
+        self._print_entity_lookup_files(self.packages, self.models_dir)
 
         # RST documentation
         if self.ydk_doc_dir is not None:
             self._print_cpp_rst_toc()
+        if self.generate_tests:
+            self._print_cmake_file(self.packages, self.bundle_name, self.test_dir)
 
     def print_module(self, index, package, size):
 
@@ -58,6 +62,8 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
         self._print_source_file(package, self.models_dir)
         if self.ydk_doc_dir is not None:
             self._print_cpp_rst_doc(package)
+        if self.generate_tests:
+            self._print_tests(package, self.test_dir)
 
     def _print_header_file(self, package, path):
         self.print_file(get_header_file_name(path, package),
@@ -69,10 +75,24 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
                         emit_source,
                         _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
 
-    def _print_entity_lookup_files(self, path, packages):
+    def _print_entity_lookup_files(self, packages, path):
         self.print_file(get_entity_lookup_source_file_name(path),
                         emit_entity_lookup_source,
                         _EmitArgs(self.ypy_ctx, packages, self.bundle_name))
+
+    def _print_tests(self, package, path):
+        empty = self.is_empty_package(package)
+        if not empty:
+            self.print_file(get_testcase_file_name(path, package),
+                            emit_test_cases,
+                            _EmitArgs(self.ypy_ctx, package, self.identity_subclasses))
+
+    def _print_cmake_file(self, packages, bundle_name, path):
+        args = {'bundle_name': bundle_name,
+                'identity_subclasses': self.identity_subclasses}
+        self.print_file(get_testcase_cmake_file_name(path),
+                        emit_cmake_file,
+                        _EmitArgs(self.ypy_ctx, packages, args))
 
     def _print_cpp_rst_doc(self, package):
         if self.ydk_doc_dir is None:
@@ -115,6 +135,14 @@ def get_table_of_contents_file_name(path):
     return '%s/ydk.models.rst' % path
 
 
+def get_testcase_file_name(path, package):
+    return '%s/test_%s.cpp' % (path, package.stmt.arg.replace('-', '_'))
+
+
+def get_testcase_cmake_file_name(path):
+    return '%s/CMakeLists.txt' % path
+
+
 def get_cpp_doc_file_name(path, named_element):
     return '%s/%s.rst' % (path, get_rst_file_name(named_element))
 
@@ -137,3 +165,11 @@ def emit_cpp_doc(ctx, named_element, identity_subclasses):
 
 def emit_table_of_contents(ctx, packages, bundle_name):
     DocPrinter(ctx, 'cpp').print_table_of_contents(packages, bundle_name)
+
+
+def emit_test_cases(ctx, package, identity_subclasses):
+    TestPrinter(ctx, 'cpp').print_tests(package, identity_subclasses)
+
+
+def emit_cmake_file(ctx, packages, args):
+    CMakeListsPrinter(ctx).print_cmakelists_file(packages, args)

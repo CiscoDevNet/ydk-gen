@@ -449,7 +449,7 @@ class Class(NamedElement):
         prop_types = [prop_type]
         if isinstance(prop_type, UnionTypeSpec):
             for child_type_stmt in prop_type.types:
-                prop_types.extend(self._get_union_type(child_type_stmt))
+                prop_types.extend(self._get_union_types(child_type_stmt, p))
         return prop_types
 
     def get_dependent_siblings(self):
