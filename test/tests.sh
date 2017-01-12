@@ -409,7 +409,7 @@ function py_test_gen {
 function test_gen_tests {
     print_msg "test_gen_tests"
 
-    init_env "python3" "python3"
+    init_env "python" "python"
     cd $YDKGEN_HOME && source gen_env/bin/activate
     git clone https://github.com/abhikeshav/ydk-test-yang.git sdk/cpp/core/tests/confd/testgen
 
