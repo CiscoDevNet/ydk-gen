@@ -27,6 +27,8 @@ from ..builder.test_fixture_builder import FixtureBuilder
 from .test_fixture_printer import FixturePrinter
 from .. import utils
 
+_IGNORE_TESTS = set({'ietf_netconf_acm'})
+
 
 class TestPrinter(FixturePrinter):
     """Test printer."""
@@ -43,7 +45,8 @@ class TestPrinter(FixturePrinter):
         test_builder.build_test(package)
         imports = fixture_builder.get_imports(package, test_builder)
         self.print_fixture_head(package, imports)
-        self._print_test_case(package, imports, test_builder)
+        if package.name not in _IGNORE_TESTS:
+            self._print_test_case(package, imports, test_builder)
         self.print_fixture_tail(package)
 
     def _print_test_case(self, package, imports, test_builder):

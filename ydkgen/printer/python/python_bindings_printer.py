@@ -213,7 +213,7 @@ def get_meta_module_file_name(path, package):
 
 
 def get_test_module_file_name(path, package):
-    return '%s/%sTest.py' % (path, package.stmt.arg.replace('-', '_'))
+    return '%s/test_%s.py' % (path, package.stmt.arg.replace('-', '_'))
 
 
 def emit_yang_ns(ctx, packages):

@@ -391,9 +391,7 @@ function py_test_gen_test {
     cd $YDKGEN_HOME
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/testgen/confd
     cd gen-api/python/models_test-bundle/ydk/tests/models_test/
-    for f in *; do
-        python $f
-    done
+    python -m unittest discover
 }
 
 function py_test_gen {
