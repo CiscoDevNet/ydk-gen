@@ -168,18 +168,18 @@ html_static_path = ['_static']
 #html_additional_pages = {}
 
 # If false, no module index is generated.
-html_domain_indices = False 
+html_domain_indices = False
 
 # If false, no index is generated.
 html_use_index = False
 
 # If true, the index is split into individual pages for each letter.
-html_split_index = False 
+html_split_index = False
 
 html_copy_source = False
 
 # If true, links to the reST sources are added to the pages.
-html_show_sourcelink = False 
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 #html_show_sphinx = True
@@ -293,4 +293,4 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
 
-# edit on GitHub
+html_style = 'css/width.css'
