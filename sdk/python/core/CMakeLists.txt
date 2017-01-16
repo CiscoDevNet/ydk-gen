@@ -56,21 +56,21 @@ set(Boost_USE_STATIC_RUNTIME     OFF)
 set(BOOST_ALL_DYN_LINK           ON)   # force dynamic linking for all libraries
 set(Boost_NO_BOOST_CMAKE         ON)
 
-add_library(path MODULE ${python_src})
-set_target_properties(path PROPERTIES PREFIX "")
+add_library(ydk_ MODULE ${python_src})
+set_target_properties(ydk_ PROPERTIES PREFIX "")
 if(WIN32 AND NOT CYGWIN)
-    set_target_properties(path PROPERTIES SUFFIX ".pyd")
+    set_target_properties(ydk_ PROPERTIES SUFFIX ".pyd")
 else()
-    set_target_properties(path PROPERTIES SUFFIX ".so")
+    set_target_properties(ydk_ PROPERTIES SUFFIX ".so")
 endif()
 
-target_compile_definitions(path PRIVATE "BOOST_ALL_DYN_LINK=1")
-target_compile_definitions(path PRIVATE "BOOST_LOG_DYN_LINK=1")
+target_compile_definitions(ydk_ PRIVATE "BOOST_ALL_DYN_LINK=1")
+target_compile_definitions(ydk_ PRIVATE "BOOST_LOG_DYN_LINK=1")
 
-set_property(TARGET path PROPERTY CXX_STANDARD 14)
-set_property(TARGET path PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET ydk_ PROPERTY CXX_STANDARD 14)
+set_property(TARGET ydk_ PROPERTY CXX_STANDARD_REQUIRED ON)
 
-target_link_libraries(path
+target_link_libraries(ydk_
             ${ydk_location}
             ${xml2_location}
             ${curl_location}

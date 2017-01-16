@@ -50,23 +50,17 @@ class CrudService : public Service
 		CrudService();
 
 		bool create(path::ServiceProvider & provider, Entity & entity);
-		bool create(path::ServiceProvider & provider, std::map<std::string, Entity*> entity_map);
 
 		bool update(path::ServiceProvider & provider, Entity & entity);
-		bool update(path::ServiceProvider & provider, std::map<std::string, Entity*> entity_map);
 
 		bool delete_(path::ServiceProvider & provider, Entity & entity);
-		bool delete_(path::ServiceProvider & provider, std::map<std::string, Entity*> entity_map);
 
 		std::unique_ptr<Entity> read(path::ServiceProvider & provider, Entity & filter);
-		std::map<std::string, std::unique_ptr<Entity> > read(path::ServiceProvider & provider, std::map<std::string, Entity*> entity);
 
 		std::unique_ptr<Entity> read_config(path::ServiceProvider & provider, Entity & filter);
-		std::map<std::string, std::unique_ptr<Entity> > read_config(path::ServiceProvider & provider, std::map<std::string, Entity*> entity);
 
 	private:
-		std::unique_ptr<Entity> read(Entity & filter, path::DataNode* read_data_node);
-		std::map<std::string, std::unique_ptr<Entity> > read(std::map<std::string, Entity*> filter_map, path::DataNode* read_data_node);
+		std::unique_ptr<Entity> read_datanode(Entity & filter, path::DataNode* read_data_node);
 };
 
 }

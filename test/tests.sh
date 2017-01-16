@@ -49,7 +49,7 @@ function run_test_no_coverage {
 }
 
 function run_test {
-    coverage run --source=ydkgen,sdk,generate --branch --parallel-mode $@
+    coverage run --source=ydkgen,sdk,generate --branch --parallel-mode $@ > /dev/null
     local status=$?
     if [ $status -ne 0 ]; then
         exit $status
@@ -140,7 +140,7 @@ function py_sanity_ydktest_test {
 
     print_msg "Copy cpp-wrapper to sdk directory"
     cd gen-api/python/ydk/ && python setup.py build && cd -
-    cp gen-api/python/ydk/build/lib*/ydk/path.so sdk/python/core/ydk
+    cp gen-api/python/ydk/build/lib*/*.so sdk/python/core
 
     run_test sdk/python/core/tests/test_sanity_codec.py
 

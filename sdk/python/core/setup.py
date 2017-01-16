@@ -159,7 +159,7 @@ setup(
     keywords='yang',
     packages=YDK_PACKAGES,
     install_requires=INSTALL_REQUIREMENTS,
-    ext_modules=[CMakeExtension('ydk.path')],
+    ext_modules=[CMakeExtension('ydk_')],
     cmdclass={
              'build_ext' :YdkBuildExtension
              },

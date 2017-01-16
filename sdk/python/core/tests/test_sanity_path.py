@@ -16,23 +16,24 @@
 
 from __future__ import absolute_import
 import unittest
-from ydk import path
+from ydk_.providers import NetconfServiceProvider
+from ydk_.path import CodecService
 
 
 class SanityTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.ncc = path.NetconfServiceProvider('127.0.0.1',
+        self.ncc = NetconfServiceProvider('127.0.0.1',
                                               'admin',
                                               'admin',
                                               12022)
         self.root_schema = self.ncc.get_root_schema()
-        self.codec = path.CodecService()
+        self.codec = CodecService()
 
     def _delete_runner(self):
         runner = self.root_schema.create("ydktest-sanity:runner")
-        xml = self.codec.encode(runner, path.CodecService.Format.XML, True)
+        xml = self.codec.encode(runner, CodecService.Format.XML, True)
         create_rpc = self.root_schema.rpc("ydk:delete")
         create_rpc.input().create("entity", xml)
         create_rpc(self.ncc)
@@ -55,17 +56,17 @@ class SanityTest(unittest.TestCase):
         for (leaf_path, leaf_value) in leaf_path_values:
             runner.create(leaf_path, leaf_value)
 
-        xml = self.codec.encode(runner, path.CodecService.Format.XML, True)
+        xml = self.codec.encode(runner, CodecService.Format.XML, True)
         create_rpc = self.root_schema.rpc("ydk:create")
         create_rpc.input().create("entity", xml)
         create_rpc(self.ncc)
 
         runner_filter = self.root_schema.create("ydktest-sanity:runner")
-        xml_filter = self.codec.encode(runner_filter, path.CodecService.Format.XML, False)
+        xml_filter = self.codec.encode(runner_filter, CodecService.Format.XML, False)
         read_rpc = self.root_schema.rpc("ydk:read")
         read_rpc.input().create("filter", xml_filter)
         runner_read = read_rpc(self.ncc)
-        xml_read = self.codec.encode(runner_read, path.CodecService.Format.XML, True)
+        xml_read = self.codec.encode(runner_read, CodecService.Format.XML, True)
         self.maxDiff = None
         self.assertEqual(xml, xml_read)
 

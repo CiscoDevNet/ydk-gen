@@ -15,7 +15,8 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-from ydk.path import *
+from ydk_.providers import NetconfServiceProvider
+from ydk_.path import CodecService
 
 
 def execute_path(provider, codec):
