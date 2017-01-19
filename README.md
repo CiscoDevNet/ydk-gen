@@ -65,7 +65,7 @@ Options:
   -p, --python        Generate Python bundle/core. This is currently the default option
   -c, --cpp           Generate C++ bundle/core
   --core              Install the python/C++ core
-  --bundle=PROFILE    Take options from a bundle profile file describing YANG
+  --bundle=PROFILE    Take options from a bundle profile file describing YANG models to generate APIs for
   -v, --verbose       Verbose mode
   --generate-doc      Generation documentation
   --output-directory  The output-directory . If not specified the output can be found under `ydk-gen/gen-api/python`
