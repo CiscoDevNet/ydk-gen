@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Getting Started](#getting-started)
+  - [Overview](#overview)
+  - [System Requirements](#system-requirements)
+  - [Install Tips](#install-tips)
+- [Example Usage](#example-usage)
+  - [Service Providers](#service-providers)
+  - [Using the model APIs](#using-the-model-apis)
+  - [Invoking the CRUD Service](#invoking-the-crud-service)
+  - [Logging](#logging)
+- [Release Notes](#release-notes)
+- [Documentation and Support](#documentation-and-support)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 <a href="https://github.com/CiscoDevNet/ydk-gen"><img src="https://cloud.githubusercontent.com/assets/17089095/14834057/2e1fe270-0bb7-11e6-9e94-73dd7d71e87d.png" height="240" width="240" ></a>
 
 
