@@ -46,13 +46,13 @@ YDK-Py requires ydk-cpp core to be built and installed.
 ####Linux
 Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
 ```
-$ sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool-bin
+$ sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libssh-dev libcurl4-openssl-dev libtool-bin libboost-all-dev libpcre3-dev cmake
 ```
 
 Centos (Fedora-based): The following packages must be present in your system before installing YDK-Py:
 ```
 $ sudo yum install epel-release
-$ sudo yum install python-pip python-devel libxml2-devel libxslt-devel libssh-devel boost-devel boost-python libcurl-devel libtool gcc-c++
+$ sudo yum install python-pip python-devel libxml2-devel libxslt-devel libssh-devel boost-devel boost-python libcurl-devel libtool gcc-c++ boost-devel pcre-devel cmake
 ```
 
 ####Mac
@@ -60,7 +60,7 @@ It is recommended to install homebrew (http://brew.sh) and Xcode command line to
 ```
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ xcode-select --install
-$ brew install boost boost-python pkg-config cmake libssh
+$ brew install boost pkg-config cmake libssh curl libssh pcre xml2 cmake
 ```
 
 ####Windows
@@ -86,7 +86,7 @@ Options:
   -p, --python        Generate Python bundle/core. This is currently the default option
   -c, --cpp           Generate C++ bundle/core
   --core              Install the python/C++ core
-  --bundle=PROFILE    Take options from a bundle profile file describing YANG
+  --bundle=PROFILE    Take options from a bundle profile file describing YANG models to generate APIs for
   -v, --verbose       Verbose mode
   --generate-doc      Generation documentation
   --output-directory  The output-directory . If not specified the output can be found under `ydk-gen/gen-api/python`
