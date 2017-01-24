@@ -46,7 +46,7 @@ YDK-Py requires ydk-cpp core to be built and installed.
 ####Linux
 Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
 ```
-$ sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool-bin bison curl doxygen flex git libboost-all-dev libboost-log-dev libcmocka0 libpcre3-dev libpcre++-dev libtool pkg-config python3-dev python3-lxml python-virtualenv software-properties-common unzip wget cmake
+$ sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool-bin libboost-all-dev libboost-log-dev libpcre3-dev libpcre++-dev libtool pkg-config python3-dev python3-lxml cmake
 ```
 
 Centos (Fedora-based): The following packages must be present in your system before installing YDK-Py:
