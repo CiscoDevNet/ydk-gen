@@ -1,3 +1,24 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [YDK-GEN](#ydk-gen)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Installing the YDK core](#installing-the-ydk-core)
+    - [Bundle profiles](#bundle-profiles)
+      - [Details](#details)
+    - [Generating documentation](#generating-documentation)
+  - [Notes](#notes)
+    - [Python version](#python-version)
+    - [Directory Structure](#directory-structure)
+    - [Troubleshooting](#troubleshooting)
+  - [Running Unit Tests](#running-unit-tests)
+    - [Python](#python)
+    - [C++](#c)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 <a href="https://github.com/CiscoDevNet/ydk-gen"><img src="https://cloud.githubusercontent.com/assets/17089095/14834057/2e1fe270-0bb7-11e6-9e94-73dd7d71e87d.png" height="240" width="240" ></a>
 
 # YDK-GEN

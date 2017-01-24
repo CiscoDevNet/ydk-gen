@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Python](#python)
+- [C++ (alpha)](#c-alpha)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 **2016-11-30 version 0.5.2:**
 
 ### Python
