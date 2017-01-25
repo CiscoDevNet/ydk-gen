@@ -4,10 +4,14 @@
 
 - [YDK-GEN](#ydk-gen)
   - [Installation](#installation)
+    - [Setting up your environment](#setting-up-your-environment)
+    - [Clone ydk-gen and install the requirements](#clone-ydk-gen-and-install-the-requirements)
   - [Usage](#usage)
-    - [Installing the YDK core](#installing-the-ydk-core)
-    - [Bundle profiles](#bundle-profiles)
+    - [First step: choose your bundle profile](#first-step-choose-your-bundle-profile)
       - [Details](#details)
+    - [Second step: Generate & install the core](#second-step-generate--install-the-core)
+    - [Third step: Generate & install your bundle](#third-step-generate--install-your-bundle)
+    - [Fourth step: Writing your first app](#fourth-step-writing-your-first-app)
     - [Generating documentation](#generating-documentation)
   - [Notes](#notes)
     - [Python version](#python-version)
@@ -41,7 +45,7 @@ The output of ydk-gen is either a core package, that defines services and provid
 
 ##System Requirements:
 
-YDK-Py requires ydk-cpp core to be built and installed.
+`ydk-py` requires `ydk-cpp` core to be built and installed.
 
 ####Linux
 Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
@@ -204,7 +208,7 @@ Now, you can start creating apps based on the models in your bundle. Assuming yo
 
 ### Generating documentation
 
-When generating the YDK documentation for several bundles and the core, it is recommended to generate the bundles without the `--generate-doc` option. After generating all the bundles, the combined documentation for all the bundles and the core can be generated using the `--core --generate-doc` option. For example, the below sequence of commands will generate the documentation for the three bundles and the core. Note that this process could take a few hours due to the size of the cisco_ios_xr bundle:
+When generating the YDK documentation for several bundles and the core, it is recommended to generate the bundles without the `--generate-doc` option. After generating all the bundles, the combined documentation for all the bundles and the core can be generated using the `--core --generate-doc` option. For example, the below sequence of commands will generate the documentation for the three bundles and the core. Note that this process could take a few hours due to the size of the `cisco_ios_xr` bundle:
 
 ```
 ./generate.py --python --bundle profiles/bundles/ietf_0_1_1.json
@@ -220,7 +224,7 @@ When generating the YDK documentation for several bundles and the core, it is re
 - If your environment has both python 2 and python 3 and uses python 2 by default, you may need to use 'python3' and 'pip3' instead of 'python' and 'pip' in the commands mentioned in this document.
 
 
-### Directory Structure
+### Directory structure
 
 ```
 README          - install and usage notes
@@ -232,7 +236,7 @@ generate.py     - script used to generate SDK for yang models
 profiles        - profile files used during generation
 yang            - some yang models used for testing
 requirements.txt- python dependencies used during installation
-sdk             - sdk core and stubs
+sdk             - sdk core and stubs for python and cpp
 test            - test code
 ```
 
