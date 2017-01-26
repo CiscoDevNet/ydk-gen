@@ -66,13 +66,11 @@ namespace ydk {
 
             std::vector<SchemaNode*> find(const std::string& path) const;
 
-
             const SchemaNode* parent() const noexcept;
 
-            const std::vector<std::unique_ptr<SchemaNode>> & children() const;
+            const std::vector<std::unique_ptr<SchemaNode>>& children() const;
 
-
-            const SchemaNode* root() const noexcept;
+            const SchemaNode& root() const noexcept;
 
             Statement statement() const;
 
@@ -82,37 +80,31 @@ namespace ydk {
             struct lys_node* m_node;
             std::vector<std::unique_ptr<SchemaNode>> m_children;
 
-
         };
+
 
         class RootSchemaNodeImpl : public RootSchemaNode
         {
         public:
             RootSchemaNodeImpl(struct ly_ctx* ctx) ;
+
             virtual ~RootSchemaNodeImpl();
 
             std::vector<SchemaNode*> find(const std::string& path) const;
 
-            const std::vector<std::unique_ptr<SchemaNode>> & children() const;
+            const std::vector<std::unique_ptr<SchemaNode>>& children() const;
+
             DataNode* create(const std::string& path) const;
+
             DataNode* create(const std::string& path, const std::string& value) const;
 
-
-
-            DataNode* from_xml(const std::string& xml) const;
-
-
-            Rpc* rpc(const std::string& path) const;
+            std::unique_ptr<Rpc> rpc(const std::string& path) const;
 
 
             struct ly_ctx* m_ctx;
             std::vector<std::unique_ptr<SchemaNode>> m_children;
 
         };
-
-
-
-
 
 
         class DataNodeImpl : public DataNode{
@@ -127,7 +119,7 @@ namespace ydk {
 
             virtual ~DataNodeImpl();
 
-            virtual const SchemaNode* schema() const;
+            virtual const SchemaNode& schema() const;
 
             virtual std::string path() const;
 
@@ -138,78 +130,70 @@ namespace ydk {
             // and value is ignored
             //
             // returns the first created or updated node
-            virtual DataNode* create_filter(const std::string& path, const std::string& value);
+            virtual DataNode& create_filter(const std::string& path, const std::string& value);
 
-            virtual DataNode* create(const std::string& path, const std::string& value);
+            virtual DataNode& create(const std::string& path, const std::string& value);
 
             virtual void set(const std::string& value);
 
             virtual std::string get() const;
 
-            virtual std::vector<DataNode*> find(const std::string& path) const;
-
+            virtual std::vector<std::shared_ptr<DataNode>> find(const std::string& path) const;
 
             virtual DataNode* parent() const;
 
-            virtual std::vector<DataNode*> children() const;
+            virtual std::vector<std::shared_ptr<DataNode>> children() const;
 
-
-            virtual const DataNode* root() const;
-
+            virtual const DataNode& root() const;
 
             virtual void add_annotation(const Annotation& an);
-
 
             virtual bool remove_annotation(const Annotation& an);
 
             virtual std::vector<Annotation> annotations();
 
-
             virtual std::string xml() const;
 
-            virtual DataNodeImpl* get_dn_for_desc_node(struct lyd_node* desc_node) const;
+            virtual std::shared_ptr<DataNode> get_dn_for_desc_node(struct lyd_node* desc_node) const;
 
         private:
 
-            virtual DataNode* create_helper(const std::string& path, const std::string& value, bool is_filter);
+            virtual DataNode& create_helper(const std::string& path, const std::string& value, bool is_filter);
 
         public:
 
             DataNode* m_parent;
             struct lyd_node* m_node;
-            std::map<struct lyd_node*, DataNodeImpl*> child_map;
+            std::map<struct lyd_node*, std::shared_ptr<DataNode>> child_map;
 
         };
 
 
         class RootDataImpl : public DataNodeImpl {
         public:
-            RootDataImpl(const SchemaNode* schema, struct ly_ctx* ctx, const std::string path);
+            RootDataImpl(const SchemaNode& schema, struct ly_ctx* ctx, const std::string path);
 
             virtual ~RootDataImpl();
 
-            virtual const SchemaNode* schema() const;
+            virtual const SchemaNode& schema() const;
 
             virtual std::string path() const;
 
-            virtual DataNode* create_filter(const std::string& path, const std::string& value);
-            virtual DataNode* create(const std::string& path, const std::string& value);
+            virtual DataNode& create(const std::string& path, const std::string& value);
 
             virtual void set(const std::string& value);
 
             virtual std::string get() const;
 
+            virtual std::vector<std::shared_ptr<DataNode>> children() const;
 
-            virtual std::vector<DataNode*> children() const;
+            virtual const DataNode& root() const;
 
-            virtual const DataNode* root() const;
+            virtual std::vector<std::shared_ptr<DataNode>> find(const std::string& path) const;
 
-            virtual std::vector<DataNode*> find(const std::string& path) const;
 
-            const SchemaNode* m_schema;
-
+            const SchemaNode& m_schema;
             struct ly_ctx* m_ctx;
-
             std::string m_path;
 
         };
@@ -218,21 +202,20 @@ namespace ydk {
         class RpcImpl : public Rpc {
         public:
 
-            RpcImpl(SchemaNodeImpl* sn, struct ly_ctx* ctx);
+            RpcImpl(SchemaNodeImpl& sn, struct ly_ctx* ctx);
 
             virtual ~RpcImpl();
 
-            virtual DataNode* operator()(const ServiceProvider& provider);
+            virtual std::unique_ptr<DataNode>
+             operator()(const ServiceProvider& provider);
+
+            virtual DataNode& input() const;
+
+            virtual SchemaNode& schema() const;
 
 
-            virtual DataNode* input() const;
-
-            virtual SchemaNode* schema() const;
-
-
-            SchemaNodeImpl* m_sn;
-            DataNode* m_input_dn;
-
+            SchemaNodeImpl& schema_node;
+            std::unique_ptr<DataNode> data_node;
 
         };
 

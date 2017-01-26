@@ -46,10 +46,10 @@ ydk::path::RootSchemaNode::parent() const noexcept
     return nullptr;
 }
 
-const ydk::path::SchemaNode*
+const ydk::path::SchemaNode&
 ydk::path::RootSchemaNode::root() const noexcept
 {
-    return this;
+    return *this;
 }
 
 ydk::path::Statement
@@ -137,29 +137,16 @@ ydk::path::RootSchemaNodeImpl::create(const std::string& path) const
 ydk::path::DataNode*
 ydk::path::RootSchemaNodeImpl::create(const std::string& path, const std::string& value) const
 {
-    RootDataImpl* rd = new RootDataImpl{this, m_ctx, "/"};
+    RootDataImpl* rd = new RootDataImpl{*this, m_ctx, "/"};
 
     if (rd){
-        return rd->create(path, value);
+        return &rd->create(path, value);
     }
 
     return nullptr;
 }
 
-ydk::path::DataNode*
-ydk::path::RootSchemaNodeImpl::from_xml(const std::string& xml) const
-{
-    struct lyd_node *root = lyd_parse_mem(m_ctx, xml.c_str(), LYD_XML, 0);
-    RootDataImpl* rd = new RootDataImpl{this, m_ctx, "/"};
-    DataNodeImpl* nodeImpl = new DataNodeImpl{rd,root};
-
-    return nodeImpl;
-
-}
-
-
-
-ydk::path::Rpc*
+std::unique_ptr<ydk::path::Rpc>
 ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
 {
     auto c = find(path);
@@ -188,6 +175,6 @@ ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
         BOOST_LOG_TRIVIAL(error) << "Schema Node case failed";
         BOOST_THROW_EXCEPTION(YCPPIllegalStateError("Internal error occurred"));
     }
-    return new RpcImpl{sn, m_ctx};
 
+    return std::make_unique<RpcImpl>(*sn, m_ctx);
 }

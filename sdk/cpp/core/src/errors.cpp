@@ -29,12 +29,12 @@
 /////////////////////////////////////////////////////////////////////////
 ydk::YCPPError::YCPPError(const std::string& msg) : err_msg{msg}
 {
-	what();
+    what();
 }
 
 const char* ydk::YCPPError::what() const noexcept
 {
-	return err_msg.c_str();
+    return err_msg.c_str();
 }
 
 /////////////////////////////////////////////////////////////////////////

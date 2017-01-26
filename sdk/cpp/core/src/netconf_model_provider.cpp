@@ -38,7 +38,7 @@ using namespace ydk;
 namespace ydk
 {
 NetconfModelProvider::NetconfModelProvider(NetconfClient & client)
-	: client(client)
+    : client(client)
 {
 }
 
@@ -48,7 +48,7 @@ NetconfModelProvider::~NetconfModelProvider()
 
 std::string NetconfModelProvider::get_hostname_port()
 {
-	return client.get_hostname_port();
+    return client.get_hostname_port();
 }
 
 string NetconfModelProvider::get_model(const string& name, const string& version, Format format)

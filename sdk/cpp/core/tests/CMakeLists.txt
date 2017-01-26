@@ -21,26 +21,25 @@ foreach(test_name IN LISTS core_tests)
     add_executable(${test_name} ${test_name}.cpp)
     set_property(TARGET ${test_name} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${test_name} PROPERTY CXX_STANDARD_REQUIRED ON)
-    #target_include_directories(${test_name} PRIVATE ${BOOST_INCLUDE_DIRS})
-    #target_compile_definitions(${test_name} PRIVATE "BOOST_TEST_DYN_LINK=1")
-    target_link_libraries(${test_name} ydk ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
-        ${Boost_LOG_LIBRARY}
-        ${BOOST_THREAD_LIBRARY}
-        ${BOOST_DATE_TIME_LIBRARY}
-        ${Boost_FILESYSTEM_LIBRARY}
-        ${Boost_SYSTEM_LIBRARY}
-        curl
-        xslt
-        pcre
-        ssh_threads
-        xml2
-        ssh)
-    target_compile_definitions(${test_name} PRIVATE "BOOST_ALL_DYN_LINK=1")
+    target_include_directories(${test_name} PRIVATE ${BOOST_INCLUDE_DIRS})
+    target_compile_definitions(${test_name} PRIVATE "BOOST_TEST_DYN_LINK=1")
     target_compile_definitions(${test_name} PRIVATE "BOOST_LOG_DYN_LINK=1")
-    
+    target_compile_definitions(${test_name} PRIVATE "BOOST_ALL_DYN_LINK=1")
+    target_link_libraries(${test_name} ydk ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
     add_test(NAME ${test_name} COMMAND $<TARGET_FILE:${test_name}>)
 endforeach(test_name)
 
+foreach(test_name IN LISTS entity_tests)
+    add_executable(${test_name} entity/${test_name}.cpp)
+    set_property(TARGET ${test_name} PROPERTY CXX_STANDARD 11)
+    set_property(TARGET ${test_name} PROPERTY CXX_STANDARD_REQUIRED ON)
+    target_include_directories(${test_name} PRIVATE ${BOOST_INCLUDE_DIRS})
+    target_compile_definitions(${test_name} PRIVATE "BOOST_TEST_DYN_LINK=1")
+    target_compile_definitions(${test_name} PRIVATE "BOOST_LOG_DYN_LINK=1")
+    target_compile_definitions(${test_name} PRIVATE "BOOST_ALL_DYN_LINK=1")
+    target_link_libraries(${test_name} ydk ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+    add_test(NAME ${test_name} COMMAND $<TARGET_FILE:${test_name}>)
+endforeach(test_name)
 
 
 configure_file("${PROJECT_SOURCE_DIR}/tests/config.hpp.in" "${PROJECT_SOURCE_DIR}/tests/config.hpp" ESCAPE_QUOTES @ONLY)

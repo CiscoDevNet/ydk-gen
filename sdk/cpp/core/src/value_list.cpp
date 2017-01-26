@@ -41,55 +41,55 @@ std::string to_string(YType t)
     {
         TOSTRING(uint8);
         TOSTRING(uint16);
-    	TOSTRING(uint32);
-    	TOSTRING(uint64);
-    	TOSTRING(int8);
-    	TOSTRING(int16);
-    	TOSTRING(int32);
-    	TOSTRING(int64);
-    	TOSTRING(empty);
-    	TOSTRING(identityref);
-    	TOSTRING(str);
-    	TOSTRING(boolean);
-    	TOSTRING(enumeration);
-    	TOSTRING(bits);
-    	TOSTRING(decimal64);
+        TOSTRING(uint32);
+        TOSTRING(uint64);
+        TOSTRING(int8);
+        TOSTRING(int16);
+        TOSTRING(int32);
+        TOSTRING(int64);
+        TOSTRING(empty);
+        TOSTRING(identityref);
+        TOSTRING(str);
+        TOSTRING(boolean);
+        TOSTRING(enumeration);
+        TOSTRING(bits);
+        TOSTRING(decimal64);
     }
     return "";
 }
 
 YLeafList::YLeafList(YType type, std::string name)
-	: operation(EditOperation::not_set), type(type), name(name)
+    : operation(EditOperation::not_set), type(type), name(name)
 {
 }
 
 YLeafList::YLeafList(const YLeafList& other)
-	: operation(EditOperation::not_set), values(other.getYLeafs()), type(other.type), name(other.name)
+    : operation(EditOperation::not_set), values(other.getYLeafs()), type(other.type), name(other.name)
 {
 }
 
 YLeafList::YLeafList(YLeafList&& other)
-	: operation(EditOperation::not_set), values(other.getYLeafs()), type(other.type), name(other.name)
+    : operation(EditOperation::not_set), values(other.getYLeafs()), type(other.type), name(other.name)
 {
 }
 
 ydk::YLeafList&
 YLeafList::operator=(const YLeafList& other)
 {
-	type = other.type;
-	name = other.name;
-	values = other.getYLeafs();
-	operation = other.operation;
+    type = other.type;
+    name = other.name;
+    values = other.getYLeafs();
+    operation = other.operation;
     return *this;
 }
 
 ydk::YLeafList&
 YLeafList::operator=(YLeafList&& other)
 {
-	type = other.type;
-	name = other.name;
-	values = other.getYLeafs();
-	operation = other.operation;
+    type = other.type;
+    name = other.name;
+    values = other.getYLeafs();
+    operation = other.operation;
     return *this;
 }
 
@@ -99,156 +99,156 @@ YLeafList::~YLeafList()
 
 void YLeafList::append(uint8 val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(uint32 val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(uint64 val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(long val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(int8 val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(int32 val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(Enum::YLeaf val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(int64 val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(Empty val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(Identity val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(Bits val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(std::string val)
 {
-	YLeaf value {type, name};
-	value = val;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 void YLeafList::append(Decimal64 val)
 {
-	YLeaf value {type, name};
-	value = val.value;
-	BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
-	BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
-	values.push_back(value);
+    YLeaf value {type, name};
+    value = val.value;
+    BOOST_LOG_TRIVIAL(trace)<<"appending "<<value.get();
+    BOOST_LOG_TRIVIAL(trace)<<"type of leaf: "<<to_string(type);
+    values.push_back(value);
 }
 
 bool YLeafList::operator == (YLeafList & other) const
 {
-	return type == other.type && name == other.name && values == other.getYLeafs();
+    return type == other.type && name == other.name && values == other.getYLeafs();
 }
 
 bool YLeafList::operator == (const YLeafList & other) const
 {
-	return type == other.type && name == other.name && values == other.getYLeafs();
+    return type == other.type && name == other.name && values == other.getYLeafs();
 }
 
 YLeaf & YLeafList::operator [] (size_t key)
 {
-	if(key >= values.size())
-	{
-		BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"List index out of range"});
-	}
-	return values[key];
+    if(key >= values.size())
+    {
+        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"List index out of range"});
+    }
+    return values[key];
 }
 
 std::vector<YLeaf> YLeafList::getYLeafs() const
 {
-	return values;
+    return values;
 }
 
 std::vector<std::pair<std::string, LeafData> > YLeafList::get_name_leafdata() const
 {
-	std::vector<std::pair<std::string, LeafData> > name_values;
+    std::vector<std::pair<std::string, LeafData> > name_values;
     for (auto value : values)
     {
-    	name_values.push_back(
-    						{
-								(value.get_name_leafdata().first+"[.='"+value.get()+"']"),
-								{"", operation, value.is_set}
-    						}
-    						);
+        name_values.push_back(
+                            {
+                                (value.get_name_leafdata().first+"[.='"+value.get()+"']"),
+                                {"", operation, value.is_set}
+                            }
+                            );
     }
     return name_values;
 }

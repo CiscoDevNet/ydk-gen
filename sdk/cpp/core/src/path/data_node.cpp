@@ -35,14 +35,14 @@ ydk::path::DataNode::~DataNode()
 
 }
 
-ydk::path::DataNode*
+ydk::path::DataNode&
 ydk::path::DataNode::create(const std::string& path)
 {
     return create(path, "");
 }
 
 
-ydk::path::DataNode*
+ydk::path::DataNode&
 ydk::path::DataNode::create_filter(const std::string& path)
 {
     return create_filter(path, "");
@@ -56,11 +56,11 @@ ydk::path::DataNodeImpl::DataNodeImpl(DataNode* parent, struct lyd_node* node): 
 	//add the children
     if(m_node && m_node->child && !(m_node->schema->nodetype == LYS_LEAF ||
                           m_node->schema->nodetype == LYS_LEAFLIST ||
-                          m_node->schema->nodetype == LYS_ANYXML)){
+                          m_node->schema->nodetype == LYS_ANYXML))
+    {
         struct lyd_node *iter = nullptr;
         LY_TREE_FOR(m_node->child, iter) {
-            DataNodeImpl* dn = new DataNodeImpl{this, iter};
-            child_map.insert(std::make_pair(iter, dn));
+            child_map.insert(std::make_pair(iter, std::make_shared<DataNodeImpl>(this, iter)));
         }
     }
 
@@ -68,26 +68,23 @@ ydk::path::DataNodeImpl::DataNodeImpl(DataNode* parent, struct lyd_node* node): 
 
 ydk::path::DataNodeImpl::~DataNodeImpl()
 {
-    //first destroy the children
-    for (auto p : child_map) {
-        delete p.second;
-    }
 
-    if(m_node){
-        if(m_parent) {
-            lyd_free(m_node);
-        } else {
-            lyd_free_withsiblings(m_node);
-        }
-
-        m_node = nullptr;
-    }
+    BOOST_LOG_TRIVIAL(error) << "~DataNodeImpl" << this;
+    // if(m_node){
+    //     if(m_parent) {
+    //         lyd_free(m_node);
+    //     } else {
+    //         lyd_free_withsiblings(m_node);
+    //     }
+    //     m_node = nullptr;
+    // }
 }
 
-const ydk::path::SchemaNode*
+const ydk::path::SchemaNode&
 ydk::path::DataNodeImpl::schema() const
 {
-    return reinterpret_cast<const SchemaNode*>(m_node->schema->priv);
+    auto schema_ptr = reinterpret_cast<const SchemaNode*>(m_node->schema->priv);
+    return *schema_ptr;
 }
 
 std::string
@@ -103,19 +100,19 @@ ydk::path::DataNodeImpl::path() const
 }
 
 
-ydk::path::DataNode*
+ydk::path::DataNode&
 ydk::path::DataNodeImpl::create_filter(const std::string& path, const std::string& value)
 {
 	return create_helper(path, value, true);
 }
 
-ydk::path::DataNode*
+ydk::path::DataNode&
 ydk::path::DataNodeImpl::create(const std::string& path, const std::string& value)
 {
 	return create_helper(path, value, false);
 }
 
-ydk::path::DataNode*
+ydk::path::DataNode&
 ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::string& value, bool is_filter)
 {
     if(path.empty())
@@ -140,7 +137,7 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
     size_t start_index = 0;
     auto iter = segments.begin();
 
-    BOOST_LOG_TRIVIAL(trace) << "Current path: "<<this->schema()->path();
+    BOOST_LOG_TRIVIAL(trace) << "Current path: "<<this->schema().path();
     BOOST_LOG_TRIVIAL(trace) << "Top container path: "<<top_container_path;
 
     while (iter != segments.end())
@@ -163,12 +160,12 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
         }
         else
         {
-            dn = dynamic_cast<DataNodeImpl*>(r[0]);
-            if (dn == nullptr)
+            if (r[0] == nullptr)
             {
                 BOOST_LOG_TRIVIAL(error) << "Invalid data node";
                 BOOST_THROW_EXCEPTION(YCPPCoreError{"Invalid data node"});
             }
+            dn = dynamic_cast<DataNodeImpl*>(r[0].get());
             ++iter;
             start_index++;
         }
@@ -227,21 +224,20 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
 
     if (first_node_created)
     {
-        auto p = new DataNodeImpl{dn, first_node_created};
-        dn->child_map.insert(std::make_pair(first_node_created, p));
+        dn->child_map.insert(std::make_pair(first_node_created, std::make_shared<DataNodeImpl>(dn, first_node_created)));
 
-        DataNodeImpl* rdn = p;
+        DataNodeImpl* rdn = dynamic_cast<DataNodeImpl*>(dn->child_map[first_node_created].get());
 
         while(!rdn->children().empty() && rdn->m_node != cn)
         {
-            rdn = dynamic_cast<DataNodeImpl*>(rdn->children()[0]);
+            rdn = dynamic_cast<DataNodeImpl*>(rdn->children()[0].get());
         }
 
-        return rdn;
+        return *rdn;
     }
     else
     {
-        return dn;
+        return *dn;
     }
 }
 
@@ -288,17 +284,17 @@ ydk::path::DataNodeImpl::get() const
     return ret;
 }
 
-std::vector<ydk::path::DataNode*>
+std::vector<std::shared_ptr<ydk::path::DataNode>>
 ydk::path::DataNodeImpl::find(const std::string& path) const
 {
-    std::vector<DataNode*> results;
+    std::vector<std::shared_ptr<DataNode>> results;
 
     if(m_node == nullptr) {
         return results;
     }
     std::string spath{path};
 
-    auto s = schema()->statement();
+    auto s = schema().statement();
     if(s.keyword == "rpc"){
         spath="input/" + spath;
     }
@@ -334,10 +330,10 @@ ydk::path::DataNodeImpl::parent() const
     return m_parent;
 }
 
-std::vector<ydk::path::DataNode*>
+std::vector<std::shared_ptr<ydk::path::DataNode>>
 ydk::path::DataNodeImpl::children() const
 {
-    std::vector<DataNode*> ret{};
+    std::vector<std::shared_ptr<DataNode>> ret{};
     //the ordering should be determined by the lyd_node
     struct lyd_node *iter;
     if(m_node && m_node->child && !(m_node->schema->nodetype == LYS_LEAF ||
@@ -356,13 +352,13 @@ ydk::path::DataNodeImpl::children() const
     return ret;
 }
 
-const ydk::path::DataNode*
+const ydk::path::DataNode&
 ydk::path::DataNodeImpl::root() const
 {
     if(m_parent){
         return m_parent->root();
     }
-    return this;
+    return *this;
 }
 
 std::string
@@ -377,10 +373,10 @@ ydk::path::DataNodeImpl::xml() const
 	return ret;
 }
 
-ydk::path::DataNodeImpl*
+std::shared_ptr<ydk::path::DataNode>
 ydk::path::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
 {
-	DataNodeImpl* dn = nullptr;
+    std::shared_ptr<DataNode> dn;
 
 	//create DataNode wrappers
 	std::vector<struct lyd_node*> nodes{};
@@ -415,11 +411,12 @@ ydk::path::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
 		   if(!m_node->parent)
 		   {
 			   //special case the root is the first node
-			   parent = child_map.begin()->second;
-			   res = parent->child_map.find(p);
+			   parent = dynamic_cast<DataNodeImpl*>(child_map.begin()->second.get());
+               auto r = parent->child_map.find(p);
 
-			   if(res != parent->child_map.end())
+			   if(r != parent->child_map.end())
 			   {
+                   res = r;
 				   dn = res->second;
 			   }
 			   else
@@ -434,7 +431,7 @@ ydk::path::DataNodeImpl::get_dn_for_desc_node(struct lyd_node* desc_node) const
 			   BOOST_THROW_EXCEPTION(YCPPCoreError{"Parent is nullptr"});
 		   }
        }
-	   parent = dn;
+	   parent = dynamic_cast<DataNodeImpl*>(dn.get());
 	}
 
 	return dn;

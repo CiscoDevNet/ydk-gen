@@ -41,11 +41,11 @@ namespace ydk {
 ///
 struct YCPPError : public std::exception, public boost::exception
 {
-	YCPPError(const std::string& msg);
+    YCPPError(const std::string& msg);
 
-	const char* what() const noexcept;
+    const char* what() const noexcept;
 
-	std::string err_msg;
+    std::string err_msg;
 };
 
 struct YCPPClientError : public YCPPError
@@ -112,7 +112,7 @@ struct YCPPOperationNotSupportedError : public YCPPError
 ///
 struct YCPPModelError : public YCPPError
 {
-	YCPPModelError(const std::string& msg);
+    YCPPModelError(const std::string& msg);
 };
 }
 

@@ -51,12 +51,12 @@ TopEntityLookUp::insert(std::string path, std::unique_ptr<Entity> top_entity)
 
 std::unique_ptr<Entity> lookup_top_entity(const std::string & lookup_key)
 {
-	return ydk_top_entities_table.lookup(lookup_key);
+    return ydk_top_entities_table.lookup(lookup_key);
 }
 
 const std::vector<path::Capability> get_global_capabilities()
 {
-	return ydk_global_capabilities;
+    return ydk_global_capabilities;
 }
 
 }

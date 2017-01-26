@@ -282,7 +282,7 @@ namespace ydk {
             /// @return The encoded string.
             //  @throws YCPPInvalidArgumentError if the arguments are invalid.
             ///
-            virtual std::string encode(const DataNode* dn, EncodingFormat format, bool pretty);
+            virtual std::string encode(const DataNode & dn, EncodingFormat format, bool pretty);
 
             ///
             /// @brief decode the buffer to return a DataNode
@@ -293,7 +293,7 @@ namespace ydk {
             /// @return The DataNode instantiated or nullptr in case of error.
             /// @throws YCPPInvalidArgumentError if the arguments are invalid.
             ///
-            virtual DataNode* decode(const RootSchemaNode* root_schema, const std::string& buffer, EncodingFormat format);
+            virtual std::unique_ptr<DataNode> decode(const RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format);
 
 
         };
@@ -644,7 +644,7 @@ namespace ydk {
             /// Returns the root of the NodeTree this nodes is part of
             /// @return the pointer to the root
             ///
-            virtual const SchemaNode* root() const noexcept = 0;
+            virtual const SchemaNode& root() const noexcept = 0;
 
             ///
             /// @brief return the YANG statement associated with this SchemaNode
@@ -707,7 +707,7 @@ namespace ydk {
             ///
             /// Returns the children of this SchemaNode.
             ///@return the children of this node.
-            virtual const std::vector<std::unique_ptr<SchemaNode>> & children() const = 0;
+            virtual const std::vector<std::unique_ptr<SchemaNode>>& children() const = 0;
 
             ///
             /// @brief get the root of NodeTree this node is part of
@@ -715,7 +715,7 @@ namespace ydk {
             /// Returns the root of the NodeTree this nodes is part of
             /// @return the pointer to the root
             ///
-            virtual const SchemaNode* root() const noexcept;
+            virtual const SchemaNode& root() const noexcept;
 
             ///
             /// @brief create a DataNode corresponding to the path and set its value
@@ -783,7 +783,7 @@ namespace ydk {
             /// @throws YCPPInvalidArgumentError if the argument is invalid.
             /// @throws YCPPPathError if the path is invalid
             ///
-            virtual Rpc* rpc(const std::string& path) const = 0;
+            virtual std::unique_ptr<Rpc> rpc(const std::string& path) const = 0;
 
         };
 
@@ -808,7 +808,7 @@ namespace ydk {
             /// Return the SchemaNode associated with this DataNode.
             /// @return SchemaNode associated with this DataNode
             ///
-            virtual const SchemaNode* schema() const = 0;
+            virtual const SchemaNode& schema() const = 0;
 
             ///
             /// @brief returns the XPath expression of this Node in the NodeTree
@@ -836,8 +836,8 @@ namespace ydk {
             /// @throws YCPPInvalidArgumentError In case the argument is invalid.
             /// @throws YCPPPathError In case the path is invalid.
             ///
-           virtual DataNode* create(const std::string& path);
-           virtual DataNode* create_filter(const std::string& path);
+           virtual DataNode& create(const std::string& path);
+           virtual DataNode& create_filter(const std::string& path);
 
             ///
             /// @brief create a DataNode corresponding to the path and set its value
@@ -856,8 +856,8 @@ namespace ydk {
             /// @throws YCPPInvalidArgumentError In case the argument is invalid.
             /// @throws YCPPPathError In case the path is invalid.
             ///
-            virtual DataNode* create(const std::string& path, const std::string& value) = 0;
-            virtual DataNode* create_filter(const std::string& path, const std::string& value) = 0;
+            virtual DataNode& create(const std::string& path, const std::string& value) = 0;
+            virtual DataNode& create_filter(const std::string& path, const std::string& value) = 0;
 
             ///
             /// @brief set the value of this DataNode.
@@ -891,7 +891,7 @@ namespace ydk {
             ///
             /// @param[in] path The path expression.
             /// @return vector of DataNodes that satisfy the path expression supplied.
-            virtual std::vector<DataNode*> find(const std::string& path) const = 0 ;
+            virtual std::vector<std::shared_ptr<DataNode>> find(const std::string& path) const = 0 ;
 
 
             ///
@@ -906,14 +906,14 @@ namespace ydk {
             ///
             /// Returns the children of this DataNode
             ///
-            virtual std::vector<DataNode*> children() const = 0;
+            virtual std::vector<std::shared_ptr<DataNode>> children() const = 0;
 
             ///
             /// @brief returns the root DataNode of this tree.
             ///
             /// Returns the root of the DataNode.
             ///
-            virtual const DataNode* root() const = 0;
+            virtual const DataNode& root() const = 0;
 
             ///
             /// @brief Add the annotation to this datanode
@@ -1102,7 +1102,7 @@ namespace ydk {
             ///
             /// @return pointer to the RootSchemaNode or nullptr if one could not be created
             ///
-           virtual RootSchemaNode* get_root_schema() const = 0;
+           virtual RootSchemaNode& get_root_schema() const = 0;
 
 
             virtual ~ServiceProvider();
@@ -1118,7 +1118,7 @@ namespace ydk {
             /// @param[in] pointer to the Rpc node
             /// @return The pointer to the DataNode representing the output.
             ///
-            virtual DataNode* invoke(Rpc* rpc) const = 0 ;
+            virtual std::unique_ptr<DataNode> invoke(Rpc& rpc) const = 0 ;
 
         };
 
@@ -1144,7 +1144,7 @@ namespace ydk {
             /// @param[in] sp The Service provider
             /// @areturn pointer to the DataNode or nullptr if none exists
             ///
-            virtual DataNode* operator()(const ServiceProvider& provider) = 0;
+            virtual std::unique_ptr<DataNode> operator()(const ServiceProvider& provider) = 0;
 
             ///
             /// @brief get the input data tree
@@ -1152,13 +1152,13 @@ namespace ydk {
             ///@return pointer to the input DataNode or nullptr if the rpc does not have
             /// an input element in the schema.
             ///
-            virtual DataNode* input() const = 0;
+            virtual DataNode& input() const = 0;
 
             ///
             /// @brief return the SchemaNode associated with this rpc
             ///
             /// @return pointer to the SchemaNode associated with this rpc.
-            virtual SchemaNode* schema() const = 0;
+            virtual SchemaNode& schema() const = 0;
 
 
         };

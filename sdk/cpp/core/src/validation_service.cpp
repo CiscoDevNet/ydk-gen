@@ -36,10 +36,10 @@ void
 ValidationService::validate(const path::ServiceProvider& sp, Entity& entity,
                             ValidationService::Option option)
 {
-	auto root_schema = sp.get_root_schema();
-	path::DataNode * datanode = get_data_node_from_entity(entity, *root_schema);
+    path::RootSchemaNode& root_schema = sp.get_root_schema();
+    path::DataNode* datanode = get_data_node_from_entity(entity, root_schema);
 
-	path::ValidationService path_validation_service{};
+    path::ValidationService path_validation_service{};
     path_validation_service.validate(*datanode, option);
 
 }

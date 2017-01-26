@@ -50,12 +50,12 @@ CodecService::~CodecService()
 std::string
 CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pretty)
 {
-    path::RootSchemaNode* root_schema = provider.get_root_schema();
+    path::RootSchemaNode& root_schema = provider.get_root_schema();
     try
     {
-        path::DataNode* data_node = get_data_node_from_entity(entity, *root_schema);
+        path::DataNode* data_node = get_data_node_from_entity(entity, root_schema);
         path::CodecService core_codec_service{};
-        return core_codec_service.encode(data_node, provider.m_encoding, pretty);
+        return core_codec_service.encode(*data_node, provider.m_encoding, pretty);
     }
     catch (const YCPPInvalidArgumentError& e)
     {
@@ -80,12 +80,12 @@ CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std:
 std::unique_ptr<Entity>
 CodecService::decode(CodecServiceProvider & provider, std::string & payload)
 {
-	BOOST_LOG_TRIVIAL(debug) << "Decoding " << payload;
+    BOOST_LOG_TRIVIAL(debug) << "Decoding " << payload;
     std::unique_ptr<Entity> entity = provider.get_top_entity(payload);
-    path::RootSchemaNode* root_schema = provider.get_root_schema();
+    path::RootSchemaNode& root_schema = provider.get_root_schema();
 
     path::CodecService core_codec_service{};
-    path::DataNode* root_data_node = core_codec_service.decode(root_schema, payload, provider.m_encoding);
+    auto root_data_node = core_codec_service.decode(root_schema, payload, provider.m_encoding);
 
     if (root_data_node->children().size() != 1)
     {
@@ -96,7 +96,7 @@ CodecService::decode(CodecServiceProvider & provider, std::string & payload)
     {
         for (auto data_node: root_data_node->children())
         {
-            get_entity_from_data_node(data_node, entity.get());
+            get_entity_from_data_node(data_node.get(), entity.get());
         }
     }
     return entity;
@@ -108,7 +108,7 @@ CodecService::decode(CodecServiceProvider & provider, std::map<std::string, std:
     std::map<std::string, std::unique_ptr<Entity>> entity_map;
     for (auto it: payload_map)
     {
-    	BOOST_LOG_TRIVIAL(debug) << "Decoding " << it.second;
+        BOOST_LOG_TRIVIAL(debug) << "Decoding " << it.second;
         std::unique_ptr<Entity> entity = decode(provider, it.second);
         entity_map[it.first] = std::move(entity);
     }

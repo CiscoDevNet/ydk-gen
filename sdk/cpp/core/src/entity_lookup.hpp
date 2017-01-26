@@ -39,15 +39,15 @@ struct Capability;
 
 class TopEntityLookUp
 {
-	public:
-		TopEntityLookUp();
-		~TopEntityLookUp();
+    public:
+        TopEntityLookUp();
+        ~TopEntityLookUp();
 
-		std::unique_ptr<Entity> lookup(const std::string & path);
-		void insert(std::string path, std::unique_ptr<Entity> top_entity);
+        std::unique_ptr<Entity> lookup(const std::string & path);
+        void insert(std::string path, std::unique_ptr<Entity> top_entity);
 
-	private:
-		std::map<std::string, std::unique_ptr<Entity>> m_entities;
+    private:
+        std::map<std::string, std::unique_ptr<Entity>> m_entities;
 };
 
 std::unique_ptr<Entity> lookup_top_entity(const std::string & lookup_key);

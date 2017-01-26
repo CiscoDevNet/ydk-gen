@@ -42,7 +42,7 @@ Entity::~Entity()
 
 unique_ptr<Entity> Entity::clone_ptr()
 {
-	return nullptr;
+    return nullptr;
 }
 
 }

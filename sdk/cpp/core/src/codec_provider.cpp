@@ -49,10 +49,10 @@ CodecServiceProvider::~CodecServiceProvider()
 {
 }
 
-path::RootSchemaNode*
+path::RootSchemaNode&
 CodecServiceProvider::get_root_schema()
 {
-    return m_root_schema.get();
+    return *m_root_schema;
 }
 
 std::unique_ptr<Entity>

@@ -38,32 +38,32 @@ namespace path
 {
 void libyang_log_callback(LY_LOG_LEVEL level, const char *msg, const char *path)
 {
-	std::ostringstream error_message{};
-	error_message <<msg;
-	if(path)
-	{
-		error_message << " " << "Path: '" << path<<"'";
-	}
-	switch(level)
-	{
-		case LY_LLERR:
-			if(error_message.str().find("Invalid value")!= std::string::npos
-					|| error_message.str().find("Failed to resolve")!= std::string::npos
-					|| error_message.str().find("Unexpected character")!= std::string::npos
-					|| error_message.str().find("does not satisfy the constraint")!= std::string::npos)
-			{
-				BOOST_LOG_TRIVIAL(error) << "Libyang ERROR: " << error_message.str();
-				BOOST_THROW_EXCEPTION(YCPPModelError{error_message.str()});
-			}
-			BOOST_LOG_TRIVIAL(error) << "Libyang ERROR: " << error_message.str();
-			break;
-		case LY_LLSILENT:
-		case LY_LLWRN:
-		case LY_LLVRB:
-		case LY_LLDBG:
-			BOOST_LOG_TRIVIAL(trace) << "Libyang TRACE: " << error_message.str();
-			break;
-	}
+    std::ostringstream error_message{};
+    error_message <<msg;
+    if(path)
+    {
+        error_message << " " << "Path: '" << path<<"'";
+    }
+    switch(level)
+    {
+        case LY_LLERR:
+            if(error_message.str().find("Invalid value")!= std::string::npos
+                    || error_message.str().find("Failed to resolve")!= std::string::npos
+                    || error_message.str().find("Unexpected character")!= std::string::npos
+                    || error_message.str().find("does not satisfy the constraint")!= std::string::npos)
+            {
+                BOOST_LOG_TRIVIAL(error) << "Libyang ERROR: " << error_message.str();
+                BOOST_THROW_EXCEPTION(YCPPModelError{error_message.str()});
+            }
+            BOOST_LOG_TRIVIAL(error) << "Libyang ERROR: " << error_message.str();
+            break;
+        case LY_LLSILENT:
+        case LY_LLWRN:
+        case LY_LLVRB:
+        case LY_LLDBG:
+            BOOST_LOG_TRIVIAL(trace) << "Libyang TRACE: " << error_message.str();
+            break;
+    }
 }
 }
 }
@@ -131,7 +131,7 @@ namespace ydk {
         }
 
         extern "C" char* get_module_callback(const char* module_name, const char* module_rev, const char *submod_name, const char *sub_rev,
-        							   void* user_data, LYS_INFORMAT* format, void (**free_module_data)(void *model_data))
+                                       void* user_data, LYS_INFORMAT* format, void (**free_module_data)(void *model_data))
         {
             BOOST_LOG_TRIVIAL(trace) << "Getting module " << module_name <<" submodule "<<(submod_name?submod_name:"none");
             *free_module_data = c_free_data;
@@ -185,17 +185,17 @@ namespace ydk {
 
 
                 for(auto model_provider : repo->get_model_providers()) {
-                	std::string model_data{};
-                	if(submod_name)
-                	{
-                		BOOST_LOG_TRIVIAL(trace) << "Getting submodule using get-schema " << submod_name;
-                		model_data = model_provider->get_model(submod_name, sub_rev != nullptr ? sub_rev : "", m_format);
-                	}
-                	else
-                	{
-                		BOOST_LOG_TRIVIAL(trace) << "Getting module using get-schema " << module_name;
-                		model_data = model_provider->get_model(module_name, module_rev != nullptr ? module_rev : "", m_format);
-                	}
+                    std::string model_data{};
+                    if(submod_name)
+                    {
+                        BOOST_LOG_TRIVIAL(trace) << "Getting submodule using get-schema " << submod_name;
+                        model_data = model_provider->get_model(submod_name, sub_rev != nullptr ? sub_rev : "", m_format);
+                    }
+                    else
+                    {
+                        BOOST_LOG_TRIVIAL(trace) << "Getting module using get-schema " << module_name;
+                        model_data = model_provider->get_model(module_name, module_rev != nullptr ? module_rev : "", m_format);
+                    }
                     if(!model_data.empty()){
 
                         sink_to_file(yang_file_path_str, model_data);
@@ -218,15 +218,15 @@ namespace ydk {
 ydk::path::RootSchemaNode*
 ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & capabilities)
 {
-	if(using_temp_directory)
-	{
-		for(auto model_provider : get_model_providers()) {
-			path+="/"+model_provider->get_hostname_port();
-			boost::filesystem::create_directory(path);
-			BOOST_LOG_TRIVIAL(debug) << "Path where models are to be downloaded: " << path.string();
-			break;
-		}
-	}
+    if(using_temp_directory)
+    {
+        for(auto model_provider : get_model_providers()) {
+            path+="/"+model_provider->get_hostname_port();
+            boost::filesystem::create_directory(path);
+            BOOST_LOG_TRIVIAL(debug) << "Path where models are to be downloaded: " << path.string();
+            break;
+        }
+    }
     std::string path_str = path.string();
     BOOST_LOG_TRIVIAL(trace) << "Creating libyang context in path "<<path_str;
     struct ly_ctx* ctx = ly_ctx_new(path_str.c_str());
