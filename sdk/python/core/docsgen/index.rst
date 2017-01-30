@@ -16,7 +16,3 @@ Contents:
    developer_guide.rst
    api_guide.rst
    about_ydk.rst
-
-Changelog
-----------
-`Changelog <https://github.com/CiscoDevNet/ydk-py/blob/master/CHANGES.md>`_

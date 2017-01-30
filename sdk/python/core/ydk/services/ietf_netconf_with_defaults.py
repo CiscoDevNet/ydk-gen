@@ -75,7 +75,7 @@ class WithDefaultsModeEnum(Enum):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf_with_defaults as meta
+        from _meta import _ietf_netconf_with_defaults as meta
         return meta._meta_table['WithDefaultsModeEnum']
 
 

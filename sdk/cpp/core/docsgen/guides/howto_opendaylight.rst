@@ -38,14 +38,18 @@ In our example YDK application, first, let us include the necessary header files
  #include <boost/log/expressions.hpp>
  
  #include <ydk/crud_service.hpp>
+ #include <ydk/path_api.hpp>
  #include <ydk/opendaylight_provider.hpp>
  #include <ydk/types.hpp>
 
  #include <ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_cfg.hpp>
  #include <ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_datatypes.hpp>
  
+  // indicate the namespaces being used (optional)
   using namespace std;
   using namespace ydk; 
+  using namespace Cisco_IOS_XR_ipv4_bgp_cfg;
+  using namespace Cisco_IOS_XR_ipv4_bgp_datatypes;
 
 OpenDaylight service provider
 ------------------------------
@@ -67,7 +71,7 @@ After establishing the connection, we instantiate the entities and set some data
  :linenos:
 
  // Create BGP object
- auto bgp = make_unique<Cisco_IOS_XR_ipv4_bgp_cfg::Bgp>();
+ auto bgp = make_unique<Bgp>();
 
  // BGP instance
  auto instance = make_unique<Bgp::Instance>();

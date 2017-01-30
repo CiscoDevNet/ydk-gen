@@ -1,8 +1,6 @@
 ydk.types module
 ================
 
-.. py:currentmodule:: ydk.types
-
 types.py
 
 Contains type definitions.
@@ -70,7 +68,7 @@ Contains type definitions.
 	
 .. py:class:: ydk.types.YLeafList()
 
-	Bases: :class:`YList`
+	Bases: :class:`ydk.types.YList`
 
 	Represents a leaf-list with support for hanging a parent.
 

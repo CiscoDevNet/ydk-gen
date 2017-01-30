@@ -49,6 +49,7 @@ class Element(object):
         self.owned_elements = []
         self._owner = None
         self.comment = None
+        self.revision = None
 
     @property
     def owner(self):
@@ -110,7 +111,7 @@ class Deviation(Element):
             name = camel_case(name) + 'Rpc'
         else:
             name = camel_case(name)
-        if self.iskeyword(name.lower()):
+        if self.iskeyword(name):
             name = '%s_' % name
 
         if name.startswith('_'):
@@ -319,6 +320,9 @@ class Package(NamedElement):
             name = 'y%s' % name
 
         self.name = name
+        revision = stmt.search_one('revision')
+        if revision is not None:
+            self.revision = revision.arg
         self._stmt = stmt
         desc = stmt.search_one('description')
         if desc is not None:
@@ -519,7 +523,7 @@ class Class(NamedElement):
             name = camel_case(name) + 'Rpc'
         else:
             name = camel_case(name)
-        if self.iskeyword(name.lower()):
+        if self.iskeyword(name):
             name = '%s_' % name
         self.name = name
 
@@ -638,7 +642,7 @@ class Bits(DataType):
         while leaf_or_typedef.parent is not None and not leaf_or_typedef.keyword in ('leaf', 'leaf-list', 'typedef'):
             leaf_or_typedef = leaf_or_typedef.parent
 
-        name = '%sBits' % camel_case(leaf_or_typedef.arg)
+        name = '%s' % camel_case(leaf_or_typedef.arg)
         if self.iskeyword(name):
             name = '%s' % name
         self.name = name

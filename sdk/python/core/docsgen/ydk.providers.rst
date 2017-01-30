@@ -1,8 +1,6 @@
 ydk.providers module
 ====================
 
-.. py:module:: ydk.providers
-
 providers.py
 
 Service Providers module. Current implementation supports the NetconfServiceProvider which

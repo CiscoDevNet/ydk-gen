@@ -7,7 +7,7 @@
    "Description":"YDK Test Profile",
    "models":{
        "file" : [
-           "profiles/ydk/yang/ietf/ietf-interfaces-ext.yang"
+           "profiles/bundles/yang/ietf/ietf-interfaces-ext.yang"
        ],
       "git": [
           {

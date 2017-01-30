@@ -1,8 +1,6 @@
 ydk.errors module
 =================
 
-.. py:currentmodule:: ydk.errors
-
 errors
 
 Contains types representing the Exception hierarchy in YDK.
