@@ -1,13 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
-
-- [YDK](#ydk)
-  - [Installation](#installation)
-  - [Running samples](#running-samples)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 <a href="https://github.com/CiscoDevNet/ydk-gen"><img src="https://cloud.githubusercontent.com/assets/17089095/14834057/2e1fe270-0bb7-11e6-9e94-73dd7d71e87d.png" height="240" width="240" ></a>
 
 # YDK
@@ -25,7 +15,7 @@ Create a build directory to build the core library and install it:
 
 ## Running samples
 
-Create a build directory to build the samples:
+Create a build directory to build the samples. Note that these samples require the ietf, openconfig and cisco-ios-xr bundles to be already installed, along with the core library:
 ```
     $ cd samples
     $ mkdir build && cd build

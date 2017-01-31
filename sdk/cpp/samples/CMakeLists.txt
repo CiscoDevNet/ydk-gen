@@ -17,7 +17,8 @@ set(samples bgp_create
                 bgp_xr_create
                 bgp_xr_delete
                 bgp_xr_read
-                bgp_xr_opendaylight)
+                bgp_xr_opendaylight
+                bgp_restconf)
 
 # set default build type if not specified by user
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")

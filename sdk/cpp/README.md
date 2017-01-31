@@ -62,27 +62,31 @@ Install Tips
 ------------
 YDK uses ``cmake`` as the build system of choice. To install the ``core`` package
 ```
-  ydk-cpp$ cd core
+  ydk-cpp$ cd core/ydk
   core$ mkdir build && cd build
-  build$ cmake .. && sudo make install
+  build$ cmake .. && make
+  build$ sudo make install
 ```
 Once you have installed the ``core`` package, you can install one or more model bundles.  Note that some bundles have dependencies on other bundles.  Those dependencies are already captured in the bundle package. To install the IETF bundle, execute
 ```
-  core$ cd ../ietf
+  core$ cd ../../ietf
   ietf$ mkdir build && cd build
-  build$ cmake .. && sudo make install
+  build$ cmake .. && make
+  build$ sudo make install
 ```
 To install the openconfig bundle, execute
 ```
   ietf$ cd ../openconfig
   openconfig$ mkdir build && cd build
-  build$ cmake .. && sudo make install
+  build$ cmake .. && make
+  build$ sudo make install
 ```
 To install the cisco-ios-xr bundle, execute
 ```
   openconfig$ cd ../cisco-ios-xr
   cisco-ios-xr$ mkdir build && cd build
-  build$ cmake .. && sudo make install
+  build$ cmake .. && make
+  build$ sudo make install
   build$ cd ../..
 ```
 
@@ -160,7 +164,7 @@ Finally, we invoke the create method of the `CRUDService` class passing in the s
  try
  {
    crud_service.create(provider, *bgp);
- }    
+ }
  catch(YDKException & e)
  {
    cerr << "Error details: " << boost::diagnostic_information(e) << endl;
@@ -189,7 +193,7 @@ YDK uses the `boost::log` logging library. The logging verbosity can be set usin
 
 Release Notes
 ===============
-The current YDK release version is 0.1.0 (alpha). YDK-Cpp is licensed under the Apache 2.0 License.
+The current YDK release version is 0.5.3 (alpha). YDK-Cpp is licensed under the Apache 2.0 License.
 
 Documentation and Support
 ===============

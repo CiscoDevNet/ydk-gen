@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  ------------------------------------------------------------------*/
-#define BOOST_TEST_MODULE OdlTest
+
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
 #include <iostream>

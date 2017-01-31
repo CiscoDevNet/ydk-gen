@@ -26,9 +26,9 @@ Linux
 Mac
   It is recommended to install homebrew (http://brew.sh), homebrew python package and Xcode command line tools on your system before installing YDK-Py::
 
-    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install python
     $ xcode-select --install
+    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    $ brew install python pkg-config libssh xml2 curl pcre
 
 Windows
     It is recommended to install a python distribution like `PythonXY <https://python-xy.github.io/>`_ on your system before installing YDK-Py
@@ -169,7 +169,7 @@ YDK uses common Python logging.  All modules are based on the "ydk" log::
 
 Release Notes
 --------------
-The current YDK release version is 0.5.2 (beta). YDK-Py is licensed under the Apache 2.0 License.
+The current YDK release version is 0.5.3 (beta). YDK-Py is licensed under the Apache 2.0 License.
 
 Documentation and Support
 --------------------------

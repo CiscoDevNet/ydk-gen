@@ -94,7 +94,7 @@ class Deviation(Element):
 
     def convert_prop_name(self, stmt):
         name = snake_case(stmt.arg)
-        if self.iskeyword(name):
+        if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
 
         if name.startswith('_'):
@@ -111,7 +111,7 @@ class Deviation(Element):
             name = camel_case(name) + 'Rpc'
         else:
             name = camel_case(name)
-        if self.iskeyword(name):
+        if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
 
         if name.startswith('_'):
@@ -314,7 +314,7 @@ class Package(NamedElement):
     @stmt.setter
     def stmt(self, stmt):
         name = stmt.arg.replace('-', '_')
-        if self.iskeyword(name):
+        if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
         if name[0] == '_':
             name = 'y%s' % name
@@ -523,7 +523,7 @@ class Class(NamedElement):
             name = camel_case(name) + 'Rpc'
         else:
             name = camel_case(name)
-        if self.iskeyword(name):
+        if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
         self.name = name
 
@@ -643,7 +643,7 @@ class Bits(DataType):
             leaf_or_typedef = leaf_or_typedef.parent
 
         name = '%s' % camel_case(leaf_or_typedef.arg)
-        if self.iskeyword(name):
+        if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s' % name
         self.name = name
 
@@ -700,7 +700,7 @@ class Property(NamedElement):
     def stmt(self, stmt):
         self._stmt = stmt
         name = snake_case(stmt.arg)
-        if self.iskeyword(name):
+        if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
         self.name = name
 
@@ -772,7 +772,7 @@ class Enum(DataType):
             leaf_or_typedef = leaf_or_typedef.parent
 
         name = '%sEnum' % camel_case(escape_name(leaf_or_typedef.arg))
-        if self.iskeyword(name):
+        if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
 
         if name[0] == '_':
