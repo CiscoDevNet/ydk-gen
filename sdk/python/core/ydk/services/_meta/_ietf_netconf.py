@@ -14,7 +14,7 @@ from ydk.errors import YPYError, YPYModelError
 from ydk.providers._importer import _yang_ns
 
 _meta_table = {
-    'ErrorTagTypeEnum' : _MetaInfoEnum('ErrorTagTypeEnum', 'ydk.models.ydktest.ietf_netconf',
+    'ErrorTagTypeEnum' : _MetaInfoEnum('ErrorTagTypeEnum', 'ydk.services.ietf_netconf',
         {
             'in-use':'in_use',
             'invalid-value':'invalid_value',
@@ -37,7 +37,7 @@ _meta_table = {
             'partial-operation':'partial_operation',
             'malformed-message':'malformed_message',
         }, 'ietf-netconf', _yang_ns._namespaces['ietf-netconf']),
-    'EditOperationTypeEnum' : _MetaInfoEnum('EditOperationTypeEnum', 'ydk.models.ydktest.ietf_netconf',
+    'EditOperationTypeEnum' : _MetaInfoEnum('EditOperationTypeEnum', 'ydk.services.ietf_netconf',
         {
             'merge':'merge',
             'replace':'replace',
@@ -45,7 +45,7 @@ _meta_table = {
             'delete':'delete',
             'remove':'remove',
         }, 'ietf-netconf', _yang_ns._namespaces['ietf-netconf']),
-    'ErrorSeverityTypeEnum' : _MetaInfoEnum('ErrorSeverityTypeEnum', 'ydk.models.ydktest.ietf_netconf',
+    'ErrorSeverityTypeEnum' : _MetaInfoEnum('ErrorSeverityTypeEnum', 'ydk.services.ietf_netconf',
         {
             'error':'error',
             'warning':'warning',
@@ -79,14 +79,14 @@ _meta_table = {
             'ietf-netconf',
             'source',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'GetConfigRpc.Input' : {
         'meta_info' : _MetaInfoClass('GetConfigRpc.Input',
             False, 
             [
-            _MetaInfoClassMember('source', REFERENCE_CLASS, 'Source' , 'ydk.models.ydktest.ietf_netconf', 'GetConfigRpc.Input.Source', 
+            _MetaInfoClassMember('source', REFERENCE_CLASS, 'Source' , 'ydk.services.ietf_netconf', 'GetConfigRpc.Input.Source',
                 [], [], 
                 '''                Particular configuration to retrieve.
                 ''',
@@ -98,7 +98,7 @@ _meta_table = {
                 ''',
                 'filter',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('with-defaults', REFERENCE_ENUM_CLASS, 'WithDefaultsModeEnum' , 'ydk.models.ydktest.ietf_netconf_with_defaults', 'WithDefaultsModeEnum', 
+            _MetaInfoClassMember('with-defaults', REFERENCE_ENUM_CLASS, 'WithDefaultsModeEnum' , 'ydk.services.ietf_netconf_with_defaults', 'WithDefaultsModeEnum',
                 [], [], 
                 '''                The explicit defaults processing mode requested.
                 ''',
@@ -108,7 +108,7 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'GetConfigRpc.Output' : {
@@ -127,19 +127,19 @@ _meta_table = {
             'ietf-netconf',
             'output',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'GetConfigRpc' : {
         'meta_info' : _MetaInfoClass('GetConfigRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'GetConfigRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'GetConfigRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('output', REFERENCE_CLASS, 'Output' , 'ydk.models.ydktest.ietf_netconf', 'GetConfigRpc.Output', 
+            _MetaInfoClassMember('output', REFERENCE_CLASS, 'Output' , 'ydk.services.ietf_netconf', 'GetConfigRpc.Output',
                 [], [], 
                 '''                ''',
                 'output',
@@ -148,7 +148,7 @@ _meta_table = {
             'ietf-netconf',
             'get-config',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'EditConfigRpc.Input.Target' : {
@@ -171,22 +171,22 @@ _meta_table = {
             'ietf-netconf',
             'target',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
-    'EditConfigRpc.Input.DefaultOperationEnum' : _MetaInfoEnum('DefaultOperationEnum', 'ydk.models.ydktest.ietf_netconf',
+    'EditConfigRpc.Input.DefaultOperationEnum' : _MetaInfoEnum('DefaultOperationEnum', 'ydk.services.ietf_netconf',
         {
             'merge':'merge',
             'replace':'replace',
             'none':'none',
         }, 'ietf-netconf', _yang_ns._namespaces['ietf-netconf']),
-    'EditConfigRpc.Input.ErrorOptionEnum' : _MetaInfoEnum('ErrorOptionEnum', 'ydk.models.ydktest.ietf_netconf',
+    'EditConfigRpc.Input.ErrorOptionEnum' : _MetaInfoEnum('ErrorOptionEnum', 'ydk.services.ietf_netconf',
         {
             'stop-on-error':'stop_on_error',
             'continue-on-error':'continue_on_error',
             'rollback-on-error':'rollback_on_error',
         }, 'ietf-netconf', _yang_ns._namespaces['ietf-netconf']),
-    'EditConfigRpc.Input.TestOptionEnum' : _MetaInfoEnum('TestOptionEnum', 'ydk.models.ydktest.ietf_netconf',
+    'EditConfigRpc.Input.TestOptionEnum' : _MetaInfoEnum('TestOptionEnum', 'ydk.services.ietf_netconf',
         {
             'test-then-set':'test_then_set',
             'set':'set',
@@ -196,25 +196,25 @@ _meta_table = {
         'meta_info' : _MetaInfoClass('EditConfigRpc.Input',
             False, 
             [
-            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.models.ydktest.ietf_netconf', 'EditConfigRpc.Input.Target', 
+            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.services.ietf_netconf', 'EditConfigRpc.Input.Target',
                 [], [], 
                 '''                Particular configuration to edit.
                 ''',
                 'target',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('default-operation', REFERENCE_ENUM_CLASS, 'DefaultOperationEnum' , 'ydk.models.ydktest.ietf_netconf', 'EditConfigRpc.Input.DefaultOperationEnum', 
+            _MetaInfoClassMember('default-operation', REFERENCE_ENUM_CLASS, 'DefaultOperationEnum' , 'ydk.services.ietf_netconf', 'EditConfigRpc.Input.DefaultOperationEnum',
                 [], [], 
                 '''                The default operation to use.
                 ''',
                 'default_operation',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('test-option', REFERENCE_ENUM_CLASS, 'TestOptionEnum' , 'ydk.models.ydktest.ietf_netconf', 'EditConfigRpc.Input.TestOptionEnum', 
+            _MetaInfoClassMember('test-option', REFERENCE_ENUM_CLASS, 'TestOptionEnum' , 'ydk.services.ietf_netconf', 'EditConfigRpc.Input.TestOptionEnum',
                 [], [], 
                 '''                The test option to use.
                 ''',
                 'test_option',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('error-option', REFERENCE_ENUM_CLASS, 'ErrorOptionEnum' , 'ydk.models.ydktest.ietf_netconf', 'EditConfigRpc.Input.ErrorOptionEnum', 
+            _MetaInfoClassMember('error-option', REFERENCE_ENUM_CLASS, 'ErrorOptionEnum' , 'ydk.services.ietf_netconf', 'EditConfigRpc.Input.ErrorOptionEnum',
                 [], [], 
                 '''                The error option to use.
                 ''',
@@ -236,14 +236,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'EditConfigRpc' : {
         'meta_info' : _MetaInfoClass('EditConfigRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'EditConfigRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'EditConfigRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -252,7 +252,7 @@ _meta_table = {
             'ietf-netconf',
             'edit-config',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CopyConfigRpc.Input.Target' : {
@@ -288,7 +288,7 @@ _meta_table = {
             'ietf-netconf',
             'target',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CopyConfigRpc.Input.Source' : {
@@ -331,26 +331,26 @@ _meta_table = {
             'ietf-netconf',
             'source',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CopyConfigRpc.Input' : {
         'meta_info' : _MetaInfoClass('CopyConfigRpc.Input',
             False, 
             [
-            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.models.ydktest.ietf_netconf', 'CopyConfigRpc.Input.Target', 
+            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.services.ietf_netconf', 'CopyConfigRpc.Input.Target',
                 [], [], 
                 '''                Particular configuration to copy to.
                 ''',
                 'target',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('source', REFERENCE_CLASS, 'Source' , 'ydk.models.ydktest.ietf_netconf', 'CopyConfigRpc.Input.Source', 
+            _MetaInfoClassMember('source', REFERENCE_CLASS, 'Source' , 'ydk.services.ietf_netconf', 'CopyConfigRpc.Input.Source',
                 [], [], 
                 '''                Particular configuration to copy from.
                 ''',
                 'source',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('with-defaults', REFERENCE_ENUM_CLASS, 'WithDefaultsModeEnum' , 'ydk.models.ydktest.ietf_netconf_with_defaults', 'WithDefaultsModeEnum', 
+            _MetaInfoClassMember('with-defaults', REFERENCE_ENUM_CLASS, 'WithDefaultsModeEnum' , 'ydk.services.ietf_netconf_with_defaults', 'WithDefaultsModeEnum',
                 [], [], 
                 '''                The explicit defaults processing mode requested.
                 ''',
@@ -360,14 +360,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CopyConfigRpc' : {
         'meta_info' : _MetaInfoClass('CopyConfigRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'CopyConfigRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'CopyConfigRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -376,7 +376,7 @@ _meta_table = {
             'ietf-netconf',
             'copy-config',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'DeleteConfigRpc.Input.Target' : {
@@ -399,14 +399,14 @@ _meta_table = {
             'ietf-netconf',
             'target',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'DeleteConfigRpc.Input' : {
         'meta_info' : _MetaInfoClass('DeleteConfigRpc.Input',
             False, 
             [
-            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.models.ydktest.ietf_netconf', 'DeleteConfigRpc.Input.Target', 
+            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.services.ietf_netconf', 'DeleteConfigRpc.Input.Target',
                 [], [], 
                 '''                Particular configuration to delete.
                 ''',
@@ -416,14 +416,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'DeleteConfigRpc' : {
         'meta_info' : _MetaInfoClass('DeleteConfigRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'DeleteConfigRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'DeleteConfigRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -432,7 +432,7 @@ _meta_table = {
             'ietf-netconf',
             'delete-config',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'LockRpc.Input.Target' : {
@@ -461,14 +461,14 @@ _meta_table = {
             'ietf-netconf',
             'target',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'LockRpc.Input' : {
         'meta_info' : _MetaInfoClass('LockRpc.Input',
             False, 
             [
-            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.models.ydktest.ietf_netconf', 'LockRpc.Input.Target', 
+            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.services.ietf_netconf', 'LockRpc.Input.Target',
                 [], [], 
                 '''                Particular configuration to lock.
                 ''',
@@ -478,14 +478,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'LockRpc' : {
         'meta_info' : _MetaInfoClass('LockRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'LockRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'LockRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -494,7 +494,7 @@ _meta_table = {
             'ietf-netconf',
             'lock',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'UnlockRpc.Input.Target' : {
@@ -523,14 +523,14 @@ _meta_table = {
             'ietf-netconf',
             'target',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'UnlockRpc.Input' : {
         'meta_info' : _MetaInfoClass('UnlockRpc.Input',
             False, 
             [
-            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.models.ydktest.ietf_netconf', 'UnlockRpc.Input.Target', 
+            _MetaInfoClassMember('target', REFERENCE_CLASS, 'Target' , 'ydk.services.ietf_netconf', 'UnlockRpc.Input.Target',
                 [], [], 
                 '''                Particular configuration to unlock.
                 ''',
@@ -540,14 +540,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'UnlockRpc' : {
         'meta_info' : _MetaInfoClass('UnlockRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'UnlockRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'UnlockRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -556,7 +556,7 @@ _meta_table = {
             'ietf-netconf',
             'unlock',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'GetRpc.Input' : {
@@ -570,7 +570,7 @@ _meta_table = {
                 ''',
                 'filter',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('with-defaults', REFERENCE_ENUM_CLASS, 'WithDefaultsModeEnum' , 'ydk.models.ydktest.ietf_netconf_with_defaults', 'WithDefaultsModeEnum', 
+            _MetaInfoClassMember('with-defaults', REFERENCE_ENUM_CLASS, 'WithDefaultsModeEnum' , 'ydk.services.ietf_netconf_with_defaults', 'WithDefaultsModeEnum',
                 [], [], 
                 '''                The explicit defaults processing mode requested.
                 ''',
@@ -580,7 +580,7 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'GetRpc.Output' : {
@@ -600,19 +600,19 @@ _meta_table = {
             'ietf-netconf',
             'output',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'GetRpc' : {
         'meta_info' : _MetaInfoClass('GetRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'GetRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'GetRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
                 'ietf-netconf', False),
-            _MetaInfoClassMember('output', REFERENCE_CLASS, 'Output' , 'ydk.models.ydktest.ietf_netconf', 'GetRpc.Output', 
+            _MetaInfoClassMember('output', REFERENCE_CLASS, 'Output' , 'ydk.services.ietf_netconf', 'GetRpc.Output',
                 [], [], 
                 '''                ''',
                 'output',
@@ -621,7 +621,7 @@ _meta_table = {
             'ietf-netconf',
             'get',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CloseSessionRpc' : {
@@ -632,7 +632,7 @@ _meta_table = {
             'ietf-netconf',
             'close-session',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'KillSessionRpc.Input' : {
@@ -649,14 +649,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'KillSessionRpc' : {
         'meta_info' : _MetaInfoClass('KillSessionRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'KillSessionRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'KillSessionRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -665,7 +665,7 @@ _meta_table = {
             'ietf-netconf',
             'kill-session',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CommitRpc.Input' : {
@@ -715,14 +715,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CommitRpc' : {
         'meta_info' : _MetaInfoClass('CommitRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'CommitRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'CommitRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -731,7 +731,7 @@ _meta_table = {
             'ietf-netconf',
             'commit',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'DiscardChangesRpc' : {
@@ -742,7 +742,7 @@ _meta_table = {
             'ietf-netconf',
             'discard-changes',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CancelCommitRpc.Input' : {
@@ -763,14 +763,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'CancelCommitRpc' : {
         'meta_info' : _MetaInfoClass('CancelCommitRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'CancelCommitRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'CancelCommitRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -779,7 +779,7 @@ _meta_table = {
             'ietf-netconf',
             'cancel-commit',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'ValidateRpc.Input.Source' : {
@@ -822,14 +822,14 @@ _meta_table = {
             'ietf-netconf',
             'source',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'ValidateRpc.Input' : {
         'meta_info' : _MetaInfoClass('ValidateRpc.Input',
             False, 
             [
-            _MetaInfoClassMember('source', REFERENCE_CLASS, 'Source' , 'ydk.models.ydktest.ietf_netconf', 'ValidateRpc.Input.Source', 
+            _MetaInfoClassMember('source', REFERENCE_CLASS, 'Source' , 'ydk.services.ietf_netconf', 'ValidateRpc.Input.Source',
                 [], [], 
                 '''                Particular configuration to validate.
                 ''',
@@ -839,14 +839,14 @@ _meta_table = {
             'ietf-netconf',
             'input',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
     'ValidateRpc' : {
         'meta_info' : _MetaInfoClass('ValidateRpc',
             False, 
             [
-            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.models.ydktest.ietf_netconf', 'ValidateRpc.Input', 
+            _MetaInfoClassMember('input', REFERENCE_CLASS, 'Input' , 'ydk.services.ietf_netconf', 'ValidateRpc.Input',
                 [], [], 
                 '''                ''',
                 'input',
@@ -855,7 +855,7 @@ _meta_table = {
             'ietf-netconf',
             'validate',
             _yang_ns._namespaces['ietf-netconf'],
-        'ydk.models.ydktest.ietf_netconf'
+        'ydk.services.ietf_netconf'
         ),
     },
 }

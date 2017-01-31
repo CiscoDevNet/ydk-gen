@@ -11,34 +11,43 @@ Types explained will include:
 Example use of Empty type
 =========================
 
-- The leaf being configured (accept_route) under the module ydk.models.routing.routing_policy:
-**accept_route:** accepts the route into the routing table. **type:** Empty
+- The leaf being configured (accept_route) under the module ydk.models.openconfig.openconfig_routing_policy:
+
+**accept_route:** accepts the route into the routing table.
+**type:** Empty
 
 .. code-block:: python
 
-    from ydk.models.routing.routing_policy import RoutingPolicy
+    from ydk.models.openconfig.openconfig_routing_policy import RoutingPolicy
 
-    policy_definitions = RoutingPolicy.PolicyDefinitions()
-    accept_leaf        = policy_definitions.policy_definition.statements.statement.actions.policy_definitions.policy_definition.statements.statement.actions.accept_route()
+    # configure policy definition
+    routing_policy = RoutingPolicy()
+    policy_definition = routing_policy.policy_definitions.PolicyDefinition()
+    policy_definition.name = "POLICY2"
+    # community-set statement
+    statement = policy_definition.statements.Statement()
+    statement.actions.accept_route = Empty() # accept_route is of Empty type
 
 Example use of Decimal64 type
 =============================
 
-- The leaf being configured (restart_timer) under the ydk.models.bgp.bgp module:
-**restart_timer:** Time interval in seconds after which the BGP session is re-established after being torn down due to exceeding the max-prefix limit. **type:** Decimal64
+- The leaf being configured (restart_timer) under the ydk.models.openconfig_bgp.bgp module:
+**restart_timer:** Time interval in seconds after which the BGP session is re-established after being torn down due to exceeding the max-prefix limit.
+**type:** Decimal64
 
 .. code-block:: python
 
-    from ydk.models.bgp.bgp import Bgp
+    from ydk.models.openconfig.openconfig_bgp import Bgp
 
-    neighbors   = Bgp.Neighbors()
-    accept_leaf = neighbors.neighbor.afi_safis.afi_safi.ipv4_labelled_unicast.prefix_limit.config.neighbors.neighbor.afi_safis.afi_safi.ipv4_labelled_unicast.prefix_limit.config.restart_timer()
+    config = Bgp.Neighbors.Neighbor.AfiSafis.AfiSafi.Ipv4LabelledUnicast.PrefixLimit.Config()
+    config.restart_timer = Decimal64('3.343') # restart_timer is of Decimal64 type
 
 Example use of FixedBitsDict type
 =================================
 
 - The leaf being configured (restart_timer) under the ydk.models.ietf.ietf_netconf_acm module:
-**access_operations:** Access operations associated with this rule.  This leaf matches if it has the value '*' or if the bit corresponding to the requested operation is set. **type:** str
+**access_operations:** Access operations associated with this rule.  This leaf matches if it has the value '*' or if the bit corresponding to the requested operation is set.
+**type:** str
 
 .. code-block:: python
 
@@ -47,27 +56,30 @@ Example use of FixedBitsDict type
     rule_list   = Nacm.RuleList()
     rule        = rule_list.Rule()
     rule.parent = rule_list
-    rule.rule_list.rule.access_operations['read'] = True
+    rule.rule_list.rule.access_operations['read'] = True # access_operations is of bits type
 
 Example use of YList type
 =========================
 
-- The node being configured (rule_list) under the ydk.models.ietf.ietf_netconf_acm module:
-**rule_list:** An ordered collection of access control rules. **type:** RuleList
+- The node being configured is afi_safi under the ydk.models.openconfig_bgp.bgp module:
 
 .. code-block:: python
 
-    from ydk.models.ietf.ietf_netconf_acm import Nacm
+    from ydk.models.openconfig.openconfig_bgp import Bgp
 
-    rule_list   = Nacm.RuleList()
-    rule        = rule_list.Rule()
-    rule.parent = rule_list
+    bgp = Bgp()
+    afi_safi = bgp.global_.afi_safis.AfiSafi() # afi_safi is of YList type
+    afi_safi.afi_safi_name = oc_bgp_types.Ipv4UnicastIdentity()
+    afi_safi.config.afi_safi_name = oc_bgp_types.Ipv4UnicastIdentity()
+    afi_safi.config.enabled = True
+    bgp.global_.afi_safis.afi_safi.append(afi_safi)
 
 Example use of YLeafList type
 =============================
 
-- The node being configured (ipv4_dscp) under the ydk.models.asr9k.Cisco_IOS_XR_asr9k_policymgr_cfg module:
-**ipv4_dscp:** An leaflist of Match IPv4 DSCP. **type:** YLeafList
+- The leaf being configured (ipv4_dscp) under the ydk.models.cisco_ios_xr.Cisco_IOS_XR_asr9k_policymgr_cfg module:
+**ipv4_dscp:** An leaflist of Match IPv4 DSCP.
+**type:** YLeafList
 
 .. code-block:: python
 

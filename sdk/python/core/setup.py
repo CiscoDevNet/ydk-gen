@@ -32,15 +32,13 @@ NMSP_PKG_DEPENDENCIES = ["$DEPENDENCY$"]
 # Define and modify version number and package name here,
 # Namespace packages are share same prefix: "ydk-models"
 NAME = 'ydk'
-VERSION = '0.5.2'
+VERSION = '0.5.3'
 INSTALL_REQUIREMENTS = ['ecdsa==0.13',
                         'enum34==1.1.3',
                         'lxml==3.4.4',
                         'paramiko==1.15.2',
                         'pyang==1.6',
                         'pycrypto==2.6.1',
-                        'Twisted>=16.0.0',
-                        'protobuf==3.0.0b2.post2',
                         'ncclient>=0.4.7',
                         'pybind11==1.8.1']
 
@@ -156,12 +154,12 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: C++'
     ],
-    keywords='yang',
+    keywords='yang, C++11, python bindings',
     packages=YDK_PACKAGES,
     install_requires=INSTALL_REQUIREMENTS,
-    ext_modules=[CMakeExtension('ydk_')],
-    cmdclass={
-             'build_ext' :YdkBuildExtension
-             },
+#    ext_modules=[CMakeExtension('ydk_')],
+#    cmdclass={
+#             'build_ext' :YdkBuildExtension
+#             },
     zip_safe=False,
 )

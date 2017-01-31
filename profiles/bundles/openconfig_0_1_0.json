@@ -7,14 +7,14 @@
    "Copyright":"Cisco",
    "models":{
       "file":[
-         "profiles/ydk/yang/openconfig/bgp@2015-05-15.yang",
-         "profiles/ydk/yang/openconfig/bgp-policy@2015-05-15.yang",
-         "profiles/ydk/yang/openconfig/bgp-multiprotocol@2015-05-15.yang",
-         "profiles/ydk/yang/openconfig/bgp-operational@2015-05-15.yang",
-         "profiles/ydk/yang/openconfig/bgp-types@2015-05-15.yang",
-         "profiles/ydk/yang/openconfig/oc-xr-mapping@2015-02-10.yang",
-         "profiles/ydk/yang/openconfig/policy-types@2015-05-15.yang",
-         "profiles/ydk/yang/openconfig/routing-policy@2015-05-15.yang"
+         "profiles/bundles/yang/openconfig/bgp@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/bgp-policy@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/bgp-multiprotocol@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/bgp-operational@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/bgp-types@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/oc-xr-mapping@2015-02-10.yang",
+         "profiles/bundles/yang/openconfig/policy-types@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/routing-policy@2015-05-15.yang"
       ],
       "_descr_git":"Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
       "git":[

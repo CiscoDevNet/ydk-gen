@@ -130,7 +130,7 @@ class EditOperationTypeEnum(Enum):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['EditOperationTypeEnum']
 
 
@@ -157,7 +157,7 @@ class ErrorSeverityTypeEnum(Enum):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['ErrorSeverityTypeEnum']
 
 
@@ -336,7 +336,7 @@ class ErrorTagTypeEnum(Enum):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['ErrorTagTypeEnum']
 
 
@@ -348,12 +348,12 @@ class GetConfigRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.GetConfigRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.GetConfigRpc.Input>`
     
     .. attribute:: output
     
     	
-    	**type**\:   :py:class:`Output <ydk.models.ydktest.ietf_netconf.GetConfigRpc.Output>`
+    	**type**\:   :py:class:`Output <ietf_netconf.GetConfigRpc.Output>`
     
     
 
@@ -383,12 +383,12 @@ class GetConfigRpc(object):
         .. attribute:: source
         
         	Particular configuration to retrieve
-        	**type**\:   :py:class:`Source <ydk.models.ydktest.ietf_netconf.GetConfigRpc.Input.Source>`
+        	**type**\:   :py:class:`Source <ietf_netconf.GetConfigRpc.Input.Source>`
         
         .. attribute:: with_defaults
         
         	The explicit defaults processing mode requested
-        	**type**\:   :py:class:`WithDefaultsModeEnum <ydk.models.ydktest.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
+        	**type**\:   :py:class:`WithDefaultsModeEnum <ietf_netconf_with_defaults.WithDefaultsModeEnum>`
         
         
 
@@ -464,7 +464,7 @@ class GetConfigRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['GetConfigRpc.Input.Source']['meta_info']
 
         @property
@@ -494,7 +494,7 @@ class GetConfigRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['GetConfigRpc.Input']['meta_info']
 
 
@@ -539,7 +539,7 @@ class GetConfigRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['GetConfigRpc.Output']['meta_info']
 
     @property
@@ -564,7 +564,7 @@ class GetConfigRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['GetConfigRpc']['meta_info']
 
 
@@ -576,7 +576,7 @@ class EditConfigRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.EditConfigRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.EditConfigRpc.Input>`
     
     
 
@@ -604,22 +604,22 @@ class EditConfigRpc(object):
         .. attribute:: default_operation
         
         	The default operation to use
-        	**type**\:   :py:class:`DefaultOperationEnum <ydk.models.ydktest.ietf_netconf.EditConfigRpc.Input.DefaultOperationEnum>`
+        	**type**\:   :py:class:`DefaultOperationEnum <ietf_netconf.EditConfigRpc.Input.DefaultOperationEnum>`
         
         .. attribute:: error_option
         
         	The error option to use
-        	**type**\:   :py:class:`ErrorOptionEnum <ydk.models.ydktest.ietf_netconf.EditConfigRpc.Input.ErrorOptionEnum>`
+        	**type**\:   :py:class:`ErrorOptionEnum <ietf_netconf.EditConfigRpc.Input.ErrorOptionEnum>`
         
         .. attribute:: target
         
         	Particular configuration to edit
-        	**type**\:   :py:class:`Target <ydk.models.ydktest.ietf_netconf.EditConfigRpc.Input.Target>`
+        	**type**\:   :py:class:`Target <ietf_netconf.EditConfigRpc.Input.Target>`
         
         .. attribute:: test_option
         
         	The test option to use
-        	**type**\:   :py:class:`TestOptionEnum <ydk.models.ydktest.ietf_netconf.EditConfigRpc.Input.TestOptionEnum>`
+        	**type**\:   :py:class:`TestOptionEnum <ietf_netconf.EditConfigRpc.Input.TestOptionEnum>`
         
         .. attribute:: url
         
@@ -672,7 +672,7 @@ class EditConfigRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['EditConfigRpc.Input.DefaultOperationEnum']
 
 
@@ -709,7 +709,7 @@ class EditConfigRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['EditConfigRpc.Input.ErrorOptionEnum']
 
 
@@ -744,7 +744,7 @@ class EditConfigRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['EditConfigRpc.Input.TestOptionEnum']
 
 
@@ -799,7 +799,7 @@ class EditConfigRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['EditConfigRpc.Input.Target']['meta_info']
 
         @property
@@ -838,7 +838,7 @@ class EditConfigRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['EditConfigRpc.Input']['meta_info']
 
     @property
@@ -860,7 +860,7 @@ class EditConfigRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['EditConfigRpc']['meta_info']
 
 
@@ -872,7 +872,7 @@ class CopyConfigRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.CopyConfigRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.CopyConfigRpc.Input>`
     
     
 
@@ -895,17 +895,17 @@ class CopyConfigRpc(object):
         .. attribute:: source
         
         	Particular configuration to copy from
-        	**type**\:   :py:class:`Source <ydk.models.ydktest.ietf_netconf.CopyConfigRpc.Input.Source>`
+        	**type**\:   :py:class:`Source <ietf_netconf.CopyConfigRpc.Input.Source>`
         
         .. attribute:: target
         
         	Particular configuration to copy to
-        	**type**\:   :py:class:`Target <ydk.models.ydktest.ietf_netconf.CopyConfigRpc.Input.Target>`
+        	**type**\:   :py:class:`Target <ietf_netconf.CopyConfigRpc.Input.Target>`
         
         .. attribute:: with_defaults
         
         	The explicit defaults processing mode requested
-        	**type**\:   :py:class:`WithDefaultsModeEnum <ydk.models.ydktest.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
+        	**type**\:   :py:class:`WithDefaultsModeEnum <ietf_netconf_with_defaults.WithDefaultsModeEnum>`
         
         
 
@@ -991,7 +991,7 @@ class CopyConfigRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['CopyConfigRpc.Input.Target']['meta_info']
 
 
@@ -1072,7 +1072,7 @@ class CopyConfigRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['CopyConfigRpc.Input.Source']['meta_info']
 
         @property
@@ -1102,7 +1102,7 @@ class CopyConfigRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['CopyConfigRpc.Input']['meta_info']
 
     @property
@@ -1124,7 +1124,7 @@ class CopyConfigRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['CopyConfigRpc']['meta_info']
 
 
@@ -1135,7 +1135,7 @@ class DeleteConfigRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.DeleteConfigRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.DeleteConfigRpc.Input>`
     
     
 
@@ -1158,7 +1158,7 @@ class DeleteConfigRpc(object):
         .. attribute:: target
         
         	Particular configuration to delete
-        	**type**\:   :py:class:`Target <ydk.models.ydktest.ietf_netconf.DeleteConfigRpc.Input.Target>`
+        	**type**\:   :py:class:`Target <ietf_netconf.DeleteConfigRpc.Input.Target>`
         
         
 
@@ -1223,7 +1223,7 @@ class DeleteConfigRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['DeleteConfigRpc.Input.Target']['meta_info']
 
         @property
@@ -1247,7 +1247,7 @@ class DeleteConfigRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['DeleteConfigRpc.Input']['meta_info']
 
     @property
@@ -1269,7 +1269,7 @@ class DeleteConfigRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['DeleteConfigRpc']['meta_info']
 
 
@@ -1281,7 +1281,7 @@ class LockRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.LockRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.LockRpc.Input>`
     
     
 
@@ -1304,7 +1304,7 @@ class LockRpc(object):
         .. attribute:: target
         
         	Particular configuration to lock
-        	**type**\:   :py:class:`Target <ydk.models.ydktest.ietf_netconf.LockRpc.Input.Target>`
+        	**type**\:   :py:class:`Target <ietf_netconf.LockRpc.Input.Target>`
         
         
 
@@ -1378,7 +1378,7 @@ class LockRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['LockRpc.Input.Target']['meta_info']
 
         @property
@@ -1402,7 +1402,7 @@ class LockRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['LockRpc.Input']['meta_info']
 
     @property
@@ -1424,7 +1424,7 @@ class LockRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['LockRpc']['meta_info']
 
 
@@ -1436,7 +1436,7 @@ class UnlockRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.UnlockRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.UnlockRpc.Input>`
     
     
 
@@ -1459,7 +1459,7 @@ class UnlockRpc(object):
         .. attribute:: target
         
         	Particular configuration to unlock
-        	**type**\:   :py:class:`Target <ydk.models.ydktest.ietf_netconf.UnlockRpc.Input.Target>`
+        	**type**\:   :py:class:`Target <ietf_netconf.UnlockRpc.Input.Target>`
         
         
 
@@ -1533,7 +1533,7 @@ class UnlockRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['UnlockRpc.Input.Target']['meta_info']
 
         @property
@@ -1557,7 +1557,7 @@ class UnlockRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['UnlockRpc.Input']['meta_info']
 
     @property
@@ -1579,7 +1579,7 @@ class UnlockRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['UnlockRpc']['meta_info']
 
 
@@ -1590,12 +1590,12 @@ class GetRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.GetRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.GetRpc.Input>`
     
     .. attribute:: output
     
     	
-    	**type**\:   :py:class:`Output <ydk.models.ydktest.ietf_netconf.GetRpc.Output>`
+    	**type**\:   :py:class:`Output <ietf_netconf.GetRpc.Output>`
     
     
 
@@ -1625,7 +1625,7 @@ class GetRpc(object):
         .. attribute:: with_defaults
         
         	The explicit defaults processing mode requested
-        	**type**\:   :py:class:`WithDefaultsModeEnum <ydk.models.ydktest.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
+        	**type**\:   :py:class:`WithDefaultsModeEnum <ietf_netconf_with_defaults.WithDefaultsModeEnum>`
         
         
 
@@ -1663,7 +1663,7 @@ class GetRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['GetRpc.Input']['meta_info']
 
 
@@ -1708,7 +1708,7 @@ class GetRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['GetRpc.Output']['meta_info']
 
     @property
@@ -1733,7 +1733,7 @@ class GetRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['GetRpc']['meta_info']
 
 
@@ -1768,7 +1768,7 @@ class CloseSessionRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['CloseSessionRpc']['meta_info']
 
 
@@ -1779,7 +1779,7 @@ class KillSessionRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.KillSessionRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.KillSessionRpc.Input>`
     
     
 
@@ -1840,7 +1840,7 @@ class KillSessionRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['KillSessionRpc.Input']['meta_info']
 
     @property
@@ -1862,7 +1862,7 @@ class KillSessionRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['KillSessionRpc']['meta_info']
 
 
@@ -1874,7 +1874,7 @@ class CommitRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.CommitRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.CommitRpc.Input>`
     
     
 
@@ -1960,7 +1960,7 @@ class CommitRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['CommitRpc.Input']['meta_info']
 
     @property
@@ -1982,7 +1982,7 @@ class CommitRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['CommitRpc']['meta_info']
 
 
@@ -2018,7 +2018,7 @@ class DiscardChangesRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['DiscardChangesRpc']['meta_info']
 
 
@@ -2032,7 +2032,7 @@ class CancelCommitRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.CancelCommitRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.CancelCommitRpc.Input>`
     
     
 
@@ -2089,7 +2089,7 @@ class CancelCommitRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['CancelCommitRpc.Input']['meta_info']
 
     @property
@@ -2111,7 +2111,7 @@ class CancelCommitRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['CancelCommitRpc']['meta_info']
 
 
@@ -2122,7 +2122,7 @@ class ValidateRpc(object):
     .. attribute:: input
     
     	
-    	**type**\:   :py:class:`Input <ydk.models.ydktest.ietf_netconf.ValidateRpc.Input>`
+    	**type**\:   :py:class:`Input <ietf_netconf.ValidateRpc.Input>`
     
     
 
@@ -2145,7 +2145,7 @@ class ValidateRpc(object):
         .. attribute:: source
         
         	Particular configuration to validate
-        	**type**\:   :py:class:`Source <ydk.models.ydktest.ietf_netconf.ValidateRpc.Input.Source>`
+        	**type**\:   :py:class:`Source <ietf_netconf.ValidateRpc.Input.Source>`
         
         
 
@@ -2237,7 +2237,7 @@ class ValidateRpc(object):
 
             @staticmethod
             def _meta_info():
-                from ydk.models.ydktest._meta import _ietf_netconf as meta
+                from _meta import _ietf_netconf as meta
                 return meta._meta_table['ValidateRpc.Input.Source']['meta_info']
 
         @property
@@ -2261,7 +2261,7 @@ class ValidateRpc(object):
 
         @staticmethod
         def _meta_info():
-            from ydk.models.ydktest._meta import _ietf_netconf as meta
+            from _meta import _ietf_netconf as meta
             return meta._meta_table['ValidateRpc.Input']['meta_info']
 
     @property
@@ -2283,7 +2283,7 @@ class ValidateRpc(object):
 
     @staticmethod
     def _meta_info():
-        from ydk.models.ydktest._meta import _ietf_netconf as meta
+        from _meta import _ietf_netconf as meta
         return meta._meta_table['ValidateRpc']['meta_info']
 
 

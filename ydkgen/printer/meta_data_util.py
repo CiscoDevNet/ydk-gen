@@ -174,9 +174,12 @@ def get_property_restriction(meta_info_data):
             convert_to_reStructuredText(meta_info_data.pattern[0]))
     else:
         if len(meta_info_data.prange) > 0:
-            prop_restriction = '**range:** {0}'. \
-                format(convert_to_reStructuredText(
-                    format_range_string(meta_info_data.prange)))
+            restriction = convert_to_reStructuredText(
+                    format_range_string(meta_info_data.prange))
+            if meta_info_data.ptype == 'str':
+                prop_restriction = '**length:** {0}'.format(restriction)
+            else:
+                prop_restriction = '**range:** {0}'.format(restriction)
 
     return prop_restriction
 

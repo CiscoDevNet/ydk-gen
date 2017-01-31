@@ -213,6 +213,12 @@ module ydktest-sanity {
   grouping all-ytypes-class {
     description "testing for couple of leaves";
     container ytypes {
+      container none {
+        leaf test {
+            type string;
+        }
+      }
+    
       description "config for one_level data types";
       leaf enabled {
         type empty;

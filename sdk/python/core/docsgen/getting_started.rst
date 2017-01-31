@@ -98,7 +98,7 @@ To get started with using the YDK API, there are sample apps available under the
 
 Release Notes
 --------------
-The current YDK release version is 0.5.2 (beta). YDK-Py is licensed under the Apache 2.0 License.
+The current YDK release version is 0.5.3 (beta). YDK-Py is licensed under the Apache 2.0 License.
 
 Documentation and Support
 --------------------------

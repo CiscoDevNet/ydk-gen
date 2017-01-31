@@ -4,8 +4,6 @@ ydk.services module
 .. toctree::
     :maxdepth: 1
 
-.. py:currentmodule:: ydk.services
-
 services.py
 
 The Services module. Supported services include

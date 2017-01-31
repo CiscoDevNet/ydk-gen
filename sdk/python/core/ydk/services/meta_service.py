@@ -238,7 +238,7 @@ def _check_type_mismatch(value, member):
     if member.mtype == REFERENCE_CLASS:
         value_clazz_name = value.__class__.__name__
         member_clazz_name = member.clazz_name.split('.')[-1]
-        if any((not value.__class__.__module__.startswith('ydk.models'),
+        if any((# not value.__class__.__module__.startswith('ydk.models'),
                 isinstance(value, list),
                 value_clazz_name != member_clazz_name)):
             raise YPYServiceError(error_msg=_TYPE_MISMATCH_CLASS.format(

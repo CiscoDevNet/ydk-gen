@@ -75,6 +75,8 @@ class DocPrinter(object):
         self._print_header(package)
         # Body / Package Comment
         self._append('%s\n' % package.name)
+        if package.revision is not None:
+            self._append('Revision: {0}\n'.format(package.revision))
         if package.comment is not None:
             self._append(package.comment)
 

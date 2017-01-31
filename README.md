@@ -45,8 +45,6 @@ The output of ydk-gen is either a core package, that defines services and provid
 
 ##System Requirements:
 
-`ydk-py` requires `ydk-cpp` core to be built and installed.
-
 ####Linux
 Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
 ```
