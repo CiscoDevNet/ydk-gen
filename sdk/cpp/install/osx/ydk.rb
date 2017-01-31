@@ -1,8 +1,8 @@
 class Ydk < Formula
   desc "generate API bindings to YANG data models"
   homepage "https://github.com/CiscoDevNet/ydk-cpp"
-  url "https://github.com/CiscoDevNet/ydk-cpp/archive/0.5.2.tar.gz"
-  sha256 "39ca26b57e0d784243ebd0c07eb0e35fc0ad8600886fde2be4440eae898b844d"
+  url "https://github.com/CiscoDevNet/ydk-cpp/archive/0.5.3.tar.gz"
+  sha256 "dd870f664d4c90e869885bc48dcdc1e1bd7508eb0fa80d357ea3355154dfe939"
 
   depends_on "cmake" => :build
   depends_on "boost"
