@@ -90,15 +90,11 @@ Download main package
 $ wget -O ydk-0.5.2.tar.gz "https://github.com/CiscoDevNet/ydk-cpp/archive/0.5.2.tar.gz"
 ```
 
-Make sure it works by following the guide at
-<a href="https://github.com/CiscoDevNet/ydk-cpp/blob/master/README.md">https://github.com/CiscoDevNet/ydk-cpp/blob/master/README.md</a>
-
-Start Package
+Start Package. Substitute ydk for bundle package names (ydk-ietf etc)
 ```
 $ bzr dh-make ydk 0.5.2 ydk-0.5.2.tar.gz
 ```
-Package type is l for library
-Verify information is correct
+Package type is l for library. Verify information is correct. This will create a directory `ydk`. In this, a few files under `ydk/debian` need to be customized.
 
 ##Customize Debian Files
 
@@ -107,6 +103,7 @@ Remove the optional example files
 $ cd ydk/debian
 $ rm *ex *EX
 ```
+See the example debian files for core and bundles under [ydk](ydk/debian), [ietf](ietf/debian) etc. For each new release, mostly only the control and changelog files need to be modified.
 
 ***Debian/changelog***
 
@@ -157,7 +154,10 @@ Build Package
 ```
 $ bzr builddeb -- -us -uc
 ```
-
+Optionally, use the -d flag
+```
+$ bzr builddeb -- -us -uc -d
+```
 Generate source.changes File
 ```
 $ bzr builddeb -S
@@ -168,7 +168,7 @@ $ debuild -S -rfakeroot -k<key-id>
 ```
 Packages and source.changes are output to one directory above and thus outside the project. 
 
-##Confirm Package (optional)
+##Confirm source (optional)
 
 View Contents
 ```
@@ -211,4 +211,6 @@ Upload PPA with dput
 ```
 $ dput ppa:<LP USERNAME>/<PPA NAME> <SOURCE.CHANGES>
 ```
-use -f or remove .upload file to push updates to this package. In case the build has some issues and you have to run 'dput' again, make sure you edit the debian/changelog (see above). Increment the `*ubuntu<number>` number by 1. For example, if on the first upload, it was `0.5.2-0ubuntu1`, change it to `0.5.2-0ubuntu2`
+use -f or remove .upload file to push updates to this package.
+
+*Note:* In case the build has some issues and you have to run 'dput' again and the package is rejected, make sure you edit the debian/changelog (see above). Increment the `*ubuntu<number>` number by 1. For example, if on the first upload, it was `0.5.2-0ubuntu1`, change it to `0.5.2-0ubuntu2`
