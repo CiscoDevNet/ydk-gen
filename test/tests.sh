@@ -268,18 +268,13 @@ function py_sanity_augmentation_test {
     run_test sdk/python/core/tests/test_sanity_bundle_aug.py
 }
 
-function cpp_sanity_core {
-    print_msg "cpp_sanity_core"
-    
-    cpp_sanity_core_test
-}
-
 function cpp_sanity_core_gen_install {
     print_msg "cpp_sanity_core_gen_install"
 
     cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test generate.py --core --cpp
-    cd $YDKGEN_HOME/gen-api/cpp/ydk/build
+    cd $YDKGEN_HOME/sdk/cpp/core
+    mkdir -p build && cd build
+    run_exec_test cmake ..
     run_exec_test make install
     cd $YDKGEN_HOME
 }
@@ -288,8 +283,9 @@ function cpp_sanity_core_test {
     print_msg "Running cpp core test"
 
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/ydktest
-    cd gen-api/cpp/ydk/build
+    cd $YDKGEN_HOME/sdk/cpp/core/build
     run_exec_test make test
+    cd $YDKGEN_HOME
 }
 
 function cpp_sanity_ydktest {
@@ -356,7 +352,7 @@ function py_tests {
 
 function cpp_tests {
     init_env "python" "python"
-    cpp_sanity_core
+    cpp_sanity_core_test
     cpp_sanity_ydktest
     teardown_env
 }
@@ -417,7 +413,6 @@ function test_gen_tests {
     cpp_test_gen
 }
 
-
 ########################## EXECUTION STARTS HERE #############################
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -428,5 +423,6 @@ init_rest_server
 cpp_tests
 test_gen_tests
 cd $YDKGEN_HOME
-print_msg "combining coverage"
+print_msg "gathering cpp coverage"
+print_msg "combining python coverage"
 coverage combine

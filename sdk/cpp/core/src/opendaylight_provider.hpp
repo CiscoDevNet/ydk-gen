@@ -40,7 +40,7 @@ class OpenDaylightServiceProvider
 								   const std::string & address,
 								   const std::string & username,
 								   const std::string & password,
-								   int port = 80,
+								   int port = 8181,
 								   EncodingFormat encoding = EncodingFormat::JSON,
 								   Protocol protocol = Protocol::restconf);
 

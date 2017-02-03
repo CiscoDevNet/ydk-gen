@@ -35,7 +35,8 @@ function install_dependencies {
                  libssh \
                  pcre \
                  wget \
-                 xml2
+                 xml2 \
+                 lcov
 
     brew install libssh
     brew link libssh

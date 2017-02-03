@@ -15,7 +15,7 @@ set(BOOST_INCLUDE_DIRS $boost_installation_prefix/include)
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0")
+set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0 -fprofile-arcs -ftest-coverage")
 
 foreach(test_name IN LISTS core_tests)
     add_executable(${test_name} ${test_name}.cpp)

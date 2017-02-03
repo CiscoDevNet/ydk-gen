@@ -19,4 +19,11 @@ script:
     - sudo ./test/tests.sh
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - bash <(curl -s https://codecov.io/bash) # Uploading python report to CodeCov
+
+    - cd ${TRAVIS_BUILD_DIR}/sdk/cpp/core/build
+    - lcov --directory . --capture --output-file coverage.info # capture coverage info
+    - lcov --remove coverage.info '/usr/*' '/Applications/*' --output-file coverage.info # filter out system
+    #- lcov --list coverage.info #debug info
+    # Uploading cpp report to CodeCov
+    - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"

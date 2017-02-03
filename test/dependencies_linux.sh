@@ -56,6 +56,7 @@ function install_dependencies {
                             unzip \
                             wget \
                             zlib1g-dev\
+                            lcov \
                             cmake > /dev/null
 
     # gcc-5 and g++5 for modern c++
