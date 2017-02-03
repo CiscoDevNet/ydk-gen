@@ -247,7 +247,7 @@ BOOST_AUTO_TEST_CASE( bgp )
 
     BOOST_REQUIRE(xml == expected_bgp_output);
 
-    auto new_bgp = s.decode(schema, xml, ydk::path::CodecService::Format::XML);
+    auto new_bgp = s.decode(schema, xml, ydk::EncodingFormat::XML);
 
     auto new_xml = s.encode(*new_bgp, ydk::EncodingFormat::XML, false);
 

@@ -38,7 +38,7 @@ public:
 	CodecServiceProvider(path::Repository & repo, EncodingFormat encoding);
 	~CodecServiceProvider();
 
-	path::RootSchemaNode* get_root_schema();
+	path::RootSchemaNode& get_root_schema();
 	std::unique_ptr<Entity> get_top_entity(std::string & payload);
 
 public:

@@ -57,7 +57,7 @@ void test_bgp_create()
     neighbor_af.create("config/enabled","true");
 
     auto s = ydk::path::CodecService{};
-    auto xml = s.encode(*bgp, ydk::path::CodecService::Format::XML, true);
+    auto xml = s.encode(*bgp, ydk::EncodingFormat::XML, true);
     // auto json = s.encode(bgp, ydk::path::CodecService::Format::JSON, true);
 
     std::cout << "Testing encoding" << std::endl;

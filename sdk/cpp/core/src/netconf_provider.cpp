@@ -81,6 +81,7 @@ NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo, string a
 
 void NetconfServiceProvider::initialize(path::Repository & repo)
 {
+    IetfCapabilitiesParser capabilities_parser{};
     client->connect();
     server_capabilities = client->get_capabilities();
 
@@ -199,7 +200,7 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::invoke(path::Rpc& rpc) c
 
     //for now we only support crud rpc's
     path::SchemaNode* rpc_schema = &(rpc.schema());
-	path::DataNode* datanode = nullptr;
+	std::unique_ptr<path::DataNode> datanode = nullptr;
 
     if(rpc_schema == create_schema || rpc_schema == delete_schema || rpc_schema == update_schema)
     {
@@ -267,10 +268,7 @@ static void create_input_target(path::DataNode & input, bool candidate_supported
 
 static void create_input_error_option(path::DataNode & input)
 {
-	if(!input.create("error-option", "rollback-on-error")){
-            BOOST_LOG_TRIVIAL(error) << "Failed to set rollback-on-error";
-            BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"Failed to set rollback-on-error option"});
-	}
+	input.create("error-option", "rollback-on-error");
 }
 
 static void create_input_source(path::DataNode & input, bool config)
@@ -295,7 +293,7 @@ static string get_annotated_config_payload(path::RootSchemaNode & root_schema,
     std::string entity_value = entity_node->get();
 
     //deserialize the entity_value
-    auto datanode = codec_service.decode(root_schema, entity_value, path::CodecService::Format::XML);
+    auto datanode = codec_service.decode(root_schema, entity_value, EncodingFormat::XML);
 
     if(!datanode){
         BOOST_LOG_TRIVIAL(error) << "Failed to decode entity node";
