@@ -34,19 +34,18 @@ class MockServiceProvider : public ydk::path::ServiceProvider
 public:
     MockServiceProvider(const std::string searchdir, const std::vector<ydk::path::Capability> capabilities) : m_searchdir{searchdir}, m_capabilities{capabilities}
     {
+        auto repo = ydk::path::Repository{m_searchdir};
+        root_schema = repo.create_root_schema(m_capabilities);
     }
 
     virtual ~MockServiceProvider()
     {
-
     }
 
 
     ydk::path::RootSchemaNode& get_root_schema() const
     {
-        auto repo = ydk::path::Repository{m_searchdir};
-
-        return *repo.create_root_schema(m_capabilities);
+        return *root_schema;
     }
 
 	ydk::EncodingFormat get_encoding() const
@@ -65,6 +64,7 @@ public:
 private:
     std::string m_searchdir;
     std::vector<ydk::path::Capability> m_capabilities;
+    std::unique_ptr<ydk::path::RootSchemaNode> root_schema;
 
 };
 }

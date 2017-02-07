@@ -1051,7 +1051,7 @@ namespace ydk {
             /// @param[in] capabilities vector of Capability
             /// @return pointer to the RootSchemaNode or nullptr if one could not be created.
             ///
-            RootSchemaNode* create_root_schema(const std::vector<path::Capability> & capabilities) ;
+            std::unique_ptr<RootSchemaNode> create_root_schema(const std::vector<path::Capability> & capabilities) ;
 
             ///
             /// @brief Adds a model provider.
@@ -1102,7 +1102,7 @@ namespace ydk {
             ///
             /// @return pointer to the RootSchemaNode or nullptr if one could not be created
             ///
-           virtual RootSchemaNode& get_root_schema() const = 0;
+            virtual RootSchemaNode& get_root_schema() const = 0;
 
 
             virtual ~ServiceProvider();

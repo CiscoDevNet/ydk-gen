@@ -215,7 +215,7 @@ namespace ydk {
 
 }
 
-ydk::path::RootSchemaNode*
+std::unique_ptr<ydk::path::RootSchemaNode>
 ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & capabilities)
 {
     if(using_temp_directory)
@@ -266,7 +266,7 @@ ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & 
 
     ly_verb(LY_LLVRB); // enable libyang logging after model download has completed
     RootSchemaNodeImpl* rs = new RootSchemaNodeImpl{ctx};
-    return rs;
+    return std::unique_ptr<RootSchemaNode>(rs);
 }
 
 ///
