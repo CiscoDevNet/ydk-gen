@@ -92,7 +92,8 @@ class YdkBuildExtension(build_ext):
                       '-DPYTHON_LIBRARY={0}'.format(
                                       get_python_library()),
                       '-DPYTHON_INCLUDE={0}'.format(
-                                      get_python_include())]
+                                      get_python_include()),
+                      '-DCMAKE_BUILD_TYPE=Release']
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)

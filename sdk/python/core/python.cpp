@@ -15,6 +15,7 @@
  ------------------------------------------------------------------*/
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include <ydk/codec_provider.hpp>
 #include <ydk/codec_service.hpp>
@@ -170,7 +171,11 @@ PYBIND11_PLUGIN(ydk_)
 
 	class_<ydk::Bits>(types, "Bits")
 		.def(init<>())
-		.def("[]", &ydk::Bits::operator[], return_value_policy::reference)
+		.def("__getitem__", &ydk::Bits::operator[], return_value_policy::reference)
+		.def("__setitem__", []( ydk::Bits &b, std::string key, bool value)
+							  {
+							      b[key] = value;
+							  })
 		.def("get_bitmap", &ydk::Bits::get_bitmap, return_value_policy::reference);
 
 	class_<ydk::Decimal64>(types, "Decimal64")
