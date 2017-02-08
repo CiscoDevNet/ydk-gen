@@ -35,10 +35,6 @@ class ModuleMetaPrinter(FilePrinter):
         self.sort_clazz = sort_clazz
 
     def print_header(self, package):
-        rpcs = [idx for idx in package.owned_elements if isinstance(idx, Class) and idx.is_rpc()]
-        anyxml_import = ''
-        if len(rpcs) > 0:
-            anyxml_import = ', ANYXML_CLASS'
         self.ctx.str("""
 
 
@@ -50,13 +46,11 @@ from enum import Enum
 from ydk._core._dm_meta_info import _MetaInfoClassMember, _MetaInfoClass, _MetaInfoEnum
 from ydk.types import Empty, YList, YLeafList, DELETE, Decimal64, FixedBitsDict
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LIST, REFERENCE_LEAFLIST, \
-    REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION{0}
+    REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, REFERENCE_BITS, REFERENCE_UNION, ANYXML_CLASS
 
 from ydk.errors import YPYError, YPYModelError
 from ydk.providers._importer import _yang_ns
-
-""".format(anyxml_import))
-
+""")
     def print_body(self, package):
         self.ctx.writeln('_meta_table = {')
         self.ctx.lvl_inc()

@@ -148,6 +148,9 @@ module ydktest-sanity {
         description "this is string value";
         type string;
       }
+      anyxml config {
+          description "test";
+      }
     }
   }
 
@@ -213,6 +216,12 @@ module ydktest-sanity {
   grouping all-ytypes-class {
     description "testing for couple of leaves";
     container ytypes {
+      container none {
+        leaf test {
+            type string;
+        }
+      }
+    
       description "config for one_level data types";
       leaf enabled {
         type empty;
@@ -351,15 +360,6 @@ module ydktest-sanity {
           }
         }*/
 
-        leaf status {
-            description
-              "Whether cable is connected or not";
-            type enumeration {
-              enum "good";
-              enum "not connected";
-            }
-          }
-
         leaf younion {
           type union {
             type Ydk-Enum-test;
@@ -376,6 +376,15 @@ module ydktest-sanity {
           type string;
           description "A list of string";
         }
+
+        leaf status {
+            description
+              "Whether cable is connected or not";
+            type enumeration {
+              enum "good";
+              enum "not connected";
+            }
+          }
 
         leaf-list bits-llist {
           type bits {
