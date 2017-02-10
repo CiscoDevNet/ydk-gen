@@ -26,7 +26,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <boost/log/trivial.hpp>
+#include "../logger.hpp"
+
 
 ////////////////////////////////////////////////////////////////////
 /// Function segmentalize()
@@ -68,6 +69,14 @@ ydk::path::ServiceProvider::~ServiceProvider()
 //////////////////////////////////////////////////////////////////////////
 // class ydk::ValidationService
 //////////////////////////////////////////////////////////////////////////
+ydk::path::ValidationService::ValidationService()
+{
+}
+
+ydk::path::ValidationService::~ValidationService()
+{
+}
+
 void
 ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::ValidationService::Option option)
 {
@@ -94,15 +103,15 @@ ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::Vali
     }
     ly_option = ly_option | LYD_OPT_NOAUTODEL;
 
-    BOOST_LOG_TRIVIAL(debug) << "Validation called on " << dn.path() << " with option " << option_str;
+    YLOG_DEBUG("Validation called on {} with option {}", dn.path(), option_str);
 
     //what kind of a DataNode is this
     const ydk::path::DataNodeImpl & dn_impl = dynamic_cast<const ydk::path::DataNodeImpl&>(dn);
     struct lyd_node* lynode = dn_impl.m_node;
     int rc = lyd_validate(&lynode,ly_option, NULL);
     if(rc) {
-        BOOST_LOG_TRIVIAL(error) << "Data validation failed";
-        BOOST_THROW_EXCEPTION(ydk::path::YCPPDataValidationError{});
+        YLOG_ERROR("Data validation failed");
+        throw(ydk::path::YCPPDataValidationError{});
     }
 
 }
@@ -113,6 +122,14 @@ ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::Vali
 //////////////////////////////////////////////////////////////////////////
 // class ydk::CodecService
 //////////////////////////////////////////////////////////////////////////
+ydk::path::CodecService::CodecService()
+{
+}
+
+ydk::path::CodecService::~CodecService()
+{
+}
+
 std::string
 ydk::path::CodecService::encode(const ydk::path::DataNode& dn, ydk::EncodingFormat format, bool pretty)
 {
@@ -124,25 +141,21 @@ ydk::path::CodecService::encode(const ydk::path::DataNode& dn, ydk::EncodingForm
 
     if(format == ydk::EncodingFormat::JSON)
     {
-    	BOOST_LOG_TRIVIAL(trace) << "Performing encode operation on JSON";
+    	YLOG_TRACE("Performing encode operation on JSON");
         scheme = LYD_JSON;
     }
     else
     {
-    	BOOST_LOG_TRIVIAL(trace) << "Performing encode operation on XML";
+    	YLOG_TRACE("Performing encode operation on XML");
     }
 
     struct lyd_node* m_node = nullptr;
 
-    const DataNodeImpl* impl = dynamic_cast<const DataNodeImpl *>(&dn);
-    if( !impl) {
-        BOOST_LOG_TRIVIAL(error) << "DataNode is nullptr";
-        BOOST_THROW_EXCEPTION(YCPPCoreError{"DataNode is null"});
-    }
-    m_node = impl->m_node;
+    const DataNodeImpl& impl = dynamic_cast<const DataNodeImpl &>(dn);
+    m_node = impl.m_node;
 
     if(m_node == nullptr){
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"No data in data node"});
+        throw(YCPPInvalidArgumentError{"No data in data node"});
     }
     char* buffer;
 
@@ -151,8 +164,8 @@ ydk::path::CodecService::encode(const ydk::path::DataNode& dn, ydk::EncodingForm
         {
             std::ostringstream os;
             os << "Could not encode datanode: "<< m_node->schema->name;
-            BOOST_LOG_TRIVIAL(error) << os.str();
-            BOOST_THROW_EXCEPTION(YCPPCoreError{os.str()});
+            YLOG_ERROR(os.str().c_str());
+            throw(YCPPCoreError{os.str()});
         }
         ret = buffer;
         std::free(buffer);
@@ -168,12 +181,12 @@ ydk::path::CodecService::decode(const RootSchemaNode & root_schema, const std::s
     LYD_FORMAT scheme = LYD_XML;
     if (format == EncodingFormat::JSON)
     {
-    	BOOST_LOG_TRIVIAL(trace) << "Performing decode operation on JSON";
+    	YLOG_TRACE("Performing decode operation on JSON");
         scheme = LYD_JSON;
     }
     else
     {
-    	BOOST_LOG_TRIVIAL(trace) << "Performing decode operation on XML";
+    	YLOG_TRACE("Performing decode operation on XML");
     }
 
     const RootSchemaNodeImpl & rs_impl = dynamic_cast<const RootSchemaNodeImpl &>(root_schema);
@@ -182,12 +195,12 @@ ydk::path::CodecService::decode(const RootSchemaNode & root_schema, const std::s
     if( root == nullptr || ly_errno )
     {
 
-        BOOST_LOG_TRIVIAL(error) << "Parsing failed with message " << ly_errmsg();
-        BOOST_THROW_EXCEPTION(YCPPCodecError{YCPPCodecError::Error::XML_INVAL});
+        YLOG_ERROR( "Parsing failed with message {}", ly_errmsg());
+        throw(YCPPCodecError{YCPPCodecError::Error::XML_INVAL});
     }
 
 
-    BOOST_LOG_TRIVIAL(trace) << "Performing decode operation";
+    YLOG_TRACE("Performing decode operation");
     RootDataImpl* rd = new RootDataImpl{rs_impl, rs_impl.m_ctx, "/"};
     rd->m_node = root;
 

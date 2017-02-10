@@ -47,9 +47,9 @@ class Entity;
 
 class ExecutorService : public Service
 {
-    public:
-        ExecutorService();
-        bool execute_rpc(NetconfServiceProvider & provider, Entity & entity);
+	public:
+		ExecutorService();
+		bool execute_rpc(NetconfServiceProvider & provider, Entity & entity);
 };
 
 }

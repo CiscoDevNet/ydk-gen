@@ -23,7 +23,7 @@
 
 
 #include "path_private.hpp"
-#include <boost/log/trivial.hpp>
+#include "../logger.hpp"
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -43,8 +43,8 @@ ydk::path::RpcImpl::RpcImpl(SchemaNodeImpl& sn, struct ly_ctx* ctx) : schema_nod
     struct lyd_node* dnode = lyd_new_path(nullptr, ctx, sn.path().c_str(), (void*)"", LYD_ANYDATA_SXML, 0);
 
     if(!dnode){
-        BOOST_LOG_TRIVIAL(error) << "Cannot find DataNode with path " << sn.path();
-        BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"Illegal state"});
+        YLOG_ERROR("Cannot find DataNode with path {}", sn.path());
+        throw(YCPPIllegalStateError{"Illegal state"});
     }
 
     data_node = std::make_unique<DataNodeImpl>(nullptr, dnode);

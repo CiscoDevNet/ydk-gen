@@ -22,10 +22,10 @@
 //////////////////////////////////////////////////////////////////
 
 #include <iostream>
-#include <boost/log/trivial.hpp>
 
 #include "codec_provider.hpp"
 #include "codec_service.hpp"
+#include "logger.hpp"
 #include "entity_data_node_walker.hpp"
 #include "path_api.hpp"
 #include "types.hpp"
@@ -33,11 +33,11 @@
 namespace ydk
 {
 
-std::string REPO_ERROR_MSG{"YANG models stored in repository is not consistent with"
+const char * REPO_ERROR_MSG ="YANG models stored in repository is not consistent with"
                            " bundle capabilities, please make sure all YANG models used"
-                           " to generate bundle is stored in this repository."};
+                           " to generate bundle is stored in this repository.";
 
-std::string PAYLOAD_ERROR_MSG{"Codec Service only support one entity per payload, please split paylaod"};
+const char * PAYLOAD_ERROR_MSG ="Codec Service only support one entity per payload, please split paylaod";
 
 CodecService::CodecService()
 {
@@ -59,8 +59,8 @@ CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pret
     }
     catch (const YCPPInvalidArgumentError& e)
     {
-        BOOST_LOG_TRIVIAL(error) << REPO_ERROR_MSG;
-        BOOST_THROW_EXCEPTION(YCPPServiceProviderError(REPO_ERROR_MSG));
+        YLOG_ERROR(REPO_ERROR_MSG);
+        throw(YCPPServiceProviderError(REPO_ERROR_MSG));
     }
     return {};
 }
@@ -78,10 +78,9 @@ CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std:
 }
 
 std::unique_ptr<Entity>
-CodecService::decode(CodecServiceProvider & provider, std::string & payload)
+CodecService::decode(CodecServiceProvider & provider, std::string & payload, std::unique_ptr<Entity> entity)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Decoding " << payload;
-    std::unique_ptr<Entity> entity = provider.get_top_entity(payload);
+    YLOG_DEBUG("Decoding {}", payload);
     path::RootSchemaNode& root_schema = provider.get_root_schema();
 
     path::CodecService core_codec_service{};
@@ -89,8 +88,8 @@ CodecService::decode(CodecServiceProvider & provider, std::string & payload)
 
     if (root_data_node->children().size() != 1)
     {
-        BOOST_LOG_TRIVIAL(error) << PAYLOAD_ERROR_MSG;
-        BOOST_THROW_EXCEPTION(YCPPServiceProviderError(PAYLOAD_ERROR_MSG));
+    	YLOG_ERROR(PAYLOAD_ERROR_MSG);
+        throw(YCPPServiceProviderError(PAYLOAD_ERROR_MSG));
     }
     else
     {
@@ -103,13 +102,13 @@ CodecService::decode(CodecServiceProvider & provider, std::string & payload)
 }
 
 std::map<std::string, std::unique_ptr<Entity>>
-CodecService::decode(CodecServiceProvider & provider, std::map<std::string, std::string> & payload_map)
+CodecService::decode(CodecServiceProvider & provider, std::map<std::string, std::string> & payload_map,
+		std::map<std::string, std::unique_ptr<Entity>> entity_map)
 {
-    std::map<std::string, std::unique_ptr<Entity>> entity_map;
     for (auto it: payload_map)
     {
-        BOOST_LOG_TRIVIAL(debug) << "Decoding " << it.second;
-        std::unique_ptr<Entity> entity = decode(provider, it.second);
+    	YLOG_DEBUG("Decoding {}", it.second);
+        std::unique_ptr<Entity> entity = decode(provider, it.second, std::move(entity_map[it.first]));
         entity_map[it.first] = std::move(entity);
     }
     return entity_map;

@@ -43,10 +43,6 @@
 #include <cassert>
 #include <sstream>
 #include <regex>
-#include <boost/filesystem.hpp>
-#include <cstdio>
-#include <boost/iostreams/stream.hpp>
-#include <boost/iostreams/device/file_descriptor.hpp>
 
 
 namespace ydk {
@@ -60,7 +56,7 @@ namespace ydk {
         public:
             SchemaNodeImpl(const SchemaNode* parent, struct lys_node* node);
 
-            virtual ~SchemaNodeImpl();
+            ~SchemaNodeImpl();
 
             std::string path() const;
 
@@ -79,7 +75,6 @@ namespace ydk {
             const SchemaNode* m_parent;
             struct lys_node* m_node;
             std::vector<std::unique_ptr<SchemaNode>> m_children;
-
         };
 
 
@@ -88,7 +83,7 @@ namespace ydk {
         public:
             RootSchemaNodeImpl(struct ly_ctx* ctx) ;
 
-            virtual ~RootSchemaNodeImpl();
+            ~RootSchemaNodeImpl();
 
             std::vector<SchemaNode*> find(const std::string& path) const;
 
@@ -104,7 +99,6 @@ namespace ydk {
             struct ly_ctx* m_ctx;
             std::vector<std::unique_ptr<DataNode>> m_root_data_nodes;
             std::vector<std::unique_ptr<SchemaNode>> m_children;
-
         };
 
 
@@ -131,35 +125,35 @@ namespace ydk {
             // and value is ignored
             //
             // returns the first created or updated node
-            virtual DataNode& create_filter(const std::string& path, const std::string& value);
+            DataNode& create_filter(const std::string& path, const std::string& value);
 
             virtual DataNode& create(const std::string& path, const std::string& value);
 
-            virtual void set(const std::string& value);
+            void set(const std::string& value);
 
             virtual std::string get() const;
 
             virtual std::vector<std::shared_ptr<DataNode>> find(const std::string& path) const;
 
-            virtual DataNode* parent() const;
+            DataNode* parent() const;
 
             virtual std::vector<std::shared_ptr<DataNode>> children() const;
 
             virtual const DataNode& root() const;
 
-            virtual void add_annotation(const Annotation& an);
+            void add_annotation(const Annotation& an);
 
-            virtual bool remove_annotation(const Annotation& an);
+            bool remove_annotation(const Annotation& an);
 
-            virtual std::vector<Annotation> annotations();
+            std::vector<Annotation> annotations();
 
-            virtual std::string xml() const;
+            std::string xml() const;
 
-            virtual std::shared_ptr<DataNode> get_dn_for_desc_node(struct lyd_node* desc_node) const;
+            std::shared_ptr<DataNode> get_dn_for_desc_node(struct lyd_node* desc_node) const;
 
         private:
 
-            virtual DataNode& create_helper(const std::string& path, const std::string& value, bool is_filter);
+            DataNode& create_helper(const std::string& path, const std::string& value, bool is_filter);
 
         public:
 
@@ -174,29 +168,28 @@ namespace ydk {
         public:
             RootDataImpl(const SchemaNode& schema, struct ly_ctx* ctx, const std::string path);
 
-            virtual ~RootDataImpl();
+            ~RootDataImpl();
 
-            virtual const SchemaNode& schema() const;
+            const SchemaNode& schema() const;
 
-            virtual std::string path() const;
+            std::string path() const;
 
-            virtual DataNode& create(const std::string& path, const std::string& value);
+            DataNode& create(const std::string& path, const std::string& value);
 
-            virtual void set(const std::string& value);
+            void set(const std::string& value);
 
-            virtual std::string get() const;
+            std::string get() const;
 
-            virtual std::vector<std::shared_ptr<DataNode>> children() const;
+            std::vector<std::shared_ptr<DataNode>> children() const;
 
-            virtual const DataNode& root() const;
+            const DataNode& root() const;
 
-            virtual std::vector<std::shared_ptr<DataNode>> find(const std::string& path) const;
+            std::vector<std::shared_ptr<DataNode>> find(const std::string& path) const;
 
 
             const SchemaNode& m_schema;
             struct ly_ctx* m_ctx;
             std::string m_path;
-
         };
 
 
@@ -205,14 +198,14 @@ namespace ydk {
 
             RpcImpl(SchemaNodeImpl& sn, struct ly_ctx* ctx);
 
-            virtual ~RpcImpl();
+            ~RpcImpl();
 
-            virtual std::unique_ptr<DataNode>
+            std::unique_ptr<DataNode>
              operator()(const ServiceProvider& provider);
 
-            virtual DataNode& input() const;
+            DataNode& input() const;
 
-            virtual SchemaNode& schema() const;
+            SchemaNode& schema() const;
 
 
             SchemaNodeImpl& schema_node;

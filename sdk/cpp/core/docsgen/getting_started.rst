@@ -14,14 +14,14 @@ Linux
   Ubuntu (Debian-based) - The following packages must be present in your system before installing YDK-Cpp::
  
 
-    $ sudo apt-get install libboost-all-dev libcurl4-openssl-dev libpcre3-dev libssh-dev libxml2-dev libxslt1-dev libtool-bin cmake
+    $ sudo apt-get install libcurl4-openssl-dev libpcre3-dev libssh-dev libxml2-dev libxslt1-dev libtool-bin cmake
 
 
   Centos (Fedora-based) - The following packages must be present in your system before installing YDK-Cpp::
 
 
     $ sudo yum install epel-release
-    $ sudo yum install libxml2-devel libxslt-devel libssh-devel boost-devel libtool gcc-c++ pcre-devel cmake
+    $ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake
 
 
 Mac
@@ -30,7 +30,7 @@ Mac
   
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install boost curl libssh pcre xml2 cmake
+    $ brew install curl libssh pcre xml2 cmake
     $ xcode-select --install
 
 

@@ -14,10 +14,10 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 #include <iostream>
 #include <string>
+
+#include <spdlog/spdlog.h>
 
 #include <ydk/errors.hpp>
 #include <ydk/path_api.hpp>
@@ -82,20 +82,12 @@ int main(int argc, char* argv[])
 	bool verbose=(args[4]=="--verbose");
 	if(verbose)
 	{
-		boost::log::core::get()->set_filter(
-			        boost::log::trivial::severity >= boost::log::trivial::debug
-			    );
-	}
-	else
-	{
-		boost::log::core::get()->set_filter(
-					        boost::log::trivial::severity >= boost::log::trivial::error
-					    );
+	    auto logger = spdlog::stdout_color_mt("ydk");
 	}
 
 	try
 	{
-		ydk::path::Repository repo{"/test-location"};
+		ydk::path::Repository repo{"/Users/abhirame/Cisco/001/ydk-gen/sdk/cpp/core/tests/models"};
 		RestconfServiceProvider provider{repo, "localhost", "admin", "admin", 12306, EncodingFormat::JSON};
 		CrudService crud{};
 
@@ -107,7 +99,7 @@ int main(int argc, char* argv[])
 	}
 	catch(YCPPError & e)
 	{
-		cerr << "Error details: "<<boost::diagnostic_information(e)<<endl;
+		cerr << "Error details: "<<e.what()<<endl;
 	}
 
 }

@@ -45,7 +45,6 @@ set(libydk_@BRIEF_NAME@_headers @HEADER_FILES@)
 find_package(LibYDK REQUIRED)
 
 include_directories(
-	${Boost_INCLUDE_DIRS}
     ${LIBYDK_INCLUDE_DIRS}
 )
 

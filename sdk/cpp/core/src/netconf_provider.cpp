@@ -24,16 +24,16 @@
 #include <iostream>
 #include <sstream>
 #include <memory>
-#include <boost/log/trivial.hpp>
 #include <libyang/libyang.h>
 
+#include "entity_data_node_walker.hpp"
+#include "errors.hpp"
 #include "ietf_parser.hpp"
-#include "types.hpp"
 #include "netconf_client.hpp"
 #include "netconf_provider.hpp"
 #include "netconf_model_provider.hpp"
-#include "entity_data_node_walker.hpp"
-#include "errors.hpp"
+#include "logger.hpp"
+#include "types.hpp"
 #include "ydk_yang.hpp"
 
 using namespace std;
@@ -68,7 +68,7 @@ NetconfServiceProvider::NetconfServiceProvider(string address, string username, 
 {
 	path::Repository repo;
     initialize(repo);
-    BOOST_LOG_TRIVIAL(debug) << "Connected to " << address << " on port "<< port <<" using ssh";
+    YLOG_DEBUG("Connected to {} on port {} using ssh", address, port);
 }
 
 NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo, string address, string username, string password, int port)
@@ -76,7 +76,7 @@ NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo, string a
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
     initialize(repo);
-    BOOST_LOG_TRIVIAL(debug) << "Connected to " << address << " on port "<< port <<" using ssh";
+    YLOG_DEBUG("Connected to {} on port {} using ssh", address, port);
 }
 
 void NetconfServiceProvider::initialize(path::Repository & repo)
@@ -102,14 +102,14 @@ void NetconfServiceProvider::initialize(path::Repository & repo)
 
 	if(root_schema.get() == nullptr)
 	{
-		BOOST_LOG_TRIVIAL(error) << "Root schema cannot be obtained";
-		BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"Root schema cannot be obtained"});
+		YLOG_ERROR("Root schema cannot be obtained");
+		throw(YCPPIllegalStateError{"Root schema cannot be obtained"});
 	}
 }
 
 NetconfServiceProvider::~NetconfServiceProvider()
 {
-	BOOST_LOG_TRIVIAL(debug) << "Disconnected from device";
+	YLOG_DEBUG("Disconnected from device");
 }
 
 EncodingFormat NetconfServiceProvider::get_encoding() const
@@ -134,10 +134,10 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_read(path::Rpc& y
     string netconf_payload = get_netconf_payload(input, "filter", filter_value);
 
     std::string reply = client->execute_payload(netconf_payload);
-    BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
-    BOOST_LOG_TRIVIAL(debug) << reply;
-    BOOST_LOG_TRIVIAL(debug) << endl;
-    return handle_read_reply(reply, *root_schema);
+    YLOG_DEBUG("=============Reply payload=============");
+    YLOG_DEBUG(reply.c_str());
+    YLOG_DEBUG("\n");
+    return handle_read_reply(reply, *root_schema	);
 }
 
 std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_edit(path::Rpc& ydk_rpc, path::Annotation annotation) const
@@ -156,9 +156,9 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_edit(path::Rpc& y
     ly_verb(LY_LLVRB); // enable libyang logging after payload has been created
 
     std::string reply = client->execute_payload(netconf_payload);
-    BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
-    BOOST_LOG_TRIVIAL(debug) << reply;
-    BOOST_LOG_TRIVIAL(debug) << endl;
+    YLOG_DEBUG("=============Reply payload=============");
+    YLOG_DEBUG(reply.c_str());
+    YLOG_DEBUG("\n");
     return handle_edit_reply(reply, *client, candidate_supported);
 }
 
@@ -171,21 +171,21 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_netconf_operation
     std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     netconf_payload = payload + netconf_payload + "</rpc>";
 
-    BOOST_LOG_TRIVIAL(debug) << netconf_payload;
+    YLOG_DEBUG(netconf_payload.c_str());
 
     std::string reply = client->execute_payload(netconf_payload);
-    BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
-    BOOST_LOG_TRIVIAL(debug) << reply;
-    BOOST_LOG_TRIVIAL(debug) << endl;
-    BOOST_LOG_TRIVIAL(trace) << "Executing rpc " + ydk_rpc.schema().path();
+    YLOG_DEBUG("=============Reply payload=============");
+    YLOG_DEBUG(reply.c_str());
+    YLOG_DEBUG("\n");
+    YLOG_TRACE("Executing rpc {}", ydk_rpc.schema().path());
     if (ydk_rpc.schema().path().find("get") != string::npos or ydk_rpc.schema().path().find("get-config") != string::npos)
     {
         return handle_read_reply(reply, *root_schema);
     }
     if(reply.find("<ok/>") == std::string::npos)
     {
-        BOOST_LOG_TRIVIAL(error) << "No ok in reply ";
-        BOOST_THROW_EXCEPTION(YCPPServiceProviderError{reply});
+        YLOG_ERROR("No ok in reply ");
+        throw(YCPPServiceProviderError{reply});
     }
     return nullptr;
 
@@ -218,8 +218,8 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::invoke(path::Rpc& rpc) c
     }
     else
     {
-        BOOST_LOG_TRIVIAL(error) << "rpc is not supported";
-        BOOST_THROW_EXCEPTION(YCPPOperationNotSupportedError{"rpc is not supported!"});
+        YLOG_ERROR("rpc is not supported");
+        throw(YCPPOperationNotSupportedError{"rpc is not supported!"});
     }
 
     return datanode;
@@ -229,8 +229,8 @@ static unique_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_sch
 {
     auto rpc = unique_ptr<path::Rpc>(root_schema.rpc(rpc_name));
     if(rpc == nullptr){
-            BOOST_LOG_TRIVIAL(error) << "Cannot create payload for RPC: " << rpc_name;
-            BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"Cannot create payload for RPC: "+ rpc_name});
+            YLOG_ERROR("Cannot create payload for RPC: {}", rpc_name);
+            throw(YCPPIllegalStateError{"Cannot create payload for RPC: "+ rpc_name});
     }
     return rpc;
 }
@@ -285,8 +285,8 @@ static string get_annotated_config_payload(path::RootSchemaNode & root_schema,
     path::CodecService codec_service{};
     auto entity = rpc.input().find("entity");
     if(entity.empty()){
-        BOOST_LOG_TRIVIAL(error) << "Failed to get entity node";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Failed to get entity node"});
+        YLOG_ERROR("Failed to get entity node");
+        throw(YCPPInvalidArgumentError{"Failed to get entity node"});
     }
 
     path::DataNode* entity_node = entity[0].get();
@@ -296,8 +296,8 @@ static string get_annotated_config_payload(path::RootSchemaNode & root_schema,
     auto datanode = codec_service.decode(root_schema, entity_value, EncodingFormat::XML);
 
     if(!datanode){
-        BOOST_LOG_TRIVIAL(error) << "Failed to decode entity node";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Failed to decode entity node"});
+        YLOG_ERROR("Failed to decode entity node");
+        throw(YCPPInvalidArgumentError{"Failed to decode entity node"});
     }
 
     std::string config_payload {};
@@ -317,8 +317,8 @@ static string get_filter_payload(path::Rpc & ydk_rpc)
 {
     auto entity = ydk_rpc.input().find("filter");
     if(entity.empty()){
-        BOOST_LOG_TRIVIAL(error) << "Failed to get entity node.";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Failed to get entity node"});
+        YLOG_ERROR("Failed to get entity node.");
+        throw(YCPPInvalidArgumentError{"Failed to get entity node"});
     }
 
     auto datanode = entity[0];
@@ -333,9 +333,9 @@ static string get_netconf_payload(path::DataNode & input, string data_tag, strin
     std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     payload+=codec_service.encode(input, EncodingFormat::XML, true);
     payload+="</rpc>";
-    BOOST_LOG_TRIVIAL(debug) <<"=============Generating payload=============";
-    BOOST_LOG_TRIVIAL(debug) <<payload;
-    BOOST_LOG_TRIVIAL(debug) <<endl;
+    YLOG_DEBUG("=============Generating payload=============");
+    YLOG_DEBUG(payload.c_str());
+    YLOG_DEBUG("\n");
     return payload;
 }
 
@@ -343,25 +343,25 @@ static std::unique_ptr<path::DataNode> handle_edit_reply(string reply, NetconfCl
 {
     if(reply.find("<ok/>") == std::string::npos)
     {
-        BOOST_LOG_TRIVIAL(error) << "No ok in reply ";
-        BOOST_THROW_EXCEPTION(YCPPServiceProviderError{reply});
+        YLOG_ERROR("No ok in reply");
+        throw(YCPPServiceProviderError{reply});
     }
 
-    if(candidate_supported)
-    {
-        //need to send the commit request
-        string commit_payload = get_commit_rpc_payload();
+	if(candidate_supported)
+	{
+		//need to send the commit request
+		string commit_payload = get_commit_rpc_payload();
 
-        BOOST_LOG_TRIVIAL(debug) << "Executing commit RPC: " << commit_payload;
+        YLOG_DEBUG( "Executing commit RPC: {}", commit_payload);
         reply = client.execute_payload(commit_payload);
 
-        BOOST_LOG_TRIVIAL(debug) <<"=============Reply payload=============";
-        BOOST_LOG_TRIVIAL(debug) << reply;
-        BOOST_LOG_TRIVIAL(debug) << endl;
+        YLOG_DEBUG("=============Reply payload=============");
+        YLOG_DEBUG(reply.c_str());
+        YLOG_DEBUG("\n");
         if(reply.find("<ok/>") == std::string::npos)
         {
-            BOOST_LOG_TRIVIAL(error) << "RPC error occurred: " << reply;
-            BOOST_THROW_EXCEPTION(YCPPServiceProviderError{reply});
+            YLOG_ERROR("RPC error occurred: {}", reply);
+            throw(YCPPServiceProviderError{reply});
         }
     }
 
@@ -375,22 +375,22 @@ static std::unique_ptr<path::DataNode> handle_read_reply(string reply, path::Roo
     auto empty_data = reply.find("<data/>");
     if(empty_data != std::string::npos)
     {
-        BOOST_LOG_TRIVIAL(debug) << "Found empty data tag";
+        YLOG_DEBUG( "Found empty data tag");
         return nullptr;
     }
 
     auto data_start = reply.find("<data>");
     if(data_start == std::string::npos)
     {
-        BOOST_LOG_TRIVIAL(debug) << "Can't find data tag in reply " << reply;
-        BOOST_THROW_EXCEPTION(YCPPServiceProviderError{reply});
+        YLOG_DEBUG( "Can't find data tag in reply {}", reply);
+        throw(YCPPServiceProviderError{reply});
     }
     data_start+= sizeof("<data>") - 1;
     auto data_end = reply.find("</data>", data_start);
     if(data_end == std::string::npos)
     {
-        BOOST_LOG_TRIVIAL(debug) << "No end data tag found in reply " << reply;
-        BOOST_THROW_EXCEPTION(YCPPError{"No end data tag found"});
+        YLOG_DEBUG( "No end data tag found in reply {}", reply);
+        throw(YCPPError{"No end data tag found"});
     }
 
     string data = reply.substr(data_start, data_end-data_start);
@@ -398,8 +398,8 @@ static std::unique_ptr<path::DataNode> handle_read_reply(string reply, path::Roo
 	auto datanode = codec_service.decode(root_schema, data, EncodingFormat::XML);
 
     if(!datanode){
-        BOOST_LOG_TRIVIAL(debug) << "Codec service failed to decode datanode";
-        BOOST_THROW_EXCEPTION(YCPPError{"Problems deserializing output"});
+        YLOG_DEBUG( "Codec service failed to decode datanode");
+        throw(YCPPError{"Problems deserializing output"});
     }
     return datanode;
 }
@@ -424,54 +424,13 @@ static bool is_config(path::Rpc & rpc)
 
 static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_schema, string operation)
 {
-    auto c = root_schema.find(operation);
-    if(c.empty())
-    {
-        BOOST_LOG_TRIVIAL(error) << "CRUD create rpc schema not found!";
-        BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"CRUD create rpc schema not found!"});
-    }
-    return c[0];
+	auto c = root_schema.find(operation);
+	if(c.empty())
+	{
+		YLOG_ERROR("CRUD create rpc schema not found!");
+		throw(YCPPIllegalStateError{"CRUD create rpc schema not found!"});
+	}
+	return c[0];
 }
-
-//TODO fix and uncomment
-/*
-static std::string get_parameter(const std::string & capability, const std::string & parameter_name)
-{
-    auto module_start = capability.find(parameter_name + "=");
-    if(module_start == std::string::npos)
-        return "";
-    auto module_end = capability.find("&", module_start);
-    module_start+=sizeof(parameter_name+"=");
-    auto size = module_end;
-    if(size != std::string::npos ){
-        size = module_end - module_start + 1;
-    }
-
-    std::string c_module = capability.substr( module_start - 1, size );
-    return c_module;
-}
-
-static std::vector<std::string> get_parameter_list(const std::string & capability, const std::string & parameter_name)
-{
-    std::vector<std::string> c_features;
-    auto features_start = capability.find(parameter_name+"=");
-    if(features_start != std::string::npos){
-        auto features_end = capability.find("&", features_start);
-        features_start+=sizeof(parameter_name+"=");
-        auto size=features_end;
-        if(size!=std::string::npos){
-            size = features_end - features_start + 1;
-        }
-        std::string features = capability.substr(features_start - 1 , size);
-        std::istringstream iss{features};
-        std::string feature;
-        while(std::getline(iss, feature, ',')) {
-            c_features.push_back(std::move(feature));
-        }
-
-    }
-    return c_features;
-}
-*/
 
 }

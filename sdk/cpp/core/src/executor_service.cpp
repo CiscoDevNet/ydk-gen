@@ -21,7 +21,7 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include <boost/log/trivial.hpp>
+#include "logger.hpp"
 #include <iostream>
 
 #include "executor_service.hpp"
@@ -38,7 +38,7 @@ string get_netconf_payload(path::DataNode* input, string data_value, string data
 
 ExecutorService::ExecutorService()
 {
-    BOOST_LOG_TRIVIAL(debug) << "ydk.services.NetconfService";
+
 }
 
 bool ExecutorService::execute_rpc(NetconfServiceProvider & provider, Entity & entity)
@@ -57,7 +57,7 @@ bool ExecutorService::execute_rpc(NetconfServiceProvider & provider, Entity & en
     // unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema->rpc(operation) };
     // // to do: implement way to walk through children to get what to create
     // ydk_rpc->input()->create("source/candidate");    // -- hard coding
-    
+
     // // Create netconf payload
     // path::CodecService codec_service{};
     // std::string netconf_payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};

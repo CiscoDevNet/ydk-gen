@@ -23,7 +23,7 @@
 
 
 #include "path_private.hpp"
-#include <boost/log/trivial.hpp>
+#include "../logger.hpp"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,15 +97,15 @@ ydk::path::SchemaNodeImpl::find(const std::string& path) const
 {
     if(path.empty())
     {
-        BOOST_LOG_TRIVIAL(error) << "Path is empty";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"path is empty"});
+        YLOG_ERROR("Path is empty");
+        throw(YCPPInvalidArgumentError{"path is empty"});
     }
 
     //has to be a relative path
     if(path.at(0) == '/')
     {
-        BOOST_LOG_TRIVIAL(error) << "path must be a relative path";
-    BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"path must be a relative path"});
+        YLOG_ERROR("path must be a relative path");
+	throw(YCPPInvalidArgumentError{"path must be a relative path"});
     }
 
     std::vector<SchemaNode*> ret;
@@ -225,8 +225,8 @@ ydk::path::SchemaNodeImpl::keys() const
     if(stmt.keyword == "list") {
         //sanity check
         if(m_node->nodetype != LYS_LIST) {
-            BOOST_LOG_TRIVIAL(error) << "Mismatch in schema";
-            BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"Mismatch in schema"});
+            YLOG_ERROR("Mismatch in schema");
+            throw(YCPPIllegalStateError{"Mismatch in schema"});
         }
         struct lys_node_list *slist = (struct lys_node_list *)m_node;
         for(uint8_t i=0; i < slist->keys_size; ++i) {

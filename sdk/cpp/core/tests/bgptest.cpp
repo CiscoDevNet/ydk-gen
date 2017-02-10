@@ -21,12 +21,11 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#define BOOST_TEST_MODULE OCBgpTest
-#include <boost/test/unit_test.hpp>
 #include <iostream>
 #include "../src/path_api.hpp"
 #include "config.hpp"
-
+#include "catch.hpp"
+#include <spdlog/spdlog.h>
 
 namespace mock {
 class MockServiceProvider : public ydk::path::ServiceProvider
@@ -34,7 +33,7 @@ class MockServiceProvider : public ydk::path::ServiceProvider
 public:
     MockServiceProvider(const std::string searchdir, const std::vector<ydk::path::Capability> capabilities) : m_searchdir{searchdir}, m_capabilities{capabilities}
     {
-        auto repo = ydk::path::Repository{m_searchdir};
+        ydk::path::Repository repo{m_searchdir};
         root_schema = repo.create_root_schema(m_capabilities);
     }
 
@@ -55,7 +54,7 @@ public:
 
 	std::unique_ptr<ydk::path::DataNode> invoke(ydk::path::Rpc& rpc) const
 	{
-        auto s = ydk::path::CodecService{};
+        ydk::path::CodecService s{};
 
         std::cout << s.encode(rpc.input(), ydk::EncodingFormat::XML, true) << std::endl;
 
@@ -203,8 +202,9 @@ const char* expected_bgp_json = "\
 const char* expected_bgp_peer_xml = "<bgp xmlns=\"http://openconfig.net/yang/bgp\"><global><config><as>65172</as></config><afi-safis><afi-safi><afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name><config><afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name><enabled>true</enabled></config></afi-safi></afi-safis></global><peer-groups><peer-group><peer-group-name>IBGP</peer-group-name><config><peer-group-name>IBGP</peer-group-name><peer-as>65001</peer-as></config><afi-safis><afi-safi><afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name><config><afi-safi-name xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:L3VPN_IPV4_UNICAST</afi-safi-name><enabled>true</enabled></config><apply-policy><config><export-policy>POLICY2</export-policy></config></apply-policy></afi-safi></afi-safis></peer-group></peer-groups><neighbors><neighbor><neighbor-address>172.16.255.2</neighbor-address><config><neighbor-address>172.16.255.2</neighbor-address><peer-group>IBGP</peer-group></config></neighbor></neighbors></bgp>";
 const char* expected_bgp_peer_json = "{\"openconfig-bgp:bgp\":{\"global\":{\"config\":{\"as\":65172},\"afi-safis\":{\"afi-safi\":[{\"afi-safi-name\":\"openconfig-bgp-types:L3VPN_IPV4_UNICAST\",\"config\":{\"afi-safi-name\":\"openconfig-bgp-types:L3VPN_IPV4_UNICAST\",\"enabled\":true}}]}},\"peer-groups\":{\"peer-group\":[{\"peer-group-name\":\"IBGP\",\"config\":{\"peer-group-name\":\"IBGP\",\"peer-as\":65001},\"afi-safis\":{\"afi-safi\":[{\"afi-safi-name\":\"openconfig-bgp-types:L3VPN_IPV4_UNICAST\",\"config\":{\"afi-safi-name\":\"openconfig-bgp-types:L3VPN_IPV4_UNICAST\",\"enabled\":true},\"apply-policy\":{\"config\":{\"export-policy\":[\"POLICY2\"]}}}]}}]},\"neighbors\":{\"neighbor\":[{\"neighbor-address\":\"172.16.255.2\",\"config\":{\"neighbor-address\":\"172.16.255.2\",\"peer-group\":\"IBGP\"}}]}}}";
 
-BOOST_AUTO_TEST_CASE( bgp )
+TEST_CASE( "bgp" )
 {
+    auto console = spdlog::stdout_color_mt("ydk");
     std::string searchdir{TEST_HOME};
     mock::MockServiceProvider sp{searchdir, test_openconfig};
 
@@ -235,44 +235,44 @@ BOOST_AUTO_TEST_CASE( bgp )
 
     auto & neighbor_enabled = neighbor_af.create("config/enabled","true");
 
-    auto s = ydk::path::CodecService{};
+    ydk::path::CodecService s{};
 
 
     //XML Codec Test
     auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 
-    BOOST_CHECK_MESSAGE( !xml.empty(), "XML output is empty");
+    CHECK( !xml.empty());
 
-    BOOST_REQUIRE(xml == expected_bgp_output);
+    REQUIRE(xml == expected_bgp_output);
 
     auto new_bgp = s.decode(schema, xml, ydk::EncodingFormat::XML);
 
     auto new_xml = s.encode(*new_bgp, ydk::EncodingFormat::XML, false);
 
-    BOOST_CHECK_MESSAGE(!new_xml.empty(), "Deserialized XML output is empty.");
+    CHECK(!new_xml.empty());
 
 
 
-    BOOST_REQUIRE(new_xml == expected_bgp_output);
+    REQUIRE(new_xml == expected_bgp_output);
 
 
     //JSON codec test
     auto json = s.encode(bgp, ydk::EncodingFormat::JSON, false);
 
-    BOOST_CHECK_MESSAGE( !json.empty(), "JSON output :" << json);
+    CHECK( !json.empty());
 
-    BOOST_REQUIRE(json == expected_bgp_json);
+    REQUIRE(json == expected_bgp_json);
 
     auto new_bgp1 = s.decode(schema, json, ydk::EncodingFormat::JSON);
 
-    BOOST_REQUIRE( new_bgp1 != nullptr);
+    REQUIRE( new_bgp1 != nullptr);
 
     auto new_json = s.encode(*new_bgp1, ydk::EncodingFormat::JSON, false);
 
 
-    BOOST_CHECK_MESSAGE(!new_json.empty(), "Deserialized json output is empty.");
+    CHECK(!new_json.empty());
 
-    BOOST_REQUIRE(new_json == expected_bgp_json);
+    REQUIRE(new_json == expected_bgp_json);
 
 
     auto create_rpc = schema.rpc("ydk:create") ;
@@ -283,7 +283,7 @@ BOOST_AUTO_TEST_CASE( bgp )
 
 }
 
-BOOST_AUTO_TEST_CASE( bgp_validation )
+TEST_CASE( "bgp_validation" )
 {
     std::string searchdir{TEST_HOME};
     mock::MockServiceProvider sp{searchdir, test_openconfig};
@@ -328,33 +328,33 @@ BOOST_AUTO_TEST_CASE( bgp_validation )
     validation_service.validate(bgp, ydk::ValidationService::Option::EDIT_CONFIG);
 }
 
-BOOST_AUTO_TEST_CASE( decode_remove_as )
+TEST_CASE( "decode_remove_as" )
 {
     std::string searchdir{TEST_HOME};
     mock::MockServiceProvider sp{searchdir, test_openconfig};
 
     auto & schema = sp.get_root_schema();
 
-    auto s = ydk::path::CodecService{};
+    ydk::path::CodecService s{};
 
     //XML Codec Test
     auto xml = "<bgp xmlns=\"http://openconfig.net/yang/bgp\"><neighbors><neighbor><neighbor-address>1.2.3.4</neighbor-address><config><neighbor-address>1.2.3.4</neighbor-address><remove-private-as xmlns:oc-bgp-types=\"http://openconfig.net/yang/bgp-types\">oc-bgp-types:PRIVATE_AS_REMOVE_ALL</remove-private-as></config></neighbor></neighbors></bgp>";
 
     auto bgp = s.decode(schema, xml, ydk::EncodingFormat::XML);
 
-    BOOST_REQUIRE( bgp != nullptr);
+    REQUIRE( bgp != nullptr);
 
     auto new_xml = s.encode(*bgp, ydk::EncodingFormat::XML, false);
 
-    BOOST_REQUIRE(xml == new_xml);
+    REQUIRE(xml == new_xml);
 
 }
 
-BOOST_AUTO_TEST_CASE( bits_order )
+TEST_CASE( "bits_order" )
 {
     std::string searchdir{TEST_HOME};
     mock::MockServiceProvider sp{searchdir, test_openconfig};
-    auto s = ydk::path::CodecService{};
+    ydk::path::CodecService s{};
 
     auto & schema = sp.get_root_schema();
 
@@ -367,39 +367,39 @@ BOOST_AUTO_TEST_CASE( bits_order )
         runner, ydk::EncodingFormat::XML, false);
 
     auto expected = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><ytypes><built-in-t><bits-value>disable-nagle auto-sense-speed</bits-value></built-in-t></ytypes></runner>";
-    BOOST_REQUIRE( new_xml == expected );
+    REQUIRE( new_xml == expected );
 }
 
-BOOST_AUTO_TEST_CASE( submodule )
+TEST_CASE( "submodule" )
 {//TODO fix issue with submodule
 //    std::string searchdir{TEST_HOME};
 //    mock::MockServiceProvider sp{searchdir, test_openconfig};
-//    auto s = ydk::path::CodecService{};
+//    ydk::path::CodecService s{};
 //
 //    std::unique_ptr<ydk::path::RootSchemaNode> schema{sp.get_root_schema()};
 //
-//    BOOST_REQUIRE(schema.get() != nullptr);
+//    REQUIRE(schema.get() != nullptr);
 //
 //    auto subtest = schema->create("ydktest-sanity:sub-test", "");
 //    std::cout<<subtest->schema()->path()<<std::endl;
 //
-//    BOOST_REQUIRE( subtest != nullptr );
+//    REQUIRE( subtest != nullptr );
 //
 //    //get the root
 //    std::unique_ptr<const ydk::path::DataNode> data_root{subtest->root()};
 //
-//    BOOST_REQUIRE( data_root != nullptr );
+//    REQUIRE( data_root != nullptr );
 //
 //    auto name = subtest->create("ydktest-sanity:sub-test/one-aug/name", "test");
-//    BOOST_REQUIRE( name!= nullptr );
+//    REQUIRE( name!= nullptr );
 //
 //    auto number = subtest->create("ydktest-sanity:sub-test/one-aug/number", "3");
-//    BOOST_REQUIRE( number!= nullptr );
+//    REQUIRE( number!= nullptr );
 
 //    auto ne1w_xml = s.encode(*subtest, ydk::EncodingFormat::XML, false);
 
 //    auto expected = "<sub-test xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one-aug><name>test</name></one-aug><one-aug><number>3</number></one-aug></sub-test>";
-////    BOOST_REQUIRE( new_xml == expected );
+////    REQUIRE( new_xml == expected );
 //
 //    auto new_bgp = s.decode(schema, expected, ydk::EncodingFormat::XML);
 //

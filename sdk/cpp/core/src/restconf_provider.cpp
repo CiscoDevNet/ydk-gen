@@ -24,7 +24,7 @@
 #include <iostream>
 #include <sstream>
 #include <memory>
-#include <boost/log/trivial.hpp>
+#include "logger.hpp"
 
 #include <libyang/libyang.h>
 
@@ -84,7 +84,7 @@ void RestconfServiceProvider::initialize(path::Repository & repo)
 
 RestconfServiceProvider::~RestconfServiceProvider()
 {
-	BOOST_LOG_TRIVIAL(debug) << "Disconnected from device";
+	YLOG_DEBUG("Disconnected from device");
 }
 
 EncodingFormat RestconfServiceProvider::get_encoding() const
@@ -121,8 +121,8 @@ std::unique_ptr<path::DataNode> RestconfServiceProvider::invoke(path::Rpc& rpc) 
     }
     else
     {
-        BOOST_LOG_TRIVIAL(error) << "rpc is not supported";
-        BOOST_THROW_EXCEPTION(YCPPOperationNotSupportedError{"rpc is not supported!"});
+        YLOG_ERROR("rpc is not supported");
+        throw(YCPPOperationNotSupportedError{"rpc is not supported!"});
     }
 
     return datanode;
@@ -157,8 +157,8 @@ std::unique_ptr<path::DataNode> RestconfServiceProvider::handle_read(path::Rpc& 
 
     auto filter = rpc.input().find("filter");
 	if(filter.empty()){
-		BOOST_LOG_TRIVIAL(error) << "Failed to get entity node.";
-		BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Failed to get entity node"});
+		YLOG_ERROR("Failed to get entity node.");
+		throw(YCPPInvalidArgumentError{"Failed to get entity node"});
 	}
 
 	path::DataNode* filter_node = filter[0].get();
@@ -176,7 +176,7 @@ std::unique_ptr<path::DataNode> RestconfServiceProvider::handle_read(path::Rpc& 
 		url = state_url_root + get_module_url_path(datanode->children()[0]->schema().path());
 	}
 
-    BOOST_LOG_TRIVIAL(debug) << "Performing GET on URL " << url;
+    YLOG_DEBUG("Performing GET on URL {}", url);
     return handle_read_reply( client->execute("GET", url, ""), *root_schema, encoding);
 }
 
@@ -185,8 +185,8 @@ std::unique_ptr<path::DataNode> RestconfServiceProvider::handle_edit(path::Rpc& 
 	path::CodecService codec_service{};
     auto entity = rpc.input().find("entity");
 	if(entity.empty()){
-		BOOST_LOG_TRIVIAL(error) << "Failed to get entity node";
-		BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Failed to get entity node"});
+		YLOG_ERROR("Failed to get entity node");
+		throw(YCPPInvalidArgumentError{"Failed to get entity node"});
 	}
 
 	path::DataNode* entity_node = entity[0].get();
@@ -195,7 +195,7 @@ std::unique_ptr<path::DataNode> RestconfServiceProvider::handle_edit(path::Rpc& 
     auto datanode = codec_service.decode(*root_schema, header_data, encoding);
 	string url = config_url_root + get_module_url_path(datanode->children()[0]->schema().path());
 
-    BOOST_LOG_TRIVIAL(debug) << "Performing "<< operation <<" on URL " << url << ". Payload: " <<header_data;
+    YLOG_DEBUG("Performing {} on URL {}. Payload: ", operation, url, header_data);
     client->execute(operation, url, header_data);
 
     return nullptr;
@@ -208,8 +208,8 @@ static std::unique_ptr<path::DataNode> handle_read_reply(const string & reply, p
 	auto datanode = codec_service.decode(root_schema, reply, encoding);
 
 	if(!datanode){
-		BOOST_LOG_TRIVIAL(debug) << "Codec service failed to decode datanode";
-		BOOST_THROW_EXCEPTION(YCPPError{"Problems deserializing output"});
+		YLOG_DEBUG("Codec service failed to decode datanode");
+		throw(YCPPError{"Problems deserializing output"});
 	}
 	return datanode;
 }
@@ -219,8 +219,8 @@ static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_sc
 	auto c = root_schema.find(operation);
 	if(c.empty())
 	{
-		BOOST_LOG_TRIVIAL(error) <<operation << " rpc schema not found!";
-		BOOST_THROW_EXCEPTION(YCPPIllegalStateError{operation + " rpc schema not found!"});
+		YLOG_ERROR("{} rpc schema not found!", operation);
+		throw(YCPPIllegalStateError{operation + " rpc schema not found!"});
 	}
 	return c[0];
 }

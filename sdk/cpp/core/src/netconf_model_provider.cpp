@@ -22,15 +22,15 @@
 //////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <memory>
 #include <sstream>
 
 #include "errors.hpp"
 #include "netconf_client.hpp"
 #include "netconf_model_provider.hpp"
+#include "logger.hpp"
 #include "types.hpp"
 #include "ydk_yang.hpp"
-#include <memory>
-#include <boost/log/trivial.hpp>
 
 using namespace std;
 using namespace ydk;
@@ -89,9 +89,9 @@ string NetconfModelProvider::get_model(const string& name, const string& version
     payload+="</get-schema>";
     payload+="</rpc>";
 
-    BOOST_LOG_TRIVIAL(trace) << "Get schema request " << payload;
+    YLOG_TRACE("Get schema request {}", payload);
     string reply = client.execute_payload(payload);
-    BOOST_LOG_TRIVIAL(trace) << "Get schema reply " << reply;
+    YLOG_TRACE("Get schema reply {}", reply);
 
 
     auto data_start = reply.find("<data ");
@@ -123,7 +123,7 @@ string NetconfModelProvider::get_model(const string& name, const string& version
         }
     }
 
-    BOOST_LOG_TRIVIAL(trace) << "Model " << model;
+    YLOG_TRACE("Model {}", model);
 
     return model;
 }

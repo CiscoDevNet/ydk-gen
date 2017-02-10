@@ -21,12 +21,13 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#define BOOST_TEST_MODULE OCBgpTest
-#include <boost/test/unit_test.hpp>
 #include <iostream>
-#include "../core/src/path_api.hpp"
-#include "../core/src/netconf_provider.hpp"
+#include <spdlog/spdlog.h>
+
+#include "path_api.hpp"
+#include "netconf_provider.hpp"
 #include "config.hpp"
+#include "catch.hpp"
 
 const char* expected_bgp_output ="\
 <bgp xmlns=\"http://openconfig.net/yang/bgp\">\
@@ -86,14 +87,14 @@ void print_tree(ydk::path::DataNode* dn, const std::string& indent)
 
 
 
-BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
+TEST_CASE( "bgp_netconf_create" )
 {
     ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
     ydk::path::RootSchemaNode& schema = sp.get_root_schema();
 
-    auto s = ydk::path::CodecService{};
+    ydk::path::CodecService s{};
 
     auto & bgp = schema.create("openconfig-bgp:bgp", "");
     //first delete
@@ -132,9 +133,9 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
 
     xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 
-    BOOST_CHECK_MESSAGE( !xml.empty(), "XML output :" << xml);
+    CHECK( !xml.empty());
 
-    BOOST_REQUIRE(xml == expected_bgp_output);
+    REQUIRE(xml == expected_bgp_output);
 
     //call create
     std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
@@ -146,25 +147,25 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
     auto & bgp_read = schema.create("openconfig-bgp:bgp", "");
 
     xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
-    BOOST_REQUIRE( !xml.empty() );
+    REQUIRE( !xml.empty() );
     read_rpc->input().create("filter", xml);
 
     auto read_result = (*read_rpc)(sp);
 
-    BOOST_REQUIRE(read_result != nullptr);
+    REQUIRE(read_result != nullptr);
 
     print_tree(read_result.get(),"");
 
     xml = s.encode(*read_result, ydk::EncodingFormat::XML, false);
 
-    BOOST_REQUIRE(xml == expected_bgp_read);
+    REQUIRE(xml == expected_bgp_read);
 
     peer_as.set("6500");
 
     //call update
     std::unique_ptr<ydk::path::Rpc> update_rpc { schema.rpc("ydk:update") };
     xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
-    BOOST_REQUIRE( !xml.empty() );
+    REQUIRE( !xml.empty() );
     update_rpc->input().create("entity", xml);
     (*update_rpc)(sp);
 
@@ -172,7 +173,7 @@ BOOST_AUTO_TEST_CASE( bgp_netconf_create  )
 }
 
 
-BOOST_AUTO_TEST_CASE(bits)
+TEST_CASE("bits")
 {
     ydk::path::Repository repo{};
 
@@ -183,15 +184,14 @@ BOOST_AUTO_TEST_CASE(bits)
 
 	//get the root
 	std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
-	BOOST_REQUIRE( data_root != nullptr );
+	REQUIRE( data_root != nullptr );
 
 	auto & ysanity = runner.create("ytypes/built-in-t/bits-value", "disable-nagle");
 
-	auto s = ydk::path::CodecService{};
+	ydk::path::CodecService s{};
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
-    BOOST_CHECK_MESSAGE( !xml.empty(),
-                        "XML output :" << xml);
+    CHECK( !xml.empty());
 
 
     //call create
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE(bits)
     (*create_rpc)(sp);
 }
 
-BOOST_AUTO_TEST_CASE(validate)
+TEST_CASE("core_validate")
 {
     ydk::path::Repository repo{};
 
@@ -211,15 +211,14 @@ BOOST_AUTO_TEST_CASE(validate)
 
     //get the root
     std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
-    BOOST_REQUIRE( data_root != nullptr );
+    REQUIRE( data_root != nullptr );
 
     auto & ysanity = runner.create("source/candidate", "");
 
-    auto s = ydk::path::CodecService{};
+    ydk::path::CodecService s{};
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
-    BOOST_CHECK_MESSAGE( !xml.empty(),
-                        "XML output :" << xml);
+    CHECK( !xml.empty());
 
     std::cout << xml << std::endl;
 
@@ -230,20 +229,20 @@ BOOST_AUTO_TEST_CASE(validate)
 }
 
 
-BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
+TEST_CASE( "bgp_xr_openconfig"  )
 {
     ydk::path::Repository repo{TEST_HOME};
 
     ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
     ydk::path::RootSchemaNode& schema = sp.get_root_schema();
 
-    auto s = ydk::path::CodecService{};
+    ydk::path::CodecService s{};
 
     auto & bgp = schema.create("openconfig-bgp:bgp", "");
     //get the root
     std::unique_ptr<const ydk::path::DataNode> data_root{&bgp.root()};
 
-    BOOST_REQUIRE( data_root != nullptr );
+    REQUIRE( data_root != nullptr );
 
     //call create
     auto & as = bgp.create("global/config/as", "65172");
@@ -263,7 +262,7 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 
     std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
-    BOOST_REQUIRE( !xml.empty() );
+    REQUIRE( !xml.empty() );
     create_rpc->input().create("entity", xml);
 
     auto res = (*create_rpc)(sp);
@@ -276,16 +275,16 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
     std::unique_ptr<const ydk::path::DataNode> data_root2{&bgp_read.root()};
 
     xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
-    BOOST_REQUIRE( !xml.empty() );
+    REQUIRE( !xml.empty() );
     read_rpc->input().create("filter", xml);
     read_rpc->input().create("only-config");
 
     auto read_result = (*read_rpc)(sp);
 
-    BOOST_REQUIRE(read_result != nullptr);
+    REQUIRE(read_result != nullptr);
 }
 //
-//BOOST_AUTO_TEST_CASE( bgp_xr_native  )
+//TEST_CASE( bgp_xr_native  )
 //{
 
 
@@ -294,7 +293,7 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 //    ydk::NetconfServiceProvider sp{repo,"localhost", "admin", "admin",  1220};
 //    ydk::path::RootSchemaNode& schema = sp.get_root_schema();
 //
-//    auto s = ydk::path::CodecService{};
+//    ydk::path::CodecService s{};
 //
 //    auto & bgp = schema.create("Cisco-IOS-XR-ipv4-bgp-cfg:bgp", "");
 //
@@ -309,7 +308,7 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 //
 //	std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
 //	auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
-//	BOOST_REQUIRE( !xml.empty() );
+//	REQUIRE( !xml.empty() );
 //	create_rpc->input().create("entity", xml);
 //
 //	auto res = (*create_rpc)(sp);
@@ -320,13 +319,13 @@ BOOST_AUTO_TEST_CASE( bgp_xr_openconfig  )
 //    std::unique_ptr<const ydk::path::DataNode> data_root2{&bgp_read.root()};
 //
 //    xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
-//    BOOST_REQUIRE( !xml.empty() );
+//    REQUIRE( !xml.empty() );
 //    read_rpc->input().create("filter", xml);
 //    read_rpc->input().create("only-config");
 //
 //    auto read_result = (*read_rpc)(sp);
 //
-//    BOOST_REQUIRE(read_result != nullptr);
+//    REQUIRE(read_result != nullptr);
 //
 //
 //}

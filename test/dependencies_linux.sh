@@ -35,8 +35,6 @@ function install_dependencies {
                             doxygen \
                             flex \
                             git \
-                            libboost-all-dev \
-                            libboost-log-dev \
                             libcmocka0 \
                             libcurl4-openssl-dev \
                             libpcre3-dev \

@@ -39,9 +39,8 @@ In our example YDK application, first, let us include the necessary header files
  :linenos:
 
  #include <iostream>
- #include <boost/log/trivial.hpp>
- #include <boost/log/expressions.hpp>
- 
+ #include <spdlog/spdlog.h>
+  
  #include "ydk/crud_service.hpp"
  #include "ydk/netconf_provider.hpp"
  
@@ -109,27 +108,20 @@ Finally, we invoke the create method of the :cpp:class:`CrudService<ydk::CrudSer
  }    
  catch(YCPPError & e)
  {
-   cerr << "Error details: " << boost::diagnostic_information(e) << endl;
+   cerr << "Error details: " << e.what() << endl;
  }
 
 Note if there were any errors the above API will raise an exception with the base type :cpp:class:`YCPPError<ydk::YCPPError>`
 
 Logging
 ----------------------
-YDK uses the `boost::log` logging library. The logging verbosity can be set using the ``set_filter`` method of ``boost::log``
+YDK uses the `spdlog` logging library. The logging can be enabled as follows by creating a logger called "ydk". For other options like logging the "ydk" log to a file, see the `spdlog reference <https://github.com/gabime/spdlog#usage-example>`_.
 
 .. code-block:: c++
  :linenos:
 
  if(verbose)
  {
-   boost::log::core::get()->set_filter(
-                                      boost::log::trivial::severity >= boost::log::trivial::debug
-                                      );
+   auto console = spdlog::stdout_color_mt("ydk");
  }
- else
- {
-   boost::log::core::get()->set_filter(
-                                      boost::log::trivial::severity >= boost::log::trivial::debug
-                                      );
- }
+

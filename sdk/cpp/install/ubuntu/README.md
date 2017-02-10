@@ -119,7 +119,7 @@ first paragraph describes the source package
 
 second and following paragraphs describe the packages to be built and dependencies. For the ydk-ietf and other bundles, make sure to add ydk (core) plus any other interdependencies.
 ```
-Build-Depends: debhelper (>=9), libboost-all-dev, libcurl4-openssl-dev, libpcre3-dev, libssh-dev, libxml2-dev, libxslt1-dev, libtool-bin, cmake (>=3), git, pkg-config
+Build-Depends: debhelper (>=9), libcurl4-openssl-dev, libpcre3-dev, libssh-dev, libxml2-dev, libxslt1-dev, libtool-bin, cmake (>=3), git, pkg-config
 ```
 fill in a description of the program
 

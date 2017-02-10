@@ -25,6 +25,6 @@
 #ifndef YDK_TEST_CONFIG_HPP
 #define YDK_TEST_CONFIG_HPP
 
-const char* TEST_HOME = "@CMAKE_SOURCE_DIR@/../core/tests/models";
+extern const char* TEST_HOME;
 
 #endif // YDK_TEST_CONFIG_HPP

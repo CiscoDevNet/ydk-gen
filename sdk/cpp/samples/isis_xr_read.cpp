@@ -14,8 +14,6 @@
  limitations under the License.
 ------------------------------------------------------------------*/
 #include <iostream>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 
 #include "ydk/types.hpp"
 #include "ydk/netconf_provider.hpp"
@@ -23,6 +21,7 @@
 
 #include "ydk_cisco_ios_xr/Cisco_IOS_XR_clns_isis_cfg.hpp"
 #include "ydk_cisco_ios_xr/Cisco_IOS_XR_clns_isis_datatypes.hpp"
+#include <spdlog/spdlog.h>
 
 #include "args_parser.h"
 
@@ -43,15 +42,7 @@ int main(int argc, char* argv[])
 	bool verbose=(args[4]=="--verbose");
 	if(verbose)
 	{
-		boost::log::core::get()->set_filter(
-			        boost::log::trivial::severity >= boost::log::trivial::debug
-			    );
-	}
-	else
-	{
-		boost::log::core::get()->set_filter(
-					        boost::log::trivial::severity >= boost::log::trivial::error
-					    );
+            auto logger = spdlog::stdout_color_mt("ydk");
 	}
 
 	NetconfServiceProvider provider{host, username, password, port};
