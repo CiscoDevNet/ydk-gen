@@ -13,25 +13,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  ------------------------------------------------------------------*/
-#define BOOST_TEST_MODULE NetconfClientTest
-#include <boost/test/unit_test.hpp>
+#define TEST_MODULE NetconfClientTest
 #include <string.h>
 #include "../core/src/netconf_client.hpp"
 #include "../core/src/errors.hpp"
 #include <iostream>
 #include <sys/time.h>
+#include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
 #define NC_VERB_VERBOSE 2
 
-BOOST_AUTO_TEST_CASE(xr)
+TEST_CASE("xr")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
     struct timeval t1, t2;
     double elapsedTime;
@@ -57,29 +57,29 @@ BOOST_AUTO_TEST_CASE(xr)
 
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
 
-BOOST_AUTO_TEST_CASE(Create)
+TEST_CASE("Create")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(EditgetConfig)
+TEST_CASE("EditgetConfig")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
 	string reply = client.execute_payload(
 	 "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(EditgetConfig)
 	 "</config>"
 	 "</edit-config>"
 	 "</rpc>");
-	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
+	REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
 
 	reply = client.execute_payload(
 	 "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(EditgetConfig)
 	 "</filter>"
 	 "</get-config>"
 	 "</rpc>");
-	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<number8>12</number8>"));
+	REQUIRE(NULL != strstr(reply.c_str(), "<number8>12</number8>"));
 
 	reply = client.execute_payload(
 	 "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
@@ -112,19 +112,19 @@ BOOST_AUTO_TEST_CASE(EditgetConfig)
 	 "</config>"
 	 "</edit-config>"
 	 "</rpc>");
-	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
+	REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(Validate)
+TEST_CASE("Validate")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
 	string reply = client.execute_payload(
 	 "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
@@ -133,26 +133,26 @@ BOOST_AUTO_TEST_CASE(Validate)
 	 "</validate>"
 	 "</rpc>");
 
-	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
+	REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(LockUnlock)
+TEST_CASE("LockUnlock")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
     string reply = client.execute_payload(
                                           "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
                                           "<discard-changes/>"
                                           "</rpc>");
 
-    BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
+    REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
 
 
 	reply = client.execute_payload(
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(LockUnlock)
 		 "</lock>"
 		 "</rpc>");
 
-	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
+	REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
 
 	reply = client.execute_payload(
 		 "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
@@ -171,7 +171,7 @@ BOOST_AUTO_TEST_CASE(LockUnlock)
 		 "</unlock>"
 		 "</rpc>");
 
-	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
+	REQUIRE(NULL != strstr(reply.c_str(), "<ok/>"));
 
 	reply = client.execute_payload(
 		 "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
@@ -180,19 +180,19 @@ BOOST_AUTO_TEST_CASE(LockUnlock)
 		 "</unlock>"
 		 "</rpc>");
 
-	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<rpc-error>"));
+	REQUIRE(NULL != strstr(reply.c_str(), "<rpc-error>"));
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(RpcError)
+TEST_CASE("RpcError")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 	string reply = client.execute_payload(
 	 "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
 	 "<edit-config>"
@@ -202,15 +202,15 @@ BOOST_AUTO_TEST_CASE(RpcError)
 	 "</config>"
 	 "</edit-config>"
 	 "</rpc>");
-	BOOST_REQUIRE(NULL != strstr(reply.c_str(), "<rpc-error>"));
+	REQUIRE(NULL != strstr(reply.c_str(), "<rpc-error>"));
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(DeviceNotConnectedExecute)
+TEST_CASE("DeviceNotConnectedExecute")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	try
 	{
 		string s = client.execute_payload(
@@ -222,23 +222,23 @@ BOOST_AUTO_TEST_CASE(DeviceNotConnectedExecute)
 				 "</config>"
 				 "</edit-config>"
 				 "</rpc>");
-		BOOST_REQUIRE(s== "");
+		REQUIRE(s== "");
 	}
 	catch (YCPPError & e)
 	{
-		BOOST_REQUIRE(e.err_msg=="Could not execute payload. Not connected to 127.0.0.1");
+		REQUIRE(e.err_msg=="YCPPClientError: Could not execute payload. Not connected to 127.0.0.1");
 	}
 
 }
 
 
-BOOST_AUTO_TEST_CASE(RpcInvalid)
+TEST_CASE("RpcInvalid")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
 	try
 	{
@@ -249,111 +249,111 @@ BOOST_AUTO_TEST_CASE(RpcInvalid)
 			 "</lock>"
 			 "</rpc>");
 
-		BOOST_REQUIRE(NULL != strstr(reply.c_str(), ""));
+		REQUIRE(NULL != strstr(reply.c_str(), ""));
 
 	}
 	catch (YCPPError & e)
 	{
-		BOOST_REQUIRE(e.err_msg=="Could not build payload");
+		REQUIRE(e.err_msg=="YCPPClientError: Could not build payload");
 	}
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(WrongXml)
+TEST_CASE("WrongXml")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
 	try
 	{
 		string reply = client.execute_payload(
 				"<testing>"
 		 );
-		BOOST_REQUIRE(reply== "");
+		REQUIRE(reply== "");
 	}
 	catch (YCPPError & e)
 	{
-		BOOST_REQUIRE(e.err_msg=="Could not build payload");
+		REQUIRE(e.err_msg=="YCPPClientError: Could not build payload");
 	}
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(CorrectXmlWrongRpc)
+TEST_CASE("CorrectXmlWrongRpc")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
 	try
 	{
 		string reply = client.execute_payload(
 				"<testing/>"
 		);
-		BOOST_REQUIRE(reply== "");
+		REQUIRE(reply== "");
 	}
 	catch (YCPPError & e)
 	{
-		BOOST_REQUIRE(e.err_msg=="Could not build payload");
+		REQUIRE(e.err_msg=="YCPPClientError: Could not build payload");
 	}
 
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(EmptyRpc)
+TEST_CASE("EmptyRpc")
 {
-	NetconfClient client{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client{"admin", "admin", "127.0.0.1", 12022, 0};
 	int OK = 0;
 
 	int result = client.connect();
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 
 	try
 	{
 		string reply = client.execute_payload("");
-		BOOST_REQUIRE(reply== "");
+		REQUIRE(reply== "");
 	}
 	catch (YCPPError & e)
 	{
-		BOOST_REQUIRE(e.err_msg=="Could not build payload");
+		REQUIRE(e.err_msg=="YCPPClientError: Could not build payload");
 	}
 
 
-	BOOST_REQUIRE(result == OK);
+	REQUIRE(result == OK);
 }
 
-BOOST_AUTO_TEST_CASE(MultipleClients)
+TEST_CASE("MultipleClients")
 {
-	NetconfClient client1{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client2{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client3{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client4{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client5{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client6{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client7{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client8{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client9{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client10{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client11{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client12{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client13{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client14{ "admin", "admin", "127.0.0.1", 12022, 0};
-	NetconfClient client15{ "admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client1{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client2{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client3{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client4{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client5{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client6{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client7{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client8{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client9{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client10{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client11{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client12{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client13{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client14{"admin", "admin", "127.0.0.1", 12022, 0};
+	NetconfClient client15{"admin", "admin", "127.0.0.1", 12022, 0};
 
 	int result = client1.connect() && client2.connect() && client3.connect() && client4.connect() && client5.connect()
 		 && client6.connect() && client7.connect() && client8.connect() && client9.connect() && client10.connect()
 		 && client11.connect() && client12.connect() && client13.connect() && client14.connect() && client15.connect();
-	BOOST_REQUIRE(result == 0);
+	REQUIRE(result == 0);
 
 }
 

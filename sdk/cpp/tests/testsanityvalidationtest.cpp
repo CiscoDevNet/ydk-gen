@@ -21,8 +21,6 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#define BOOST_TEST_MODULE OCBgpTest
-#include <boost/test/unit_test.hpp>
 #include <iostream>
 
 #include "ydk/path_api.hpp"
@@ -31,10 +29,10 @@
 #include "ydk/types.hpp"
 #include "ydk/validation_service.hpp"
 #include "config.hpp"
+#include "catch.hpp"
 
-//test_sanity_types begin
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
+TEST_CASE("validation_int8 ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -52,7 +50,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int8 )
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
+TEST_CASE("validation_int16 ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -69,7 +67,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int16 )
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
+TEST_CASE("validation_int32 ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -86,7 +84,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int32 )
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
+TEST_CASE("validation_int64 ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -103,7 +101,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_int64 )
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
+TEST_CASE("validation_uint8 ")
 {
      ydk::path::Repository repo{TEST_HOME};
 
@@ -120,7 +118,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint8 )
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
+TEST_CASE("validation_uint16 ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -138,7 +136,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint16 )
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
+TEST_CASE("validation_uint32 ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -154,7 +152,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint32 )
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
+TEST_CASE("validation_uint64 ")
 {
 
     ydk::path::Repository repo{TEST_HOME};
@@ -172,7 +170,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_uint64 )
 }
 
 
-BOOST_AUTO_TEST_CASE( bits )
+TEST_CASE("bits ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -184,14 +182,14 @@ BOOST_AUTO_TEST_CASE( bits )
     builtInT.bits_value["disable-nagle"] = true;
     builtInT.bits_value["auto-sense-speed"] = true;
     auto r = builtInT.get_entity_path(nullptr);
-    BOOST_TEST_MESSAGE(r.path);
+    INFO(r.path);
 
     validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG);
 
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
+TEST_CASE("validation_decimal64 ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -207,7 +205,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_decimal64 )
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_string)
+TEST_CASE("validation_string")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -225,7 +223,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_string)
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
+TEST_CASE("validation_empty")
 {
     ydk::Empty empty{};
     ydk::path::Repository repo{TEST_HOME};
@@ -244,7 +242,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_empty)
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
+TEST_CASE("validation_boolean")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -260,7 +258,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_boolean)
 }
 
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
+TEST_CASE("validation_embedded_enum")
 {
 
     ydk::path::Repository repo{TEST_HOME};
@@ -281,7 +279,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_embedded_enum)
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
+TEST_CASE("validation_enum")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -301,7 +299,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_enum)
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_union)
+TEST_CASE("validation_union")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -321,7 +319,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union)
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
+TEST_CASE("validation_union_enum")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -339,7 +337,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_enum)
 
 }
 
-BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
+TEST_CASE("validation_union_int")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -358,7 +356,7 @@ BOOST_AUTO_TEST_CASE( test_sanity_types_union_int)
 }
 
 
-BOOST_AUTO_TEST_CASE( test_union_leaflist)
+TEST_CASE("test_v_union_leaflist")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -377,7 +375,7 @@ BOOST_AUTO_TEST_CASE( test_union_leaflist)
 
 }
 
-BOOST_AUTO_TEST_CASE( test_enum_leaflist)
+TEST_CASE("test_v_enum_leaflist")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -396,7 +394,7 @@ BOOST_AUTO_TEST_CASE( test_enum_leaflist)
 
 }
 
-BOOST_AUTO_TEST_CASE( test_identity_leaflist)
+TEST_CASE("test_v_identity_leaflist")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -416,7 +414,7 @@ BOOST_AUTO_TEST_CASE( test_identity_leaflist)
 }
 
 
-BOOST_AUTO_TEST_CASE( test_union_complex_list)
+TEST_CASE("test_v_union_complex_list")
 {
 
     ydk::path::Repository repo{TEST_HOME};
@@ -436,7 +434,7 @@ BOOST_AUTO_TEST_CASE( test_union_complex_list)
 }
 
 
-BOOST_AUTO_TEST_CASE( test_identityref)
+TEST_CASE("test_v_identityref")
 {
     ydk::path::Repository repo{TEST_HOME};
 

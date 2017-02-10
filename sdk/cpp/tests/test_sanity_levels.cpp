@@ -14,11 +14,6 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#define BOOST_TEST_MODULE LevelsTests
-#include <boost/exception/all.hpp>
-#include <boost/test/unit_test.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 #include <string.h>
 #include <iostream>
 
@@ -26,27 +21,12 @@
 #include "ydk/crud_service.hpp"
 #include "ydk_ydktest/ydktest_sanity.hpp"
 #include "config.hpp"
+#include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
 
-struct YdkTest
-{
-	YdkTest()
-    {
-    	boost::log::core::get()->set_filter(
-    	        boost::log::trivial::severity >= boost::log::trivial::trace
-    	    );
-    }
-
-    ~YdkTest()
-    {
-    }
-};
-
-BOOST_FIXTURE_TEST_SUITE(sanity_levels, YdkTest )
-
-BOOST_AUTO_TEST_CASE(one_level_pos_set)
+TEST_CASE("one_level_pos_set")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -57,10 +37,10 @@ BOOST_AUTO_TEST_CASE(one_level_pos_set)
     r_1->one->number = 1;
     r_1->one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
     bool reply = crud.create(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(one_level_pos)
+TEST_CASE("one_level_pos")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -69,21 +49,21 @@ BOOST_AUTO_TEST_CASE(one_level_pos)
     // READ
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     r_1->one->number = 1;
     r_1->one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
     reply = crud.create(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     auto filter = make_unique<ydktest_sanity::Runner>();
     auto r_2 = crud.read(provider, *filter);
-    BOOST_REQUIRE(r_2!=nullptr);
+    REQUIRE(r_2!=nullptr);
     ydktest_sanity::Runner * r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
-    BOOST_REQUIRE(r_2_ptr!=nullptr);
+    REQUIRE(r_2_ptr!=nullptr);
 
-    BOOST_REQUIRE(r_1->one->number == r_2_ptr->one->number);
-    BOOST_REQUIRE(r_1->one->name == r_2_ptr->one->name);
+    REQUIRE(r_1->one->number == r_2_ptr->one->number);
+    REQUIRE(r_1->one->name == r_2_ptr->one->name);
 
     //UPDATE
     r_1 = make_unique<ydktest_sanity::Runner>();
@@ -93,20 +73,20 @@ BOOST_AUTO_TEST_CASE(one_level_pos)
     filter = make_unique<ydktest_sanity::Runner>();
     reply = crud.update(provider, *r_1);
     r_2 = crud.read(provider, *filter);
-    BOOST_REQUIRE(r_2!=nullptr);
+    REQUIRE(r_2!=nullptr);
     r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
-    BOOST_REQUIRE(r_2_ptr!=nullptr);
+    REQUIRE(r_2_ptr!=nullptr);
 
-    BOOST_REQUIRE(r_1->one->number == r_2_ptr->one->number);
-    BOOST_REQUIRE(r_1->one->name == r_2_ptr->one->name);
+    REQUIRE(r_1->one->number == r_2_ptr->one->number);
+    REQUIRE(r_1->one->name == r_2_ptr->one->name);
 
     // DELETE
     filter = make_unique<ydktest_sanity::Runner>();
     reply = crud.delete_(provider, *filter);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(two_level_pos)
+TEST_CASE("two_level_pos")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -119,19 +99,19 @@ BOOST_AUTO_TEST_CASE(two_level_pos)
     r_1->two->sub1->number = 21;
 
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
     reply = crud.create(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     auto filter = make_unique<ydktest_sanity::Runner>();
     auto r_2 = crud.read(provider, *filter);
-    BOOST_REQUIRE(r_2!=nullptr);
+    REQUIRE(r_2!=nullptr);
     ydktest_sanity::Runner * r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
-    BOOST_REQUIRE(r_2_ptr!=nullptr);
+    REQUIRE(r_2_ptr!=nullptr);
 
-    BOOST_REQUIRE(r_1->two->number == r_2_ptr->two->number);
-    BOOST_REQUIRE(r_1->two->name == r_2_ptr->two->name);
-    BOOST_REQUIRE(r_1->two->sub1->number == r_2_ptr->two->sub1->number);
+    REQUIRE(r_1->two->number == r_2_ptr->two->number);
+    REQUIRE(r_1->two->name == r_2_ptr->two->name);
+    REQUIRE(r_1->two->sub1->number == r_2_ptr->two->sub1->number);
 
     // UPDATE
     r_1 = make_unique<ydktest_sanity::Runner>();
@@ -142,21 +122,21 @@ BOOST_AUTO_TEST_CASE(two_level_pos)
     filter = make_unique<ydktest_sanity::Runner>();
     reply = crud.update(provider, *r_1);
     r_2 = crud.read(provider, *filter);
-    BOOST_REQUIRE(r_2!=nullptr);
+    REQUIRE(r_2!=nullptr);
     r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
-    BOOST_REQUIRE(r_2_ptr!=nullptr);
+    REQUIRE(r_2_ptr!=nullptr);
 
-    BOOST_REQUIRE(r_1->two->number == r_2_ptr->two->number);
-    BOOST_REQUIRE(r_1->two->name == r_2_ptr->two->name);
-    BOOST_REQUIRE(r_1->two->sub1->number == r_1->two->sub1->number);
+    REQUIRE(r_1->two->number == r_2_ptr->two->number);
+    REQUIRE(r_1->two->name == r_2_ptr->two->name);
+    REQUIRE(r_1->two->sub1->number == r_1->two->sub1->number);
 
     // DELETE
     filter = make_unique<ydktest_sanity::Runner>();
     reply = crud.delete_(provider, *filter);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(three_level_pos)
+TEST_CASE("three_level_pos")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -165,7 +145,7 @@ BOOST_AUTO_TEST_CASE(three_level_pos)
     // READ
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     //bool reply = crud.delete_(provider, *r_1);
-    //BOOST_REQUIRE(reply);
+    //REQUIRE(reply);
 
     r_1->three->number = 3;
     r_1->three->name = "runner:three:name";
@@ -173,18 +153,18 @@ BOOST_AUTO_TEST_CASE(three_level_pos)
     r_1->three->sub1->sub2->number = 311;
 
     bool reply = crud.create(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     auto filter = make_unique<ydktest_sanity::Runner>();
     auto r_2 = crud.read(provider, *filter);
-    BOOST_REQUIRE(r_2!=nullptr);
+    REQUIRE(r_2!=nullptr);
     ydktest_sanity::Runner * r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
-    BOOST_REQUIRE(r_2_ptr!=nullptr);
+    REQUIRE(r_2_ptr!=nullptr);
 
-    BOOST_REQUIRE(r_1->three->number == r_2_ptr->three->number);
-    BOOST_REQUIRE(r_1->three->name == r_2_ptr->three->name);
-    BOOST_REQUIRE(r_1->three->sub1->number == r_2_ptr->three->sub1->number);
-    BOOST_REQUIRE(r_1->three->sub1->sub2->number == r_2_ptr->three->sub1->sub2->number);
+    REQUIRE(r_1->three->number == r_2_ptr->three->number);
+    REQUIRE(r_1->three->name == r_2_ptr->three->name);
+    REQUIRE(r_1->three->sub1->number == r_2_ptr->three->sub1->number);
+    REQUIRE(r_1->three->sub1->sub2->number == r_2_ptr->three->sub1->sub2->number);
 
     // UPDATE
     r_1 = make_unique<ydktest_sanity::Runner>();
@@ -196,22 +176,22 @@ BOOST_AUTO_TEST_CASE(three_level_pos)
     filter = make_unique<ydktest_sanity::Runner>();
     reply = crud.update(provider, *r_1);
     r_2 = crud.read(provider, *filter);
-    BOOST_REQUIRE(r_2!=nullptr);
+    REQUIRE(r_2!=nullptr);
     r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
-    BOOST_REQUIRE(r_2_ptr!=nullptr);
+    REQUIRE(r_2_ptr!=nullptr);
 
-    BOOST_REQUIRE(r_1->three->number == r_2_ptr->three->number);
-    BOOST_REQUIRE(r_1->three->name == r_2_ptr->three->name);
-    BOOST_REQUIRE(r_1->three->sub1->number == r_2_ptr->three->sub1->number);
-    BOOST_REQUIRE(r_1->three->sub1->sub2->number == r_2_ptr->three->sub1->sub2->number);
+    REQUIRE(r_1->three->number == r_2_ptr->three->number);
+    REQUIRE(r_1->three->name == r_2_ptr->three->name);
+    REQUIRE(r_1->three->sub1->number == r_2_ptr->three->sub1->number);
+    REQUIRE(r_1->three->sub1->sub2->number == r_2_ptr->three->sub1->sub2->number);
 
     // DELETE
     filter = make_unique<ydktest_sanity::Runner>();
     reply = crud.delete_(provider, *filter);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(onelist)
+TEST_CASE("onelist")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -219,7 +199,7 @@ BOOST_AUTO_TEST_CASE(onelist)
 
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     auto r_2 = make_unique<ydktest_sanity::Runner>();
     auto e_1 = make_unique<ydktest_sanity::Runner::OneList::Ldata>();
@@ -236,12 +216,12 @@ BOOST_AUTO_TEST_CASE(onelist)
 	r_1->one_list->ldata.push_back(move(e_2));
 
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 	auto r_read = crud.read(provider, *r_2);
-	BOOST_REQUIRE(r_read != nullptr);
+	REQUIRE(r_read != nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(test_onelist_neg_update_key_nonexist)
+TEST_CASE("test_onelist_neg_update_key_nonexist")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -250,7 +230,7 @@ BOOST_AUTO_TEST_CASE(test_onelist_neg_update_key_nonexist)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     auto r_2 = make_unique<ydktest_sanity::Runner>();
@@ -260,22 +240,22 @@ BOOST_AUTO_TEST_CASE(test_onelist_neg_update_key_nonexist)
     e_1->name = "foo";
 	r_1->one_list->ldata.push_back(move(e_1));
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto r_read = crud.read(provider, *r_2);
-	BOOST_REQUIRE(r_read != nullptr);
+	REQUIRE(r_read != nullptr);
 
 	//UPDATE
 	r_1->one_list->ldata[0]->name = "2";
 	r_1->one_list->ldata[0]->number = 2;
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 	r_read = crud.read(provider, *r_2);
-	BOOST_REQUIRE(r_read != nullptr);
+	REQUIRE(r_read != nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(test_twolist_pos)
+TEST_CASE("test_twolist_pos")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -284,7 +264,7 @@ BOOST_AUTO_TEST_CASE(test_twolist_pos)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     auto r_2 = make_unique<ydktest_sanity::Runner>();
@@ -312,11 +292,11 @@ BOOST_AUTO_TEST_CASE(test_twolist_pos)
     r_1->two_list->ldata.push_back(move(l_2));
 
     reply = crud.create(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //READ
     auto r_read = crud.read(provider, *r_2);
-    BOOST_REQUIRE(r_read != nullptr);
+    REQUIRE(r_read != nullptr);
 
     //UPDATE
     r_1->two_list->ldata[0]->number = 23;
@@ -328,12 +308,12 @@ BOOST_AUTO_TEST_CASE(test_twolist_pos)
     r_1->two_list->ldata[1]->subl1[0]->number = 224;
     r_1->two_list->ldata[1]->subl1[0]->name = "224name";
     reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 	r_read = crud.read(provider, *r_2);
-	BOOST_REQUIRE(r_read != nullptr);
+	REQUIRE(r_read != nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(test_threelist_pos)
+TEST_CASE("test_threelist_pos")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -342,7 +322,7 @@ BOOST_AUTO_TEST_CASE(test_threelist_pos)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     auto r_2 = make_unique<ydktest_sanity::Runner>();
@@ -380,11 +360,11 @@ BOOST_AUTO_TEST_CASE(test_threelist_pos)
     r_1->three_list->ldata.push_back(move(l_2));
 
     reply = crud.create(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //READ
     auto r_read = crud.read(provider, *r_2);
-    BOOST_REQUIRE(r_read != nullptr);
+    REQUIRE(r_read != nullptr);
 
     //UPDATE
     r_1->three_list->ldata[0]->number = 23;
@@ -400,12 +380,12 @@ BOOST_AUTO_TEST_CASE(test_threelist_pos)
 	r_1->three_list->ldata[1]->subl1[0]->sub_subl1[0]->number = 2224;
 	r_1->three_list->ldata[1]->subl1[0]->sub_subl1[0]->name = "2224name";
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 	r_read = crud.read(provider, *r_2);
-	BOOST_REQUIRE(r_read != nullptr);
+	REQUIRE(r_read != nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(test_InbtwList_pos)
+TEST_CASE("test_InbtwList_pos")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -414,7 +394,7 @@ BOOST_AUTO_TEST_CASE(test_InbtwList_pos)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     auto r_2 = make_unique<ydktest_sanity::Runner>();
@@ -442,11 +422,11 @@ BOOST_AUTO_TEST_CASE(test_InbtwList_pos)
     r_1->inbtw_list->ldata.push_back(move(l_2));
 
     reply = crud.create(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //READ
     auto r_read = crud.read(provider, *r_2);
-    BOOST_REQUIRE(r_read != nullptr);
+    REQUIRE(r_read != nullptr);
 
     //UPDATE
     r_1->inbtw_list->ldata[0]->number = 221;
@@ -458,12 +438,12 @@ BOOST_AUTO_TEST_CASE(test_InbtwList_pos)
     r_1->inbtw_list->ldata[1]->subc->subc_subl1[0]->number = 2222;
     r_1->inbtw_list->ldata[1]->subc->subc_subl1[0]->name = "2222name";
     reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 	r_read = crud.read(provider, *r_2);
-	BOOST_REQUIRE(r_read != nullptr);
+	REQUIRE(r_read != nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(test_leafref_simple_pos)
+TEST_CASE("test_leafref_simple_pos")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -472,7 +452,7 @@ BOOST_AUTO_TEST_CASE(test_leafref_simple_pos)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     auto r_2 = make_unique<ydktest_sanity::Runner>();
@@ -483,17 +463,17 @@ BOOST_AUTO_TEST_CASE(test_leafref_simple_pos)
 
 	//READ
 	auto r_read = crud.read(provider, *r_2);
-	BOOST_REQUIRE(r_read != nullptr);
+	REQUIRE(r_read != nullptr);
 
 	//UPDATE
 	r_1->ytypes->built_in_t->number8 = 110;
 	r_1->ytypes->built_in_t->leaf_ref = r_1->ytypes->built_in_t->number8.get();
 	crud.update(provider, *r_1);
 	r_read = crud.read(provider, *r_2);
-	BOOST_REQUIRE(r_read != nullptr);
+	REQUIRE(r_read != nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(test_leafref_pos)
+TEST_CASE("test_leafref_pos")
 {
 	ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -502,7 +482,7 @@ BOOST_AUTO_TEST_CASE(test_leafref_pos)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
@@ -549,22 +529,22 @@ BOOST_AUTO_TEST_CASE(test_leafref_pos)
 	r_1->leaf_ref->one->name_of_one = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
 	r_1->leaf_ref->one->two->self_ref_one_name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	auto r_filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *r_filter);
 	ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->one->name == r_2->one->name);
-	BOOST_REQUIRE(r_1->one->number == r_2->one->number);
-	BOOST_REQUIRE(r_1->inbtw_list->ldata[0]->number == r_2->inbtw_list->ldata[0]->number);
-	BOOST_REQUIRE(r_1->inbtw_list->ldata[0]->name == r_2->inbtw_list->ldata[0]->name);
-	BOOST_REQUIRE(r_1->inbtw_list->ldata[1]->number == r_2->inbtw_list->ldata[1]->number);
-	BOOST_REQUIRE(r_1->inbtw_list->ldata[1]->name == r_2->inbtw_list->ldata[1]->name);
-	BOOST_REQUIRE(r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->number == r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->number);
-	BOOST_REQUIRE(r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->name == r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->name);
+	REQUIRE(r_1->one->name == r_2->one->name);
+	REQUIRE(r_1->one->number == r_2->one->number);
+	REQUIRE(r_1->inbtw_list->ldata[0]->number == r_2->inbtw_list->ldata[0]->number);
+	REQUIRE(r_1->inbtw_list->ldata[0]->name == r_2->inbtw_list->ldata[0]->name);
+	REQUIRE(r_1->inbtw_list->ldata[1]->number == r_2->inbtw_list->ldata[1]->number);
+	REQUIRE(r_1->inbtw_list->ldata[1]->name == r_2->inbtw_list->ldata[1]->name);
+	REQUIRE(r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->number == r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->number);
+	REQUIRE(r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->name == r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->name);
 }
 
-BOOST_AUTO_TEST_CASE(aug_one_pos)
+TEST_CASE("aug_one_pos")
 {
 	ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -573,30 +553,30 @@ BOOST_AUTO_TEST_CASE(aug_one_pos)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->one->one_aug->number = 1;
     r_1->one->one_aug->name = "one";
     reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto r_filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *r_filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->one->one_aug->number == r_2->one->one_aug->number);
-	BOOST_REQUIRE(r_1->one->one_aug->name == r_2->one->one_aug->name);
+	REQUIRE(r_1->one->one_aug->number == r_2->one->one_aug->number);
+	REQUIRE(r_1->one->one_aug->name == r_2->one->one_aug->name);
 
 	//UPDATE
 	r_1->one->one_aug->number = 10;
 	r_1->one->one_aug->name = "onenone";
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(aug_onelist_pos)
+TEST_CASE("aug_onelist_pos")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -605,7 +585,7 @@ BOOST_AUTO_TEST_CASE(aug_onelist_pos)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	auto e_1 = make_unique<ydktest_sanity::Runner::OneList::OneAugList::Ldata>();
@@ -620,18 +600,18 @@ BOOST_AUTO_TEST_CASE(aug_onelist_pos)
 	r_1->one_list->one_aug_list->ldata.push_back(move(e_2));
 	r_1->one_list->one_aug_list->enabled = true;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto r_filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *r_filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->one_list->one_aug_list->ldata[0]->name == r_2->one_list->one_aug_list->ldata[0]->name);
-	BOOST_REQUIRE(r_1->one_list->one_aug_list->ldata[0]->number == r_2->one_list->one_aug_list->ldata[0]->number);
+	REQUIRE(r_1->one_list->one_aug_list->ldata[0]->name == r_2->one_list->one_aug_list->ldata[0]->name);
+	REQUIRE(r_1->one_list->one_aug_list->ldata[0]->number == r_2->one_list->one_aug_list->ldata[0]->number);
 }
 
-BOOST_AUTO_TEST_CASE(parent_empty)
+TEST_CASE("parent_empty")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -640,18 +620,17 @@ BOOST_AUTO_TEST_CASE(parent_empty)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->emptee = Empty();
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto r_filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *r_filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
 

@@ -13,11 +13,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 ------------------------------------------------------------------*/
-#include <boost/log/trivial.hpp>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <sstream>
 
 #include "ietf_parser.hpp"
+#include "logger.hpp"
 #include "path_api.hpp"
 #include "ydk_yang.hpp"
 
@@ -49,18 +50,18 @@ vector<string> IetfCapabilitiesXmlParser::parse(const string & capabilities_buff
 	vector<string> capabilities{};
 	if (doc == NULL)
 	{
-		BOOST_LOG_TRIVIAL(debug) << "Empty capabilities";
+		YLOG_DEBUG("Empty capabilities");
 		return {};
 	}
 	xmlNodePtr cur = xmlDocGetRootElement(doc);
 	if (cur == NULL)
 	{
-		BOOST_LOG_TRIVIAL(debug) << "Empty capabilities";
+		YLOG_DEBUG("Empty capabilities");
 		return {};
 	}
 	if (xmlStrcmp(cur->name, (const xmlChar *) "capabilities") != 0)
 	{
-		BOOST_LOG_TRIVIAL(debug) << "Unexpected XML";
+		YLOG_DEBUG("Unexpected XML");
 		return {};
 	}
 	cur = cur->xmlChildrenNode;

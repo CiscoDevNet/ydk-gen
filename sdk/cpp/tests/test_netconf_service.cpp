@@ -14,42 +14,25 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#define BOOST_TEST_MODULE NetconfServiceTest
-#include <boost/test/unit_test.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 #include <string.h>
 #include <iostream>
 
-#include "ydk/netconf_provider.hpp"
-#include "ydk/netconf_service.hpp"
-#include "ydk_ydktest/ydktest_sanity.hpp"
-#include "ydk_ydktest/openconfig_bgp.hpp"
+#include <ydk/netconf_provider.hpp>
+#include <ydk/netconf_service.hpp>
+#include <ydk_ydktest/ydktest_sanity.hpp>
+#include <ydk_ydktest/openconfig_bgp.hpp>
+#include <ydk/ietf_netconf.hpp>
+#include <ydk/types.hpp>
+#include <spdlog/spdlog.h>
+
 #include "config.hpp"
-#include "ydk/ietf_netconf.hpp"
-#include "ydk/types.hpp"
+#include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
 
-struct YdkTest
-{
-	YdkTest()
-    {
-    	boost::log::core::get()->set_filter(
-    	        boost::log::trivial::severity >= boost::log::trivial::error
-    	    );
-    }
-
-    ~YdkTest()
-    {
-    }
-};
-
-BOOST_FIXTURE_TEST_SUITE(netconf_service, YdkTest )
-
 // cancel_commit -- issues in netsim
-//BOOST_AUTO_TEST_CASE(cancel_commit)
+//TEST_CASE("cancel_commit")
 //{
 //    // provider
 //    path::Repository repo{TEST_HOME};
@@ -57,11 +40,11 @@ BOOST_FIXTURE_TEST_SUITE(netconf_service, YdkTest )
 //    NetconfService ns{};
 //
 //    auto reply = ns.cancel_commit(provider);
-//    BOOST_REQUIRE(reply);
+//    REQUIRE(reply);
 //}
 
 // close_session
-BOOST_AUTO_TEST_CASE(close_session)
+TEST_CASE("close_session")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -69,11 +52,11 @@ BOOST_AUTO_TEST_CASE(close_session)
     NetconfService ns{};
 
     auto reply = ns.close_session(provider);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
 // commit
-BOOST_AUTO_TEST_CASE(commit)
+TEST_CASE("commit")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -81,11 +64,11 @@ BOOST_AUTO_TEST_CASE(commit)
     NetconfService ns{};
 
     auto reply = ns.commit(provider);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
 // copy_config
-BOOST_AUTO_TEST_CASE(copy_config)
+TEST_CASE("copy_config")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -96,11 +79,11 @@ BOOST_AUTO_TEST_CASE(copy_config)
     DataStore source = DataStore::running;
 
     auto reply = ns.copy_config(provider, target, source);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
 // delete_config -- issues in netsim
-BOOST_AUTO_TEST_CASE(delete_config)
+TEST_CASE("delete_config")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -110,11 +93,11 @@ BOOST_AUTO_TEST_CASE(delete_config)
     DataStore target = DataStore::url;
 
 //    auto reply = ns.delete_config(provider, target, "http://test");
-    BOOST_CHECK_THROW(ns.delete_config(provider, target, "http://test"), YCPPServiceProviderError);
+    CHECK_THROWS_AS(ns.delete_config(provider, target, "http://test"), YCPPServiceProviderError);
 }
 
 // discard_changes
-BOOST_AUTO_TEST_CASE(discard_changes)
+TEST_CASE("discard_changes")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -122,11 +105,11 @@ BOOST_AUTO_TEST_CASE(discard_changes)
     NetconfService ns{};
 
     auto reply = ns.discard_changes(provider);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
 // edit_config, get_config
-BOOST_AUTO_TEST_CASE(edit_config)
+TEST_CASE("edit_config")
 {
 	// provider
     path::Repository repo{TEST_HOME};
@@ -140,21 +123,21 @@ BOOST_AUTO_TEST_CASE(edit_config)
     bgp.global->config->as = 6500;
 
     auto reply = ns.edit_config(provider, target, bgp);
-    BOOST_REQUIRE(reply);
-    
+    REQUIRE(reply);
+
     auto data = ns.get_config(provider, source, filter);
-    BOOST_REQUIRE(data);
-    
+    REQUIRE(data);
+
     auto data_ptr = dynamic_cast<openconfig_bgp::Bgp*>(data.get());
-    BOOST_REQUIRE(data_ptr != nullptr);
-    BOOST_REQUIRE(data_ptr->global->config->as == bgp.global->config->as);
-    
+    REQUIRE(data_ptr != nullptr);
+    REQUIRE(data_ptr->global->config->as == bgp.global->config->as);
+
     reply = ns.discard_changes(provider);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
 // get
-BOOST_AUTO_TEST_CASE(get)
+TEST_CASE("get")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -164,11 +147,11 @@ BOOST_AUTO_TEST_CASE(get)
     openconfig_bgp::Bgp filter = {};
 
     auto reply = ns.get(provider, filter);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
 // kill_session
-BOOST_AUTO_TEST_CASE(kill_session)
+TEST_CASE("kill_session")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -178,11 +161,11 @@ BOOST_AUTO_TEST_CASE(kill_session)
     int session_id = 3;
 
 //    auto reply = ns.kill_session(provider, session_id);
-    BOOST_CHECK_THROW(ns.kill_session(provider, session_id), YCPPServiceProviderError);
+    CHECK_THROWS_AS(ns.kill_session(provider, session_id), YCPPServiceProviderError);
 }
 
 // lock, unlock
-BOOST_AUTO_TEST_CASE(lock)
+TEST_CASE("lock")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -192,14 +175,14 @@ BOOST_AUTO_TEST_CASE(lock)
     DataStore target = DataStore::candidate;
 
     auto reply = ns.lock(provider, target);
-    BOOST_REQUIRE(reply);
-    
+    REQUIRE(reply);
+
     reply = ns.unlock(provider, target);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
 
 // validate
-BOOST_AUTO_TEST_CASE(validate)
+TEST_CASE("validate")
 {
     // provider
     path::Repository repo{TEST_HOME};
@@ -209,7 +192,5 @@ BOOST_AUTO_TEST_CASE(validate)
     DataStore source = DataStore::candidate;
 
     auto reply = ns.validate(provider, source);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 }
-
-BOOST_AUTO_TEST_SUITE_END()

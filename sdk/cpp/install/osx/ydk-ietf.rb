@@ -6,8 +6,6 @@ class YdkIetf < Formula
 
   depends_on "ydk"
   depends_on "cmake" => :build
-  depends_on "boost"
-  depends_on "boost-python"
   depends_on "curl"
   depends_on "libssh"
   depends_on "pcre"
@@ -29,12 +27,7 @@ class YdkIetf < Formula
       }
     EOS
     system ENV.cxx, "-std=c++11", "-Wall", "-Wextra", "-g", "-O0",
-    "test.cpp", "-otest", "-lboost_log_setup-mt", "-lboost_log-mt",
-    "-lboost_thread-mt", "-lboost_date_time-mt", "-lboost_system-mt",
-    "-lboost_filesystem-mt", "-lboost_log_setup-mt", "-lboost_log-mt",
-    "-lboost_thread-mt", "-lboost_date_time-mt", "-lboost_system-mt",
-    "-lboost_filesystem-mt", "-lboost_log_setup-mt", "-lboost_log-mt",
-    "-lboost_filesystem-mt", "-lboost_system-mt", "-lxml2", "-lcurl",
+    "test.cpp", "-otest", "-lxml2", "-lcurl",
     "-lssh_threads", "-lpcre", "-lxslt", "-lssh", "-lpthread", "-ldl",
     "-lydk"
     system "./test"

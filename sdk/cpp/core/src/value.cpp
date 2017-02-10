@@ -25,8 +25,6 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include <boost/log/trivial.hpp>
-
 #include <iostream>
 #include <sstream>
 

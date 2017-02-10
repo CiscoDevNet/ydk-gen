@@ -157,7 +157,7 @@ class TestPrinter(FixturePrinter):
             self._write_end(fmt.format(read_obj_name, stmt))
         elif self.lang == 'cpp':
             self._write_end('auto read_unique_ptr = {}'.format(stmt))
-            self._write_end('BOOST_CHECK_EQUAL( read_unique_ptr != nullptr, true )')
+            self._write_end('CHECK( read_unique_ptr != nullptr)')
             self._write_end(fmt.format(read_obj_name, qn, 'read_unique_ptr'))
 
     def _print_test_case_cleanup(self, clazz, top_classes):
@@ -196,7 +196,7 @@ class TestPrinter(FixturePrinter):
         if self.lang == 'py':
             self._writeln('def test_{}s(self):'.format(test_name))
         elif self.lang == 'cpp':
-            self._writeln('BOOST_AUTO_TEST_CASE( {}_test )'.format(test_name))
+            self._writeln('TEST_CASE_METHOD( ConnectionFixture, "{}_{}_test" )'.format(self.package.name, test_name))
             self._writeln('{')
             self._lvl_inc()
         self._lvl_inc()
@@ -208,13 +208,12 @@ class TestPrinter(FixturePrinter):
         elif self.lang == 'cpp':
             self._lvl_dec()
             self._writeln('}')
+            self._bline()
 
     def _print_logging(self, msg):
         self._bline()
         if self.lang == 'py':
             self._write_end('logger.info("{}")'.format(msg))
-        elif self.lang == 'cpp':
-            self._write_end('BOOST_LOG_TRIVIAL(trace) << "{}"'.format(msg))
 
     def get_assignment_fmt(self, path):
         fmt = '{} = {}'
@@ -267,7 +266,7 @@ class TestPrinter(FixturePrinter):
     def compare_fmt(self):
         fmt = 'self.assertEqual({}, {})'
         if self.lang == 'cpp':
-            fmt = 'BOOST_CHECK_EQUAL( {} == {}, true )'
+            fmt = 'CHECK( {} == {} )'
         return fmt
 
     @property

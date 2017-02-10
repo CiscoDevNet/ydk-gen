@@ -82,6 +82,18 @@ set(libydk_src
     src/path/schema_node.cpp
     src/path/statement.cpp)
 
+file(GLOB SPDLOG_HEADERS src/spdlog/*.h)
+file(GLOB SPDLOG_DETAILS_HEADERS src/spdlog/details/*.h)
+file(GLOB SPDLOG_FMT_HEADERS src/spdlog/fmt/*.h)
+file(GLOB SPDLOG_FMT_BUNDLED_HEADERS src/spdlog/fmt/bundled/*.h src/spdlog/fmt/bundled/*.cc)
+file(GLOB SPDLOG_SINKS_HEADERS src/spdlog/sinks/*.h)
+
+set(spdlog_include_location include/spdlog)
+set(spdlog_details_include_location include/spdlog/details)
+set(spdlog_fmt_include_location include/spdlog/fmt)
+set(spdlog_fmt_bundled_include_location include/spdlog/fmt/bundled)
+set(spdlog_sinks_include_location include/spdlog/sinks)
+
 set(libydk_install_headers
     src/capabilities_parser.hpp
     src/codec_provider.hpp
@@ -93,7 +105,7 @@ set(libydk_install_headers
     src/errors.hpp
     src/executor_service.hpp
     src/ietf_netconf.hpp
-    src/ietf_netconf_with_defaults.hpp
+    src/ietf_netconf_with_defaults.hpp    
     src/netconf_provider.hpp
     src/network_topology.hpp
     src/netconf_service.hpp
@@ -221,13 +233,6 @@ set(yang_objs
     yang_types.c.o
 )
 
-set(Boost_USE_STATIC_LIBS        OFF)
-set(Boost_USE_MULTITHREADED      ON)
-set(Boost_USE_STATIC_RUNTIME     OFF)
-set(BOOST_ALL_DYN_LINK           ON)   # force dynamic linking for all libraries
-set(Boost_NO_BOOST_CMAKE         ON)
-#set(Boost_USE_STATIC_LIBS ON)
-
 # Find dependent libraries
 find_library(curl_location curl)
 find_library(ssh_threads_location ssh_threads)
@@ -236,8 +241,6 @@ find_library(pcre_location pcre)
 find_library(pthread_location pthread)
 find_library(dl_location dl)
 find_package(LibXml2 REQUIRED)
-find_package(Boost REQUIRED)
-find_package(Boost COMPONENTS log_setup log thread date_time system filesystem REQUIRED)
 find_package(LibSSH REQUIRED)
 
 # Add LibNetconf
@@ -316,7 +319,6 @@ foreach(yang_obj IN LISTS yang_objs)
 endforeach(yang_obj)
 
 include_directories(
-    ${Boost_INCLUDE_DIRS}
     ${LIBYANG_INCLUDE_DIRS}
     ${LIBSSH_INCLUDE_DIRS}
     ${LIBXML2_INCLUDE_DIR}
@@ -324,21 +326,14 @@ include_directories(
     ${libnetconf_location}/headers
     ${libyang_headers_location}
     ${libyang_location}/headers
+    ${PROJECT_SOURCE_DIR}/src
 )
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(ydk STATIC ${libydk_src} ${libnetconf_inc_objs} ${libyang_inc_objs})
-target_compile_definitions(ydk PRIVATE "BOOST_ALL_DYN_LINK=1")
-target_compile_definitions(ydk PRIVATE "BOOST_LOG_DYN_LINK=1")
 
 target_link_libraries(ydk
-    ${Boost_LOG_SETUP_LIBRARY}
-    ${Boost_LOG_LIBRARY}
-    ${BOOST_THREAD_LIBRARY}
-    ${BOOST_DATE_TIME_LIBRARY}
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
     ${LIBXML2_LIBRARIES}
     ${LIBSSH_LIBRARIES}
     ${curl_location}
@@ -356,6 +351,11 @@ set_property(TARGET ydk PROPERTY CXX_STANDARD_REQUIRED ON)
 
 install(TARGETS ydk DESTINATION ${LIB_INSTALL_DIR})
 install(FILES ${libydk_install_headers} DESTINATION ${INCLUDE_INSTALL_DIR})
+install(FILES ${SPDLOG_HEADERS} DESTINATION ${spdlog_include_location})
+install(FILES ${SPDLOG_DETAILS_HEADERS} DESTINATION ${spdlog_details_include_location})
+install(FILES ${SPDLOG_FMT_HEADERS} DESTINATION ${spdlog_fmt_include_location})
+install(FILES ${SPDLOG_FMT_BUNDLED_HEADERS} DESTINATION ${spdlog_fmt_bundled_include_location})
+install(FILES ${SPDLOG_SINKS_HEADERS} DESTINATION ${spdlog_sinks_include_location})
 
 # generate doxygen documentation for ydk_core API
 find_package(Doxygen)

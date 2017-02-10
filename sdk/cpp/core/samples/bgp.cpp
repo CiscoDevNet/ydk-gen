@@ -1,5 +1,5 @@
 //
-//  bgp.cpp
+    //  bgp.cpp
 //  ydk
 //
 //  Created by Manu Radhakrishna on 7/25/16.
@@ -56,7 +56,7 @@ void test_bgp_create()
     neighbor_af.create("config/afi-safi-name" , "openconfig-bgp-types:L3VPN_IPV4_UNICAST");
     neighbor_af.create("config/enabled","true");
 
-    auto s = ydk::path::CodecService{};
+    ydk::path::CodecService s {};
     auto xml = s.encode(bgp, ydk::EncodingFormat::XML, true);
     // auto json = s.encode(bgp, ydk::path::CodecService::Format::JSON, true);
 

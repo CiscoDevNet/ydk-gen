@@ -13,10 +13,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  ------------------------------------------------------------------*/
-#define BOOST_TEST_MODULE OdlTest
-#include <boost/test/unit_test.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 #include <string.h>
 #include <iostream>
 
@@ -25,17 +21,15 @@
 #include <ydk/path_api.hpp>
 #include <ydk_ydktest/openconfig_bgp.hpp>
 #include "config.hpp"
+#include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
 
 using namespace ydk::openconfig_bgp;
 
-BOOST_AUTO_TEST_CASE(Read)
+TEST_CASE("ReadODL")
 {
-//	boost::log::core::get()->set_filter(
-//	        boost::log::trivial::severity >= boost::log::trivial::debug
-//	    );
 	ydk::path::Repository repo{TEST_HOME};
 	OpenDaylightServiceProvider provider{repo, "localhost", "admin", "admin", 12306, EncodingFormat::JSON};
 	CrudService crud {};
@@ -46,30 +40,27 @@ BOOST_AUTO_TEST_CASE(Read)
 
 	auto bgp_read = crud.read_config(provider.get_node_provider("xr"), *bgp_filter);
 
-	BOOST_REQUIRE(bgp_read!=nullptr);
+	REQUIRE(bgp_read!=nullptr);
 
 	if(bgp_read == nullptr)
 	{
-		BOOST_TEST_MESSAGE("==================================================");
-		BOOST_TEST_MESSAGE("No entries found");
-		BOOST_TEST_MESSAGE("==================================================");
+		INFO("==================================================");
+		INFO("No entries found");
+		INFO("==================================================");
 
 	}
 
 	Bgp * bgp_read_ptr = dynamic_cast<Bgp*>(bgp_read.get());
-	BOOST_REQUIRE(bgp_read_ptr!=nullptr);
-	BOOST_TEST_MESSAGE("==================================================");
-	BOOST_TEST_MESSAGE("BGP configuration: ");
-	BOOST_TEST_MESSAGE("AS: " << bgp_read_ptr->global->config->as);
-	BOOST_TEST_MESSAGE("Router ID: " << bgp_read_ptr->global->config->router_id);
+	REQUIRE(bgp_read_ptr!=nullptr);
+	INFO("==================================================");
+	INFO("BGP configuration: ");
+	INFO("AS: " << bgp_read_ptr->global->config->as);
+	INFO("Router ID: " << bgp_read_ptr->global->config->router_id);
 
 }
 
-BOOST_AUTO_TEST_CASE(Create)
+TEST_CASE("CreateODL")
 {
-	boost::log::core::get()->set_filter(
-	        boost::log::trivial::severity >= boost::log::trivial::debug
-	    );
 	ydk::path::Repository repo{TEST_HOME};
 	OpenDaylightServiceProvider provider{repo, "localhost", "admin", "admin", 12306, EncodingFormat::JSON};
 	CrudService crud {};
@@ -109,9 +100,9 @@ BOOST_AUTO_TEST_CASE(Create)
 	peer_group->parent = bgp->peer_groups.get();
 	bgp->peer_groups->peer_group.push_back(move(peer_group));
 
-        auto & prov = provider.get_node_provider("xr");
+    auto & prov = provider.get_node_provider("xr");
 	bool result = crud.create(prov, *bgp);
-	BOOST_REQUIRE(result);
+	REQUIRE(result);
 }
-//BOOST_AUTO_TEST_SUITE_END()
+//AUTO_TEST_SUITE_END()
 

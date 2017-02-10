@@ -37,39 +37,22 @@ class EntityLookUpPrinter(FilePrinter):
         self._init_headers(packages)
         self._init_insert_stmts(packages)
         self._print_headers()
-        self._print_get_entity_lookup_func()
+        self._print_capabilities_lookup_func()
 
     def _init_headers(self, packages):
         unique_headers = set()
         self._add_common_headers(unique_headers)
-        for package in packages:
-            if len(package.owned_elements) > 0:
-                self._add_package_headers(unique_headers, package)
         self.headers = list(sorted(unique_headers))
 
     def _add_common_headers(self, unique_headers):
-        unique_headers.add('#include "ydk/path_api.hpp"')
-        unique_headers.add('#include "ydk/types.hpp"')
-        unique_headers.add('#include "ydk/entity_lookup.hpp"')
-
-    def _add_package_headers(self, unique_headers, package):
-        self._add_import_statement(unique_headers, package)
-        for imported_type in package.imported_types():
-            self._add_import_statement(unique_headers, imported_type)
-
-    def _add_import_statement(self, unique_headers, named_element):
-        header_name = named_element.get_cpp_header_name()
-        unique_headers.add('#include "%s"' % header_name)
+        unique_headers.add('#include <ydk/entity_lookup.hpp>')
+        unique_headers.add('#include <ydk/path_api.hpp>')
 
     def _init_insert_stmts(self, packages):
-        entity_lookup = {}
         capability_lookup = set()
         for package in packages:
-            top_level_entities = self._get_top_level_entities(package)
-            self._add_top_level_entities(top_level_entities, entity_lookup)
             mod_rev_tuple = self._get_module_revision(package)
             capability_lookup.add(mod_rev_tuple)
-        self.entity_lookup = entity_lookup
         self.capability_lookup = capability_lookup
 
     def _get_module_revision(self, package):
@@ -81,32 +64,16 @@ class EntityLookUpPrinter(FilePrinter):
 
         return (module_name, revision)
 
-    def _get_top_level_entities(self, package):
-        return [entity
-                for entity in package.owned_elements
-                if hasattr(entity, 'stmt') and
-                entity.stmt.keyword in ('container', 'list')]
-
-    def _add_top_level_entities(self, top_level_entities, entity_lookup):
-        for top_entity in top_level_entities:
-            path = '/%s:%s' % (top_entity.module.arg, top_entity.stmt.arg)
-            entity_lookup[path] = top_entity.fully_qualified_cpp_name()
-
-            ns_stmt = top_entity.module.search_one('namespace')
-            if ns_stmt:
-                ns = '%s:%s' % (ns_stmt.arg, top_entity.stmt.arg)
-                entity_lookup[ns] = top_entity.fully_qualified_cpp_name()
-
     def _print_headers(self):
         for header in self.headers:
             self.ctx.writeln(header)
 
-    def _print_get_entity_lookup_func(self):
-        self._print_get_entity_lookup_func_header()
-        self._print_get_entity_lookup_func_body()
-        self._print_get_entity_lookup_func_trailer()
+    def _print_capabilities_lookup_func(self):
+        self._print_capabilities_lookup_func_header()
+        self._print_capabilities_lookup_func_body()
+        self._print_capabilities_lookup_func_trailer()
 
-    def _print_get_entity_lookup_func_header(self):
+    def _print_capabilities_lookup_func_header(self):
         self.ctx.bline()
         self.ctx.writeln('namespace ydk')
         self.ctx.writeln('{')
@@ -117,21 +84,11 @@ class EntityLookUpPrinter(FilePrinter):
         self.ctx.bline()
         self.ctx.lvl_inc()
 
-    def _print_get_entity_lookup_func_body(self):
-        for path in self.entity_lookup:
-            self._print_insert_statement(path)
-
+    def _print_capabilities_lookup_func_body(self):
         self.ctx.bline()
-        self.ctx.bline()
-
         for (module_name, revision) in self.capability_lookup:
             self._print_push_back_statement(module_name, revision)
-
-    def _print_insert_statement(self, path):
-        qualified_name = self.entity_lookup[path]
-        self.ctx.writeln("ydk_top_entities_table.insert(std::string{\"%s\"},"
-                         "std::make_unique<%s>());"
-                         % (path, qualified_name))
+        self.ctx.bline()
 
     def _print_push_back_statement(self, module_name, revision):
         self.ctx.writeln("ydk_global_capabilities.push_back("
@@ -139,6 +96,6 @@ class EntityLookUpPrinter(FilePrinter):
                          "\"%s\", {}, {}});"
                          % (module_name, revision))
 
-    def _print_get_entity_lookup_func_trailer(self):
+    def _print_capabilities_lookup_func_trailer(self):
         self.ctx.lvl_dec()
         self.ctx.writelns(['}\n'] * 2)

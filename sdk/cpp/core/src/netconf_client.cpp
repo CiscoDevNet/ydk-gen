@@ -28,10 +28,10 @@
 
 #include <libnetconf.h>
 #include <libnetconf_ssh.h>
-#include <boost/log/trivial.hpp>
 
-
+#include "logger.hpp"
 #include "netconf_client.hpp"
+#include "types.hpp"
 
 using namespace std;
 using namespace ydk;
@@ -111,34 +111,34 @@ nc_rpc* NetconfClient::build_rpc_request(const string & payload)
 {
     nc_rpc* rpc = nc_rpc_build(payload.c_str(), session);
 
-    if (rpc == NULL)
-    {
-          BOOST_LOG_TRIVIAL(error) << "Could not build rpc payload:-" << payload ;
-          BOOST_THROW_EXCEPTION(YCPPClientError{"Could not build payload"});
-    }
-    else if(NC_RPC_UNKNOWN==nc_rpc_get_type(rpc))
-    {
-        nc_rpc_free(rpc);
-        BOOST_LOG_TRIVIAL(error)<< "Rpc type is unknown";
-        BOOST_THROW_EXCEPTION(YCPPClientError{"Could not build payload"});
-    }
-    return rpc;
+	if (rpc == NULL)
+	{
+          YLOG_ERROR("Could not build rpc payload: {}", payload );
+	      throw(YCPPClientError{"Could not build payload"});
+	}
+	else if(NC_RPC_UNKNOWN==nc_rpc_get_type(rpc))
+	{
+		nc_rpc_free(rpc);
+        YLOG_ERROR("Rpc type is unknown");
+		throw(YCPPClientError{"Could not build payload"});
+	}
+	return rpc;
 }
 
 string NetconfClient::process_rpc_reply(int reply_type, const nc_reply* reply)
 {
-    switch (reply_type)
-    {
-        case NC_MSG_REPLY:
-            return nc_reply_dump(reply);
+	switch (reply_type)
+	{
+		case NC_MSG_REPLY:
+			return nc_reply_dump(reply);
 
-        default:
-        case NC_MSG_NONE:
-        case NC_MSG_UNKNOWN:
-            BOOST_LOG_TRIVIAL(error) << "RPC error occurred";
-            BOOST_THROW_EXCEPTION(YCPPClientError{"RPC error occured"});
-    }
-    return {};
+		default:
+		case NC_MSG_NONE:
+		case NC_MSG_UNKNOWN:
+            YLOG_ERROR("RPC error occurred");
+			throw(YCPPClientError{"RPC error occured"});
+	}
+	return {};
 }
 
 StringVec NetconfClient::get_capabilities()
@@ -148,21 +148,21 @@ StringVec NetconfClient::get_capabilities()
 
 void NetconfClient::clb_print(NC_VERB_LEVEL level, const char* msg)
 {
-    switch (level)
-    {
-    case NC_VERB_ERROR:
-         BOOST_LOG_TRIVIAL(error) << "libnetconf ERROR: " << msg;
-        break;
-    case NC_VERB_WARNING:
-         BOOST_LOG_TRIVIAL(warning) << "libnetconf WARNING: " << msg;
-        break;
-    case NC_VERB_VERBOSE:
-         BOOST_LOG_TRIVIAL(trace) << "libnetconf VERBOSE: " << msg;
-        break;
-    case NC_VERB_DEBUG:
-        BOOST_LOG_TRIVIAL(debug) << "libnetconf DEBUG: " << msg;
-        break;
-    }
+	switch (level)
+	{
+	case NC_VERB_ERROR:
+         YLOG_ERROR("libnetconf ERROR: {}", msg);
+		break;
+	case NC_VERB_WARNING:
+		YLOG_WARN("libnetconf WARNING: {}", msg);
+		break;
+	case NC_VERB_VERBOSE:
+		YLOG_TRACE("libnetconf VERBOSE: {}", msg);
+		break;
+	case NC_VERB_DEBUG:
+		YLOG_DEBUG("libnetconf DEBUG: {}", msg);
+		break;
+	}
 }
 
 char* NetconfClient::clb_set_password(const char* user_name,
@@ -185,11 +185,11 @@ int NetconfClient::clb_ssh_host_authenticity_check(const char *hostname,
 
 void NetconfClient::perform_session_check(string message)
 {
-    if (session == NULL)
-    {
-        BOOST_LOG_TRIVIAL(error) << message;
-        BOOST_THROW_EXCEPTION(YCPPClientError{message});
-    }
+	if (session == NULL)
+	{
+        YLOG_ERROR(message.c_str());
+		throw(YCPPClientError{message});
+	}
 }
 
 

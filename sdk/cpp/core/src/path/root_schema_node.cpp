@@ -23,12 +23,13 @@
 
 
 #include "path_private.hpp"
-#include <boost/log/trivial.hpp>
+#include "../logger.hpp"
 
 
 //////////////////////////////////////////////////////////////////////////////
 /// RootSchemaNode
 /////////////////////////////////////////////////////////////////////////////
+
 ydk::path::RootSchemaNode::~RootSchemaNode()
 {
 
@@ -101,14 +102,14 @@ std::vector<ydk::path::SchemaNode*>
 ydk::path::RootSchemaNodeImpl::find(const std::string& path) const
 {
     if(path.empty()) {
-        BOOST_LOG_TRIVIAL(error) << "path is empty";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"path is empty"});
+        YLOG_ERROR("path is empty");
+        throw(YCPPInvalidArgumentError{"path is empty"});
     }
 
     //has to be a relative path
     if(path.at(0) == '/') {
-        BOOST_LOG_TRIVIAL(error) << "path must be a relative path";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"path must be a relative path"});
+        YLOG_ERROR("path must be a relative path");
+        throw(YCPPInvalidArgumentError{"path must be a relative path"});
     }
 
     std::vector<SchemaNode*> ret;
@@ -153,7 +154,7 @@ ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
 {
     auto c = find(path);
     if(c.empty()){
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Path is invalid"});
+        throw(YCPPInvalidArgumentError{"Path is invalid"});
     }
 
     bool found = false;
@@ -169,13 +170,13 @@ ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
     }
 
     if(!found){
-        BOOST_LOG_TRIVIAL(error) << "Path " << path << " does not refer to an rpc node.";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Path does not refer to an rpc node"});
+        YLOG_ERROR("Path {} does not refer to an rpc node.", path);
+        throw(YCPPInvalidArgumentError{"Path does not refer to an rpc node"});
     }
     SchemaNodeImpl* sn = dynamic_cast<SchemaNodeImpl*>(rpc_sn);
     if(!sn){
-        BOOST_LOG_TRIVIAL(error) << "Schema Node case failed";
-        BOOST_THROW_EXCEPTION(YCPPIllegalStateError("Internal error occurred"));
+        YLOG_ERROR("Schema Node case failed");
+        throw(YCPPIllegalStateError("Internal error occurred"));
     }
 
     return std::make_unique<RpcImpl>(*sn, m_ctx);

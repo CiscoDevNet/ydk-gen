@@ -21,14 +21,13 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#define BOOST_TEST_MODULE CoreTest
-#include <boost/test/unit_test.hpp>
 #include <iostream>
 #include "../src/path_api.hpp"
 #include "../src/path/path_private.hpp"
 #include "config.hpp"
+#include "catch.hpp"
 
-BOOST_AUTO_TEST_CASE( test_segmentalize  )
+TEST_CASE( "test_segmentalize"  )
 {
 	std::string test_string = "Cisco-IOS-XR-clns-isis-cfg:isis/instances/instance/interfaces[interface-name='GigabitEthernet0/0/0/0']";
 	std::vector<std::string> segments = ydk::path::segmentalize(test_string);
@@ -36,6 +35,6 @@ BOOST_AUTO_TEST_CASE( test_segmentalize  )
 
 	for (size_t index = 0;index<segments.size();index++)
 	{
-		BOOST_REQUIRE(segments[index] == expected[index]);
+		REQUIRE(segments[index] == expected[index]);
 	}
 }

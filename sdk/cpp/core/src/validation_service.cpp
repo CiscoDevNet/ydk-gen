@@ -26,7 +26,7 @@
 #include "service.hpp"
 #include "validation_service.hpp"
 #include <map>
-#include <boost/log/trivial.hpp>
+#include "logger.hpp"
 
 using namespace std;
 

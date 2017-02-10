@@ -224,7 +224,7 @@ EntityPath GetConfigRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -455,7 +455,7 @@ EntityPath EditConfigRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -795,7 +795,7 @@ EntityPath CopyConfigRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1013,7 +1013,7 @@ EntityPath DeleteConfigRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1211,7 +1211,7 @@ EntityPath LockRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1409,7 +1409,7 @@ EntityPath UnlockRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1587,7 +1587,7 @@ EntityPath GetRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1688,7 +1688,7 @@ EntityPath CloseSessionRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1764,7 +1764,7 @@ EntityPath KillSessionRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1854,7 +1854,7 @@ EntityPath CommitRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1947,7 +1947,7 @@ EntityPath DiscardChangesRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -2023,7 +2023,7 @@ EntityPath CancelCommitRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -2211,7 +2211,7 @@ EntityPath ValidateRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();

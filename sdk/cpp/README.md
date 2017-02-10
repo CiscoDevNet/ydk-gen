@@ -34,14 +34,14 @@ System Requirements
   Ubuntu (Debian-based) - The following packages must be present in your system before installing YDK-Cpp
  
 ```
-    $ sudo apt-get install libboost-all-dev libcurl4-openssl-dev libpcre3-dev libssh-dev libxml2-dev libxslt1-dev libtool-bin cmake
+    $ sudo apt-get install libcurl4-openssl-dev libpcre3-dev libssh-dev libxml2-dev libxslt1-dev libtool-bin cmake
 ```
 
   Centos (Fedora-based) - The following packages must be present in your system before installing YDK-Cpp
 
 ```
     $ sudo yum install epel-release
-    $ sudo yum install libxml2-devel libxslt-devel libssh-devel boost-devel libtool gcc-c++ pcre-devel cmake
+    $ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake
 ```
 
 **Mac**
@@ -50,7 +50,7 @@ System Requirements
   
 ```
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install boost curl libssh pcre xml2 cmake
+    $ brew install curl libssh pcre xml2 cmake
     $ xcode-select --install
 ```
 
@@ -105,9 +105,8 @@ In this example, we set some BGP configuration using the OpenConfig model, the C
 In our example YDK application, first, let us include the necessary header files
 ```c++
  #include <iostream>
- #include <boost/log/trivial.hpp>
- #include <boost/log/expressions.hpp>
- 
+ #include <spdlog/spdlog.h>
+  
  #include "ydk/crud_service.hpp"
  #include "ydk/netconf_provider.hpp"
  
@@ -167,27 +166,19 @@ Finally, we invoke the create method of the `CRUDService` class passing in the s
  }
  catch(YDKException & e)
  {
-   cerr << "Error details: " << boost::diagnostic_information(e) << endl;
+   cerr << "Error details: " << e.what() << endl;
  }
 ```
 Note if there were any errors the above API will raise an exception with the base type `YDKException`
 
 Logging
 -------
-YDK uses the `boost::log` logging library. The logging verbosity can be set using the `set_filter` method
+YDK uses the `spdlog` logging library. The logging can be enabled as follows by creating a logger called "ydk". For other options like logging the "ydk" log to a file, see the [spdlog reference](https://github.com/gabime/spdlog#usage-example).
 
 ```c++
  if(verbose)
  {
-   boost::log::core::get()->set_filter(
-                                      boost::log::trivial::severity >= boost::log::trivial::debug
-                                      );
- }
- else
- {
-   boost::log::core::get()->set_filter(
-                                      boost::log::trivial::severity >= boost::log::trivial::debug
-                                      );
+   auto console = spdlog::stdout_color_mt("ydk");
  }
 ```
 

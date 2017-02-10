@@ -29,8 +29,7 @@ function print_msg {
 function install_dependencies {
     print_msg "install_dependencies"
 
-    brew install boost \
-                 curl \
+    brew install curl \
                  doxygen \
                  libssh \
                  pcre \

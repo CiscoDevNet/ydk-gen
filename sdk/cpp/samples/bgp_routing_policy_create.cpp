@@ -14,8 +14,6 @@
  limitations under the License.
 ------------------------------------------------------------------*/
 #include <iostream>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 
 #include "ydk/netconf_provider.hpp"
 #include "ydk/crud_service.hpp"
@@ -76,10 +74,6 @@ void config_routing_policy(openconfig_routing_policy::RoutingPolicy* routing_pol
 
 int main(int argc, char* argv[])
 {
-	boost::log::core::get()->set_filter(
-		        boost::log::trivial::severity >= boost::log::trivial::debug
-		    );
-
 	vector<string> args = parse_args(argc, argv);
 	if(args.empty()) return 1;
 	string host, username, password;

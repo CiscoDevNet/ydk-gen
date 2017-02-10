@@ -14,15 +14,15 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#define BOOST_TEST_MODULE CrudTest
-#include <boost/test/unit_test.hpp>
-
 #include <string.h>
 #include <iostream>
 
-#include "../core/src/netconf_provider.hpp"
-#include "../core/src/crud_service.hpp"
-#include "ydk_ydktest/openconfig_bgp.hpp"
+#include "netconf_provider.hpp"
+#include "crud_service.hpp"
+#include "catch.hpp"
+
+#include <ydk_ydktest/openconfig_bgp.hpp>
+
 #include "config.hpp"
 
 using namespace ydk;
@@ -65,106 +65,106 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
 	bgp->peer_groups->peer_group.push_back(move(peer_group));
 }
 
-BOOST_AUTO_TEST_CASE(bgp_create_delete)
+TEST_CASE("bgp_create_delete")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp = make_unique<openconfig_bgp::Bgp>();
 	bool reply = crud.delete_(provider, *bgp);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	config_bgp(bgp.get());
 	reply = crud.create(provider, *bgp);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(bgp_read_delete)
+TEST_CASE("bgp_read_delete")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp_set = make_unique<openconfig_bgp::Bgp>();
 	bool reply = crud.delete_(provider, *bgp_set);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	config_bgp(bgp_set.get());
 	reply = crud.create(provider, *bgp_set);
 
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
 	auto bgp_read = crud.read(provider, *bgp_filter);
-	BOOST_REQUIRE(bgp_read!=nullptr);
+	REQUIRE(bgp_read!=nullptr);
 	openconfig_bgp::Bgp * bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
-	BOOST_REQUIRE(bgp_read_ptr!=nullptr);
+	REQUIRE(bgp_read_ptr!=nullptr);
 
-	BOOST_CHECK_EQUAL(bgp_set->global->config->as, bgp_read_ptr->global->config->as);
-	BOOST_CHECK_EQUAL(bgp_set->neighbors->neighbor[0]->neighbor_address, bgp_read_ptr->neighbors->neighbor[0]->neighbor_address);
-	BOOST_CHECK_EQUAL(bgp_set->neighbors->neighbor[0]->config->local_as, bgp_read_ptr->neighbors->neighbor[0]->config->local_as);
-	BOOST_CHECK_EQUAL(bgp_set->global->afi_safis->afi_safi[0]->afi_safi_name, bgp_read_ptr->global->afi_safis->afi_safi[0]->afi_safi_name);
-	BOOST_CHECK_EQUAL(bgp_set->global->afi_safis->afi_safi[0]->config->afi_safi_name, bgp_read_ptr->global->afi_safis->afi_safi[0]->config->afi_safi_name);
+	CHECK(bgp_set->global->config->as == bgp_read_ptr->global->config->as);
+	CHECK(bgp_set->neighbors->neighbor[0]->neighbor_address == bgp_read_ptr->neighbors->neighbor[0]->neighbor_address);
+	CHECK(bgp_set->neighbors->neighbor[0]->config->local_as == bgp_read_ptr->neighbors->neighbor[0]->config->local_as);
+	CHECK(bgp_set->global->afi_safis->afi_safi[0]->afi_safi_name == bgp_read_ptr->global->afi_safis->afi_safi[0]->afi_safi_name);
+	CHECK(bgp_set->global->afi_safis->afi_safi[0]->config->afi_safi_name == bgp_read_ptr->global->afi_safis->afi_safi[0]->config->afi_safi_name);
 
 	reply = reply && (bgp_set->global->afi_safis->afi_safi[0]->config->enabled  == bgp_read_ptr->global->afi_safis->afi_safi[0]->config->enabled);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(bgp_update_delete)
+TEST_CASE("bgp_update_delete")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp = make_unique<openconfig_bgp::Bgp>();
 	bool reply = crud.delete_(provider, *bgp);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	config_bgp(bgp.get());
 	reply = crud.create(provider, *bgp);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	auto bgp_update = make_unique<openconfig_bgp::Bgp>();
 	bgp_update->global->config->as = 65210;
 	reply = crud.update(provider, *bgp_update);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(bgp_set_leaf)
+TEST_CASE("bgp_set_leaf")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp = make_unique<openconfig_bgp::Bgp>();
 	bool reply = crud.delete_(provider, *bgp);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	bgp->global->config->as = 65210;
 	reply = crud.update(provider, *bgp);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(bgp_read_create)
+TEST_CASE("bgp_read_create")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 	CrudService crud{};
 	auto bgp_set = make_unique<openconfig_bgp::Bgp>();
 	bool reply = crud.delete_(provider, *bgp_set);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	bgp_set->global->config->as = 65001;
 	bgp_set->global->config->router_id = "1.2.3.4";
 	reply = crud.create(provider, *bgp_set);
 
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
 	auto bgp_read = crud.read_config(provider, *bgp_filter);
-	BOOST_REQUIRE(bgp_read!=nullptr);
+	REQUIRE(bgp_read!=nullptr);
 	openconfig_bgp::Bgp * bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
-	BOOST_REQUIRE(bgp_read_ptr!=nullptr);
+	REQUIRE(bgp_read_ptr!=nullptr);
 
 	bgp_read_ptr->global->config->as = 65210;
 	bgp_read_ptr->global->config->router_id = "6.7.8.9";
 	reply = crud.update(provider, *bgp_read_ptr);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 }

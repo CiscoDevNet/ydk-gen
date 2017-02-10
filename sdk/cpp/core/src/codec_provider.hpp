@@ -39,7 +39,6 @@ public:
 	~CodecServiceProvider();
 
 	path::RootSchemaNode& get_root_schema();
-	std::unique_ptr<Entity> get_top_entity(std::string & payload);
 
 public:
 	EncodingFormat m_encoding;

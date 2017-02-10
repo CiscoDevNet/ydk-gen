@@ -2,7 +2,7 @@ Source: ydk-cisco-ios-xr
 Maintainer: Yang Development Kit (YDK) <ydk-admin@cisco.com>
 Section: misc
 Priority: optional
-Build-Depends: debhelper (>=9), libboost-all-dev, libcurl4-openssl-dev, libpcre3-dev, libssh-dev, libxml2-dev, libxslt1-dev, libtool-bin, cmake (>=3), git, pkg-config, ydk, ydk-ietf
+Build-Depends: debhelper (>=9), libcurl4-openssl-dev, libpcre3-dev, libssh-dev, libxml2-dev, libxslt1-dev, libtool-bin, cmake (>=3), git, pkg-config, ydk, ydk-ietf
 Standards-Version: 3.9.6
 Homepage: https://github.com/CiscoDevNet/ydk-cpp
 #Vcs-Git: git://anonscm.debian.org/collab-maint/ydk.git

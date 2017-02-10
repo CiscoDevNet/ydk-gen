@@ -21,13 +21,14 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include <boost/log/trivial.hpp>
 #include <iostream>
+#include <sstream>
 
+#include "entity_data_node_walker.hpp"
 #include "errors.hpp"
+#include "logger.hpp"
 #include "netconf_service.hpp"
 #include "path_api.hpp"
-#include "entity_data_node_walker.hpp"
 
 using namespace std;
 
@@ -50,7 +51,7 @@ NetconfService::~NetconfService()
 //cancel_commit
 bool NetconfService::cancel_commit(NetconfServiceProvider & provider, int persist_id)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing cancel-commit RPC";
+	YLOG_DEBUG("Executing cancel-commit RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:cancel-commit");
@@ -67,7 +68,7 @@ bool NetconfService::cancel_commit(NetconfServiceProvider & provider, int persis
 //close_session
 bool NetconfService::close_session(NetconfServiceProvider & provider)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing close-session RPC";
+	YLOG_DEBUG("Executing close-session RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:close-session");
@@ -80,7 +81,7 @@ bool NetconfService::close_session(NetconfServiceProvider & provider)
 bool NetconfService::commit(NetconfServiceProvider & provider, bool confirmed,
     int confirm_timeout, int persist, int persist_id)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing commit RPC";
+	YLOG_DEBUG("Executing commit RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:commit");
@@ -112,7 +113,7 @@ bool NetconfService::commit(NetconfServiceProvider & provider, bool confirmed,
 //copy_config
 bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore target, DataStore source, string url)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing copy-config RPC";
+	YLOG_DEBUG("Executing copy-config RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:copy-config");
@@ -127,7 +128,7 @@ bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore ta
 
 bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore target, Entity& source)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing copy-config RPC";
+	YLOG_DEBUG("Executing copy-config RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:copy-config");
@@ -146,7 +147,7 @@ bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore ta
 //delete_config
 bool NetconfService::delete_config(NetconfServiceProvider & provider, DataStore target, std::string url)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing delete-config RPC";
+	YLOG_DEBUG("Executing delete-config RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:delete-config");
@@ -161,7 +162,7 @@ bool NetconfService::delete_config(NetconfServiceProvider & provider, DataStore 
 //discard_changes
 bool NetconfService::discard_changes(NetconfServiceProvider & provider)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing discard-changes RPC";
+	YLOG_DEBUG("Executing discard-changes RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:discard-changes");
@@ -174,7 +175,7 @@ bool NetconfService::discard_changes(NetconfServiceProvider & provider)
 bool NetconfService::edit_config(NetconfServiceProvider & provider, DataStore target,
     Entity& config, std::string default_operation, std::string test_option, std::string error_option)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing edit-config RPC";
+	YLOG_DEBUG("Executing edit-config RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:edit-config");
@@ -208,7 +209,7 @@ bool NetconfService::edit_config(NetconfServiceProvider & provider, DataStore ta
 //get_config
 unique_ptr<Entity> NetconfService::get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing get-config RPC";
+	YLOG_DEBUG("Executing get-config RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:get-config");
@@ -233,7 +234,7 @@ unique_ptr<Entity> NetconfService::get_config(NetconfServiceProvider & provider,
 //get
 unique_ptr<Entity> NetconfService::get(NetconfServiceProvider & provider, Entity& filter)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing get RPC";
+	YLOG_DEBUG("Executing get RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:get");
@@ -253,7 +254,7 @@ unique_ptr<Entity> NetconfService::get(NetconfServiceProvider & provider, Entity
 //kill_session
 bool NetconfService::kill_session(NetconfServiceProvider & provider, int session_id)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing kill-session RPC";
+	YLOG_DEBUG("Executing kill-session RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:kill-session");
@@ -268,7 +269,7 @@ bool NetconfService::kill_session(NetconfServiceProvider & provider, int session
 //lock
 bool NetconfService::lock(NetconfServiceProvider & provider, DataStore target)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing lock RPC";
+	YLOG_DEBUG("Executing lock RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:lock");
@@ -283,7 +284,7 @@ bool NetconfService::lock(NetconfServiceProvider & provider, DataStore target)
 //unlock
 bool NetconfService::unlock(NetconfServiceProvider & provider, DataStore target)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing unlock RPC";
+	YLOG_DEBUG("Executing unlock RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:unlock");
@@ -298,7 +299,7 @@ bool NetconfService::unlock(NetconfServiceProvider & provider, DataStore target)
 //validate
 bool NetconfService::validate(NetconfServiceProvider & provider, DataStore source, string url)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing validate RPC";
+	YLOG_DEBUG("Executing validate RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:validate");
@@ -312,7 +313,7 @@ bool NetconfService::validate(NetconfServiceProvider & provider, DataStore sourc
 
 bool NetconfService::validate(NetconfServiceProvider & provider, Entity& source)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing validate RPC";
+	YLOG_DEBUG("Executing validate RPC");
 
     // Get the root schema node
     unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:validate");
@@ -327,10 +328,10 @@ bool NetconfService::validate(NetconfServiceProvider & provider, Entity& source)
 
 static unique_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider, string && operation)
 {
-    path::RootSchemaNode& root_schema = provider.get_root_schema();
-    auto rpc =  root_schema.rpc(operation);
-    if (rpc == nullptr)
-        BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Unable to create rpc"});
+	path::RootSchemaNode & root_schema = provider.get_root_schema();
+	auto rpc =  root_schema.rpc(operation);
+	if (rpc == nullptr)
+		throw(YCPPServiceProviderError{"Unable to create rpc"});
 
     return rpc;
 }
@@ -359,7 +360,7 @@ static void create_input_leaf(path::DataNode & input_datanode, DataStore datasto
     {
         if(url.size() == 0)
         {
-            BOOST_THROW_EXCEPTION(YCPPServiceError{"URL needs to be specified"});
+            throw(YCPPServiceError{"URL needs to be specified"});
         }
         os << "/url";
 
@@ -391,7 +392,7 @@ static void create_input_leaf(path::DataNode & input_datanode, DataStore datasto
             break;
 
         case DataStore::url:
-            BOOST_THROW_EXCEPTION(YCPPServiceError{"URL needs to be specified"});
+            throw(YCPPServiceError{"URL needs to be specified"});
             break;
     }
 

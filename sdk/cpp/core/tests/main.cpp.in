@@ -1,0 +1,6 @@
+ #include "config.hpp"
+
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+
+const char* TEST_HOME = "@CMAKE_SOURCE_DIR@/tests/models";

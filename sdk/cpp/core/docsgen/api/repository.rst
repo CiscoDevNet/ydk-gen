@@ -55,7 +55,7 @@ Behind the scenes the repository is responsible for loading and parsing the YANG
 
         :return: ``std::vector`` of model providers associated with this repository
 
-    .. cpp:member:: boost::filesystem::path path
+    .. cpp:member:: std::string path
 
         Location where YANG models are present and/or downloaded to
 

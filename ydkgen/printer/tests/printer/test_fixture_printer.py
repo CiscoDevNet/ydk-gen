@@ -26,7 +26,7 @@ from .printer import Printer
 class FixturePrinter(Printer):
     """Printer for test fixture:
         - Python: unittest
-        - C++ : boost/unittest
+        - C++ : catch
     """
 
     def __init__(self, ctx, lang,
@@ -48,14 +48,12 @@ class FixturePrinter(Printer):
         if self.lang == 'py':
             self._print_py_fixture(package)
         elif self.lang == 'cpp':
-            self._print_cpp_fixture()
+            self._print_cpp_fixture(package)
 
     def print_fixture_tail(self, package):
         """Print langauge specific test fixture."""
         if self.lang == 'py':
             self._print_py_main_block(package)
-        elif self.lang == 'cpp':
-            self._writeln('BOOST_AUTO_TEST_SUITE_END()')
 
     def _print_imports(self, package, imports):
         """Print import statements."""
@@ -79,12 +77,8 @@ class FixturePrinter(Printer):
 
     def _print_cpp_common_imports(self, package):
         """Print C++ common import statements."""
-        macro = package.name.title().replace('_', '')
-        self._writeln('#define BOOST_TEST_MODULE {}Test'.format(macro))
         self._writeln('')
-        self._writeln('#include <boost/log/trivial.hpp>')
-        self._writeln('#include <boost/test/unit_test.hpp>')
-        self._writeln('#include <boost/log/expressions.hpp>')
+        self._writeln('#include "catch.hpp"')
         self._writeln('')
         self._writeln('#include "ydk/crud_service.hpp"')
         self._writeln('#include "ydk/netconf_provider.hpp"')
@@ -141,13 +135,12 @@ class FixturePrinter(Printer):
         self._bline()
         self._lvl_dec()
 
-    def _print_cpp_fixture(self):
+    def _print_cpp_fixture(self, package):
         """Print C++ fixture."""
         self._print_cpp_connection_fixture()
         self._bline()
-        self._writeln('BOOST_FIXTURE_TEST_SUITE( s, ConnectionFixture )')
+        self._writeln('TEST_CASE( "{}_empty_test_place_holder" ) {{}}'.format(package.name))
         self._bline()
-        self._writeln('BOOST_AUTO_TEST_CASE( empty_test_place_holder ) {}')
 
     def _print_cpp_connection_fixture(self):
         """Print C++ connection fixture."""
@@ -158,9 +151,6 @@ class FixturePrinter(Printer):
         self._writeln('{')
         self._lvl_inc()
         self._bline()
-        self._writeln("boost::log::core::get()->set_filter("
-                      "boost::log::trivial::severity == "
-                      "boost::log::trivial::error);")
         self._writeln('m_crud = CrudService{};')
         self._writeln("m_provider = "
                       "std::make_unique<NetconfServiceProvider>"

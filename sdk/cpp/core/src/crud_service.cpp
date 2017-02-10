@@ -21,7 +21,7 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include <boost/log/trivial.hpp>
+#include "logger.hpp"
 
 #include "crud_service.hpp"
 #include "types.hpp"
@@ -31,6 +31,7 @@
 using namespace std;
 
 namespace ydk {
+
 static string get_data_payload(Entity & entity, path::ServiceProvider & provider);
 static std::unique_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, Entity & entity,
 		const string & operation, const string & data_tag, bool set_config_flag);
@@ -43,7 +44,7 @@ CrudService::CrudService()
 
 bool CrudService::create(path::ServiceProvider & provider, Entity & entity)
 {
-	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD create operation";
+	YLOG_DEBUG("Executing CRUD create operation");
 	return operation_succeeded(
 			execute_rpc(provider, entity, "ydk:create", "entity", false)
 			);
@@ -51,7 +52,7 @@ bool CrudService::create(path::ServiceProvider & provider, Entity & entity)
 
 bool CrudService::update(path::ServiceProvider & provider, Entity & entity)
 {
-	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD update operation";
+	YLOG_DEBUG("Executing CRUD update operation");
 	return operation_succeeded(
 			execute_rpc(provider, entity, "ydk:update", "entity", false)
 			);
@@ -59,7 +60,7 @@ bool CrudService::update(path::ServiceProvider & provider, Entity & entity)
 
 bool CrudService::delete_(path::ServiceProvider & provider, Entity & entity)
 {
-	BOOST_LOG_TRIVIAL(debug) << "Executing CRUD delete operation";
+	YLOG_DEBUG("Executing CRUD delete operation");
 	return operation_succeeded(
 			execute_rpc(provider, entity, "ydk:delete", "entity", false)
 			);
@@ -67,17 +68,14 @@ bool CrudService::delete_(path::ServiceProvider & provider, Entity & entity)
 
 unique_ptr<Entity> CrudService::read(path::ServiceProvider & provider, Entity & filter)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing CRUD read operation";
-    auto read_data_node = execute_rpc(provider, filter, "ydk:read", "filter", true);
-    return read_datanode(filter, std::move(read_data_node));
+	YLOG_DEBUG("Executing CRUD read operation");
+	return read_datanode(filter, execute_rpc(provider, filter, "ydk:read", "filter", false));
 }
 
 unique_ptr<Entity> CrudService::read_config(path::ServiceProvider & provider, Entity & filter)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Executing CRUD config read operation";
-    auto read_data_node = execute_rpc(provider, filter, "ydk:read", "filter", true);
-    return read_datanode(filter, std::move(read_data_node))
-    ;
+	YLOG_DEBUG("Executing CRUD config read operation");
+	return read_datanode(filter, execute_rpc(provider, filter, "ydk:read", "filter", true));
 }
 
 unique_ptr<Entity> CrudService::read_datanode(Entity & filter, unique_ptr<path::DataNode> read_data_node)
@@ -91,8 +89,8 @@ unique_ptr<Entity> CrudService::read_datanode(Entity & filter, unique_ptr<path::
 
 static bool operation_succeeded(unique_ptr<path::DataNode> node)
 {
-    BOOST_LOG_TRIVIAL(debug) << "Operation " << ((node == nullptr)?"succeeded":"failed");
-    return node == nullptr;
+	YLOG_DEBUG("Operation {}", ((node == nullptr)?"succeeded":"failed"));
+	return node == nullptr;
 }
 
 static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)

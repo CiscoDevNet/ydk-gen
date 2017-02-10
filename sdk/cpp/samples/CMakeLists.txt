@@ -23,7 +23,7 @@ set(samples bgp_create
 # set default build type if not specified by user
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG   "-g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG   "-g -O0 -fprofile-arcs -ftest-coverage")
 
 # Find dependent libraries
 find_library(ydk_location ydk)
@@ -37,12 +37,8 @@ find_library(pcre_location pcre)
 find_library(xslt_location xslt)
 find_library(pthread_location pthread)
 find_library(dl_location dl)
-find_package(Boost REQUIRED)
-find_package(Boost COMPONENTS log_setup log thread date_time system filesystem unit_test_framework REQUIRED)
 
-set(BOOST_INCLUDE_DIRS $boost_installation_prefix/include)
-
-include_directories(SYSTEM ${BOOST_INCLUDE_DIR})
+include_directories(SYSTEM)
 
 # set default build type if not specified by user
 if(NOT CMAKE_BUILD_TYPE)
@@ -51,7 +47,6 @@ endif()
 
 foreach(sample IN LISTS samples)
     add_executable(${sample} ${sample}.cpp args_parser.cpp)
-    target_compile_definitions(${sample} PRIVATE "BOOST_LOG_DYN_LINK=1")
 
     target_link_libraries(${sample}
             ${ydk_location} 
@@ -65,13 +60,6 @@ foreach(sample IN LISTS samples)
             ${xslt_location}
             ${pthread_location}
             ${dl_location}
-            ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-            ${Boost_LOG_SETUP_LIBRARY}
-            ${Boost_LOG_LIBRARY}
-            ${BOOST_THREAD_LIBRARY}
-            ${BOOST_DATE_TIME_LIBRARY}
-            ${Boost_FILESYSTEM_LIBRARY}
-            ${Boost_SYSTEM_LIBRARY}
             -rdynamic
             )
 

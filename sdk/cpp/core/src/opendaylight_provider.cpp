@@ -13,8 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 ------------------------------------------------------------------*/
-#include <boost/log/trivial.hpp>
-
+#include "logger.hpp"
 #include "netconf_provider.hpp"
 #include "opendaylight_parser.hpp"
 #include "opendaylight_provider.hpp"
@@ -22,21 +21,24 @@
 #include "restconf_client.hpp"
 #include "restconf_provider.hpp"
 
+
 using namespace std;
 
 namespace ydk
 {
+#define ODLNode network_topology::NetworkTopology::Topology::Node
+
 static string get_encoding_string(EncodingFormat encoding);
 
 OpenDaylightServiceProvider::OpenDaylightServiceProvider(path::Repository & repo, const string & address,
 		   const string & username, const string & password, int port, EncodingFormat encoding, Protocol protocol)
-	: m_repo{repo},
-	  address(address), username(username), password(password), port(port), encoding(encoding)
+	: m_repo{repo}, address(address), username(username), password(password),
+	  port(port), encoding(encoding)
 {
 	if(protocol != Protocol::restconf)
 	{
-		BOOST_LOG_TRIVIAL(error) << "Netconf protocol currently not supported";
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Netconf protocol currently not supported"});
+		YLOG_ERROR("Netconf protocol currently not supported");
+		throw(YCPPServiceProviderError{"Netconf protocol currently not supported"});
 	}
 
 	RestconfClient client{address, username, password, port, get_encoding_string(encoding)};
@@ -58,10 +60,10 @@ unique_ptr<path::ServiceProvider> OpenDaylightServiceProvider::create_provider_f
 {
 	if(odl_nodes.find(node_id) == odl_nodes.end())
 	{
-		BOOST_LOG_TRIVIAL(error) << "Invalid node id " << node_id;
-		BOOST_THROW_EXCEPTION(YCPPServiceProviderError{"Invalid node id " + node_id});
+		YLOG_ERROR("Invalid node id {}", node_id);
+		throw(YCPPServiceProviderError{"Invalid node id " + node_id});
 	}
-	BOOST_LOG_TRIVIAL(trace) << "Creating and returning provider for "<<node_id;
+	YLOG_TRACE("Creating and returning provider for {}", node_id);
 	vector<string> node_capabilities{};
 	const auto & node = odl_nodes[node_id];
 
@@ -89,7 +91,7 @@ path::ServiceProvider & OpenDaylightServiceProvider::get_node_provider(const str
 {
 	if(providers.find(node_id) != providers.end())
 	{
-		BOOST_LOG_TRIVIAL(trace) << "Returning existing provider for "<<node_id;
+		YLOG_TRACE("Returning existing provider for {}", node_id);
 		return *(providers[node_id]);
 	}
 
@@ -109,5 +111,6 @@ static string get_encoding_string(EncodingFormat encoding)
 		("application/yang.data+json");
 }
 
+#undef ODLNode
 }
 

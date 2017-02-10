@@ -28,7 +28,6 @@
 #ifndef _EXCEPTION_HPP_
 #define _EXCEPTION_HPP_
 
-#include <boost/exception/all.hpp>
 #include <exception>
 #include <string>
 
@@ -39,7 +38,7 @@ namespace ydk {
 ///
 /// The subclasses give a specialized view of the error that has occurred.
 ///
-struct YCPPError : public std::exception, public boost::exception
+struct YCPPError : public std::exception
 {
     YCPPError(const std::string& msg);
 
@@ -50,27 +49,17 @@ struct YCPPError : public std::exception, public boost::exception
 
 struct YCPPClientError : public YCPPError
 {
-	YCPPClientError(const std::string& msg) : YCPPError{msg}, err_msg{msg}
-	{
-	}
-
-	std::string err_msg;
+	YCPPClientError(const std::string& msg);
 };
 
 struct YCPPServiceProviderError : public YCPPError
 {
-    YCPPServiceProviderError(const std::string& msg) : YCPPError{msg}
-    {
-
-    }
+    YCPPServiceProviderError(const std::string& msg);
 };
 
 struct YCPPServiceError : public YCPPError
 {
-    YCPPServiceError(const std::string& msg) : YCPPError{msg}
-    {
-
-    }
+    YCPPServiceError(const std::string& msg);
 };
 
 ///
@@ -114,6 +103,9 @@ struct YCPPModelError : public YCPPError
 {
     YCPPModelError(const std::string& msg);
 };
+
+std::ostream & operator<<(std::ostream& o, const ydk::YCPPError& e);
+std::ostream & operator<<(std::ostream& o, ydk::YCPPError& e);
 }
 
 #endif /* _EXCEPTION_HPP_ */

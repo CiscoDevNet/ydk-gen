@@ -23,7 +23,7 @@
 
 
 #include "path_private.hpp"
-#include <boost/log/trivial.hpp>
+#include "../logger.hpp"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,32 +55,32 @@ ydk::path::RootDataImpl::create(const std::string& path, const std::string& valu
 {
     if(path.empty())
     {
-        BOOST_LOG_TRIVIAL(error) << "Path is empty";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Path is empty"});
+        YLOG_ERROR("Path is empty");
+        throw(YCPPInvalidArgumentError{"Path is empty"});
     }
 
     //path should not start with /
     if(path.at(0) == '/')
     {
-        BOOST_LOG_TRIVIAL(error) << "Path " << path << " starts with /";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Path starts with /"});
+        YLOG_ERROR("Path {} starts with /", path);
+        throw(YCPPInvalidArgumentError{"Path starts with /"});
     }
     std::vector<std::string> segments = segmentalize(path);
     if(segments.size()<=0)
     {
-        BOOST_LOG_TRIVIAL(error) << "Could not segmentalize";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Could not segmentalize"});
+		YLOG_ERROR("Could not segmentalize");
+		throw(YCPPInvalidArgumentError{"Could not segmentalize"});
     }
 
     std::string start_seg = m_path + segments[0];
-    BOOST_LOG_TRIVIAL(trace) << "Creating root data node with path '"<<start_seg<<"'";
+    YLOG_TRACE("Creating root data node with path '{}'", start_seg);
     struct lyd_node* dnode = lyd_new_path(m_node, m_ctx, start_seg.c_str(),
                                           segments.size() == 1 ? (void*)value.c_str():nullptr, LYD_ANYDATA_SXML, 0);
 
     if( dnode == nullptr)
     {
-        BOOST_LOG_TRIVIAL(error) << "Path " << path << " is invalid";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Path is invalid."});
+        YLOG_ERROR("Path {} is invalid", path);
+        throw(YCPPInvalidArgumentError{"Path is invalid."});
     }
 
     DataNodeImpl* dn = nullptr;
@@ -139,8 +139,8 @@ void
 ydk::path::RootDataImpl::set(const std::string& value)
 {
     if(!value.empty()) {
-        BOOST_LOG_TRIVIAL(error) << "Invalid value being assigned to root";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Invalid value being assigned to root."});
+        YLOG_ERROR("Invalid value being assigned to root");
+        throw(YCPPInvalidArgumentError{"Invalid value being assigned to root."});
     }
 }
 
@@ -204,7 +204,7 @@ ydk::path::RootDataImpl::find(const std::string& path) const
 
     schema_path+=path;
 
-    BOOST_LOG_TRIVIAL(trace) << "Looking for schema nodes path in root: '"<<schema_path<<"'";
+    YLOG_TRACE("Looking for schema nodes path in root: '{}'", schema_path);
     const struct lys_node* found_snode = ly_ctx_get_node(m_node->schema->module->ctx, nullptr, schema_path.c_str());
 
     if(found_snode)

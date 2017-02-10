@@ -36,7 +36,7 @@ void get_relative_entity_path(const Entity* current_node, const Entity* ancestor
 {
     if(ancestor == nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor should not be null."});
+        throw(YCPPInvalidArgumentError{"ancestor should not be null."});
     }
     auto p = current_node->parent;
     std::vector<Entity*> parents {};
@@ -46,7 +46,7 @@ void get_relative_entity_path(const Entity* current_node, const Entity* ancestor
     }
 
     if (p == nullptr) {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"parent is not in the ancestor hierarchy."});
+        throw(YCPPInvalidArgumentError{"parent is not in the ancestor hierarchy."});
     }
 
     std::reverse(parents.begin(), parents.end());

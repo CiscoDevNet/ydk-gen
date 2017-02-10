@@ -14,9 +14,8 @@
  limitations under the License.
 ------------------------------------------------------------------*/
 #include <iostream>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 
+#include <spdlog/spdlog.h>
 #include "ydk/netconf_provider.hpp"
 #include "ydk/crud_service.hpp"
 #include "ydk_openconfig/openconfig_bgp.hpp"
@@ -76,20 +75,14 @@ int main(int argc, char* argv[])
 	bool verbose=(args[4]=="--verbose");
 	if(verbose)
 	{
-		boost::log::core::get()->set_filter(
-			        boost::log::trivial::severity >= boost::log::trivial::debug
-			    );
-	}
-	else
-	{
-		boost::log::core::get()->set_filter(
-					        boost::log::trivial::severity >= boost::log::trivial::error
-					    );
+	    auto logger = spdlog::stdout_color_mt("ydk");
+        logger->set_level(spdlog::level::debug);
 	}
 
 	try
 	{
-		NetconfServiceProvider provider{host, username, password, port};
+	    path::Repository repo{};
+		NetconfServiceProvider provider{repo, host, username, password, port};
 		CrudService crud{};
 
 		auto bgp = make_unique<openconfig_bgp::Bgp>();
@@ -100,7 +93,7 @@ int main(int argc, char* argv[])
 	}
 	catch(YCPPError & e)
 	{
-		cerr << "Error details: "<<boost::diagnostic_information(e)<<endl;
+		cerr << "Error details: "<<e<<endl;
 	}
 
 }

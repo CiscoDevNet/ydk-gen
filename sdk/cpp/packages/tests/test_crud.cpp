@@ -14,9 +14,6 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#define BOOST_TEST_MODULE CrudTest
-#include <boost/test/unit_test.hpp>
-
 #include <string.h>
 #include <iostream>
 
@@ -63,7 +60,7 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
 	bgp->peer_groups->peer_group.push_back(move(peer_group));
 }
 
-BOOST_AUTO_TEST_CASE(bgp_create)
+TEST_CASE(bgp_create)
 {
 	ydk::core::Repository repo{MODELS_DIR};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
@@ -71,10 +68,10 @@ BOOST_AUTO_TEST_CASE(bgp_create)
 	auto bgp = make_unique<openconfig_bgp::Bgp>();
 	config_bgp(bgp.get());
 	string reply = crud.create(provider, *bgp);
-	BOOST_REQUIRE(strstr(reply.c_str(),"<ok/>") != NULL);
+	REQUIRE(strstr(reply.c_str(),"<ok/>") != NULL);
 }
 
-BOOST_AUTO_TEST_CASE(bgp_read)
+TEST_CASE(bgp_read)
 {
 	ydk::core::Repository repo{MODELS_DIR};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
@@ -83,26 +80,26 @@ BOOST_AUTO_TEST_CASE(bgp_read)
 	config_bgp(bgp_set.get());
 	string reply = crud.create(provider, *bgp_set);
 
-	BOOST_REQUIRE(strstr(reply.c_str(),"<ok/>") != NULL);
+	REQUIRE(strstr(reply.c_str(),"<ok/>") != NULL);
 
 	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
 	auto bgp_read = crud.read(provider, *bgp_filter, true);
-	BOOST_REQUIRE(bgp_read!=nullptr);
+	REQUIRE(bgp_read!=nullptr);
 	openconfig_bgp::Bgp * bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
-	BOOST_REQUIRE(bgp_read_ptr!=nullptr);
+	REQUIRE(bgp_read_ptr!=nullptr);
 
-	BOOST_CHECK_EQUAL(bgp_set->global_->config->as_, bgp_read_ptr->global_->config->as_);
-	BOOST_CHECK_EQUAL(bgp_set->neighbors->neighbor[0]->neighbor_address, bgp_read_ptr->neighbors->neighbor[0]->neighbor_address);
-	BOOST_CHECK_EQUAL(bgp_set->neighbors->neighbor[0]->config->local_as, bgp_read_ptr->neighbors->neighbor[0]->config->local_as);
-	BOOST_CHECK_EQUAL(bgp_set->global_->afi_safis->afi_safi[0]->afi_safi_name, bgp_read_ptr->global_->afi_safis->afi_safi[0]->afi_safi_name);
-	BOOST_CHECK_EQUAL(bgp_set->global_->afi_safis->afi_safi[0]->config->afi_safi_name, bgp_read_ptr->global_->afi_safis->afi_safi[0]->config->afi_safi_name);
+	CHECK_EQUAL(bgp_set->global_->config->as_, bgp_read_ptr->global_->config->as_);
+	CHECK_EQUAL(bgp_set->neighbors->neighbor[0]->neighbor_address, bgp_read_ptr->neighbors->neighbor[0]->neighbor_address);
+	CHECK_EQUAL(bgp_set->neighbors->neighbor[0]->config->local_as, bgp_read_ptr->neighbors->neighbor[0]->config->local_as);
+	CHECK_EQUAL(bgp_set->global_->afi_safis->afi_safi[0]->afi_safi_name, bgp_read_ptr->global_->afi_safis->afi_safi[0]->afi_safi_name);
+	CHECK_EQUAL(bgp_set->global_->afi_safis->afi_safi[0]->config->afi_safi_name, bgp_read_ptr->global_->afi_safis->afi_safi[0]->config->afi_safi_name);
 
 //	cerr<<bgp_set->global_->afi_safis->afi_safi[0]->config->enabled<<","<<bgp_read_ptr->global_->afi_safis->afi_safi[0]->config->enabled<<endl;
 //	res &= string(bgp_set->global_->afi_safis->afi_safi[0]->config->enabled)  == string(bgp_read_ptr->global_->afi_safis->afi_safi[0]->config->enabled);
-//	BOOST_REQUIRE(res==1);
+//	REQUIRE(res==1);
 }
 
-BOOST_AUTO_TEST_CASE(bgp_update)
+TEST_CASE(bgp_update)
 {
 	ydk::core::Repository repo{MODELS_DIR};
 	NetconfServiceProvider provider{&repo, "127.0.0.1", "admin", "admin", 12022};
@@ -111,5 +108,5 @@ BOOST_AUTO_TEST_CASE(bgp_update)
 	config_bgp(bgp.get());
 
 	string reply = crud.update(provider, *bgp);
-	BOOST_REQUIRE(strstr(reply.c_str(),"<ok/>") != NULL);
+	REQUIRE(strstr(reply.c_str(),"<ok/>") != NULL);
 }
