@@ -110,6 +110,9 @@ class YdkGenerator(object):
         curr_bundle, all_bundles = resolver.resolve(tmp_file)
 
         api_pkgs = self._get_api_pkgs(curr_bundle.resolved_models_dir)
+        if len(api_pkgs) == 0:
+            raise YdkGenException('No YANG models were found. Please check your JSON profile file to make sure it is valid')
+
         _set_api_pkg_sub_name(all_bundles, api_pkgs, curr_bundle)
         gen_api_root = self._init_dirs(api_pkgs=api_pkgs, bundle=curr_bundle)
 
