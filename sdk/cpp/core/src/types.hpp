@@ -138,6 +138,9 @@ class Entity {
 
     virtual std::map<std::string, Entity*> & get_children() = 0;
     virtual std::unique_ptr<Entity> clone_ptr();
+    virtual void set_child(const std::string & yang_name, Entity* entity);
+    virtual Entity* get_child(const std::string & yang_name);
+    virtual std::map<std::string, Entity*> & get_protected_children();
 
   public:
     Entity* parent;
@@ -259,6 +262,21 @@ class YLeaf
     void operator = (std::string val);
     void operator = (Enum::YLeaf val);
     void operator = (Decimal64 val);
+
+    void set(uint8 val);
+    void set(uint32 val);
+    void set(uint64 val);
+    void set(long val);
+    void set(int8 val);
+    void set(int32 val);
+    void set(int64 val);
+    void set(double val);
+    void set(Empty val);
+    void set(Identity val);
+    void set(Bits val);
+    void set(std::string val);
+    void set(Enum::YLeaf val);
+    void set(Decimal64 val);
 
     operator std::string() const;
     bool operator == (YLeaf & other) const;

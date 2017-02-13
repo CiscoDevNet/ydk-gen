@@ -120,11 +120,9 @@ static unique_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, 
 
 static string get_data_payload(Entity & entity, path::ServiceProvider & provider)
 {
-	const ydk::path::DataNode* data_node = get_data_node_from_entity(entity, provider.get_root_schema());
-	if (data_node==nullptr)
-		return "";
-	path::CodecService codec{};
-	return codec.encode(*data_node, provider.get_encoding(), false);
+	const ydk::path::DataNode& data_node = get_data_node_from_entity(entity, provider.get_root_schema());
+    path::CodecService codec{};
+	return codec.encode(data_node, provider.get_encoding(), false);
 }
 
 }

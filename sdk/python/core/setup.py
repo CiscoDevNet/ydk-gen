@@ -40,7 +40,7 @@ INSTALL_REQUIREMENTS = ['ecdsa==0.13',
                         'pyang==1.6',
                         'pycrypto==2.6.1',
                         'ncclient>=0.4.7',
-                        'pybind11==1.8.1']
+                        'pybind11==2.0.1']
 
 
 LONG_DESCRIPTION = '''
@@ -81,7 +81,7 @@ class YdkBuildExtension(build_ext):
             import pybind11
         except ImportError:
             import pip
-            pip.main(['install', 'pybind11==1.8.1'])
+            pip.main(['install', 'pybind11==2.0.1'])
             import pybind11
 
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
@@ -105,7 +105,7 @@ class YdkBuildExtension(build_ext):
 def get_python_version():
     python_version = sysconfig.get_config_var('LDVERSION')
     if python_version is None or len(python_version) == 0:
-        python_version = sysconfig.get_config_var('VERSION')        
+        python_version = sysconfig.get_config_var('VERSION')
     return python_version
 
 

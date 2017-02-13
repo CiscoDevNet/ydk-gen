@@ -68,8 +68,6 @@ ydk::path::DataNodeImpl::DataNodeImpl(DataNode* parent, struct lyd_node* node): 
 
 ydk::path::DataNodeImpl::~DataNodeImpl()
 {
-
-    BOOST_LOG_TRIVIAL(error) << "~DataNodeImpl" << this;
     // if(m_node){
     //     if(m_parent) {
     //         lyd_free(m_node);

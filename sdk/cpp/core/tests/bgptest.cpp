@@ -210,13 +210,11 @@ BOOST_AUTO_TEST_CASE( bgp )
 
     auto & schema = sp.get_root_schema();
 
-    auto bgp = schema.create("openconfig-bgp:bgp", "");
+    auto & bgp = schema.create("openconfig-bgp:bgp", "");
 
-    BOOST_REQUIRE( bgp != nullptr );
+    auto & as = bgp.create("global/config/as", "65172");
 
-    auto & as = bgp->create("global/config/as", "65172");
-
-    auto & l3vpn_ipv4_unicast = bgp->create("global/afi-safis/afi-safi[afi-safi-name='openconfig-bgp-types:L3VPN_IPV4_UNICAST']", "");
+    auto & l3vpn_ipv4_unicast = bgp.create("global/afi-safis/afi-safi[afi-safi-name='openconfig-bgp-types:L3VPN_IPV4_UNICAST']", "");
 
     auto & afi_safi_name = l3vpn_ipv4_unicast.create("config/afi-safi-name", "openconfig-bgp-types:L3VPN_IPV4_UNICAST");
 
@@ -224,7 +222,7 @@ BOOST_AUTO_TEST_CASE( bgp )
     auto & enable = l3vpn_ipv4_unicast.create("config/enabled","true");
 
     //bgp/neighbors/neighbor
-    auto & neighbor = bgp->create("neighbors/neighbor[neighbor-address='172.16.255.2']", "");
+    auto & neighbor = bgp.create("neighbors/neighbor[neighbor-address='172.16.255.2']", "");
 
     auto & neighbor_address = neighbor.create("config/neighbor-address", "172.16.255.2");
 
@@ -241,7 +239,7 @@ BOOST_AUTO_TEST_CASE( bgp )
 
 
     //XML Codec Test
-    auto xml = s.encode(*bgp, ydk::EncodingFormat::XML, false);
+    auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 
     BOOST_CHECK_MESSAGE( !xml.empty(), "XML output is empty");
 
@@ -253,11 +251,13 @@ BOOST_AUTO_TEST_CASE( bgp )
 
     BOOST_CHECK_MESSAGE(!new_xml.empty(), "Deserialized XML output is empty.");
 
+
+
     BOOST_REQUIRE(new_xml == expected_bgp_output);
 
 
     //JSON codec test
-    auto json = s.encode(*bgp, ydk::EncodingFormat::JSON, false);
+    auto json = s.encode(bgp, ydk::EncodingFormat::JSON, false);
 
     BOOST_CHECK_MESSAGE( !json.empty(), "JSON output :" << json);
 
@@ -281,7 +281,6 @@ BOOST_AUTO_TEST_CASE( bgp )
     //call create
     (*create_rpc)(sp);
 
-
 }
 
 BOOST_AUTO_TEST_CASE( bgp_validation )
@@ -291,13 +290,11 @@ BOOST_AUTO_TEST_CASE( bgp_validation )
 
     auto & schema = sp.get_root_schema();
 
-    auto bgp = schema.create("openconfig-bgp:bgp", "");
+    auto & bgp = schema.create("openconfig-bgp:bgp", "");
 
-    BOOST_REQUIRE( bgp != nullptr );
+    auto & as = bgp.create("global/config/as", "65172");
 
-    auto & as = bgp->create("global/config/as", "65172");
-
-    auto & l3vpn_ipv4_unicast = bgp->create("global/afi-safis/afi-safi[afi-safi-name='openconfig-bgp-types:L3VPN_IPV4_UNICAST']", "");
+    auto & l3vpn_ipv4_unicast = bgp.create("global/afi-safis/afi-safi[afi-safi-name='openconfig-bgp-types:L3VPN_IPV4_UNICAST']", "");
 
     auto & afi_safi_name = l3vpn_ipv4_unicast.create("config/afi-safi-name", "openconfig-bgp-types:L3VPN_IPV4_UNICAST");
 
@@ -305,7 +302,7 @@ BOOST_AUTO_TEST_CASE( bgp_validation )
     auto & enable = l3vpn_ipv4_unicast.create("config/enabled","true");
 
     //bgp/neighbors/neighbor
-    auto & neighbor = bgp->create("neighbors/neighbor[neighbor-address='172.16.255.2']", "");
+    auto & neighbor = bgp.create("neighbors/neighbor[neighbor-address='172.16.255.2']", "");
 
     //auto & peer_group = neighbor.create("config/peer-group", "IBGP");
 
@@ -322,13 +319,13 @@ BOOST_AUTO_TEST_CASE( bgp_validation )
 
     auto & neighbor_enabled = neighbor_af.create("config/enabled","true");
 
-    auto & peer_group = bgp->create("peer-groups/peer-group[peer-group-name='IBGP']", "");
+    auto & peer_group = bgp.create("peer-groups/peer-group[peer-group-name='IBGP']", "");
     auto & peer_group_name = peer_group.create("config/peer-group-name", "IBGP");
     peer_as = peer_group.create("config/peer-as", "65172");
 
     ydk::path::ValidationService validation_service{};
 
-    validation_service.validate(*bgp, ydk::ValidationService::Option::EDIT_CONFIG);
+    validation_service.validate(bgp, ydk::ValidationService::Option::EDIT_CONFIG);
 }
 
 BOOST_AUTO_TEST_CASE( decode_remove_as )
@@ -362,13 +359,12 @@ BOOST_AUTO_TEST_CASE( bits_order )
     auto & schema = sp.get_root_schema();
 
 
-    auto runner = schema.create("ydktest-sanity:runner", "");
+    auto & runner = schema.create("ydktest-sanity:runner", "");
 
-    BOOST_REQUIRE( runner != nullptr );
+    auto  & bits = runner.create("ytypes/built-in-t/bits-value", "auto-sense-speed disable-nagle");
 
-    auto  & bits = runner->create("ytypes/built-in-t/bits-value", "auto-sense-speed disable-nagle");
-
-    auto new_xml = s.encode(*runner, ydk::EncodingFormat::XML, false);
+    auto new_xml = s.encode(
+        runner, ydk::EncodingFormat::XML, false);
 
     auto expected = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><ytypes><built-in-t><bits-value>disable-nagle auto-sense-speed</bits-value></built-in-t></ytypes></runner>";
     BOOST_REQUIRE( new_xml == expected );

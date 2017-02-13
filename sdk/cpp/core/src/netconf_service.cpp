@@ -337,11 +337,9 @@ static unique_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider,
 
 static std::string get_data_payload(Entity & entity, path::RootSchemaNode & root_schema)
 {
-    path::DataNode* data_node = get_data_node_from_entity(entity, root_schema);
-    if (data_node==nullptr)
-        return "";
+    path::DataNode& data_node = get_data_node_from_entity(entity, root_schema);
     path::CodecService codec{};
-    return codec.encode(*data_node, ydk::EncodingFormat::XML, true);
+    return codec.encode(data_node, ydk::EncodingFormat::XML, true);
 }
 
 static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)

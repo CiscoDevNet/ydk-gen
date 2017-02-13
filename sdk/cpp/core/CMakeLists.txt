@@ -32,6 +32,7 @@ set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0 -fprofile-arcs -ftest-coverage")
 
+
 if(CMAKE_BUILD_TYPE STREQUAL debug)
     option(ENABLE_BUILD_TESTS "Build tests" ON)
     option(ENABLE_VALGRIND_TESTS "Build tests with valgrind" ON)
@@ -45,7 +46,7 @@ set(libydk_src
     src/bits.cpp
     src/codec_provider.cpp
     src/codec_service.cpp
-    src/capabilities_parser.cpp    
+    src/capabilities_parser.cpp
     src/crud_service.cpp
     src/entity.cpp
     src/entity_data_node_walker.cpp

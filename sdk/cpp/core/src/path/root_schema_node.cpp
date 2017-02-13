@@ -71,6 +71,8 @@ ydk::path::RootSchemaNode::keys() const
 /////////////////////////////////////////////////////////////////////////////////////
 ydk::path::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx) : m_ctx{ctx}
 {
+    // m_root_data_nodes = std::vector<std::unique_ptr<DataNode>>{};
+
     //populate the tree
     uint32_t idx = 0;
     while( auto p = ly_ctx_get_module_iter(ctx, &idx)) {
@@ -85,6 +87,10 @@ ydk::path::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx) : m_ctx{ct
 
 ydk::path::RootSchemaNodeImpl::~RootSchemaNodeImpl()
 {
+    // need to release before destroy context
+    for (auto & r: m_root_data_nodes)
+        r.release();
+
     if(m_ctx){
         ly_ctx_destroy(m_ctx, nullptr);
         m_ctx = nullptr;
@@ -128,22 +134,18 @@ ydk::path::RootSchemaNodeImpl::children() const
     return m_children;
 }
 
-ydk::path::DataNode*
-ydk::path::RootSchemaNodeImpl::create(const std::string& path) const
+ydk::path::DataNode&
+ydk::path::RootSchemaNodeImpl::create(const std::string& path)
 {
     return create(path, "");
 }
 
-ydk::path::DataNode*
-ydk::path::RootSchemaNodeImpl::create(const std::string& path, const std::string& value) const
+ydk::path::DataNode&
+ydk::path::RootSchemaNodeImpl::create(const std::string& path, const std::string& value)
 {
-    RootDataImpl* rd = new RootDataImpl{*this, m_ctx, "/"};
-
-    if (rd){
-        return &rd->create(path, value);
-    }
-
-    return nullptr;
+    auto root_data_node = std::make_unique<RootDataImpl>(*this, m_ctx, "/");
+    m_root_data_nodes.push_back(std::move(root_data_node));
+    return m_root_data_nodes.back()->create(path, value);
 }
 
 std::unique_ptr<ydk::path::Rpc>

@@ -295,7 +295,6 @@ namespace ydk {
             ///
             virtual std::unique_ptr<DataNode> decode(const RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format);
 
-
         };
 
 
@@ -736,7 +735,7 @@ namespace ydk {
             /// @throws YCPPInvalidArgumentError In case the argument is invalid.
             /// @throws YCPPPathError In case the path is invalid.
             ///
-            virtual DataNode* create(const std::string& path, const std::string& value) const = 0;
+            virtual DataNode& create(const std::string& path, const std::string& value) = 0;
 
             ///
             /// @brief create a DataNode corresponding to the path and set its value
@@ -755,7 +754,7 @@ namespace ydk {
             /// @throws YCPPInvalidArgumentError In case the argument is invalid.
             /// @throws YCPPPathError In case the path is invalid.
             ///
-            virtual DataNode* create(const std::string& path) const  = 0;
+            virtual DataNode& create(const std::string& path)  = 0;
 
             ///
             /// @brief return the Statement representing this SchemaNode

@@ -226,6 +226,76 @@ void YLeaf::operator = (Decimal64 val)
 	store_value(value_buffer.str());
 }
 
+void YLeaf::set(uint8 val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(uint32 val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(uint64 val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(long val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(int8 val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(int32 val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(Enum::YLeaf val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(Bits val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(int64 val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(double val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(Empty val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(Identity val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(std::string val)
+{
+    YLeaf::operator=(val);
+}
+
+void YLeaf::set(Decimal64 val)
+{
+    YLeaf::operator=(val);
+}
+
 void YLeaf::store_value(std::string && val)
 {
 	is_set=true;

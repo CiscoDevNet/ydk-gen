@@ -53,9 +53,9 @@ CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pret
     path::RootSchemaNode& root_schema = provider.get_root_schema();
     try
     {
-        path::DataNode* data_node = get_data_node_from_entity(entity, root_schema);
+        path::DataNode& data_node = get_data_node_from_entity(entity, root_schema);
         path::CodecService core_codec_service{};
-        return core_codec_service.encode(*data_node, provider.m_encoding, pretty);
+        return core_codec_service.encode(data_node, provider.m_encoding, pretty);
     }
     catch (const YCPPInvalidArgumentError& e)
     {

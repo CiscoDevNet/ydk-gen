@@ -94,14 +94,15 @@ namespace ydk {
 
             const std::vector<std::unique_ptr<SchemaNode>>& children() const;
 
-            DataNode* create(const std::string& path) const;
+            DataNode& create(const std::string& path);
 
-            DataNode* create(const std::string& path, const std::string& value) const;
+            DataNode& create(const std::string& path, const std::string& value);
 
             std::unique_ptr<Rpc> rpc(const std::string& path) const;
 
 
             struct ly_ctx* m_ctx;
+            std::vector<std::unique_ptr<DataNode>> m_root_data_nodes;
             std::vector<std::unique_ptr<SchemaNode>> m_children;
 
         };

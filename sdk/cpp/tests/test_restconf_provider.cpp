@@ -34,20 +34,18 @@ BOOST_AUTO_TEST_CASE(CreateDelRead)
 
 	auto s = ydk::path::CodecService{};
 
-	auto runner = schema.create("ydktest-sanity:runner", "");
-
-	BOOST_REQUIRE( runner != nullptr );
+	auto & runner = schema.create("ydktest-sanity:runner", "");
 
 	//first delete
 	std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
-	auto json = s.encode(*runner, EncodingFormat::JSON, false);
+	auto json = s.encode(runner, EncodingFormat::JSON, false);
 	delete_rpc->input().create("entity", json);
 	//call delete
 	(*delete_rpc)(provider);
 
-	auto & number8 = runner->create("ytypes/built-in-t/number8", "3");
+	auto & number8 = runner.create("ytypes/built-in-t/number8", "3");
 
-    json = s.encode(*runner, EncodingFormat::JSON, false);
+    json = s.encode(runner, EncodingFormat::JSON, false);
     BOOST_CHECK_MESSAGE( !json.empty(), "JSON output :" << json);
     //call create
     std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
@@ -56,19 +54,18 @@ BOOST_AUTO_TEST_CASE(CreateDelRead)
 
     //read
     std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
-	auto runner_read = schema.create("ydktest-sanity:runner", "");
-	BOOST_REQUIRE( runner_read != nullptr );
+	auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-	json = s.encode(*runner_read, EncodingFormat::JSON, false);
+	json = s.encode(runner_read, EncodingFormat::JSON, false);
 	BOOST_REQUIRE( !json.empty() );
 	read_rpc->input().create("filter", json);
 
 	auto read_result = (*read_rpc)(provider);
 
 	runner = schema.create("ydktest-sanity:runner", "");
-    number8 = runner->create("ytypes/built-in-t/number8", "5");
+    number8 = runner.create("ytypes/built-in-t/number8", "5");
 
-	json = s.encode(*runner, EncodingFormat::JSON, false);
+	json = s.encode(runner, EncodingFormat::JSON, false);
 	BOOST_CHECK_MESSAGE( !json.empty(), "JSON output :" << json);
 	//call update
 	std::unique_ptr<ydk::path::Rpc> update_rpc { schema.rpc("ydk:update") };
