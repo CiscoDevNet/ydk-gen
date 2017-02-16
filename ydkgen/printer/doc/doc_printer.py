@@ -145,24 +145,31 @@ class DocPrinter(object):
         self._append('=' * len(title))
         self._append('\n')
 
-    def _print_toctree(self, elements, is_package=False):
+    def _print_toctree_section(self, elements, title):
+        if len(elements) == 0:
+            return
+        if len(title) > 0:
+            self._append('**{}**\n'.format(title))
         self._append('.. toctree::')
         self.ctx.lvl_inc()
         self._append(':maxdepth: 1\n')
-
-        if not is_package:
-            elements.reverse()
-            for elem in elements:
-                if any((isinstance(elem, Class),
-                        isinstance(elem, Enum),
-                        isinstance(elem, Bits) and self.lang == 'py')):
-                    self._append('%s <%s>' % (elem.name, get_rst_file_name(elem)))
-        else:
-            for elem in elements:
-                self._append('%s <%s>' % (elem.name, get_rst_file_name(elem)))
-
+        for elem in elements:
+            self._append('%s <%s>' % (elem.name, get_rst_file_name(elem)))
         self._append('')
         self.ctx.lvl_dec()
+
+    def _print_toctree(self, elements, is_package=False):
+        if not is_package:
+            elements.reverse()
+            data_classes = [elem for elem in elements if (isinstance(elem, Class) and not elem.is_identity())]
+            self._print_toctree_section(data_classes, 'Data Classes')
+
+            type_classes = [elem for elem in elements if any((isinstance(elem, Class) and elem.is_identity(),
+                                                    isinstance(elem, Enum),
+                                                    isinstance(elem, Bits) and self.lang == 'py'))]
+            self._print_toctree_section(type_classes, 'Type Classes')
+        else:
+            self._print_toctree_section(elements, '')
 
     def _print_namespace(self, clazz):
         if self.lang == 'cpp':
