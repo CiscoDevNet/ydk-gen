@@ -42,7 +42,23 @@ Entity::~Entity()
 
 unique_ptr<Entity> Entity::clone_ptr()
 {
-	return nullptr;
+    return nullptr;
 }
+
+void Entity::set_child(const std::string & yang_name, Entity* entity)
+{
+    children[yang_name] = entity;
+}
+
+Entity* Entity::get_child(const std::string & yang_name)
+{
+    return children[yang_name];
+}
+
+std::map<std::string, Entity*> & Entity::get_protected_children()
+{
+    return children;
+}
+
 
 }

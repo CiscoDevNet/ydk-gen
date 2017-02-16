@@ -48,13 +48,13 @@ The output of ydk-gen is either a core package, that defines services and provid
 ####Linux
 Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
 ```
-$ sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libboost-dev libboost-python-dev libssh-dev libcurl4-openssl-dev libtool-bin libboost-all-dev libboost-log-dev libpcre3-dev libpcre++-dev libtool pkg-config python3-dev python3-lxml cmake
+$ sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libssh-dev libcurl4-openssl-dev libtool-bin libpcre3-dev libpcre++-dev libtool pkg-config python3-dev python3-lxml cmake
 ```
 
 Centos (Fedora-based): The following packages must be present in your system before installing YDK-Py:
 ```
 $ sudo yum install epel-release
-$ sudo yum install python-pip python-devel libxml2-devel libxslt-devel libssh-devel boost-devel boost-python libcurl-devel libtool gcc-c++ cmake
+$ sudo yum install python-pip python-devel libxml2-devel libxslt-devel libssh-devel libcurl-devel libtool gcc-c++ cmake
 ```
 
 ####Mac
@@ -62,7 +62,7 @@ It is recommended to install homebrew (http://brew.sh) and Xcode command line to
 ```
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ xcode-select --install
-$ brew install boost pkg-config cmake libssh xml2 curl pcre
+$ brew install pkg-config cmake libssh xml2 curl pcre
 ```
 
 ####Windows

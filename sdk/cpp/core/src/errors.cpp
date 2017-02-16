@@ -29,18 +29,57 @@
 /////////////////////////////////////////////////////////////////////////
 ydk::YCPPError::YCPPError(const std::string& msg) : err_msg{msg}
 {
-	what();
+    what();
 }
 
 const char* ydk::YCPPError::what() const noexcept
 {
-	return err_msg.c_str();
+    return err_msg.c_str();
+}
+
+std::ostream & ydk::operator<<(std::ostream &stream, const ydk::YCPPError & e)
+{
+    stream << e.what();
+    return stream;
+}
+
+std::ostream & ydk::operator<<(std::ostream &stream, ydk::YCPPError & e)
+{
+    stream << e.what();
+    return stream;
+}
+
+/////////////////////////////////////////////////////////////////////////
+/// YCPPClientError
+/////////////////////////////////////////////////////////////////////////
+ydk::YCPPClientError::YCPPClientError(const std::string& msg)
+    : YCPPError{"YCPPClientError: " + msg}
+{
+
+}
+
+/////////////////////////////////////////////////////////////////////////
+/// YCPPServiceProviderError
+/////////////////////////////////////////////////////////////////////////
+ydk::YCPPServiceProviderError::YCPPServiceProviderError(const std::string& msg)
+    : YCPPError{"YCPPServiceProviderError: " + msg}
+{
+
+}
+
+/////////////////////////////////////////////////////////////////////////
+/// YCPPServiceError
+/////////////////////////////////////////////////////////////////////////
+ydk::YCPPServiceError::YCPPServiceError(const std::string& msg)
+    : YCPPError{"YCPPServiceError: " + msg}
+{
+
 }
 
 /////////////////////////////////////////////////////////////////////////
 /// YCPPCoreError
 /////////////////////////////////////////////////////////////////////////
-ydk::path::YCPPCoreError::YCPPCoreError(const std::string& msg) : ydk::YCPPError{msg}
+ydk::path::YCPPCoreError::YCPPCoreError(const std::string& msg) : ydk::YCPPError{"YCPPCoreError: " + msg}
 {
 
 }
@@ -48,7 +87,7 @@ ydk::path::YCPPCoreError::YCPPCoreError(const std::string& msg) : ydk::YCPPError
 //////////////////////////////////////////////////////////////////////////
 /// YCPPIllegalStateError
 //////////////////////////////////////////////////////////////////////////
-ydk::YCPPIllegalStateError::YCPPIllegalStateError(const std::string& msg) : ydk::YCPPError{msg}
+ydk::YCPPIllegalStateError::YCPPIllegalStateError(const std::string& msg) : ydk::YCPPError{"YCPPIllegalStateError: " + msg}
 {
 
 }
@@ -56,7 +95,7 @@ ydk::YCPPIllegalStateError::YCPPIllegalStateError(const std::string& msg) : ydk:
 //////////////////////////////////////////////////////////////////////////
 /// YCPPInvalidArgumentError
 //////////////////////////////////////////////////////////////////////////
-ydk::YCPPInvalidArgumentError::YCPPInvalidArgumentError(const std::string& msg) : ydk::YCPPError{msg}
+ydk::YCPPInvalidArgumentError::YCPPInvalidArgumentError(const std::string& msg) : ydk::YCPPError{"YCPPInvalidArgumentError: " + msg}
 {
 
 }
@@ -64,7 +103,7 @@ ydk::YCPPInvalidArgumentError::YCPPInvalidArgumentError(const std::string& msg) 
 //////////////////////////////////////////////////////////////////////////
 /// YCPPOperationNotSupportedError
 //////////////////////////////////////////////////////////////////////////
-ydk::YCPPOperationNotSupportedError::YCPPOperationNotSupportedError(const std::string& msg) : ydk::YCPPError{msg}
+ydk::YCPPOperationNotSupportedError::YCPPOperationNotSupportedError(const std::string& msg) : ydk::YCPPError{"YCPPOperationNotSupportedError: " + msg}
 {
 
 }
@@ -72,7 +111,7 @@ ydk::YCPPOperationNotSupportedError::YCPPOperationNotSupportedError(const std::s
 //////////////////////////////////////////////////////////////////////////
 /// YCPPDataValidationError
 //////////////////////////////////////////////////////////////////////////
-ydk::path::YCPPDataValidationError::YCPPDataValidationError() : ydk::path::YCPPCoreError{ly_errmsg()}
+ydk::path::YCPPDataValidationError::YCPPDataValidationError() : ydk::path::YCPPCoreError{"YCPPDataValidationError: " + std::string(ly_errmsg())}
 {
 
 }
@@ -90,7 +129,7 @@ ydk::path::YCPPPathError::YCPPPathError(ydk::path::YCPPPathError::Error error_co
 /////////////////////////////////////////////////////////////////////////
 /// YCPPCodecError
 /////////////////////////////////////////////////////////////////////////
-ydk::path::YCPPCodecError::YCPPCodecError(YCPPCodecError::Error ec) : YCPPCoreError(ly_errmsg()), err{ec}
+ydk::path::YCPPCodecError::YCPPCodecError(YCPPCodecError::Error ec) : YCPPCoreError("YCPPCodecError: " + std::string(ly_errmsg())), err{ec}
 {
 
 }
@@ -99,7 +138,7 @@ ydk::path::YCPPCodecError::YCPPCodecError(YCPPCodecError::Error ec) : YCPPCoreEr
 /////////////////////////////////////////////////////////////////////////
 /// YCPPModelError
 /////////////////////////////////////////////////////////////////////////
-ydk::YCPPModelError::YCPPModelError(const std::string& msg) : ydk::YCPPError{msg}
+ydk::YCPPModelError::YCPPModelError(const std::string& msg) : ydk::YCPPError{"YCPPModelError: " + msg}
 {
 
 }

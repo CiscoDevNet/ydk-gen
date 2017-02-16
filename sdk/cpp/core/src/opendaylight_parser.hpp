@@ -28,7 +28,6 @@
 
 namespace ydk
 {
-
 class OpenDaylightCapabilitiesJsonParser
 {
 	public:

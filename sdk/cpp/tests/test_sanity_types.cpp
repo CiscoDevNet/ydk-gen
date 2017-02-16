@@ -14,10 +14,6 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#define BOOST_TEST_MODULE LevelsTests
-#include <boost/test/unit_test.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 #include <string.h>
 #include <iostream>
 
@@ -26,11 +22,12 @@
 #include "ydk_ydktest/ydktest_sanity.hpp"
 #include "ydk_ydktest/ydktest_sanity_types.hpp"
 #include "config.hpp"
+#include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
 
-BOOST_AUTO_TEST_CASE(test_int8)
+TEST_CASE("test_types_int8")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -39,22 +36,22 @@ BOOST_AUTO_TEST_CASE(test_int8)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->number8 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->number8 == r_2->ytypes->built_in_t->number8);
+	REQUIRE(r_1->ytypes->built_in_t->number8 == r_2->ytypes->built_in_t->number8);
 }
 
-BOOST_AUTO_TEST_CASE(test_int16)
+TEST_CASE("test_types_int16")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -63,22 +60,22 @@ BOOST_AUTO_TEST_CASE(test_int16)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->number16 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->number16 == r_2->ytypes->built_in_t->number16);
+	REQUIRE(r_1->ytypes->built_in_t->number16 == r_2->ytypes->built_in_t->number16);
 }
 
-BOOST_AUTO_TEST_CASE(test_int32)
+TEST_CASE("test_types_int32")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -87,22 +84,22 @@ BOOST_AUTO_TEST_CASE(test_int32)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->number32 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->number32 == r_2->ytypes->built_in_t->number32);
+	REQUIRE(r_1->ytypes->built_in_t->number32 == r_2->ytypes->built_in_t->number32);
 }
 
-BOOST_AUTO_TEST_CASE(test_int64)
+TEST_CASE("test_types_int64")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -111,22 +108,22 @@ BOOST_AUTO_TEST_CASE(test_int64)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->number64 = -193933810;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->number64 == r_2->ytypes->built_in_t->number64);
+	REQUIRE(r_1->ytypes->built_in_t->number64 == r_2->ytypes->built_in_t->number64);
 }
 
-BOOST_AUTO_TEST_CASE(test_uint8)
+TEST_CASE("test_types_uint8")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -135,22 +132,22 @@ BOOST_AUTO_TEST_CASE(test_uint8)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->u_number8 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->u_number8 == r_2->ytypes->built_in_t->u_number8);
+	REQUIRE(r_1->ytypes->built_in_t->u_number8 == r_2->ytypes->built_in_t->u_number8);
 }
 
-BOOST_AUTO_TEST_CASE(test_uint16)
+TEST_CASE("test_types_uint16")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -159,22 +156,22 @@ BOOST_AUTO_TEST_CASE(test_uint16)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->u_number16 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->u_number16 == r_2->ytypes->built_in_t->u_number16);
+	REQUIRE(r_1->ytypes->built_in_t->u_number16 == r_2->ytypes->built_in_t->u_number16);
 }
 
-BOOST_AUTO_TEST_CASE(test_uint32)
+TEST_CASE("test_types_uint32")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -183,22 +180,22 @@ BOOST_AUTO_TEST_CASE(test_uint32)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->u_number32 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->u_number32 == r_2->ytypes->built_in_t->u_number32);
+	REQUIRE(r_1->ytypes->built_in_t->u_number32 == r_2->ytypes->built_in_t->u_number32);
 }
 
-BOOST_AUTO_TEST_CASE(test_uint64)
+TEST_CASE("test_types_uint64")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -207,22 +204,22 @@ BOOST_AUTO_TEST_CASE(test_uint64)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->u_number64 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->u_number64 == r_2->ytypes->built_in_t->u_number64);
+	REQUIRE(r_1->ytypes->built_in_t->u_number64 == r_2->ytypes->built_in_t->u_number64);
 }
 
-BOOST_AUTO_TEST_CASE(bits)
+TEST_CASE("test_types_bits")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -231,22 +228,22 @@ BOOST_AUTO_TEST_CASE(bits)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->bits_value["auto-sense-speed"] = true;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->bits_value == r_2->ytypes->built_in_t->bits_value);
+	REQUIRE(r_1->ytypes->built_in_t->bits_value == r_2->ytypes->built_in_t->bits_value);
 }
 
-BOOST_AUTO_TEST_CASE(test_deci64)
+TEST_CASE("test_types_deci64")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -255,22 +252,22 @@ BOOST_AUTO_TEST_CASE(test_deci64)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->deci64 = Decimal64("23.14");
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->deci64 == r_2->ytypes->built_in_t->deci64);
+	REQUIRE(r_1->ytypes->built_in_t->deci64 == r_2->ytypes->built_in_t->deci64);
 }
 
-BOOST_AUTO_TEST_CASE(test_string)
+TEST_CASE("test_types_string")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -279,22 +276,22 @@ BOOST_AUTO_TEST_CASE(test_string)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->name = "testing";
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->name == r_2->ytypes->built_in_t->name);
+	REQUIRE(r_1->ytypes->built_in_t->name == r_2->ytypes->built_in_t->name);
 }
 
-BOOST_AUTO_TEST_CASE(test_empty)
+TEST_CASE("test_types_empty")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -303,22 +300,22 @@ BOOST_AUTO_TEST_CASE(test_empty)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->emptee = Empty();
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->emptee == r_2->ytypes->built_in_t->emptee);
+	REQUIRE(r_1->ytypes->built_in_t->emptee == r_2->ytypes->built_in_t->emptee);
 }
 
-BOOST_AUTO_TEST_CASE(test_bool)
+TEST_CASE("test_types_bool")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -327,24 +324,24 @@ BOOST_AUTO_TEST_CASE(test_bool)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->bool_value = true;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
 	std::cout<<r_1->ytypes->built_in_t->bool_value<<std::endl;
 	std::cout<<r_2->ytypes->built_in_t->bool_value<<std::endl;
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->bool_value == r_2->ytypes->built_in_t->bool_value);
+	REQUIRE(r_1->ytypes->built_in_t->bool_value == r_2->ytypes->built_in_t->bool_value);
 }
 
-BOOST_AUTO_TEST_CASE(test_embeded_enum)
+TEST_CASE("test_types_embeded_enum")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -353,22 +350,22 @@ BOOST_AUTO_TEST_CASE(test_embeded_enum)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->embeded_enum = ydktest_sanity::Runner::Ytypes::BuiltInT::EmbededEnumEnum::zero;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->embeded_enum == r_2->ytypes->built_in_t->embeded_enum);
+	REQUIRE(r_1->ytypes->built_in_t->embeded_enum == r_2->ytypes->built_in_t->embeded_enum);
 }
 
-BOOST_AUTO_TEST_CASE(test_enum)
+TEST_CASE("test_types_enum")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -377,22 +374,22 @@ BOOST_AUTO_TEST_CASE(test_enum)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->enum_value = ydktest_sanity::YdkEnumTestEnum::none;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->enum_value == r_2->ytypes->built_in_t->enum_value);
+	REQUIRE(r_1->ytypes->built_in_t->enum_value == r_2->ytypes->built_in_t->enum_value);
 }
 
-BOOST_AUTO_TEST_CASE(test_younion)
+TEST_CASE("test_types_younion")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -401,22 +398,22 @@ BOOST_AUTO_TEST_CASE(test_younion)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->younion = ydktest_sanity::YdkEnumTestEnum::none;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->younion == r_2->ytypes->built_in_t->younion);
+	REQUIRE(r_1->ytypes->built_in_t->younion == r_2->ytypes->built_in_t->younion);
 }
 
-BOOST_AUTO_TEST_CASE(test_identity)
+TEST_CASE("test_types_identity")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -425,24 +422,24 @@ BOOST_AUTO_TEST_CASE(test_identity)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->identity_ref_value = ydktest_sanity_types::OtherIdentity();
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
     cout<<r_2->ytypes->built_in_t->identity_ref_value<<endl;
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->identity_ref_value == r_2->ytypes->built_in_t->identity_ref_value);
+	REQUIRE(r_1->ytypes->built_in_t->identity_ref_value == r_2->ytypes->built_in_t->identity_ref_value);
 }
 
-BOOST_AUTO_TEST_CASE(test_submodule)
+TEST_CASE("test_types_submodule")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -451,25 +448,25 @@ BOOST_AUTO_TEST_CASE(test_submodule)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::SubTest>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->one_aug->name = "test";
 	r_1->one_aug->number = 3;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::SubTest>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::SubTest * r_2 = dynamic_cast<ydktest_sanity::SubTest*>(r_read.get());
-	BOOST_REQUIRE(r_1->one_aug->name == r_2->one_aug->name);
-	BOOST_REQUIRE(r_1->one_aug->number == r_2->one_aug->number);
+	REQUIRE(r_1->one_aug->name == r_2->one_aug->name);
+	REQUIRE(r_1->one_aug->number == r_2->one_aug->number);
 }
 
 
-BOOST_AUTO_TEST_CASE(test_identity_other_module)
+TEST_CASE("test_types_identity_other_module")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -478,22 +475,22 @@ BOOST_AUTO_TEST_CASE(test_identity_other_module)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->identity_ref_value = ydktest_sanity_types::YdktestTypeIdentity();
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->identity_ref_value == r_2->ytypes->built_in_t->identity_ref_value);
+	REQUIRE(r_1->ytypes->built_in_t->identity_ref_value == r_2->ytypes->built_in_t->identity_ref_value);
 }
 
-BOOST_AUTO_TEST_CASE(test_enum_leaflist)
+TEST_CASE("test_types_enum_leaflist")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -502,23 +499,23 @@ BOOST_AUTO_TEST_CASE(test_enum_leaflist)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::local);
 	r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::remote);
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->enum_llist == r_2->ytypes->built_in_t->enum_llist);
+	REQUIRE(r_1->ytypes->built_in_t->enum_llist == r_2->ytypes->built_in_t->enum_llist);
 }
 
-BOOST_AUTO_TEST_CASE(test_identity_leaflist)
+TEST_CASE("test_types_identity_leaflist")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -527,23 +524,23 @@ BOOST_AUTO_TEST_CASE(test_identity_leaflist)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->identity_llist.append(ydktest_sanity::ChildIdentityIdentity());
 	r_1->ytypes->built_in_t->identity_llist.append(ydktest_sanity::ChildChildIdentityIdentity());
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->enum_llist == r_2->ytypes->built_in_t->enum_llist);
+	REQUIRE(r_1->ytypes->built_in_t->enum_llist == r_2->ytypes->built_in_t->enum_llist);
 }
 
-BOOST_AUTO_TEST_CASE(test_union_complex_list)
+TEST_CASE("test_types_union_complex_list")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -552,22 +549,22 @@ BOOST_AUTO_TEST_CASE(test_union_complex_list)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->younion_list.append("123:45");
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->younion_list == r_2->ytypes->built_in_t->younion_list);
+	REQUIRE(r_1->ytypes->built_in_t->younion_list == r_2->ytypes->built_in_t->younion_list);
 }
 
-BOOST_AUTO_TEST_CASE(test_list)
+TEST_CASE("test_types_list")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -576,7 +573,7 @@ BOOST_AUTO_TEST_CASE(test_list)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	r_1->ytypes->built_in_t->llunion.append(1);
@@ -591,17 +588,17 @@ BOOST_AUTO_TEST_CASE(test_list)
 	r_1->ytypes->built_in_t->llunion.append(10);
 	r_1->ytypes->built_in_t->llunion.append(11);
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->younion_list == r_2->ytypes->built_in_t->younion_list);
+	REQUIRE(r_1->ytypes->built_in_t->younion_list == r_2->ytypes->built_in_t->younion_list);
 }
 
-BOOST_AUTO_TEST_CASE(test_bits_list)
+TEST_CASE("test_types_bits_list")
 {
 	ydk::path::Repository repo{TEST_HOME};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -610,7 +607,7 @@ BOOST_AUTO_TEST_CASE(test_bits_list)
 	//DELETE
 	auto r_1 = make_unique<ydktest_sanity::Runner>();
 	bool reply = crud.delete_(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE
 	Bits bits1{};
@@ -620,12 +617,12 @@ BOOST_AUTO_TEST_CASE(test_bits_list)
 	r_1->ytypes->built_in_t->bits_llist.append(bits1);
 	r_1->ytypes->built_in_t->bits_llist.append(bits2);
 //	reply = crud.create(provider, *r_1); //TODO: netsim issue
-//	BOOST_REQUIRE(reply);
+//	REQUIRE(reply);
 //
 //	//READ
 //	auto filter = make_unique<ydktest_sanity::Runner>();
 //	auto r_read = crud.read(provider, *filter);
-//	BOOST_REQUIRE(r_read!=nullptr);
+//	REQUIRE(r_read!=nullptr);
 //	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-//	BOOST_REQUIRE(r_1->ytypes->built_in_t->bits_llist == r_2->ytypes->built_in_t->bits_llist);
+//	REQUIRE(r_1->ytypes->built_in_t->bits_llist == r_2->ytypes->built_in_t->bits_llist);
 }

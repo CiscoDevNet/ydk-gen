@@ -40,10 +40,6 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#define BOOST_TEST_MODULE LevelsTests
-#include <boost/test/unit_test.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 #include <string.h>
 #include <iostream>
 
@@ -52,11 +48,12 @@
 #include "ydk_ydktest/ydktest_sanity.hpp"
 #include "ydk_ydktest/ydktest_sanity_types.hpp"
 #include "config.hpp"
+#include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
 
-BOOST_AUTO_TEST_CASE(test_replace)
+TEST_CASE("test_replace")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -65,35 +62,35 @@ BOOST_AUTO_TEST_CASE(test_replace)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->number8 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ
 	auto filter = make_unique<ydktest_sanity::Runner>();
 	auto r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->number8 == r_2->ytypes->built_in_t->number8);
+	REQUIRE(r_1->ytypes->built_in_t->number8 == r_2->ytypes->built_in_t->number8);
 
 	//REPLACE
 	r_1->ytypes->built_in_t->number8 = 25;
 	r_1->operation = EditOperation::replace;
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//READ AGAIN
 	filter = make_unique<ydktest_sanity::Runner>();
 	r_read = crud.read(provider, *filter);
-	BOOST_REQUIRE(r_read!=nullptr);
+	REQUIRE(r_read!=nullptr);
 	r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-	BOOST_REQUIRE(r_1->ytypes->built_in_t->number8 == r_2->ytypes->built_in_t->number8);
+	REQUIRE(r_1->ytypes->built_in_t->number8 == r_2->ytypes->built_in_t->number8);
 }
 
-BOOST_AUTO_TEST_CASE(test_create)
+TEST_CASE("test_create")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -102,7 +99,7 @@ BOOST_AUTO_TEST_CASE(test_create)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
 	auto e_1 = make_unique<ydktest_sanity::Runner::OneList::Ldata>();
@@ -121,13 +118,13 @@ BOOST_AUTO_TEST_CASE(test_create)
 	r_1->one_list->ldata.push_back(move(e_2));
 
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//CREATE AGAIN WITH ERROR
-	BOOST_CHECK_THROW(crud.update(provider, *r_1), YCPPServiceProviderError);
+	CHECK_THROWS_AS(crud.update(provider, *r_1), YCPPServiceProviderError);
 }
 
-BOOST_AUTO_TEST_CASE(test_delete)
+TEST_CASE("test_delete")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -136,7 +133,7 @@ BOOST_AUTO_TEST_CASE(test_delete)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
 	auto e_1 = make_unique<ydktest_sanity::Runner::OneList::Ldata>();
@@ -155,7 +152,7 @@ BOOST_AUTO_TEST_CASE(test_delete)
 	r_1->one_list->ldata.push_back(move(e_2));
 
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//DELETE
 	r_1 = make_unique<ydktest_sanity::Runner>();
@@ -167,7 +164,7 @@ BOOST_AUTO_TEST_CASE(test_delete)
 	r_1->one_list->ldata.push_back(move(e_1));
 
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//DELETE AGAIN WITH ERROR
 	r_1 = make_unique<ydktest_sanity::Runner>();
@@ -177,10 +174,10 @@ BOOST_AUTO_TEST_CASE(test_delete)
 	e_1->number = 1;
 	e_1->operation = EditOperation::delete_;
 	r_1->one_list->ldata.push_back(move(e_1));
-	BOOST_CHECK_THROW(crud.update(provider, *r_1), YCPPServiceProviderError);
+	CHECK_THROWS_AS(crud.update(provider, *r_1), YCPPServiceProviderError);
 }
 
-BOOST_AUTO_TEST_CASE(test_remove)
+TEST_CASE("test_remove")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -189,27 +186,27 @@ BOOST_AUTO_TEST_CASE(test_remove)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //MERGE
 	r_1->ytypes->built_in_t->number8 = 25;
 	r_1->operation = EditOperation::merge;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//REMOVE
 	r_1 = make_unique<ydktest_sanity::Runner>();
 	r_1->operation = EditOperation::remove;
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//REMOVE AGAIN WITH NO ERROR
 	r_1->operation = EditOperation::remove;
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(test_merge)
+TEST_CASE("test_merge")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -218,21 +215,21 @@ BOOST_AUTO_TEST_CASE(test_merge)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
 	r_1->ytypes->built_in_t->number8 = 25;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//MERGE
 	r_1->ytypes->built_in_t->number8 = 32;
 	r_1->operation = EditOperation::merge;
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 }
 
-BOOST_AUTO_TEST_CASE(delete_leaf)
+TEST_CASE("delete_leaf")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -241,24 +238,24 @@ BOOST_AUTO_TEST_CASE(delete_leaf)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->number8 = 10;
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//DELETE
 	r_1->ytypes->built_in_t->number8.operation = EditOperation::delete_;
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//DELETE AGAIN WITH ERROR
-	BOOST_CHECK_THROW(crud.update(provider, *r_1), YCPPServiceProviderError);
+	CHECK_THROWS_AS(crud.update(provider, *r_1), YCPPServiceProviderError);
 }
 
 
-BOOST_AUTO_TEST_CASE(delete_leaflist)
+TEST_CASE("delete_leaflist")
 {
     ydk::path::Repository repo{TEST_HOME};
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
@@ -267,18 +264,18 @@ BOOST_AUTO_TEST_CASE(delete_leaflist)
     //DELETE
     auto r_1 = make_unique<ydktest_sanity::Runner>();
     bool reply = crud.delete_(provider, *r_1);
-    BOOST_REQUIRE(reply);
+    REQUIRE(reply);
 
     //CREATE
     r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::local);
 	reply = crud.create(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//DELETE
 	r_1->ytypes->built_in_t->enum_llist.operation = EditOperation::delete_;
 	reply = crud.update(provider, *r_1);
-	BOOST_REQUIRE(reply);
+	REQUIRE(reply);
 
 	//DELETE AGAIN WITH ERROR
-	BOOST_CHECK_THROW(crud.update(provider, *r_1), YCPPServiceProviderError);
+	CHECK_THROWS_AS(crud.update(provider, *r_1), YCPPServiceProviderError);
 }

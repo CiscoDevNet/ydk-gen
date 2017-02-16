@@ -31,18 +31,18 @@ namespace ydk
 {
 std::string to_string(EditOperation operation)
 {
-	#define TOSTR(a) case EditOperation::a: return #a;
-	switch(operation)
-	{
-		TOSTR(merge)
-		TOSTR(create)
-		TOSTR(remove)
-		TOSTR(replace)
-		TOSTR(not_set)
-		case EditOperation::delete_:
-		    return "delete";
-	}
-	#undef TOSTR
-	return {};
+    #define TOSTR(a) case EditOperation::a: return #a;
+    switch(operation)
+    {
+        TOSTR(merge)
+        TOSTR(create)
+        TOSTR(remove)
+        TOSTR(replace)
+        TOSTR(not_set)
+        case EditOperation::delete_:
+            return "delete";
+    }
+    #undef TOSTR
+    return {};
 }
 }

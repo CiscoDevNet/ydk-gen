@@ -13,24 +13,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 ------------------------------------------------------------------*/
-#include <boost/log/trivial.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-
 #include <sstream>
 #include <string>
 #include <iostream>
 
+#include "json.hpp"
 #include "opendaylight_parser.hpp"
 #include "path_api.hpp"
 #include "ydk_yang.hpp"
 
 
 using namespace std;
-using namespace ydk::network_topology;
+using json = nlohmann::json;
 
 namespace ydk
 {
+#define ODLNode network_topology::NetworkTopology::Topology::Node
+
 //////////////////////////////////////////
 //// OpenDaylightCapabilitiesParser
 //////////////////////////////////////////
@@ -94,88 +93,83 @@ OpenDaylightCapabilitiesJsonParser::~OpenDaylightCapabilitiesJsonParser()
 {
 }
 
-static vector<string> get_caps(boost::property_tree::ptree const& pt, int count)
+static void print_to_node(const json& pt, ODLNode & odl_node)
 {
-    using boost::property_tree::ptree;
-    ptree::const_iterator end = pt.end();
-    vector<string> v{};
-    for (ptree::const_iterator it = pt.begin(); it != end; ++it)
+    for (auto it = pt.begin(); it != pt.end(); ++it)
     {
-        if(count == 1)
-            return get_caps(it->second, count+1);
-       	v.push_back(it->second.get_value<std::string>());
-    }
-    return v;
-}
-
-static void print_to_node(boost::property_tree::ptree const& pt, NetworkTopology::Topology::Node & odl_node)
-{
-    using boost::property_tree::ptree;
-    ptree::const_iterator end = pt.end();
-    for (ptree::const_iterator it = pt.begin(); it != end; ++it)
-    {
-        if(it->first.find("node-id") != string::npos)
+        if(it.key().find("node-id") != string::npos)
         {
-        	odl_node.node_id = it->second.get_value<std::string>();
+            odl_node.node_id = it->get<string>();
         }
-        else if(it->first.find("host") != string::npos)
+        else if(it.key().find("host") != string::npos)
         {
-        	odl_node.host = it->second.get_value<std::string>();
+            odl_node.host = it->get<string>();
         }
-        else if(it->first.find("connection-status") != string::npos)
-	{
-		odl_node.connection_status = it->second.get_value<std::string>();
-	}
-        else if(it->first.find("port") != string::npos)
-	{
-		odl_node.port = it->second.get_value<int>();
-	}
-        else if(it->first.find("available-capabilities") != string::npos)
+        else if(it.key().find("connection-status") != string::npos)
         {
-            vector<string> caps = get_caps(it->second, 1);
-            for(const auto & c : caps)
+            odl_node.connection_status = it->get<string>();
+        }
+        else if(it.key().find("port") != string::npos)
+        {
+            odl_node.port = it->get<int>();
+        }
+        else if(it.key().find(":available-capabilities") != string::npos)
+        {
+            for(auto p = it->begin(); p != it->end(); ++p)
             {
-            	auto a = make_unique<NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability>();
-            	a->capability = c;
-            	odl_node.available_capabilities->available_capability.push_back(move(a));
+                for(auto p1 = p->begin(); p1 != p->end(); ++p1)
+                {
+                    auto a = make_unique<ODLNode::AvailableCapabilities::AvailableCapability>();
+                    a->capability = p1->get<string>();
+                    odl_node.available_capabilities->available_capability.push_back(move(a));
+                }
             }
         }
-
     }
 }
 
-static void parse_json(boost::property_tree::ptree const& pt, std::map<std::string, std::unique_ptr<NetworkTopology::Topology::Node>> & odl_nodes)
+static void parse_json(const json& pt, std::map<std::string, std::unique_ptr<ODLNode>> & odl_nodes)
 {
-    using boost::property_tree::ptree;
-    ptree::const_iterator end = pt.end();
+    auto network_topology = pt.find("network-topology");
+    if(network_topology == pt.end())
+        return;
 
-    for (ptree::const_iterator it = pt.begin(); it != end; ++it)
+    auto topology = network_topology->find("topology");
+    if(topology == network_topology->end())
+        return;
+
+    for(auto it = topology->begin(); it != topology->end(); it++)
     {
-        if(it->first.find("node") != string::npos)
+        for(auto child = it->begin(); child != it->end(); child++)
         {
-            auto node = make_unique<NetworkTopology::Topology::Node>();
-            print_to_node(pt, *node);
-            if(node->node_id.get().size()>0)
+            if(child->type_name() == "array")
             {
-            	string s = node->node_id.get();
-                odl_nodes[s] = move(node);
+                for(size_t i=0; i<child->size(); i++)
+                {
+                    auto node = make_unique<ODLNode>();
+                    print_to_node(child->at(i), *node);
+                    if(node->node_id.get().size()>0)
+                    {
+                        string s = node->node_id.get();
+                        odl_nodes[s] = move(node);
+                     }
+                }
             }
         }
-        parse_json(it->second, odl_nodes);
     }
 }
 
-std::map<std::string, std::unique_ptr<NetworkTopology::Topology::Node>> OpenDaylightCapabilitiesJsonParser::parse(const string & capabilities_buffer)
+std::map<std::string, std::unique_ptr<ODLNode>> OpenDaylightCapabilitiesJsonParser::parse(const string & capabilities_buffer)
 {
-	std::map<std::string, std::unique_ptr<NetworkTopology::Topology::Node>> odl_nodes;
+	std::map<std::string, std::unique_ptr<ODLNode>> odl_nodes;
 
-	boost::property_tree::ptree pt;
 	istringstream ss(capabilities_buffer);
-	read_json(ss, pt);
+	json pt;
+	ss >> pt;
 
 	parse_json(pt, odl_nodes);
 
 	return odl_nodes;
 }
-
+#undef ODLNode
 }

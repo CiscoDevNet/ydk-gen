@@ -28,7 +28,7 @@ class NetconfClient;
 
 class NetconfModelProvider : public path::ModelProvider {
 public:
-		NetconfModelProvider(NetconfClient & client);
+        NetconfModelProvider(NetconfClient & client);
 
         ~NetconfModelProvider();
 

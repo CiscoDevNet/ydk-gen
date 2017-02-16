@@ -46,21 +46,22 @@ class Entity;
 
 class CrudService : public Service
 {
-	public:
-		CrudService();
+    public:
+        CrudService();
 
-		bool create(path::ServiceProvider & provider, Entity & entity);
+        bool create(path::ServiceProvider & provider, Entity & entity);
 
-		bool update(path::ServiceProvider & provider, Entity & entity);
+        bool update(path::ServiceProvider & provider, Entity & entity);
 
-		bool delete_(path::ServiceProvider & provider, Entity & entity);
+        bool delete_(path::ServiceProvider & provider, Entity & entity);
 
-		std::unique_ptr<Entity> read(path::ServiceProvider & provider, Entity & filter);
+        std::unique_ptr<Entity> read(path::ServiceProvider & provider, Entity & filter);
 
-		std::unique_ptr<Entity> read_config(path::ServiceProvider & provider, Entity & filter);
+        std::unique_ptr<Entity> read_config(path::ServiceProvider & provider, Entity & filter);
 
-	private:
-		std::unique_ptr<Entity> read_datanode(Entity & filter, path::DataNode* read_data_node);
+    private:
+        std::unique_ptr<Entity> read_datanode(Entity & filter, std::unique_ptr<path::DataNode>
+         read_data_node);
 };
 
 }

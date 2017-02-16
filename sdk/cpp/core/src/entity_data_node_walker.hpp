@@ -25,8 +25,8 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#ifndef WALKER_HPP
-#define WALKER_HPP
+#ifndef _WALKER_HPP_
+#define _WALKER_HPP_
 
 #include <vector>
 #include <map>
@@ -34,12 +34,11 @@
 
 namespace ydk {
 
-
 class Entity;
 
-path::DataNode* get_data_node_from_entity(Entity & entity, const path::RootSchemaNode & root);
+path::DataNode& get_data_node_from_entity(Entity & entity, path::RootSchemaNode & root);
 
 void get_entity_from_data_node(path::DataNode * node, Entity* entity);
 
 }
-#endif /* WALKER_HPP */
+#endif /* _WALKER_HPP_ */

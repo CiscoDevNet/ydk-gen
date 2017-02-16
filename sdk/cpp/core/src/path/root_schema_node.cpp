@@ -23,12 +23,13 @@
 
 
 #include "path_private.hpp"
-#include <boost/log/trivial.hpp>
+#include "../logger.hpp"
 
 
 //////////////////////////////////////////////////////////////////////////////
 /// RootSchemaNode
 /////////////////////////////////////////////////////////////////////////////
+
 ydk::path::RootSchemaNode::~RootSchemaNode()
 {
 
@@ -46,10 +47,10 @@ ydk::path::RootSchemaNode::parent() const noexcept
     return nullptr;
 }
 
-const ydk::path::SchemaNode*
+const ydk::path::SchemaNode&
 ydk::path::RootSchemaNode::root() const noexcept
 {
-    return this;
+    return *this;
 }
 
 ydk::path::Statement
@@ -71,6 +72,8 @@ ydk::path::RootSchemaNode::keys() const
 /////////////////////////////////////////////////////////////////////////////////////
 ydk::path::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx) : m_ctx{ctx}
 {
+    // m_root_data_nodes = std::vector<std::unique_ptr<DataNode>>{};
+
     //populate the tree
     uint32_t idx = 0;
     while( auto p = ly_ctx_get_module_iter(ctx, &idx)) {
@@ -85,6 +88,10 @@ ydk::path::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx) : m_ctx{ct
 
 ydk::path::RootSchemaNodeImpl::~RootSchemaNodeImpl()
 {
+    // need to release before destroy context
+    for (auto & r: m_root_data_nodes)
+        r.release();
+
     if(m_ctx){
         ly_ctx_destroy(m_ctx, nullptr);
         m_ctx = nullptr;
@@ -95,14 +102,14 @@ std::vector<ydk::path::SchemaNode*>
 ydk::path::RootSchemaNodeImpl::find(const std::string& path) const
 {
     if(path.empty()) {
-        BOOST_LOG_TRIVIAL(error) << "path is empty";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"path is empty"});
+        YLOG_ERROR("path is empty");
+        throw(YCPPInvalidArgumentError{"path is empty"});
     }
 
     //has to be a relative path
     if(path.at(0) == '/') {
-        BOOST_LOG_TRIVIAL(error) << "path must be a relative path";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"path must be a relative path"});
+        YLOG_ERROR("path must be a relative path");
+        throw(YCPPInvalidArgumentError{"path must be a relative path"});
     }
 
     std::vector<SchemaNode*> ret;
@@ -128,43 +135,26 @@ ydk::path::RootSchemaNodeImpl::children() const
     return m_children;
 }
 
-ydk::path::DataNode*
-ydk::path::RootSchemaNodeImpl::create(const std::string& path) const
+ydk::path::DataNode&
+ydk::path::RootSchemaNodeImpl::create(const std::string& path)
 {
     return create(path, "");
 }
 
-ydk::path::DataNode*
-ydk::path::RootSchemaNodeImpl::create(const std::string& path, const std::string& value) const
+ydk::path::DataNode&
+ydk::path::RootSchemaNodeImpl::create(const std::string& path, const std::string& value)
 {
-    RootDataImpl* rd = new RootDataImpl{this, m_ctx, "/"};
-
-    if (rd){
-        return rd->create(path, value);
-    }
-
-    return nullptr;
+    auto root_data_node = std::make_unique<RootDataImpl>(*this, m_ctx, "/");
+    m_root_data_nodes.push_back(std::move(root_data_node));
+    return m_root_data_nodes.back()->create(path, value);
 }
 
-ydk::path::DataNode*
-ydk::path::RootSchemaNodeImpl::from_xml(const std::string& xml) const
-{
-    struct lyd_node *root = lyd_parse_mem(m_ctx, xml.c_str(), LYD_XML, 0);
-    RootDataImpl* rd = new RootDataImpl{this, m_ctx, "/"};
-    DataNodeImpl* nodeImpl = new DataNodeImpl{rd,root};
-
-    return nodeImpl;
-
-}
-
-
-
-ydk::path::Rpc*
+std::unique_ptr<ydk::path::Rpc>
 ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
 {
     auto c = find(path);
     if(c.empty()){
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Path is invalid"});
+        throw(YCPPInvalidArgumentError{"Path is invalid"});
     }
 
     bool found = false;
@@ -180,14 +170,14 @@ ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
     }
 
     if(!found){
-        BOOST_LOG_TRIVIAL(error) << "Path " << path << " does not refer to an rpc node.";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"Path does not refer to an rpc node"});
+        YLOG_ERROR("Path {} does not refer to an rpc node.", path);
+        throw(YCPPInvalidArgumentError{"Path does not refer to an rpc node"});
     }
     SchemaNodeImpl* sn = dynamic_cast<SchemaNodeImpl*>(rpc_sn);
     if(!sn){
-        BOOST_LOG_TRIVIAL(error) << "Schema Node case failed";
-        BOOST_THROW_EXCEPTION(YCPPIllegalStateError("Internal error occurred"));
+        YLOG_ERROR("Schema Node case failed");
+        throw(YCPPIllegalStateError("Internal error occurred"));
     }
-    return new RpcImpl{sn, m_ctx};
 
+    return std::make_unique<RpcImpl>(*sn, m_ctx);
 }

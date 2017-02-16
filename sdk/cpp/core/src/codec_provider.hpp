@@ -38,8 +38,7 @@ public:
 	CodecServiceProvider(path::Repository & repo, EncodingFormat encoding);
 	~CodecServiceProvider();
 
-	path::RootSchemaNode* get_root_schema();
-	std::unique_ptr<Entity> get_top_entity(std::string & payload);
+	path::RootSchemaNode& get_root_schema();
 
 public:
 	EncodingFormat m_encoding;

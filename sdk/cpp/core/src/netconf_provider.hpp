@@ -38,15 +38,15 @@ public:
                                std::string password,
                                int port = 830);
         ~NetconfServiceProvider();
-        path::RootSchemaNode* get_root_schema() const;
-        path::DataNode* invoke(path::Rpc* rpc) const;
+        path::RootSchemaNode& get_root_schema() const;
+        std::unique_ptr<path::DataNode> invoke(path::Rpc& rpc) const;
         EncodingFormat get_encoding() const;
 
 private:
-        path::DataNode* handle_edit(path::Rpc* rpc, path::Annotation ann) const;
-        path::DataNode* handle_netconf_operation(path::Rpc* ydk_rpc) const;
-        path::DataNode* handle_read(path::Rpc* rpc) const;
-        void initialize(path::Repository & repo);
+        std::unique_ptr<path::DataNode> handle_edit(path::Rpc& rpc, path::Annotation ann) const;
+        std::unique_ptr<path::DataNode> handle_netconf_operation(path::Rpc& ydk_rpc) const;
+        std::unique_ptr<path::DataNode> handle_read(path::Rpc& rpc) const;
+        void initialize(path::Repository& repo);
 
 private:
         std::unique_ptr<NetconfClient> client;

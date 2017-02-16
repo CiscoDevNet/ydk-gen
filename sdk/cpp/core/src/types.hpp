@@ -59,11 +59,11 @@ typedef signed long long int64;
 enum class EditOperation
 {
     merge,
-	create,
-	remove,
-	delete_,
+    create,
+    remove,
+    delete_,
     replace,
-	not_set
+    not_set
 };
 
 typedef struct Empty {
@@ -75,46 +75,46 @@ class Entity;
 class LeafData
 {
   public:
-	LeafData(std::string value, EditOperation operation, bool is_set);
-	~LeafData();
+    LeafData(std::string value, EditOperation operation, bool is_set);
+    ~LeafData();
 
-	bool operator == (LeafData & other) const;
-	bool operator == (const LeafData & other) const;
+    bool operator == (LeafData & other) const;
+    bool operator == (const LeafData & other) const;
 
   public:
-	std::string value;
-	EditOperation operation;
-	bool is_set;
+    std::string value;
+    EditOperation operation;
+    bool is_set;
 };
 
 struct EntityPath {
-	std::string path;
-	std::vector<std::pair<std::string, LeafData>> value_paths;
+    std::string path;
+    std::vector<std::pair<std::string, LeafData>> value_paths;
 
-	EntityPath(std::string path, std::vector<std::pair<std::string, LeafData> > value_paths)
-		: path(path), value_paths(value_paths)
-	{
-	}
+    EntityPath(std::string path, std::vector<std::pair<std::string, LeafData> > value_paths)
+        : path(path), value_paths(value_paths)
+    {
+    }
 
-	~EntityPath()
-	{
-	}
+    ~EntityPath()
+    {
+    }
 
-	inline bool operator == (EntityPath & other) const
-	{
-	    return path == other.path && value_paths == other.value_paths;
-	}
+    inline bool operator == (EntityPath & other) const
+    {
+        return path == other.path && value_paths == other.value_paths;
+    }
 
-	inline bool operator == (const EntityPath & other) const
-	{
-	    return path == other.path && value_paths == other.value_paths;
-	}
+    inline bool operator == (const EntityPath & other) const
+    {
+        return path == other.path && value_paths == other.value_paths;
+    }
 };
 
 class Entity {
   public:
-	Entity();
-	virtual ~Entity();
+    Entity();
+    virtual ~Entity();
 
   public:
     //
@@ -138,103 +138,106 @@ class Entity {
 
     virtual std::map<std::string, Entity*> & get_children() = 0;
     virtual std::unique_ptr<Entity> clone_ptr();
+    virtual void set_child(const std::string & yang_name, Entity* entity);
+    virtual Entity* get_child(const std::string & yang_name);
+    virtual std::map<std::string, Entity*> & get_protected_children();
 
   public:
-	Entity* parent;
-	std::string yang_name;
-	std::string yang_parent_name;
-	EditOperation operation;
+    Entity* parent;
+    std::string yang_name;
+    std::string yang_parent_name;
+    EditOperation operation;
 
   protected:
-	std::map<std::string, Entity*> children;
+    std::map<std::string, Entity*> children;
 };
 
 class Bits {
   public:
-	Bits();
-	virtual ~Bits();
-	bool & operator [] (std::string key);
+    Bits();
+    virtual ~Bits();
+    bool & operator [] (std::string key);
     const std::map<std::string, bool> & get_bitmap() const;
 
   private:
-	std::map<std::string, bool> bitmap;
+    std::map<std::string, bool> bitmap;
 };
 
 class Decimal64 {
   public:
-	Decimal64(std::string value)
+    Decimal64(std::string value)
      : value(value)
     {
     }
-	virtual ~Decimal64()
-	{
-	}
+    virtual ~Decimal64()
+    {
+    }
 
-	std::string value;
+    std::string value;
 };
 
 class Identity {
   public:
-	Identity(std::string tag) : tag(tag)
-	{
-	}
+    Identity(std::string tag) : tag(tag)
+    {
+    }
 
-	virtual ~Identity(){}
+    virtual ~Identity(){}
 
-	std::string to_string()
-	{
-		return tag;
-	}
+    std::string to_string()
+    {
+        return tag;
+    }
 
   private:
-	std::string tag;
+    std::string tag;
 };
 
 class Enum {
   public:
-	class YLeaf {
-	  public:
-		YLeaf(int value, std::string name)
-			: value(value), name(name)
-		{
-		}
-		~YLeaf(){}
+    class YLeaf {
+      public:
+        YLeaf(int value, std::string name)
+            : value(value), name(name)
+        {
+        }
+        ~YLeaf(){}
 
-		int value;
-		std::string name;
-	};
+        int value;
+        std::string name;
+    };
 
-	Enum()
-	{
-	}
-	~Enum()
-	{
-	}
+    Enum()
+    {
+    }
+    ~Enum()
+    {
+    }
 };
 
 enum class YType {
-	uint8,
-	uint16,
-	uint32,
-	uint64,
-	int8,
-	int16,
-	int32,
-	int64,
-	empty,
-	identityref,
-	str,
-	boolean,
-	enumeration,
-	bits,
-	decimal64
+    uint8,
+    uint16,
+    uint32,
+    uint64,
+    int8,
+    int16,
+    int32,
+    int64,
+    empty,
+    identityref,
+    str,
+    boolean,
+    enumeration,
+    bits,
+    decimal64
 };
 
 class YLeaf
 {
   public:
-	YLeaf(YType type, std::string name);
-	~YLeaf();
+    YLeaf(YType type, std::string name);
+    ~YLeaf();
 
     YLeaf(const YLeaf& val);
     YLeaf(YLeaf&& val);
@@ -242,48 +245,63 @@ class YLeaf
     YLeaf& operator=(const YLeaf& val)=delete;
     YLeaf& operator=(YLeaf&& val)=delete;
 
-	const std::string get() const;
-	std::pair<std::string, LeafData> get_name_leafdata() const;
+    const std::string get() const;
+    std::pair<std::string, LeafData> get_name_leafdata() const;
 
-	void operator = (uint8 val);
-	void operator = (uint32 val);
-	void operator = (uint64 val);
-	void operator = (long val);
-	void operator = (int8 val);
-	void operator = (int32 val);
-	void operator = (int64 val);
-	void operator = (double val);
-	void operator = (Empty val);
-	void operator = (Identity val);
-	void operator = (Bits val);
-	void operator = (std::string val);
-	void operator = (Enum::YLeaf val);
-	void operator = (Decimal64 val);
+    void operator = (uint8 val);
+    void operator = (uint32 val);
+    void operator = (uint64 val);
+    void operator = (long val);
+    void operator = (int8 val);
+    void operator = (int32 val);
+    void operator = (int64 val);
+    void operator = (double val);
+    void operator = (Empty val);
+    void operator = (Identity val);
+    void operator = (Bits val);
+    void operator = (std::string val);
+    void operator = (Enum::YLeaf val);
+    void operator = (Decimal64 val);
 
-	operator std::string() const;
-	bool operator == (YLeaf & other) const;
-	bool operator == (const YLeaf & other) const;
+    void set(uint8 val);
+    void set(uint32 val);
+    void set(uint64 val);
+    void set(long val);
+    void set(int8 val);
+    void set(int32 val);
+    void set(int64 val);
+    void set(double val);
+    void set(Empty val);
+    void set(Identity val);
+    void set(Bits val);
+    void set(std::string val);
+    void set(Enum::YLeaf val);
+    void set(Decimal64 val);
 
-	bool & operator [] (std::string key);
+    operator std::string() const;
+    bool operator == (YLeaf & other) const;
+    bool operator == (const YLeaf & other) const;
+
+    bool & operator [] (std::string key);
 
   public:
-	bool is_set;
-	EditOperation operation;
+    bool is_set;
+    EditOperation operation;
 
   private:
-	void store_value(std::string && val);
-	std::string get_bits_string() const;
+    void store_value(std::string && val);
+    std::string get_bits_string() const;
 
-	std::string name;
-	std::string value;
-	YType type;
-	Bits bits_value;
+    std::string name;
+    std::string value;
+    YType type;
+    Bits bits_value;
 };
 
 class YLeafList {
   public:
-	YLeafList(YType type, std::string name);
-	~YLeafList();
+    YLeafList(YType type, std::string name);
+    ~YLeafList();
 
     YLeafList(const YLeafList& val);
     YLeafList(YLeafList&& val);
@@ -291,44 +309,44 @@ class YLeafList {
     YLeafList& operator=(const YLeafList& val);
     YLeafList& operator=(YLeafList&& val);
 
-	void append(uint8 val);
-	void append(uint32 val);
-	void append(uint64 val);
-	void append(long val);
-	void append(int8 val);
-	void append(int32 val);
-	void append(int64 val);
-	void append(double val);
-	void append(Empty val);
-	void append(Identity val);
-	void append(Bits val);
-	void append(std::string val);
-	void append(Enum::YLeaf val);
-	void append(Decimal64 val);
+    void append(uint8 val);
+    void append(uint32 val);
+    void append(uint64 val);
+    void append(long val);
+    void append(int8 val);
+    void append(int32 val);
+    void append(int64 val);
+    void append(double val);
+    void append(Empty val);
+    void append(Identity val);
+    void append(Bits val);
+    void append(std::string val);
+    void append(Enum::YLeaf val);
+    void append(Decimal64 val);
 
-	YLeaf & operator [] (size_t index);
+    YLeaf & operator [] (size_t index);
 
-	operator std::string() const;
-	bool operator == (YLeafList & other) const;
-	bool operator == (const YLeafList & other) const;
+    operator std::string() const;
+    bool operator == (YLeafList & other) const;
+    bool operator == (const YLeafList & other) const;
 
-	std::vector<std::pair<std::string, LeafData> > get_name_leafdata() const;
-	std::vector<YLeaf> getYLeafs() const;
+    std::vector<std::pair<std::string, LeafData> > get_name_leafdata() const;
+    std::vector<YLeaf> getYLeafs() const;
 
   public:
-	EditOperation operation;
+    EditOperation operation;
 
   private:
-	std::vector<YLeaf> values;
-	YType type;
-	std::string name;
+    std::vector<YLeaf> values;
+    YType type;
+    std::string name;
 };
 
 std::ostream& operator<< (std::ostream& stream, const YLeaf& value);
 
 enum class EncodingFormat {
-	XML,
-	JSON
+    XML,
+    JSON
 };
 
 std::string to_string(EditOperation operation);

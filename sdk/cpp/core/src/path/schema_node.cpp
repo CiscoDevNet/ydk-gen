@@ -23,7 +23,7 @@
 
 
 #include "path_private.hpp"
-#include <boost/log/trivial.hpp>
+#include "../logger.hpp"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ ydk::path::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_n
         const struct lys_node *last = nullptr;
 
         while( auto q = lys_getnext(last, node, nullptr, 0)) {
-            m_children.emplace_back(std::make_unique<SchemaNodeImpl>(this,const_cast<struct lys_node*>(q)));
+            m_children.emplace_back(std::make_unique<SchemaNodeImpl>(this, const_cast<struct lys_node*>(q)));
             last = q;
         }
     }
@@ -68,24 +68,24 @@ ydk::path::SchemaNodeImpl::path() const
     struct lys_module* module = nullptr;
 
     while(cur_node != nullptr){
-	module = cur_node->module;
-	if (!cur_node->parent || cur_node->parent->module != module) {
-		//qualify with module name
+    module = cur_node->module;
+    if (!cur_node->parent || cur_node->parent->module != module) {
+        //qualify with module name
 
-		std::string segname {module->name};
-		segname+=':';
-		segname+=cur_node->name;
-		segments.push_back(segname);
-	} else {
-		segments.push_back(cur_node->name);
-	}
-	cur_node = cur_node->parent;
+        std::string segname {module->name};
+        segname+=':';
+        segname+=cur_node->name;
+        segments.push_back(segname);
+    } else {
+        segments.push_back(cur_node->name);
+    }
+    cur_node = cur_node->parent;
     }
 
     std::reverse(segments.begin(), segments.end());
     for ( auto seg : segments ) {
-	ret+="/";
-	ret+=seg;
+    ret+="/";
+    ret+=seg;
 
     }
 
@@ -97,15 +97,15 @@ ydk::path::SchemaNodeImpl::find(const std::string& path) const
 {
     if(path.empty())
     {
-        BOOST_LOG_TRIVIAL(error) << "Path is empty";
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"path is empty"});
+        YLOG_ERROR("Path is empty");
+        throw(YCPPInvalidArgumentError{"path is empty"});
     }
 
     //has to be a relative path
     if(path.at(0) == '/')
     {
-        BOOST_LOG_TRIVIAL(error) << "path must be a relative path";
-	BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"path must be a relative path"});
+        YLOG_ERROR("path must be a relative path");
+	throw(YCPPInvalidArgumentError{"path must be a relative path"});
     }
 
     std::vector<SchemaNode*> ret;
@@ -115,11 +115,11 @@ ydk::path::SchemaNodeImpl::find(const std::string& path) const
 
     if (found_node)
     {
-		auto p = reinterpret_cast<SchemaNode*>(found_node->priv);
-		if(p)
-		{
-			ret.push_back(p);
-		}
+        auto p = reinterpret_cast<SchemaNode*>(found_node->priv);
+        if(p)
+        {
+            ret.push_back(p);
+        }
     }
 
     return ret;
@@ -138,16 +138,16 @@ ydk::path::SchemaNodeImpl::children() const
     return m_children;
 }
 
-const ydk::path::SchemaNode*
+const ydk::path::SchemaNode&
 ydk::path::SchemaNodeImpl::root() const noexcept
 {
     if(m_parent == nullptr)
     {
-	    return this;
+        return *this;
     }
     else
     {
-    	return m_parent->root();
+        return m_parent->root();
     }
 }
 
@@ -162,14 +162,14 @@ ydk::path::SchemaNodeImpl::statement() const
         s.keyword = "container";
         break;
     case LYS_CHOICE:
-	s.keyword = "choice";
-	break;
+    s.keyword = "choice";
+    break;
     case LYS_LEAF:
-	s.keyword = "leaf";
-	break;
+    s.keyword = "leaf";
+    break;
     case LYS_LEAFLIST:
-	s.keyword = "leaf-list";
-	break;
+    s.keyword = "leaf-list";
+    break;
     case LYS_LIST:
         s.keyword = "list";
         break;
@@ -201,8 +201,8 @@ ydk::path::SchemaNodeImpl::statement() const
         s.keyword = "anyxml";
         break;
     case LYS_ACTION:
-    	s.keyword = "action";
-    	break;
+        s.keyword = "action";
+        break;
     case LYS_ANYDATA:
     case LYS_UNKNOWN:
         break;
@@ -225,8 +225,8 @@ ydk::path::SchemaNodeImpl::keys() const
     if(stmt.keyword == "list") {
         //sanity check
         if(m_node->nodetype != LYS_LIST) {
-            BOOST_LOG_TRIVIAL(error) << "Mismatch in schema";
-            BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"Mismatch in schema"});
+            YLOG_ERROR("Mismatch in schema");
+            throw(YCPPIllegalStateError{"Mismatch in schema"});
         }
         struct lys_node_list *slist = (struct lys_node_list *)m_node;
         for(uint8_t i=0; i < slist->keys_size; ++i) {

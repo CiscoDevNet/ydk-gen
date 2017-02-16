@@ -27,36 +27,11 @@
 namespace ydk
 {
 
-TopEntityLookUp ydk_top_entities_table;
 std::vector<path::Capability> ydk_global_capabilities;
-
-TopEntityLookUp::TopEntityLookUp ()
-{
-    m_entities = std::map<std::string, std::unique_ptr<Entity>>{};
-}
-
-TopEntityLookUp::~TopEntityLookUp () {}
-
-std::unique_ptr<Entity>
-TopEntityLookUp::lookup(const std::string & path)
-{
-    return m_entities.at(path)->clone_ptr();
-}
-
-void
-TopEntityLookUp::insert(std::string path, std::unique_ptr<Entity> top_entity)
-{
-    m_entities[path] = std::move(top_entity);
-}
-
-std::unique_ptr<Entity> lookup_top_entity(const std::string & lookup_key)
-{
-	return ydk_top_entities_table.lookup(lookup_key);
-}
 
 const std::vector<path::Capability> get_global_capabilities()
 {
-	return ydk_global_capabilities;
+    return ydk_global_capabilities;
 }
 
 }

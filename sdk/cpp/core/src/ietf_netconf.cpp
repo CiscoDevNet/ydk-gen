@@ -81,9 +81,9 @@ void GetConfigRpc::Output::set_value(const std::string & value_path, std::string
 
 GetConfigRpc::Source::Source()
     :
-    	candidate{YType::empty, "candidate"},
-	 running{YType::empty, "running"},
-	 startup{YType::empty, "startup"}
+        candidate{YType::empty, "candidate"},
+     running{YType::empty, "running"},
+     startup{YType::empty, "startup"}
 {
     yang_name = "source"; yang_parent_name = "get-config";
 }
@@ -95,16 +95,16 @@ GetConfigRpc::Source::~Source()
 bool GetConfigRpc::Source::has_data() const
 {
     return candidate.is_set
-	|| running.is_set
-	|| startup.is_set;
+    || running.is_set
+    || startup.is_set;
 }
 
 bool GetConfigRpc::Source::has_operation() const
 {
     return is_set(operation)
-	|| is_set(candidate.operation)
-	|| is_set(running.operation)
-	|| is_set(startup.operation);
+    || is_set(candidate.operation)
+    || is_set(running.operation)
+    || is_set(startup.operation);
 }
 
 std::string GetConfigRpc::Source::get_segment_path() const
@@ -177,10 +177,10 @@ void GetConfigRpc::Source::set_value(const std::string & value_path, std::string
 
 GetConfigRpc::GetConfigRpc()
     :
-    	with_defaults{YType::enumeration, "with-defaults"}
-    	,
+        with_defaults{YType::enumeration, "with-defaults"}
+        ,
     output(std::make_unique<GetConfigRpc::Output>())
-	,source(std::make_unique<GetConfigRpc::Source>())
+    ,source(std::make_unique<GetConfigRpc::Source>())
 {
     output->parent = this;
     children["output"] = output.get();
@@ -198,16 +198,16 @@ GetConfigRpc::~GetConfigRpc()
 bool GetConfigRpc::has_data() const
 {
     return with_defaults.is_set
-	|| (output !=  nullptr && output->has_data())
-	|| (source !=  nullptr && source->has_data());
+    || (output !=  nullptr && output->has_data())
+    || (source !=  nullptr && source->has_data());
 }
 
 bool GetConfigRpc::has_operation() const
 {
     return is_set(operation)
-	|| is_set(with_defaults.operation)
-	|| (output !=  nullptr && is_set(output->operation))
-	|| (source !=  nullptr && is_set(source->operation));
+    || is_set(with_defaults.operation)
+    || (output !=  nullptr && is_set(output->operation))
+    || (source !=  nullptr && is_set(source->operation));
 }
 
 std::string GetConfigRpc::get_segment_path() const
@@ -224,7 +224,7 @@ EntityPath GetConfigRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -317,8 +317,8 @@ std::unique_ptr<Entity> GetConfigRpc::clone_ptr()
 }
 EditConfigRpc::Target::Target()
     :
-    	candidate{YType::empty, "candidate"},
-	 running{YType::empty, "running"}
+        candidate{YType::empty, "candidate"},
+     running{YType::empty, "running"}
 {
     yang_name = "target"; yang_parent_name = "edit-config";
 }
@@ -330,14 +330,14 @@ EditConfigRpc::Target::~Target()
 bool EditConfigRpc::Target::has_data() const
 {
     return candidate.is_set
-	|| running.is_set;
+    || running.is_set;
 }
 
 bool EditConfigRpc::Target::has_operation() const
 {
     return is_set(operation)
-	|| is_set(candidate.operation)
-	|| is_set(running.operation);
+    || is_set(candidate.operation)
+    || is_set(running.operation);
 }
 
 std::string EditConfigRpc::Target::get_segment_path() const
@@ -405,11 +405,11 @@ void EditConfigRpc::Target::set_value(const std::string & value_path, std::strin
 
 EditConfigRpc::EditConfigRpc()
     :
-    	default_operation{YType::enumeration, "default-operation"},
-	 error_option{YType::enumeration, "error-option"},
-	 test_option{YType::enumeration, "test-option"},
-	 url{YType::str, "url"}
-    	,
+        default_operation{YType::enumeration, "default-operation"},
+     error_option{YType::enumeration, "error-option"},
+     test_option{YType::enumeration, "test-option"},
+     url{YType::str, "url"}
+        ,
     target(std::make_unique<EditConfigRpc::Target>())
 {
     target->parent = this;
@@ -425,20 +425,20 @@ EditConfigRpc::~EditConfigRpc()
 bool EditConfigRpc::has_data() const
 {
     return default_operation.is_set
-	|| error_option.is_set
-	|| test_option.is_set
-	|| url.is_set
-	|| (target !=  nullptr && target->has_data());
+    || error_option.is_set
+    || test_option.is_set
+    || url.is_set
+    || (target !=  nullptr && target->has_data());
 }
 
 bool EditConfigRpc::has_operation() const
 {
     return is_set(operation)
-	|| is_set(default_operation.operation)
-	|| is_set(error_option.operation)
-	|| is_set(test_option.operation)
-	|| is_set(url.operation)
-	|| (target !=  nullptr && is_set(target->operation));
+    || is_set(default_operation.operation)
+    || is_set(error_option.operation)
+    || is_set(test_option.operation)
+    || is_set(url.operation)
+    || (target !=  nullptr && is_set(target->operation));
 }
 
 std::string EditConfigRpc::get_segment_path() const
@@ -455,7 +455,7 @@ EntityPath EditConfigRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -540,10 +540,10 @@ std::unique_ptr<Entity> EditConfigRpc::clone_ptr()
 }
 CopyConfigRpc::Target::Target()
     :
-    	candidate{YType::empty, "candidate"},
-	 running{YType::empty, "running"},
-	 startup{YType::empty, "startup"},
-	 url{YType::str, "url"}
+        candidate{YType::empty, "candidate"},
+     running{YType::empty, "running"},
+     startup{YType::empty, "startup"},
+     url{YType::str, "url"}
 {
     yang_name = "target"; yang_parent_name = "copy-config";
 }
@@ -555,18 +555,18 @@ CopyConfigRpc::Target::~Target()
 bool CopyConfigRpc::Target::has_data() const
 {
     return candidate.is_set
-	|| running.is_set
-	|| startup.is_set
-	|| url.is_set;
+    || running.is_set
+    || startup.is_set
+    || url.is_set;
 }
 
 bool CopyConfigRpc::Target::has_operation() const
 {
     return is_set(operation)
-	|| is_set(candidate.operation)
-	|| is_set(running.operation)
-	|| is_set(startup.operation)
-	|| is_set(url.operation);
+    || is_set(candidate.operation)
+    || is_set(running.operation)
+    || is_set(startup.operation)
+    || is_set(url.operation);
 }
 
 std::string CopyConfigRpc::Target::get_segment_path() const
@@ -644,10 +644,10 @@ void CopyConfigRpc::Target::set_value(const std::string & value_path, std::strin
 
 CopyConfigRpc::Source::Source()
     :
-    	candidate{YType::empty, "candidate"},
-	 running{YType::empty, "running"},
-	 startup{YType::empty, "startup"},
-	 url{YType::str, "url"}
+        candidate{YType::empty, "candidate"},
+     running{YType::empty, "running"},
+     startup{YType::empty, "startup"},
+     url{YType::str, "url"}
 {
     yang_name = "source"; yang_parent_name = "copy-config";
 }
@@ -659,18 +659,18 @@ CopyConfigRpc::Source::~Source()
 bool CopyConfigRpc::Source::has_data() const
 {
     return candidate.is_set
-	|| running.is_set
-	|| startup.is_set
-	|| url.is_set;
+    || running.is_set
+    || startup.is_set
+    || url.is_set;
 }
 
 bool CopyConfigRpc::Source::has_operation() const
 {
     return is_set(operation)
-	|| is_set(candidate.operation)
-	|| is_set(running.operation)
-	|| is_set(startup.operation)
-	|| is_set(url.operation);
+    || is_set(candidate.operation)
+    || is_set(running.operation)
+    || is_set(startup.operation)
+    || is_set(url.operation);
 }
 
 std::string CopyConfigRpc::Source::get_segment_path() const
@@ -748,10 +748,10 @@ void CopyConfigRpc::Source::set_value(const std::string & value_path, std::strin
 
 CopyConfigRpc::CopyConfigRpc()
     :
-    	with_defaults{YType::enumeration, "with-defaults"}
-    	,
+        with_defaults{YType::enumeration, "with-defaults"}
+        ,
     source(std::make_unique<CopyConfigRpc::Source>())
-	,target(std::make_unique<CopyConfigRpc::Target>())
+    ,target(std::make_unique<CopyConfigRpc::Target>())
 {
     source->parent = this;
     children["source"] = source.get();
@@ -769,16 +769,16 @@ CopyConfigRpc::~CopyConfigRpc()
 bool CopyConfigRpc::has_data() const
 {
     return with_defaults.is_set
-	|| (source !=  nullptr && source->has_data())
-	|| (target !=  nullptr && target->has_data());
+    || (source !=  nullptr && source->has_data())
+    || (target !=  nullptr && target->has_data());
 }
 
 bool CopyConfigRpc::has_operation() const
 {
     return is_set(operation)
-	|| is_set(with_defaults.operation)
-	|| (source !=  nullptr && is_set(source->operation))
-	|| (target !=  nullptr && is_set(target->operation));
+    || is_set(with_defaults.operation)
+    || (source !=  nullptr && is_set(source->operation))
+    || (target !=  nullptr && is_set(target->operation));
 }
 
 std::string CopyConfigRpc::get_segment_path() const
@@ -795,7 +795,7 @@ EntityPath CopyConfigRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -888,8 +888,8 @@ std::unique_ptr<Entity> CopyConfigRpc::clone_ptr()
 }
 DeleteConfigRpc::Target::Target()
     :
-    	startup{YType::empty, "startup"},
-	 url{YType::str, "url"}
+        startup{YType::empty, "startup"},
+     url{YType::str, "url"}
 {
     yang_name = "target"; yang_parent_name = "delete-config";
 }
@@ -901,14 +901,14 @@ DeleteConfigRpc::Target::~Target()
 bool DeleteConfigRpc::Target::has_data() const
 {
     return startup.is_set
-	|| url.is_set;
+    || url.is_set;
 }
 
 bool DeleteConfigRpc::Target::has_operation() const
 {
     return is_set(operation)
-	|| is_set(startup.operation)
-	|| is_set(url.operation);
+    || is_set(startup.operation)
+    || is_set(url.operation);
 }
 
 std::string DeleteConfigRpc::Target::get_segment_path() const
@@ -996,7 +996,7 @@ bool DeleteConfigRpc::has_data() const
 bool DeleteConfigRpc::has_operation() const
 {
     return is_set(operation)
-	|| (target !=  nullptr && is_set(target->operation));
+    || (target !=  nullptr && is_set(target->operation));
 }
 
 std::string DeleteConfigRpc::get_segment_path() const
@@ -1013,7 +1013,7 @@ EntityPath DeleteConfigRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1078,9 +1078,9 @@ std::unique_ptr<Entity> DeleteConfigRpc::clone_ptr()
 }
 LockRpc::Target::Target()
     :
-    	candidate{YType::empty, "candidate"},
-	 running{YType::empty, "running"},
-	 startup{YType::empty, "startup"}
+        candidate{YType::empty, "candidate"},
+     running{YType::empty, "running"},
+     startup{YType::empty, "startup"}
 {
     yang_name = "target"; yang_parent_name = "lock";
 }
@@ -1092,16 +1092,16 @@ LockRpc::Target::~Target()
 bool LockRpc::Target::has_data() const
 {
     return candidate.is_set
-	|| running.is_set
-	|| startup.is_set;
+    || running.is_set
+    || startup.is_set;
 }
 
 bool LockRpc::Target::has_operation() const
 {
     return is_set(operation)
-	|| is_set(candidate.operation)
-	|| is_set(running.operation)
-	|| is_set(startup.operation);
+    || is_set(candidate.operation)
+    || is_set(running.operation)
+    || is_set(startup.operation);
 }
 
 std::string LockRpc::Target::get_segment_path() const
@@ -1194,7 +1194,7 @@ bool LockRpc::has_data() const
 bool LockRpc::has_operation() const
 {
     return is_set(operation)
-	|| (target !=  nullptr && is_set(target->operation));
+    || (target !=  nullptr && is_set(target->operation));
 }
 
 std::string LockRpc::get_segment_path() const
@@ -1211,7 +1211,7 @@ EntityPath LockRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1276,9 +1276,9 @@ std::unique_ptr<Entity> LockRpc::clone_ptr()
 }
 UnlockRpc::Target::Target()
     :
-    	candidate{YType::empty, "candidate"},
-	 running{YType::empty, "running"},
-	 startup{YType::empty, "startup"}
+        candidate{YType::empty, "candidate"},
+     running{YType::empty, "running"},
+     startup{YType::empty, "startup"}
 {
     yang_name = "target"; yang_parent_name = "unlock";
 }
@@ -1290,16 +1290,16 @@ UnlockRpc::Target::~Target()
 bool UnlockRpc::Target::has_data() const
 {
     return candidate.is_set
-	|| running.is_set
-	|| startup.is_set;
+    || running.is_set
+    || startup.is_set;
 }
 
 bool UnlockRpc::Target::has_operation() const
 {
     return is_set(operation)
-	|| is_set(candidate.operation)
-	|| is_set(running.operation)
-	|| is_set(startup.operation);
+    || is_set(candidate.operation)
+    || is_set(running.operation)
+    || is_set(startup.operation);
 }
 
 std::string UnlockRpc::Target::get_segment_path() const
@@ -1392,7 +1392,7 @@ bool UnlockRpc::has_data() const
 bool UnlockRpc::has_operation() const
 {
     return is_set(operation)
-	|| (target !=  nullptr && is_set(target->operation));
+    || (target !=  nullptr && is_set(target->operation));
 }
 
 std::string UnlockRpc::get_segment_path() const
@@ -1409,7 +1409,7 @@ EntityPath UnlockRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1546,8 +1546,8 @@ void GetRpc::Output::set_value(const std::string & value_path, std::string value
 
 GetRpc::GetRpc()
     :
-    	with_defaults{YType::enumeration, "with-defaults"}
-    	,
+        with_defaults{YType::enumeration, "with-defaults"}
+        ,
     output(std::make_unique<GetRpc::Output>())
 {
     output->parent = this;
@@ -1563,14 +1563,14 @@ GetRpc::~GetRpc()
 bool GetRpc::has_data() const
 {
     return with_defaults.is_set
-	|| (output !=  nullptr && output->has_data());
+    || (output !=  nullptr && output->has_data());
 }
 
 bool GetRpc::has_operation() const
 {
     return is_set(operation)
-	|| is_set(with_defaults.operation)
-	|| (output !=  nullptr && is_set(output->operation));
+    || is_set(with_defaults.operation)
+    || (output !=  nullptr && is_set(output->operation));
 }
 
 std::string GetRpc::get_segment_path() const
@@ -1587,7 +1587,7 @@ EntityPath GetRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1688,7 +1688,7 @@ EntityPath CloseSessionRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1730,7 +1730,7 @@ std::unique_ptr<Entity> CloseSessionRpc::clone_ptr()
 }
 KillSessionRpc::KillSessionRpc()
     :
-    	session_id{YType::uint32, "session-id"}
+        session_id{YType::uint32, "session-id"}
 {
     yang_name = "kill-session"; yang_parent_name = "ietf-netconf";
 }
@@ -1747,7 +1747,7 @@ bool KillSessionRpc::has_data() const
 bool KillSessionRpc::has_operation() const
 {
     return is_set(operation)
-	|| is_set(session_id.operation);
+    || is_set(session_id.operation);
 }
 
 std::string KillSessionRpc::get_segment_path() const
@@ -1764,7 +1764,7 @@ EntityPath KillSessionRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1811,10 +1811,10 @@ std::unique_ptr<Entity> KillSessionRpc::clone_ptr()
 }
 CommitRpc::CommitRpc()
     :
-    	confirm_timeout{YType::uint32, "confirm-timeout"},
-	 confirmed{YType::empty, "confirmed"},
-	 persist{YType::str, "persist"},
-	 persist_id{YType::str, "persist-id"}
+        confirm_timeout{YType::uint32, "confirm-timeout"},
+     confirmed{YType::empty, "confirmed"},
+     persist{YType::str, "persist"},
+     persist_id{YType::str, "persist-id"}
 {
     yang_name = "commit"; yang_parent_name = "ietf-netconf";
 }
@@ -1826,18 +1826,18 @@ CommitRpc::~CommitRpc()
 bool CommitRpc::has_data() const
 {
     return confirm_timeout.is_set
-	|| confirmed.is_set
-	|| persist.is_set
-	|| persist_id.is_set;
+    || confirmed.is_set
+    || persist.is_set
+    || persist_id.is_set;
 }
 
 bool CommitRpc::has_operation() const
 {
     return is_set(operation)
-	|| is_set(confirm_timeout.operation)
-	|| is_set(confirmed.operation)
-	|| is_set(persist.operation)
-	|| is_set(persist_id.operation);
+    || is_set(confirm_timeout.operation)
+    || is_set(confirmed.operation)
+    || is_set(persist.operation)
+    || is_set(persist_id.operation);
 }
 
 std::string CommitRpc::get_segment_path() const
@@ -1854,7 +1854,7 @@ EntityPath CommitRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1947,7 +1947,7 @@ EntityPath DiscardChangesRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -1989,7 +1989,7 @@ std::unique_ptr<Entity> DiscardChangesRpc::clone_ptr()
 }
 CancelCommitRpc::CancelCommitRpc()
     :
-    	persist_id{YType::str, "persist-id"}
+        persist_id{YType::str, "persist-id"}
 {
     yang_name = "cancel-commit"; yang_parent_name = "ietf-netconf";
 }
@@ -2006,7 +2006,7 @@ bool CancelCommitRpc::has_data() const
 bool CancelCommitRpc::has_operation() const
 {
     return is_set(operation)
-	|| is_set(persist_id.operation);
+    || is_set(persist_id.operation);
 }
 
 std::string CancelCommitRpc::get_segment_path() const
@@ -2023,7 +2023,7 @@ EntityPath CancelCommitRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();
@@ -2070,10 +2070,10 @@ std::unique_ptr<Entity> CancelCommitRpc::clone_ptr()
 }
 ValidateRpc::Source::Source()
     :
-    	candidate{YType::empty, "candidate"},
-	 running{YType::empty, "running"},
-	 startup{YType::empty, "startup"},
-	 url{YType::str, "url"}
+        candidate{YType::empty, "candidate"},
+     running{YType::empty, "running"},
+     startup{YType::empty, "startup"},
+     url{YType::str, "url"}
 {
     yang_name = "source"; yang_parent_name = "validate";
 }
@@ -2085,18 +2085,18 @@ ValidateRpc::Source::~Source()
 bool ValidateRpc::Source::has_data() const
 {
     return candidate.is_set
-	|| running.is_set
-	|| startup.is_set
-	|| url.is_set;
+    || running.is_set
+    || startup.is_set
+    || url.is_set;
 }
 
 bool ValidateRpc::Source::has_operation() const
 {
     return is_set(operation)
-	|| is_set(candidate.operation)
-	|| is_set(running.operation)
-	|| is_set(startup.operation)
-	|| is_set(url.operation);
+    || is_set(candidate.operation)
+    || is_set(running.operation)
+    || is_set(startup.operation)
+    || is_set(url.operation);
 }
 
 std::string ValidateRpc::Source::get_segment_path() const
@@ -2194,7 +2194,7 @@ bool ValidateRpc::has_data() const
 bool ValidateRpc::has_operation() const
 {
     return is_set(operation)
-	|| (source !=  nullptr && is_set(source->operation));
+    || (source !=  nullptr && is_set(source->operation));
 }
 
 std::string ValidateRpc::get_segment_path() const
@@ -2211,7 +2211,7 @@ EntityPath ValidateRpc::get_entity_path(Entity* ancestor) const
     std::ostringstream path_buffer;
     if (ancestor != nullptr)
     {
-        BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
+        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});
     }
 
     path_buffer << get_segment_path();

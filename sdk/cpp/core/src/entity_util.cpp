@@ -34,40 +34,40 @@ namespace ydk
 
 void get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::ostringstream & path_buffer)
 {
-	if(ancestor == nullptr)
-	{
-		BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"ancestor should not be null."});
-	}
-	auto p = current_node->parent;
-	std::vector<Entity*> parents {};
-	while (p != nullptr && p != ancestor) {
-		parents.push_back(p);
-		p = p->parent;
-	}
+    if(ancestor == nullptr)
+    {
+        throw(YCPPInvalidArgumentError{"ancestor should not be null."});
+    }
+    auto p = current_node->parent;
+    std::vector<Entity*> parents {};
+    while (p != nullptr && p != ancestor) {
+        parents.push_back(p);
+        p = p->parent;
+    }
 
-	if (p == nullptr) {
-		BOOST_THROW_EXCEPTION(YCPPInvalidArgumentError{"parent is not in the ancestor hierarchy."});
-	}
+    if (p == nullptr) {
+        throw(YCPPInvalidArgumentError{"parent is not in the ancestor hierarchy."});
+    }
 
-	std::reverse(parents.begin(), parents.end());
+    std::reverse(parents.begin(), parents.end());
 
-	p = nullptr;
-	for (auto p1 : parents) {
-		if (p) {
-			path_buffer << "/";
-		} else {
-			 p = p1;
-		}
-		path_buffer << p1->get_segment_path();
-	}
-	if(p)
-		path_buffer << "/";
-	path_buffer<<current_node->get_segment_path();
+    p = nullptr;
+    for (auto p1 : parents) {
+        if (p) {
+            path_buffer << "/";
+        } else {
+             p = p1;
+        }
+        path_buffer << p1->get_segment_path();
+    }
+    if(p)
+        path_buffer << "/";
+    path_buffer<<current_node->get_segment_path();
 }
 
 bool is_set(const EditOperation & operation)
 {
-	return operation != EditOperation::not_set;
+    return operation != EditOperation::not_set;
 }
 
 }

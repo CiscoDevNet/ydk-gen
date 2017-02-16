@@ -14,12 +14,11 @@
  limitations under the License.
 ------------------------------------------------------------------*/
 #include <iostream>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 
 #include "ydk/netconf_provider.hpp"
 #include "ydk/crud_service.hpp"
 #include "ydk_openconfig/openconfig_bgp.hpp"
+#include <spdlog/spdlog.h>
 
 #include "args_parser.h"
 
@@ -39,21 +38,21 @@ int main(int argc, char* argv[])
 	bool verbose=(args[4]=="--verbose");
 	if(verbose)
 	{
-		boost::log::core::get()->set_filter(
-			        boost::log::trivial::severity >= boost::log::trivial::trace
-			    );
-	}
-	else
-	{
-		boost::log::core::get()->set_filter(
-					        boost::log::trivial::severity >= boost::log::trivial::error
-					    );
+	    auto logger = spdlog::stdout_color_mt("ydk");
+	    logger->set_level(spdlog::level::debug);
 	}
 
 	NetconfServiceProvider provider{host, username, password, port};
 	CrudService crud{};
 
 	auto bgp = make_unique<openconfig_bgp::Bgp>();
-	bool reply = crud.delete_(provider, *bgp);
-	if(reply) cout << "Delete operation success" << endl; else cout << "Operation failed" << endl;
+	try
+	{
+        bool reply = crud.delete_(provider, *bgp);
+        if(reply) cout << "Delete operation success" << endl; else cout << "Operation failed" << endl;
+	}
+    catch(YCPPError & e)
+    {
+        cerr << e<<endl;
+    }
 }

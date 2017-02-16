@@ -28,10 +28,10 @@
 
 #include <libnetconf.h>
 #include <libnetconf_ssh.h>
-#include <boost/log/trivial.hpp>
 
-
+#include "logger.hpp"
 #include "netconf_client.hpp"
+#include "types.hpp"
 
 using namespace std;
 using namespace ydk;
@@ -44,83 +44,83 @@ namespace ydk
 map<pair<string, string>, string> NetconfClient::password_lookup;
 
 NetconfClient::NetconfClient(string  username, string  password,
-		string  hostname, int port, int verbosity) :
-		username(username), hostname(hostname), port(port)
+        string  hostname, int port, int verbosity) :
+        username(username), hostname(hostname), port(port)
 {
-	nc_verbosity((NC_VERB_LEVEL) verbosity);
-	nc_callback_print(clb_print);
-	nc_callback_sshauth_password(clb_set_password);
-	nc_callback_ssh_host_authenticity_check(clb_ssh_host_authenticity_check);
+    nc_verbosity((NC_VERB_LEVEL) verbosity);
+    nc_callback_print(clb_print);
+    nc_callback_sshauth_password(clb_set_password);
+    nc_callback_ssh_host_authenticity_check(clb_ssh_host_authenticity_check);
 
-	password_lookup.insert(make_pair(make_pair(username, hostname), password));
-	session=NULL;
+    password_lookup.insert(make_pair(make_pair(username, hostname), password));
+    session=NULL;
 }
 
 
 int NetconfClient::connect()
 {
-	session = nc_session_connect(hostname.c_str(), port, username.c_str(), NULL);
-	perform_session_check("Could not connect to " + hostname);
-	init_capabilities();
-	return EXIT_SUCCESS;
+    session = nc_session_connect(hostname.c_str(), port, username.c_str(), NULL);
+    perform_session_check("Could not connect to " + hostname);
+    init_capabilities();
+    return EXIT_SUCCESS;
 }
 
 std::string NetconfClient::get_hostname_port()
 {
-	ostringstream os;
-	os<<hostname<<":"<<port;
-	return os.str();
+    ostringstream os;
+    os<<hostname<<":"<<port;
+    return os.str();
 }
 
 void NetconfClient::init_capabilities()
 {
-	struct nc_cpblts* capabilities_list;
-	const char *cap;
+    struct nc_cpblts* capabilities_list;
+    const char *cap;
 
-	capabilities_list = nc_session_get_cpblts(session);
-	nc_cpblts_iter_start(capabilities_list);
+    capabilities_list = nc_session_get_cpblts(session);
+    nc_cpblts_iter_start(capabilities_list);
 
-	while ((cap = nc_cpblts_iter_next(capabilities_list)) != NULL)
-	{
-		capabilities.push_back(cap);
-	}
+    while ((cap = nc_cpblts_iter_next(capabilities_list)) != NULL)
+    {
+        capabilities.push_back(cap);
+    }
 }
 
 string NetconfClient::execute_payload(const string & payload)
 {
-	perform_session_check("Could not execute payload. Not connected to " + hostname);
+    perform_session_check("Could not execute payload. Not connected to " + hostname);
 
-	nc_reply *reply;
-	nc_rpc *rpc = build_rpc_request(payload);
+    nc_reply *reply;
+    nc_rpc *rpc = build_rpc_request(payload);
 
-	NC_MSG_TYPE reply_type = nc_session_send_recv(session, rpc, &reply);
-	string reply_payload = process_rpc_reply(reply_type, reply);
+    NC_MSG_TYPE reply_type = nc_session_send_recv(session, rpc, &reply);
+    string reply_payload = process_rpc_reply(reply_type, reply);
 
-	nc_reply_free(reply);
-	nc_rpc_free(rpc);
+    nc_reply_free(reply);
+    nc_rpc_free(rpc);
 
-	return reply_payload;
+    return reply_payload;
 }
 
 NetconfClient::~NetconfClient()
 {
-	nc_session_free(session);
+    nc_session_free(session);
 }
 
 nc_rpc* NetconfClient::build_rpc_request(const string & payload)
 {
-	nc_rpc* rpc = nc_rpc_build(payload.c_str(), session);
+    nc_rpc* rpc = nc_rpc_build(payload.c_str(), session);
 
 	if (rpc == NULL)
 	{
-          BOOST_LOG_TRIVIAL(error) << "Could not build rpc payload:-" << payload ;
-	      BOOST_THROW_EXCEPTION(YCPPClientError{"Could not build payload"});
+          YLOG_ERROR("Could not build rpc payload: {}", payload );
+	      throw(YCPPClientError{"Could not build payload"});
 	}
 	else if(NC_RPC_UNKNOWN==nc_rpc_get_type(rpc))
 	{
 		nc_rpc_free(rpc);
-        BOOST_LOG_TRIVIAL(error)<< "Rpc type is unknown";
-		BOOST_THROW_EXCEPTION(YCPPClientError{"Could not build payload"});
+        YLOG_ERROR("Rpc type is unknown");
+		throw(YCPPClientError{"Could not build payload"});
 	}
 	return rpc;
 }
@@ -135,15 +135,15 @@ string NetconfClient::process_rpc_reply(int reply_type, const nc_reply* reply)
 		default:
 		case NC_MSG_NONE:
 		case NC_MSG_UNKNOWN:
-            BOOST_LOG_TRIVIAL(error) << "RPC error occurred";
-			BOOST_THROW_EXCEPTION(YCPPClientError{"RPC error occured"});
+            YLOG_ERROR("RPC error occurred");
+			throw(YCPPClientError{"RPC error occured"});
 	}
 	return {};
 }
 
 StringVec NetconfClient::get_capabilities()
 {
-	return capabilities;
+    return capabilities;
 }
 
 void NetconfClient::clb_print(NC_VERB_LEVEL level, const char* msg)
@@ -151,44 +151,44 @@ void NetconfClient::clb_print(NC_VERB_LEVEL level, const char* msg)
 	switch (level)
 	{
 	case NC_VERB_ERROR:
-         BOOST_LOG_TRIVIAL(error) << "libnetconf ERROR: " << msg;
+         YLOG_ERROR("libnetconf ERROR: {}", msg);
 		break;
 	case NC_VERB_WARNING:
-         BOOST_LOG_TRIVIAL(warning) << "libnetconf WARNING: " << msg;
+		YLOG_WARN("libnetconf WARNING: {}", msg);
 		break;
 	case NC_VERB_VERBOSE:
-         BOOST_LOG_TRIVIAL(trace) << "libnetconf VERBOSE: " << msg;
+		YLOG_TRACE("libnetconf VERBOSE: {}", msg);
 		break;
 	case NC_VERB_DEBUG:
-		BOOST_LOG_TRIVIAL(debug) << "libnetconf DEBUG: " << msg;
+		YLOG_DEBUG("libnetconf DEBUG: {}", msg);
 		break;
 	}
 }
 
 char* NetconfClient::clb_set_password(const char* user_name,
-		const char* host_name)
+        const char* host_name)
 {
-	string password_string = password_lookup[make_pair(user_name, host_name)];
-	char* password_buffer = (char*) malloc(
-			sizeof(char) * (password_string.size() + 1));
-	snprintf(password_buffer, password_string.size() + 1, "%s",
-			password_string.c_str());
+    string password_string = password_lookup[make_pair(user_name, host_name)];
+    char* password_buffer = (char*) malloc(
+            sizeof(char) * (password_string.size() + 1));
+    snprintf(password_buffer, password_string.size() + 1, "%s",
+            password_string.c_str());
 
-	return password_buffer;
+    return password_buffer;
 }
 
 int NetconfClient::clb_ssh_host_authenticity_check(const char *hostname,
-		ssh_session session)
+        ssh_session session)
 {
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
 void NetconfClient::perform_session_check(string message)
 {
 	if (session == NULL)
 	{
-        BOOST_LOG_TRIVIAL(error) << message;
-		BOOST_THROW_EXCEPTION(YCPPClientError{message});
+        YLOG_ERROR(message.c_str());
+		throw(YCPPClientError{message});
 	}
 }
 

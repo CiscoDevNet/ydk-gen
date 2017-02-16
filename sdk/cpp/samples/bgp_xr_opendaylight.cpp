@@ -14,8 +14,6 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
 #include <iostream>
 #include <string>
 
@@ -24,6 +22,7 @@
 #include <ydk/crud_service.hpp>
 #include <ydk/opendaylight_provider.hpp>
 #include <ydk/types.hpp>
+#include <spdlog/spdlog.h>
 
 #include <ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_cfg.hpp>
 #include <ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_datatypes.hpp>
@@ -89,15 +88,7 @@ static void set_logging(bool verbose)
 {
 	if(verbose)
 	{
-		boost::log::core::get()->set_filter(
-			        boost::log::trivial::severity >= boost::log::trivial::debug
-			    );
-	}
-	else
-	{
-		boost::log::core::get()->set_filter(
-					        boost::log::trivial::severity >= boost::log::trivial::error
-					    );
+            auto logger = spdlog::stdout_color_mt("ydk");
 	}
 }
 
@@ -114,7 +105,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		ydk::path::Repository repo{"/Users/abhirame/Cisco/odl/distribution-karaf-0.5.2-Boron-SR2/cache/schema"};
-		OpenDaylightServiceProvider provider{repo, "http://127.0.0.1", "admin", "admin", 8181, EncodingFormat::XML};
+	        OpenDaylightServiceProvider provider{repo, host, username, password, port, EncodingFormat::XML};
 		CrudService crud {};
 
 		auto bgp = make_unique<Bgp>();
@@ -125,7 +116,7 @@ int main(int argc, char* argv[])
 	}
 	catch(YCPPError & e)
 	{
-		cerr << "Error details: "<<boost::diagnostic_information(e)<<endl;
+		cerr << "Error details: "<<e.what()<<endl;
 	}
 
 }

@@ -14,9 +14,6 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#define BOOST_TEST_MODULE NetconfProviderTest
-#include <boost/test/unit_test.hpp>
-
 #include <string.h>
 #include <iostream>
 
@@ -28,7 +25,7 @@ using namespace ydk;
 using namespace std;
 #define MODELS_PATH "/Users/abhirame/Cisco/003/ydk-gen/sdk/cpp/ydk/tests/models/openconfig"
 
-BOOST_AUTO_TEST_CASE(bgp_as)
+TEST_CASE(bgp_as)
 {
 	ydk::NetconfServiceProvider provider{ "127.0.0.1", "admin", "admin", "12022", "", "", MODELS_PATH};
 	auto bgp = make_unique<ydk::openconfig_bgp::Bgp>();
@@ -37,8 +34,8 @@ BOOST_AUTO_TEST_CASE(bgp_as)
 	bgp->global_->config->as_ = 65001;
 
 	string payload = provider.encode(*bgp, "create");
-	BOOST_TEST_MESSAGE(payload);
+	INFO(payload);
 
 	string result = provider.execute_payload(payload, "create");
-	BOOST_REQUIRE(strstr(result.c_str(),"<ok/>") != NULL);
+	REQUIRE(strstr(result.c_str(),"<ok/>") != NULL);
 }

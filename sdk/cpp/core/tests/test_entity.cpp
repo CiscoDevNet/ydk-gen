@@ -25,9 +25,8 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#define BOOST_TEST_MODULE EntityTest
-#include <boost/test/unit_test.hpp>
 #include "../src/types.hpp"
+#include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
@@ -235,7 +234,7 @@ class TestEntity:public Entity
   unique_ptr<TestEntity::Child> child;
 };
 
-BOOST_AUTO_TEST_CASE(test_create)
+TEST_CASE("test_create")
 {
 	TestEntity test{};
 	string test_value = "value for test";
@@ -244,8 +243,8 @@ BOOST_AUTO_TEST_CASE(test_create)
 							 {"enabled", {"true", EditOperation::not_set, true}},
 							 {"bits-field", {"bit1 bit2", EditOperation::not_set, true}}}};
 
-	BOOST_REQUIRE(test.get_entity_path(nullptr).path == "test");
-	BOOST_REQUIRE(test.has_data() == false);
+	REQUIRE(test.get_entity_path(nullptr).path == "test");
+	REQUIRE(test.has_data() == false);
 
 	test.name = test_value;
 	test.enabled = true;
@@ -253,55 +252,55 @@ BOOST_AUTO_TEST_CASE(test_create)
 	test.bits_field["bit1"] = true;
 	test.bits_field["bit2"] = true;
 
-	BOOST_REQUIRE(test.has_data() == true);
-	BOOST_REQUIRE(test.get_entity_path(nullptr) == expected);
+	REQUIRE(test.has_data() == true);
+	REQUIRE(test.get_entity_path(nullptr) == expected);
 }
 
-BOOST_AUTO_TEST_CASE(test_read)
+TEST_CASE("test_read")
 {
 	TestEntity test{};
 
-	BOOST_REQUIRE(test.get_entity_path(nullptr).path == "test");
-	BOOST_REQUIRE(test.has_data() == false);
+	REQUIRE(test.get_entity_path(nullptr).path == "test");
+	REQUIRE(test.has_data() == false);
 
 	test.set_value("name", "test test");
-	BOOST_REQUIRE(test.has_data() == true);
+	REQUIRE(test.has_data() == true);
 
 	auto child = test.get_child_by_name("child", "");
-	BOOST_REQUIRE(child != nullptr);
+	REQUIRE(child != nullptr);
 
 	child->set_value("child-val", "123");
-	BOOST_REQUIRE(child->has_data() == true);
+	REQUIRE(child->has_data() == true);
 }
 
-BOOST_AUTO_TEST_CASE(test_multi_create)
+TEST_CASE("test_multi_create")
 {
 	TestEntity test{};
 
-	BOOST_REQUIRE(test.get_entity_path(nullptr).path == "test");
-	BOOST_REQUIRE(test.has_data() == false);
+	REQUIRE(test.get_entity_path(nullptr).path == "test");
+	REQUIRE(test.has_data() == false);
 
 	test.set_value("name", "test test");
-	BOOST_REQUIRE(test.has_data() == true);
+	REQUIRE(test.has_data() == true);
 
 	auto mchild = test.child->get_child_by_name("multi-child", "");
-	BOOST_REQUIRE(mchild != nullptr);
+	REQUIRE(mchild != nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(test_multi_read)
+TEST_CASE("test_multi_read")
 {
 	TestEntity test{};
 
-	BOOST_REQUIRE(test.get_entity_path(nullptr).path == "test");
-	BOOST_REQUIRE(test.has_data() == false);
+	REQUIRE(test.get_entity_path(nullptr).path == "test");
+	REQUIRE(test.has_data() == false);
 
 	test.set_value("name", "test test");
-	BOOST_REQUIRE(test.has_data() == true);
+	REQUIRE(test.has_data() == true);
 
 	auto mchild = make_unique<TestEntity::Child::MultiChild>();
 	mchild->parent = test.child.get();
 	test.child->multi_child.push_back(move(mchild));
 
 	auto m = test.child->get_child_by_name("multi-child", "multi-child[multi-key='abc']");
-	BOOST_REQUIRE(m != nullptr);
+	REQUIRE(m != nullptr);
 }

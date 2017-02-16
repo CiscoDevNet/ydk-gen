@@ -21,7 +21,6 @@ ENDIF()
 # find_library(unittest_location UnitTest++)
 find_library(ydk_client_location ydk_client HINT ${BUILDS_DIR}/ydk)
 find_library(netconf_location netconf)
-find_library(boost_python_location boost_python)
 find_library(python_location python2.7)
 find_library(ssh_location ssh)
 find_library(xml2_location xml2)
@@ -47,7 +46,6 @@ target_link_libraries(test_netconf_client
 	UnitTest++
 	${ydk_client_location}
 	${netconf_location}
-	${boost_python_location}
 	${python_location}
 	${ssh_location}
 	${xml2_location}

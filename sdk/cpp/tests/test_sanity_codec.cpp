@@ -14,10 +14,7 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#define BOOST_TEST_MODULE CodecTests
-
 #include <iostream>
-#include <boost/test/unit_test.hpp>
 #include <string.h>
 
 #include "ydk/codec_provider.hpp"
@@ -27,7 +24,9 @@
 #include "ydk_ydktest/oc_pattern.hpp"
 
 #include "config.hpp"
+#include "catch.hpp"
 
+using namespace std;
 using namespace ydk;
 
 std::string XML_OC_PATTERN_PAYLOAD = R"(<oc-A xmlns="http://cisco.com/ns/yang/oc-pattern">
@@ -256,7 +255,7 @@ config_runner_1(ydktest_sanity::Runner *runner)
     runner->two_list->ldata.push_back(std::move(l_2));
 }
 
-BOOST_AUTO_TEST_CASE(single_encode)
+TEST_CASE("single_encode")
 {
 	path::Repository repo{TEST_HOME};
     CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
@@ -268,10 +267,10 @@ BOOST_AUTO_TEST_CASE(single_encode)
     config_runner_1(runner.get());
 
     std::string xml = codec_service.encode(codec_provider, *runner, true);
-    BOOST_CHECK_EQUAL(XML_RUNNER_PAYLOAD_1, xml);
+    CHECK(XML_RUNNER_PAYLOAD_1 == xml);
 }
 
-BOOST_AUTO_TEST_CASE(multiple_encode)
+TEST_CASE("multiple_encode")
 {
     path::Repository repo{TEST_HOME};
     CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
@@ -291,59 +290,59 @@ BOOST_AUTO_TEST_CASE(multiple_encode)
 
     std::map<std::string, std::string> payload_map = codec_service.encode(codec_provider, entity_map, true);
 
-    BOOST_CHECK_EQUAL(payload_map["runner1"], XML_RUNNER_PAYLOAD_1);
-    BOOST_CHECK_EQUAL(payload_map["runner2"], XML_RUNNER_PAYLOAD_2);
+    CHECK(payload_map["runner1"] == XML_RUNNER_PAYLOAD_1);
+    CHECK(payload_map["runner2"] == XML_RUNNER_PAYLOAD_2);
 }
 
-BOOST_AUTO_TEST_CASE(test_oc_pattern)
+TEST_CASE("test_oc_pattern")
 {
     path::Repository repo{TEST_HOME};
     CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
     CodecService codec_service{};
 
-    auto entity = codec_service.decode(codec_provider, XML_OC_PATTERN_PAYLOAD);
+    auto entity = codec_service.decode(codec_provider, XML_OC_PATTERN_PAYLOAD, make_unique<oc_pattern::OcA>());
 
     oc_pattern::OcA * entity_ptr = dynamic_cast<oc_pattern::OcA*>(entity.get());
-    BOOST_CHECK_EQUAL(entity_ptr->a.get(), "Hello");
+    CHECK(entity_ptr->a.get() == "Hello");
 }
 
-BOOST_AUTO_TEST_CASE(enum_2)
+TEST_CASE("enum_2")
 {
     path::Repository repo{TEST_HOME};
     CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
     CodecService codec_service{};
 
-    auto entity = codec_service.decode(codec_provider, XML_ENUM_PAYLOAD_2);
+    auto entity = codec_service.decode(codec_provider, XML_ENUM_PAYLOAD_2, make_unique<ydktest_sanity::Runner>());
     ydktest_sanity::Runner * entity_ptr = dynamic_cast<ydktest_sanity::Runner*>(entity.get());
-    BOOST_CHECK_EQUAL(entity_ptr->ytypes->built_in_t->enum_value.get(), "local");
+    CHECK(entity_ptr->ytypes->built_in_t->enum_value.get() == "local");
 }
 
-BOOST_AUTO_TEST_CASE(single_decode)
+TEST_CASE("single_decode")
 {
     path::Repository repo{TEST_HOME};
     CodecServiceProvider codec_provider{repo,EncodingFormat::JSON};
     CodecService codec_service{};
 
-    auto entity = codec_service.decode(codec_provider, JSON_RUNNER_PAYLOAD_1);
-    BOOST_CHECK_EQUAL(entity!=nullptr, true);
+    auto entity = codec_service.decode(codec_provider, JSON_RUNNER_PAYLOAD_1, make_unique<ydktest_sanity::Runner>());
+    CHECK(entity!=nullptr);
 
     ydktest_sanity::Runner * entity_ptr = dynamic_cast<ydktest_sanity::Runner*>(entity.get());
 
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[0]->number.get(), "11");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[0]->name.get(), "l11name");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[0]->subl1[0]->number.get(), "111");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[0]->subl1[0]->name.get(), "s111name");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[0]->subl1[1]->number.get(), "112");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[0]->subl1[1]->name.get(), "s112name");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->number.get(), "12");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->name.get(), "l12name");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->subl1[0]->number.get(), "121");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->subl1[0]->name.get(), "s121name");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->subl1[1]->number.get(), "122");
-    BOOST_CHECK_EQUAL(entity_ptr->two_list->ldata[1]->subl1[1]->name.get(), "s122name");
+    CHECK(entity_ptr->two_list->ldata[0]->number.get() == "11");
+    CHECK(entity_ptr->two_list->ldata[0]->name.get() == "l11name");
+    CHECK(entity_ptr->two_list->ldata[0]->subl1[0]->number.get() == "111");
+    CHECK(entity_ptr->two_list->ldata[0]->subl1[0]->name.get() == "s111name");
+    CHECK(entity_ptr->two_list->ldata[0]->subl1[1]->number.get() == "112");
+    CHECK(entity_ptr->two_list->ldata[0]->subl1[1]->name.get() == "s112name");
+    CHECK(entity_ptr->two_list->ldata[1]->number.get() == "12");
+    CHECK(entity_ptr->two_list->ldata[1]->name.get() == "l12name");
+    CHECK(entity_ptr->two_list->ldata[1]->subl1[0]->number.get() == "121");
+    CHECK(entity_ptr->two_list->ldata[1]->subl1[0]->name.get() == "s121name");
+    CHECK(entity_ptr->two_list->ldata[1]->subl1[1]->number.get() == "122");
+    CHECK(entity_ptr->two_list->ldata[1]->subl1[1]->name.get() == "s122name");
 }
 
-BOOST_AUTO_TEST_CASE(encode_decode)
+TEST_CASE("encode_decode")
 {
      path::Repository repo{TEST_HOME};
      CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
@@ -351,18 +350,18 @@ BOOST_AUTO_TEST_CASE(encode_decode)
 
      std::string test = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one><name>test</name></one></runner>";
 
-     auto entity = codec_service.decode(codec_provider, test) ;
-     BOOST_CHECK_EQUAL(entity!=nullptr, true);
+     auto entity = codec_service.decode(codec_provider, test, make_unique<ydktest_sanity::Runner>());
+     CHECK(entity!=nullptr);
 
      std::string xml = codec_service.encode(codec_provider, *entity);
-     BOOST_CHECK_EQUAL(xml, test);
+     CHECK(xml == test);
 
-     auto redecode = codec_service.decode(codec_provider, xml) ;
-     BOOST_CHECK_EQUAL(redecode!=nullptr, true);
+     auto redecode = codec_service.decode(codec_provider, xml, make_unique<ydktest_sanity::Runner>()) ;
+     CHECK(redecode!=nullptr);
 
      ydktest_sanity::Runner * entity_ptr = dynamic_cast<ydktest_sanity::Runner*>(redecode.get());
      auto runner = std::make_unique<ydktest_sanity::Runner>();
      runner->one->name = "test";
 
-     BOOST_CHECK_EQUAL(entity_ptr->one->name, runner->one->name);
+     CHECK(entity_ptr->one->name == runner->one->name);
 }

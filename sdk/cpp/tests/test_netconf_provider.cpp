@@ -13,33 +13,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  ------------------------------------------------------------------*/
-#define BOOST_TEST_MODULE NetconfProviderTest
-#include <boost/test/unit_test.hpp>
 #include <string.h>
 #include "../core/src/netconf_provider.hpp"
 #include "../core/src/errors.hpp"
 #include <iostream>
 #include "config.hpp"
+#include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
 
 
 
-BOOST_AUTO_TEST_CASE(Create)
+TEST_CASE("CreateP")
 {
 	ydk::path::Repository repo{};
 	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
 
-	auto root_schema = provider.get_root_schema();
-	BOOST_REQUIRE(root_schema != nullptr);
+	CHECK_NOTHROW(provider.get_root_schema());
 }
 
 
-BOOST_AUTO_TEST_CASE(CreateNoRepo)
+TEST_CASE("CreateNoRepoP")
 {
 	NetconfServiceProvider provider{ "127.0.0.1", "admin", "admin", 12022};
 
-	auto root_schema = provider.get_root_schema();
-	BOOST_REQUIRE(root_schema != nullptr);
+	CHECK_NOTHROW(provider.get_root_schema());
 }

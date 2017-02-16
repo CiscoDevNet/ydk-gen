@@ -58,12 +58,8 @@ find_library(pthread_location pthread)
 find_library(dl_location dl)
 find_library(ydk_location ydk)
 {1}
-find_package(Boost REQUIRED)
-find_package(Boost COMPONENTS log_setup log thread date_time system filesystem unit_test_framework REQUIRED)
 
-set(BOOST_INCLUDE_DIRS $boost_installation_prefix/include)
-
-include_directories(SYSTEM ${{BOOST_INCLUDE_DIR}})
+include_directories(SYSTEM)
 
 set(CMAKE_CXX_FLAGS         "${{CMAKE_CXX_FLAGS}} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
@@ -79,9 +75,6 @@ foreach(test_name IN LISTS test_cases)
     add_executable(${{test_name}} ${{test_name}}.cpp)
     set_property(TARGET ${{test_name}} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${{test_name}} PROPERTY CXX_STANDARD_REQUIRED ON)
-    target_include_directories(${{test_name}} PRIVATE ${{BOOST_INCLUDE_DIRS}} /opt/local/include /usr/local/include)
-    target_compile_definitions(${{test_name}} PRIVATE "BOOST_TEST_DYN_LINK=1")
-    target_compile_definitions(${{test_name}} PRIVATE "BOOST_LOG_DYN_LINK=1")
     target_link_libraries(${{test_name}}
         ${{ydk_location}}
         {2}
@@ -94,13 +87,6 @@ foreach(test_name IN LISTS test_cases)
         ${{xslt_location}}
         ${{pthread_location}}
         ${{dl_location}}
-        ${{Boost_UNIT_TEST_FRAMEWORK_LIBRARY}}
-        ${{Boost_LOG_SETUP_LIBRARY}}
-        ${{Boost_LOG_LIBRARY}}
-        ${{BOOST_THREAD_LIBRARY}}
-        ${{BOOST_DATE_TIME_LIBRARY}}
-        ${{Boost_FILESYSTEM_LIBRARY}}
-        ${{Boost_SYSTEM_LIBRARY}}
         -rdynamic
     )
 

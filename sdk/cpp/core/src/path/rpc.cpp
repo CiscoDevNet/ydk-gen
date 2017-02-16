@@ -23,7 +23,7 @@
 
 
 #include "path_private.hpp"
-#include <boost/log/trivial.hpp>
+#include "../logger.hpp"
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -31,51 +31,45 @@
 ////////////////////////////////////////////////////////////////////////
 ydk::path::Rpc::~Rpc()
 {
-
 }
 ////////////////////////////////////////////////////////////////////////////////
 // class RpcImpl
 ////////////////////////////////////////////////////////////////////////////////
 
 
-ydk::path::RpcImpl::RpcImpl(SchemaNodeImpl* sn, struct ly_ctx* ctx) : m_sn{sn}
+ydk::path::RpcImpl::RpcImpl(SchemaNodeImpl& sn, struct ly_ctx* ctx) : schema_node{sn}
 {
 
-    struct lyd_node* dnode = lyd_new_path(nullptr, ctx, sn->path().c_str(), (void*)"", LYD_ANYDATA_SXML, 0);
+    struct lyd_node* dnode = lyd_new_path(nullptr, ctx, sn.path().c_str(), (void*)"", LYD_ANYDATA_SXML, 0);
 
     if(!dnode){
-        BOOST_LOG_TRIVIAL(error) << "Cannot find DataNode with path " << sn->path();
-        BOOST_THROW_EXCEPTION(YCPPIllegalStateError{"Illegal state"});
+        YLOG_ERROR("Cannot find DataNode with path {}", sn.path());
+        throw(YCPPIllegalStateError{"Illegal state"});
     }
 
-    m_input_dn = new DataNodeImpl{nullptr, dnode};
+    data_node = std::make_unique<DataNodeImpl>(nullptr, dnode);
 
 }
 
 ydk::path::RpcImpl::~RpcImpl()
 {
-    if(m_input_dn){
-        delete m_input_dn;
-        m_input_dn = nullptr;
-    }
-
 }
 
-ydk::path::DataNode*
+std::unique_ptr<ydk::path::DataNode>
 ydk::path::RpcImpl::operator()(const ydk::path::ServiceProvider& provider)
 {
-    return provider.invoke(this);
+    return provider.invoke(*this);
 }
 
 
-ydk::path::DataNode*
+ydk::path::DataNode&
 ydk::path::RpcImpl::input() const
 {
-    return m_input_dn;
+    return *data_node;
 }
 
-ydk::path::SchemaNode*
+ydk::path::SchemaNode&
 ydk::path::RpcImpl::schema() const
 {
-    return m_sn;
+    return schema_node;
 }

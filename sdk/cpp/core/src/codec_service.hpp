@@ -35,14 +35,16 @@ class CodecService
 {
 public:
 
-	CodecService();
-	~CodecService();
+    CodecService();
+    ~CodecService();
 
-	std::string encode(CodecServiceProvider & provider, Entity & entity, bool pretty=false);
-	std::map<std::string, std::string> encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity, bool pretty=false);
+    std::string encode(CodecServiceProvider & provider, Entity & entity, bool pretty=false);
+    std::map<std::string, std::string> encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity, bool pretty=false);
 
-	std::unique_ptr<Entity> decode(CodecServiceProvider & provider, std::string & payload);
-	std::map<std::string, std::unique_ptr<Entity>> decode(CodecServiceProvider & provider, std::map<std::string, std::string> & payload_map);
+    std::unique_ptr<Entity> decode(CodecServiceProvider & provider, std::string & payload, std::unique_ptr<Entity> entity);
+    std::map<std::string, std::unique_ptr<Entity>> decode(CodecServiceProvider & provider,
+        std::map<std::string, std::string> & payload_map,
+        std::map<std::string, std::unique_ptr<Entity>> entity_map);
 };
 }
 
