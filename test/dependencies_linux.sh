@@ -29,6 +29,8 @@ function print_msg {
 function install_dependencies {
     print_msg "Installing dependencies"
 
+    wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
+
     sudo apt-get update > /dev/null
     sudo apt-get install -y bison \
                             curl \
@@ -57,12 +59,9 @@ function install_dependencies {
                             lcov \
                             cmake > /dev/null
 
-    # gcc-5 and g++5 for modern c++
-    sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-    sudo apt-get update
-    sudo apt-get install gcc-5 g++-5 -y
-    sudo ln -f -s /usr/bin/g++-5 /usr/bin/g++
-    sudo ln -f -s /usr/bin/gcc-5 /usr/bin/gcc
+    sudo apt-get install clang-3.8 lldb-3.8 -y
+    sudo ln -f -s /usr/bin/clang++-3.8 /usr/bin/clang++
+    sudo ln -f -s /usr/bin/clang-3.8 /usr/bin/clang
 }
 
 function install_confd {
@@ -85,3 +84,4 @@ function download_moco {
 install_dependencies
 install_confd
 download_moco
+

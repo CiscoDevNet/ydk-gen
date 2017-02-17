@@ -22,10 +22,12 @@ Test printer.
 
 from ydkgen.common import iscppkeyword
 
-from ..builder.test_builder import TestBuilder
-from ..builder.test_fixture_builder import FixtureBuilder
+from ydkgen.builder import TestBuilder
+from ydkgen.builder import FixtureBuilder
 from .test_fixture_printer import FixturePrinter
-from .. import utils
+from ydkgen.common import get_top_class, get_element_path, get_path_sep, get_obj_name, \
+                    get_qn, is_reference_prop, is_terminal_prop, is_empty_prop, \
+                    is_identity_prop, is_decimal64_prop
 
 _IGNORE_TESTS = set({'ietf_netconf_acm'})
 
@@ -131,22 +133,22 @@ class TestPrinter(FixturePrinter):
         for top_class in top_classes:
             self._print_crud_create_stmts(top_class)
 
-        top_class = utils.get_top_class(clazz)
+        top_class = get_top_class(clazz)
 
         self._print_crud_create_stmts(top_class)
         self._print_crud_read_stmts(top_class)
 
     def _print_crud_create_stmts(self, top_class):
-        top_obj_name = utils.get_obj_name(top_class)
+        top_obj_name = get_obj_name(top_class)
         self._print_logging('Creating {}...'.format(top_obj_name))
         fmt = self._get_crud_fmt('create')
         self._write_end(fmt.format(top_obj_name))
 
     def _print_crud_read_stmts(self, top_class):
-        top_obj_name = utils.get_obj_name(top_class)
+        top_obj_name = get_obj_name(top_class)
         read_obj_name = '{}_read'.format(top_obj_name)
         filter_obj_name = '{}_filter'.format(top_obj_name)
-        qn = utils.get_qn(self.lang, top_class)
+        qn = get_qn(self.lang, top_class)
         self._print_logging('Reading {}...'.format(top_obj_name))
         self._write_end(self.declaration_fmt.format(filter_obj_name, qn))
 
@@ -166,8 +168,8 @@ class TestPrinter(FixturePrinter):
             self._print_crud_delete_stmts(clazz)
 
     def _print_crud_delete_stmts(self, clazz):
-        top_class = utils.get_top_class(clazz)
-        top_obj_name = utils.get_obj_name(top_class)
+        top_class = get_top_class(clazz)
+        top_obj_name = get_obj_name(top_class)
         fmt = self._get_crud_fmt('delete')
         self._print_logging('Deleting {}...'.format(top_obj_name))
         self._write_end(fmt.format(top_obj_name))
@@ -175,14 +177,14 @@ class TestPrinter(FixturePrinter):
     def _print_test_case_compare(self, clazz):
         self._print_logging('Comparing leaf/leaf-lists...')
         for prop in clazz.properties():
-            if utils.is_reference_prop(prop) or utils.is_terminal_prop(prop):
+            if is_reference_prop(prop) or is_terminal_prop(prop):
                 # unable to compare empty
                 # read object will not be assigned to Empty() automatically
-                if not utils.is_empty_prop(prop):
+                if not is_empty_prop(prop):
                     self._print_compare_stmt(prop)
 
     def _print_compare_stmt(self, prop):
-        if utils.is_identity_prop(prop) or utils.is_decimal64_prop(prop):
+        if is_identity_prop(prop) or is_decimal64_prop(prop):
             # unable to compare decimal64 in Python
             # unable to compare identity in C++ and Python
             return
@@ -277,8 +279,8 @@ class TestPrinter(FixturePrinter):
         return fmt
 
     def _get_element_path(self, element):
-        return utils.get_element_path(self.lang, element)
+        return get_element_path(self.lang, element)
 
     @property
     def sep(self):
-        return utils.get_path_sep(self.lang)
+        return get_path_sep(self.lang)

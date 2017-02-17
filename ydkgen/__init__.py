@@ -36,6 +36,8 @@ from ydkgen.printer import printer_factory
 logger = logging.getLogger('ydkgen')
 logger.addHandler(logging.NullHandler())
 
+classes_per_source_file = 150
+
 
 class YdkGenerator(object):
     """ YdkGenerator class, based in the output_directory using the supplied
@@ -48,24 +50,24 @@ class YdkGenerator(object):
             groupings_as_class (bool): If set to true, YANG grouping is
                                        converted to a class.
             language (str): Language for generated APIs
-            pkg_type (str): Package type for generated APIs.
+            package_type (str): Package type for generated APIs.
                             Valid options for bundle approach are: 'core',
-                                                                   'bundle'.
+                                                                   'packages'.
             sort_clazz (bool): Option to sort generated classes at same leve.
 
         Raises:
             YdkGenException: If an error has occurred
     """
 
-    def __init__(self, output_dir, ydk_root, groupings_as_class, generate_tests, language, pkg_type, sort_clazz=False):
+    def __init__(self, output_dir, ydk_root, groupings_as_class, generate_tests, language, package_type, sort_clazz=False):
 
-        _check_generator_args(output_dir, ydk_root, language, pkg_type)
+        _check_generator_args(output_dir, ydk_root, language, package_type)
 
         self.output_dir = output_dir
         self.ydk_root = ydk_root
         self.groupings_as_class = groupings_as_class
         self.language = language
-        self.pkg_type = pkg_type
+        self.package_type = package_type
         self.generate_tests = generate_tests
         self.sort_clazz = sort_clazz
         if self.language == 'cpp':
@@ -73,7 +75,7 @@ class YdkGenerator(object):
         else:
             self.iskeyword = ispythonkeyword
 
-    def generate(self, description_file=None):
+    def generate(self, description_file):
         """ Generate ydk bundle packages or ydk core library.
 
         Args:
@@ -83,14 +85,12 @@ class YdkGenerator(object):
             Generated APIs root directory for core and profile package.
             List of Generated APIs root directories for bundle packages.
         """
-        if self.pkg_type == 'bundle':
+        if self.package_type == 'bundle':
             return self._generate_bundle(description_file)
-
-        elif self.pkg_type == 'core':
+        elif self.package_type == 'core':
             return self._generate_core()
-
         else:
-            raise YdkGenException('Invalid package type specified: %s' % self.pkg_type)
+            raise YdkGenException('Invalid package type specified: %s' % self.package_type)
 
     def _generate_bundle(self, profile_file):
         """ Generate ydk bundle package. First translate profile file to
@@ -109,14 +109,17 @@ class YdkGenerator(object):
         resolver = bundle_resolver.Resolver(self.output_dir, self.ydk_root, self.iskeyword)
         curr_bundle, all_bundles = resolver.resolve(tmp_file)
 
-        api_pkgs = self._get_api_pkgs(curr_bundle.resolved_models_dir)
-        if len(api_pkgs) == 0:
+        packages = self._get_packages(curr_bundle.resolved_models_dir)
+        if len(packages) == 0:
             raise YdkGenException('No YANG models were found. Please check your JSON profile file to make sure it is valid')
 
-        _set_api_pkg_sub_name(all_bundles, api_pkgs, curr_bundle)
-        gen_api_root = self._init_dirs(api_pkgs=api_pkgs, bundle=curr_bundle)
+        _set_original_bundle_name_for_packages(all_bundles, packages, curr_bundle)
+        gen_api_root = self._init_bundle_directories(packages=packages, bundle=curr_bundle)
 
-        self._print_pkgs(api_pkgs, gen_api_root, curr_bundle.name)
+        generated_files = self._print_packages(packages, gen_api_root, curr_bundle.name, curr_bundle.str_version)
+        if self.language == 'cpp':
+            _modify_cpp_cmake(gen_api_root, curr_bundle.name, curr_bundle.str_version,
+                              generated_files[0], generated_files[1])
 
         os.remove(tmp_file)
 
@@ -129,20 +132,19 @@ class YdkGenerator(object):
         Returns:
             gen_api_root (str): Root directory for generated APIs.
         """
-        gen_api_root = self._init_dirs(pkg_name='ydk', pkg_type='core')
-
+        gen_api_root = self._initialize_gen_api_directories(package_name='ydk', package_type='core')
 
         return gen_api_root
 
-    def _get_api_pkgs(self, resolved_model_dir):
-        """ Return api packages for resolved YANG modules. Each module will be
+    def _get_packages(self, resolved_model_dir):
+        """ Return packages for resolved YANG modules. Each module will be
             represented as an api package.
 
         Args:
             resolved_model_dir (str): Path to resolved YANG modules.
 
         Returns:
-            api_pkgs (List[.api_model.Package]): List of api packages.
+            packages (List[.api_model.Package]): List of api packages.
         """
 
         pyang_builder = PyangModelBuilder(resolved_model_dir)
@@ -150,65 +152,54 @@ class YdkGenerator(object):
 
         # build api model packages
         if not self.groupings_as_class:
-            api_pkgs = ApiModelBuilder(self.iskeyword, self.language).generate(modules)
+            packages = ApiModelBuilder(self.iskeyword, self.language).generate(modules)
         else:
-            api_pkgs = GroupingClassApiModelBuilder(self.iskeyword, self.language).generate(modules)
-        api_pkgs.extend(
+            packages = GroupingClassApiModelBuilder(self.iskeyword, self.language).generate(modules)
+        packages.extend(
             SubModuleBuilder().generate(pyang_builder.get_submodules(), self.iskeyword))
 
-        return api_pkgs
+        return packages
 
-    def _print_pkgs(self, pkgs, output_dir, bundle_name=''):
+    def _print_packages(self, pkgs, output_dir, bundle_name, bundle_version):
         """ Emit generated APIs.
 
         Args:
             pkgs (List[.api_model.Package]): List of api packages to print.
-            pkg_name (str): Package name for generated APIs.
+            package_name (str): Package name for generated APIs.
                             For example 'ydk_bgp', 'ydk_ietf'.
         """
+        global classes_per_source_file
         factory = printer_factory.PrinterFactory()
-        ydk_printer = factory.get_printer(self.language)(output_dir, bundle_name, self.generate_tests, self.sort_clazz)
-        ydk_printer.emit(pkgs)
+        ydk_printer = factory.get_printer(self.language)(output_dir, bundle_name, bundle_version, self.generate_tests, self.sort_clazz)
+        generated_files = ydk_printer.emit(pkgs, classes_per_source_file)
+        return generated_files
 
     # Initialize generated API directory ######################################
-    def _init_dirs(self, api_pkgs=None, pkg_name=None, pkg_type=None, bundle=None):
+    def _initialize_gen_api_directories(self, package_name, package_type):
         """ Initialize and return generated APIs root directory.
-
-        Args:
-            pkg_name (str): Package name for generated APIs.
-            pkg_type (str): Sdk template type to be copied from.
-            bundle (bundle_resolver.Bundle): Bundle instance.
-        """
-        if bundle:
-            return self._init_bundle_dirs(api_pkgs, bundle)
-        else:
-            return self._init_gen_api_dirs(pkg_name, pkg_type)
-
-    def _init_gen_api_dirs(self, pkg_name=None, pkg_type=None):
-        """ Initialize and return generated APIs root directory.
-            If pkg_name is specified, the gen_api_root is:
-                <self.output_dir>/<self.language>/<pkg_name>
+            If package_name is specified, the gen_api_root is:
+                <self.output_dir>/<self.language>/<package_name>
             otherwise, the gen_api_root is:
                 <self.output_dir>/<self.language>
 
             Args:
-                pkg_name (str): Package name for generated API, if specified.
-                pkg_type (str): Sdk template type to copied from, if specified.
+                package_name (str): Package name for generated API, if specified.
+                package_type (str): Sdk template type to copied from, if specified.
                                 Valid options are: core, packages.
         """
         gen_api_root = os.path.join(self.output_dir, self.language)
-        if pkg_name:
-            gen_api_root = os.path.join(gen_api_root, pkg_name)
+        if package_name:
+            gen_api_root = os.path.join(gen_api_root, package_name)
 
         # clean up gen_api_root
         if not os.path.isdir(gen_api_root):
             os.makedirs(gen_api_root)
 
-        self._copy_sdk_template(gen_api_root, pkg_type)
+        self._copy_sdk_template(gen_api_root, package_type)
 
         return gen_api_root
 
-    def _init_bundle_dirs(self, api_pkgs, bundle):
+    def _init_bundle_directories(self, packages, bundle):
         """ Initialize generated API directory for bundle approach.
 
         Args:
@@ -217,7 +208,7 @@ class YdkGenerator(object):
         Returns:
             gen_api_root (str): Root directory for generated APIs.
         """
-        gen_api_root = self._init_gen_api_dirs(bundle.name + '-bundle', 'packages')
+        gen_api_root = self._initialize_gen_api_directories(bundle.name + '-bundle', 'packages')
 
         if self.language == 'python':
             _modify_python_setup(gen_api_root,
@@ -225,49 +216,43 @@ class YdkGenerator(object):
                                  bundle.str_version,
                                  bundle.dependencies)
 
-        elif self.language == 'cpp':
-            _modify_cpp_cmake(gen_api_root,
-                              bundle.name,
-                              api_pkgs,
-                              bundle.models,
-                              bundle.version)
         # write init file for bundle models directory.
         bundle_model_dir = os.path.join(gen_api_root, 'ydk')
         os.mkdir(bundle_model_dir)
 
         return gen_api_root
 
-    def _copy_sdk_template(self, gen_api_root, pkg_type):
+    def _copy_sdk_template(self, gen_api_root, package_type):
         """ Copy sdk template to gen_api_root directory.
 
         Args:
             gen_api_root (str): Root directory for generated APIs.
-            pkg_type (str): Sdk template to copied from.
+            package_type (str): Sdk template to copied from.
                             Valid options are: core, packages.
         """
         target_dir = os.path.join(self.ydk_root, 'sdk', self.language)
         if self.language == 'python':
-            target_dir = os.path.join(target_dir, pkg_type)
+            target_dir = os.path.join(target_dir, package_type)
         elif self.language == 'cpp':
-            if pkg_type == 'packages':
-                target_dir = os.path.join(target_dir, pkg_type)
-            elif pkg_type == 'core':
+            if package_type == 'packages':
+                target_dir = os.path.join(target_dir, package_type)
+            elif package_type == 'core':
                 target_dir = os.path.join(target_dir, 'core')
         shutil.rmtree(gen_api_root)
         logger.debug('Copying %s to %s' % (target_dir, gen_api_root))
         dir_util.copy_tree(target_dir, gen_api_root)
 
 
-def _set_api_pkg_sub_name(bundles, api_pkgs, curr_bundle):
-    """ Set nmsp_pkg for api packages.
+def _set_original_bundle_name_for_packages(bundles, packages, curr_bundle):
+    """ Set original bundle name for packages.
 
     Args:
         bundles (List[.resolver.bundle_resolver.Bundle]): Bundle instance.
-        api_pkgs (List[.api_model.Package]): List of api packages.
+        packages (List[.api_model.Package]): List of api packages.
 
     """
     # add API for model being augmented to bundle
-    for pkg in api_pkgs:
+    for pkg in packages:
         pkg.curr_bundle_name = curr_bundle.name
         for bundle in bundles:
             for module in bundle.models:
@@ -275,7 +260,7 @@ def _set_api_pkg_sub_name(bundles, api_pkgs, curr_bundle):
                     pkg.bundle_name = bundle.name
 
 
-def _modify_python_setup(gen_api_root, pkg_name, version, dependencies=None):
+def _modify_python_setup(gen_api_root, package_name, version, dependencies):
     """ Modify setup.py template for python packages. Replace package name
         and version number in setup.py located in <gen_api_root>/setup.py.
         If dependencies are specified, $DEPENDENCY$ in setup.py will be replaced.
@@ -283,7 +268,7 @@ def _modify_python_setup(gen_api_root, pkg_name, version, dependencies=None):
 
     Args:
         gen_api_root (str): Root directory for generated APIs.
-        pkg_name (str): Package name for generated APIs.
+        package_name (str): Package name for generated APIs.
         version (str): Package version for generated APIs.
     """
     setup_file = os.path.join(gen_api_root, 'setup.py')
@@ -293,7 +278,7 @@ def _modify_python_setup(gen_api_root, pkg_name, version, dependencies=None):
     for line in fileinput.input(setup_file, inplace=True):
         if not replaced_package and "$PACKAGE$" in line:
             replaced_package = True
-            print(line.replace("$PACKAGE$", pkg_name), end='')
+            print(line.replace("$PACKAGE$", package_name), end='')
         elif not replaced_version and "$VERSION$" in line:
             replaced_version = True
             print(line.replace("$VERSION$", version), end='')
@@ -309,7 +294,7 @@ def _modify_python_setup(gen_api_root, pkg_name, version, dependencies=None):
             print(line, end='')
 
 
-def _modify_cpp_cmake(gen_api_root, bundle_name, packages, models, version, descriptions=""):
+def _modify_cpp_cmake(gen_api_root, bundle_name, version, source_files, header_files):
     """ Modify CMakeLists.txt template for cpp libraries.
 
     Args:
@@ -319,67 +304,41 @@ def _modify_cpp_cmake(gen_api_root, bundle_name, packages, models, version, desc
     """
     cmake_file = os.path.join(gen_api_root, 'CMakeLists.txt')
 
-    files = _get_cpp_files(packages, models, {'source':'cpp', 'header':'hpp'})
+    source_files = ['ydk/models/' + s for s in source_files]
+    header_files = ['ydk/models/' + s for s in header_files]
+    source_file_names = ' '.join(source_files)
+    header_file_names = ' '.join(header_files)
+
     for line in fileinput.input(cmake_file, inplace=True):
-        if "@DESCRIPTIONS@" in line:
-            print(line.replace("@DESCRIPTIONS@", descriptions), end='')
-        elif "@BRIEF_NAME@" in line:
+        if "@BRIEF_NAME@" in line:
             line = line.replace("@BRIEF_NAME@", bundle_name)
             if "@SOURCE_FILES@" in line:
-                line = line.replace("@SOURCE_FILES@", files['source'])
+                line = line.replace("@SOURCE_FILES@", source_file_names)
             elif "@HEADER_FILES@" in line:
-                line = line.replace("@HEADER_FILES@", files['header'])
+                line = line.replace("@HEADER_FILES@", header_file_names)
+            elif "@VERSION@" in line:
+                line = line.replace("@VERSION@", version)
             print(line, end='')
-        elif "@BRIEF_NAME_CAP@" in line:
-            print(line.replace("@BRIEF_NAME_CAP@", bundle_name.upper()), end='')
         else:
             print(line, end='')
-
-
-def _get_cpp_files(packages, models, extensions):
-    files = {}
-    for model in models:
-        skip = False
-        if 'deviation' in model.pkg_name:
-            skip = True
-        else:
-            for package in packages:
-                if (package.name == model.pkg_name) and (len(package.owned_elements) == 0):
-                    skip = True
-                    break
-        if skip:
-            continue
-
-        for key, val in extensions.items():
-            file_name = 'ydk/models/%s.%s' % (model.pkg_name, val)
-            if key not in files:
-                files[key] = [file_name]
-            else:
-                files[key].append(file_name)
-    for key, val in files.items():
-        files[key] = ' '.join(files[key])
-    return files
 
 
 # Generator checks #####################################################
-def _check_generator_args(output_dir, ydk_root, language, pkg_type):
+def _check_generator_args(output_dir, ydk_root, language, package_type):
     """ Check generator arguments.
 
     Args:
         output_dir (str): The output directory for generated APIs.
         ydk_root (str): The ydk root directory.
         language (str): Language for generated APIs.
-        pkg_type (str): Package type for generated APIs.
+        package_type (str): Package type for generated APIs.
                         Valid options for bundle approach are: 'core',
-                                                               'bundle'.
+                                                               'packages'.
     Raises:
         YdkGenException: If invalid arguments are passed in.
     """
     if language != 'cpp' and language != 'python':
         raise YdkGenException('Language {0} not supported'.format(language))
-
-#    if language != 'python' and pkg_type == 'bundle':
-#        raise YdkGenException('{0} bundle not supported'.format(language))
 
     if output_dir is None or len(output_dir) == 0:
         logger.error('output_directory is None.')

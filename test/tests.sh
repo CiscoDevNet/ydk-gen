@@ -274,7 +274,7 @@ function cpp_sanity_core_gen_install {
     cd $YDKGEN_HOME && source gen_env/bin/activate
     cd $YDKGEN_HOME/sdk/cpp/core
     mkdir -p build && cd build
-    run_exec_test cmake ..
+    run_exec_test cmake -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ ..
     run_exec_test make install
     cd $YDKGEN_HOME
 }
@@ -309,7 +309,7 @@ function cpp_sanity_ydktest_test {
     print_msg "Running cpp bundle tests"
 
     mkdir -p $YDKGEN_HOME/sdk/cpp/tests/build && cd sdk/cpp/tests/build
-    run_exec_test cmake ..
+    run_exec_test cmake -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ ..
     run_exec_test make
     make test
     local status=$?
@@ -364,7 +364,7 @@ function cpp_test_gen_test {
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/testgen/confd
     mkdir -p gen-api/cpp/models_test-bundle/ydk/tests/build
     cd gen-api/cpp/models_test-bundle/ydk/tests/build
-    run_exec_test cmake ..
+    run_exec_test cmake -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ ..
     run_exec_test make
     ctest --output-on-failure
 }

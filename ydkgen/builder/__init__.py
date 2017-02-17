@@ -17,3 +17,8 @@
 from ._api_model_builder import ApiModelBuilder, GroupingClassApiModelBuilder, SubModuleBuilder
 from ._pyang_model_builder import PyangModelBuilder
 from ._types_extractor import TypesExtractor
+from .multi_file_builder import MultiFileBuilder, MultiFileHeader, MultiFileSource, MultiFile
+from .test_case.test_builder import TestBuilder
+from .test_case.test_cases_builder import TestCasesBuilder
+from .test_case.test_value_builder import ValueBuilder
+from .test_case.test_fixture_builder import FixtureBuilder

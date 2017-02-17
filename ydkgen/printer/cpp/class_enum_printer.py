@@ -27,24 +27,32 @@ class EnumPrinter(object):
 
     def __init__(self, ctx):
         self.ctx = ctx
+        self.printed_enums = {}
 
-    def print_enum_declarations(self, element):
-        self._print_enum_declarations(self._get_enums(element))
-        for child in element.owned_elements:
-            self.print_enum_declarations(child)
+    def print_enum_declarations(self, package, classes, file_name, reset_enum_lookup):
+        self._print_declarations(package, file_name)
+        for clazz in classes:
+            self._print_declarations(clazz, file_name)
+        if reset_enum_lookup:
+            self.printed_enums = {}
+                
+    def _print_declarations(self, clazz, file_name):
+        self._print_enum_declarations(self._get_enums(clazz, file_name))
 
-    def print_enum_to_string_funcs(self, element):
-        self._print_enums(self._get_enums(element))
-        for child in element.owned_elements:
-            self.print_enum_to_string_funcs(child)
+    def print_enum_to_string_funcs(self, package, classes):
+        self._print_to_string_funcs(package)
+        for clazz in classes:
+            self._print_to_string_funcs(clazz)
 
-    def _get_enums(self, element):
+    def _print_to_string_funcs(self, clazz):
+        self._print_enums(self._get_enums(clazz))
+                
+    def _get_enums(self, element, file_name=''):
         enums = []
-        enum_name_map = {}
         for child in element.owned_elements:
-            if isinstance(child, Enum) and not child.name in enum_name_map:
+            if isinstance(child, Enum) and not child.name in self.printed_enums:
                 enums.append(child)
-                enum_name_map[child.name] = child
+                self.printed_enums[child.name] = child
         return enums
 
     def _print_enums(self, enums):

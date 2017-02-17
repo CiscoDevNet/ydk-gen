@@ -21,7 +21,8 @@ Build information needed for a test program.
 """
 
 from .test_cases_builder import TestCasesBuilder
-from .. import utils
+from ydkgen.common import is_nonid_class_element, has_terminal_nodes, \
+                         is_config_prop, is_class_prop
 
 
 class TestBuilder(object):
@@ -41,16 +42,16 @@ class TestBuilder(object):
     def build_test(self, package):
         """Build test program."""
         for element in package.owned_elements:
-            if utils.is_nonid_class_element(element):
+            if is_nonid_class_element(element):
                 self._traverse_and_build(element)
 
     def _traverse_and_build(self, clazz):
         """Traverse and build test cases."""
-        if all((utils.has_terminal_nodes(clazz),
-                utils.is_config_prop(clazz))):
+        if all((has_terminal_nodes(clazz),
+                is_config_prop(clazz))):
             self._build_test_case(clazz)
         for prop in clazz.properties():
-            if utils.is_class_prop(prop):
+            if is_class_prop(prop):
                 ptype = prop.property_type
                 self._traverse_and_build(ptype)
 

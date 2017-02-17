@@ -22,8 +22,6 @@
 """
 from __future__ import absolute_import
 
-from .common import camel_case
-from .common import snake_case, escape_name
 
 from pyang.types import UnionTypeSpec
 
@@ -87,10 +85,6 @@ class Deviation(Element):
             stmt = stmt.parent
 
         return '.'.join(reversed(names))
-
-
-
-
 
     def convert_prop_name(self, stmt):
         name = snake_case(stmt.arg)
@@ -561,11 +555,11 @@ class Class(NamedElement):
         else:
             return False
 
-    @NamedElement.owner.getter
+    @property
     def owner(self):
         return self._owner
 
-    @NamedElement.owner.setter
+    @owner.setter
     def owner(self, owner):
         self._owner = owner
         self.name = _modify_nested_container_with_same_name(self)
@@ -877,8 +871,49 @@ def get_properties(owned_elements):
 
     return props
 
+
 def _modify_nested_container_with_same_name(named_element):
     if named_element.owner.name.rstrip('_') == named_element.name:
         return '%s_' % named_element.owner.name
     else:
         return named_element.name
+
+
+
+def snake_case(input_text):
+    snake_case = input_text.replace('-', '_')
+    snake_case = snake_case.replace('.', '_')
+    return snake_case.lower()
+
+
+def camel_case(input_text):
+    return ''.join([word.title() for word in input_text.split('-')])
+
+
+def escape_name(name):
+    name = name.replace('+', '__PLUS__')
+    name = name.replace('/', '__FWD_SLASH__')
+    name = name.replace('\\', '__BACK_SLASH__')
+    name = name.replace('.', '__DOT__')
+    name = name.replace('*', '__STAR__')
+    name = name.replace('$', '__DOLLAR__')
+    name = name.replace('@', '__AT__')
+    name = name.replace('#', '__POUND__')
+    name = name.replace('^', '__CARET__')
+    name = name.replace('&', '__AMPERSAND__')
+    name = name.replace('(', '__LPAREN__')
+    name = name.replace(')', '__RPAREN__')
+    name = name.replace('=', '__EQUALS__')
+    name = name.replace('{', '__LCURLY__')
+    name = name.replace('}', '__RCURLY__')
+    name = name.replace("'", '__SQUOTE__')
+    name = name.replace('"', '__DQUOTE__')
+    name = name.replace('<', '__GREATER_THAN__')
+    name = name.replace('>', '__LESS_THAN__')
+    name = name.replace(',', '__COMMA__')
+    name = name.replace(':', '__COLON__')
+    name = name.replace('?', '__QUESTION__')
+    name = name.replace('!', '__BANG__')
+    name = name.replace(';', '__SEMICOLON__')
+
+    return name

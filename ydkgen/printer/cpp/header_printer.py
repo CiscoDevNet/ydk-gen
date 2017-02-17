@@ -22,42 +22,48 @@ header_printer.py
 """
 
 from ydkgen.api_model import Class
-
-from ydkgen.common import sort_classes_at_same_level
-from ydkgen.printer.file_printer import FilePrinter
+from ydkgen.builder import MultiFileHeader
+from ydkgen.printer import MultiFilePrinter
 
 from .class_members_printer import ClassMembersPrinter
 from .class_enum_printer import EnumPrinter
 
 
-class HeaderPrinter(FilePrinter):
-    def __init__(self, ctx, sort_clazz, identity_subclasses):
+class HeaderPrinter(MultiFilePrinter):
+    def __init__(self, ctx, identity_subclasses):
         super(HeaderPrinter, self).__init__(ctx)
-        self.sort_clazz = sort_clazz
+        self.enum_printer = EnumPrinter(self.ctx)
         self.identity_subclasses = identity_subclasses
 
-    def print_header(self, package):
-        self._print_include_guard_header(package)
-        self._print_imports(package)
+    def print_body(self, multi_file):
+        assert isinstance(multi_file, MultiFileHeader)
+        for clazz in multi_file.class_list:
+            self._print_class(clazz)
+
+    def print_extra(self, package, multi_file):
+        assert isinstance(multi_file, MultiFileHeader)
+        self._print_enums(package, multi_file.class_list, multi_file.file_name, (not multi_file.fragmented))
+
+    def print_header(self, package, multi_file):
+        assert isinstance(multi_file, MultiFileHeader)
+        self.p = package
+        self._print_include_guard_header(multi_file.include_guard)
+        self._print_imports(package, multi_file.imports)
         self.ctx.writeln('namespace ydk {')
         self.ctx.writeln('namespace %s {' % package.name)
         self.ctx.bline()
 
-    def print_trailer(self, package):
+    def print_trailer(self, package, multi_file):
+        assert isinstance(multi_file, MultiFileHeader)
         self.ctx.bline()
         self.ctx.writeln('}')
         self.ctx.writeln('}')
-        self._print_include_guard_trailer(package)
+        self._print_include_guard_trailer(multi_file.include_guard)
         self.ctx.bline()
 
-    def print_body(self, package):
-        self._print_classes([clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
-        self.ctx.bline()
-        self._print_enums(package)
-
-    def _print_imports(self, package):
+    def _print_imports(self, package, imports_to_print):
         self._print_common_imports(package)
-        self._print_unique_imports(package)
+        self._print_unique_imports(package, imports_to_print)
 
     def _print_common_imports(self, package):
         self.ctx.writeln('#include <memory>')
@@ -67,25 +73,18 @@ class HeaderPrinter(FilePrinter):
         self.ctx.writeln('#include "ydk/errors.hpp"')
         self.ctx.bline()
 
-    def _print_unique_imports(self, package):
-        if len(package.imported_types()) == 0:
+    def _print_unique_imports(self, package, imports_to_print):
+        if len(package.imported_types()) == 0 and len(imports_to_print) == 0:
             return
-        imports_to_print = set()
         for imported_type in package.imported_types():
             if all((id(imported_type) in self.identity_subclasses,
                     self.is_derived_identity(package, imported_type))):
                 import_stmt = '#include "{0}"'.format(imported_type.get_cpp_header_name())
                 imports_to_print.add(import_stmt)
-
         imports_to_print = sorted(imports_to_print)
         for import_to_print in imports_to_print:
             self.ctx.writeln('%s' % import_to_print)
         self.ctx.bline()
-
-    def _print_classes(self, clazzes):
-        sorted_classes = sort_classes_at_same_level(clazzes, self.sort_clazz)
-        for clazz in sorted_classes:
-            self._print_class(clazz)
 
     def _print_class(self, clazz):
         self._print_class_header(clazz)
@@ -96,24 +95,23 @@ class HeaderPrinter(FilePrinter):
         parents = 'Entity'
         if isinstance(clazz.owner, Class):
             self.ctx.bline()
+        class_name = clazz.qualified_cpp_name()
         if len(clazz.extends) > 0:
             parents = ', '.join([sup.fully_qualified_cpp_name() for sup in clazz.extends])
             if clazz.is_identity():
                 parents += ', virtual Identity'
-            self.ctx.writeln('class ' + clazz.name + ' : public ' + parents)
+            self.ctx.writeln('class ' + class_name + ' : public ' + parents)
         elif clazz.is_identity():
-            self.ctx.writeln('class ' + clazz.name + ' : public virtual Identity')
+            self.ctx.writeln('class ' + class_name + ' : public virtual Identity')
         else:
-            self.ctx.writeln('class ' + clazz.name + ' : public Entity')
+            self.ctx.writeln('class ' + class_name + ' : public Entity')
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
 
     def _print_class_body(self, clazz):
         members_printer = ClassMembersPrinter(self.ctx)
         members_printer.print_class_members(clazz)
-        child_classes = [nested_class for nested_class in clazz.owned_elements if isinstance(nested_class, Class)]
-        if len(child_classes) > 0:
-            self._print_classes(child_classes)
+        self._print_forward_declarations(clazz)
         members_printer.print_class_children_members(clazz)
 
     def _print_class_trailer(self, clazz):
@@ -122,14 +120,27 @@ class HeaderPrinter(FilePrinter):
         self.ctx.writeln('}; // ' + clazz.qualified_cpp_name())
         self.ctx.bline()
 
-    def _print_include_guard_header(self, package):
-        self.ctx.writeln('#ifndef _{0}_'.format(package.name.upper()))
-        self.ctx.writeln('#define _{0}_'.format(package.name.upper()))
+    def _print_forward_declarations(self, clazz):
+        child_classes = [nested_class for nested_class in clazz.owned_elements if isinstance(nested_class, Class)]
+        if len(child_classes) == 0:
+            return
+        self.ctx.bline()
+        self.ctx.lvl_inc()
+        for child in child_classes:
+            self._print_forward_declaration(child)
+        self.ctx.lvl_dec()
+
+    def _print_forward_declaration(self, clazz):
+        self.ctx.writeln('class ' + clazz.name + '; //type: ' + clazz.qualified_cpp_name())
+
+    def _print_include_guard_header(self, include_guard):
+        self.ctx.writeln('#ifndef {0}'.format(include_guard))
+        self.ctx.writeln('#define {0}'.format(include_guard))
         self.ctx.bline()
 
-    def _print_include_guard_trailer(self, package):
+    def _print_include_guard_trailer(self, include_guard):
         self.ctx.bline()
-        self.ctx.writeln('#endif /* _{0}_ */'.format(package.name.upper()))
+        self.ctx.writeln('#endif /* {0} */'.format(include_guard))
 
-    def _print_enums(self, package):
-        EnumPrinter(self.ctx).print_enum_declarations(package)
+    def _print_enums(self, package, classes, file_name, reset_enum_lookup):
+        self.enum_printer.print_enum_declarations(package, classes, file_name, reset_enum_lookup)

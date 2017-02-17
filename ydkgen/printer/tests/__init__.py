@@ -1,1 +1,1 @@
-from .printer.test_printer import TestPrinter
+from .test_printer import TestPrinter

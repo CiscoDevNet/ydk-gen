@@ -20,7 +20,8 @@ test_fixture_builder.py
 Build test case fixture.
 """
 from ydkgen.api_model import Class, Enum, Bits
-from .. import utils
+from ydkgen.common import is_class_element, is_identity_prop, is_path_prop, \
+        is_union_prop, get_typedef_stmt, is_union_type_spec, is_identityref_type_spec
 
 
 class FixtureBuilder(object):
@@ -50,7 +51,7 @@ class FixtureBuilder(object):
             if isinstance(element, (Class, Enum, Bits)):
                 imports.add(self._get_import_stmt(element))
         for element in package.owned_elements:
-            if utils.is_class_element(element) and element.is_config():
+            if is_class_element(element) and element.is_config():
                 self._add_refclass_imports(element, imports)
 
         for identity in builder.derived_identities:
@@ -73,29 +74,29 @@ class FixtureBuilder(object):
         """Add necessary import statements for properties that might
         reside in different package.
         """
-        if utils.is_identity_prop(prop):
+        if is_identity_prop(prop):
             identity = prop.property_type
             imports.add(self._get_import_stmt(identity))
             self._add_identity_import(id(identity), imports)
-        elif utils.is_path_prop(prop):
+        elif is_path_prop(prop):
             leafref_ptr = prop.stmt.i_leafref_ptr
             if leafref_ptr is not None:
                 ptr, _ = prop.stmt.i_leafref_ptr
                 ref_class = ptr.parent.i_class
                 imports.add(self._get_import_stmt(ref_class))
-        elif utils.is_union_prop(prop):
+        elif is_union_prop(prop):
             ptype = prop.property_type
             self._add_union_imports(ptype, imports)
 
     def _add_union_imports(self, type_spec, imports):
         """Add import statement for union type."""
         for type_stmt in type_spec.types:
-            type_stmt = utils.get_typedef_stmt(type_stmt)
+            type_stmt = get_typedef_stmt(type_stmt)
             if hasattr(type_stmt, 'i_type_spec'):
                 type_spec = type_stmt.i_type_spec
-                if utils.is_union_type_spec(type_spec):
+                if is_union_type_spec(type_spec):
                     self._add_union_imports(type_spec, imports)
-                elif utils.is_identityref_type_spec(type_spec):
+                elif is_identityref_type_spec(type_spec):
                     identity = type_spec.base.i_identity.i_class
                     imports.add(self._get_import_stmt(identity))
                     self._add_identity_import(id(identity), imports)

@@ -29,7 +29,7 @@ from pyang import types as ptypes
 from ydkgen import api_model as atypes
 from ydkgen.builder import TypesExtractor
 
-from .. import utils
+from ydkgen.common import is_identity_element, get_qn, get_typedef_stmt, is_match_all
 
 _LOW = 0
 _HIGH = 33
@@ -63,7 +63,7 @@ class ValueBuilder(object):
 
         if isinstance(self.type_spec, atypes.Bits):
             prop_value = self._handle_bits()
-        elif utils.is_identity_element(self.type_spec):
+        elif is_identity_element(self.type_spec):
             prop_value = self._handle_identity()
         elif isinstance(self.type_spec, atypes.Enum):
             prop_value = self._handle_enum()
@@ -100,13 +100,13 @@ class ValueBuilder(object):
         identities = set()
         self._collect_identities(self.type_spec, identities)
         identity = choice(list(identities))
-        identity_value = '{}()'.format(utils.get_qn(self.lang, identity))
+        identity_value = '{}()'.format(get_qn(self.lang, identity))
         return IdentityValue(val=identity_value, identity=identity)
 
     def _handle_enum(self):
         """Chose an return enum literal."""
         literal = choice(self.type_spec.literals)
-        qn = utils.get_qn(self.lang, self.type_spec)
+        qn = get_qn(self.lang, self.type_spec)
         return self.nmsp_sep.join([qn, literal.name])
 
     def _handle_binary(self):
@@ -158,7 +158,7 @@ class ValueBuilder(object):
         return trimmed string."""
         low, high = choice(self._get_length_limits(self.type_spec))
         self.type_spec = self.type_spec.base
-        self.type_stmt = utils.get_typedef_stmt(self.type_stmt)
+        self.type_stmt = get_typedef_stmt(self.type_stmt)
         return self._handle_string(low=low, high=high)
 
     def _handle_int(self, low=None, high=None):
@@ -232,7 +232,7 @@ class ValueBuilder(object):
         """
         low, high = choice(self._get_range_limits(self.type_spec))
         self.type_spec = self.type_spec.base
-        self.type_stmt = utils.get_typedef_stmt(self.type_stmt)
+        self.type_stmt = get_typedef_stmt(self.type_stmt)
         if isinstance(self.type_spec, ptypes.IntTypeSpec):
             return self._handle_int(low=low, high=high)
         elif isinstance(self.type_spec, ptypes.Decimal64TypeSpec):
@@ -321,7 +321,7 @@ class ValueBuilder(object):
         [0-9a-zA-Z].
         """
         low, high = self._render_range(low, high)
-        if pattern is None or utils.is_match_all(pattern):
+        if pattern is None or is_match_all(pattern):
             pattern = r'[0-9a-zA-Z]'
         return rstr.xeger(pattern).rstrip("\\\"")
 

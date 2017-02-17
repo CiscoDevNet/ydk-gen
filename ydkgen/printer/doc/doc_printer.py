@@ -56,14 +56,10 @@ class DocPrinter(object):
         self.ctx.writelns(self.lines)
         del self.lines
 
-    def print_table_of_contents(self, packages, bundle_name):
+    def print_table_of_contents(self, packages, bundle_name, bundle_version):
         self.lines = []
-        if bundle_name == '':
-            title = 'YDK Model API'
-            description = '\nThis is the YDK model API\n'
-        else:
-            title = '{0} bundle API'.format(bundle_name)
-            description = '\nModel API documentation for the {0} bundle\n'.format(bundle_name)
+        title = '{0} bundle API'.format(bundle_name)
+        description = '\nModel API documentation for the {0} bundle. Version: {1}.\n'.format(bundle_name, bundle_version)
         self._print_title(title)
         self._append(description)
         self._print_toctree(packages, is_package=True)

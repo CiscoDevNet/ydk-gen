@@ -205,7 +205,7 @@ ydk-models-<name-of-bundle> (0.5.1)
 
 ### Fourth step: Writing your first app
 
-Now, you can start creating apps based on the models in your bundle. Assuming you generated a python bundle, the models will be available for importing in your app under `ydk.models.<name-of-your-bundle>`. See [ydk-py-samples](https://github.com/CiscoDevNet/ydk-py-samples#a-hello-world-app) for examples.
+Now, you can start creating apps based on the models in your bundle. Assuming you generated a python bundle, the models will be available for importing in your app under `ydk.models.<name-of-your-bundle>`. See [ydk-py-samples](https://github.com/CiscoDevNet/ydk-py-samples#a-hello-world-app) for examples. Also refer to the [documentation](http://ydk.cisco.com/py/docs/developer_guide.html).
 
 ### Documentation
 

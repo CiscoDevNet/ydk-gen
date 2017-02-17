@@ -20,8 +20,14 @@ test_cases_builder.py
 Build an individual test case within a test program file.
 """
 from ydkgen import api_model as atypes
+from ydkgen.common import is_pkg_element, get_top_class, get_obj_name, get_qn, \
+                        is_presence_element, is_list_element, is_mandatory_element, \
+                        is_class_prop, is_class_element, is_config_prop, \
+                        is_reference_prop, is_terminal_prop, is_leaflist_prop, \
+                        is_union_prop, get_element_path
+
 from .test_value_builder import ValueBuilder, BitsValue, IdentityValue
-from .. import utils
+
 
 # Default value need to be set
 _DEFAULT_VALUES = {
@@ -164,7 +170,7 @@ class TestCasesBuilder(ValueBuilder):
         """Build a single test case."""
         self.clazz = clazz
         self.test_name = clazz.qn().lower().replace('.', '_')
-        top_class = utils.get_top_class(clazz)
+        top_class = get_top_class(clazz)
         self._add_declaration_stmt(top_class)
         self._add_requisite_stmts(clazz)
         self._add_mandatory_stmts(top_class)
@@ -174,10 +180,10 @@ class TestCasesBuilder(ValueBuilder):
 
     def _add_declaration_stmt(self, element):
         """Add declaration statements."""
-        obj_name = utils.get_obj_name(element)
+        obj_name = get_obj_name(element)
 
         if isinstance(element, (atypes.Bits, atypes.Class)):
-            value = utils.get_qn(self.lang, element)
+            value = get_qn(self.lang, element)
             self.stmts.add_declaration(obj_name, value)
         else:
             # add dec stmt for bits value
@@ -199,7 +205,7 @@ class TestCasesBuilder(ValueBuilder):
             - is a node referenced by its ancestors, which has been listed
               in _DEFAULT_LEAFREFS
         """
-        while not utils.is_pkg_element(clazz):
+        while not is_pkg_element(clazz):
             self._add_requisite_clazz_stmts(clazz)
             for prop in clazz.properties():
                 self._add_requisite_prop_stmts(prop)
@@ -208,18 +214,18 @@ class TestCasesBuilder(ValueBuilder):
 
     def _add_requisite_clazz_stmts(self, clazz):
         """Add requisite statements for a YANG container."""
-        if utils.is_presence_element(clazz):
+        if is_presence_element(clazz):
             self._add_presence_clazz_stmts(clazz)
-        if utils.is_list_element(clazz):
+        if is_list_element(clazz):
             self._add_list_stmts(clazz)
 
     def _add_requisite_prop_stmts(self, prop):
         """Add requisite statements for a YANG leaf or leaf-list."""
         self._add_default_stmts(prop)
         self._add_relative_default_stmts(prop)
-        if utils.is_mandatory_element(prop):
+        if is_mandatory_element(prop):
             self._add_prop_stmts(prop)
-        elif utils.is_presence_element(prop):
+        elif is_presence_element(prop):
             self._add_presence_prop_stmts(prop)
 
     def _add_presence_clazz_stmts(self, clazz):
@@ -235,9 +241,9 @@ class TestCasesBuilder(ValueBuilder):
     def _add_mandatory_stmts(self, clazz):
         """Add requisite statements for mandatory nodes."""
         for prop in clazz.properties():
-            if utils.is_class_prop(prop):
+            if is_class_prop(prop):
                 self._add_mandatory_stmts(prop.property_type)
-            if utils.is_mandatory_element(prop):
+            if is_mandatory_element(prop):
                 self._add_requisite_stmts(prop.owner)
                 self._add_prop_stmts(prop)
 
@@ -246,16 +252,16 @@ class TestCasesBuilder(ValueBuilder):
         ptype = self._get_element_ptype(element)
         path = self._get_element_path(element)
         if path not in self.stmts.declaration_stmts:
-            obj_name = utils.get_obj_name(ptype)
-            if utils.is_class_element(ptype):
+            obj_name = get_obj_name(ptype)
+            if is_class_element(ptype):
                 obj_name = self.assignment_fmt.format(obj_name)
             self.stmts.add_assignment(path, obj_name)
 
     def _add_list_stmts(self, clazz):
         """Add list statements as well as its requisite statements."""
-        while not utils.is_pkg_element(clazz):
-            if all((utils.is_list_element(clazz),
-                    not utils.is_pkg_element(clazz.owner))):
+        while not is_pkg_element(clazz):
+            if all((is_list_element(clazz),
+                    not is_pkg_element(clazz.owner))):
                 self._add_declaration_stmt(clazz)
                 self._add_list_key_stmts(clazz)
                 self._add_append_stmt(clazz)
@@ -271,20 +277,20 @@ class TestCasesBuilder(ValueBuilder):
 
     def _add_prop_stmts(self, prop):
         """Add property statements."""
-        if utils.is_config_prop(prop):
-            if utils.is_reference_prop(prop):
+        if is_config_prop(prop):
+            if is_reference_prop(prop):
                 self._add_reference_stmts(prop)
                 self._add_requisite_prop_stmts(prop)
-            elif utils.is_terminal_prop(prop):
+            elif is_terminal_prop(prop):
                 self._add_terminal_prop_stmts(prop)
 
     def _add_reference_stmts(self, prop):
         """Add reference statements and its requisites."""
         refprop, refclass = self._get_reference_prop(prop)
-        top_class = utils.get_top_class(prop)
-        top_refclass = utils.get_top_class(refprop)
+        top_class = get_top_class(prop)
+        top_refclass = get_top_class(refprop)
         if top_class != top_refclass:
-            top_refclass_name = utils.get_qn(self.lang, top_refclass)
+            top_refclass_name = get_qn(self.lang, top_refclass)
             self.ref_top_classes[top_refclass_name] = top_refclass
             self._add_mandatory_stmts(top_refclass)
             self._add_declaration_stmt(top_refclass)
@@ -299,11 +305,11 @@ class TestCasesBuilder(ValueBuilder):
         path = self._get_element_path(prop)
         refpath = self._get_element_path(refprop)
         value = self._get_value(refprop)
-        if utils.is_leaflist_prop(prop):
+        if is_leaflist_prop(prop):
             self.stmts.add_leaflist_append(path, refpath)
         else:
             self.stmts.add_reference(path, refpath)
-        if utils.is_reference_prop(refprop):
+        if is_reference_prop(refprop):
             prop = refprop
             refprop, _ = self._get_reference_prop(prop)
             self._add_reference_stmt(prop, refprop)
@@ -314,7 +320,7 @@ class TestCasesBuilder(ValueBuilder):
     def _add_terminal_prop_stmts(self, prop):
         """Add test case statements for leaf or leaf-list."""
         path = self._get_element_path(prop)
-        if utils.is_leaflist_prop(prop):
+        if is_leaflist_prop(prop):
             path = '{}[0]'.format(path)
             value = self._get_value(prop)
             if isinstance(value, BitsValue):
@@ -327,11 +333,11 @@ class TestCasesBuilder(ValueBuilder):
         else:
             value = self._get_value(prop)
             if isinstance(value, BitsValue):
-                if self.lang == 'py' and utils.is_union_prop(prop):
+                if self.lang == 'py' and is_union_prop(prop):
                     # add additional dec, assignment stmt
                     # for UnionType contains Bits
                     dec_obj = self._get_element_path(value.type_spec)
-                    dec = utils.get_qn(self.lang, value.type_spec)
+                    dec = get_qn(self.lang, value.type_spec)
                     self.stmts.add_assignment(path, dec_obj)
                     self.stmts.add_declaration(dec_obj, dec)
 
@@ -342,13 +348,13 @@ class TestCasesBuilder(ValueBuilder):
     def _add_leaflist_append_stmts(self, element):
         """Add leaf-list append statements."""
         path = self._get_element_path(element)
-        obj_name = utils.get_obj_name(element)
+        obj_name = get_obj_name(element)
         self.stmts.add_leaflist_append(path, obj_name)
 
     def _add_append_stmt(self, element):
         """Add list append statements."""
         path = self._get_element_path(element)
-        obj_name = utils.get_obj_name(element)
+        obj_name = get_obj_name(element)
         self.stmts.add_append(path, obj_name)
 
     def _add_default_stmts(self, prop):
@@ -357,7 +363,7 @@ class TestCasesBuilder(ValueBuilder):
         default_path = prop_path.replace('->', '.')
         for seg in _DEFAULT_LEAFREFS:
             if all((default_path.endswith(seg),
-                    utils.is_reference_prop(prop))):
+                    is_reference_prop(prop))):
                 self._add_default_reference_stmts(prop)
 
     def _add_default_reference_stmts(self, prop):
@@ -366,7 +372,7 @@ class TestCasesBuilder(ValueBuilder):
         path = self._get_element_path(prop)
         refpath = self._get_element_path(refprop)
         self.stmts.add_adjustment(path, refpath)
-        if utils.is_reference_prop(refprop):
+        if is_reference_prop(refprop):
             self._add_default_reference_stmts(refprop)
 
     def _add_relative_default_stmts(self, prop):
@@ -409,7 +415,7 @@ class TestCasesBuilder(ValueBuilder):
 
                         path_prop = self._get_path_predicate_prop(prop, up, dn)
                         # need to adjust value assigned according to predicate
-                        if utils.is_reference_prop(path_prop):
+                        if is_reference_prop(path_prop):
                             path = self._get_element_path(orig_refprop,
                                                           length=idx)
                             if isinstance(identifier, tuple):
@@ -417,7 +423,7 @@ class TestCasesBuilder(ValueBuilder):
                             path = self.path_sep.join([path, identifier])
                             value = self._get_element_path(path_prop)
                             self.stmts.add_adjustment(path, value)
-                        elif utils.is_terminal_prop(path_prop):
+                        elif is_terminal_prop(path_prop):
                             self._add_terminal_prop_stmts(path_prop)
 
     def _get_path_predicate_prop(self, prop, up, dn):
@@ -451,7 +457,7 @@ class TestCasesBuilder(ValueBuilder):
 
     def _get_element_path(self, element, length=None):
         """Get assignment path for element."""
-        return utils.get_element_path(self.lang, element, length)
+        return get_element_path(self.lang, element, length)
 
     def _get_element_ptype(self, element):
         """Get element property type."""
