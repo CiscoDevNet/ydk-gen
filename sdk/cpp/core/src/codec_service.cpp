@@ -55,7 +55,9 @@ CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pret
     {
         path::DataNode& data_node = get_data_node_from_entity(entity, root_schema);
         path::CodecService core_codec_service{};
-        return core_codec_service.encode(data_node, provider.m_encoding, pretty);
+        std::string result = core_codec_service.encode(data_node, provider.m_encoding, pretty);
+        YLOG_DEBUG("Performing encode operation, resulting in {}", result);
+        return result;
     }
     catch (const YCPPInvalidArgumentError& e)
     {
@@ -80,7 +82,7 @@ CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std:
 std::unique_ptr<Entity>
 CodecService::decode(CodecServiceProvider & provider, std::string & payload, std::unique_ptr<Entity> entity)
 {
-    YLOG_DEBUG("Decoding {}", payload);
+    YLOG_DEBUG("Performing decode operation on {}", payload);
     path::RootSchemaNode& root_schema = provider.get_root_schema();
 
     path::CodecService core_codec_service{};
@@ -107,7 +109,6 @@ CodecService::decode(CodecServiceProvider & provider, std::map<std::string, std:
 {
     for (auto it: payload_map)
     {
-    	YLOG_DEBUG("Decoding {}", it.second);
         std::unique_ptr<Entity> entity = decode(provider, it.second, std::move(entity_map[it.first]));
         entity_map[it.first] = std::move(entity);
     }

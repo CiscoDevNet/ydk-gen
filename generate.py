@@ -182,11 +182,10 @@ def create_shared_libraries(output_directory):
     os.chdir(cmake_build_dir)
     try:
         subprocess.check_call(['cmake', '-DCMAKE_C_COMPILER=/usr/bin/clang', '-DCMAKE_CXX_COMPILER=/usr/bin/clang++', '..'])
-        subprocess.check_call(['make'])
     except subprocess.CalledProcessError as e:
         print('\nERROR: Failed to create shared library!\n')
         sys.exit(e.returncode)
-    print('\nSuccessfully created shared libraries at {0}.\nTo install, run "[sudo] make install" from {1}'.format(output_directory, cmake_build_dir))
+    print('\nSuccessfully generated code at {0}.\nTo build and install, run "make && [sudo] make install" from {1}'.format(output_directory, cmake_build_dir))
     print('\n=================================================')
     print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
     print('Please read %s/README.md for information on how to use YDK\n' % (
@@ -312,7 +311,7 @@ if __name__ == '__main__':
 
     minutes_str, seconds_str = _get_time_taken(start_time)
     print('\nTime taken for code/doc generation: {0} {1}\n'.format(minutes_str, seconds_str))
-    print('\nBuilding {0} package...\n'.format(language))
+    print('\nCreating {0} package...\n'.format(language))
 
     if options.cpp:
         create_shared_libraries(output_directory)

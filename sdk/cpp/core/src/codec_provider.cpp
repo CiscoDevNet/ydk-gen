@@ -20,6 +20,8 @@
 //
 //////////////////////////////////////////////////////////////////
 
+#include <libyang/libyang.h>
+
 #include "codec_provider.hpp"
 #include "entity_lookup.hpp"
 
@@ -29,7 +31,9 @@ CodecServiceProvider::CodecServiceProvider(path::Repository & repo, EncodingForm
     : m_encoding{encoding}, m_repo{repo}
 {
     augment_lookup_tables();
+    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
     m_root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(m_repo.create_root_schema(get_global_capabilities()));
+    ly_verb(LY_LLVRB); // enable libyang logging after payload has been created
 }
 
 CodecServiceProvider::~CodecServiceProvider()
