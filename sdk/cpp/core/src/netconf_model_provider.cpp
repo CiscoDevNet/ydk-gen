@@ -89,10 +89,7 @@ string NetconfModelProvider::get_model(const string& name, const string& version
     payload+="</get-schema>";
     payload+="</rpc>";
 
-    YLOG_TRACE("Get schema request {}", payload);
     string reply = client.execute_payload(payload);
-    YLOG_TRACE("Get schema reply {}", reply);
-
 
     auto data_start = reply.find("<data ");
     if(data_start == string::npos) {
@@ -122,8 +119,6 @@ string NetconfModelProvider::get_model(const string& name, const string& version
             model = model.substr(data_start, data_end - data_start);
         }
     }
-
-    YLOG_TRACE("Model {}", model);
 
     return model;
 }

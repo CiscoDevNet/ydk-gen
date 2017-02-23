@@ -44,13 +44,17 @@ namespace ydk
 map<pair<string, string>, string> NetconfClient::password_lookup;
 
 NetconfClient::NetconfClient(string  username, string  password,
-        string  hostname, int port, int verbosity) :
+        string  hostname, int port) :
         username(username), hostname(hostname), port(port)
 {
-    nc_verbosity((NC_VERB_LEVEL) verbosity);
+    nc_verbosity(NC_VERB_DEBUG);
     nc_callback_print(clb_print);
     nc_callback_sshauth_password(clb_set_password);
+    nc_callback_sshauth_interactive(clb_set_interactive);
+    nc_callback_sshauth_passphrase(clb_set_passphrase);
     nc_callback_ssh_host_authenticity_check(clb_ssh_host_authenticity_check);
+    nc_ssh_pref(NC_SSH_AUTH_PASSWORD, 100);
+    nc_session_transport(NC_TRANSPORT_SSH);
 
     password_lookup.insert(make_pair(make_pair(username, hostname), password));
     session=NULL;
@@ -154,13 +158,9 @@ void NetconfClient::clb_print(NC_VERB_LEVEL level, const char* msg)
          YLOG_ERROR("libnetconf ERROR: {}", msg);
 		break;
 	case NC_VERB_WARNING:
-		YLOG_WARN("libnetconf WARNING: {}", msg);
-		break;
 	case NC_VERB_VERBOSE:
-		YLOG_TRACE("libnetconf VERBOSE: {}", msg);
-		break;
 	case NC_VERB_DEBUG:
-		YLOG_DEBUG("libnetconf DEBUG: {}", msg);
+	    YLOG_TRACE("libnetconf TRACE: {}", msg);
 		break;
 	}
 }
@@ -174,6 +174,32 @@ char* NetconfClient::clb_set_password(const char* user_name,
     snprintf(password_buffer, password_string.size() + 1, "%s",
             password_string.c_str());
 
+    YLOG_TRACE("looked up password: {}", password_buffer);
+    return password_buffer;
+}
+
+char* NetconfClient::clb_set_interactive(const char *name, const char *instruction, const char *prompt, int echo)
+{
+    string password_string{};
+    for(const auto & entry : password_lookup)
+    {
+        password_string = entry.second;
+        break;
+    }
+    char* password_buffer = (char*) malloc(sizeof(char) * (password_string.size() + 1));
+    snprintf(password_buffer, password_string.size() + 1, "%s", password_string.c_str());
+
+    YLOG_TRACE("looked up password for interactive: {}", password_buffer);
+    return password_buffer;
+}
+
+char* NetconfClient::clb_set_passphrase(const char *user_name, const char *host_name, const char *priv_key_file)
+{
+    string password_string = password_lookup[make_pair(user_name, host_name)];
+    char* password_buffer = (char*) malloc(sizeof(char) * (password_string.size() + 1));
+    snprintf(password_buffer, password_string.size() + 1, "%s", password_string.c_str());
+
+    YLOG_TRACE("looked up password for passphrase: {}", password_buffer);
     return password_buffer;
 }
 

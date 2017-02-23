@@ -63,7 +63,7 @@ static std::unique_ptr<path::DataNode> handle_read_reply(string reply, path::Roo
 const char* CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
 
 NetconfServiceProvider::NetconfServiceProvider(string address, string username, string password, int port)
-    : client(make_unique<NetconfClient>(username, password, address, port, 0)),
+    : client(make_unique<NetconfClient>(username, password, address, port)),
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
 	path::Repository repo;
@@ -72,7 +72,7 @@ NetconfServiceProvider::NetconfServiceProvider(string address, string username, 
 }
 
 NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo, string address, string username, string password, int port)
-    : client(make_unique<NetconfClient>(username, password, address, port, 0)),
+    : client(make_unique<NetconfClient>(username, password, address, port)),
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
     initialize(repo);

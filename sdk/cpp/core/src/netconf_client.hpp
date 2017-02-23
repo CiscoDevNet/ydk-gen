@@ -46,7 +46,7 @@ public:
 
 public:
 	NetconfClient(std::string  username, std::string  password,
-			std::string  server_ip, int port, int verbosity);
+			std::string  server_ip, int port);
 
 	~NetconfClient();
 
@@ -63,6 +63,8 @@ private:
 			const char* message, const char* attribute, const char* element,
 			const char* ns, const char* sid);
 	static char* clb_set_password(const char* username, const char* hostname);
+	static char* clb_set_interactive(const char *name, const char *instruction, const char *prompt, int echo);
+	static char* clb_set_passphrase(const char *username, const char *hostname, const char *priv_key_file);
 	static int clb_ssh_host_authenticity_check(const char *hostname,
 			ssh_session session);
 
