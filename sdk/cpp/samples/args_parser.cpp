@@ -19,54 +19,118 @@
 #include "args_parser.h"
 
 using namespace std;
-
 void show_usage(string name)
 {
-	cerr << "\nUsage:\n\t"<< name << " [http|ssh]://user:password@host:port [-v]" <<endl<<endl;
+    cerr << "\nUsage:\n\t"<< name << " [http|ssh]://user:password@host[:port] [-v]" <<endl;
+    cerr << "\t\tIf host is IPv6, enclose it in square brackets. E.g. [1234:1234:1234:1234::1234]"<<endl;
+    cerr << "\t\tIf port is not specified, 830 will be used with ssh (netconf) or 80 with http (restconf)"<<endl<<endl;
 }
 
 vector<string> parse_args(int argc, char* argv[])
 {
-	if (argc < 2)
-	{
-		show_usage(argv[0]);
-		return {};
-	}
-	string arg = argv[1];
-	if ((arg == "-h") || (arg == "--help"))
-	{
-		show_usage(argv[0]);
-		return {};
-	}
-	vector<string> ret;
-	size_t s = arg.find("ssh://") + sizeof("ssh://")-1;
-	if(s==string::npos)
-	{
-		s = arg.find("http://") + sizeof("http://")-1;
-	}
-	size_t col1 = arg.find(":",s);
-	size_t amp = arg.find("@")-1;
-	size_t col2 = arg.find(":",amp);
-	ret.push_back(arg.substr(s,col1-s));
-	ret.push_back(arg.substr(col1+1, amp-col1));
-	ret.push_back(arg.substr(amp+2, col2-amp-2));
-	ret.push_back(arg.substr(col2+1));
+    vector<string> ret;
+    string host, username, password, port;
+    string arg;
 
-	bool verb = false;
-	if(argc == 3)
-	{
-		string v = argv[2];
-		if(v=="-v")
-			verb = true;
-	}
+    if (argc < 2)
+    {
+        goto fail;
+    }
+    if ((arg == "-h") || (arg == "--help"))
+    {
+        goto fail;
+    }
 
-	if(verb)
-	{
-		ret.push_back("--verbose");
-	}
-	else
-	{
-		ret.push_back("--silent");
-	}
-	return ret;
+    arg = argv[1];
+
+    try
+    {
+        size_t s = arg.find("ssh://");
+        if(s!=string::npos)
+        {
+            s += sizeof("ssh://")-1;
+            port = "830";
+        }
+        else
+        {
+            s = arg.find("http://");
+            if(s!=string::npos)
+            {
+                s += sizeof("http://")-1;
+                port = "80";
+            }
+        }
+
+        size_t col1 = arg.find(":",s);
+        size_t amp = arg.find("@")-1;
+        if(col1 == string::npos || amp == string::npos)
+        {
+            goto fail;
+        }
+
+        username = arg.substr(s,col1-s);
+        password = arg.substr(col1+1, amp-col1);
+
+        size_t open_bracket = arg.find("[");
+        if(open_bracket != string::npos)
+        {
+            size_t close_bracket = arg.find("]");
+            if(close_bracket!=string::npos)
+            {
+                host = arg.substr(amp+3, close_bracket-amp-3);
+                size_t col2 = arg.find(":", close_bracket);
+                if(col2 != string::npos)
+                {
+                    port = arg.substr(col2+1);
+                }
+            }
+        }
+        else
+        {
+            size_t col2 = arg.find(":",amp);
+            if(col2 != string::npos)
+            {
+                host = arg.substr(amp+2, col2-amp-2);
+                port = arg.substr(col2+1);
+            }
+            else
+            {
+                host = arg.substr(amp+2, arg.size()-amp-2);
+            }
+        }
+
+        ret.push_back(username);
+        ret.push_back(password);
+        ret.push_back(host);
+        ret.push_back(port);
+
+        bool verb = false;
+        if(argc == 3)
+        {
+            string v = argv[2];
+            if(v=="-v")
+                verb = true;
+        }
+
+        if(verb)
+        {
+            ret.push_back("--verbose");
+        }
+        else
+        {
+            ret.push_back("--silent");
+        }
+    }
+    catch(...)
+    {
+        goto fail;
+    }
+    return ret;
+
+    fail:
+    {
+        show_usage(argv[0]);
+        return {};
+    }
 }
+
