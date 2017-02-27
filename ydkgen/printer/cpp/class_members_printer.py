@@ -79,7 +79,7 @@ class ClassMembersPrinter(object):
 
     def _print_clone_ptr_method(self, clazz):
         if clazz.owner is not None and isinstance(clazz.owner, Package):
-            self.ctx.writeln('std::unique_ptr<Entity> clone_ptr() override;')
+            self.ctx.writeln('std::shared_ptr<Entity> clone_ptr() override;')
 
     def _print_class_value_members(self, clazz):
         if clazz.is_identity():

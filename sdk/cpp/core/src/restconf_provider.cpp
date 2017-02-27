@@ -39,7 +39,7 @@ using namespace std;
 
 namespace ydk
 {
-static std::unique_ptr<path::DataNode> handle_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding);
+static std::shared_ptr<path::DataNode> handle_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding);
 static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_schema, const string & operation);
 static string get_encoding_string(EncodingFormat encoding);
 
@@ -97,7 +97,7 @@ path::RootSchemaNode& RestconfServiceProvider::get_root_schema() const
     return *root_schema;
 }
 
-std::unique_ptr<path::DataNode> RestconfServiceProvider::invoke(path::Rpc& rpc) const
+std::shared_ptr<path::DataNode> RestconfServiceProvider::invoke(path::Rpc& rpc) const
 {
 	path::SchemaNode* create_schema = get_schema_for_operation(*root_schema, "ydk:create");
 	path::SchemaNode* read_schema = get_schema_for_operation(*root_schema, "ydk:read");
@@ -105,7 +105,7 @@ std::unique_ptr<path::DataNode> RestconfServiceProvider::invoke(path::Rpc& rpc) 
 	path::SchemaNode* delete_schema = get_schema_for_operation(*root_schema, "ydk:delete");
 
     path::SchemaNode* rpc_schema = &(rpc.schema());
-    std::unique_ptr<path::DataNode> datanode = nullptr;
+    std::shared_ptr<path::DataNode> datanode = nullptr;
 
     if(rpc_schema == create_schema || rpc_schema == update_schema)
     {
@@ -151,7 +151,7 @@ static bool is_config(path::Rpc & rpc)
 	return false;
 }
 
-std::unique_ptr<path::DataNode> RestconfServiceProvider::handle_read(path::Rpc& rpc) const
+std::shared_ptr<path::DataNode> RestconfServiceProvider::handle_read(path::Rpc& rpc) const
 {
     path::CodecService codec_service{};
 
@@ -180,7 +180,7 @@ std::unique_ptr<path::DataNode> RestconfServiceProvider::handle_read(path::Rpc& 
     return handle_read_reply( client->execute("GET", url, ""), *root_schema, encoding);
 }
 
-std::unique_ptr<path::DataNode> RestconfServiceProvider::handle_edit(path::Rpc& rpc, const string & operation) const
+std::shared_ptr<path::DataNode> RestconfServiceProvider::handle_edit(path::Rpc& rpc, const string & operation) const
 {
 	path::CodecService codec_service{};
     auto entity = rpc.input().find("entity");
@@ -201,11 +201,11 @@ std::unique_ptr<path::DataNode> RestconfServiceProvider::handle_edit(path::Rpc& 
     return nullptr;
 }
 
-static std::unique_ptr<path::DataNode> handle_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding)
+static std::shared_ptr<path::DataNode> handle_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding)
 {
 	path::CodecService codec_service{};
 
-	auto datanode = codec_service.decode(root_schema, reply, encoding);
+	auto datanode = std::shared_ptr<path::DataNode>(codec_service.decode(root_schema, reply, encoding));
 
 	if(!datanode){
 		YLOG_DEBUG("Codec service failed to decode datanode");

@@ -40,25 +40,19 @@ Entity::~Entity()
 {
 }
 
-unique_ptr<Entity> Entity::clone_ptr()
+shared_ptr<Entity> Entity::clone_ptr()
 {
     return nullptr;
 }
 
-void Entity::set_child(const std::string & yang_name, Entity* entity)
+void Entity::set_parent(Entity* p)
 {
-    children[yang_name] = entity;
+    parent = p;
 }
 
-Entity* Entity::get_child(const std::string & yang_name)
+Entity* Entity::get_parent()
 {
-    return children[yang_name];
+    return parent;
 }
-
-std::map<std::string, Entity*> & Entity::get_protected_children()
-{
-    return children;
-}
-
 
 }

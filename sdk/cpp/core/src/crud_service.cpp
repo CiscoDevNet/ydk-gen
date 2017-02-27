@@ -33,10 +33,10 @@ using namespace std;
 namespace ydk {
 
 static string get_data_payload(Entity & entity, path::ServiceProvider & provider);
-static std::unique_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, Entity & entity,
+static std::shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, Entity & entity,
 		const string & operation, const string & data_tag, bool set_config_flag);
-static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter);
-static bool operation_succeeded(unique_ptr<path::DataNode> node);
+static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter);
+static bool operation_succeeded(shared_ptr<path::DataNode> node);
 
 CrudService::CrudService()
 {
@@ -66,34 +66,34 @@ bool CrudService::delete_(path::ServiceProvider & provider, Entity & entity)
 			);
 }
 
-unique_ptr<Entity> CrudService::read(path::ServiceProvider & provider, Entity & filter)
+shared_ptr<Entity> CrudService::read(path::ServiceProvider & provider, Entity & filter)
 {
 	YLOG_DEBUG("Executing CRUD read operation");
 	return read_datanode(filter, execute_rpc(provider, filter, "ydk:read", "filter", false));
 }
 
-unique_ptr<Entity> CrudService::read_config(path::ServiceProvider & provider, Entity & filter)
+shared_ptr<Entity> CrudService::read_config(path::ServiceProvider & provider, Entity & filter)
 {
 	YLOG_DEBUG("Executing CRUD config read operation");
 	return read_datanode(filter, execute_rpc(provider, filter, "ydk:read", "filter", true));
 }
 
-unique_ptr<Entity> CrudService::read_datanode(Entity & filter, unique_ptr<path::DataNode> read_data_node)
+shared_ptr<Entity> CrudService::read_datanode(Entity & filter, shared_ptr<path::DataNode> read_data_node)
 {
     if (read_data_node == nullptr)
         return {};
-    unique_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
+    shared_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
     get_entity_from_data_node(read_data_node->children()[0].get(), top_entity.get());
     return top_entity;
 }
 
-static bool operation_succeeded(unique_ptr<path::DataNode> node)
+static bool operation_succeeded(shared_ptr<path::DataNode> node)
 {
 	YLOG_DEBUG("Operation {}", ((node == nullptr)?"succeeded":"failed"));
 	return node == nullptr;
 }
 
-static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)
+static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter)
 {
     if(filter.parent == nullptr)
         return filter.clone_ptr();
@@ -101,11 +101,11 @@ static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)
     return get_top_entity_from_filter(*(filter.parent));
 }
 
-static unique_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, Entity & entity,
+static shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, Entity & entity,
         const string & operation, const string & data_tag, bool set_config_flag)
 {
     path::RootSchemaNode& root_schema = provider.get_root_schema();
-    unique_ptr<ydk::path::Rpc> ydk_rpc { root_schema.rpc(operation) };
+    shared_ptr<ydk::path::Rpc> ydk_rpc { root_schema.rpc(operation) };
     string data = get_data_payload(entity, provider);
 
     if(set_config_flag)

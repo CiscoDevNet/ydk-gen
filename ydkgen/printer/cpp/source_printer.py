@@ -96,10 +96,10 @@ class SourcePrinter(MultiFilePrinter):
 
     def _print_clone_ptr_method(self, clazz, leafs):
         if clazz.owner is not None and isinstance(clazz.owner, Package):
-            self.ctx.writeln('std::unique_ptr<Entity> %s::clone_ptr()' % clazz.qualified_cpp_name())
+            self.ctx.writeln('std::shared_ptr<Entity> %s::clone_ptr()' % clazz.qualified_cpp_name())
             self.ctx.writeln('{')
             self.ctx.lvl_inc()
-            self.ctx.writeln('return std::make_unique<%s>();' % clazz.qualified_cpp_name())
+            self.ctx.writeln('return std::make_shared<%s>();' % clazz.qualified_cpp_name())
             self.ctx.lvl_dec()
             self.ctx.writeln('}')
 

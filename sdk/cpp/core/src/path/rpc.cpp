@@ -55,7 +55,7 @@ ydk::path::RpcImpl::~RpcImpl()
 {
 }
 
-std::unique_ptr<ydk::path::DataNode>
+std::shared_ptr<ydk::path::DataNode>
 ydk::path::RpcImpl::operator()(const ydk::path::ServiceProvider& provider)
 {
     return provider.invoke(*this);

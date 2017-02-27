@@ -120,13 +120,13 @@ class GetEntityPathPrinter(object):
             self.ctx.writeln('else')
             self.ctx.writeln('{')
             self.ctx.lvl_inc()
-            
-            self.ctx.writeln("get_relative_entity_path(this, ancestor, path_buffer);")            
+
+            self.ctx.writeln("path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());")
 
             self.ctx.lvl_dec()
             self.ctx.writeln('}')
             self.ctx.bline()
-       
+
         self.ctx.writeln('std::vector<std::pair<std::string, LeafData> > leaf_name_data {};')
         self.ctx.bline()
         for prop in leafs:

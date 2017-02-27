@@ -32,8 +32,10 @@ using namespace std;
 namespace ydk
 {
 
-void get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::ostringstream & path_buffer)
+std::string get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::string path)
 {
+    std::ostringstream path_buffer;
+    path_buffer << path;
     if(ancestor == nullptr)
     {
         throw(YCPPInvalidArgumentError{"ancestor should not be null."});
@@ -63,6 +65,8 @@ void get_relative_entity_path(const Entity* current_node, const Entity* ancestor
     if(p)
         path_buffer << "/";
     path_buffer<<current_node->get_segment_path();
+    return path_buffer.str();
+
 }
 
 bool is_set(const EditOperation & operation)

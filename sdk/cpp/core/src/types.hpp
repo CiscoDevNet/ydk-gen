@@ -137,18 +137,16 @@ class Entity {
     virtual Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path="") = 0;
 
     virtual std::map<std::string, Entity*> & get_children() = 0;
-    virtual std::unique_ptr<Entity> clone_ptr();
-    virtual void set_child(const std::string & yang_name, Entity* entity);
-    virtual Entity* get_child(const std::string & yang_name);
-    virtual std::map<std::string, Entity*> & get_protected_children();
+    virtual std::shared_ptr<Entity> clone_ptr();
+
+    virtual void set_parent(Entity* p);
+    virtual Entity* get_parent();
 
   public:
     Entity* parent;
     std::string yang_name;
     std::string yang_parent_name;
     EditOperation operation;
-
-  protected:
     std::map<std::string, Entity*> children;
 };
 
@@ -301,7 +299,7 @@ class YLeaf
 class YLeafList {
   public:
     YLeafList(YType type, std::string name);
-    ~YLeafList();
+    virtual ~YLeafList();
 
     YLeafList(const YLeafList& val);
     YLeafList(YLeafList&& val);
@@ -309,29 +307,29 @@ class YLeafList {
     YLeafList& operator=(const YLeafList& val);
     YLeafList& operator=(YLeafList&& val);
 
-    void append(uint8 val);
-    void append(uint32 val);
-    void append(uint64 val);
-    void append(long val);
-    void append(int8 val);
-    void append(int32 val);
-    void append(int64 val);
-    void append(double val);
-    void append(Empty val);
-    void append(Identity val);
-    void append(Bits val);
-    void append(std::string val);
-    void append(Enum::YLeaf val);
-    void append(Decimal64 val);
+    virtual void append(uint8 val);
+    virtual void append(uint32 val);
+    virtual void append(uint64 val);
+    virtual void append(long val);
+    virtual void append(int8 val);
+    virtual void append(int32 val);
+    virtual void append(int64 val);
+    virtual void append(double val);
+    virtual void append(Empty val);
+    virtual void append(Identity val);
+    virtual void append(Bits val);
+    virtual void append(std::string val);
+    virtual void append(Enum::YLeaf val);
+    virtual void append(Decimal64 val);
 
-    YLeaf & operator [] (size_t index);
+    virtual YLeaf & operator [] (size_t index);
 
     operator std::string() const;
     bool operator == (YLeafList & other) const;
     bool operator == (const YLeafList & other) const;
 
-    std::vector<std::pair<std::string, LeafData> > get_name_leafdata() const;
-    std::vector<YLeaf> getYLeafs() const;
+    virtual std::vector<std::pair<std::string, LeafData> > get_name_leafdata() const;
+    virtual std::vector<YLeaf> getYLeafs() const;
 
   public:
     EditOperation operation;

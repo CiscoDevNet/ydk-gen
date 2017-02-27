@@ -36,7 +36,7 @@ TEST_CASE("CreateDelRead")
 	auto & runner = schema.create("ydktest-sanity:runner", "");
 
 	//first delete
-	std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+	std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 	auto json = s.encode(runner, EncodingFormat::JSON, false);
 	delete_rpc->input().create("entity", json);
 	//call delete
@@ -47,12 +47,12 @@ TEST_CASE("CreateDelRead")
     json = s.encode(runner, EncodingFormat::JSON, false);
     CHECK( !json.empty());
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", json);
     (*create_rpc)(provider);
 
     //read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
 	auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
 	json = s.encode(runner_read, EncodingFormat::JSON, false);
@@ -67,7 +67,7 @@ TEST_CASE("CreateDelRead")
 	json = s.encode(runner, EncodingFormat::JSON, false);
 	CHECK( !json.empty());
 	//call update
-	std::unique_ptr<ydk::path::Rpc> update_rpc { schema.rpc("ydk:update") };
+	std::shared_ptr<ydk::path::Rpc> update_rpc { schema.rpc("ydk:update") };
 	update_rpc->input().create("entity", json);
 	(*update_rpc)(provider);
 

@@ -25,7 +25,7 @@ class GetConfigRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
         YLeaf with_defaults; //type: WithDefaultsModeEnum
 
 
@@ -92,7 +92,7 @@ class EditConfigRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
         YLeaf default_operation; //type: DefaultOperationEnum
         YLeaf test_option; //type: TestOptionEnum
         YLeaf error_option; //type: ErrorOptionEnum
@@ -142,7 +142,7 @@ class CopyConfigRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
         YLeaf with_defaults; //type: WithDefaultsModeEnum
 
 
@@ -214,7 +214,7 @@ class DeleteConfigRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
 
 
     class Target : public Entity
@@ -257,7 +257,7 @@ class LockRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
 
 
     class Target : public Entity
@@ -301,7 +301,7 @@ class UnlockRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
 
 
     class Target : public Entity
@@ -345,7 +345,7 @@ class GetRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
         YLeaf with_defaults; //type: WithDefaultsModeEnum
 
 
@@ -388,7 +388,7 @@ class CloseSessionRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
 
 
 
@@ -408,7 +408,7 @@ class KillSessionRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
         YLeaf session_id; //type: uint32
 
 
@@ -429,7 +429,7 @@ class CommitRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
         YLeaf confirmed; //type: empty
         YLeaf confirm_timeout; //type: uint32
         YLeaf persist; //type: string
@@ -453,7 +453,7 @@ class DiscardChangesRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
 
 
 
@@ -473,7 +473,7 @@ class CancelCommitRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
         YLeaf persist_id; //type: string
 
 
@@ -494,7 +494,7 @@ class ValidateRpc : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::unique_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() override;
 
 
     class Source : public Entity

@@ -52,7 +52,7 @@ public:
 		return ydk::EncodingFormat::XML;
 	}
 
-	std::unique_ptr<ydk::path::DataNode> invoke(ydk::path::Rpc& rpc) const
+	std::shared_ptr<ydk::path::DataNode> invoke(ydk::path::Rpc& rpc) const
 	{
         ydk::path::CodecService s{};
 

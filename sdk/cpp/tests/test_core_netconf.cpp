@@ -98,7 +98,7 @@ TEST_CASE( "bgp_netconf_create" )
 
     auto & bgp = schema.create("openconfig-bgp:bgp", "");
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 
@@ -138,12 +138,12 @@ TEST_CASE( "bgp_netconf_create" )
     REQUIRE(xml == expected_bgp_output);
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & bgp_read = schema.create("openconfig-bgp:bgp", "");
 
     xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
@@ -163,7 +163,7 @@ TEST_CASE( "bgp_netconf_create" )
     peer_as.set("6500");
 
     //call update
-    std::unique_ptr<ydk::path::Rpc> update_rpc { schema.rpc("ydk:update") };
+    std::shared_ptr<ydk::path::Rpc> update_rpc { schema.rpc("ydk:update") };
     xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
     update_rpc->input().create("entity", xml);
@@ -183,7 +183,7 @@ TEST_CASE("bits")
 	auto & runner = schema.create("ydktest-sanity:runner", "");
 
 	//get the root
-	std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+	std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 	REQUIRE( data_root != nullptr );
 
 	auto & ysanity = runner.create("ytypes/built-in-t/bits-value", "disable-nagle");
@@ -195,7 +195,7 @@ TEST_CASE("bits")
 
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 }
@@ -210,7 +210,7 @@ TEST_CASE("core_validate")
     auto & runner = schema.create("ietf-netconf:validate", "");
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
     REQUIRE( data_root != nullptr );
 
     auto & ysanity = runner.create("source/candidate", "");
@@ -223,7 +223,7 @@ TEST_CASE("core_validate")
     std::cout << xml << std::endl;
 
     //call create
-    // std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    // std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     // create_rpc->input().create("entity", xml);
     // (*create_rpc)(sp);
 }
@@ -240,7 +240,7 @@ TEST_CASE( "bgp_xr_openconfig"  )
 
     auto & bgp = schema.create("openconfig-bgp:bgp", "");
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&bgp.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&bgp.root()};
 
     REQUIRE( data_root != nullptr );
 
@@ -260,7 +260,7 @@ TEST_CASE( "bgp_xr_openconfig"  )
     auto & peer_group_name = ppeer_group.create("config/peer-group-name", "IBGP");
     auto & ppeer_as = ppeer_group.create("config/peer-as","65172");
 
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
     create_rpc->input().create("entity", xml);
@@ -268,11 +268,11 @@ TEST_CASE( "bgp_xr_openconfig"  )
     auto res = (*create_rpc)(sp);
 
 	//call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & bgp_read = schema.create("openconfig-bgp:bgp", "");
 
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&bgp_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&bgp_read.root()};
 
     xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -306,7 +306,7 @@ TEST_CASE( "bgp_xr_openconfig"  )
 //
 //    auto & vrf = four_instance_as->create("vrfs/vrf[vrf-name='red']");
 //
-//	std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+//	std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
 //	auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
 //	REQUIRE( !xml.empty() );
 //	create_rpc->input().create("entity", xml);
@@ -314,9 +314,9 @@ TEST_CASE( "bgp_xr_openconfig"  )
 //	auto res = (*create_rpc)(sp);
 //
 //	//call read
-//    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+//    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
 //    auto & bgp_read = schema.create("Cisco-IOS-XR-ipv4-bgp-cfg:bgp", "");
-//    std::unique_ptr<const ydk::path::DataNode> data_root2{&bgp_read.root()};
+//    std::shared_ptr<const ydk::path::DataNode> data_root2{&bgp_read.root()};
 //
 //    xml = s.encode(bgp_read, ydk::EncodingFormat::XML, false);
 //    REQUIRE( !xml.empty() );

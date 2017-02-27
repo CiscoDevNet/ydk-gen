@@ -44,7 +44,7 @@ EntityPath GetConfigRpc::Output::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -125,7 +125,7 @@ EntityPath GetConfigRpc::Source::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -311,7 +311,7 @@ void GetConfigRpc::set_value(const std::string & value_path, std::string value)
     }
 }
 
-std::unique_ptr<Entity> GetConfigRpc::clone_ptr()
+std::shared_ptr<Entity> GetConfigRpc::clone_ptr()
 {
     return std::make_unique<GetConfigRpc>();
 }
@@ -358,7 +358,7 @@ EntityPath EditConfigRpc::Target::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -534,7 +534,7 @@ void EditConfigRpc::set_value(const std::string & value_path, std::string value)
     }
 }
 
-std::unique_ptr<Entity> EditConfigRpc::clone_ptr()
+std::shared_ptr<Entity> EditConfigRpc::clone_ptr()
 {
     return std::make_unique<EditConfigRpc>();
 }
@@ -587,7 +587,7 @@ EntityPath CopyConfigRpc::Target::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -691,7 +691,7 @@ EntityPath CopyConfigRpc::Source::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -882,7 +882,7 @@ void CopyConfigRpc::set_value(const std::string & value_path, std::string value)
     }
 }
 
-std::unique_ptr<Entity> CopyConfigRpc::clone_ptr()
+std::shared_ptr<Entity> CopyConfigRpc::clone_ptr()
 {
     return std::make_unique<CopyConfigRpc>();
 }
@@ -929,7 +929,7 @@ EntityPath DeleteConfigRpc::Target::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1072,7 +1072,7 @@ void DeleteConfigRpc::set_value(const std::string & value_path, std::string valu
 {
 }
 
-std::unique_ptr<Entity> DeleteConfigRpc::clone_ptr()
+std::shared_ptr<Entity> DeleteConfigRpc::clone_ptr()
 {
     return std::make_unique<DeleteConfigRpc>();
 }
@@ -1122,7 +1122,7 @@ EntityPath LockRpc::Target::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1270,7 +1270,7 @@ void LockRpc::set_value(const std::string & value_path, std::string value)
 {
 }
 
-std::unique_ptr<Entity> LockRpc::clone_ptr()
+std::shared_ptr<Entity> LockRpc::clone_ptr()
 {
     return std::make_unique<LockRpc>();
 }
@@ -1320,7 +1320,7 @@ EntityPath UnlockRpc::Target::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1468,7 +1468,7 @@ void UnlockRpc::set_value(const std::string & value_path, std::string value)
 {
 }
 
-std::unique_ptr<Entity> UnlockRpc::clone_ptr()
+std::shared_ptr<Entity> UnlockRpc::clone_ptr()
 {
     return std::make_unique<UnlockRpc>();
 }
@@ -1509,7 +1509,7 @@ EntityPath GetRpc::Output::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1651,7 +1651,7 @@ void GetRpc::set_value(const std::string & value_path, std::string value)
     }
 }
 
-std::unique_ptr<Entity> GetRpc::clone_ptr()
+std::shared_ptr<Entity> GetRpc::clone_ptr()
 {
     return std::make_unique<GetRpc>();
 }
@@ -1724,7 +1724,7 @@ void CloseSessionRpc::set_value(const std::string & value_path, std::string valu
 {
 }
 
-std::unique_ptr<Entity> CloseSessionRpc::clone_ptr()
+std::shared_ptr<Entity> CloseSessionRpc::clone_ptr()
 {
     return std::make_unique<CloseSessionRpc>();
 }
@@ -1805,7 +1805,7 @@ void KillSessionRpc::set_value(const std::string & value_path, std::string value
     }
 }
 
-std::unique_ptr<Entity> KillSessionRpc::clone_ptr()
+std::shared_ptr<Entity> KillSessionRpc::clone_ptr()
 {
     return std::make_unique<KillSessionRpc>();
 }
@@ -1910,7 +1910,7 @@ void CommitRpc::set_value(const std::string & value_path, std::string value)
     }
 }
 
-std::unique_ptr<Entity> CommitRpc::clone_ptr()
+std::shared_ptr<Entity> CommitRpc::clone_ptr()
 {
     return std::make_unique<CommitRpc>();
 }
@@ -1983,7 +1983,7 @@ void DiscardChangesRpc::set_value(const std::string & value_path, std::string va
 {
 }
 
-std::unique_ptr<Entity> DiscardChangesRpc::clone_ptr()
+std::shared_ptr<Entity> DiscardChangesRpc::clone_ptr()
 {
     return std::make_unique<DiscardChangesRpc>();
 }
@@ -2064,7 +2064,7 @@ void CancelCommitRpc::set_value(const std::string & value_path, std::string valu
     }
 }
 
-std::unique_ptr<Entity> CancelCommitRpc::clone_ptr()
+std::shared_ptr<Entity> CancelCommitRpc::clone_ptr()
 {
     return std::make_unique<CancelCommitRpc>();
 }
@@ -2117,7 +2117,7 @@ EntityPath ValidateRpc::Source::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -2270,7 +2270,7 @@ void ValidateRpc::set_value(const std::string & value_path, std::string value)
 {
 }
 
-std::unique_ptr<Entity> ValidateRpc::clone_ptr()
+std::shared_ptr<Entity> ValidateRpc::clone_ptr()
 {
     return std::make_unique<ValidateRpc>();
 }

@@ -43,7 +43,7 @@ namespace ydk
 {
 static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode& root_schema, string operation);
 
-static unique_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name);
+static shared_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name);
 static path::DataNode& create_rpc_input(path::Rpc & netconf_rpc);
 
 static bool is_candidate_supported(vector<string> capbilities);
@@ -52,13 +52,13 @@ static void create_input_source(path::DataNode & input, bool config);
 static void create_input_error_option(path::DataNode & input);
 static string get_annotated_config_payload(path::RootSchemaNode & root_schema, path::Rpc & rpc, path::Annotation & annotation);
 static string get_commit_rpc_payload();
-static std::unique_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported);
+static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported);
 
 static string get_read_rpc_name(bool config);
 static bool is_config(path::Rpc & rpc);
 static string get_filter_payload(path::Rpc & ydk_rpc);
 static string get_netconf_payload(path::DataNode & input, string data_tag, string data_value);
-static std::unique_ptr<path::DataNode> handle_read_reply(string reply, path::RootSchemaNode & root_schema);
+static std::shared_ptr<path::DataNode> handle_read_reply(string reply, path::RootSchemaNode & root_schema);
 
 const char* CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
 
@@ -122,7 +122,7 @@ path::RootSchemaNode& NetconfServiceProvider::get_root_schema() const
     return *root_schema;
 }
 
-std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_read(path::Rpc& ydk_rpc) const
+std::shared_ptr<path::DataNode> NetconfServiceProvider::handle_read(path::Rpc& ydk_rpc) const
 {
     //for now we only support crud rpc's
     bool config = is_config(ydk_rpc);
@@ -137,10 +137,10 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_read(path::Rpc& y
     YLOG_DEBUG("=============Reply payload=============");
     YLOG_DEBUG(reply.c_str());
     YLOG_DEBUG("\n");
-    return handle_read_reply(reply, *root_schema	);
+    return handle_read_reply(reply, *root_schema);
 }
 
-std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_edit(path::Rpc& ydk_rpc, path::Annotation annotation) const
+std::shared_ptr<path::DataNode> NetconfServiceProvider::handle_edit(path::Rpc& ydk_rpc, path::Annotation annotation) const
 {
     //for now we only support crud rpc's
     bool candidate_supported = is_candidate_supported(server_capabilities);
@@ -162,7 +162,7 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_edit(path::Rpc& y
     return handle_edit_reply(reply, *client, candidate_supported);
 }
 
-std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_netconf_operation(path::Rpc& ydk_rpc) const
+std::shared_ptr<path::DataNode> NetconfServiceProvider::handle_netconf_operation(path::Rpc& ydk_rpc) const
 {
     bool candidate_supported = is_candidate_supported(server_capabilities);
 
@@ -191,7 +191,7 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::handle_netconf_operation
 
 }
 
-std::unique_ptr<path::DataNode> NetconfServiceProvider::invoke(path::Rpc& rpc) const
+std::shared_ptr<path::DataNode> NetconfServiceProvider::invoke(path::Rpc& rpc) const
 {
     path::SchemaNode* create_schema = get_schema_for_operation(*root_schema, "ydk:create");
     path::SchemaNode* read_schema = get_schema_for_operation(*root_schema, "ydk:read");
@@ -200,7 +200,7 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::invoke(path::Rpc& rpc) c
 
     //for now we only support crud rpc's
     path::SchemaNode* rpc_schema = &(rpc.schema());
-	std::unique_ptr<path::DataNode> datanode = nullptr;
+	std::shared_ptr<path::DataNode> datanode = nullptr;
 
     if(rpc_schema == create_schema || rpc_schema == delete_schema || rpc_schema == update_schema)
     {
@@ -225,9 +225,9 @@ std::unique_ptr<path::DataNode> NetconfServiceProvider::invoke(path::Rpc& rpc) c
     return datanode;
 }
 
-static unique_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name)
+static shared_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name)
 {
-    auto rpc = unique_ptr<path::Rpc>(root_schema.rpc(rpc_name));
+    auto rpc = shared_ptr<path::Rpc>(root_schema.rpc(rpc_name));
     if(rpc == nullptr){
             YLOG_ERROR("Cannot create payload for RPC: {}", rpc_name);
             throw(YCPPIllegalStateError{"Cannot create payload for RPC: "+ rpc_name});
@@ -339,7 +339,7 @@ static string get_netconf_payload(path::DataNode & input, string data_tag, strin
     return payload;
 }
 
-static std::unique_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported)
+static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported)
 {
     if(reply.find("<ok/>") == std::string::npos)
     {
@@ -369,7 +369,7 @@ static std::unique_ptr<path::DataNode> handle_edit_reply(string reply, NetconfCl
     return nullptr;
 }
 
-static std::unique_ptr<path::DataNode> handle_read_reply(string reply, path::RootSchemaNode & root_schema)
+static std::shared_ptr<path::DataNode> handle_read_reply(string reply, path::RootSchemaNode & root_schema)
 {
     path::CodecService codec_service{};
     auto empty_data = reply.find("<data/>");
@@ -395,7 +395,7 @@ static std::unique_ptr<path::DataNode> handle_read_reply(string reply, path::Roo
 
     string data = reply.substr(data_start, data_end-data_start);
 
-	auto datanode = codec_service.decode(root_schema, data, EncodingFormat::XML);
+	auto datanode = std::shared_ptr<path::DataNode>(codec_service.decode(root_schema, data, EncodingFormat::XML));
 
     if(!datanode){
         YLOG_DEBUG( "Codec service failed to decode datanode");

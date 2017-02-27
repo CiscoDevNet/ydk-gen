@@ -39,13 +39,13 @@ public:
                                int port = 830);
         ~NetconfServiceProvider();
         path::RootSchemaNode& get_root_schema() const;
-        std::unique_ptr<path::DataNode> invoke(path::Rpc& rpc) const;
+        std::shared_ptr<path::DataNode> invoke(path::Rpc& rpc) const;
         EncodingFormat get_encoding() const;
 
 private:
-        std::unique_ptr<path::DataNode> handle_edit(path::Rpc& rpc, path::Annotation ann) const;
-        std::unique_ptr<path::DataNode> handle_netconf_operation(path::Rpc& ydk_rpc) const;
-        std::unique_ptr<path::DataNode> handle_read(path::Rpc& rpc) const;
+        std::shared_ptr<path::DataNode> handle_edit(path::Rpc& rpc, path::Annotation ann) const;
+        std::shared_ptr<path::DataNode> handle_netconf_operation(path::Rpc& ydk_rpc) const;
+        std::shared_ptr<path::DataNode> handle_read(path::Rpc& rpc) const;
         void initialize(path::Repository& repo);
 
 private:

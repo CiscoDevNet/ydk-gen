@@ -93,7 +93,7 @@ namespace ydk {
 
             DataNode& create(const std::string& path, const std::string& value);
 
-            std::unique_ptr<Rpc> rpc(const std::string& path) const;
+            std::shared_ptr<Rpc> rpc(const std::string& path) const;
 
 
             struct ly_ctx* m_ctx;
@@ -200,8 +200,7 @@ namespace ydk {
 
             ~RpcImpl();
 
-            std::unique_ptr<DataNode>
-             operator()(const ServiceProvider& provider);
+            std::shared_ptr<DataNode> operator()(const ServiceProvider& provider);
 
             DataNode& input() const;
 

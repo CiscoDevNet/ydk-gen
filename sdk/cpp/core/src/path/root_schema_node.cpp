@@ -149,7 +149,7 @@ ydk::path::RootSchemaNodeImpl::create(const std::string& path, const std::string
     return m_root_data_nodes.back()->create(path, value);
 }
 
-std::unique_ptr<ydk::path::Rpc>
+std::shared_ptr<ydk::path::Rpc>
 ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
 {
     auto c = find(path);
@@ -179,5 +179,5 @@ ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
         throw(YCPPIllegalStateError("Internal error occurred"));
     }
 
-    return std::make_unique<RpcImpl>(*sn, m_ctx);
+    return std::make_shared<RpcImpl>(*sn, m_ctx);
 }

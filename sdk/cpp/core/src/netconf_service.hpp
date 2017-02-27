@@ -77,9 +77,9 @@ class NetconfService : public Service
         bool edit_config(NetconfServiceProvider & provider, DataStore target, Entity& config,
             std::string default_operation = "", std::string test_option = "", std::string error_option = "");
 
-        std::unique_ptr<Entity> get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter);
+        std::shared_ptr<Entity> get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter);
 
-        std::unique_ptr<Entity> get(NetconfServiceProvider & provider, Entity& filter);
+        std::shared_ptr<Entity> get(NetconfServiceProvider & provider, Entity& filter);
 
         bool kill_session(NetconfServiceProvider & provider, int session_id);
 

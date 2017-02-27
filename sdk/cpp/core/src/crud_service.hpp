@@ -55,13 +55,12 @@ class CrudService : public Service
 
         bool delete_(path::ServiceProvider & provider, Entity & entity);
 
-        std::unique_ptr<Entity> read(path::ServiceProvider & provider, Entity & filter);
+        std::shared_ptr<Entity> read(path::ServiceProvider & provider, Entity & filter);
 
-        std::unique_ptr<Entity> read_config(path::ServiceProvider & provider, Entity & filter);
+        std::shared_ptr<Entity> read_config(path::ServiceProvider & provider, Entity & filter);
 
     private:
-        std::unique_ptr<Entity> read_datanode(Entity & filter, std::unique_ptr<path::DataNode>
-         read_data_node);
+        std::shared_ptr<Entity> read_datanode(Entity & filter, std::shared_ptr<path::DataNode> read_data_node);
 };
 
 }

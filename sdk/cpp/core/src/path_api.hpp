@@ -659,7 +659,7 @@ public:
     /// @throws YCPPInvalidArgumentError if the argument is invalid.
     /// @throws YCPPPathError if the path is invalid
     ///
-    virtual std::unique_ptr<Rpc> rpc(const std::string& path) const = 0;
+    virtual std::shared_ptr<Rpc> rpc(const std::string& path) const = 0;
 
 };
 
@@ -996,7 +996,7 @@ public:
     /// @param[in] pointer to the Rpc node
     /// @return The pointer to the DataNode representing the output.
     ///
-    virtual std::unique_ptr<DataNode> invoke(Rpc& rpc) const = 0 ;
+    virtual std::shared_ptr<DataNode> invoke(Rpc& rpc) const = 0 ;
 
 };
 
@@ -1022,7 +1022,7 @@ public:
     /// @param[in] sp The Service provider
     /// @areturn pointer to the DataNode or nullptr if none exists
     ///
-    virtual std::unique_ptr<DataNode> operator()(const ServiceProvider& provider) = 0;
+    virtual std::shared_ptr<DataNode> operator()(const ServiceProvider& provider) = 0;
 
     ///
     /// @brief get the input data tree

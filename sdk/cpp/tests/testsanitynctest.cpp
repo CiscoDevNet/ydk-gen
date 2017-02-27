@@ -45,12 +45,12 @@ TEST_CASE("test_sanity_types_int8 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -67,15 +67,15 @@ TEST_CASE("test_sanity_types_int8 ")
 
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -113,12 +113,12 @@ TEST_CASE("test_sanity_types_int16 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -136,15 +136,15 @@ TEST_CASE("test_sanity_types_int16 ")
 
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -182,12 +182,12 @@ TEST_CASE("test_sanity_types_int32 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -203,15 +203,15 @@ TEST_CASE("test_sanity_types_int32 ")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -247,12 +247,12 @@ TEST_CASE("test_sanity_types_int64 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -268,15 +268,15 @@ TEST_CASE("test_sanity_types_int64 ")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -312,12 +312,12 @@ TEST_CASE("test_sanity_types_uint8 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -334,15 +334,15 @@ TEST_CASE("test_sanity_types_uint8 ")
 
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -378,12 +378,12 @@ TEST_CASE("test_sanity_types_uint16 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -400,15 +400,15 @@ TEST_CASE("test_sanity_types_uint16 ")
                         );
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -444,12 +444,12 @@ TEST_CASE("test_sanity_types_uint32 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -467,15 +467,15 @@ TEST_CASE("test_sanity_types_uint32 ")
 
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -511,12 +511,12 @@ TEST_CASE("test_sanity_types_uint64 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -532,15 +532,15 @@ TEST_CASE("test_sanity_types_uint64 ")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -578,12 +578,12 @@ TEST_CASE("test_sanity_types_bits ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -600,15 +600,15 @@ TEST_CASE("test_sanity_types_bits ")
 
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -644,12 +644,12 @@ TEST_CASE("test_sanity_types_decimal64 ")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -665,15 +665,15 @@ TEST_CASE("test_sanity_types_decimal64 ")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -712,12 +712,12 @@ TEST_CASE("test_sanity_types_string")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -733,15 +733,15 @@ TEST_CASE("test_sanity_types_string")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -779,12 +779,12 @@ TEST_CASE("test_sanity_types_empty")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -800,15 +800,15 @@ TEST_CASE("test_sanity_types_empty")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -844,12 +844,12 @@ TEST_CASE("test_sanity_types_boolean")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -865,15 +865,15 @@ TEST_CASE("test_sanity_types_boolean")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -910,12 +910,12 @@ TEST_CASE("test_sanity_types_embedded_enum")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -931,15 +931,15 @@ TEST_CASE("test_sanity_types_embedded_enum")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -975,12 +975,12 @@ TEST_CASE("test_sanity_types_enum")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -996,15 +996,15 @@ TEST_CASE("test_sanity_types_enum")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -1041,12 +1041,12 @@ TEST_CASE("test_sanity_types_union")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -1062,15 +1062,15 @@ TEST_CASE("test_sanity_types_union")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -1107,12 +1107,12 @@ TEST_CASE("test_sanity_types_union_enum")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -1128,15 +1128,15 @@ TEST_CASE("test_sanity_types_union_enum")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -1175,12 +1175,12 @@ TEST_CASE("test_sanity_types_union_int")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -1197,15 +1197,15 @@ TEST_CASE("test_sanity_types_union_int")
 
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -1243,12 +1243,12 @@ TEST_CASE("test_union_leaflist")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -1266,15 +1266,15 @@ TEST_CASE("test_union_leaflist")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -1310,12 +1310,12 @@ TEST_CASE("test_enum_leaflist")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -1333,15 +1333,15 @@ TEST_CASE("test_enum_leaflist")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -1377,12 +1377,12 @@ TEST_CASE("test_identity_leaflist")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -1400,15 +1400,15 @@ TEST_CASE("test_identity_leaflist")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -1445,12 +1445,12 @@ TEST_CASE("test_union_complex_list")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -1466,15 +1466,15 @@ TEST_CASE("test_union_complex_list")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );
@@ -1506,12 +1506,12 @@ TEST_CASE("test_identityref")
 
 
     //get the root
-    std::unique_ptr<const ydk::path::DataNode> data_root{&runner.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
 
     REQUIRE( data_root != nullptr );
 
     //first delete
-    std::unique_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.rpc("ydk:delete") };
 
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 
@@ -1527,16 +1527,16 @@ TEST_CASE("test_identityref")
     CHECK( !xml.empty());
 
     //call create
-    std::unique_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.rpc("ydk:create") };
     create_rpc->input().create("entity", xml);
     (*create_rpc)(sp);
 
     //call read
-    std::unique_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.rpc("ydk:read") };
     auto & runner_read = schema.create("ydktest-sanity:runner", "");
 
 
-    std::unique_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
+    std::shared_ptr<const ydk::path::DataNode> data_root2{&runner_read.root()};
 
     xml = s.encode(runner_read, ydk::EncodingFormat::XML, false);
     REQUIRE( !xml.empty() );

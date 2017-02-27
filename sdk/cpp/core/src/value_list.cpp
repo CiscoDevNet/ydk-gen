@@ -131,6 +131,15 @@ void YLeafList::append(long val)
 	values.push_back(value);
 }
 
+void YLeafList::append(double val)
+{
+    YLeaf value {type, name};
+    value = val;
+
+
+    values.push_back(value);
+}
+
 void YLeafList::append(int8 val)
 {
 	YLeaf value {type, name};

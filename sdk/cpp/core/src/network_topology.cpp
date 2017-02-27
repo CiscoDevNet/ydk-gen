@@ -44,7 +44,7 @@ EntityPath NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_entity
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -122,7 +122,7 @@ EntityPath NetworkTopology::Topology::TopologyTypes::get_entity_path(Entity* anc
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -220,7 +220,7 @@ EntityPath NetworkTopology::Topology::UnderlayTopology::get_entity_path(Entity* 
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -303,7 +303,7 @@ EntityPath NetworkTopology::Topology::Node::SupportingNode::get_entity_path(Enti
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -400,7 +400,7 @@ EntityPath NetworkTopology::Topology::Node::TerminationPoint::get_entity_path(En
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -498,7 +498,7 @@ EntityPath NetworkTopology::Topology::Node::YangModuleCapabilities::get_entity_p
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -587,7 +587,7 @@ EntityPath NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatu
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -682,7 +682,7 @@ EntityPath NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_entit
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -791,7 +791,7 @@ EntityPath NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapa
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -883,7 +883,7 @@ EntityPath NetworkTopology::Topology::Node::AvailableCapabilities::get_entity_pa
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -987,7 +987,7 @@ EntityPath NetworkTopology::Topology::Node::UnavailableCapabilities::Unavailable
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1079,7 +1079,7 @@ EntityPath NetworkTopology::Topology::Node::UnavailableCapabilities::get_entity_
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1177,7 +1177,7 @@ EntityPath NetworkTopology::Topology::Node::PassThrough::get_entity_path(Entity*
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1258,7 +1258,7 @@ EntityPath NetworkTopology::Topology::Node::YangLibrary::get_entity_path(Entity*
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1456,7 +1456,7 @@ EntityPath NetworkTopology::Topology::Node::get_entity_path(Entity* ancestor) co
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1814,7 +1814,7 @@ EntityPath NetworkTopology::Topology::Link::Source::get_entity_path(Entity* ance
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1902,7 +1902,7 @@ EntityPath NetworkTopology::Topology::Link::Destination::get_entity_path(Entity*
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -1987,7 +1987,7 @@ EntityPath NetworkTopology::Topology::Link::SupportingLink::get_entity_path(Enti
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -2090,7 +2090,7 @@ EntityPath NetworkTopology::Topology::Link::get_entity_path(Entity* ancestor) co
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -2282,7 +2282,7 @@ EntityPath NetworkTopology::Topology::get_entity_path(Entity* ancestor) const
     }
     else
     {
-        get_relative_entity_path(this, ancestor, path_buffer);
+        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
     }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
@@ -2533,7 +2533,7 @@ void NetworkTopology::set_value(const std::string & value_path, std::string valu
 {
 }
 
-std::unique_ptr<Entity> NetworkTopology::clone_ptr()
+std::shared_ptr<Entity> NetworkTopology::clone_ptr()
 {
     return std::make_unique<NetworkTopology>();
 }

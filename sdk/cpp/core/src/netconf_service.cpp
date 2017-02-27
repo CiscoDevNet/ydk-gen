@@ -35,8 +35,8 @@ using namespace std;
 namespace ydk {
 
 static std::string get_data_payload(Entity& entity, path::RootSchemaNode& root_schema);
-static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter);
-static unique_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider, string && operation);
+static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter);
+static shared_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider, string && operation);
 static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string, string & url);
 static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string);
 
@@ -54,7 +54,7 @@ bool NetconfService::cancel_commit(NetconfServiceProvider & provider, int persis
 	YLOG_DEBUG("Executing cancel-commit RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:cancel-commit");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:cancel-commit");
 
     if (persist_id > -1)
     {
@@ -71,7 +71,7 @@ bool NetconfService::close_session(NetconfServiceProvider & provider)
 	YLOG_DEBUG("Executing close-session RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:close-session");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:close-session");
 
     auto read_datanode = (*rpc)(provider);
     return read_datanode == nullptr;
@@ -84,7 +84,7 @@ bool NetconfService::commit(NetconfServiceProvider & provider, bool confirmed,
 	YLOG_DEBUG("Executing commit RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:commit");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:commit");
 
     if (confirmed)
     {
@@ -116,7 +116,7 @@ bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore ta
 	YLOG_DEBUG("Executing copy-config RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:copy-config");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:copy-config");
 
     // target options: candidate | running | startup | url
     create_input_leaf(rpc->input(), target, "target", url);
@@ -131,7 +131,7 @@ bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore ta
 	YLOG_DEBUG("Executing copy-config RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:copy-config");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:copy-config");
 
     // target options: candidate | running | startup | url
     create_input_leaf(rpc->input(), target, "target");
@@ -150,7 +150,7 @@ bool NetconfService::delete_config(NetconfServiceProvider & provider, DataStore 
 	YLOG_DEBUG("Executing delete-config RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:delete-config");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:delete-config");
 
     // target options: startup | url
     create_input_leaf(rpc->input(), target, "target", url);
@@ -165,7 +165,7 @@ bool NetconfService::discard_changes(NetconfServiceProvider & provider)
 	YLOG_DEBUG("Executing discard-changes RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:discard-changes");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:discard-changes");
 
     auto read_datanode = (*rpc)(provider);
     return read_datanode == nullptr;
@@ -178,7 +178,7 @@ bool NetconfService::edit_config(NetconfServiceProvider & provider, DataStore ta
 	YLOG_DEBUG("Executing edit-config RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:edit-config");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:edit-config");
 
     // target options: candidate | running
     create_input_leaf(rpc->input(), target, "target");
@@ -207,12 +207,12 @@ bool NetconfService::edit_config(NetconfServiceProvider & provider, DataStore ta
 }
 
 //get_config
-unique_ptr<Entity> NetconfService::get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter)
+shared_ptr<Entity> NetconfService::get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter)
 {
 	YLOG_DEBUG("Executing get-config RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:get-config");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:get-config");
 
     // source options: candidate | running | startup
     create_input_leaf(rpc->input(), source, "source");
@@ -225,19 +225,19 @@ unique_ptr<Entity> NetconfService::get_config(NetconfServiceProvider & provider,
     if (read_datanode == nullptr)
         return nullptr;
 
-    unique_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
+    shared_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
     get_entity_from_data_node(read_datanode->children()[0].get(), top_entity.get());
     return top_entity;
 
 }
 
 //get
-unique_ptr<Entity> NetconfService::get(NetconfServiceProvider & provider, Entity& filter)
+shared_ptr<Entity> NetconfService::get(NetconfServiceProvider & provider, Entity& filter)
 {
 	YLOG_DEBUG("Executing get RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:get");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:get");
 
     // filter
     std::string entity_string = get_data_payload(filter, provider.get_root_schema());
@@ -246,7 +246,7 @@ unique_ptr<Entity> NetconfService::get(NetconfServiceProvider & provider, Entity
     auto result_datanode = (*rpc)(provider);
     if (result_datanode == nullptr)
         return {};
-    unique_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
+    shared_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
     get_entity_from_data_node(result_datanode->children()[0].get(), top_entity.get());
     return top_entity;
 }
@@ -257,7 +257,7 @@ bool NetconfService::kill_session(NetconfServiceProvider & provider, int session
 	YLOG_DEBUG("Executing kill-session RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:kill-session");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:kill-session");
 
     std::string sid_string = std::to_string(session_id);
     rpc->input().create("session-id", sid_string);
@@ -272,7 +272,7 @@ bool NetconfService::lock(NetconfServiceProvider & provider, DataStore target)
 	YLOG_DEBUG("Executing lock RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:lock");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:lock");
 
     // target options: candidate | running | startup
     create_input_leaf(rpc->input(), target, "target");
@@ -287,7 +287,7 @@ bool NetconfService::unlock(NetconfServiceProvider & provider, DataStore target)
 	YLOG_DEBUG("Executing unlock RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:unlock");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:unlock");
 
     // target options: candidate | running | startup
     create_input_leaf(rpc->input(), target, "target");
@@ -302,7 +302,7 @@ bool NetconfService::validate(NetconfServiceProvider & provider, DataStore sourc
 	YLOG_DEBUG("Executing validate RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:validate");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:validate");
 
     // source options: candidate | running | startup | url
     create_input_leaf(rpc->input(), source, "source", url);
@@ -316,7 +316,7 @@ bool NetconfService::validate(NetconfServiceProvider & provider, Entity& source)
 	YLOG_DEBUG("Executing validate RPC");
 
     // Get the root schema node
-    unique_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:validate");
+    shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:validate");
 
     // source
     std::string entity_string = get_data_payload(source, provider.get_root_schema());
@@ -326,7 +326,7 @@ bool NetconfService::validate(NetconfServiceProvider & provider, Entity& source)
     return read_datanode == nullptr;
 }
 
-static unique_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider, string && operation)
+static shared_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider, string && operation)
 {
 	path::RootSchemaNode & root_schema = provider.get_root_schema();
 	auto rpc =  root_schema.rpc(operation);
@@ -343,7 +343,7 @@ static std::string get_data_payload(Entity & entity, path::RootSchemaNode & root
     return codec.encode(data_node, ydk::EncodingFormat::XML, true);
 }
 
-static unique_ptr<Entity> get_top_entity_from_filter(Entity & filter)
+static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter)
 {
     if(filter.parent == nullptr)
         return filter.clone_ptr();
