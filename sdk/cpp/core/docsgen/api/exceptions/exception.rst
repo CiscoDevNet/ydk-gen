@@ -14,9 +14,14 @@ Base class for YDK Exceptions.
 .. toctree:: Error Classes
    :maxdepth: 2
 
-   model_error.rst
+
+   core_excep_codec.rst
+   core_excep_data.rst
+   core_excep_path.rst
+   core_excep_schema.rst
+   core_exception.rst
    excep_illegal_state.rst
    excep_invalid_argument.rst
    excep_operation_not_supported.rst
    excep_service_provider.rst
-   core_exception.rst
+   model_error.rst

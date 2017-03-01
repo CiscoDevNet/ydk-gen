@@ -1,0 +1,46 @@
+{
+    "name": "ydktest-new",
+   "version":"0.1.0",
+   "ydk_version":"0.5.0",
+    "Author": "Cisco",
+    "Copyright": "Cisco",
+    "Description": "YDK Test Profile",
+    "models": {
+        "git": [
+          {
+          "url": "https://github.com/YangModels/yang.git",
+          "commits": [                      
+                      {
+
+                          "commitid": "a5e3d7f27e0e846cac6b6357ff460b8facc810a8",
+                          "file": [
+                                  "standard/ietf/RFC/ietf-inet-types.yang",
+                                  "standard/ietf/RFC/ietf-interfaces.yang",
+                                  "standard/ietf/RFC/ietf-netconf-acm.yang",
+                                  "standard/ietf/RFC/ietf-yang-smiv2.yang",
+                                  "standard/ietf/RFC/ietf-yang-types.yang",
+                                  "standard/ietf/RFC/iana-if-type.yang",
+                                  "standard/ietf/RFC/ietf-netconf.yang",
+                                  "standard/ietf/RFC/ietf-netconf-with-defaults.yang"
+                                  ]
+                      },
+
+                      {
+                          "commitid": "be8ff2197e1179c2193433c38ba766a65aca5828",
+                          "file": [
+                                  "standard/ietf/RFC/iana-crypt-hash.yang"
+                                  ]
+                      },
+
+                      {
+                          "commitid": "ead44523cefc2d0f029056f61253c3b36ab38da8",
+                          "file": [
+                                  "standard/ietf/RFC/ietf-system@2014-08-06.yang",
+                                  "standard/ietf/RFC/ietf-netconf-monitoring@2010-10-04.yang"
+                                  ]
+                      }
+                      ]
+          }
+       ]
+    }
+}

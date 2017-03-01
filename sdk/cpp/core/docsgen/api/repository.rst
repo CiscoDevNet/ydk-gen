@@ -28,7 +28,7 @@ Behind the scenes the repository is responsible for loading and parsing the YANG
         :param search_dir: The path in the filesystem where yang files can be found.
         :raises: :cpp:class:`YCPPInvalidArgumentError<YCPPInvalidArgumentError>` if the search_dir is not a valid directory in the filesystem.
 
-    .. cpp:function:: RootSchemaNode* create_root_schema(const std::vector<Capability> capabilities) const
+    .. cpp:function:: std::unique_ptr<RootSchemaNode> create_root_schema(const std::vector<Capability> capabilities) const
 
         Creates the root schema based on the ``std::vector`` of capabilities passed in.
 

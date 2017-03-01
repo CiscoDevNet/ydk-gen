@@ -20,23 +20,18 @@ source_printer.py
  prints C++ classes
 
 """
-from ydkgen.api_model import Class, Package
 from ydkgen.builder import MultiFileSource
 from ydkgen.printer import MultiFilePrinter
 
-from .class_constructor_printer import ClassConstructorPrinter
-from .class_has_data_printer import ClassHasDataPrinter
-from .class_get_children_printer import ClassGetChildrenPrinter
-from .class_get_child_printer import ClassGetChildPrinter
-from .class_set_value_printer import ClassSetYLeafPrinter
+from .class_source_printer import ClassSourcePrinter
 from .class_enum_printer import EnumPrinter
-from .class_get_entity_path_printer import GetEntityPathPrinter, GetSegmentPathPrinter
 
 
 class SourcePrinter(MultiFilePrinter):
-    def __init__(self, ctx):
+    def __init__(self, ctx, bundle_name):
         super(SourcePrinter, self).__init__(ctx)
         self.enum_printer = EnumPrinter(self.ctx)
+        self.bundle_name = bundle_name
 
     def print_body(self, multi_file):
         assert isinstance(multi_file, MultiFileSource)
@@ -52,7 +47,9 @@ class SourcePrinter(MultiFilePrinter):
         self.ctx.bline()
         self.ctx.writeln('#include <sstream>')
         self.ctx.writeln('#include <iostream>')
-        self.ctx.writeln('#include "ydk/entity_util.hpp"')
+        self.ctx.writeln('#include <ydk/entity_util.hpp>')
+        self.ctx.writeln('#include "bundle_info.hpp"')
+        self.ctx.writeln('#include "generated_entity_lookup.hpp"')
         self.ctx.writeln('#include "{0}"'.format(multi_file.file_name.replace('.cpp', '.hpp')))
         for header_import in multi_file.imports:
             self.ctx.writeln(header_import)
@@ -69,71 +66,7 @@ class SourcePrinter(MultiFilePrinter):
         self.ctx.bline()
 
     def _print_class(self, clazz):
-        leafs = []
-        children = []
-        self._get_class_members(clazz, leafs, children)
-        self._print_class_constructor(clazz, leafs, children)
-        self._print_class_destructor(clazz)
-        self._print_class_method_definitions(clazz, leafs, children)
-
-    def _print_class_method_definitions(self, clazz, leafs, children):
-        if clazz.is_identity():
-            return
-        self._print_class_has_data(clazz, leafs, children)
-        self._print_class_has_operation(clazz, leafs, children)
-        self._print_class_get_segment_path(clazz)
-        self._print_class_get_path(clazz, leafs)
-        self._print_class_set_child(clazz, children)
-        self._print_class_get_children(clazz, children)
-        self._print_class_set_value(clazz, leafs)
-        self._print_clone_ptr_method(clazz, leafs)
-
-    def _print_class_destructor(self, clazz):
-        self.ctx.writeln(clazz.qualified_cpp_name() + '::~' + clazz.name + '()')
-        self.ctx.writeln('{')
-        self.ctx.writeln('}')
-        self.ctx.bline()
-
-    def _print_clone_ptr_method(self, clazz, leafs):
-        if clazz.owner is not None and isinstance(clazz.owner, Package):
-            self.ctx.writeln('std::shared_ptr<Entity> %s::clone_ptr()' % clazz.qualified_cpp_name())
-            self.ctx.writeln('{')
-            self.ctx.lvl_inc()
-            self.ctx.writeln('return std::make_shared<%s>();' % clazz.qualified_cpp_name())
-            self.ctx.lvl_dec()
-            self.ctx.writeln('}')
-
-    def _get_class_members(self, clazz, leafs, children):
-        for prop in clazz.properties():
-            ptype = prop.property_type
-            if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
-                children.append(prop)
-            elif ptype is not None:
-                leafs.append(prop)
-
-    def _print_class_get_children(self, clazz, children):
-        ClassGetChildrenPrinter(self.ctx).print_class_get_children(clazz, children)
-
-    def _print_class_constructor(self, clazz, leafs, children):
-        ClassConstructorPrinter(self.ctx).print_constructor(clazz, leafs, children)
-
-    def _print_class_has_data(self, clazz, leafs, children):
-        ClassHasDataPrinter(self.ctx).print_class_has_data(clazz, leafs, children)
-
-    def _print_class_has_operation(self, clazz, leafs, children):
-        ClassHasDataPrinter(self.ctx).print_class_has_operation(clazz, leafs, children)
-
-    def _print_class_get_segment_path(self, clazz):
-        GetSegmentPathPrinter(self.ctx).print_output(clazz)
-
-    def _print_class_get_path(self, clazz, leafs):
-        GetEntityPathPrinter(self.ctx).print_output(clazz, leafs)
-
-    def _print_class_set_child(self, clazz, children):
-        ClassGetChildPrinter(self.ctx).print_class_get_child(clazz, children)
-
-    def _print_class_set_value(self, clazz, leafs):
-        ClassSetYLeafPrinter(self.ctx).print_class_set_value(clazz, leafs)
+        ClassSourcePrinter(self.ctx, self.bundle_name).print_output(clazz)
 
     def _print_enums(self, package, classes):
         self.enum_printer.print_enum_to_string_funcs(package, classes)

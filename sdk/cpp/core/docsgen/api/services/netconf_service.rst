@@ -103,7 +103,7 @@ Netconf Service class for supporting encoding and decoding C++ model API objects
         :return: true if the operation succeeds, else false.
         :raises YCPPError: If an error has occurred
 
-    .. cpp:function:: std::unique_ptr<Entity> get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter)
+    .. cpp:function:: std::shared_ptr<Entity> get_config(NetconfServiceProvider & provider, DataStore source, Entity& filter)
 
         Retrieve all or part of a specified configuration datastore
 
@@ -112,7 +112,7 @@ Netconf Service class for supporting encoding and decoding C++ model API objects
         :return: The requested data as :cpp:class:`Entity<ydk::Entity>`
         :raises YCPPError: If an error has occurred
         
-    .. cpp:function:: std::unique_ptr<Entity> get(NetconfServiceProvider & provider, Entity& filter)
+    .. cpp:function:: std::shared_ptr<Entity> get(NetconfServiceProvider & provider, Entity& filter)
 
         Retrieve running configuration and device state information
 

@@ -15,15 +15,11 @@
 ------------------------------------------------------------------*/
 #include <iostream>
 
-#include "ydk/types.hpp"
-#include "ydk/netconf_provider.hpp"
-#include "ydk/crud_service.hpp"
+#include <ydk/types.hpp>
+#include <ydk/netconf_provider.hpp>
+#include <ydk/crud_service.hpp>
 
-#include "ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_cfg.hpp"
-#include "ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_oper.hpp"
-#include "ydk_cisco_ios_xr/Cisco_IOS_XR_infra_policymgr_oper.hpp"
-#include "ydk_cisco_ios_xr/Cisco_IOS_XR_mpls_te_oper.hpp"
-#include "ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_datatypes.hpp"
+#include <ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_cfg.hpp>
 #include <spdlog/spdlog.h>
 
 #include "args_parser.h"
@@ -46,6 +42,7 @@ int main(int argc, char* argv[])
 	if(verbose)
 	{
             auto logger = spdlog::stdout_color_mt("ydk");
+            logger->set_level(spdlog::level::debug);
 	}
 
 	NetconfServiceProvider provider{host, username, password, port};
@@ -60,7 +57,6 @@ int main(int argc, char* argv[])
 		cout << "=================================================="<<endl;
 		return 0;
 	}
-
 	Bgp* bgp_read_ptr = dynamic_cast<Bgp*>(bgp_read.get());
 
 	cout << "=================================================="<<endl;

@@ -24,14 +24,12 @@ https://github.com/xym-tool/symd/blob/master/symd.py.
 from __future__ import print_function
 import os
 import re
-import sys
 import json
 import logging
 import tempfile
 from os import walk
 from git import Repo
 from shutil import rmtree
-from optparse import OptionParser
 from collections import namedtuple
 from jinja2 import Environment
 
@@ -163,6 +161,7 @@ def get_git_attrs(repos, root, remote=None):
         logger.debug('Bundle Translator: Removing folder %s' % tmp_dir)
         rmtree(tmp_dir)
 
+
 def load_profile_attr(profile_file, attr):
     with open(profile_file) as f:
         data = json.load(f)
@@ -205,57 +204,3 @@ def translate(in_file, out_file, root_dir):
 
     with open(out_file, 'w') as f:
         f.write(output)
-
-
-if __name__ == '__main__':
-
-    # init option parser
-    parser = OptionParser(usage="usage: %prog [options]")
-
-    parser.add_option("-v", "--verbose",
-                      action="store_true",
-                      dest="verbose",
-                      default=False,
-                      help="Verbose mode")
-    parser.add_option("-r", "--root",
-                      type=str,
-                      dest="root",
-                      help="Root directory")
-
-    (options, args) = parser.parse_args()
-
-    # init logger
-    if options.verbose:
-        handler = logging.StreamHandler()
-        logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG)
-
-    # init dirs
-    ydk_root = options.root
-    profiles_root = os.path.join(ydk_root, 'profiles')
-    bundles_root = os.path.join(ydk_root, 'bundles')
-    if os.path.isdir(bundles_root):
-        rmtree(bundles_root)
-    else:
-        os.mkdir(bundles_root)
-
-    # translate profile description files to bundle description files.
-    for (dirpath, _, filenames) in walk(profiles_root):
-        for filename in filenames:
-            if filename.endswith('.json'):
-                # those profile files use gitlab url,
-                # not reachable by travis CI.
-                if filename in ('ydk_0_4_0-mdt.json',
-                                'ydk_0_1_0.json',
-                                'bgp_ydk_dev.json'):
-                    continue
-                in_file = os.path.join(dirpath, filename)
-                out_path = os.path.join(bundles_root,
-                                        os.path.relpath(dirpath,
-                                                        profiles_root))
-                if not os.path.isdir(out_path):
-                    os.makedirs(out_path)
-                out_file = os.path.join(out_path, filename)
-                logger.debug(('Bundle Translator: Translating profile %s -> bundle %s'
-                               % (in_file, out_file)))
-                translate(in_file, out_file)

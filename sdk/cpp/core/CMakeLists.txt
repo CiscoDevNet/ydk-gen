@@ -21,6 +21,8 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE debug)
 endif()
 
+configure_file("${CMAKE_SOURCE_DIR}/core_info.hpp.in" "${CMAKE_SOURCE_DIR}/src/path/core_info.hpp" ESCAPE_QUOTES @ONLY)
+
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0 -fprofile-arcs -ftest-coverage")
@@ -48,7 +50,6 @@ set(libydk_src
     src/errors.cpp
     src/executor_service.cpp
     src/ietf_parser.cpp
-    src/ietf_netconf.cpp
     src/leaf_data.cpp
     src/netconf_client.cpp
     src/netconf_edit_operations.cpp
@@ -97,8 +98,6 @@ set(libydk_install_headers
     src/entity_util.hpp
     src/errors.hpp
     src/executor_service.hpp
-    src/ietf_netconf.hpp
-    src/ietf_netconf_with_defaults.hpp    
     src/netconf_provider.hpp
     src/network_topology.hpp
     src/netconf_service.hpp

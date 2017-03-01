@@ -41,7 +41,8 @@ class MultiFilePrinter(FilePrinter):
             if not os.path.isdir(path):
                 os.mkdir(path)
         path = os.path.join(path, multi_file.file_name)
-        logger.debug('Printing fragmented file {0}'.format(multi_file.file_name))
+        if multi_file.fragmented:
+            logger.debug('Printing fragmented file {0}'.format(multi_file.file_name))
         with open(path, 'w+') as file_descriptor:
             self.ctx.fd = file_descriptor
             self._start_tab_leak_check()

@@ -33,11 +33,14 @@
 namespace ydk
 {
 
-const char * REPO_ERROR_MSG ="YANG models stored in repository is not consistent with"
-                           " bundle capabilities, please make sure all YANG models used"
-                           " to generate bundle is stored in this repository.";
+const char * REPO_ERROR_MSG ="Failed to initialize provider.";
 
-const char * PAYLOAD_ERROR_MSG ="Codec Service only support one entity per payload, please split paylaod";
+const char * PAYLOAD_ERROR_MSG ="Codec service only supports one entity per payload, please split payload";
+
+static augment_capabilities_function get_augment_capabilities_function(Entity & entity);
+static std::string get_bundle_yang_models_location(Entity & entity);
+static std::string get_bundle_name(Entity & entity);
+
 
 CodecService::CodecService()
 {
@@ -50,7 +53,10 @@ CodecService::~CodecService()
 std::string
 CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pretty)
 {
-    path::RootSchemaNode& root_schema = provider.get_root_schema();
+    auto const & bundle_name = get_bundle_name(entity);
+    provider.initialize(bundle_name, get_bundle_yang_models_location(entity), get_augment_capabilities_function(entity));
+
+    path::RootSchemaNode& root_schema = provider.get_root_schema(bundle_name);
     try
     {
         path::DataNode& data_node = get_data_node_from_entity(entity, root_schema);
@@ -82,8 +88,12 @@ CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std:
 std::unique_ptr<Entity>
 CodecService::decode(CodecServiceProvider & provider, std::string & payload, std::unique_ptr<Entity> entity)
 {
+    auto const & bundle_name = get_bundle_name(*entity);
+    provider.initialize(bundle_name, get_bundle_yang_models_location(*entity), get_augment_capabilities_function(*entity));
+
+    path::RootSchemaNode& root_schema = provider.get_root_schema(bundle_name);
+
     YLOG_DEBUG("Performing decode operation on {}", payload);
-    path::RootSchemaNode& root_schema = provider.get_root_schema();
 
     path::CodecService core_codec_service{};
     auto root_data_node = core_codec_service.decode(root_schema, payload, provider.m_encoding);
@@ -115,5 +125,28 @@ CodecService::decode(CodecServiceProvider & provider, std::map<std::string, std:
     return entity_map;
 }
 
+static augment_capabilities_function get_augment_capabilities_function(Entity & entity)
+{
+    if(entity.parent == nullptr)
+        return entity.get_augment_capabilities_function();
+
+    return get_augment_capabilities_function(*(entity.parent));
+}
+
+static std::string get_bundle_yang_models_location(Entity & entity)
+{
+    if(entity.parent == nullptr)
+        return entity.get_bundle_yang_models_location();
+
+    return get_bundle_yang_models_location(*(entity.parent));
+}
+
+static std::string get_bundle_name(Entity & entity)
+{
+    if(entity.parent == nullptr)
+        return entity.get_bundle_name();
+
+    return get_bundle_name(*(entity.parent));
+}
 
 }

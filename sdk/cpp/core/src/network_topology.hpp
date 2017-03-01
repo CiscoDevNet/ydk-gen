@@ -23,7 +23,7 @@ class NetworkTopology : public Entity
         Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
         std::map<std::string, Entity*> & get_children() override;
-        std::shared_ptr<Entity> clone_ptr() override;
+        std::shared_ptr<Entity> clone_ptr() const override;
 
 
 

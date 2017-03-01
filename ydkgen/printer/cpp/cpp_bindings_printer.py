@@ -82,7 +82,7 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
                 self.header_files.append(multi_file_header.file_name)
 
     def _print_source_file(self, package, multi_file_data, path):
-        sp = SourcePrinter(self.ypy_ctx)
+        sp = SourcePrinter(self.ypy_ctx, self.bundle_name)
         for multi_file_source in [x for x in multi_file_data.multi_file_list if isinstance(x, MultiFileSource)]:
             sp.print_output(
                             package,
@@ -97,6 +97,9 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
     def _print_entity_lookup_files(self, packages, path):
         self.print_file(get_entity_lookup_source_file_name(path),
                         emit_entity_lookup_source,
+                        _EmitArgs(self.ypy_ctx, packages, self.bundle_name))
+        self.print_file(get_entity_lookup_header_file_name(path),
+                        emit_entity_lookup_header,
                         _EmitArgs(self.ypy_ctx, packages, self.bundle_name))
 
     def _print_tests(self, package, path):
@@ -142,6 +145,10 @@ def get_entity_lookup_source_file_name(path):
     return '%s/generated_entity_lookup.cpp' % (path)
 
 
+def get_entity_lookup_header_file_name(path):
+    return '%s/generated_entity_lookup.hpp' % (path)
+
+
 def get_table_of_contents_file_name(path):
     return '%s/ydk.models.rst' % path
 
@@ -164,6 +171,10 @@ def emit_header(ctx, package, extra_args):
 
 def emit_entity_lookup_source(ctx, packages, bundle_name):
     EntityLookUpPrinter(ctx).print_source(packages, bundle_name)
+
+
+def emit_entity_lookup_header(ctx, packages, bundle_name):
+    EntityLookUpPrinter(ctx).print_header(bundle_name)
 
 
 def emit_cpp_doc(ctx, named_element, identity_subclasses):

@@ -19,11 +19,11 @@ script:
     - sudo ./test/tests.sh
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash) # Uploading python report to CodeCov
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) ; fi  # Uploading python report to CodeCov 
 
-    - cd ${TRAVIS_BUILD_DIR}/sdk/cpp/core/build
-    - lcov --directory . --capture --output-file coverage.info # capture coverage info
-    - lcov --remove coverage.info '/usr/*' '/Applications/*' --output-file coverage.info # filter out system
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd ${TRAVIS_BUILD_DIR}/sdk/cpp/core/build ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --directory . --capture --output-file coverage.info ; fi # capture coverage info
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --remove coverage.info '/usr/*' '/Applications/*' --output-file coverage.info ; fi # filter out system
     #- lcov --list coverage.info #debug info
     # Uploading cpp report to CodeCov
-    - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports" ; fi

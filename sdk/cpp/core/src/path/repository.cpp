@@ -30,6 +30,7 @@
 #include "path_private.hpp"
 #include "../logger.hpp"
 #include "../ydk_yang.hpp"
+#include "core_info.hpp"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -44,6 +45,17 @@ static bool file_exists(const std::string & path)
     return stat(path.c_str(), &st) == 0;
 }
 
+static void create_if_does_not_exist(const std::string & path)
+{
+    if(!file_exists(path))
+    {
+        if(mkdir(path.c_str(), 0700) != 0)
+        {
+            YLOG_ERROR("Could not create repository");
+            throw(YCPPIllegalStateError{"Could not create repository"});
+        }
+    }
+}
 
 namespace path
 {
@@ -82,18 +94,8 @@ void libyang_log_callback(LY_LOG_LEVEL level, const char *msg, const char *path)
 ydk::path::Repository::Repository()
   : using_temp_directory(true)
 {
-    char temp[] = "/tmp/tmpdir.XXXXXX";
-    char *dir_name = mkdtemp(temp);
-
-    if(dir_name == NULL)
-    {
-        YLOG_ERROR("Could not create temporary path");
-        throw(YCPPIllegalStateError{"Could not create temporary path"});
-    }
-    path = dir_name;
-    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
+    path = ydk_models_path;
     ly_set_log_clb(libyang_log_callback, 1);
-
 }
 
 
@@ -106,16 +108,11 @@ ydk::path::Repository::Repository(const std::string& search_dir)
         throw(YCPPInvalidArgumentError{"path "+search_dir+" is not a valid directory"});
     }
 
-    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
     ly_set_log_clb(libyang_log_callback, 1);
 }
 
 ydk::path::Repository::~Repository()
 {
-    if(using_temp_directory)
-    {
-        rmdir(path.c_str());
-    }
 }
 
 namespace ydk {
@@ -244,8 +241,17 @@ namespace ydk {
 std::unique_ptr<ydk::path::RootSchemaNode>
 ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & capabilities)
 {
+    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
+    create_if_does_not_exist(path);
+
     if(using_temp_directory)
     {
+        for(auto model_provider : get_model_providers())
+        {
+            path+="/"+model_provider->get_hostname_port();
+            break;
+        }
+        create_if_does_not_exist(path);
         YLOG_DEBUG("Path where models are to be downloaded: {}", path);
     }
     YLOG_TRACE("Creating libyang context in path {}", path);

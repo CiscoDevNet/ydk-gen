@@ -16,19 +16,19 @@ if any. The Callable takes as a parameter the :cpp:class:`ServiceProvider<Servic
 
     .. cpp:function:: virtual ~Rpc()
 
-    .. cpp:function:: virtual DataNode* operator()(const ServiceProvider& provider)
+    .. cpp:function:: virtual std::shared_ptr<DataNode> operator()(const ServiceProvider& provider)
 
         Execute/Invoke the rpc through the given service provider.
 
         :param sp: The Service provider.
         :return: Pointer to the :cpp:class:`DataNode<DataNode>` or ``nullptr`` if none exists.
 
-    .. cpp:function:: virtual DataNode* input() const
+    .. cpp:function:: virtual DataNode& input() const
 
         Get the input data tree.
 
         :return: Pointer to the input :cpp:class:`DataNode<DataNode>` or ``nullptr`` if the rpc does not have an input element in the schema.
 
-    .. cpp:function:: virtual SchemaNode* schema() const
+    .. cpp:function:: virtual SchemaNode& schema() const
 
         :return: Pointer to the :cpp:class:`SchemaNode<SchemaNode>` associated with this rpc.

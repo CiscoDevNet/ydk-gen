@@ -295,14 +295,22 @@ function cpp_sanity_ydktest {
     cpp_sanity_ydktest_test
 }
 
-function cpp_sanity_ydktest_gen_install {
-    print_msg "Generating and installing ydktest bundle"
-
-    cd $YDKGEN_HOME && source gen_env/bin/activate
-    run_test generate.py --bundle profiles/test/ydktest-cpp.json --cpp --generate-doc
-    cd gen-api/cpp/ydktest-bundle/build
+function generate_install_cpp_bundle {
+   bundle_profile=$1
+   bundle_name=$2
+   cd $YDKGEN_HOME && source gen_env/bin/activate
+    run_test generate.py --bundle $bundle_profile --cpp --generate-doc
+    cd gen-api/cpp/$2/build
     run_exec_test make install
     cd -
+}
+
+function cpp_sanity_ydktest_gen_install {
+    print_msg "Generating and installing ydktest bundle"
+    generate_install_cpp_bundle profiles/test/ydktest-cpp.json ydktest-bundle
+
+    print_msg "Generating and installing new ydktest bundle"
+    generate_install_cpp_bundle profiles/test/ydktest-cpp-new.json ydktest_new-bundle
 }
 
 function cpp_sanity_ydktest_test {
@@ -314,17 +322,8 @@ function cpp_sanity_ydktest_test {
     make test
     local status=$?
     if [ $status -ne 0 ]; then
-    # If the tests fail, try to run them individually to get more details for debug
-        for test_name in $(ls test*);
-        do
-            echo "Running $test_name"
-            ./$test_name -l all > output
-            local test_status=$?
-            if [ $test_status -ne 0 ]; then
-                cat output
-                exit $test_status
-            fi
-        done
+    # If the tests fail, try to run them in verbose to get more details for  # debug
+        ./ydk_bundle_test -s
         exit $status
     fi
 }

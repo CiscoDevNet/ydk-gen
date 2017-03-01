@@ -111,6 +111,8 @@ struct EntityPath {
     }
 };
 
+typedef void (*augment_capabilities_function)();
+
 class Entity {
   public:
     Entity();
@@ -137,10 +139,14 @@ class Entity {
     virtual Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path="") = 0;
 
     virtual std::map<std::string, Entity*> & get_children() = 0;
-    virtual std::shared_ptr<Entity> clone_ptr();
+    virtual std::shared_ptr<Entity> clone_ptr() const;
 
     virtual void set_parent(Entity* p);
-    virtual Entity* get_parent();
+    virtual Entity* get_parent() const;
+
+    virtual augment_capabilities_function get_augment_capabilities_function() const;
+    virtual std::string get_bundle_yang_models_location() const;
+    virtual std::string get_bundle_name() const;
 
   public:
     Entity* parent;

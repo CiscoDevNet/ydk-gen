@@ -21,7 +21,6 @@
 #include <ydk/netconf_service.hpp>
 #include <ydk_ydktest/ydktest_sanity.hpp>
 #include <ydk_ydktest/openconfig_bgp.hpp>
-#include <ydk/ietf_netconf.hpp>
 #include <ydk/types.hpp>
 #include <spdlog/spdlog.h>
 

@@ -18,7 +18,7 @@ Class represents the :cpp:class:`DataNode<DataNode>`.
 
             A :cpp:class:`DataNode<DataNode>` represents a containment hierarchy. So invocation of the destructor will lead to the children of this node being destroyed.
 
-    .. cpp:function:: virtual const SchemaNode* schema() const
+    .. cpp:function:: virtual const SchemaNode& schema() const
 
         Returns the :cpp:class:`SchemaNode<SchemaNode>` associated with this :cpp:class:`DataNode<DataNode>`.
 
@@ -30,7 +30,7 @@ Class represents the :cpp:class:`DataNode<DataNode>`.
 
         :return: ``std::string`` representing the path to this Node.
 
-    .. cpp:function:: virtual DataNode* create(const std::string& path)
+    .. cpp:function:: virtual DataNode& create(const std::string& path)
 
         Creates a :cpp:class:`DataNode<DataNode>` corresponding to the path and set its value.
 
@@ -50,7 +50,7 @@ Class represents the :cpp:class:`DataNode<DataNode>`.
         :raises: :cpp:class:`YCPPInvalidArgumentError<YCPPInvalidArgumentError>` In case the argument is invalid.
         :raises: :cpp:class:`YCPPPathError<YCPPPathError>` In case the path is invalid.
 
-    .. cpp:function:: virtual DataNode* create(const std::string& path, const std::string& value)
+    .. cpp:function:: virtual DataNode& create(const std::string& path, const std::string& value)
 
         Create a :cpp:class:`DataNode<DataNode>` corresponding to the path and set its value.
 
@@ -87,7 +87,7 @@ Class represents the :cpp:class:`DataNode<DataNode>`.
 
         :return: A ``std::string`` representation of the value.
 
-    .. cpp:function:: virtual std::vector<DataNode*> find(const std::string& path) const
+    .. cpp:function:: virtual std::vector<std::shared_ptr<DataNode>> find(const std::string& path) const
 
         Finds nodes that satisfy the given path expression. For details about the path expression see :ref:`how to path <ref-howtopath>`.
 
@@ -98,11 +98,11 @@ Class represents the :cpp:class:`DataNode<DataNode>`.
 
         :return: Pointer to the parent of this :cpp:class:`DataNode<DataNode>` or ``nullptr`` if None exist.
 
-    .. cpp:function:: virtual std::vector<DataNode*> children() const
+    .. cpp:function:: virtual std::vector<std::shared_ptr<DataNode>> children() const
 
         :return: Pointer to the children of this :cpp:class:`DataNode<DataNode>`.
 
-    .. cpp:function:: virtual const DataNode* root() const
+    .. cpp:function:: virtual const DataNode& root() const
 
         :return: Pointer to the root :cpp:class:`DataNode<DataNode>` of this tree.
 

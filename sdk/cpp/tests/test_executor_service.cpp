@@ -20,7 +20,6 @@
 #include <ydk/netconf_provider.hpp>
 #include <ydk/executor_service.hpp>
 #include <ydk_ydktest/ydktest_sanity.hpp>
-#include <ydk/ietf_netconf.hpp>
 #include <ydk/types.hpp>
 
 #include "config.hpp"

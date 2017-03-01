@@ -19,7 +19,6 @@
 #include <iostream>
 #include "config.hpp"
 #include "catch.hpp"
-
 using namespace ydk;
 using namespace std;
 
@@ -36,6 +35,7 @@ TEST_CASE("CreateP")
 
 TEST_CASE("CreateNoRepoP")
 {
+
 	NetconfServiceProvider provider{ "127.0.0.1", "admin", "admin", 12022};
 
 	CHECK_NOTHROW(provider.get_root_schema());

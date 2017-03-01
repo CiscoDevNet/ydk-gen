@@ -20,7 +20,6 @@
 #include <ydk/codec_service.hpp>
 #include <ydk/crud_service.hpp>
 #include <ydk/netconf_provider.hpp>
-#include <ydk/path_api.hpp>
 #include <ydk/types.hpp>
 
 #include <ydk_cisco_ios_xr/Cisco_IOS_XR_ipv4_bgp_cfg.hpp>
@@ -72,12 +71,11 @@ int main(int argc, char* argv[])
 
     try
     {
-        path::Repository repo{};
-        NetconfServiceProvider provider{repo, host, username, password, port};
+        NetconfServiceProvider provider{host, username, password, port};
         CrudService crud{};
 
         CodecService codec_service{};
-        CodecServiceProvider codec_provider{repo, EncodingFormat::JSON};
+        CodecServiceProvider codec_provider{EncodingFormat::JSON};
 
         auto bgp = codec_service.decode(codec_provider, json, make_unique<Bgp>());
 

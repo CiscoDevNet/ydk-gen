@@ -24,27 +24,83 @@
 
 #include "codec_provider.hpp"
 #include "entity_lookup.hpp"
+#include "logger.hpp"
 
 namespace ydk
 {
+
+#define USER_PROVIDED_REPO "ydk-user-provider-repo"
+
 CodecServiceProvider::CodecServiceProvider(path::Repository & repo, EncodingFormat encoding)
-    : m_encoding{encoding}, m_repo{repo}
+    : m_encoding{encoding}, user_provided_repo(true), capabilities_augmented(false), m_repo(repo)
 {
-    augment_lookup_tables();
-    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
-    m_root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(m_repo.create_root_schema(get_global_capabilities()));
-    ly_verb(LY_LLVRB); // enable libyang logging after payload has been created
+}
+
+CodecServiceProvider::CodecServiceProvider(EncodingFormat encoding)
+    : m_encoding{encoding}, user_provided_repo(false), capabilities_augmented(false)
+{
 }
 
 CodecServiceProvider::~CodecServiceProvider()
 {
 }
 
-path::RootSchemaNode&
-CodecServiceProvider::get_root_schema()
+void CodecServiceProvider::initialize(const std::string & bundle_name,
+        const std::string & models_path, augment_capabilities_function augment_caps_function)
 {
-    return *m_root_schema;
+    if(!capabilities_augmented)
+    {
+        YLOG_TRACE("Augmenting global YDK capabilities for bundle {}", bundle_name);
+        augment_caps_function();
+    }
+
+    if(user_provided_repo)
+    {
+        YLOG_TRACE("Using user provided repo");
+        initialize_root_schema(USER_PROVIDED_REPO, m_repo);
+        return;
+    }
+
+    if (m_root_schema_table.find(bundle_name) != m_root_schema_table.end())
+    {
+        return;
+    }
+
+    augment_caps_function();
+    capabilities_augmented = true;
+    YLOG_TRACE("Creating repo in path {}", models_path);
+    path::Repository repo{models_path};
+    initialize_root_schema(bundle_name, repo);
 }
 
+path::RootSchemaNode& CodecServiceProvider::get_root_schema(const std::string & bundle_name)
+{
+    if(user_provided_repo)
+    {
+        auto const & val = m_root_schema_table[USER_PROVIDED_REPO];
+        return *(val);
+    }
 
+    if(m_root_schema_table.find(bundle_name) == m_root_schema_table.end())
+    {
+        YLOG_ERROR("Root schema not created");
+        throw(YCPPServiceProviderError("Root schema not created"));
+    }
+
+    auto const & val = m_root_schema_table[bundle_name];
+    return *(val);
+}
+
+void CodecServiceProvider::initialize_root_schema(const std::string & bundle_name, path::Repository & repo)
+{
+    YLOG_TRACE("Initializing root schema for {}", bundle_name);
+    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
+    auto root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(repo.create_root_schema(get_global_capabilities()));
+    std::string s{bundle_name};
+    std::pair<std::string, std::unique_ptr<path::RootSchemaNode>> entry {s, std::move(root_schema)};
+    m_root_schema_table.insert(std::move(entry));
+    ly_verb(LY_LLVRB); // enable libyang logging after payload has been created
+}
+
+#undef USER_PROVIDED_REPO
 }

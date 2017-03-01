@@ -10,7 +10,7 @@ path::CodecService
 
 Codec Service, part of YDK path API, which deals with generic path-based YANG data nodes
 
-    .. cpp:function:: virtual std::string encode(const DataNode* datanode, EncodingFormat format, bool pretty)
+    .. cpp:function:: virtual std::string encode(const std::unique_ptr<DataNode> datanode, EncodingFormat format, bool pretty)
 
         Encode the given DataNode Tree
 
@@ -20,7 +20,7 @@ Codec Service, part of YDK path API, which deals with generic path-based YANG da
         :return: The encoded string
         :raises: :cpp:class:`YCPPInvalidArgumentError<YCPPInvalidArgumentError>` if the arguments are invalid
 
-    .. cpp:function:: virtual DataNode* decode(const RootSchemaNode* root_schema, const std::string& buffer, Format format)
+    .. cpp:function:: virtual std::unique_ptr<DataNode> decode(const RootSchemaNode& root_schema, const std::string& buffer, Format format)
 
         Decode the buffer to return a DataNode
 

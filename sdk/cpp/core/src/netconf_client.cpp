@@ -174,7 +174,6 @@ char* NetconfClient::clb_set_password(const char* user_name,
     snprintf(password_buffer, password_string.size() + 1, "%s",
             password_string.c_str());
 
-    YLOG_TRACE("looked up password: {}", password_buffer);
     return password_buffer;
 }
 

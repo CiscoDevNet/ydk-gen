@@ -35,6 +35,7 @@ find_library(pthread_location pthread)
 find_library(dl_location dl)
 find_library(ydk_location ydk)
 find_library(ydk_ydktest_location ydk_ydktest)
+find_library(ydk_ydktest_new_location ydk_ydktest_new)
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
@@ -56,7 +57,7 @@ set_property(TARGET ${YDK_UNITTEST_TARGET_NAME} PROPERTY CXX_STANDARD_REQUIRED O
 target_link_libraries(${YDK_UNITTEST_TARGET_NAME}
     ${ydk_location}
     ${ydk_ydktest_location}
-    ${ydk_location}
+    ${ydk_ydktest_new_location}
     ${xml2_location}
     ${curl_location}
     ${ssh_location}

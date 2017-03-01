@@ -1,0 +1,849 @@
+module ydk {
+
+  
+  namespace "http://cisco.com/ns/yang/ydk";
+
+  prefix "ydk";
+
+ 
+  
+  organization "Cisco Systems, Inc.";
+
+  contact
+    "Cisco Systems, Inc.
+     Customer Service
+
+     Postal: 170 West Tasman Drive
+     San Jose, CA 95134
+
+     Tel: +1 800 553-NETS
+
+     E-mail: cs-yang@cisco.com";
+
+  description 
+    "This module defines  the core YDK model.  
+    
+    Top level objects of this model include
+    
+    + modules --> All the modules referenced by the Bundles. This is a 
+                  repository of all YANG modules/submodules
+                  
+    + service-providers --> All the registered service providers we know of
+    						A service provider should augment the list here.
+    						Implementations once active can show them selves here.
+    						
+    + bundles --> All bundles that comprise the runtime
+    			  A bundle is a collection YANG modules that are converted to an API
+    			  in a target language/environment. Each bundle is defined in a file that is encoded in JSON/XML
+    			  based on this YANG model. It lists among other things the data models that constitute this bundle
+    			  as well as all the dependencies this bundle has. ydk-gen can use a bundle description today to 
+    			  produce a pip-installable package for the python API generated from these models.
+    			  In the future the same mechanism can be used to create shared libraries , java jar files etc..
+                  from a bundle profile.     
+    
+    ";
+
+  revision "2016-02-26" {
+    description
+      "Initial revision.";
+  }
+
+  typedef VERSION-NUMBER {
+  
+  	type string {
+  	  pattern "[0-9][0-9]";
+  	 }
+  }
+  
+  typedef revision-identifier {
+  	type string {
+  		pattern '\d{4}-\d{2}-\d{2}';
+  	}
+  	description "Represents a specific date in YYYY-MM-DD format.";
+  }
+  
+ 
+  
+ 
+  
+  extension type-constraint {
+  	 description "This extension is used under an instance-identifier type. It is used to 
+  	 qualify the instance-identifier with the type of target node identified by the path.
+  	 
+  	 A note a given type instance-identifier can have multiple targets
+  	 ";
+     argument path;
+     
+  }
+  
+  extension service-provider-class-name {
+  	description "The service provider class name extension. Service Providers
+  	are modelled in yang as augment statemnts that augment /ydk:service-providers/ydk:service-provider.
+  	This extension is a must to determine the name of the service-provider-class.";
+  	
+  	argument name;
+  }
+  
+  extension service-class-name {
+  	description "The default behavior of ydk-gen is to group all rpc statements
+  	defined in a module and create a service class of the form <module-name>Service
+  	which will have methods that correspond to each rpc. The service class is
+  	a wrapper around the RPC classes that makes it easier to consume the RPCs defined
+  	in a module. This extension can be used to create associate an rpc with a 
+  	ServiceClass that will be generated as part of this module's transformation'";
+  	
+  	argument name;
+  }
+  
+  grouping semantic-version {
+  	
+  		description "The semantic version of the form major.minor.patch-level.suffix";
+  			
+  		leaf major-version-number {
+			config false;
+  			type VERSION-NUMBER;
+  		}
+  		
+  		leaf minor-version-number {
+  			config false;
+  			type VERSION-NUMBER;
+  		}
+  		
+  		leaf patch-level {
+  		   type VERSION-NUMBER;
+  		}
+  		
+  		leaf suffix {
+  		
+  		   type string;
+  		}
+ 
+  }
+  
+
+
+container ydk { 
+  container modules {
+  		config false;
+  		description "Model of the YANG statements represented by this module or submodule .
+  					A statement consists of a keyword followed by an argument and
+  					has list of substatements . Each statement is identified by a key
+  					that refers to row and column number in the file.
+  					";
+  		list module {
+  			key "name revision";
+  			description
+  		  	"Each entry represents one module/submodule";
+  		
+  			leaf name {
+				type string;
+				description
+					"The YANG module or submodule name.";
+			}
+		
+			leaf revision {
+				type union {
+					type revision-identifier;
+					type string { length 0; }
+			}
+			description
+				"The YANG module or submodule revision date.
+				A zero-length string is used if no revision statement
+				is present in the YANG module or submodule.";
+			}
+			
+  			leaf uri {
+  				type string;
+  				description 
+  					"Contains a URL that represents the YANG schema 
+  						resource for this module or submodule.
+  				
+  						This leaf will only be present if there is a URL 
+  						available for retrieval of the schema for this entry.";
+  			}
+  			
+  			leaf kind {
+				type enumeration {
+		  			enum MODULE {
+		  				value 0;
+		  			}
+		  
+		  			enum SUBMODULE {
+		     			value 1;
+		  			}
+				}
+			}
+  			
+  			container statements {
+  				list statement {
+  			    	description "Represents a statement in a YANG model. Statement represents
+  			    				a meta-model of the YANG language itself. Any YANG document is composed of 
+  			    				statements that are of the form keyword <optional-arg> followed by a 
+  			    				semi colon or a block { <with zero or more statements> }
+  			    
+  			    				Because this represents a list of statements there is a need to uniquely identify
+  			    				each statement
+  			    
+  			    				";
+  					key id;
+  				
+  					leaf id {
+  						description "A statement is defined by its keyword which is a tuple of the form
+   									((name of the module, keyword), arg).Note the name of the module can be None
+   									in which case this is defined to be part of the YANG language. The arg can also be none
+   									 
+   									  
+   									 We use a key a hash id that hashes the statement path.
+   									 Statement path is defined as (/statement-path)+
+    								statement-path := (<name_of_module>, keyword, arg) 
+    								The hash is necessary to identify the statement in YANG and has no meaning other wise";
+  				   		type string;
+  					}
+  				    
+  				    leaf module-name {
+  				        description "Module name of the extension that defines this keyword. Otherwise nothing.";
+  				    	type string;
+  				    }
+  				    
+  					leaf keyword {
+  						description "Keyword of the statement";
+  				   		type string;
+  					}
+  				
+  					leaf arg {
+  						description "Optional argument";
+  				  		type string;
+  					}
+  				
+  					leaf parent {
+  					    description "The id of the parent of this statement";
+  						type leafref {
+  							path /ydk:ydk/ydk:modules/ydk:module/ydk:statements/ydk:statement/ydk:id;
+  						}
+  					}
+  					
+  					leaf-list substatements {
+  					    description "Substatements for this statement";
+  						type leafref {
+  							path /ydk:ydk/ydk:modules/ydk:module/ydk:statements/ydk:statement/ydk:id;
+  						}
+  					}
+  					
+  				}
+  			}
+  		}
+  }
+  			
+
+  			
+  
+  container service-providers {
+  	config false;
+  	
+  	list service-provider {
+  		description "Service Providers . A service provider 
+  		augments this list. Note it is the responsibility of the
+  		service provider to provide an id 
+  	
+  	module providers {
+  	  ...
+  	  import ydk {
+  	  	prefix ydk;
+  	  }
+  	  
+  	  
+  	  augment /ydk:service-providers/ydk:service-provider {
+  	  	    ydk:service-provider-class-name NetconfServiceProvider;
+  	  			
+  	  		leaf address {
+  	  			type inet:address;
+  	  		}
+  	  		
+  	  		leaf port {
+  	  			type uint16;
+  	  		}
+  	  		
+  	  		leaf username {
+  	  			type string;
+  	  		}
+  	  		
+  	  		leaf password {
+  	  			type string;
+  	  		}
+  	  		
+  	  		leaf protocol {
+  	  			type enumeration {
+  	  				enum SSH;
+  	  				
+  	  				enum TCP;
+  	  			}
+  	  		}
+  	  	
+  	  	}
+  	  
+  	  }
+  	
+  	}
+  	
+  	";
+  	
+  		key name;
+  		
+  		leaf name {
+  			description "A unique name identifying this service-provider within the system";
+  			type string;
+  		}
+  		
+  		leaf-list capabilities {
+  			description "List of capabilities";
+  			type string;
+  		}
+  		
+  			
+  	}
+  }
+  
+  
+  
+  
+  container bundles {	
+  	config false;
+  	
+  	list bundle {
+  		
+  		description "A bundle definition. Each bundle consists of a list of modules/submodules that 
+  		are used by ydk-gen to generate the API for this bundle. 
+  		
+  		It also lists other bundles that this bundle is dependent on. Note that list of modules/submodules 
+  		collected from this bundle's modules and its dependent bundles must be self contained. i.e all cross
+  		references must be resolvable from this set of modules.'";
+  		
+  	    key "name major-version-number minor-version-number";
+  	    
+  		leaf name {
+  		  description "Name of the bundle. This is usually used as the root package.";
+  		  
+  		  type string;
+  		}
+  		
+  		leaf description-url {
+  			type string;
+  		}
+  		
+  		leaf author {
+  			type string;
+  		}
+  		
+  		leaf author_email {
+  			type string;
+  		}
+  		
+  		leaf license {
+  			type string;
+  		}
+  		
+  		uses semantic-version;
+  		
+  		container ydk-version {
+  			description "YDK version this bundle is dependent on.";
+  			uses semantic-version;
+  		}
+  		
+  		
+  		container bundle-dependencies {
+  		
+  		   description "This would list all bundles that this bundle is dependent on.";
+  		   
+  		   list bundle-dependency {
+  		       description "A bundle the parent bundle is dependent on.";
+  		       
+  		 	   key name;
+  		 	   
+  		 	   leaf name {
+  		 	   	 description "Name of the bundle this bundle is dependent on .";
+  		 	   	 
+  		 	      type leafref {
+  		 	          path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:name"; 
+  		 	      }  
+  		   	   }
+  		   	   
+  		   	   uses semantic-version;
+  		   	 
+  		   	   
+  				leaf uri {
+  					
+  					type string;
+  				
+  					description "Either file://.. path to file or git://<path to .git repo>?commit-id=<commit-id>?path=<relative-path-to-file>
+ 					";
+  				}   	   
+  		 		
+  		  }
+  	    }
+  		
+  		container named-elements {
+  			description "Named elements exported by this bundle";
+  				
+  			list named-element {
+  				key fqn;
+  				
+  				leaf fqn {
+  				
+  					type string;
+  					
+  					description "The fully qualified name of this element.";
+  				}
+  				
+  				leaf qn {
+  					type string;
+  					
+  					description "The qualified name of this element.";
+  				}
+  				
+  				leaf owner {
+					type leafref {
+						path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+					}
+				
+				}
+			
+				leaf-list owned_elements {
+					type leafref {
+						path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+					}
+				}
+		
+  				
+  				leaf module-name {
+  					type leafref {
+  						path "/ydk:ydk/ydk:modules/ydk:module/ydk:name" ;
+  					}
+  				}
+  				
+  				leaf module-revision {
+  					type leafref {
+  						path "/ydk:ydk/ydk:modules/ydk:module/ydk:revision";
+  					}
+  				}
+  				
+  				leaf statement-id {
+  					type leafref {
+  						path "/ydk:ydk/ydk:modules/ydk:module/ydk:statements/ydk:statement/ydk:id";
+  					}
+  				}
+  				
+  				leaf python-module-name {
+  				    type string;
+  				 }
+  				
+  				choice named-element {
+  	
+  				    case typed-element {
+  				    	leaf lower-bound {
+  				    		type int32;
+  				    	}
+  				    	
+  				    	leaf upper-bound {
+  				    		type int32;
+  				    	}
+  				    	
+  				    	leaf many {
+  				    		type empty;
+  				    	}
+  				    	
+  				    	leaf ordered {
+  				    		type empty;
+  				    	}
+  				    	
+  				    	leaf required {
+  				    		type empty;
+  				    	}
+  				    	
+  				    	leaf unique {
+  				    		type empty;
+  				    	}
+  				    	
+  				    	
+  				    	
+  				    	choice typed-element {
+  				    	
+  				    		case structural-feature {
+  				    			leaf feature-id {
+  				    				type int32;
+  				    			}
+  				    			
+  				    			leaf changeable {
+  				    				type empty;
+  				    			}
+  				    			
+  				    			leaf derived {
+  				    				type empty;
+  				    			}
+  				    			
+  				    			leaf transient {
+  				    				type empty;
+  				    			}
+  				    			
+  				    			choice structural-feature {
+  				    				case attribute {
+  				    					leaf attribute-type {
+  				    						description "This has to point a data-type";
+  				    						type leafref {
+												path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+											}
+  				    					}
+  				    					
+  				    					leaf id {
+  				    						description "Is this attribute a key";
+  				    						type empty;
+  				    					}
+  				    				}
+  				    				
+  				    				case reference {
+  				    					leaf containment {
+  				    						description "A reference is a containment if it
+  				    								represents by-value content.";
+  				    						type empty;
+  				    					}
+  				    					
+  				    					leaf container {
+  				    						description "A reference is a container if has an opposite that is 
+  				    						a containment";
+  				    						type empty;
+  				    					}
+  				    					
+  				    					leaf opposite {
+  				    						description "Represents the other end of a bidirectional relation";
+  				    						type leafref {
+												path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+											}
+  				    					}
+  				    				}
+  				    			}
+  				    		
+  				    		}
+  				    	} /* choice typed element */
+  				    	
+  				    } /* case typed element */
+  				    
+  				    
+  					case package {
+  						leaf-list subpackages {
+  							type leafref {
+								path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+							}
+  						}
+  						
+  					}
+  					
+  					case enum-literal {
+  						leaf literal {
+  							type string;
+  						}
+  						
+  						leaf value {
+  							type int32;
+  						}
+  					}
+  					
+  					case classifier {
+  					    
+  					    leaf classifier-id {
+  					    	type int32;
+  					    }
+  					    
+  					    leaf package {
+  					    	type leafref {
+								path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+							}
+  					    }
+  					    
+  						choice classifier {
+  							case bits {
+  								
+  							}
+  						
+  							case class {
+  								leaf-list all-attributes{
+  					    			type leafref {
+										path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+									}
+  					    		}
+  					    		
+  					    		leaf-list all-containments{
+  					    			type leafref {
+										path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+									}
+  					    		}
+  					    		
+  					    		leaf-list all-structural-features{
+  					    			type leafref {
+										path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+									}
+  					    		}
+  					    		
+  					    		leaf-list all-super-types {
+  					    			type leafref {
+										path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+									}
+  					    		}
+  					    		
+  					    		leaf-list attributes{
+  					    			type leafref {
+										path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+									}
+  					    		}
+  					    		
+  					    		leaf-list references{
+  					    			type leafref {
+										path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+									}
+  					    		}
+  					    		
+  					    		leaf-list structural-features{
+  					    			type leafref {
+										path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+									}
+  					    		}
+  					    		
+  					    		leaf-list super-types {
+  					    			type leafref {
+										path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+									}
+  					    		}
+  					    		
+  					    		leaf abstract {
+  					    			type empty;
+  					    		}
+  					    		
+  					    		
+  								
+  							}
+  							
+  							case data-type {
+  								choice data-type {
+  									case enum {
+  										leaf literals {
+  											type leafref {
+												path "/ydk:ydk/ydk:bundles/ydk:bundle/ydk:named-elements/ydk:named-element/ydk:fqn";
+											}
+										}
+  									}
+  								} 
+  							}
+  						}
+  					}
+  				}
+  				
+  			
+  				
+  			}
+  			
+  			
+  		}
+  		
+  		
+  	    container source-modules {
+  	    	description "Collection of modules/submodules that is part of this bundle";
+  	    	
+  	    	list source-module{
+  	    		description "Module or submodule that is part of this bundle";
+  	    		key "name revision";
+  	    		
+  	    		leaf name{
+  	    			type leafref {
+  	    				path /ydk:ydk/ydk:modules/ydk:module/ydk:name;
+  	    			}
+  	    		}
+  	    		
+  	    		leaf revision {
+  	    			type leafref {
+  	    				path /ydk:ydk/ydk:modules/ydk:module/ydk:revision;
+  	    			}
+  	    		}
+  	    		
+  			}
+  		}
+  	    		
+  	
+ 		container api-generation-strategy {
+ 			presence "If this is instiated it usually means that a modification to the default
+ 			code generation strategy is being requested. The default strategy uses the expanded
+ 			api syntax. In the future other options can be added in here. Note the user is advised
+ 			to consider the implications of each code generation-strategy when they they design their bundle.";
+ 			
+ 			
+ 			leaf grouping-as-superclass {
+ 				
+ 				description "In this strategy groupings become classes in the module they are defined.
+ 				Any container/ list that uses the grouping becomes a subclass of the grouping-class.
+ 				This does reduce the number of classes generated. However it may break backward compatibility
+ 				since the grouping now becomes part of the api.";
+ 				type empty;
+ 			}
+ 			
+ 			leaf collapse-containers-with-single-list {
+ 				
+ 				description "Consider the following pattern in yang
+ 				  
+ 				  list bundle {
+ 				  	.....
+ 				  	container modules {
+ 				  			list module {
+ 				  			...
+ 				  
+ 				  In the expanded API generations strategy the source file will be encoded as follows
+ 				  
+ 				  class Bundle(object): --> corresponds to the list bundle
+ 				  	def __init__(self):
+ 				  		self.modules = Modules() 
+ 				  		
+ 				  	class Modules(object): --> corresponds to the container modules
+ 				    	def __init__(self):
+ 				       		self.module = YList() --> corresponds to the list Module
+ 				       
+ 				    	class Module(object): --> corresponds to the list module     
+ 				  	
+					If this leaf is set the generated api will skip the container modules and have the class
+					 Module as a child of the Bundle class like this
+					 
+					   class Bundle(object):  ---> corresponds to the list bundle
+					      def __init__(self):
+					      	 self.modules = YList() --> corresponds to the list Module
+					      
+					      class Module(obect):
+					           ... 				  	
+ 				  	
+ 				  	
+ 				  ";
+ 				type empty;
+ 			}
+ 			
+ 			
+ 		}
+  
+ }
+ }
+  
+ }
+  
+  
+  rpc generate {
+    description "Generate APIs for the given set of bundles";
+    
+    input {
+    	leaf-list bundles {
+    	  description "Path to the bundle file. This will follow the uri syntax.
+    	  Note although this is a list, the implementation may choose to support only one uri.";
+    	  type string;
+    	}
+    	
+    	leaf output-directory {
+    		description "The output directory where the generated files will be put
+    		The structure of this directory will follow
+    		 language bundle.
+    		 
+    		 For eg- 
+    		 
+    		  +-<output-dir>
+    		    |
+    		    +-python
+    		      |
+    		      + cisco-xr600
+    		        |
+    		          - __init__.py
+    		            Cisco_IOS_XR_bgp_cfg.py..
+    		      
+    		";
+    		type string;
+    	
+    	}
+    	
+    	leaf-list languages {
+    		description "The target language for the generated api";
+    		
+    		type enumeration {
+    			enum python {
+    				value 1;
+    			}
+    			
+    			
+    		}
+    	}
+    	
+    	leaf reuse-modules-cache {
+    		description "If set the generator will use the cache for modules find in the output directory.
+    					This allows a previously downloaded file to be used.";
+    		type empty;
+    	}
+    	
+    	leaf reuse-bundles-cache {
+    		description "If set the generator will reuse the bundle cache for modules found in the output directory. 
+    				This allows a previously downloaded file to be used.";
+    				
+    		type empty;
+    	
+    	}
+    	
+    }
+  
+  }
+
+  rpc create {
+    
+    description "The create rpc call to create an entity. This is the model for the CRUDService offered by ydk";
+
+    input {
+
+        anyxml entity {
+           description "The xml like payload that represents the entity or entities to create"; 
+        }
+    }
+  } 
+
+  rpc read {
+      description "Read the entity/entities";
+
+     input {
+        anyxml filter {
+           description "Filter of what needs to be read. Modelled like the netconf get/get-config filter";
+        }
+
+        leaf only-config {
+            description "If set filter on config elements only";
+            type empty;
+        } 
+     }
+     output {
+         anyxml data {
+           description "Data that is read";
+         }
+     }
+  }
+
+  rpc update {
+    
+    description "The update rpc call to update an entity. This is the model for the CRUDService offered by ydk";
+
+    input {
+
+        anyxml entity {
+           description "The xml like payload that represents the entity or entities to update"; 
+        }
+    }
+  } 
+  
+  rpc delete {
+    
+    description "The delete rpc call to delete an entity. This is the model for the CRUDService offered by ydk";
+
+    input {
+
+        anyxml entity {
+           description "The xml like payload that represents the entity to delete."; 
+        }
+    }
+  } 
+
+}
+

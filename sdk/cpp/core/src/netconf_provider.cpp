@@ -132,12 +132,7 @@ std::shared_ptr<path::DataNode> NetconfServiceProvider::handle_read(path::Rpc& y
     std::string filter_value = get_filter_payload(ydk_rpc);
 
     string netconf_payload = get_netconf_payload(input, "filter", filter_value);
-
-    std::string reply = client->execute_payload(netconf_payload);
-    YLOG_DEBUG("=============Reply payload=============");
-    YLOG_DEBUG(reply.c_str());
-    YLOG_DEBUG("\n");
-    return handle_read_reply(reply, *root_schema);
+    return handle_read_reply(execute_payload(netconf_payload), *root_schema	);
 }
 
 std::shared_ptr<path::DataNode> NetconfServiceProvider::handle_edit(path::Rpc& ydk_rpc, path::Annotation annotation) const
@@ -155,29 +150,21 @@ std::shared_ptr<path::DataNode> NetconfServiceProvider::handle_edit(path::Rpc& y
     string netconf_payload = get_netconf_payload(input, "config", config_payload);
     ly_verb(LY_LLVRB); // enable libyang logging after payload has been created
 
-    std::string reply = client->execute_payload(netconf_payload);
-    YLOG_DEBUG("=============Reply payload=============");
-    YLOG_DEBUG(reply.c_str());
-    YLOG_DEBUG("\n");
-    return handle_edit_reply(reply, *client, candidate_supported);
+    return handle_edit_reply(execute_payload(netconf_payload), *client, candidate_supported);
 }
 
 std::shared_ptr<path::DataNode> NetconfServiceProvider::handle_netconf_operation(path::Rpc& ydk_rpc) const
 {
-    bool candidate_supported = is_candidate_supported(server_capabilities);
-
     path::CodecService codec_service{};
     auto netconf_payload = codec_service.encode(ydk_rpc.input(), EncodingFormat::XML, true);
     std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     netconf_payload = payload + netconf_payload + "</rpc>";
 
+    YLOG_DEBUG("=============Generating payload to send to device=============");
     YLOG_DEBUG(netconf_payload.c_str());
-
-    std::string reply = client->execute_payload(netconf_payload);
-    YLOG_DEBUG("=============Reply payload=============");
-    YLOG_DEBUG(reply.c_str());
     YLOG_DEBUG("\n");
-    YLOG_TRACE("Executing rpc {}", ydk_rpc.schema().path());
+
+    std::string reply = execute_payload(netconf_payload);
     if (ydk_rpc.schema().path().find("get") != string::npos or ydk_rpc.schema().path().find("get-config") != string::npos)
     {
         return handle_read_reply(reply, *root_schema);
@@ -225,12 +212,21 @@ std::shared_ptr<path::DataNode> NetconfServiceProvider::invoke(path::Rpc& rpc) c
     return datanode;
 }
 
+std::string NetconfServiceProvider::execute_payload(const std::string & payload) const
+{
+    std::string reply = client->execute_payload(payload);
+    YLOG_DEBUG("=============Reply payload received from device=============");
+    YLOG_DEBUG(reply.c_str());
+    YLOG_DEBUG("\n");
+    return reply;
+}
+
 static shared_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name)
 {
     auto rpc = shared_ptr<path::Rpc>(root_schema.rpc(rpc_name));
     if(rpc == nullptr){
-            YLOG_ERROR("Cannot create payload for RPC: {}", rpc_name);
-            throw(YCPPIllegalStateError{"Cannot create payload for RPC: "+ rpc_name});
+        YLOG_ERROR("Cannot create payload for RPC: {}", rpc_name);
+        throw(YCPPIllegalStateError{"Cannot create payload for RPC: "+ rpc_name});
     }
     return rpc;
 }
@@ -333,7 +329,7 @@ static string get_netconf_payload(path::DataNode & input, string data_tag, strin
     std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     payload+=codec_service.encode(input, EncodingFormat::XML, true);
     payload+="</rpc>";
-    YLOG_DEBUG("=============Generating payload=============");
+    YLOG_DEBUG("=============Generating payload to send to device=============");
     YLOG_DEBUG(payload.c_str());
     YLOG_DEBUG("\n");
     return payload;
@@ -343,7 +339,7 @@ static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfCl
 {
     if(reply.find("<ok/>") == std::string::npos)
     {
-        YLOG_ERROR("No ok in reply");
+        YLOG_ERROR("No ok in reply received from device");
         throw(YCPPServiceProviderError{reply});
     }
 
@@ -355,7 +351,7 @@ static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfCl
         YLOG_DEBUG( "Executing commit RPC: {}", commit_payload);
         reply = client.execute_payload(commit_payload);
 
-        YLOG_DEBUG("=============Reply payload=============");
+        YLOG_DEBUG("=============Reply payload received from device=============");
         YLOG_DEBUG(reply.c_str());
         YLOG_DEBUG("\n");
         if(reply.find("<ok/>") == std::string::npos)
@@ -382,14 +378,14 @@ static std::shared_ptr<path::DataNode> handle_read_reply(string reply, path::Roo
     auto data_start = reply.find("<data>");
     if(data_start == std::string::npos)
     {
-        YLOG_DEBUG( "Can't find data tag in reply {}", reply);
+        YLOG_ERROR( "Can't find data tag in reply sent by device {}", reply);
         throw(YCPPServiceProviderError{reply});
     }
     data_start+= sizeof("<data>") - 1;
     auto data_end = reply.find("</data>", data_start);
     if(data_end == std::string::npos)
     {
-        YLOG_DEBUG( "No end data tag found in reply {}", reply);
+        YLOG_ERROR( "No end data tag found in reply sent by device {}", reply);
         throw(YCPPError{"No end data tag found"});
     }
 
@@ -398,7 +394,7 @@ static std::shared_ptr<path::DataNode> handle_read_reply(string reply, path::Roo
 	auto datanode = std::shared_ptr<path::DataNode>(codec_service.decode(root_schema, data, EncodingFormat::XML));
 
     if(!datanode){
-        YLOG_DEBUG( "Codec service failed to decode datanode");
+        YLOG_ERROR( "Codec service failed to decode datanode");
         throw(YCPPError{"Problems deserializing output"});
     }
     return datanode;

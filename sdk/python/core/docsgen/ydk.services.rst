@@ -416,7 +416,7 @@ CodecService: Provides encode/decode API's
 
         .. py:method:: decode(provider, payload)
 
-                Decodes the the payload and returns the python entity. Entity is either:
+                Decodes the the payload and returns the python entity. Payload is either:
                   - an instance of an XML payload defined for a yang module, or
                   - a dictionary containing:
                      - module names as keys and

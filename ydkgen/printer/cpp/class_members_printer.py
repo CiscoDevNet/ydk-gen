@@ -44,7 +44,7 @@ class ClassMembersPrinter(object):
         if clazz.is_identity():
             return
         self._print_common_method_declarations(clazz)
-        self._print_clone_ptr_method(clazz)
+        self._print_top_level_entity_functions(clazz)
         self.ctx.bline()
 
     def _print_constructor_destructor(self, clazz):
@@ -77,9 +77,12 @@ class ClassMembersPrinter(object):
         self.ctx.writeln('void set_value(const std::string & value_path, std::string value) override;')
         self.ctx.writeln('std::map<std::string, Entity*> & get_children() override;')
 
-    def _print_clone_ptr_method(self, clazz):
+    def _print_top_level_entity_functions(self, clazz):
         if clazz.owner is not None and isinstance(clazz.owner, Package):
-            self.ctx.writeln('std::shared_ptr<Entity> clone_ptr() override;')
+            self.ctx.writeln('std::shared_ptr<Entity> clone_ptr() const override;')
+            self.ctx.writeln('augment_capabilities_function get_augment_capabilities_function() const override;')
+            self.ctx.writeln('std::string get_bundle_yang_models_location() const override;')
+            self.ctx.writeln('std::string get_bundle_name() const override;')
 
     def _print_class_value_members(self, clazz):
         if clazz.is_identity():

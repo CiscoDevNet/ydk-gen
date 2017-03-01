@@ -20,11 +20,13 @@ from __future__ import print_function
 from distutils import dir_util
 from subprocess import call
 
-import os, sys, shutil
+import fileinput
+import glob
 import json
 import logging
+import os, sys, shutil
+import tarfile
 import tempfile
-import fileinput
 
 from .common import YdkGenException, iscppkeyword, ispythonkeyword
 from ydkgen.builder import (ApiModelBuilder, GroupingClassApiModelBuilder,
@@ -37,6 +39,7 @@ logger = logging.getLogger('ydkgen')
 logger.addHandler(logging.NullHandler())
 
 classes_per_source_file = 150
+YDK_YANG_MODEL = 'ydk@2016-02-26.yang'
 
 
 class YdkGenerator(object):
@@ -108,6 +111,9 @@ class YdkGenerator(object):
 
         resolver = bundle_resolver.Resolver(self.output_dir, self.ydk_root, self.iskeyword)
         curr_bundle, all_bundles = resolver.resolve(tmp_file)
+        assert isinstance(curr_bundle, bundle_resolver.Bundle)
+        for x in all_bundles:
+            assert isinstance(x, bundle_resolver.Bundle)
 
         packages = self._get_packages(curr_bundle.resolved_models_dir)
         if len(packages) == 0:
@@ -117,9 +123,12 @@ class YdkGenerator(object):
         gen_api_root = self._init_bundle_directories(packages=packages, bundle=curr_bundle)
 
         generated_files = self._print_packages(packages, gen_api_root, curr_bundle.name, curr_bundle.str_version)
+
+        yang_models = self._create_models_archive(curr_bundle, gen_api_root)
+
         if self.language == 'cpp':
             _modify_cpp_cmake(gen_api_root, curr_bundle.name, curr_bundle.str_version,
-                              generated_files[0], generated_files[1])
+                              generated_files[0], generated_files[1], yang_models)
 
         os.remove(tmp_file)
 
@@ -241,6 +250,31 @@ class YdkGenerator(object):
         shutil.rmtree(gen_api_root)
         logger.debug('Copying %s to %s' % (target_dir, gen_api_root))
         dir_util.copy_tree(target_dir, gen_api_root)
+        
+    def _create_models_archive(self, bundle, target_dir):
+        '''
+        Creates yang models archive as part of bundle package.
+        Args:
+            source_dir (str): Directory where models are located
+            bundle_qualified_name (st): Bundle name with version
+            target_dir (str): Directory where archive is to be created
+        '''
+        global YDK_YANG_MODEL
+        assert isinstance(bundle, bundle_resolver.Bundle)
+        tar_file = '{}.tar.gz'.format(bundle.fqn)
+        tar_file_path = os.path.join(target_dir, tar_file)
+        ydk_yang = os.path.join(target_dir, YDK_YANG_MODEL)
+        if os.path.isfile(ydk_yang):
+            shutil.copy(ydk_yang, bundle.resolved_models_dir)
+        yang_models = []
+        with tarfile.open(tar_file_path, 'w:gz') as tar:
+            for yang_model in os.listdir(bundle.resolved_models_dir):
+                if yang_model.endswith(".yang"):
+                    yang_models.append(yang_model)
+                    yang_model_path = os.path.join(bundle.resolved_models_dir, yang_model)
+                    tar.add(yang_model_path, arcname=os.path.basename(yang_model_path))
+        logger.debug('\nCreated models archive: {}'.format(tar_file_path))
+        return yang_models
 
 
 def _set_original_bundle_name_for_packages(bundles, packages, curr_bundle):
@@ -294,7 +328,7 @@ def _modify_python_setup(gen_api_root, package_name, version, dependencies):
             print(line, end='')
 
 
-def _modify_cpp_cmake(gen_api_root, bundle_name, version, source_files, header_files):
+def _modify_cpp_cmake(gen_api_root, bundle_name, version, source_files, header_files, model_names):
     """ Modify CMakeLists.txt template for cpp libraries.
 
     Args:
@@ -308,6 +342,7 @@ def _modify_cpp_cmake(gen_api_root, bundle_name, version, source_files, header_f
     header_files = ['ydk/models/' + s for s in header_files]
     source_file_names = ' '.join(source_files)
     header_file_names = ' '.join(header_files)
+    model_file_names = ' '.join(model_names)
 
     for line in fileinput.input(cmake_file, inplace=True):
         if "@BRIEF_NAME@" in line:
@@ -318,6 +353,8 @@ def _modify_cpp_cmake(gen_api_root, bundle_name, version, source_files, header_f
                 line = line.replace("@HEADER_FILES@", header_file_names)
             elif "@VERSION@" in line:
                 line = line.replace("@VERSION@", version)
+            elif "@YANG_FILES@" in line:
+                line = line.replace("@YANG_FILES@", model_file_names)
             print(line, end='')
         else:
             print(line, end='')

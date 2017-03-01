@@ -153,6 +153,10 @@ class Model(object):
         self.iskeyword = iskeyword
 
     @property
+    def name(self):
+        return self._name
+
+    @property
     def pkg_name(self):
         name = self._name
         name = name.replace('-', '_')
@@ -171,6 +175,11 @@ class Model(object):
     def uri(self):
         """ Return model uri."""
         return self._uri
+
+    @property
+    def revision(self):
+        '''Return model revision.'''
+        return self._revision
 
 
 class Bundle(BundleDefinition):
@@ -197,7 +206,7 @@ class Bundle(BundleDefinition):
         try:
             with open(uri) as json_file:
                 data = json.load(json_file)
-        except IOError as error:
+        except IOError:
             raise YdkGenException('Cannot open bundle file %s.' % uri)
 
         try:
@@ -209,7 +218,7 @@ class Bundle(BundleDefinition):
                 for d in data['bundle']['dependencies']:
                     self.dependencies.append(BundleDependency(d))
 
-        except KeyError as error:
+        except KeyError:
             raise YdkGenException('Bundle file is not well formatted.')
 
         self.children = []

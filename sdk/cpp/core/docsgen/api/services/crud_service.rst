@@ -36,7 +36,7 @@ CRUD Service class for supporting CRUD operations on entities.
         :return: ``true`` if successful, ``false`` if not
         :raises YCPPError: If an error has occurred
 
-    .. cpp:function:: std::unique_ptr<ydk::Entity> read(path::ServiceProvider & provider, Entity & filter)
+    .. cpp:function:: std::shared_ptr<ydk::Entity> read(path::ServiceProvider & provider, Entity & filter)
 
         Read the entity.
 
@@ -45,7 +45,7 @@ CRUD Service class for supporting CRUD operations on entities.
         :return: A pointer to an instance of :cpp:class:`Entity<ydk::Entity>` as identified by the ``filter`` if successful, ``nullptr`` if not
         :raises YCPPError: If an error has occurred
 
-    .. cpp:function:: std::unique_ptr<ydk::Entity> read_config(path::ServiceProvider & provider, Entity & filter)
+    .. cpp:function:: std::shared_ptr<ydk::Entity> read_config(path::ServiceProvider & provider, Entity & filter)
 
         Read only config.
 

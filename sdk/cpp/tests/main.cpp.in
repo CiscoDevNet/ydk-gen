@@ -1,6 +1,20 @@
- #include "config.hpp"
+#include "config.hpp"
+#include <spdlog/spdlog.h>
 
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_RUNNER
 #include "catch.hpp"
 
 const char* TEST_HOME = "@CMAKE_SOURCE_DIR@/../core/tests/models";
+
+int main( int argc, char* argv[] )
+{
+  // global setup...
+  auto logger = spdlog::stdout_color_mt("ydk");
+  logger->set_level(spdlog::level::trace);
+
+  int result = Catch::Session().run( argc, argv );
+
+  // global clean-up...
+
+  return ( result < 0xff ? result : 0xff );
+}

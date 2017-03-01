@@ -69,8 +69,8 @@ class HeaderPrinter(MultiFilePrinter):
         self.ctx.writeln('#include <memory>')
         self.ctx.writeln('#include <vector>')
         self.ctx.writeln('#include <string>')
-        self.ctx.writeln('#include "ydk/types.hpp"')
-        self.ctx.writeln('#include "ydk/errors.hpp"')
+        self.ctx.writeln('#include <ydk/types.hpp>')
+        self.ctx.writeln('#include <ydk/errors.hpp>')
         self.ctx.bline()
 
     def _print_unique_imports(self, package, imports_to_print):
@@ -132,15 +132,6 @@ class HeaderPrinter(MultiFilePrinter):
 
     def _print_forward_declaration(self, clazz):
         self.ctx.writeln('class ' + clazz.name + '; //type: ' + clazz.qualified_cpp_name())
-
-    def _print_include_guard_header(self, include_guard):
-        self.ctx.writeln('#ifndef {0}'.format(include_guard))
-        self.ctx.writeln('#define {0}'.format(include_guard))
-        self.ctx.bline()
-
-    def _print_include_guard_trailer(self, include_guard):
-        self.ctx.bline()
-        self.ctx.writeln('#endif /* {0} */'.format(include_guard))
 
     def _print_enums(self, package, classes, file_name, reset_enum_lookup):
         self.enum_printer.print_enum_declarations(package, classes, file_name, reset_enum_lookup)

@@ -25,9 +25,8 @@
 #ifndef ENTITY_LOOKUP_HPP
 #define ENTITY_LOOKUP_HPP
 
-#include <map>
 #include <string>
-#include "types.hpp"
+#include <vector>
 
 namespace ydk
 {
@@ -39,11 +38,9 @@ struct Capability;
 
 const std::vector<path::Capability> get_global_capabilities();
 
-// Variables are generated
+// Variable is generated
 extern std::vector<path::Capability> ydk_global_capabilities;
 
-// Function definition is generated
-void augment_lookup_tables();
 }
 
 #endif /* ENTITY_LOOKUP_HPP */

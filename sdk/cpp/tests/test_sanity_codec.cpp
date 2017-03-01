@@ -17,11 +17,14 @@
 #include <iostream>
 #include <string.h>
 
-#include "ydk/codec_provider.hpp"
-#include "ydk/codec_service.hpp"
-#include "ydk_ydktest/ydktest_sanity.hpp"
-#include "ydk_ydktest/ydktest_sanity_types.hpp"
-#include "ydk_ydktest/oc_pattern.hpp"
+#include <ydk/codec_provider.hpp>
+#include <ydk/codec_service.hpp>
+#include <ydk/path_api.hpp>
+#include <ydk_ydktest/ydktest_sanity.hpp>
+#include <ydk_ydktest/ydktest_sanity_types.hpp>
+#include <ydk_ydktest/oc_pattern.hpp>
+
+#include <ydk_ydktest_new/ietf_system.hpp>
 
 #include "config.hpp"
 #include "catch.hpp"
@@ -257,8 +260,7 @@ config_runner_1(ydktest_sanity::Runner *runner)
 
 TEST_CASE("single_encode")
 {
-	path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
+    CodecServiceProvider codec_provider{EncodingFormat::XML};
 
     CodecService codec_service{};
 
@@ -272,8 +274,8 @@ TEST_CASE("single_encode")
 
 TEST_CASE("multiple_encode")
 {
-    path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
+
+    CodecServiceProvider codec_provider{EncodingFormat::XML};
     CodecService codec_service{};
 
     auto runner1 = std::make_unique<ydktest_sanity::Runner>();
@@ -296,8 +298,8 @@ TEST_CASE("multiple_encode")
 
 TEST_CASE("test_oc_pattern")
 {
-    path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
+
+    CodecServiceProvider codec_provider{EncodingFormat::XML};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, XML_OC_PATTERN_PAYLOAD, make_unique<oc_pattern::OcA>());
@@ -308,8 +310,8 @@ TEST_CASE("test_oc_pattern")
 
 TEST_CASE("enum_2")
 {
-    path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
+
+    CodecServiceProvider codec_provider{EncodingFormat::XML};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, XML_ENUM_PAYLOAD_2, make_unique<ydktest_sanity::Runner>());
@@ -319,8 +321,8 @@ TEST_CASE("enum_2")
 
 TEST_CASE("single_decode")
 {
-    path::Repository repo{TEST_HOME};
-    CodecServiceProvider codec_provider{repo,EncodingFormat::JSON};
+
+    CodecServiceProvider codec_provider{EncodingFormat::JSON};
     CodecService codec_service{};
 
     auto entity = codec_service.decode(codec_provider, JSON_RUNNER_PAYLOAD_1, make_unique<ydktest_sanity::Runner>());
@@ -344,8 +346,8 @@ TEST_CASE("single_decode")
 
 TEST_CASE("encode_decode")
 {
-     path::Repository repo{TEST_HOME};
-     CodecServiceProvider codec_provider{repo,EncodingFormat::XML};
+
+     CodecServiceProvider codec_provider{EncodingFormat::XML};
      CodecService codec_service{};
 
      std::string test = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one><name>test</name></one></runner>";
@@ -364,4 +366,46 @@ TEST_CASE("encode_decode")
      runner->one->name = "test";
 
      CHECK(entity_ptr->one->name == runner->one->name);
+}
+
+TEST_CASE("multiple_bundles_codec")
+{
+    CodecServiceProvider codec_provider{EncodingFormat::XML};
+
+    CodecService codec_service{};
+
+    auto runner = std::make_unique<ydktest_sanity::Runner>();
+    config_runner_1(runner.get());
+    std::string xml = codec_service.encode(codec_provider, *runner, true);
+    CHECK(XML_RUNNER_PAYLOAD_1 == xml);
+
+    auto system = std::make_unique<ietf_system::System>();
+    system->contact = "1223";
+    xml = codec_service.encode(codec_provider, *system, true);
+    CHECK(xml == "<system xmlns=\"urn:ietf:params:xml:ns:yang:ietf-system\">\n"
+            "  <contact>1223</contact>\n"
+            "</system>\n");
+
+    xml = codec_service.encode(codec_provider, *runner, true);
+    CHECK(XML_RUNNER_PAYLOAD_1 == xml);
+
+    xml = codec_service.encode(codec_provider, *system, true);
+    CHECK(xml == "<system xmlns=\"urn:ietf:params:xml:ns:yang:ietf-system\">\n"
+            "  <contact>1223</contact>\n"
+            "</system>\n");
+}
+
+TEST_CASE("user_provided_repo")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    CodecServiceProvider codec_provider{repo, EncodingFormat::XML};
+
+    CodecService codec_service{};
+
+    auto runner = std::make_unique<ydktest_sanity::Runner>();
+
+    config_runner_1(runner.get());
+
+    std::string xml = codec_service.encode(codec_provider, *runner, true);
+    CHECK(XML_RUNNER_PAYLOAD_1 == xml);
 }

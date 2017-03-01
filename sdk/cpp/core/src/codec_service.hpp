@@ -43,8 +43,8 @@ public:
 
     std::unique_ptr<Entity> decode(CodecServiceProvider & provider, std::string & payload, std::unique_ptr<Entity> entity);
     std::map<std::string, std::unique_ptr<Entity>> decode(CodecServiceProvider & provider,
-        std::map<std::string, std::string> & payload_map,
-        std::map<std::string, std::unique_ptr<Entity>> entity_map);
+                            std::map<std::string, std::string> & payload_map,
+                            std::map<std::string, std::unique_ptr<Entity>> entity_map);
 };
 }
 

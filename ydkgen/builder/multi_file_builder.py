@@ -20,7 +20,7 @@
 
 """
 from ydkgen.api_model import Class, Package
-from ydkgen.common import sort_classes_at_same_level
+from ydkgen.common import sort_classes_at_same_level, get_include_guard_name
 
 
 class MultiFile(object):
@@ -35,7 +35,7 @@ class MultiFileHeader(MultiFile):
     def __init__(self, package, file_index, fragmented):
         super(MultiFileHeader, self).__init__(fragmented)
         self.file_name = _get_header_name(package, file_index)
-        self.include_guard = _get_include_guard_name(package, file_index)
+        self.include_guard = get_include_guard_name(package.name, file_index)
 
 
 class MultiFileSource(MultiFile):
@@ -181,9 +181,3 @@ def _get_source_name(package, file_index=-1):
         return '{0}_{1}.cpp'.format(package.name, file_index)
     return '{0}.cpp'.format(package.name)
 
-
-def _get_include_guard_name(package, file_index=-1):
-        if file_index > -1:
-            return '_{0}_{1}_'.format(package.name.upper(), file_index)
-        else:
-            return '_{0}_'.format(package.name.upper())

@@ -47,13 +47,13 @@ Represents a Node in the SchemaTree.
 
         :return: ``SchemaNode*`` the children of this node.
 
-    .. cpp:function:: virtual std::vector<SchemaNode*> children() const
+    .. cpp:function:: virtual std::vector<std::unique_ptr<SchemaNode>> & children() const
 
         Returns the children of this :cpp:class:`SchemaNode <SchemaNode>` in the NodeTree.
 
-        :return: ``std::vector<SchemaNode*>`` the pointer to the root.
+        :return: Child schema nodes.
 
-    .. cpp:function:: virtual const SchemaNode* root() const noexcept
+    .. cpp:function:: virtual const SchemaNode& root() const noexcept
 
         Get the root of NodeTree this node is part of
 
@@ -70,13 +70,3 @@ Represents a Node in the SchemaTree.
         Returns vector of YANG statement corresponding the the keys.
 
         :return: Vector of :cpp:class:`Statement` that represent keys.
-
-    .. cpp:function:: virtual SchemaValueType* type() const
-
-        Returns the pointer to the type associated with this schema node.
-
-        .. note::
-
-            This method will only work for :cpp:class:`SchemaNode<SchemaNode>` that represent a ``leaf`` or ``leaf-list``. Otherwise a ``nullptr`` will be returned.
-
-        :return: Pointer to :cpp:class:`SchemaValueType<SchemaValueType>` or ``nullptr``. User should not free this pointer it is contained within the :cpp:class:`SchemaNode<SchemaNode>` so destroying the :cpp:class:`SchemaNode<SchemaNode>`.

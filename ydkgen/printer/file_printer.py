@@ -82,3 +82,12 @@ class FilePrinter(object):
                     if ext == identity:
                         return True
         return False
+
+    def _print_include_guard_header(self, include_guard):
+        self.ctx.writeln('#ifndef {0}'.format(include_guard))
+        self.ctx.writeln('#define {0}'.format(include_guard))
+        self.ctx.bline()
+
+    def _print_include_guard_trailer(self, include_guard):
+        self.ctx.bline()
+        self.ctx.writeln('#endif /* {0} */'.format(include_guard))

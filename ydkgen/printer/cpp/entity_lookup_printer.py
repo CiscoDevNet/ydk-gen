@@ -20,6 +20,7 @@ entity_lookup_printer.py
  Prints top entity lookup map
 
 """
+from ydkgen.common import snake_case, get_include_guard_name
 from ydkgen.printer.file_printer import FilePrinter
 
 
@@ -29,6 +30,17 @@ class EntityLookUpPrinter(FilePrinter):
         self.headers = None
         self.entity_lookup = None
         self.capability_lookup = None
+
+    def print_header(self, bundle_name):
+        self.bundle_name = bundle_name
+        self._print_include_guard_header(get_include_guard_name('entity_lookup'))
+        self.ctx.writeln('namespace ydk')
+        self.ctx.writeln('{')
+        self.ctx.bline()
+        self.ctx.writeln("void {}_augment_lookup_tables();".format(snake_case(self.bundle_name)))
+        self.ctx.bline()
+        self.ctx.writeln('}')
+        self._print_include_guard_trailer(get_include_guard_name('entity_lookup'))
 
     def print_source(self, packages, bundle_name):
         self.bundle_name = bundle_name
@@ -47,6 +59,7 @@ class EntityLookUpPrinter(FilePrinter):
     def _add_common_headers(self, unique_headers):
         unique_headers.add('#include <ydk/entity_lookup.hpp>')
         unique_headers.add('#include <ydk/path_api.hpp>')
+        unique_headers.add('#include "generated_entity_lookup.hpp"')
 
     def _init_insert_stmts(self, packages):
         capability_lookup = set()
@@ -78,7 +91,7 @@ class EntityLookUpPrinter(FilePrinter):
         self.ctx.writeln('namespace ydk')
         self.ctx.writeln('{')
         self.ctx.bline()
-        self.ctx.writelns(["void augment_lookup_tables()",
+        self.ctx.writelns(["void {}_augment_lookup_tables()".format(snake_case(self.bundle_name)),
                            "{"])
 
         self.ctx.bline()

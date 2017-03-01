@@ -2533,7 +2533,7 @@ void NetworkTopology::set_value(const std::string & value_path, std::string valu
 {
 }
 
-std::shared_ptr<Entity> NetworkTopology::clone_ptr()
+std::shared_ptr<Entity> NetworkTopology::clone_ptr() const
 {
     return std::make_unique<NetworkTopology>();
 }

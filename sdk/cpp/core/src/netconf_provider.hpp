@@ -47,6 +47,7 @@ private:
         std::shared_ptr<path::DataNode> handle_netconf_operation(path::Rpc& ydk_rpc) const;
         std::shared_ptr<path::DataNode> handle_read(path::Rpc& rpc) const;
         void initialize(path::Repository& repo);
+        std::string execute_payload(const std::string & payload) const;
 
 private:
         std::unique_ptr<NetconfClient> client;

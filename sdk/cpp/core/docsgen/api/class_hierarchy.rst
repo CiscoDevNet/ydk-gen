@@ -26,8 +26,4 @@ YDK C++ provides a new interface in the form of Path API, which can be used to w
    statement.rst
 
    nodes/core_node_data.rst
-   nodes/core_node_diagnostic.rst
    nodes/core_node_schema.rst
-
-   schema_constraint.rst   
-   values/core_value.rst
