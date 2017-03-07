@@ -51,8 +51,7 @@ set(libydk_src
     src/executor_service.cpp
     src/ietf_parser.cpp
     src/leaf_data.cpp
-    src/netconf_client.cpp
-    src/netconf_edit_operations.cpp
+    src/netconf_client.cpp    
     src/netconf_model_provider.cpp
     src/netconf_provider.cpp
     src/netconf_service.cpp
@@ -64,6 +63,7 @@ set(libydk_src
     src/validation_service.cpp
     src/value.cpp
     src/value_list.cpp
+    src/ydk_operation.cpp
     src/ydk_yang.cpp
     src/path/annotation.cpp
     src/path/capability.cpp

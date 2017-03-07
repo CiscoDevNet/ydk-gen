@@ -84,7 +84,7 @@ ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::Vali
     int ly_option = 0;
     switch(option) {
         case ydk::ValidationService::Option::DATASTORE:
-            option_str="DATATSTORE";
+            option_str="DATASTORE";
             ly_option = LYD_OPT_CONFIG;
             break;
         case ydk::ValidationService::Option::EDIT_CONFIG:

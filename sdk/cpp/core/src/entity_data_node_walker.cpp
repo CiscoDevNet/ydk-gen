@@ -41,7 +41,7 @@ using namespace std;
 namespace ydk
 {
 static void populate_data_node(Entity & entity, path::DataNode & data_node);
-static EntityPath get_top_entity_path(Entity & entity);
+static Entity & get_top_entity(Entity & entity);
 static void walk_children(Entity & entity, path::DataNode & data_node);
 static void populate_name_values(path::DataNode & parent_data_node, EntityPath & path);
 static bool data_node_is_leaf(path::DataNode & data_node);
@@ -57,16 +57,17 @@ static path::Annotation get_annotation(EditOperation operation);
 //////////////////////////////////////////////////////////////////////////
 path::DataNode& get_data_node_from_entity(Entity & entity, ydk::path::RootSchemaNode & root_schema)
 {
-    EntityPath root_path = get_top_entity_path(entity);
+    Entity & top_entity = get_top_entity(entity);
+    EntityPath root_path = top_entity.get_entity_path(nullptr);
     auto & root_data_node = root_schema.create(root_path.path);
-    if(is_set(entity.operation))
+    if(is_set(top_entity.operation))
     {
-        add_annotation_to_datanode(entity, root_data_node);
+        add_annotation_to_datanode(top_entity, root_data_node);
     }
 
     YLOG_TRACE("Root entity: {}", root_path.path);
     populate_name_values(root_data_node, root_path);
-    walk_children(entity, root_data_node)
+    walk_children(top_entity, root_data_node)
 ;
     return root_data_node;
 }
@@ -134,16 +135,16 @@ static void populate_name_values(path::DataNode & data_node, EntityPath & path)
         }
 
         YLOG_TRACE("Result: {}", (result?"success":"failure"));
-        }
+    }
 }
 
-static EntityPath get_top_entity_path(Entity & entity)
+static Entity & get_top_entity(Entity & entity)
 {
     if (entity.parent == nullptr)
     {
-        return entity.get_entity_path(nullptr);
+        return entity;
     }
-    return get_top_entity_path(*entity.parent);
+    return get_top_entity(*entity.parent);
 }
 
 static void add_annotation_to_datanode(const Entity & entity, path::DataNode & data_node)

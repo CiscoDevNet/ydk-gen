@@ -626,3 +626,32 @@ TEST_CASE("test_types_bits_list")
 //	ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
 //	REQUIRE(r_1->ytypes->built_in_t->bits_llist == r_2->ytypes->built_in_t->bits_llist);
 }
+
+TEST_CASE("string_leaflist")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    r_1->ytypes->built_in_t->llstring.append("0");
+    r_1->ytypes->built_in_t->llstring.append("1");
+    r_1->ytypes->built_in_t->llstring.append("2");
+    r_1->ytypes->built_in_t->llstring.append("3");
+    r_1->ytypes->built_in_t->llstring.append("4");
+    r_1->ytypes->built_in_t->llstring.append("5");
+    reply = crud.create(provider, *r_1);
+    REQUIRE(reply);
+
+    //READ
+    auto filter = make_unique<ydktest_sanity::Runner>();
+    auto r_read = crud.read(provider, *filter);
+    REQUIRE(r_read!=nullptr);
+    ydktest_sanity::Runner * r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
+    REQUIRE(r_1->ytypes->built_in_t->enum_llist == r_2->ytypes->built_in_t->enum_llist);
+}

@@ -182,10 +182,6 @@ TEST_CASE("bits")
 
 	auto & runner = schema.create("ydktest-sanity:runner", "");
 
-	//get the root
-	std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
-	REQUIRE( data_root != nullptr );
-
 	auto & ysanity = runner.create("ytypes/built-in-t/bits-value", "disable-nagle");
 
 	ydk::path::CodecService s{};
@@ -208,10 +204,6 @@ TEST_CASE("core_validate")
     ydk::path::RootSchemaNode& schema = sp.get_root_schema();
 
     auto & runner = schema.create("ietf-netconf:validate", "");
-
-    //get the root
-    std::shared_ptr<const ydk::path::DataNode> data_root{&runner.root()};
-    REQUIRE( data_root != nullptr );
 
     auto & ysanity = runner.create("source/candidate", "");
 

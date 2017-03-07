@@ -59,7 +59,7 @@ class DocPrinter(object):
     def print_table_of_contents(self, packages, bundle_name, bundle_version):
         self.lines = []
         title = '{0} bundle API'.format(bundle_name)
-        description = '\nModel API documentation for the {0} bundle. Version: {1}.\n'.format(bundle_name, bundle_version)
+        description = '\nModel API documentation for the {0} bundle.\n Version: **{1}**.\n'.format(bundle_name, bundle_version)
         self._print_title(title)
         self._append(description)
         self._print_toctree(packages, is_package=True)

@@ -34,6 +34,7 @@ using namespace ydk;
 
 std::string XML_OC_PATTERN_PAYLOAD = R"(<oc-A xmlns="http://cisco.com/ns/yang/oc-pattern">
   <a>Hello</a>
+<B><b>Hello</b></B>
 </oc-A>
 )";
 
@@ -299,10 +300,19 @@ TEST_CASE("multiple_encode")
 TEST_CASE("test_oc_pattern")
 {
 
-    CodecServiceProvider codec_provider{EncodingFormat::XML};
+    CodecServiceProvider codec_provider{EncodingFormat::JSON};
     CodecService codec_service{};
 
-    auto entity = codec_service.decode(codec_provider, XML_OC_PATTERN_PAYLOAD, make_unique<oc_pattern::OcA>());
+    auto entity = codec_service.decode(codec_provider, "{\n"
+            "  \"oc-pattern:oc-A\": [\n"
+            "    {\n"
+            "      \"a\": \"Hello\",\n"
+            "      \"B\": {\n"
+            "        \"b\": \"Hello\"\n"
+            "      }\n"
+            "    }\n"
+            "  ]\n"
+            "}", make_unique<oc_pattern::OcA>());
 
     oc_pattern::OcA * entity_ptr = dynamic_cast<oc_pattern::OcA*>(entity.get());
     CHECK(entity_ptr->a.get() == "Hello");

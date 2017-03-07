@@ -444,7 +444,7 @@ void ydk::path::DataNodeImpl::add_annotation(const ydk::path::Annotation& an)
     }
 
     std::string name { an.m_ns + ":" + an.m_name };
-    YLOG_TRACE("Adding annotation '{}' = {} to {}", name, an.m_val, m_node->schema->name);
+    YLOG_TRACE("Adding annotation '{} = {}' to {}", name, an.m_val, m_node->schema->name);
 
     struct lyd_attr* attr = lyd_insert_attr(m_node, nullptr, name.c_str(), an.m_val.c_str());
 

@@ -86,7 +86,7 @@ CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std:
 }
 
 std::unique_ptr<Entity>
-CodecService::decode(CodecServiceProvider & provider, std::string & payload, std::unique_ptr<Entity> entity)
+CodecService::decode(CodecServiceProvider & provider, const std::string & payload, std::unique_ptr<Entity> entity)
 {
     auto const & bundle_name = get_bundle_name(*entity);
     provider.initialize(bundle_name, get_bundle_yang_models_location(*entity), get_augment_capabilities_function(*entity));

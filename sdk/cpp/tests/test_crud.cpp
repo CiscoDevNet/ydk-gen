@@ -168,3 +168,32 @@ TEST_CASE("bgp_read_create")
 	reply = crud.update(provider, *bgp_read_ptr);
 	REQUIRE(reply);
 }
+
+
+TEST_CASE("bgp_read_non_top")
+{
+	ydk::path::Repository repo{TEST_HOME};
+	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+	CrudService crud{};
+	auto bgp_set = make_unique<openconfig_bgp::Bgp>();
+	bgp_set->global->config->as = 65001;
+	bgp_set->global->config->router_id = "1.2.3.4";
+        auto d = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
+        d->neighbor_address = "1.2.3.4";
+        d->config->neighbor_address = "1.2.3.4";
+        bgp_set->neighbors->neighbor.push_back(move(d));
+        auto q = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
+        q->neighbor_address = "1.2.3.5";
+        q->config->neighbor_address = "1.2.3.5";
+        bgp_set->neighbors->neighbor.push_back(move(q));
+	bool reply = crud.create(provider, *bgp_set);
+
+	REQUIRE(reply);
+
+	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
+	auto bgp_read = crud.read_config(provider, *(bgp_filter->neighbors));
+	REQUIRE(bgp_read!=nullptr);
+	openconfig_bgp::Bgp * bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
+	REQUIRE(bgp_read_ptr!=nullptr);
+
+}

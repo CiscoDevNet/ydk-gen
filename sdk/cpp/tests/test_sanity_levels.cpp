@@ -215,7 +215,7 @@ TEST_CASE("onelist")
     e_2->parent = r_1->one_list.get();
 	r_1->one_list->ldata.push_back(move(e_2));
 
-	reply = crud.create(provider, *r_1);
+	reply = crud.create(provider, *(r_1->one_list));
 	REQUIRE(reply);
 	auto r_read = crud.read(provider, *r_2);
 	REQUIRE(r_read != nullptr);

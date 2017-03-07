@@ -139,7 +139,7 @@ namespace ydk {
             }
         }
 
-        char* get_enlarged_data(const std::string & buffer)
+        char* get_enlarged_data(const std::string & buffer, const std::string & model_name)
         {
         	char *enlarged_data = nullptr;
 			/* enlarge data by 2 bytes for flex */
@@ -147,6 +147,7 @@ namespace ydk {
 			auto len = std::strlen(data);
 			enlarged_data = static_cast<char*>(std::malloc((len + 2) * sizeof *enlarged_data));
 			if (!enlarged_data) {
+			    YLOG_ERROR("Could not get model: {}", model_name);
 				throw(std::bad_alloc{});
 			}
 			memcpy(enlarged_data, data, len);
@@ -198,7 +199,7 @@ namespace ydk {
 
                         yang_file.close();
 
-                        return get_enlarged_data(model_data);
+                        return get_enlarged_data(model_data, yang_file_path);
                     } else {
                         YLOG_ERROR("Cannot open file {}", yang_file_path);
                         throw(YCPPIllegalStateError("Cannot open file"));
@@ -222,7 +223,7 @@ namespace ydk {
                     if(!model_data.empty()){
 
                         sink_to_file(yang_file_path, model_data);
-                        return get_enlarged_data(model_data);
+                        return get_enlarged_data(model_data, yang_file_path);
                     } else {
                         YLOG_TRACE("Cannot find model with module_name: {} module_rev: {}", module_name, (module_rev !=nullptr ? module_rev : ""));
 //                        throw(YCPPIllegalStateError{"Cannot find model"});
@@ -258,6 +259,7 @@ ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & 
     struct ly_ctx* ctx = ly_ctx_new(path.c_str());
 
     if(!ctx) {
+        YLOG_ERROR("Could not create repository in: {}", path);
         throw(std::bad_alloc{});
     }
 

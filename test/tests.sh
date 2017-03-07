@@ -284,7 +284,13 @@ function cpp_sanity_core_test {
 
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/ydktest
     cd $YDKGEN_HOME/sdk/cpp/core/build
-    run_exec_test make test
+    make test
+    local status=$?
+    if [ $status -ne 0 ]; then
+    # If the tests fail, try to run them in verbose to get more details for  # debug
+        ./tests/ydk_core_test -s
+        exit $status
+    fi
     cd $YDKGEN_HOME
 }
 

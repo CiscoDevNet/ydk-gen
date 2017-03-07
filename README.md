@@ -3,6 +3,7 @@
 **Table of Contents**
 
 - [YDK-GEN](#ydk-gen)
+  - [System requirements](#system-requirements)
   - [Installation](#installation)
     - [Setting up your environment](#setting-up-your-environment)
     - [Clone ydk-gen and install the requirements](#clone-ydk-gen-and-install-the-requirements)
@@ -43,7 +44,7 @@ Of course, many other libraries are used as an integral part of ydk-gen and its 
 The output of ydk-gen is either a core package, that defines services and providers, or a module bundle, consisting of APIs based on YANG models. Each module bundle is generated using a bundle profile and the ydk-gen tool. Developers can either use pre-packaged generated bundles (e.g. [ydk-py](http://cs.co/ydk-py)), or they can define their own bundle, consisting of a set of YANG models, using a bundle profile (e.g. [```ietf_0_1_1.json```](profiles/bundles/ietf_0_1_1.json)). This gives a developer the ability to customize the scope of their bundle based on their requirements.
 
 
-##System Requirements:
+##System requirements
 
 ####Linux
 Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
