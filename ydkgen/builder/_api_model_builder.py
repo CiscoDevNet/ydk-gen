@@ -326,16 +326,9 @@ class ApiModelBuilder(object):
         if hasattr(stmt, 'i_key') and stmt.i_key is not None:
             children.extend([s for s in stmt.i_key if s not in children])
 
-        black_sheep = []
         for child in stmt.i_children:
             if child not in children and child.keyword in keywords:
-                if child.keyword == 'input':
-                    black_sheep.append(child)
-                else:
                     children.append(child)
-
-        for child in black_sheep:
-            children.extend(self._walk_children(child, keywords))
 
         return children
 
