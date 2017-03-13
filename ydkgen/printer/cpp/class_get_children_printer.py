@@ -26,7 +26,7 @@ class ClassGetChildrenPrinter(object):
         self.ctx = ctx
 
     def print_class_get_children(self, clazz, children):
-        self.ctx.writeln('std::map<std::string, Entity*> & %s::get_children()' % clazz.qualified_cpp_name())
+        self.ctx.writeln('std::map<std::string, std::shared_ptr<Entity>> & %s::get_children()' % clazz.qualified_cpp_name())
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
         for child in children:
@@ -50,7 +50,7 @@ class ClassGetChildrenPrinter(object):
         self.ctx.writeln('if(children.find(c->get_segment_path()) == children.end())')
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
-        self.ctx.writeln('children[c->get_segment_path()] = c.get();')
+        self.ctx.writeln('children[c->get_segment_path()] = c;')
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
         self.ctx.lvl_dec()
@@ -63,7 +63,7 @@ class ClassGetChildrenPrinter(object):
         self.ctx.writeln('if(%s != nullptr)' % child.name)
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
-        self.ctx.writeln('children["%s"] = %s.get();' % (child.stmt.arg, child.name))
+        self.ctx.writeln('children["%s"] = %s;' % (child.stmt.arg, child.name))
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
         self.ctx.lvl_dec()

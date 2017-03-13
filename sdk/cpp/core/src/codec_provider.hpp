@@ -50,7 +50,7 @@ public:
 	EncodingFormat m_encoding;
 
 private:
-	std::map<std::string, std::unique_ptr<path::RootSchemaNode>> m_root_schema_table;
+	std::map<std::string, std::shared_ptr<path::RootSchemaNode>> m_root_schema_table;
 	bool user_provided_repo;
 	bool capabilities_augmented;
 	path::Repository m_repo;

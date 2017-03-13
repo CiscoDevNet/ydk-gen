@@ -35,7 +35,7 @@ class TestEntity:public Entity
 {
   public:
 	TestEntity()
-		: name{YType::str, "name"}, enabled{YType::boolean, "enabled"}, bits_field{YType::bits, "bits-field"}, child(make_unique<TestEntity::Child>())
+		: name{YType::str, "name"}, enabled{YType::boolean, "enabled"}, bits_field{YType::bits, "bits-field"}, child(make_shared<TestEntity::Child>())
 	{
 		yang_name = "test"; yang_parent_name = "";
 	}
@@ -65,7 +65,7 @@ class TestEntity:public Entity
 		return {{"test"}, {name.get_name_leafdata(), enabled.get_name_leafdata(), bits_field.get_name_leafdata()}};
 	}
 
-	Entity* get_child_by_name(const std::string & child_name, const std::string & child_path)
+	std::shared_ptr<Entity> get_child_by_name(const std::string & child_name, const std::string & child_path)
 	{
 		if(child_name == child->yang_name)
 		{
@@ -75,10 +75,10 @@ class TestEntity:public Entity
 			}
 			else
 			{
-				child = make_unique<TestEntity::Child>();
+				child = make_shared<TestEntity::Child>();
 				child->parent = this;
-				children[child_name] = child.get();
-				return child.get();
+				children[child_name] = child;
+				return child;
 			}
 		}
 		return nullptr;
@@ -100,7 +100,7 @@ class TestEntity:public Entity
 		}
 	}
 
-	std::map<std::string, Entity*> & get_children()
+	std::map<std::string, std::shared_ptr<Entity>> & get_children()
 	{
 		return children;
 	}
@@ -134,7 +134,7 @@ class TestEntity:public Entity
 			return {{"child"}, {child_val.get_name_leafdata()}};
 		}
 
-		Entity* get_child_by_name(const std::string & child_name, const std::string & child_path)
+		std::shared_ptr<Entity> get_child_by_name(const std::string & child_name, const std::string & child_path)
 		{
 			if(child_name == "multi-child")
 			{
@@ -145,21 +145,21 @@ class TestEntity:public Entity
 					{
 						if(children.find(child_path)==children.end())
 						{
-							children[child_path] = ch.get();
+							children[child_path] = ch;
 						}
 						return children.at(child_path);
 					}
 				}
-				auto ch = make_unique<TestEntity::Child::MultiChild>();
+				auto ch = make_shared<TestEntity::Child::MultiChild>();
 				ch->parent = this;
 				multi_child.push_back(move(ch));
-				children[child_path] = multi_child.back().get();
-				return multi_child.back().get();
+				children[child_path] = multi_child.back();
+				return multi_child.back();
 			}
 			return nullptr;
 		}
 
-		std::map<std::string, Entity*> & get_children()
+		std::map<std::string, std::shared_ptr<Entity>> & get_children()
 		{
 			return children;
 		}
@@ -204,12 +204,12 @@ class TestEntity:public Entity
 				return {{"multi-child[multi-key='"+child_key.get()+"']"}, {child_key.get_name_leafdata()}};
 			}
 
-			Entity* get_child_by_name(const std::string & child_name, const std::string & child_path)
+			std::shared_ptr<Entity> get_child_by_name(const std::string & child_name, const std::string & child_path)
 			{
 				return nullptr;
 			}
 
-			std::map<std::string, Entity*> & get_children()
+			std::map<std::string, std::shared_ptr<Entity>> & get_children()
 			{
 				return children;
 			}
@@ -225,13 +225,13 @@ class TestEntity:public Entity
 			YLeaf child_key;
 		};
 
-		vector<unique_ptr<TestEntity::Child::MultiChild> > multi_child;
+		vector<shared_ptr<TestEntity::Child::MultiChild> > multi_child;
 	};
 
   YLeaf name;
   YLeaf enabled;
   YLeaf bits_field;
-  unique_ptr<TestEntity::Child> child;
+  shared_ptr<TestEntity::Child> child;
 };
 
 TEST_CASE("test_create")
@@ -297,7 +297,7 @@ TEST_CASE("test_multi_read")
 	test.set_value("name", "test test");
 	REQUIRE(test.has_data() == true);
 
-	auto mchild = make_unique<TestEntity::Child::MultiChild>();
+	auto mchild = make_shared<TestEntity::Child::MultiChild>();
 	mchild->parent = test.child.get();
 	test.child->multi_child.push_back(move(mchild));
 

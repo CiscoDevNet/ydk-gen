@@ -45,7 +45,7 @@ project(ydk_{0}_test)
 enable_testing()
 
 set(CMAKE_MODULE_PATH ${{CMAKE_MODULE_PATH}} "${{CMAKE_SOURCE_DIR}}/CMakeModules/")
-set(test_cases {3}; ${{PROJECT_SOURCE_DIR}}/../../tests/main.cpp)
+set(test_cases {3}; ${{PROJECT_SOURCE_DIR}}/../../../../tests/main.cpp)
 
 
 find_library(xml2_location xml2)
@@ -57,9 +57,11 @@ find_library(xslt_location xslt)
 find_library(pthread_location pthread)
 find_library(dl_location dl)
 find_library(ydk_location ydk)
+find_package(PythonLibs REQUIRED)
 {1}
 
-include_directories(SYSTEM ${{PROJECT_SOURCE_DIR}}/../../tests)
+include_directories(SYSTEM ${{PROJECT_SOURCE_DIR}}/../test)
+include_directories(${{PYTHON_INCLUDE_PATH}})
 
 set(CMAKE_CXX_FLAGS         "${{CMAKE_CXX_FLAGS}} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
@@ -86,6 +88,7 @@ target_link_libraries(ydk_model_test
         ${{xslt_location}}
         ${{pthread_location}}
         ${{dl_location}}
+        ${{PYTHON_LIBRARIES}}
         -rdynamic
 )
 

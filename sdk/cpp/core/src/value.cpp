@@ -356,9 +356,13 @@ std::string get_bool_string(const std::string & value)
     {
         return "true";
     }
-    else
+    else if(value == "0" || value == "false")
     {
         return "false";
+    }
+    else
+    {
+        return value;
     }
 }
 

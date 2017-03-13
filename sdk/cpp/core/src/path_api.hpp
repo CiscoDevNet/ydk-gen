@@ -292,7 +292,7 @@ public:
     /// @return The DataNode instantiated or nullptr in case of error.
     /// @throws YCPPInvalidArgumentError if the arguments are invalid.
     ///
-    std::unique_ptr<DataNode> decode(const RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format);
+    std::shared_ptr<DataNode> decode(const RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format);
 };
 
 
@@ -929,7 +929,7 @@ public:
     /// @param[in] capabilities vector of Capability
     /// @return pointer to the RootSchemaNode or nullptr if one could not be created.
     ///
-    std::unique_ptr<RootSchemaNode> create_root_schema(const std::vector<path::Capability> & capabilities) ;
+    std::shared_ptr<RootSchemaNode> create_root_schema(const std::vector<path::Capability> & capabilities) ;
 
     ///
     /// @brief Adds a model provider.

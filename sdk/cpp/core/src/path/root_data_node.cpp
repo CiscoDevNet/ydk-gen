@@ -73,7 +73,7 @@ ydk::path::RootDataImpl::create(const std::string& path, const std::string& valu
     }
 
     std::string start_seg = m_path + segments[0];
-    YLOG_TRACE("Creating root data node with path '{}'", start_seg);
+    YLOG_DEBUG("Creating root data node with path '{}'", start_seg);
     struct lyd_node* dnode = lyd_new_path(m_node, m_ctx, start_seg.c_str(),
                                           segments.size() == 1 ? (void*)value.c_str():nullptr, LYD_ANYDATA_SXML, 0);
 
@@ -204,7 +204,7 @@ ydk::path::RootDataImpl::find(const std::string& path) const
 
     schema_path+=path;
 
-    YLOG_TRACE("Looking for schema nodes path in root: '{}'", schema_path);
+    YLOG_DEBUG("Looking for schema nodes path in root: '{}'", schema_path);
     const struct lys_node* found_snode = ly_ctx_get_node(m_node->schema->module->ctx, nullptr, schema_path.c_str());
 
     if(found_snode)

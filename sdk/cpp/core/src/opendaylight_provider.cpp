@@ -63,7 +63,7 @@ unique_ptr<path::ServiceProvider> OpenDaylightServiceProvider::create_provider_f
 		YLOG_ERROR("Invalid node id {}", node_id);
 		throw(YCPPServiceProviderError{"Invalid node id " + node_id});
 	}
-	YLOG_TRACE("Creating and returning provider for {}", node_id);
+	YLOG_DEBUG("Creating and returning provider for {}", node_id);
 	vector<string> node_capabilities{};
 	const auto & node = odl_nodes[node_id];
 
@@ -79,7 +79,7 @@ unique_ptr<path::ServiceProvider> OpenDaylightServiceProvider::create_provider_f
 	auto capabilities = capabilities_parser.parse(node_capabilities);
 	return make_unique<RestconfServiceProvider>(
 							make_unique<RestconfClient>(address, username, password, port, get_encoding_string(encoding)),
-							unique_ptr<path::RootSchemaNode>(m_repo.create_root_schema(capabilities)),
+							m_repo.create_root_schema(capabilities),
 							"PUT",
 							string("/config/network-topology:network-topology/topology/topology-netconf/node/")+node_id+string("/yang-ext:mount"),
 							string("/operational/network-topology:network-topology/topology/topology-netconf/node/")+node_id+string("/yang-ext:mount"),
@@ -91,7 +91,7 @@ path::ServiceProvider & OpenDaylightServiceProvider::get_node_provider(const str
 {
 	if(providers.find(node_id) != providers.end())
 	{
-		YLOG_TRACE("Returning existing provider for {}", node_id);
+		YLOG_DEBUG("Returning existing provider for {}", node_id);
 		return *(providers[node_id]);
 	}
 

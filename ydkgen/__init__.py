@@ -122,7 +122,7 @@ class YdkGenerator(object):
         _set_original_bundle_name_for_packages(all_bundles, packages, curr_bundle)
         gen_api_root = self._init_bundle_directories(packages=packages, bundle=curr_bundle)
 
-        generated_files = self._print_packages(packages, gen_api_root, curr_bundle.name, curr_bundle.str_version)
+        generated_files = self._print_packages(packages, gen_api_root, curr_bundle)
 
         yang_models = self._create_models_archive(curr_bundle, gen_api_root)
 
@@ -169,7 +169,7 @@ class YdkGenerator(object):
 
         return packages
 
-    def _print_packages(self, pkgs, output_dir, bundle_name, bundle_version):
+    def _print_packages(self, pkgs, output_dir, bundle):
         """ Emit generated APIs.
 
         Args:
@@ -179,7 +179,7 @@ class YdkGenerator(object):
         """
         global classes_per_source_file
         factory = printer_factory.PrinterFactory()
-        ydk_printer = factory.get_printer(self.language)(output_dir, bundle_name, bundle_version, self.generate_tests, self.sort_clazz)
+        ydk_printer = factory.get_printer(self.language)(output_dir, bundle, self.generate_tests, self.sort_clazz)
         generated_files = ydk_printer.emit(pkgs, classes_per_source_file)
         return generated_files
 
@@ -224,6 +224,7 @@ class YdkGenerator(object):
                                  'ydk-models-%s' % bundle.name,
                                  bundle.str_version,
                                  bundle.dependencies)
+            _modify_python_manifest(gen_api_root, bundle.name)
 
         # write init file for bundle models directory.
         bundle_model_dir = os.path.join(gen_api_root, 'ydk')
@@ -250,7 +251,7 @@ class YdkGenerator(object):
         shutil.rmtree(gen_api_root)
         logger.debug('Copying %s to %s' % (target_dir, gen_api_root))
         dir_util.copy_tree(target_dir, gen_api_root)
-        
+
     def _create_models_archive(self, bundle, target_dir):
         '''
         Creates yang models archive as part of bundle package.
@@ -328,6 +329,15 @@ def _modify_python_setup(gen_api_root, package_name, version, dependencies):
             print(line, end='')
 
 
+def _modify_python_manifest(gen_api_root, bundle_name):
+    manifest_file = os.path.join(gen_api_root, 'MANIFEST.in')
+    for line in fileinput.input(manifest_file, inplace=True):
+        if '$NAME$' in line:
+            print(line.replace('$NAME$', bundle_name))
+        else:
+            print(line, end='')
+
+
 def _modify_cpp_cmake(gen_api_root, bundle_name, version, source_files, header_files, model_names):
     """ Modify CMakeLists.txt template for cpp libraries.
 
@@ -338,8 +348,8 @@ def _modify_cpp_cmake(gen_api_root, bundle_name, version, source_files, header_f
     """
     cmake_file = os.path.join(gen_api_root, 'CMakeLists.txt')
 
-    source_files = ['ydk/models/' + s for s in source_files]
-    header_files = ['ydk/models/' + s for s in header_files]
+    source_files = ['ydk/models/{}/'.format(bundle_name) + s for s in source_files]
+    header_files = ['ydk/models/{}/'.format(bundle_name) + s for s in header_files]
     source_file_names = ' '.join(source_files)
     header_file_names = ' '.join(header_files)
     model_file_names = ' '.join(model_names)

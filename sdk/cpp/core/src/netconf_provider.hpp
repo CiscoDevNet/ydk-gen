@@ -52,7 +52,7 @@ private:
 private:
         std::unique_ptr<NetconfClient> client;
         std::unique_ptr<path::ModelProvider> model_provider;
-        std::unique_ptr<ydk::path::RootSchemaNode> root_schema;
+        std::shared_ptr<ydk::path::RootSchemaNode> root_schema;
 
         std::vector<std::string> server_capabilities;
 

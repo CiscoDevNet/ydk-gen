@@ -52,7 +52,7 @@ RestconfServiceProvider::RestconfServiceProvider(path::Repository & repo, const 
 }
 
 RestconfServiceProvider::RestconfServiceProvider(std::unique_ptr<RestconfClient> client,
-		std::unique_ptr<ydk::path::RootSchemaNode> root_schema, const std::string & edit_method,
+		std::shared_ptr<ydk::path::RootSchemaNode> root_schema, const std::string & edit_method,
 		const std::string & config_url_root, const std::string & state_url_root, EncodingFormat encoding)
 	: client(move(client)), root_schema(move(root_schema)), encoding(encoding), edit_method(edit_method),
 	  config_url_root(config_url_root), state_url_root(state_url_root)
@@ -74,17 +74,12 @@ void RestconfServiceProvider::initialize(path::Repository & repo)
 					);
 	capabilities = capabilities_parser.parse(server_capabilities);
 
-	root_schema = unique_ptr<ydk::path::RootSchemaNode>(
-									repo.create_root_schema
-										(
-										capabilities
-										)
-									);
+	root_schema = repo.create_root_schema(capabilities);
 }
 
 RestconfServiceProvider::~RestconfServiceProvider()
 {
-	YLOG_DEBUG("Disconnected from device");
+	YLOG_INFO("Disconnected from device");
 }
 
 EncodingFormat RestconfServiceProvider::get_encoding() const
@@ -176,7 +171,7 @@ std::shared_ptr<path::DataNode> RestconfServiceProvider::handle_read(path::Rpc& 
 		url = state_url_root + get_module_url_path(datanode->children()[0]->schema().path());
 	}
 
-    YLOG_DEBUG("Performing GET on URL {}", url);
+    YLOG_INFO("Performing GET on URL {}", url);
     return handle_read_reply( client->execute("GET", url, ""), *root_schema, encoding);
 }
 
@@ -195,7 +190,7 @@ std::shared_ptr<path::DataNode> RestconfServiceProvider::handle_edit(path::Rpc& 
     auto datanode = codec_service.decode(*root_schema, header_data, encoding);
 	string url = config_url_root + get_module_url_path(datanode->children()[0]->schema().path());
 
-    YLOG_DEBUG("Performing {} on URL {}. Payload: ", operation, url, header_data);
+    YLOG_INFO("Performing {} on URL {}. Payload: ", operation, url, header_data);
     client->execute(operation, url, header_data);
 
     return nullptr;
@@ -208,7 +203,7 @@ static std::shared_ptr<path::DataNode> handle_read_reply(const string & reply, p
 	auto datanode = std::shared_ptr<path::DataNode>(codec_service.decode(root_schema, reply, encoding));
 
 	if(!datanode){
-		YLOG_DEBUG("Codec service failed to decode datanode");
+		YLOG_INFO("Codec service failed to decode datanode");
 		throw(YCPPError{"Problems deserializing output"});
 	}
 	return datanode;

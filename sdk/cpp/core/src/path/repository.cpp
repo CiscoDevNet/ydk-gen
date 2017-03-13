@@ -84,7 +84,7 @@ void libyang_log_callback(LY_LOG_LEVEL level, const char *msg, const char *path)
         case LY_LLWRN:
         case LY_LLVRB:
         case LY_LLDBG:
-            YLOG_TRACE("Libyang TRACE: {}", error_message.str());
+            YLOG_DEBUG("Libyang TRACE: {}", error_message.str());
             break;
     }
 }
@@ -135,7 +135,7 @@ namespace ydk {
                 sink << contents ;
                 sink.close();
             } else {
-                YLOG_DEBUG("Cannot sink to file {}", filename);
+                YLOG_INFO("Cannot sink to file {}", filename);
             }
         }
 
@@ -158,7 +158,7 @@ namespace ydk {
         extern "C" char* get_module_callback(const char* module_name, const char* module_rev, const char *submod_name, const char *sub_rev,
                                        void* user_data, LYS_INFORMAT* format, void (**free_module_data)(void *model_data))
         {
-            YLOG_TRACE("Getting module {} submodule {}", module_name, (submod_name?submod_name:"none"));
+            YLOG_DEBUG("Getting module {} submodule {}", module_name, (submod_name?submod_name:"none"));
             *free_module_data = c_free_data;
 
             if(user_data != nullptr){
@@ -167,7 +167,7 @@ namespace ydk {
                 auto repo = reinterpret_cast<const Repository*>(user_data);
 
                 //first check our directory for a file of the form <module-module_name>@<module_rev-date>.yang
-                YLOG_TRACE("Looking for file in folder: {}", repo->path);
+                YLOG_DEBUG("Looking for file in folder: {}", repo->path);
                 std::string yang_file_path{repo->path};
                 std::string yang_file_path_no_revision{repo->path};
                 yang_file_path += '/';
@@ -182,10 +182,11 @@ namespace ydk {
                     yang_file_path += sub_rev;
                 }
                 yang_file_path += ".yang";
-                YLOG_TRACE("Opening file {}", yang_file_path);
+                YLOG_DEBUG("Opening file {}", yang_file_path);
 
-                YLOG_TRACE("Path found with rev: {}. Path without rev: {}",
+                YLOG_DEBUG("Path found with rev: {}. Path without rev: {}",
                         file_exists(yang_file_path), file_exists(yang_file_path_no_revision));
+
                 if(file_exists(yang_file_path) || file_exists(yang_file_path_no_revision)) {
                     //open the file read the data and return it
                     std::string model_data {""};
@@ -207,17 +208,16 @@ namespace ydk {
 
                 }
 
-
                 for(auto model_provider : repo->get_model_providers()) {
                     std::string model_data{};
                     if(submod_name)
                     {
-                        YLOG_TRACE("Getting submodule using get-schema {}", submod_name);
+                        YLOG_DEBUG("Getting submodule using get-schema {}", submod_name);
                         model_data = model_provider->get_model(submod_name, sub_rev != nullptr ? sub_rev : "", m_format);
                     }
                     else
                     {
-                        YLOG_TRACE("Getting module using get-schema {}", module_name);
+                        YLOG_DEBUG("Getting module using get-schema {}", module_name);
                         model_data = model_provider->get_model(module_name, module_rev != nullptr ? module_rev : "", m_format);
                     }
                     if(!model_data.empty()){
@@ -225,13 +225,13 @@ namespace ydk {
                         sink_to_file(yang_file_path, model_data);
                         return get_enlarged_data(model_data, yang_file_path);
                     } else {
-                        YLOG_TRACE("Cannot find model with module_name: {} module_rev: {}", module_name, (module_rev !=nullptr ? module_rev : ""));
+                        YLOG_DEBUG("Cannot find model with module_name: {} module_rev: {}", module_name, (module_rev !=nullptr ? module_rev : ""));
 //                        throw(YCPPIllegalStateError{"Cannot find model"});
                         return {};
                     }
                 }
             }
-            YLOG_TRACE("Cannot find model with module_name: {}", module_name);
+            YLOG_DEBUG("Cannot find model with module_name: {}", module_name);
 //            throw(YCPPIllegalStateError{"Cannot find model"});
             return {};
         }
@@ -239,7 +239,7 @@ namespace ydk {
 
 }
 
-std::unique_ptr<ydk::path::RootSchemaNode>
+std::shared_ptr<ydk::path::RootSchemaNode>
 ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & capabilities)
 {
     ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
@@ -253,9 +253,9 @@ ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & 
             break;
         }
         create_if_does_not_exist(path);
-        YLOG_DEBUG("Path where models are to be downloaded: {}", path);
+        YLOG_INFO("Path where models are to be downloaded: {}", path);
     }
-    YLOG_TRACE("Creating libyang context in path {}", path);
+    YLOG_DEBUG("Creating libyang context in path {}", path);
     struct ly_ctx* ctx = ly_ctx_new(path.c_str());
 
     if(!ctx) {
@@ -271,30 +271,44 @@ ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & 
 
     for (auto c : capabilities)
     {
+        for (auto d: c.deviations)
+        {
+            auto res = ly_ctx_get_module(ctx, d.c_str(), 0);
+            if (!res) {
+                YLOG_DEBUG("Fetch deviation module name: {}", d);
+                res = ly_ctx_load_module(ctx, d.c_str(), 0);
+            }
+            else {
+                YLOG_DEBUG("Cache hit deviation module name: {}", d);
+            }
+            if (!res) {
+                YLOG_DEBUG("Unable to parse deviation module: {}", d);
+                continue;
+            }
+        }
         if(c.module == "ietf-yang-library")
             continue;
-        YLOG_TRACE("Module {} Revision ", c.module.c_str(), c.revision.c_str());
+        YLOG_DEBUG("Module {} Revision {}", c.module.c_str(), c.revision.c_str());
         auto p = ly_ctx_get_module(ctx, c.module.c_str(), c.revision.empty() ? 0 : c.revision.c_str());
 
         if(!p)
         {
             p = ly_ctx_load_module(ctx, c.module.c_str(), c.revision.empty() ? 0 : c.revision.c_str());
         } else {
-            YLOG_TRACE("Cache hit module name: {}", c.module);
+            YLOG_DEBUG("Cache hit module name: {}", c.module);
         }
 
         if (!p) {
-            YLOG_TRACE("Unable to parse module: {}", c.module);
+            YLOG_DEBUG("Unable to parse module: {}", c.module);
             continue;
         }
         for (auto f : c.features)
             lys_features_enable(p, f.c_str());
-
     }
 
     ly_verb(LY_LLVRB); // enable libyang logging after model download has completed
     RootSchemaNodeImpl* rs = new RootSchemaNodeImpl{ctx};
-    return std::unique_ptr<RootSchemaNode>(rs);
+    return std::shared_ptr<RootSchemaNode>(rs);
 }
 
 ///

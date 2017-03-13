@@ -34,9 +34,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Os -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG   "-g -O0")
 
 
-set(libydk_@BRIEF_NAME@_src ydk/models/generated_entity_lookup.cpp @SOURCE_FILES@)
+set(libydk_@BRIEF_NAME@_src ydk/models/@BRIEF_NAME@/generated_entity_lookup.cpp @SOURCE_FILES@)
 
-set(libydk_@BRIEF_NAME@_headers ydk/models/bundle_info.hpp @HEADER_FILES@)
+set(libydk_@BRIEF_NAME@_headers ydk/models/@BRIEF_NAME@/bundle_info.hpp @HEADER_FILES@)
 
 set(libydk_@BRIEF_NAME@_yang @YANG_FILES@)
 
@@ -64,10 +64,11 @@ find_package(LibYDK REQUIRED)
 
 include_directories(
     ${LIBYDK_INCLUDE_DIRS}
-    ${CMAKE_SOURCE_DIR}/ydk/models
+    ${CMAKE_SOURCE_DIR}/ydk/models/@BRIEF_NAME@
 )
 
-configure_file("${CMAKE_SOURCE_DIR}/bundle_info.hpp.in" "${CMAKE_SOURCE_DIR}/ydk/models/bundle_info.hpp" ESCAPE_QUOTES @ONLY)
+configure_file("${CMAKE_SOURCE_DIR}/bundle_info.hpp.in" "${CMAKE_SOURCE_DIR}/ydk/models/@BRIEF_NAME@/bundle_info.hpp" ESCAPE_QUOTES @ONLY)
+configure_file("${CMAKE_SOURCE_DIR}/tests/catch.hpp" "${CMAKE_SOURCE_DIR}/ydk/models/@BRIEF_NAME@/test/catch.hpp" COPYONLY)
 
 add_library(ydk_@BRIEF_NAME@ STATIC ${libydk_@BRIEF_NAME@_src})
 

@@ -81,7 +81,7 @@ def is_equal(lhs, rhs):
         pass
     elif is_builtin_type(lhs) or is_builtin_type(rhs):
         try:
-            if lhs != rhs:
+            if lhs != rhs and not _equal_enum(lhs, rhs):
                 errtyp, ret = ErrNo.WRONG_VALUE, False
         except Exception:
             errtyp, ret = ErrNo.WRONG_TYPES, False
@@ -113,7 +113,7 @@ def is_equal(lhs, rhs):
                 continue
             elif is_builtin_type(dict_lhs[k]) or is_builtin_type(dict_rhs[k]):
                 try:
-                    if dict_lhs[k] != dict_rhs[k]:
+                    if dict_lhs[k] != dict_rhs[k] and not _equal_enum(dict_lhs[k], dict_rhs[k]):
                         lhs = dict_lhs[k]
                         rhs = dict_rhs[k]
                         errtyp, ret = ErrNo.WRONG_VALUE, False
@@ -129,3 +129,9 @@ def is_equal(lhs, rhs):
         err_msg.print_err()
 
     return ret
+
+
+def _equal_enum(rhs, lhs):
+    return all((isinstance(rhs, Enum),
+                isinstance(lhs, Enum),
+                rhs.name == lhs.name))

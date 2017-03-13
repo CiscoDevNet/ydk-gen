@@ -41,10 +41,10 @@ public:
     std::string encode(CodecServiceProvider & provider, Entity & entity, bool pretty=false);
     std::map<std::string, std::string> encode(CodecServiceProvider & provider, std::map<std::string, std::unique_ptr<Entity>> & entity, bool pretty=false);
 
-    std::unique_ptr<Entity> decode(CodecServiceProvider & provider, const std::string & payload, std::unique_ptr<Entity> entity);
-    std::map<std::string, std::unique_ptr<Entity>> decode(CodecServiceProvider & provider,
-                            std::map<std::string, std::string> & payload_map,
-                            std::map<std::string, std::unique_ptr<Entity>> entity_map);
+    std::shared_ptr<Entity> decode(CodecServiceProvider & provider, const std::string & payload, std::shared_ptr<Entity> entity);
+    std::map<std::string, std::shared_ptr<Entity>> decode(CodecServiceProvider & provider,
+        std::map<std::string, std::string> & payload_map,
+        std::map<std::string, std::shared_ptr<Entity>> entity_map);
 };
 }
 

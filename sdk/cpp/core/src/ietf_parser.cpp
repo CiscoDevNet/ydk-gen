@@ -50,18 +50,18 @@ vector<string> IetfCapabilitiesXmlParser::parse(const string & capabilities_buff
 	vector<string> capabilities{};
 	if (doc == NULL)
 	{
-		YLOG_DEBUG("Empty capabilities");
+		YLOG_INFO("Empty capabilities");
 		return {};
 	}
 	xmlNodePtr cur = xmlDocGetRootElement(doc);
 	if (cur == NULL)
 	{
-		YLOG_DEBUG("Empty capabilities");
+		YLOG_INFO("Empty capabilities");
 		return {};
 	}
 	if (xmlStrcmp(cur->name, (const xmlChar *) "capabilities") != 0)
 	{
-		YLOG_DEBUG("Unexpected XML");
+		YLOG_INFO("Unexpected XML");
 		return {};
 	}
 	cur = cur->xmlChildrenNode;

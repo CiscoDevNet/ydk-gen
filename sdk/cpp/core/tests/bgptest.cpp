@@ -63,7 +63,7 @@ public:
 private:
     std::string m_searchdir;
     std::vector<ydk::path::Capability> m_capabilities;
-    std::unique_ptr<ydk::path::RootSchemaNode> root_schema;
+    std::shared_ptr<ydk::path::RootSchemaNode> root_schema;
 
 };
 }

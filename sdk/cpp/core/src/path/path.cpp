@@ -103,7 +103,7 @@ ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::Vali
     }
     ly_option = ly_option | LYD_OPT_NOAUTODEL;
 
-    YLOG_DEBUG("Validation called on {} with option {}", dn.path(), option_str);
+    YLOG_INFO("Validation called on {} with option {}", dn.path(), option_str);
 
     //what kind of a DataNode is this
     const ydk::path::DataNodeImpl & dn_impl = dynamic_cast<const ydk::path::DataNodeImpl&>(dn);
@@ -141,12 +141,12 @@ ydk::path::CodecService::encode(const ydk::path::DataNode& dn, ydk::EncodingForm
 
     if(format == ydk::EncodingFormat::JSON)
     {
-    	YLOG_TRACE("Performing encode operation on JSON");
+    	YLOG_DEBUG("Performing encode operation on JSON");
         scheme = LYD_JSON;
     }
     else
     {
-    	YLOG_TRACE("Performing encode operation on XML");
+    	YLOG_DEBUG("Performing encode operation on XML");
     }
 
     struct lyd_node* m_node = nullptr;
@@ -175,18 +175,18 @@ ydk::path::CodecService::encode(const ydk::path::DataNode& dn, ydk::EncodingForm
 
 }
 
-std::unique_ptr<ydk::path::DataNode>
+std::shared_ptr<ydk::path::DataNode>
 ydk::path::CodecService::decode(const RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format)
 {
     LYD_FORMAT scheme = LYD_XML;
     if (format == EncodingFormat::JSON)
     {
-    	YLOG_TRACE("Performing decode operation on JSON");
+    	YLOG_DEBUG("Performing decode operation on JSON");
         scheme = LYD_JSON;
     }
     else
     {
-    	YLOG_TRACE("Performing decode operation on XML");
+    	YLOG_DEBUG("Performing decode operation on XML");
     }
 
     const RootSchemaNodeImpl & rs_impl = dynamic_cast<const RootSchemaNodeImpl &>(root_schema);
@@ -200,7 +200,7 @@ ydk::path::CodecService::decode(const RootSchemaNode & root_schema, const std::s
     }
 
 
-    YLOG_TRACE("Performing decode operation");
+    YLOG_DEBUG("Performing decode operation");
     RootDataImpl* rd = new RootDataImpl{rs_impl, rs_impl.m_ctx, "/"};
     rd->m_node = root;
 
@@ -212,5 +212,5 @@ ydk::path::CodecService::decode(const RootSchemaNode & root_schema, const std::s
         dnode = dnode->next;
     } while(dnode && dnode != nullptr && dnode != root);
 
-    return std::unique_ptr<ydk::path::DataNode>(rd);
+    return std::shared_ptr<ydk::path::DataNode>(rd);
 }

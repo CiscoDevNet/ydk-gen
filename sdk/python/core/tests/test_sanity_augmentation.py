@@ -22,7 +22,8 @@ import unittest
 
 from ydk.services import CRUDService
 from ydk.providers import NetconfServiceProvider
-from compare import is_equal
+from ydk.models.augmentation import ietf_aug_base_1
+from ydk.models.augmentation import ietf_aug_base_2
 
 
 class SanityYang(unittest.TestCase):
@@ -38,7 +39,7 @@ class SanityYang(unittest.TestCase):
 
     @classmethod
     def tearDownClass(self):
-        self.ncc.close()
+        pass
 
     def setUp(self):
         self.crud.delete(self.ncc, ietf_aug_base_1.Cpython())
@@ -67,7 +68,12 @@ class SanityYang(unittest.TestCase):
         self.crud.create(self.ncc, cpython)
         cpython_read = self.crud.read(self.ncc, ietf_aug_base_1.Cpython())
 
-        self.assertEqual(is_equal(cpython, cpython_read), True)
+        self.assertEqual(cpython.doc.ydktest_aug_1.aug_one, cpython_read.doc.ydktest_aug_1.aug_one)
+        self.assertEqual(cpython.doc.ydktest_aug_2.aug_two, cpython_read.doc.ydktest_aug_2.aug_two)
+        self.assertEqual(cpython.doc.ydktest_aug_4.aug_four, cpython_read.doc.ydktest_aug_4.aug_four)
+        self.assertEqual(cpython.lib.ydktest_aug_1.ydktest_aug_nested_1.aug_one, cpython_read.lib.ydktest_aug_1.ydktest_aug_nested_1.aug_one)
+        self.assertEqual(cpython.lib.ydktest_aug_2.ydktest_aug_nested_2.aug_two, cpython_read.lib.ydktest_aug_2.ydktest_aug_nested_2.aug_two)
+        self.assertEqual(cpython.lib.ydktest_aug_4.ydktest_aug_nested_4.aug_four, cpython_read.lib.ydktest_aug_4.ydktest_aug_nested_4.aug_four)
 
     def test_aug_base_2(self):
         cpython = ietf_aug_base_2.Cpython()
@@ -76,22 +82,11 @@ class SanityYang(unittest.TestCase):
         self.crud.create(self.ncc, cpython)
         cpython_read = self.crud.read(self.ncc, ietf_aug_base_2.Cpython())
 
-        self.assertEqual(is_equal(cpython, cpython_read), True)
+        self.assertEqual(cpython.tools.aug_four, cpython_read.tools.aug_four)
 
 
 if __name__ == '__main__':
-    # execute if and only if we have augmentation bundle is installed
-    import pip
     import sys
-    installed_packages = pip.get_installed_distributions()
-    installed_packages = {i.key for i in installed_packages}
-    augmentation_bundles = {'ydk-models-ietf',
-                            'ydk-models-ydktest-aug-ietf-1',
-                            'ydk-models-ydktest-aug-ietf-2',
-                            'ydk-models-ydktest-aug-ietf-4'}
-    if augmentation_bundles.issubset(installed_packages):
-        from ydk.models.ietf import ietf_aug_base_1
-        from ydk.models.ietf import ietf_aug_base_2
-        suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)
-        ret = not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
-        sys.exit(ret)
+    suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)
+    ret = not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
+    sys.exit(ret)

@@ -31,22 +31,22 @@ all:  ydktest-sanity-augm.fxs ydktest-sanity-types.fxs ydktest-sanity.fxs\
 	@echo "Build complete"
 
 ietf-aug-base-1.yang:
-	cp ../../../../../../yang/ydktest-aug-ietf/ietf-aug-base-1\@2016-07-01.yang ietf-aug-base-1.yang
+	cp ../../../../../../yang/ydktest-augmentation/ietf-aug-base-1\@2016-07-01.yang ietf-aug-base-1.yang
 
 ietf-aug-base-2.yang:
-	cp ../../../../../../yang/ydktest-aug-ietf/ietf-aug-base-2\@2016-07-01.yang ietf-aug-base-2.yang
+	cp ../../../../../../yang/ydktest-augmentation/ietf-aug-base-2\@2016-07-01.yang ietf-aug-base-2.yang
 
 oc-pattern.yang:
 	cp ../../models/oc-pattern\@2015-11-17.yang oc-pattern.yang
 
 ydktest-aug-ietf-1.yang:
-	cp ../../../../../../yang/ydktest-aug-ietf/ydktest-aug-ietf-1\@2016-06-17.yang ydktest-aug-ietf-1.yang
+	cp ../../../../../../yang/ydktest-augmentation/ydktest-aug-ietf-1\@2016-06-17.yang ydktest-aug-ietf-1.yang
 
 ydktest-aug-ietf-2.yang:
-	cp ../../../../../../yang/ydktest-aug-ietf/ydktest-aug-ietf-2\@2016-06-22.yang ydktest-aug-ietf-2.yang
+	cp ../../../../../../yang/ydktest-augmentation/ydktest-aug-ietf-2\@2016-06-22.yang ydktest-aug-ietf-2.yang
 
 ydktest-aug-ietf-4.yang:
-	cp ../../../../../../yang/ydktest-aug-ietf/ydktest-aug-ietf-4\@2016-06-27.yang ydktest-aug-ietf-4.yang
+	cp ../../../../../../yang/ydktest-augmentation/ydktest-aug-ietf-4\@2016-06-27.yang ydktest-aug-ietf-4.yang
 
 ydktest-sanity-augm.yang: ydktest-sanity.yang
 	cp ../../models/ydktest-sanity-augm\@2015-11-17.yang ydktest-sanity-augm.yang

@@ -44,7 +44,7 @@ CrudService::CrudService()
 
 bool CrudService::create(path::ServiceProvider & provider, Entity & entity)
 {
-	YLOG_DEBUG("Executing CRUD create operation");
+	YLOG_INFO("Executing CRUD create operation");
 	return operation_succeeded(
 			execute_rpc(provider, entity, "ydk:create", "entity", false)
 			);
@@ -52,7 +52,7 @@ bool CrudService::create(path::ServiceProvider & provider, Entity & entity)
 
 bool CrudService::update(path::ServiceProvider & provider, Entity & entity)
 {
-	YLOG_DEBUG("Executing CRUD update operation");
+	YLOG_INFO("Executing CRUD update operation");
 	return operation_succeeded(
 			execute_rpc(provider, entity, "ydk:update", "entity", false)
 			);
@@ -60,7 +60,7 @@ bool CrudService::update(path::ServiceProvider & provider, Entity & entity)
 
 bool CrudService::delete_(path::ServiceProvider & provider, Entity & entity)
 {
-	YLOG_DEBUG("Executing CRUD delete operation");
+	YLOG_INFO("Executing CRUD delete operation");
 	return operation_succeeded(
 			execute_rpc(provider, entity, "ydk:delete", "entity", false)
 			);
@@ -68,13 +68,13 @@ bool CrudService::delete_(path::ServiceProvider & provider, Entity & entity)
 
 shared_ptr<Entity> CrudService::read(path::ServiceProvider & provider, Entity & filter)
 {
-	YLOG_DEBUG("Executing CRUD read operation");
+	YLOG_INFO("Executing CRUD read operation");
 	return read_datanode(filter, execute_rpc(provider, filter, "ydk:read", "filter", false));
 }
 
 shared_ptr<Entity> CrudService::read_config(path::ServiceProvider & provider, Entity & filter)
 {
-	YLOG_DEBUG("Executing CRUD config read operation");
+	YLOG_INFO("Executing CRUD config read operation");
 	return read_datanode(filter, execute_rpc(provider, filter, "ydk:read", "filter", true));
 }
 
@@ -83,13 +83,13 @@ shared_ptr<Entity> CrudService::read_datanode(Entity & filter, shared_ptr<path::
     if (read_data_node == nullptr)
         return {};
     shared_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
-    get_entity_from_data_node(read_data_node->children()[0].get(), top_entity.get());
+    get_entity_from_data_node(read_data_node->children()[0].get(), top_entity);
     return top_entity;
 }
 
 static bool operation_succeeded(shared_ptr<path::DataNode> node)
 {
-	YLOG_DEBUG("Operation {}", ((node == nullptr)?"succeeded":"failed"));
+	YLOG_INFO("Operation {}", ((node == nullptr)?"succeeded":"failed"));
 	return node == nullptr;
 }
 

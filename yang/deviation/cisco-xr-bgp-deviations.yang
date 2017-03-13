@@ -111,11 +111,11 @@ module cisco-xr-bgp-deviations {
     deviate not-supported;
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -131,11 +131,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -151,11 +151,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -171,11 +171,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -191,11 +191,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -211,11 +211,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -231,11 +231,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -251,11 +251,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -271,11 +271,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -291,11 +291,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -311,11 +311,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -331,11 +331,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -351,11 +351,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -371,11 +371,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -391,11 +391,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -411,11 +411,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -431,11 +431,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -451,11 +451,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -471,11 +471,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -491,11 +491,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:global/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -667,11 +667,11 @@ module cisco-xr-bgp-deviations {
     deviate not-supported;
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -687,11 +687,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -707,11 +707,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -727,11 +727,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -747,11 +747,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -767,11 +767,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -787,11 +787,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -807,11 +807,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -827,11 +827,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -847,11 +847,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -867,11 +867,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -887,11 +887,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -907,11 +907,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -927,11 +927,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -947,11 +947,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -967,11 +967,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -987,11 +987,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1007,11 +1007,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1027,11 +1027,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1047,11 +1047,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:neighbors/bgp:neighbor/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1211,11 +1211,11 @@ module cisco-xr-bgp-deviations {
     deviate not-supported;
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1231,11 +1231,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1251,11 +1251,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1271,11 +1271,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1291,11 +1291,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1311,11 +1311,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv4-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1331,11 +1331,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1351,11 +1351,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:ipv6-labelled-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1371,11 +1371,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1391,11 +1391,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1411,11 +1411,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1431,11 +1431,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-unicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1451,11 +1451,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1471,11 +1471,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv4-multicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1491,11 +1491,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1511,11 +1511,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l3vpn-ipv6-multicast/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1531,11 +1531,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1551,11 +1551,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-vpls/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1571,11 +1571,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:config/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1591,11 +1591,11 @@ module cisco-xr-bgp-deviations {
     }
   }
 
-  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
-    deviate add {
+//  deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:max-prefixes {
+//    deviate add {
 //      must "shutdown-threshold-pct and restart-timer";
-    }
-  }
+//    }
+//  }
 
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:afi-safis/bgp:afi-safi/bgp:l2vpn-evpn/bgp:prefix-limit/bgp:state/bgp:shutdown-threshold-pct {
     deviate add {
@@ -1674,5 +1674,4 @@ module cisco-xr-bgp-deviations {
   deviation /bgp:bgp/bgp:peer-groups/bgp:peer-group/bgp:use-multiple-paths {
     deviate not-supported;
   }
-
 }

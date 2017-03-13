@@ -134,14 +134,14 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
     size_t start_index = 0;
     auto iter = segments.begin();
 
-    YLOG_TRACE("Current path: {}", schema().path());
-    YLOG_TRACE("Top container path: {}", top_container_path);
+    YLOG_DEBUG("Current path: {}", schema().path());
+    YLOG_DEBUG("Top container path: {}", top_container_path);
 
     while (iter != segments.end())
     {
     	if((*iter) == top_container_path || (*iter) == m_node->schema->name)
     	{
-    		YLOG_TRACE("Skipping segment same as {}", top_container_path);
+    		YLOG_DEBUG("Skipping segment same as {}", top_container_path);
     		++iter;
     		continue;
     	}
@@ -182,24 +182,24 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
     {
     	if(segments[i] == top_container_path || segments[i] == m_node->schema->name)
 		{
-    		YLOG_TRACE("Skipping segment same as {}", top_container_path);
+    		YLOG_DEBUG("Skipping segment same as {}", top_container_path);
 			continue;
 		}
 
     	auto child_segment = segments[i];
     	if(is_filter)
 		{
-			YLOG_TRACE("Creating new filter path '{}' in '{}'", child_segment, cn->schema->name);
+			YLOG_DEBUG("Creating new filter path '{}' in '{}'", child_segment, cn->schema->name);
 			cn = lyd_new_output(cn, nullptr, child_segment.c_str());
 		}
     	else if (i != segments.size() - 1)
         {
-    		YLOG_TRACE("Creating new data path '{}' in '{}'", child_segment, cn->schema->name);
+    		YLOG_DEBUG("Creating new data path '{}' in '{}'", child_segment, cn->schema->name);
 			cn = lyd_new_path(cn, nullptr, child_segment.c_str(), nullptr, LYD_ANYDATA_SXML, 0);
 		}
         else
         {
-        	YLOG_TRACE("Creating new data path '{}' with value '{}' in '{}'", child_segment, value, cn->schema->name);
+        	YLOG_DEBUG("Creating new data path '{}' with value '{}' in '{}'", child_segment, value, cn->schema->name);
 			cn = lyd_new_path(cn, nullptr, child_segment.c_str(), (void*)value.c_str(), LYD_ANYDATA_SXML, 0);
 		}
 
@@ -247,7 +247,7 @@ ydk::path::DataNodeImpl::set(const std::string& value)
     if (s_node->nodetype == LYS_LEAF || s_node->nodetype == LYS_LEAFLIST)
     {
         struct lyd_node_leaf_list* leaf= reinterpret_cast<struct lyd_node_leaf_list *>(m_node);
-        YLOG_TRACE("Setting leaf value '{}'", value);
+        YLOG_DEBUG("Setting leaf value '{}'", value);
         if(lyd_change_leaf(leaf, value.c_str()))
         {
             YLOG_ERROR("Invalid value {}", value);
@@ -295,13 +295,13 @@ ydk::path::DataNodeImpl::find(const std::string& path) const
     if(s.keyword == "rpc"){
         spath="input/" + spath;
     }
-    YLOG_TRACE("Getting child schema with path '{}' in {}", spath, m_node->schema->name);
+    YLOG_DEBUG("Getting child schema with path '{}' in {}", spath, m_node->schema->name);
     const struct lys_node* found_snode =
         ly_ctx_get_node(m_node->schema->module->ctx, m_node->schema, spath.c_str());
 
     if(found_snode)
     {
-    	YLOG_TRACE("Getting data nodes with path '{}'", path);
+    	YLOG_DEBUG("Getting data nodes with path '{}'", path);
         struct ly_set* result_set = lyd_find_xpath(m_node, path.c_str());
         if( result_set )
         {
@@ -444,7 +444,7 @@ void ydk::path::DataNodeImpl::add_annotation(const ydk::path::Annotation& an)
     }
 
     std::string name { an.m_ns + ":" + an.m_name };
-    YLOG_TRACE("Adding annotation '{} = {}' to {}", name, an.m_val, m_node->schema->name);
+    YLOG_DEBUG("Adding annotation '{}' = {} to {}", name, an.m_val, m_node->schema->name);
 
     struct lyd_attr* attr = lyd_insert_attr(m_node, nullptr, name.c_str(), an.m_val.c_str());
 

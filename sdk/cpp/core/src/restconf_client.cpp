@@ -42,7 +42,7 @@ RestconfClient::RestconfClient(const string & address, const string & username, 
     : curl(NULL), header_options_list(NULL), encoding(encoding)
 {
     initialize(address, username, password, port);
-    YLOG_DEBUG("Ready to communicate with {} using http", base_url);
+    YLOG_INFO("Ready to communicate with {} using http", base_url);
 }
 
 RestconfClient::~RestconfClient()
@@ -84,7 +84,7 @@ string RestconfClient::execute(const string & operation, const string & url, con
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
     curl_easy_setopt(curl, CURLOPT_URL, (base_url + url).c_str());
 
-    YLOG_TRACE( "Sending request: {}. Payload: {}. URL: {}", operation, payload, (base_url + url));
+    YLOG_DEBUG( "Sending request: {}. Payload: {}. URL: {}", operation, payload, (base_url + url));
 
     CURLcode res = curl_easy_perform(curl);
     if(res != CURLE_OK)
@@ -103,7 +103,7 @@ string RestconfClient::execute(const string & operation, const string & url, con
         YLOG_ERROR(os.str().c_str());
         throw(YCPPServiceProviderError{os.str()});
     }
-    YLOG_TRACE( "Got response code: {}, data: {}", response_code, response);
+    YLOG_DEBUG( "Got response code: {}, data: {}", response_code, response);
     return response;
 }
 
@@ -223,7 +223,7 @@ static string get_restconf_root(CURL *curl, string base)
             || http_status_is_error(response_code)
             || (root = parse_restconf_root_response(response)).size() == 0)
     {
-        YLOG_DEBUG("Unable to retrieve restconf root. Assuming '/restconf' as the root");
+        YLOG_INFO("Unable to retrieve restconf root. Assuming '/restconf' as the root");
         return "/restconf";
     }
 
@@ -235,7 +235,7 @@ static void get_debug_info(CURL *curl)
     double speed_upload, total_time;
     curl_easy_getinfo(curl, CURLINFO_SPEED_UPLOAD, &speed_upload);
     curl_easy_getinfo(curl, CURLINFO_TOTAL_TIME, &total_time);
-    YLOG_TRACE("Speed of upload: {} bytes/sec", speed_upload);
-    YLOG_TRACE("Total time: {} seconds", total_time);
+    YLOG_DEBUG("Speed of upload: {} bytes/sec", speed_upload);
+    YLOG_DEBUG("Total time: {} seconds", total_time);
 }
 }

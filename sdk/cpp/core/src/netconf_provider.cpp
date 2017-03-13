@@ -68,7 +68,7 @@ NetconfServiceProvider::NetconfServiceProvider(string address, string username, 
 {
 	path::Repository repo;
     initialize(repo);
-    YLOG_DEBUG("Connected to {} on port {} using ssh", address, port);
+    YLOG_INFO("Connected to {} on port {} using ssh", address, port);
 }
 
 NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo, string address, string username, string password, int port)
@@ -76,7 +76,7 @@ NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo, string a
 	  model_provider(make_unique<NetconfModelProvider>(*client))
 {
     initialize(repo);
-    YLOG_DEBUG("Connected to {} on port {} using ssh", address, port);
+    YLOG_INFO("Connected to {} on port {} using ssh", address, port);
 }
 
 void NetconfServiceProvider::initialize(path::Repository & repo)
@@ -93,12 +93,7 @@ void NetconfServiceProvider::initialize(path::Repository & repo)
 		}
 	}
 
-	root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(
-								repo.create_root_schema
-									(
-									capabilities_parser.parse(server_capabilities)
-									)
-								);
+	root_schema = repo.create_root_schema(capabilities_parser.parse(server_capabilities));
 
 	if(root_schema.get() == nullptr)
 	{
@@ -109,7 +104,7 @@ void NetconfServiceProvider::initialize(path::Repository & repo)
 
 NetconfServiceProvider::~NetconfServiceProvider()
 {
-	YLOG_DEBUG("Disconnected from device");
+	YLOG_INFO("Disconnected from device");
 }
 
 EncodingFormat NetconfServiceProvider::get_encoding() const
@@ -160,9 +155,9 @@ std::shared_ptr<path::DataNode> NetconfServiceProvider::handle_netconf_operation
     std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     netconf_payload = payload + netconf_payload + "</rpc>";
 
-    YLOG_DEBUG("=============Generating payload to send to device=============");
-    YLOG_DEBUG(netconf_payload.c_str());
-    YLOG_DEBUG("\n");
+    YLOG_INFO("=============Generating payload to send to device=============");
+    YLOG_INFO(netconf_payload.c_str());
+    YLOG_INFO("\n");
 
     std::string reply = execute_payload(netconf_payload);
     if (ydk_rpc.schema().path().find("get") != string::npos or ydk_rpc.schema().path().find("get-config") != string::npos)
@@ -215,9 +210,9 @@ std::shared_ptr<path::DataNode> NetconfServiceProvider::invoke(path::Rpc& rpc) c
 std::string NetconfServiceProvider::execute_payload(const std::string & payload) const
 {
     std::string reply = client->execute_payload(payload);
-    YLOG_DEBUG("=============Reply payload received from device=============");
-    YLOG_DEBUG(reply.c_str());
-    YLOG_DEBUG("\n");
+    YLOG_INFO("=============Reply payload received from device=============");
+    YLOG_INFO(reply.c_str());
+    YLOG_INFO("\n");
     return reply;
 }
 
@@ -329,9 +324,9 @@ static string get_netconf_payload(path::DataNode & input, string data_tag, strin
     std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     payload+=codec_service.encode(input, EncodingFormat::XML, true);
     payload+="</rpc>";
-    YLOG_DEBUG("=============Generating payload to send to device=============");
-    YLOG_DEBUG(payload.c_str());
-    YLOG_DEBUG("\n");
+    YLOG_INFO("=============Generating payload to send to device=============");
+    YLOG_INFO(payload.c_str());
+    YLOG_INFO("\n");
     return payload;
 }
 
@@ -348,12 +343,12 @@ static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfCl
 		//need to send the commit request
 		string commit_payload = get_commit_rpc_payload();
 
-        YLOG_DEBUG( "Executing commit RPC: {}", commit_payload);
+        YLOG_INFO( "Executing commit RPC: {}", commit_payload);
         reply = client.execute_payload(commit_payload);
 
-        YLOG_DEBUG("=============Reply payload received from device=============");
-        YLOG_DEBUG(reply.c_str());
-        YLOG_DEBUG("\n");
+        YLOG_INFO("=============Reply payload received from device=============");
+        YLOG_INFO(reply.c_str());
+        YLOG_INFO("\n");
         if(reply.find("<ok/>") == std::string::npos)
         {
             YLOG_ERROR("RPC error occurred: {}", reply);
@@ -371,7 +366,7 @@ static std::shared_ptr<path::DataNode> handle_read_reply(string reply, path::Roo
     auto empty_data = reply.find("<data/>");
     if(empty_data != std::string::npos)
     {
-        YLOG_DEBUG( "Found empty data tag");
+        YLOG_INFO( "Found empty data tag");
         return nullptr;
     }
 

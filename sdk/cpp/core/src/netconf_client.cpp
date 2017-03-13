@@ -160,7 +160,7 @@ void NetconfClient::clb_print(NC_VERB_LEVEL level, const char* msg)
 	case NC_VERB_WARNING:
 	case NC_VERB_VERBOSE:
 	case NC_VERB_DEBUG:
-	    YLOG_TRACE("libnetconf TRACE: {}", msg);
+	    YLOG_DEBUG("libnetconf TRACE: {}", msg);
 		break;
 	}
 }
@@ -188,7 +188,7 @@ char* NetconfClient::clb_set_interactive(const char *name, const char *instructi
     char* password_buffer = (char*) malloc(sizeof(char) * (password_string.size() + 1));
     snprintf(password_buffer, password_string.size() + 1, "%s", password_string.c_str());
 
-    YLOG_TRACE("looked up password for interactive: {}", password_buffer);
+    YLOG_DEBUG("looked up password for interactive: {}", password_buffer);
     return password_buffer;
 }
 
@@ -198,7 +198,7 @@ char* NetconfClient::clb_set_passphrase(const char *user_name, const char *host_
     char* password_buffer = (char*) malloc(sizeof(char) * (password_string.size() + 1));
     snprintf(password_buffer, password_string.size() + 1, "%s", password_string.c_str());
 
-    YLOG_TRACE("looked up password for passphrase: {}", password_buffer);
+    YLOG_DEBUG("looked up password for passphrase: {}", password_buffer);
     return password_buffer;
 }
 

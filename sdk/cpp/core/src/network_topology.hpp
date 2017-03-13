@@ -20,9 +20,9 @@ class NetworkTopology : public Entity
         bool has_operation() const override;
         EntityPath get_entity_path(Entity* parent) const override;
         std::string get_segment_path() const override;
-        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+        std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
         void set_value(const std::string & value_path, std::string value) override;
-        std::map<std::string, Entity*> & get_children() override;
+        std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
         std::shared_ptr<Entity> clone_ptr() const override;
 
 
@@ -37,9 +37,9 @@ class NetworkTopology : public Entity
             bool has_operation() const override;
             EntityPath get_entity_path(Entity* parent) const override;
             std::string get_segment_path() const override;
-            Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+            std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
             void set_value(const std::string & value_path, std::string value) override;
-            std::map<std::string, Entity*> & get_children() override;
+            std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
             YLeaf topology_id; //type: string
@@ -55,9 +55,9 @@ class NetworkTopology : public Entity
                 bool has_operation() const override;
                 EntityPath get_entity_path(Entity* parent) const override;
                 std::string get_segment_path() const override;
-                Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                 void set_value(const std::string & value_path, std::string value) override;
-                std::map<std::string, Entity*> & get_children() override;
+                std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
 
@@ -71,9 +71,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
 
@@ -82,7 +82,7 @@ class NetworkTopology : public Entity
             }; // NetworkTopology::Topology::TopologyTypes::TopologyNetconf
 
 
-                std::unique_ptr<network_topology::NetworkTopology::Topology::TopologyTypes::TopologyNetconf> topology_netconf;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::TopologyTypes::TopologyNetconf> topology_netconf;
 
 
         }; // NetworkTopology::Topology::TopologyTypes
@@ -98,9 +98,9 @@ class NetworkTopology : public Entity
                 bool has_operation() const override;
                 EntityPath get_entity_path(Entity* parent) const override;
                 std::string get_segment_path() const override;
-                Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                 void set_value(const std::string & value_path, std::string value) override;
-                std::map<std::string, Entity*> & get_children() override;
+                std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                 //type: string (refers to network_topology::NetworkTopology::Topology::topology_id)
@@ -121,9 +121,9 @@ class NetworkTopology : public Entity
                 bool has_operation() const override;
                 EntityPath get_entity_path(Entity* parent) const override;
                 std::string get_segment_path() const override;
-                Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                 void set_value(const std::string & value_path, std::string value) override;
-                std::map<std::string, Entity*> & get_children() override;
+                std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                 YLeaf node_id; //type: string
@@ -155,9 +155,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                     //type: string (refers to network_topology::NetworkTopology::Topology::topology_id)
@@ -180,9 +180,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                     YLeaf tp_id; //type: string
@@ -204,9 +204,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                     YLeaf override; //type: boolean
@@ -227,9 +227,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                     YLeaf netconf_master_node; //type: string
@@ -244,9 +244,9 @@ class NetworkTopology : public Entity
                         bool has_operation() const override;
                         EntityPath get_entity_path(Entity* parent) const override;
                         std::string get_segment_path() const override;
-                        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                        std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                         void set_value(const std::string & value_path, std::string value) override;
-                        std::map<std::string, Entity*> & get_children() override;
+                        std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                         YLeaf node; //type: string
@@ -258,7 +258,7 @@ class NetworkTopology : public Entity
                 }; // NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus
 
 
-                    std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus> > node_status;
+                    std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus> > node_status;
 
 
             }; // NetworkTopology::Topology::Node::ClusteredConnectionStatus
@@ -274,9 +274,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
 
@@ -290,9 +290,9 @@ class NetworkTopology : public Entity
                         bool has_operation() const override;
                         EntityPath get_entity_path(Entity* parent) const override;
                         std::string get_segment_path() const override;
-                        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                        std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                         void set_value(const std::string & value_path, std::string value) override;
-                        std::map<std::string, Entity*> & get_children() override;
+                        std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                         YLeaf capability; //type: string
@@ -304,7 +304,7 @@ class NetworkTopology : public Entity
                 }; // NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability
 
 
-                    std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability> > available_capability;
+                    std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability> > available_capability;
 
 
             }; // NetworkTopology::Topology::Node::AvailableCapabilities
@@ -320,9 +320,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
 
@@ -336,9 +336,9 @@ class NetworkTopology : public Entity
                         bool has_operation() const override;
                         EntityPath get_entity_path(Entity* parent) const override;
                         std::string get_segment_path() const override;
-                        Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                        std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                         void set_value(const std::string & value_path, std::string value) override;
-                        std::map<std::string, Entity*> & get_children() override;
+                        std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                         YLeaf capability; //type: string
@@ -350,7 +350,7 @@ class NetworkTopology : public Entity
                 }; // NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability
 
 
-                    std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability> > unavailable_capability;
+                    std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability> > unavailable_capability;
 
 
             }; // NetworkTopology::Topology::Node::UnavailableCapabilities
@@ -366,9 +366,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
 
@@ -387,9 +387,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                     YLeaf yang_library_url; //type: string
@@ -401,14 +401,14 @@ class NetworkTopology : public Entity
             }; // NetworkTopology::Topology::Node::YangLibrary
 
 
-                std::unique_ptr<network_topology::NetworkTopology::Topology::Node::AvailableCapabilities> available_capabilities;
-                std::unique_ptr<network_topology::NetworkTopology::Topology::Node::ClusteredConnectionStatus> clustered_connection_status;
-                std::unique_ptr<network_topology::NetworkTopology::Topology::Node::PassThrough> pass_through;
-                std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::Node::SupportingNode> > supporting_node;
-                std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::Node::TerminationPoint> > termination_point;
-                std::unique_ptr<network_topology::NetworkTopology::Topology::Node::UnavailableCapabilities> unavailable_capabilities;
-                std::unique_ptr<network_topology::NetworkTopology::Topology::Node::YangLibrary> yang_library;
-                std::unique_ptr<network_topology::NetworkTopology::Topology::Node::YangModuleCapabilities> yang_module_capabilities;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::Node::AvailableCapabilities> available_capabilities;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::Node::ClusteredConnectionStatus> clustered_connection_status;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::Node::PassThrough> pass_through;
+                std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::Node::SupportingNode> > supporting_node;
+                std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::Node::TerminationPoint> > termination_point;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::Node::UnavailableCapabilities> unavailable_capabilities;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::Node::YangLibrary> yang_library;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::Node::YangModuleCapabilities> yang_module_capabilities;
                 class ConnectionStatusEnum;
 
 
@@ -425,9 +425,9 @@ class NetworkTopology : public Entity
                 bool has_operation() const override;
                 EntityPath get_entity_path(Entity* parent) const override;
                 std::string get_segment_path() const override;
-                Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                 void set_value(const std::string & value_path, std::string value) override;
-                std::map<std::string, Entity*> & get_children() override;
+                std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                 YLeaf link_id; //type: string
@@ -442,9 +442,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                     //type: string (refers to network_topology::NetworkTopology::Topology::Node::node_id)
@@ -467,9 +467,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                     //type: string (refers to network_topology::NetworkTopology::Topology::Node::node_id)
@@ -492,9 +492,9 @@ class NetworkTopology : public Entity
                     bool has_operation() const override;
                     EntityPath get_entity_path(Entity* parent) const override;
                     std::string get_segment_path() const override;
-                    Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
+                    std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;
                     void set_value(const std::string & value_path, std::string value) override;
-                    std::map<std::string, Entity*> & get_children() override;
+                    std::map<std::string, std::shared_ptr<Entity>> & get_children() override;
 
 
                     //type: string (refers to network_topology::NetworkTopology::Topology::Link::link_id)
@@ -505,24 +505,24 @@ class NetworkTopology : public Entity
             }; // NetworkTopology::Topology::Link::SupportingLink
 
 
-                std::unique_ptr<network_topology::NetworkTopology::Topology::Link::Destination> destination;
-                std::unique_ptr<network_topology::NetworkTopology::Topology::Link::Source> source;
-                std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::Link::SupportingLink> > supporting_link;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::Link::Destination> destination;
+                std::shared_ptr<network_topology::NetworkTopology::Topology::Link::Source> source;
+                std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::Link::SupportingLink> > supporting_link;
 
 
         }; // NetworkTopology::Topology::Link
 
 
-            std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::Link> > link;
-            std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::Node> > node;
-            std::unique_ptr<network_topology::NetworkTopology::Topology::TopologyTypes> topology_types;
-            std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology::UnderlayTopology> > underlay_topology;
+            std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::Link> > link;
+            std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::Node> > node;
+            std::shared_ptr<network_topology::NetworkTopology::Topology::TopologyTypes> topology_types;
+            std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology::UnderlayTopology> > underlay_topology;
 
 
     }; // NetworkTopology::Topology
 
 
-        std::vector<std::unique_ptr<network_topology::NetworkTopology::Topology> > topology;
+        std::vector<std::shared_ptr<network_topology::NetworkTopology::Topology> > topology;
 
 
 }; // NetworkTopology

@@ -53,7 +53,7 @@ class ClassConstructorPrinter(object):
             if child.is_many or child.stmt.search_one('presence') is not None:
                 continue
             self.ctx.writeln('%s->parent = this;' % child.name)
-            self.ctx.writeln('children["%s"] = %s.get();' % (child.stmt.arg, child.name))
+            self.ctx.writeln('children["%s"] = %s;' % (child.stmt.arg, child.name))
             self.ctx.bline()
 
     def _print_class_constructor_trailer(self):
@@ -70,7 +70,7 @@ class ClassConstructorPrinter(object):
         for child in children:
             if not child.is_many:
                 if (child.stmt.search_one('presence') is None):
-                    init_stmts.append('%s(std::make_unique<%s>())' % (child.name, child.property_type.qualified_cpp_name()))
+                    init_stmts.append('%s(std::make_shared<%s>())' % (child.name, child.property_type.qualified_cpp_name()))
                 else:
                     init_stmts.append('%s(nullptr) // presence node' % (child.name))
         if len(init_stmts) > 0:

@@ -73,9 +73,9 @@ class ClassMembersPrinter(object):
         self.ctx.writeln('bool has_operation() const override;')
         self.ctx.writeln('EntityPath get_entity_path(Entity* parent) const override;')
         self.ctx.writeln('std::string get_segment_path() const override;')
-        self.ctx.writeln('Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;')
+        self.ctx.writeln('std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;')
         self.ctx.writeln('void set_value(const std::string & value_path, std::string value) override;')
-        self.ctx.writeln('std::map<std::string, Entity*> & get_children() override;')
+        self.ctx.writeln('std::map<std::string, std::shared_ptr<Entity>> & get_children() override;')
 
     def _print_top_level_entity_functions(self, clazz):
         if clazz.owner is not None and isinstance(clazz.owner, Package):
@@ -152,11 +152,11 @@ class ClassMembersPrinter(object):
             presence_stmt = ''
             if prop.property_type.stmt.search_one('presence') is not None:
                 presence_stmt = ' // presence node'
-            return 'std::unique_ptr<%s> %s;%s' % (prop.property_type.fully_qualified_cpp_name(), prop.name, presence_stmt)
+            return 'std::shared_ptr<%s> %s;%s' % (prop.property_type.fully_qualified_cpp_name(), prop.name, presence_stmt)
 
     def _get_class_inits_many(self, prop):
         if prop.is_many and isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
-            return 'std::vector<std::unique_ptr<%s> > %s;' % (prop.property_type.fully_qualified_cpp_name(), prop.name)
+            return 'std::vector<std::shared_ptr<%s> > %s;' % (prop.property_type.fully_qualified_cpp_name(), prop.name)
 
     def _get_children(self, clazz):
         class_inits_properties = []

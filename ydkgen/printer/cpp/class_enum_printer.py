@@ -50,9 +50,9 @@ class EnumPrinter(object):
     def _get_enums(self, element, file_name=''):
         enums = []
         for child in element.owned_elements:
-            if isinstance(child, Enum) and not child.name in self.printed_enums:
+            if isinstance(child, Enum) and not child.fully_qualified_cpp_name() in self.printed_enums:
                 enums.append(child)
-                self.printed_enums[child.name] = child
+                self.printed_enums[child.fully_qualified_cpp_name()] = child
         return enums
 
     def _print_enums(self, enums):

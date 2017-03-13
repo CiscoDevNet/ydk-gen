@@ -37,8 +37,8 @@ from ..tests import TestPrinter
 
 class CppBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle_name, bundle_version, generate_tests, sort_clazz):
-        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle_name, bundle_version, generate_tests, sort_clazz)
+    def __init__(self, ydk_root_dir, bundle, generate_tests, sort_clazz):
+        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, sort_clazz)
         self.source_files = []
         self.header_files = []
 
@@ -139,6 +139,10 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
         self.print_file(get_table_of_contents_file_name(self.ydk_doc_dir),
                         emit_table_of_contents,
                         _EmitArgs(self.ypy_ctx, packages, (self.bundle_name, self.bundle_version)))
+
+
+def get_tests_dir(path):
+    return os.path.join(path, 'test')
 
 
 def get_entity_lookup_source_file_name(path):

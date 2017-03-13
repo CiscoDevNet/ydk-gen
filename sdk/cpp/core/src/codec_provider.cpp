@@ -50,13 +50,13 @@ void CodecServiceProvider::initialize(const std::string & bundle_name,
 {
     if(!capabilities_augmented)
     {
-        YLOG_TRACE("Augmenting global YDK capabilities for bundle {}", bundle_name);
+        YLOG_DEBUG("Augmenting global YDK capabilities for bundle {}", bundle_name);
         augment_caps_function();
     }
 
     if(user_provided_repo)
     {
-        YLOG_TRACE("Using user provided repo");
+        YLOG_DEBUG("Using user provided repo");
         initialize_root_schema(USER_PROVIDED_REPO, m_repo);
         return;
     }
@@ -68,7 +68,7 @@ void CodecServiceProvider::initialize(const std::string & bundle_name,
 
     augment_caps_function();
     capabilities_augmented = true;
-    YLOG_TRACE("Creating repo in path {}", models_path);
+    YLOG_DEBUG("Creating repo in path {}", models_path);
     path::Repository repo{models_path};
     initialize_root_schema(bundle_name, repo);
 }
@@ -93,12 +93,12 @@ path::RootSchemaNode& CodecServiceProvider::get_root_schema(const std::string & 
 
 void CodecServiceProvider::initialize_root_schema(const std::string & bundle_name, path::Repository & repo)
 {
-    YLOG_TRACE("Initializing root schema for {}", bundle_name);
+    YLOG_DEBUG("Initializing root schema for {}", bundle_name);
     ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
-    auto root_schema = std::unique_ptr<ydk::path::RootSchemaNode>(repo.create_root_schema(get_global_capabilities()));
+    auto root_schema = repo.create_root_schema(get_global_capabilities());
     std::string s{bundle_name};
-    std::pair<std::string, std::unique_ptr<path::RootSchemaNode>> entry {s, std::move(root_schema)};
-    m_root_schema_table.insert(std::move(entry));
+    std::pair<std::string, std::shared_ptr<path::RootSchemaNode>> entry {s, root_schema};
+    m_root_schema_table.insert(entry);
     ly_verb(LY_LLVRB); // enable libyang logging after payload has been created
 }
 

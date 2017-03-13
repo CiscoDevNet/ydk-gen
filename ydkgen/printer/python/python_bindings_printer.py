@@ -39,8 +39,8 @@ from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _E
 
 class PythonBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle_name, bundle_version, generate_tests, sort_clazz):
-        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle_name, bundle_version, generate_tests, sort_clazz)
+    def __init__(self, ydk_root_dir, bundle, generate_tests, sort_clazz):
+        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, sort_clazz)
 
     def print_files(self):
         self._print_init_file(self.models_dir)
@@ -52,9 +52,8 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         # Sub package
         if self.sub_dir != '':
             self._print_nmsp_declare_init(self.ydk_dir)
+            self._print_nmsp_declare_init(os.path.join(self.ydk_dir, 'models'))
             self._print_nmsp_declare_init(self.models_dir)
-            self._print_nmsp_augment_finder_init(self.sub_dir)
-            self._print_nmsp_augment_finder_init(os.path.join(self.sub_dir, '_meta'), True)
 
         # RST Documentation
         if self.ydk_doc_dir is not None:
@@ -82,8 +81,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
             module_dir = self.initialize_output_directory(
                 '%s/%s/%s' % (self.models_dir, self.bundle_name, '_aug'))
         else:
-            module_dir = self.initialize_output_directory(
-                '%s/%s' % (self.models_dir, sub))
+            module_dir = self.initialize_output_directory(self.models_dir)
 
         meta_dir = self.initialize_output_directory(module_dir + '/_meta')
         test_output_dir = self.initialize_output_directory(
@@ -149,9 +147,8 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
     def _print_yang_ns_file(self):
         packages = self.packages + self.deviation_packages
-        target_dir = self.models_dir if self.sub_dir == '' else self.sub_dir
 
-        self.print_file(get_yang_ns_file_name(target_dir),
+        self.print_file(get_yang_ns_file_name(self.models_dir),
                         emit_yang_ns,
                         _EmitArgs(self.ypy_ctx, packages))
 

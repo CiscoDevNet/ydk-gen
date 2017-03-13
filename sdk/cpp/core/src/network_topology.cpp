@@ -56,7 +56,7 @@ EntityPath NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_entity
 
 }
 
-Entity* NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -70,7 +70,7 @@ Entity* NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_child_by_
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_children()
 {
     return children;
 }
@@ -81,10 +81,10 @@ void NetworkTopology::Topology::TopologyTypes::TopologyNetconf::set_value(const 
 
 NetworkTopology::Topology::TopologyTypes::TopologyTypes()
     :
-    topology_netconf(std::make_unique<NetworkTopology::Topology::TopologyTypes::TopologyNetconf>())
+    topology_netconf(std::make_shared<NetworkTopology::Topology::TopologyTypes::TopologyNetconf>())
 {
     topology_netconf->parent = this;
-    children["topology-netconf"] = topology_netconf.get();
+    children["topology-netconf"] = topology_netconf;
 
     yang_name = "topology-types"; yang_parent_name = "topology";
 }
@@ -134,7 +134,7 @@ EntityPath NetworkTopology::Topology::TopologyTypes::get_entity_path(Entity* anc
 
 }
 
-Entity* NetworkTopology::Topology::TopologyTypes::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::TopologyTypes::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -149,13 +149,13 @@ Entity* NetworkTopology::Topology::TopologyTypes::get_child_by_name(const std::s
     {
         if(topology_netconf != nullptr)
         {
-            children["topology-netconf"] = topology_netconf.get();
+            children["topology-netconf"] = topology_netconf;
         }
         else
         {
-            topology_netconf = std::make_unique<NetworkTopology::Topology::TopologyTypes::TopologyNetconf>();
+            topology_netconf = std::make_shared<NetworkTopology::Topology::TopologyTypes::TopologyNetconf>();
             topology_netconf->parent = this;
-            children["topology-netconf"] = topology_netconf.get();
+            children["topology-netconf"] = topology_netconf;
         }
         return children.at("topology-netconf");
     }
@@ -163,13 +163,13 @@ Entity* NetworkTopology::Topology::TopologyTypes::get_child_by_name(const std::s
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::TopologyTypes::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::TopologyTypes::get_children()
 {
     if(children.find("topology-netconf") == children.end())
     {
         if(topology_netconf != nullptr)
         {
-            children["topology-netconf"] = topology_netconf.get();
+            children["topology-netconf"] = topology_netconf;
         }
     }
 
@@ -233,7 +233,7 @@ EntityPath NetworkTopology::Topology::UnderlayTopology::get_entity_path(Entity* 
 
 }
 
-Entity* NetworkTopology::Topology::UnderlayTopology::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::UnderlayTopology::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -247,7 +247,7 @@ Entity* NetworkTopology::Topology::UnderlayTopology::get_child_by_name(const std
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::UnderlayTopology::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::UnderlayTopology::get_children()
 {
     return children;
 }
@@ -317,7 +317,7 @@ EntityPath NetworkTopology::Topology::Node::SupportingNode::get_entity_path(Enti
 
 }
 
-Entity* NetworkTopology::Topology::Node::SupportingNode::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::SupportingNode::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -331,7 +331,7 @@ Entity* NetworkTopology::Topology::Node::SupportingNode::get_child_by_name(const
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::SupportingNode::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::SupportingNode::get_children()
 {
     return children;
 }
@@ -415,7 +415,7 @@ EntityPath NetworkTopology::Topology::Node::TerminationPoint::get_entity_path(En
 
 }
 
-Entity* NetworkTopology::Topology::Node::TerminationPoint::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::TerminationPoint::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -429,7 +429,7 @@ Entity* NetworkTopology::Topology::Node::TerminationPoint::get_child_by_name(con
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::TerminationPoint::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::TerminationPoint::get_children()
 {
     return children;
 }
@@ -513,7 +513,7 @@ EntityPath NetworkTopology::Topology::Node::YangModuleCapabilities::get_entity_p
 
 }
 
-Entity* NetworkTopology::Topology::Node::YangModuleCapabilities::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::YangModuleCapabilities::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -527,7 +527,7 @@ Entity* NetworkTopology::Topology::Node::YangModuleCapabilities::get_child_by_na
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::YangModuleCapabilities::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::YangModuleCapabilities::get_children()
 {
     return children;
 }
@@ -601,7 +601,7 @@ EntityPath NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatu
 
 }
 
-Entity* NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -615,7 +615,7 @@ Entity* NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus::
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus::get_children()
 {
     return children;
 }
@@ -695,7 +695,7 @@ EntityPath NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_entit
 
 }
 
-Entity* NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -713,27 +713,27 @@ Entity* NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_child_by
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus>();
+        auto c = std::make_shared<NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus>();
         c->parent = this;
         node_status.push_back(std::move(c));
-        children[segment_path] = node_status.back().get();
+        children[segment_path] = node_status.back();
         return children.at(segment_path);
     }
 
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_children()
 {
     for (auto const & c : node_status)
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -805,7 +805,7 @@ EntityPath NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapa
 
 }
 
-Entity* NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -819,7 +819,7 @@ Entity* NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapabil
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability::get_children()
 {
     return children;
 }
@@ -895,7 +895,7 @@ EntityPath NetworkTopology::Topology::Node::AvailableCapabilities::get_entity_pa
 
 }
 
-Entity* NetworkTopology::Topology::Node::AvailableCapabilities::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::AvailableCapabilities::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -913,27 +913,27 @@ Entity* NetworkTopology::Topology::Node::AvailableCapabilities::get_child_by_nam
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability>();
+        auto c = std::make_shared<NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability>();
         c->parent = this;
         available_capability.push_back(std::move(c));
-        children[segment_path] = available_capability.back().get();
+        children[segment_path] = available_capability.back();
         return children.at(segment_path);
     }
 
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::AvailableCapabilities::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::AvailableCapabilities::get_children()
 {
     for (auto const & c : available_capability)
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -1001,7 +1001,7 @@ EntityPath NetworkTopology::Topology::Node::UnavailableCapabilities::Unavailable
 
 }
 
-Entity* NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -1015,7 +1015,7 @@ Entity* NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCap
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability::get_children()
 {
     return children;
 }
@@ -1091,7 +1091,7 @@ EntityPath NetworkTopology::Topology::Node::UnavailableCapabilities::get_entity_
 
 }
 
-Entity* NetworkTopology::Topology::Node::UnavailableCapabilities::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::UnavailableCapabilities::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -1109,27 +1109,27 @@ Entity* NetworkTopology::Topology::Node::UnavailableCapabilities::get_child_by_n
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability>();
+        auto c = std::make_shared<NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability>();
         c->parent = this;
         unavailable_capability.push_back(std::move(c));
-        children[segment_path] = unavailable_capability.back().get();
+        children[segment_path] = unavailable_capability.back();
         return children.at(segment_path);
     }
 
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::UnavailableCapabilities::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::UnavailableCapabilities::get_children()
 {
     for (auto const & c : unavailable_capability)
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -1189,7 +1189,7 @@ EntityPath NetworkTopology::Topology::Node::PassThrough::get_entity_path(Entity*
 
 }
 
-Entity* NetworkTopology::Topology::Node::PassThrough::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::PassThrough::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -1203,7 +1203,7 @@ Entity* NetworkTopology::Topology::Node::PassThrough::get_child_by_name(const st
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::PassThrough::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::PassThrough::get_children()
 {
     return children;
 }
@@ -1273,7 +1273,7 @@ EntityPath NetworkTopology::Topology::Node::YangLibrary::get_entity_path(Entity*
 
 }
 
-Entity* NetworkTopology::Topology::Node::YangLibrary::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::YangLibrary::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -1287,7 +1287,7 @@ Entity* NetworkTopology::Topology::Node::YangLibrary::get_child_by_name(const st
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::YangLibrary::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::YangLibrary::get_children()
 {
     return children;
 }
@@ -1329,30 +1329,30 @@ NetworkTopology::Topology::Node::Node()
 	 tcp_only{YType::boolean, "tcp-only"},
 	 username{YType::str, "username"}
     	,
-    available_capabilities(std::make_unique<NetworkTopology::Topology::Node::AvailableCapabilities>())
-	,clustered_connection_status(std::make_unique<NetworkTopology::Topology::Node::ClusteredConnectionStatus>())
-	,pass_through(std::make_unique<NetworkTopology::Topology::Node::PassThrough>())
-	,unavailable_capabilities(std::make_unique<NetworkTopology::Topology::Node::UnavailableCapabilities>())
-	,yang_library(std::make_unique<NetworkTopology::Topology::Node::YangLibrary>())
-	,yang_module_capabilities(std::make_unique<NetworkTopology::Topology::Node::YangModuleCapabilities>())
+    available_capabilities(std::make_shared<NetworkTopology::Topology::Node::AvailableCapabilities>())
+	,clustered_connection_status(std::make_shared<NetworkTopology::Topology::Node::ClusteredConnectionStatus>())
+	,pass_through(std::make_shared<NetworkTopology::Topology::Node::PassThrough>())
+	,unavailable_capabilities(std::make_shared<NetworkTopology::Topology::Node::UnavailableCapabilities>())
+	,yang_library(std::make_shared<NetworkTopology::Topology::Node::YangLibrary>())
+	,yang_module_capabilities(std::make_shared<NetworkTopology::Topology::Node::YangModuleCapabilities>())
 {
     available_capabilities->parent = this;
-    children["available-capabilities"] = available_capabilities.get();
+    children["available-capabilities"] = available_capabilities;
 
     clustered_connection_status->parent = this;
-    children["clustered-connection-status"] = clustered_connection_status.get();
+    children["clustered-connection-status"] = clustered_connection_status;
 
     pass_through->parent = this;
-    children["pass-through"] = pass_through.get();
+    children["pass-through"] = pass_through;
 
     unavailable_capabilities->parent = this;
-    children["unavailable-capabilities"] = unavailable_capabilities.get();
+    children["unavailable-capabilities"] = unavailable_capabilities;
 
     yang_library->parent = this;
-    children["yang-library"] = yang_library.get();
+    children["yang-library"] = yang_library;
 
     yang_module_capabilities->parent = this;
-    children["yang-module-capabilities"] = yang_module_capabilities.get();
+    children["yang-module-capabilities"] = yang_module_capabilities;
 
     yang_name = "node"; yang_parent_name = "topology";
 }
@@ -1486,7 +1486,7 @@ EntityPath NetworkTopology::Topology::Node::get_entity_path(Entity* ancestor) co
 
 }
 
-Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Node::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -1501,13 +1501,13 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
     {
         if(available_capabilities != nullptr)
         {
-            children["available-capabilities"] = available_capabilities.get();
+            children["available-capabilities"] = available_capabilities;
         }
         else
         {
-            available_capabilities = std::make_unique<NetworkTopology::Topology::Node::AvailableCapabilities>();
+            available_capabilities = std::make_shared<NetworkTopology::Topology::Node::AvailableCapabilities>();
             available_capabilities->parent = this;
-            children["available-capabilities"] = available_capabilities.get();
+            children["available-capabilities"] = available_capabilities;
         }
         return children.at("available-capabilities");
     }
@@ -1516,13 +1516,13 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
     {
         if(clustered_connection_status != nullptr)
         {
-            children["clustered-connection-status"] = clustered_connection_status.get();
+            children["clustered-connection-status"] = clustered_connection_status;
         }
         else
         {
-            clustered_connection_status = std::make_unique<NetworkTopology::Topology::Node::ClusteredConnectionStatus>();
+            clustered_connection_status = std::make_shared<NetworkTopology::Topology::Node::ClusteredConnectionStatus>();
             clustered_connection_status->parent = this;
-            children["clustered-connection-status"] = clustered_connection_status.get();
+            children["clustered-connection-status"] = clustered_connection_status;
         }
         return children.at("clustered-connection-status");
     }
@@ -1531,13 +1531,13 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
     {
         if(pass_through != nullptr)
         {
-            children["pass-through"] = pass_through.get();
+            children["pass-through"] = pass_through;
         }
         else
         {
-            pass_through = std::make_unique<NetworkTopology::Topology::Node::PassThrough>();
+            pass_through = std::make_shared<NetworkTopology::Topology::Node::PassThrough>();
             pass_through->parent = this;
-            children["pass-through"] = pass_through.get();
+            children["pass-through"] = pass_through;
         }
         return children.at("pass-through");
     }
@@ -1549,14 +1549,14 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::Node::SupportingNode>();
+        auto c = std::make_shared<NetworkTopology::Topology::Node::SupportingNode>();
         c->parent = this;
         supporting_node.push_back(std::move(c));
-        children[segment_path] = supporting_node.back().get();
+        children[segment_path] = supporting_node.back();
         return children.at(segment_path);
     }
 
@@ -1567,14 +1567,14 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::Node::TerminationPoint>();
+        auto c = std::make_shared<NetworkTopology::Topology::Node::TerminationPoint>();
         c->parent = this;
         termination_point.push_back(std::move(c));
-        children[segment_path] = termination_point.back().get();
+        children[segment_path] = termination_point.back();
         return children.at(segment_path);
     }
 
@@ -1582,13 +1582,13 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
     {
         if(unavailable_capabilities != nullptr)
         {
-            children["unavailable-capabilities"] = unavailable_capabilities.get();
+            children["unavailable-capabilities"] = unavailable_capabilities;
         }
         else
         {
-            unavailable_capabilities = std::make_unique<NetworkTopology::Topology::Node::UnavailableCapabilities>();
+            unavailable_capabilities = std::make_shared<NetworkTopology::Topology::Node::UnavailableCapabilities>();
             unavailable_capabilities->parent = this;
-            children["unavailable-capabilities"] = unavailable_capabilities.get();
+            children["unavailable-capabilities"] = unavailable_capabilities;
         }
         return children.at("unavailable-capabilities");
     }
@@ -1597,13 +1597,13 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
     {
         if(yang_library != nullptr)
         {
-            children["yang-library"] = yang_library.get();
+            children["yang-library"] = yang_library;
         }
         else
         {
-            yang_library = std::make_unique<NetworkTopology::Topology::Node::YangLibrary>();
+            yang_library = std::make_shared<NetworkTopology::Topology::Node::YangLibrary>();
             yang_library->parent = this;
-            children["yang-library"] = yang_library.get();
+            children["yang-library"] = yang_library;
         }
         return children.at("yang-library");
     }
@@ -1612,13 +1612,13 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
     {
         if(yang_module_capabilities != nullptr)
         {
-            children["yang-module-capabilities"] = yang_module_capabilities.get();
+            children["yang-module-capabilities"] = yang_module_capabilities;
         }
         else
         {
-            yang_module_capabilities = std::make_unique<NetworkTopology::Topology::Node::YangModuleCapabilities>();
+            yang_module_capabilities = std::make_shared<NetworkTopology::Topology::Node::YangModuleCapabilities>();
             yang_module_capabilities->parent = this;
-            children["yang-module-capabilities"] = yang_module_capabilities.get();
+            children["yang-module-capabilities"] = yang_module_capabilities;
         }
         return children.at("yang-module-capabilities");
     }
@@ -1626,13 +1626,13 @@ Entity* NetworkTopology::Topology::Node::get_child_by_name(const std::string & c
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Node::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Node::get_children()
 {
     if(children.find("available-capabilities") == children.end())
     {
         if(available_capabilities != nullptr)
         {
-            children["available-capabilities"] = available_capabilities.get();
+            children["available-capabilities"] = available_capabilities;
         }
     }
 
@@ -1640,7 +1640,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Node::get_children()
     {
         if(clustered_connection_status != nullptr)
         {
-            children["clustered-connection-status"] = clustered_connection_status.get();
+            children["clustered-connection-status"] = clustered_connection_status;
         }
     }
 
@@ -1648,7 +1648,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Node::get_children()
     {
         if(pass_through != nullptr)
         {
-            children["pass-through"] = pass_through.get();
+            children["pass-through"] = pass_through;
         }
     }
 
@@ -1656,7 +1656,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Node::get_children()
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -1664,7 +1664,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Node::get_children()
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -1672,7 +1672,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Node::get_children()
     {
         if(unavailable_capabilities != nullptr)
         {
-            children["unavailable-capabilities"] = unavailable_capabilities.get();
+            children["unavailable-capabilities"] = unavailable_capabilities;
         }
     }
 
@@ -1680,7 +1680,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Node::get_children()
     {
         if(yang_library != nullptr)
         {
-            children["yang-library"] = yang_library.get();
+            children["yang-library"] = yang_library;
         }
     }
 
@@ -1688,7 +1688,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Node::get_children()
     {
         if(yang_module_capabilities != nullptr)
         {
-            children["yang-module-capabilities"] = yang_module_capabilities.get();
+            children["yang-module-capabilities"] = yang_module_capabilities;
         }
     }
 
@@ -1828,7 +1828,7 @@ EntityPath NetworkTopology::Topology::Link::Source::get_entity_path(Entity* ance
 
 }
 
-Entity* NetworkTopology::Topology::Link::Source::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Link::Source::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -1842,7 +1842,7 @@ Entity* NetworkTopology::Topology::Link::Source::get_child_by_name(const std::st
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Link::Source::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Link::Source::get_children()
 {
     return children;
 }
@@ -1916,7 +1916,7 @@ EntityPath NetworkTopology::Topology::Link::Destination::get_entity_path(Entity*
 
 }
 
-Entity* NetworkTopology::Topology::Link::Destination::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Link::Destination::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -1930,7 +1930,7 @@ Entity* NetworkTopology::Topology::Link::Destination::get_child_by_name(const st
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Link::Destination::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Link::Destination::get_children()
 {
     return children;
 }
@@ -2000,7 +2000,7 @@ EntityPath NetworkTopology::Topology::Link::SupportingLink::get_entity_path(Enti
 
 }
 
-Entity* NetworkTopology::Topology::Link::SupportingLink::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Link::SupportingLink::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -2014,7 +2014,7 @@ Entity* NetworkTopology::Topology::Link::SupportingLink::get_child_by_name(const
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Link::SupportingLink::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Link::SupportingLink::get_children()
 {
     return children;
 }
@@ -2031,14 +2031,14 @@ NetworkTopology::Topology::Link::Link()
     :
     	link_id{YType::str, "link-id"}
     	,
-    destination(std::make_unique<NetworkTopology::Topology::Link::Destination>())
-	,source(std::make_unique<NetworkTopology::Topology::Link::Source>())
+    destination(std::make_shared<NetworkTopology::Topology::Link::Destination>())
+	,source(std::make_shared<NetworkTopology::Topology::Link::Source>())
 {
     destination->parent = this;
-    children["destination"] = destination.get();
+    children["destination"] = destination;
 
     source->parent = this;
-    children["source"] = source.get();
+    children["source"] = source;
 
     yang_name = "link"; yang_parent_name = "topology";
 }
@@ -2103,7 +2103,7 @@ EntityPath NetworkTopology::Topology::Link::get_entity_path(Entity* ancestor) co
 
 }
 
-Entity* NetworkTopology::Topology::Link::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::Link::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -2118,13 +2118,13 @@ Entity* NetworkTopology::Topology::Link::get_child_by_name(const std::string & c
     {
         if(destination != nullptr)
         {
-            children["destination"] = destination.get();
+            children["destination"] = destination;
         }
         else
         {
-            destination = std::make_unique<NetworkTopology::Topology::Link::Destination>();
+            destination = std::make_shared<NetworkTopology::Topology::Link::Destination>();
             destination->parent = this;
-            children["destination"] = destination.get();
+            children["destination"] = destination;
         }
         return children.at("destination");
     }
@@ -2133,13 +2133,13 @@ Entity* NetworkTopology::Topology::Link::get_child_by_name(const std::string & c
     {
         if(source != nullptr)
         {
-            children["source"] = source.get();
+            children["source"] = source;
         }
         else
         {
-            source = std::make_unique<NetworkTopology::Topology::Link::Source>();
+            source = std::make_shared<NetworkTopology::Topology::Link::Source>();
             source->parent = this;
-            children["source"] = source.get();
+            children["source"] = source;
         }
         return children.at("source");
     }
@@ -2151,27 +2151,27 @@ Entity* NetworkTopology::Topology::Link::get_child_by_name(const std::string & c
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::Link::SupportingLink>();
+        auto c = std::make_shared<NetworkTopology::Topology::Link::SupportingLink>();
         c->parent = this;
         supporting_link.push_back(std::move(c));
-        children[segment_path] = supporting_link.back().get();
+        children[segment_path] = supporting_link.back();
         return children.at(segment_path);
     }
 
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::Link::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::Link::get_children()
 {
     if(children.find("destination") == children.end())
     {
         if(destination != nullptr)
         {
-            children["destination"] = destination.get();
+            children["destination"] = destination;
         }
     }
 
@@ -2179,7 +2179,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Link::get_children()
     {
         if(source != nullptr)
         {
-            children["source"] = source.get();
+            children["source"] = source;
         }
     }
 
@@ -2187,7 +2187,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::Link::get_children()
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -2207,10 +2207,10 @@ NetworkTopology::Topology::Topology()
     	topology_id{YType::str, "topology-id"},
 	 server_provided{YType::boolean, "server-provided"}
     	,
-    topology_types(std::make_unique<NetworkTopology::Topology::TopologyTypes>())
+    topology_types(std::make_shared<NetworkTopology::Topology::TopologyTypes>())
 {
     topology_types->parent = this;
-    children["topology-types"] = topology_types.get();
+    children["topology-types"] = topology_types;
 
     yang_name = "topology"; yang_parent_name = "network-topology";
 }
@@ -2296,7 +2296,7 @@ EntityPath NetworkTopology::Topology::get_entity_path(Entity* ancestor) const
 
 }
 
-Entity* NetworkTopology::Topology::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::Topology::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -2314,14 +2314,14 @@ Entity* NetworkTopology::Topology::get_child_by_name(const std::string & child_y
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::Link>();
+        auto c = std::make_shared<NetworkTopology::Topology::Link>();
         c->parent = this;
         link.push_back(std::move(c));
-        children[segment_path] = link.back().get();
+        children[segment_path] = link.back();
         return children.at(segment_path);
     }
 
@@ -2332,14 +2332,14 @@ Entity* NetworkTopology::Topology::get_child_by_name(const std::string & child_y
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::Node>();
+        auto c = std::make_shared<NetworkTopology::Topology::Node>();
         c->parent = this;
         node.push_back(std::move(c));
-        children[segment_path] = node.back().get();
+        children[segment_path] = node.back();
         return children.at(segment_path);
     }
 
@@ -2347,13 +2347,13 @@ Entity* NetworkTopology::Topology::get_child_by_name(const std::string & child_y
     {
         if(topology_types != nullptr)
         {
-            children["topology-types"] = topology_types.get();
+            children["topology-types"] = topology_types;
         }
         else
         {
-            topology_types = std::make_unique<NetworkTopology::Topology::TopologyTypes>();
+            topology_types = std::make_shared<NetworkTopology::Topology::TopologyTypes>();
             topology_types->parent = this;
-            children["topology-types"] = topology_types.get();
+            children["topology-types"] = topology_types;
         }
         return children.at("topology-types");
     }
@@ -2365,27 +2365,27 @@ Entity* NetworkTopology::Topology::get_child_by_name(const std::string & child_y
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology::UnderlayTopology>();
+        auto c = std::make_shared<NetworkTopology::Topology::UnderlayTopology>();
         c->parent = this;
         underlay_topology.push_back(std::move(c));
-        children[segment_path] = underlay_topology.back().get();
+        children[segment_path] = underlay_topology.back();
         return children.at(segment_path);
     }
 
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::Topology::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::Topology::get_children()
 {
     for (auto const & c : link)
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -2393,7 +2393,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::get_children()
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -2401,7 +2401,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::get_children()
     {
         if(topology_types != nullptr)
         {
-            children["topology-types"] = topology_types.get();
+            children["topology-types"] = topology_types;
         }
     }
 
@@ -2409,7 +2409,7 @@ std::map<std::string, Entity*> & NetworkTopology::Topology::get_children()
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -2484,7 +2484,7 @@ EntityPath NetworkTopology::get_entity_path(Entity* ancestor) const
 
 }
 
-Entity* NetworkTopology::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
+std::shared_ptr<Entity> NetworkTopology::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
 {
     if(children.find(child_yang_name) != children.end())
     {
@@ -2502,27 +2502,27 @@ Entity* NetworkTopology::get_child_by_name(const std::string & child_yang_name, 
             std::string segment = c->get_segment_path();
             if(segment_path == segment)
             {
-                children[segment_path] = c.get();
+                children[segment_path] = c;
                 return children.at(segment_path);
             }
         }
-        auto c = std::make_unique<NetworkTopology::Topology>();
+        auto c = std::make_shared<NetworkTopology::Topology>();
         c->parent = this;
         topology.push_back(std::move(c));
-        children[segment_path] = topology.back().get();
+        children[segment_path] = topology.back();
         return children.at(segment_path);
     }
 
     return nullptr;
 }
 
-std::map<std::string, Entity*> & NetworkTopology::get_children()
+std::map<std::string, std::shared_ptr<Entity>> & NetworkTopology::get_children()
 {
     for (auto const & c : topology)
     {
         if(children.find(c->get_segment_path()) == children.end())
         {
-            children[c->get_segment_path()] = c.get();
+            children[c->get_segment_path()] = c;
         }
     }
 
@@ -2535,7 +2535,7 @@ void NetworkTopology::set_value(const std::string & value_path, std::string valu
 
 std::shared_ptr<Entity> NetworkTopology::clone_ptr() const
 {
-    return std::make_unique<NetworkTopology>();
+    return std::make_shared<NetworkTopology>();
 }
 
 const Enum::YLeaf NetworkTopology::Topology::Node::ConnectionStatusEnum::connecting {0, "connecting"};

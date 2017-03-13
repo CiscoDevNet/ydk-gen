@@ -137,7 +137,7 @@ function py_sanity_ydktest_test {
 
     cd $YDKGEN_HOME && cp -r gen-api/python/ydktest-bundle/ydk/models/* sdk/python/core/ydk/models
 
-    run_test gen-api/python/ydktest-bundle/ydk/tests/import_tests.py
+    run_test gen-api/python/ydktest-bundle/ydk/models/ydktest/test/import_tests.py
 
     print_msg "deactivate virtualenv to gather coverage"
     deactivate
@@ -243,10 +243,7 @@ function py_sanity_augmentation_gen {
     cd $YDKGEN_HOME && rm -rf gen-api/python/*
     source gen_env/bin/activate
     run_test generate.py --core
-    run_test generate.py --bundle profiles/test-augmentation/ietf.json
-    run_test generate.py --bundle profiles/test-augmentation/ydktest-aug-ietf-1.json
-    run_test generate.py --bundle profiles/test-augmentation/ydktest-aug-ietf-2.json
-    run_test generate.py --bundle profiles/test-augmentation/ydktest-aug-ietf-4.json
+    run_test generate.py --bundle profiles/test/ydktest-augmentation.json
 }
 
 function py_sanity_augmentation_install {
@@ -254,18 +251,15 @@ function py_sanity_augmentation_install {
 
     cd $YDKGEN_HOME && source test_env/bin/activate
     pip uninstall ydk -y
-    pip install gen-api/python/ydk/dist/*.tar.gz \
-                gen-api/python/ietf*/dist/*.tar.gz \
-                gen-api/python/ydktest_aug_ietf_1*/dist/ydk*.tar.gz \
-                gen-api/python/ydktest_aug_ietf_2*/dist/ydk*.tar.gz \
-                gen-api/python/ydktest_aug_ietf_4*/dist/ydk*.tar.gz
+    pip install gen-api/python/ydk/dist/ydk*.tar.gz
+    pip install gen-api/python/augmentation-bundle/dist/*.tar.gz
 }
 
 function py_sanity_augmentation_test {
     print_msg "py_sanity_augmentation_test"
 
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/augmentation
-    run_test sdk/python/core/tests/test_sanity_bundle_aug.py
+    run_test sdk/python/core/tests/test_sanity_augmentation.py
 }
 
 function cpp_sanity_core_gen_install {
@@ -345,10 +339,10 @@ function py_tests {
     TEST_ENV="python3"
 
     init_env $GEN_ENV $TEST_ENV
-    
+
     # Install ydk-cpp core before starting tests
     cpp_sanity_core_gen_install
-    
+
     py_sanity_ydktest
     py_sanity_deviation
     py_sanity_augmentation

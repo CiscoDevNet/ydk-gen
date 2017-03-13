@@ -136,9 +136,9 @@ class Entity {
     virtual bool has_operation() const = 0;
 
     virtual void set_value(const std::string & value_path, std::string value) = 0;
-    virtual Entity* get_child_by_name(const std::string & yang_name, const std::string & segment_path="") = 0;
+    virtual std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path="") = 0;
 
-    virtual std::map<std::string, Entity*> & get_children() = 0;
+    virtual std::map<std::string, std::shared_ptr<Entity>> & get_children() = 0;
     virtual std::shared_ptr<Entity> clone_ptr() const;
 
     virtual void set_parent(Entity* p);
@@ -153,7 +153,7 @@ class Entity {
     std::string yang_name;
     std::string yang_parent_name;
     EditOperation operation;
-    std::map<std::string, Entity*> children;
+    std::map<std::string, std::shared_ptr<Entity>> children;
 };
 
 class Bits {

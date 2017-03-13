@@ -53,21 +53,21 @@ class GetEntityPathPrinter(object):
     def _is_parent_needed_for_abs_path(self, clazz):
         c = clazz.owner
         parents = []
-        
+
         while c is not None and not isinstance(c,Package):
             parents.append(c)
             c = c.owner
-      
+
         for p in parents:
             key_props = p.get_key_props()
             if key_props is not None and len(key_props) > 0:
-                return True 
+                return True
         return False
 
     def _print_get_entity_path_body(self, clazz, leafs):
         #can this class handle a nullptr
         #in which case it's absolute path can be determined
-        
+
         self.ctx.writeln('std::ostringstream path_buffer;')
 
         if clazz.owner is not None and isinstance(clazz.owner, Package):
@@ -81,12 +81,12 @@ class GetEntityPathPrinter(object):
             self.ctx.bline()
             self.ctx.writeln('path_buffer << get_segment_path();');
         else:
-            #this is not a top level 
+            #this is not a top level
             # is nullptr a valid parameter here
             self.ctx.writeln('if (ancestor == nullptr)')
             self.ctx.writeln('{')
             self.ctx.lvl_inc()
-            
+
             if self._is_parent_needed_for_abs_path(clazz):
                 self.ctx.writeln('throw(YCPPInvalidArgumentError{"ancestor cannot be nullptr as one of the ancestors is a list"});')
             else:
@@ -176,12 +176,10 @@ class GetSegmentPathPrinter(object):
     def _print_get_ydk_segment_path_header(self, clazz):
         self.ctx.writeln('std::string %s::get_segment_path() const' % clazz.qualified_cpp_name())
         self.ctx.writeln('{')
-        
         self.ctx.lvl_inc()
 
 
     def _print_get_ydk_segment_path_body(self, clazz):
-       
         path='"'
         if clazz.owner is not None:
             if isinstance(clazz.owner, Package):
@@ -193,32 +191,22 @@ class GetSegmentPathPrinter(object):
         path+='"'
         predicates = ''
         insert_token = ' <<'
-        
         key_props = clazz.get_key_props()
         for key_prop in key_props:
             predicates += insert_token
-            
             predicates += '"['
             if key_prop.stmt.i_module.arg != clazz.stmt.i_module.arg:
                 predicates += key_prop.stmt.i_module.arg
                 predicates += ':'
-            
             predicates += key_prop.stmt.arg + '='
-            
             predicates+= "'"
-                
             predicates+='"'
-
             predicates += insert_token
-            
-            predicates += ('%s.get()') % key_prop.name + insert_token
-
+            predicates += ('%s') % key_prop.name + insert_token
             predicates += '"'
-                
             predicates += "'"
-                
             predicates += ']"'
-            
+
         self.ctx.writeln('std::ostringstream path_buffer;')
         self.ctx.writeln('path_buffer << %s%s;' % (path, predicates))
         self.ctx.bline()
