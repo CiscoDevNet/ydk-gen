@@ -91,24 +91,15 @@ struct EntityPath {
     std::string path;
     std::vector<std::pair<std::string, LeafData>> value_paths;
 
-    EntityPath(std::string path, std::vector<std::pair<std::string, LeafData> > value_paths)
-        : path(path), value_paths(value_paths)
-    {
-    }
+    EntityPath(std::string path, std::vector<std::pair<std::string, LeafData> > value_paths);
 
-    ~EntityPath()
-    {
-    }
+    ~EntityPath();
 
-    inline bool operator == (EntityPath & other) const
-    {
-        return path == other.path && value_paths == other.value_paths;
-    }
+    bool operator == (EntityPath & other) const;
+    bool operator == (const EntityPath & other) const;
 
-    inline bool operator == (const EntityPath & other) const
-    {
-        return path == other.path && value_paths == other.value_paths;
-    }
+    bool operator != (EntityPath & other) const;
+    bool operator != (const EntityPath & other) const;
 };
 
 typedef void (*augment_capabilities_function)();
@@ -129,7 +120,7 @@ class Entity {
     // @param[in] parent The ancestor relative to which the path is calculated or nullptr
     // @return EntityPath
     // @throws YCPPInvalidArgumentError if the parent is invalid
-    virtual EntityPath get_entity_path(Entity* ancestor) const = 0;
+    virtual const EntityPath get_entity_path(Entity* ancestor) const = 0;
     virtual std::string get_segment_path() const = 0;
 
     virtual bool has_data() const = 0;
@@ -138,7 +129,7 @@ class Entity {
     virtual void set_value(const std::string & value_path, std::string value) = 0;
     virtual std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path="") = 0;
 
-    virtual std::map<std::string, std::shared_ptr<Entity>> & get_children() = 0;
+    virtual std::map<std::string, std::shared_ptr<Entity>> get_children() const = 0;
     virtual std::shared_ptr<Entity> clone_ptr() const;
 
     virtual void set_parent(Entity* p);
@@ -148,12 +139,16 @@ class Entity {
     virtual std::string get_bundle_yang_models_location() const;
     virtual std::string get_bundle_name() const;
 
+    bool operator == (Entity & other) const;
+    bool operator == (const Entity & other) const;
+    bool operator != (Entity & other) const;
+    bool operator != (const Entity & other) const;
+
   public:
     Entity* parent;
     std::string yang_name;
     std::string yang_parent_name;
     EditOperation operation;
-    std::map<std::string, std::shared_ptr<Entity>> children;
 };
 
 class Bits {
@@ -347,6 +342,9 @@ class YLeafList {
 };
 
 std::ostream& operator<< (std::ostream& stream, const YLeaf& value);
+std::ostream& operator<< (std::ostream& stream, const EntityPath& value);
+std::ostream& operator<< (std::ostream& stream, Entity& value);
+std::ostream& operator<< (std::ostream& stream, const LeafData& value);
 
 enum class EncodingFormat {
     XML,

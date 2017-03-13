@@ -46,7 +46,7 @@ class GetEntityPathPrinter(object):
         self._print_get_entity_path_trailer(clazz)
 
     def _print_get_entity_path_header(self, clazz):
-        self.ctx.writeln('EntityPath %s::get_entity_path(Entity* ancestor) const' % clazz.qualified_cpp_name())
+        self.ctx.writeln('const EntityPath %s::get_entity_path(Entity* ancestor) const' % clazz.qualified_cpp_name())
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
 
@@ -75,7 +75,7 @@ class GetEntityPathPrinter(object):
             self.ctx.writeln('if (ancestor != nullptr)')
             self.ctx.writeln('{')
             self.ctx.lvl_inc()
-            self.ctx.writeln('throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node"});')
+            self.ctx.writeln('throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node. Path: "+get_segment_path()});')
             self.ctx.lvl_dec()
             self.ctx.writeln('}')
             self.ctx.bline()

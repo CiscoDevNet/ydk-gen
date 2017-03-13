@@ -542,6 +542,7 @@ TEST_CASE("test_leafref_pos")
 	REQUIRE(r_1->inbtw_list->ldata[1]->name == r_2->inbtw_list->ldata[1]->name);
 	REQUIRE(r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->number == r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->number);
 	REQUIRE(r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->name == r_1->inbtw_list->ldata[0]->subc->subc_subl1[0]->name);
+        REQUIRE(*r_1 == *r_2);
 }
 
 TEST_CASE("aug_one_pos")

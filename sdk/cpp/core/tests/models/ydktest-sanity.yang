@@ -148,9 +148,6 @@ module ydktest-sanity {
         description "this is string value";
         type string;
       }
-      anyxml config {
-          description "test";
-      }
     }
   }
 

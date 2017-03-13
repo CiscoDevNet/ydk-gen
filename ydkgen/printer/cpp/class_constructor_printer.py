@@ -53,7 +53,6 @@ class ClassConstructorPrinter(object):
             if child.is_many or child.stmt.search_one('presence') is not None:
                 continue
             self.ctx.writeln('%s->parent = this;' % child.name)
-            self.ctx.writeln('children["%s"] = %s;' % (child.stmt.arg, child.name))
             self.ctx.bline()
 
     def _print_class_constructor_trailer(self):

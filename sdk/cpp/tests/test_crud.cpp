@@ -94,10 +94,12 @@ TEST_CASE("bgp_read_delete")
 	REQUIRE(reply);
 
 	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
-	auto bgp_read = crud.read(provider, *bgp_filter);
+	auto bgp_read = crud.read_config(provider, *bgp_filter);
 	REQUIRE(bgp_read!=nullptr);
 	openconfig_bgp::Bgp * bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
 	REQUIRE(bgp_read_ptr!=nullptr);
+
+	REQUIRE(*(bgp_read_ptr) == *(bgp_set));
 
 	CHECK(bgp_set->global->config->as == bgp_read_ptr->global->config->as);
 	CHECK(bgp_set->neighbors->neighbor[0]->neighbor_address == bgp_read_ptr->neighbors->neighbor[0]->neighbor_address);
@@ -107,6 +109,9 @@ TEST_CASE("bgp_read_delete")
 
 	reply = reply && (bgp_set->global->afi_safis->afi_safi[0]->config->enabled  == bgp_read_ptr->global->afi_safis->afi_safi[0]->config->enabled);
 	REQUIRE(reply);
+
+    cout<<*bgp_set<<endl<<endl;
+    cout<<*bgp_read_ptr<<endl;
 }
 
 TEST_CASE("bgp_update_delete")
@@ -163,6 +168,8 @@ TEST_CASE("bgp_read_create")
 	openconfig_bgp::Bgp * bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
 	REQUIRE(bgp_read_ptr!=nullptr);
 
+	REQUIRE(*(bgp_read_ptr) == *(bgp_set));
+
 	bgp_read_ptr->global->config->as = 65210;
 	bgp_read_ptr->global->config->router_id = "6.7.8.9";
 	reply = crud.update(provider, *bgp_read_ptr);
@@ -172,28 +179,37 @@ TEST_CASE("bgp_read_create")
 
 TEST_CASE("bgp_read_non_top")
 {
-	ydk::path::Repository repo{TEST_HOME};
-	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-	CrudService crud{};
-	auto bgp_set = make_unique<openconfig_bgp::Bgp>();
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+    auto bgp_set = make_unique<openconfig_bgp::Bgp>();
+    bool reply = crud.delete_(provider, *bgp_set);
+    REQUIRE(reply);
+
 	bgp_set->global->config->as = 65001;
 	bgp_set->global->config->router_id = "1.2.3.4";
-        auto d = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
-        d->neighbor_address = "1.2.3.4";
-        d->config->neighbor_address = "1.2.3.4";
-        bgp_set->neighbors->neighbor.push_back(move(d));
-        auto q = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
-        q->neighbor_address = "1.2.3.5";
-        q->config->neighbor_address = "1.2.3.5";
-        bgp_set->neighbors->neighbor.push_back(move(q));
-	bool reply = crud.create(provider, *bgp_set);
-
+    auto d = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
+    d->neighbor_address = "1.2.3.4";
+    d->config->neighbor_address = "1.2.3.4";
+    d->parent = bgp_set->neighbors.get();
+    bgp_set->neighbors->neighbor.push_back(move(d));
+    auto q = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
+    q->neighbor_address = "1.2.3.5";
+    q->config->neighbor_address = "1.2.3.5";
+    q->parent = bgp_set->neighbors.get();
+    bgp_set->neighbors->neighbor.push_back(move(q));
+	reply = crud.create(provider, *bgp_set);
 	REQUIRE(reply);
 
 	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
-	auto bgp_read = crud.read_config(provider, *(bgp_filter->neighbors));
+	auto bgp_read = crud.read_config(provider, *(bgp_filter));
 	REQUIRE(bgp_read!=nullptr);
 	openconfig_bgp::Bgp * bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
 	REQUIRE(bgp_read_ptr!=nullptr);
+
+    cout<<*bgp_set<<endl<<endl;
+    cout<<*bgp_read_ptr<<endl;
+
+	REQUIRE(*(bgp_read_ptr) == *(bgp_set));
 
 }

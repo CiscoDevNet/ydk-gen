@@ -27,6 +27,7 @@
 
 #include "../src/types.hpp"
 #include "catch.hpp"
+#include <iostream>
 
 using namespace ydk;
 using namespace std;
@@ -60,24 +61,23 @@ class TestEntity:public Entity
 		return "test";
 	}
 
-	EntityPath get_entity_path(Entity* parent) const
+	const EntityPath get_entity_path(Entity* parent) const
 	{
 		return {{"test"}, {name.get_name_leafdata(), enabled.get_name_leafdata(), bits_field.get_name_leafdata()}};
 	}
 
-	std::shared_ptr<Entity> get_child_by_name(const std::string & child_name, const std::string & child_path)
+	std::shared_ptr<Entity> get_child_by_name(const std::string & child_path, const string & u)
 	{
-		if(child_name == child->yang_name)
+		if(child_path == child->get_segment_path())
 		{
-			if(children.find(child_name) != children.end())
+			if(child != nullptr)
 			{
-				return children.at(child_name);
+				return child;
 			}
 			else
 			{
 				child = make_shared<TestEntity::Child>();
 				child->parent = this;
-				children[child_name] = child;
 				return child;
 			}
 		}
@@ -100,8 +100,9 @@ class TestEntity:public Entity
 		}
 	}
 
-	std::map<std::string, std::shared_ptr<Entity>> & get_children()
+	std::map<std::string, std::shared_ptr<Entity>> get_children() const
 	{
+	    std::map<std::string, std::shared_ptr<Entity>> children;
 		return children;
 	}
 
@@ -129,38 +130,34 @@ class TestEntity:public Entity
 			return "child";
 		}
 
-		EntityPath get_entity_path(Entity* parent) const
+		const EntityPath get_entity_path(Entity* parent) const
 		{
 			return {{"child"}, {child_val.get_name_leafdata()}};
 		}
 
-		std::shared_ptr<Entity> get_child_by_name(const std::string & child_name, const std::string & child_path)
+		std::shared_ptr<Entity> get_child_by_name(const std::string & child_path, const string & u)
 		{
-			if(child_name == "multi-child")
+			if(child_path == "multi-child")
 			{
 				for(auto const& ch : multi_child)
 				{
 					string segment = ch->get_segment_path();
-					if(child_path == segment)
+					if(u == segment)
 					{
-						if(children.find(child_path)==children.end())
-						{
-							children[child_path] = ch;
-						}
-						return children.at(child_path);
+					    return ch;
 					}
 				}
 				auto ch = make_shared<TestEntity::Child::MultiChild>();
 				ch->parent = this;
-				multi_child.push_back(move(ch));
-				children[child_path] = multi_child.back();
+				multi_child.push_back(ch);
 				return multi_child.back();
 			}
 			return nullptr;
 		}
 
-		std::map<std::string, std::shared_ptr<Entity>> & get_children()
+		std::map<std::string, std::shared_ptr<Entity>> get_children() const
 		{
+		    std::map<std::string, std::shared_ptr<Entity>> children;
 			return children;
 		}
 
@@ -196,21 +193,22 @@ class TestEntity:public Entity
 
 			std::string get_segment_path() const
 			{
-				return "multi-child[multi-key='"+child_key.get()+"']";
+				return "multi-child[child-key='"+child_key.get()+"']";
 			}
 
-			EntityPath get_entity_path(Entity* parent) const
+			const EntityPath get_entity_path(Entity* parent) const
 			{
-				return {{"multi-child[multi-key='"+child_key.get()+"']"}, {child_key.get_name_leafdata()}};
+				return {{"multi-child[child-key='"+child_key.get()+"']"}, {child_key.get_name_leafdata()}};
 			}
 
-			std::shared_ptr<Entity> get_child_by_name(const std::string & child_name, const std::string & child_path)
+			std::shared_ptr<Entity> get_child_by_name(const std::string & child_path, const string & u)
 			{
 				return nullptr;
 			}
 
-			std::map<std::string, std::shared_ptr<Entity>> & get_children()
+			std::map<std::string, std::shared_ptr<Entity>> get_children() const
 			{
+			    std::map<std::string, std::shared_ptr<Entity>> children;
 				return children;
 			}
 
@@ -256,6 +254,98 @@ TEST_CASE("test_create")
 	REQUIRE(test.get_entity_path(nullptr) == expected);
 }
 
+TEST_CASE("test_unequal")
+{
+    TestEntity test1{};
+
+    test1.name = "value for test";
+    test1.enabled = true;
+    test1.bits_field["bit1"] = false;
+    test1.bits_field["bit2"] = true;
+
+    TestEntity test2{};
+
+    test2.name = "different";
+    test2.enabled = false;
+    test2.bits_field["bit1"] = true;
+    test2.bits_field["bit2"] = false;
+
+    REQUIRE(test1.has_data() == true);
+    REQUIRE(test2.has_data() == true);
+    REQUIRE(test1 != test2);
+}
+
+TEST_CASE("test_unequal_child")
+{
+    TestEntity test1{};
+
+    test1.name = "value for test";
+    test1.enabled = true;
+    test1.bits_field["bit1"] = false;
+    test1.bits_field["bit2"] = true;
+    test1.child->child_val = 23;
+
+    TestEntity test2{};
+
+    test2.name = "value for test";
+    test2.enabled = true;
+    test2.bits_field["bit1"] = true;
+    test2.bits_field["bit2"] = false;
+
+    REQUIRE(test1.has_data() == true);
+    REQUIRE(test2.has_data() == true);
+
+    cout<<test1<<endl;
+    cout<<test2<<endl;
+    REQUIRE(test1 != test2);
+}
+
+TEST_CASE("test_equal")
+{
+    TestEntity test1{};
+
+    test1.name = "value for test";
+    test1.enabled = true;
+    test1.bits_field["bit1"] = false;
+    test1.bits_field["bit2"] = true;
+
+    TestEntity test2{};
+
+    test2.name = "value for test";
+    test2.enabled = true;
+    test2.bits_field["bit1"] = false;
+    test2.bits_field["bit2"] = true;
+
+    REQUIRE(test1.has_data() == true);
+    REQUIRE(test2.has_data() == true);
+    REQUIRE(test1 == test2);
+}
+
+TEST_CASE("test_equal_child")
+{
+    TestEntity test1{};
+
+    test1.name = "value for test";
+    test1.enabled = true;
+    test1.bits_field["bit1"] = false;
+    test1.bits_field["bit2"] = true;
+    test1.child->child_val = 23;
+
+    TestEntity test2{};
+
+    test2.name = "value for test";
+    test2.enabled = true;
+    test2.bits_field["bit1"] = false;
+    test2.bits_field["bit2"] = true;
+    test2.child->child_val = 23;
+
+    REQUIRE(test1.has_data() == true);
+    REQUIRE(test2.has_data() == true);
+
+    cout<<test1<<endl;
+    cout<<test2<<endl;
+    REQUIRE(test1 == test2);
+}
 TEST_CASE("test_read")
 {
 	TestEntity test{};

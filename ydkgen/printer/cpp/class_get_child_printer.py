@@ -37,25 +37,9 @@ class ClassGetChildPrinter(object):
         self.ctx.lvl_inc()
 
     def _print_class_get_child_body(self, children):
-        self._print_class_get_child_common()
         for child in children:
             self._print_class_get_child(child)
             self.ctx.bline()
-
-    def _print_class_get_child_common(self):
-        self.ctx.writeln('if(children.find(child_yang_name) != children.end())')
-        self.ctx.writeln('{')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('return children.at(child_yang_name);')
-        self.ctx.lvl_dec()
-        self.ctx.writeln('}')
-        self.ctx.writeln('else if(children.find(segment_path) != children.end())')
-        self.ctx.writeln('{')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('return children.at(segment_path);')
-        self.ctx.lvl_dec()
-        self.ctx.writeln('}')
-        self.ctx.bline()
 
     def _print_class_get_child(self, child):
         self.ctx.writeln('if(child_yang_name == "%s")' % (child.stmt.arg))
@@ -76,34 +60,24 @@ class ClassGetChildPrinter(object):
         self.ctx.writeln('if(segment_path == segment)')
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
-        self.ctx.writeln('children[segment_path] = c;')
-        self.ctx.writeln('return children.at(segment_path);')
+        self.ctx.writeln('return c;')
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
         self.ctx.writeln('auto c = std::make_shared<%s>();' % (child.property_type.qualified_cpp_name()))
         self.ctx.writeln('c->parent = this;')
-        self.ctx.writeln('%s.push_back(std::move(c));' % child.name)
-        self.ctx.writeln('children[segment_path] = %s.back();' % child.name)
-        self.ctx.writeln('return children.at(segment_path);')
+        self.ctx.writeln('%s.push_back(c);' % child.name)
+        self.ctx.writeln('return c;')
 
     def _print_class_get_child_unique(self, child):
-        self.ctx.writeln('if(%s != nullptr)' % child.name)
-        self.ctx.writeln('{')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('children["%s"] = %s;' % (child.stmt.arg, child.name))
-        self.ctx.lvl_dec()
-        self.ctx.writeln('}')
-        self.ctx.writeln('else')
+        self.ctx.writeln('if(%s == nullptr)' % child.name)
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
         self.ctx.writeln('%s = std::make_shared<%s>();' % (child.name, child.property_type.qualified_cpp_name()))
-        self.ctx.writeln('%s->parent = this;' % child.name)
-        self.ctx.writeln('children["%s"] = %s;' % (child.stmt.arg, child.name))
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
-        self.ctx.writeln('return children.at("%s");' % child.stmt.arg)
+        self.ctx.writeln('return %s;' % child.name)
 
     def _print_class_get_child_trailer(self, clazz):
         self.ctx.writeln('return nullptr;')

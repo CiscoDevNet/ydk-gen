@@ -132,6 +132,9 @@ class ClassSourcePrinter(object):
     def _print_class_get_path(self, clazz, leafs):
         GetEntityPathPrinter(self.ctx).print_output(clazz, leafs)
 
+    def _print_class_create_child(self, clazz, children):
+        ClassCreateChildPrinter(self.ctx).print_class_create_child(clazz, children)
+
     def _print_class_set_child(self, clazz, children):
         ClassGetChildPrinter(self.ctx).print_class_get_child(clazz, children)
 

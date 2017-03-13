@@ -71,11 +71,11 @@ class ClassMembersPrinter(object):
     def _print_common_method_declarations(self, clazz):
         self.ctx.writeln('bool has_data() const override;')
         self.ctx.writeln('bool has_operation() const override;')
-        self.ctx.writeln('EntityPath get_entity_path(Entity* parent) const override;')
+        self.ctx.writeln('const EntityPath get_entity_path(Entity* parent) const override;')
         self.ctx.writeln('std::string get_segment_path() const override;')
         self.ctx.writeln('std::shared_ptr<Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;')
         self.ctx.writeln('void set_value(const std::string & value_path, std::string value) override;')
-        self.ctx.writeln('std::map<std::string, std::shared_ptr<Entity>> & get_children() override;')
+        self.ctx.writeln('std::map<std::string, std::shared_ptr<Entity>> get_children() const override;')
 
     def _print_top_level_entity_functions(self, clazz):
         if clazz.owner is not None and isinstance(clazz.owner, Package):
