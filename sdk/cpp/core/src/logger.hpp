@@ -37,20 +37,25 @@ class PyLogger
 public:
     PyLogger()
     {
-        Py_Initialize();
+    }
 
-        py_logging  = PyImport_ImportModule("logging");
+    ~PyLogger()
+    {
+        if (py_logger != nullptr)
+        {
+           Py_DECREF(py_logger);
+        }
+    }
 
+    void set_logger()
+    {
+        PyObject* py_logging  = PyImport_ImportModule("logging");
         PyObject* ydk_arg = Py_BuildValue("s", "ydk");
         const char* method = "getLogger";
         const char* fmt = "O";
         py_logger = PyObject_CallMethod(py_logging, (char *)method, (char *)fmt, ydk_arg);
         Py_DECREF(ydk_arg);
-    }
-    ~PyLogger()
-    {
         Py_DECREF(py_logging);
-        Py_DECREF(py_logger);
     }
 
     template <typename... Args> void py_fmt_log(const std::string& name, const char* fmt, spdlog::level::level_enum lvl, const char* py_lvl, const Args&... args)
@@ -89,7 +94,14 @@ public:
     {
         PyObject* py_msg_arg = Py_BuildValue("s", msg);
         const char* fmt = "O";
-        PyObject_CallMethod(py_logger, (char *)py_lvl, (char *)fmt, py_msg_arg);
+        if (Py_IsInitialized())
+        {
+            if (py_logger == nullptr)
+            {
+                set_logger();
+            }
+            PyObject_CallMethod(py_logger, (char *)py_lvl, (char *)fmt, py_msg_arg);
+        }
         Py_DECREF(py_msg_arg);
     }
 
@@ -120,7 +132,6 @@ public:
 
 
 private:
-    PyObject* py_logging = nullptr;
     PyObject* py_logger = nullptr;
 };
 
@@ -143,6 +154,7 @@ class Logger
         { \
             if(!lazy_check()) { return; } \
             internal_logger->loglevel<Args...>(fmt, args...); \
+            if (Py_IsInitialized()) \
             py_logger->loglevel<Args...>(internal_logger->name(), fmt, args...); \
         }
 
@@ -152,6 +164,7 @@ class Logger
         { \
             if(!lazy_check()) { return; } \
             internal_logger->loglevel<T>(msg); \
+            if (Py_IsInitialized()) \
             py_logger->loglevel<T>(msg); \
         }
 

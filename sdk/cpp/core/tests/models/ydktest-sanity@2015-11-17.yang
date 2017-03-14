@@ -400,6 +400,7 @@ module ydktest-sanity {
 
         leaf-list enum-llist {
           type Ydk-Enum-test;
+          max-elements 3;
           description "A leaf-list of enum";
         }
 

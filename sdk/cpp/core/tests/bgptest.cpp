@@ -25,7 +25,6 @@
 #include "../src/path_api.hpp"
 #include "config.hpp"
 #include "catch.hpp"
-#include <spdlog/spdlog.h>
 
 namespace mock {
 class MockServiceProvider : public ydk::path::ServiceProvider
@@ -204,7 +203,6 @@ const char* expected_bgp_peer_json = "{\"openconfig-bgp:bgp\":{\"global\":{\"con
 
 TEST_CASE( "bgp" )
 {
-    auto console = spdlog::stdout_color_mt("ydk");
     std::string searchdir{TEST_HOME};
     mock::MockServiceProvider sp{searchdir, test_openconfig};
 

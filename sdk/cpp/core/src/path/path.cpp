@@ -110,8 +110,8 @@ ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::Vali
     struct lyd_node* lynode = dn_impl.m_node;
     int rc = lyd_validate(&lynode,ly_option, NULL);
     if(rc) {
-        YLOG_ERROR("Data validation failed: {}", ly_errmsg());
-        throw(ydk::path::YCPPDataValidationError{});
+        YLOG_ERROR("Data validation failed: {}. Path: {}", ly_errmsg(), ly_errpath());
+        throw(ydk::YCPPModelError{""});
     }
 
 }

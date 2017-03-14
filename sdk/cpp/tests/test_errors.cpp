@@ -29,16 +29,13 @@
 using namespace ydk;
 using namespace std;
 
-bool correct_message(const YCPPError& ex)
-{
-    CHECK(
-    		(string(ex.what()).find("Invalid value")!=string::npos
-    		|| string(ex.what()).find("Failed to resolve")!=string::npos
-			|| string(ex.what()).find("Unexpected character")!=string::npos
-			|| string(ex.what()).find("does not satisfy the constraint")!=string::npos) ==
-			true);
-    return true;
-}
+#define CONTAINS_ERROR_MESSAGE \
+    		Catch::Contains("Invalid value") \
+    		|| Catch::Contains("Failed to resolve") \
+			|| Catch::Contains("Unexpected character") \
+			|| Catch::Contains("does not satisfy the constraint") \
+			|| Catch::Contains("YCPPModelError")
+
 
 TEST_CASE("int8_invalid")
 {
@@ -53,7 +50,7 @@ TEST_CASE("int8_invalid")
 
 	//CREATE
 	r_1->ytypes->built_in_t->number8 = "test";
-	CHECK_THROWS(crud.create(provider, *r_1));
+	CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("int16_invalid")
@@ -69,7 +66,7 @@ TEST_CASE("int16_invalid")
 
 	//CREATE
 	r_1->ytypes->built_in_t->number16 = "test";
-	CHECK_THROWS(crud.create(provider, *r_1));
+	CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("int64_invalid")
@@ -85,7 +82,7 @@ TEST_CASE("int64_invalid")
 
 	//CREATE
 	r_1->ytypes->built_in_t->number64 = "test";
-	CHECK_THROWS(crud.create(provider, *r_1));
+	CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("bits_invalid")
@@ -101,7 +98,7 @@ TEST_CASE("bits_invalid")
 
     //CREATE
     r_1->ytypes->built_in_t->bits_value["invalid"] = true;
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("deci_invalid")
@@ -117,7 +114,7 @@ TEST_CASE("deci_invalid")
 
     //CREATE
     r_1->ytypes->built_in_t->deci64 = "xyz";
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("empty_invalid")
@@ -133,7 +130,7 @@ TEST_CASE("empty_invalid")
 
     //CREATE
     r_1->ytypes->built_in_t->emptee = 1;
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("enum_invalid")
@@ -149,11 +146,11 @@ TEST_CASE("enum_invalid")
 
     //CREATE
     r_1->ytypes->built_in_t->embeded_enum = ydktest_sanity::YdkEnumTestEnum::none;
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 
     //CREATE
     r_1->ytypes->built_in_t->embeded_enum = "wrong";
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("identity_invalid")
@@ -169,7 +166,7 @@ TEST_CASE("identity_invalid")
 
     //CREATE
     r_1->ytypes->built_in_t->identity_ref_value = "wrong";
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("leaflist_invalid")
@@ -185,7 +182,7 @@ TEST_CASE("leaflist_invalid")
 
     //CREATE
     r_1->ytypes->built_in_t->identity_llist.append(1);
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("empty_invalid_1")
@@ -201,7 +198,7 @@ TEST_CASE("empty_invalid_1")
 
     //CREATE
     r_1->ytypes->built_in_t->emptee = 143;
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 
@@ -218,7 +215,7 @@ TEST_CASE("enum_leaflist_invalid")
 
     //CREATE
     r_1->ytypes->built_in_t->enum_llist.append(Empty());
-    CHECK_THROWS(crud.create(provider, *r_1));
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("int8_invalid_1")
@@ -234,7 +231,7 @@ TEST_CASE("int8_invalid_1")
 
 	//CREATE
 	r_1->ytypes->built_in_t->number8 = Empty();
-	CHECK_THROWS(crud.create(provider, *r_1));
+	CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }
 
 TEST_CASE("leafref_invalid")
@@ -251,5 +248,24 @@ TEST_CASE("leafref_invalid")
 	//CREATE
 	r_1->leaf_ref->one->name_of_one = "test";
 	r_1->leaf_ref->one->two->self_ref_one_name = "test";
-	CHECK_THROWS(crud.create(provider, *r_1));
+	CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
+}
+
+TEST_CASE("leaflist_max_elements")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::local);
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::not_set);
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::remote);
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::none);
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE);
 }

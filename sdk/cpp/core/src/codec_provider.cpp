@@ -73,7 +73,7 @@ void CodecServiceProvider::initialize(const std::string & bundle_name,
     initialize_root_schema(bundle_name, repo);
 }
 
-path::RootSchemaNode& CodecServiceProvider::get_root_schema(const std::string & bundle_name)
+path::RootSchemaNode& CodecServiceProvider::get_root_schema_for_bundle(const std::string & bundle_name)
 {
     if(user_provided_repo)
     {

@@ -383,6 +383,7 @@ module ydktest-sanity {
         leaf-list enum-llist {
           type Ydk-Enum-test;
           description "A leaf-list of enum";
+          max-elements 3;
         }
 
         leaf-list identity-llist {

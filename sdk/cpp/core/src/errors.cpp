@@ -24,6 +24,14 @@
 
 #include "path/path_private.hpp"
 
+namespace ydk
+{
+static std::string get_libyang_error()
+{
+    return std::string(ly_errmsg()) + ". Path: " + std::string(ly_errpath());
+}
+}
+
 /////////////////////////////////////////////////////////////////////////
 /// YCPPError
 /////////////////////////////////////////////////////////////////////////
@@ -111,7 +119,7 @@ ydk::YCPPOperationNotSupportedError::YCPPOperationNotSupportedError(const std::s
 //////////////////////////////////////////////////////////////////////////
 /// YCPPDataValidationError
 //////////////////////////////////////////////////////////////////////////
-ydk::path::YCPPDataValidationError::YCPPDataValidationError() : ydk::path::YCPPCoreError{"YCPPDataValidationError: " + std::string(ly_errmsg())}
+ydk::path::YCPPDataValidationError::YCPPDataValidationError() : ydk::path::YCPPCoreError{"YCPPDataValidationError:" + get_libyang_error()}
 {
 
 }
@@ -129,7 +137,7 @@ ydk::path::YCPPPathError::YCPPPathError(ydk::path::YCPPPathError::Error error_co
 /////////////////////////////////////////////////////////////////////////
 /// YCPPCodecError
 /////////////////////////////////////////////////////////////////////////
-ydk::path::YCPPCodecError::YCPPCodecError(YCPPCodecError::Error ec) : YCPPCoreError("YCPPCodecError: " + std::string(ly_errmsg())), err{ec}
+ydk::path::YCPPCodecError::YCPPCodecError(YCPPCodecError::Error ec) : YCPPCoreError("YCPPCodecError:" + get_libyang_error()), err{ec}
 {
 
 }
@@ -138,7 +146,7 @@ ydk::path::YCPPCodecError::YCPPCodecError(YCPPCodecError::Error ec) : YCPPCoreEr
 /////////////////////////////////////////////////////////////////////////
 /// YCPPModelError
 /////////////////////////////////////////////////////////////////////////
-ydk::YCPPModelError::YCPPModelError(const std::string& msg) : ydk::YCPPError{"YCPPModelError: " + msg}
+ydk::YCPPModelError::YCPPModelError(const std::string& msg) : ydk::YCPPError{"YCPPModelError: " + msg+" : " + get_libyang_error()}
 {
 
 }

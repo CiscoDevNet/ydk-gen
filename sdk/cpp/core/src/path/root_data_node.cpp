@@ -80,7 +80,7 @@ ydk::path::RootDataImpl::create(const std::string& path, const std::string& valu
     if( dnode == nullptr)
     {
         YLOG_ERROR("Path {} is invalid", path);
-        throw(YCPPInvalidArgumentError{"Path is invalid."});
+        throw(YCPPInvalidArgumentError{"Path is invalid: " + path});
     }
 
     DataNodeImpl* dn = nullptr;

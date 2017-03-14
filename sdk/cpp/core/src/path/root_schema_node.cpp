@@ -154,7 +154,7 @@ ydk::path::RootSchemaNodeImpl::rpc(const std::string& path) const
 {
     auto c = find(path);
     if(c.empty()){
-        throw(YCPPInvalidArgumentError{"Path is invalid"});
+        throw(YCPPInvalidArgumentError{"Path is invalid: "+path});
     }
 
     bool found = false;

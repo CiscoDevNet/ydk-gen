@@ -40,6 +40,7 @@ const char * PAYLOAD_ERROR_MSG ="Codec service only supports one entity per payl
 static augment_capabilities_function get_augment_capabilities_function(Entity & entity);
 static std::string get_bundle_yang_models_location(Entity & entity);
 static std::string get_bundle_name(Entity & entity);
+static path::RootSchemaNode & get_root_schema(CodecServiceProvider & provider, Entity & entity);
 
 
 CodecService::CodecService()
@@ -53,10 +54,7 @@ CodecService::~CodecService()
 std::string
 CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pretty)
 {
-    auto const & bundle_name = get_bundle_name(entity);
-    provider.initialize(bundle_name, get_bundle_yang_models_location(entity), get_augment_capabilities_function(entity));
-
-    path::RootSchemaNode& root_schema = provider.get_root_schema(bundle_name);
+    path::RootSchemaNode& root_schema = get_root_schema(provider, entity);
     try
     {
         path::DataNode& data_node = get_data_node_from_entity(entity, root_schema);
@@ -88,10 +86,7 @@ CodecService::encode(CodecServiceProvider & provider, std::map<std::string, std:
 std::shared_ptr<Entity>
 CodecService::decode(CodecServiceProvider & provider, const std::string & payload, std::shared_ptr<Entity> entity)
 {
-    auto const & bundle_name = get_bundle_name(*entity);
-    provider.initialize(bundle_name, get_bundle_yang_models_location(*entity), get_augment_capabilities_function(*entity));
-
-    path::RootSchemaNode& root_schema = provider.get_root_schema(bundle_name);
+    path::RootSchemaNode& root_schema = get_root_schema(provider, *entity);
 
     YLOG_INFO("Performing decode operation on {}", payload);
 
@@ -149,4 +144,12 @@ static std::string get_bundle_name(Entity & entity)
     return get_bundle_name(*(entity.parent));
 }
 
+static path::RootSchemaNode & get_root_schema(CodecServiceProvider & provider, Entity & entity)
+{
+    auto const & bundle_name = get_bundle_name(entity);
+    provider.initialize(bundle_name, get_bundle_yang_models_location(entity), get_augment_capabilities_function(entity));
+
+    path::RootSchemaNode& root_schema = provider.get_root_schema_for_bundle(bundle_name);
+    return root_schema;
+}
 }

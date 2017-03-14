@@ -1,12 +1,41 @@
-**2017-01-30 version 0.5.3:**
+### 2017-03-17 version 0.5.4
 
-### Python
+#### Python
+ * Improved logging to indicate message directionality ([#388](https://github.com/CiscoDevNet/ydk-gen/pull/388))
+ * Provide more details for validation error message for leaf-lists ([#398](https://github.com/CiscoDevNet/ydk-gen/pull/398))
+ * Remove indirect python requirements from `setup.py` ([#392](https://github.com/CiscoDevNet/ydk-gen/pull/392))
+ * If validation error occurs when decoding payload, include payload as an attribute of the `YPYModelError` raised ([#381](https://github.com/CiscoDevNet/ydk-gen/pull/381))
+
+#### C++
+ * Changed dependent libraries ([#382](https://github.com/CiscoDevNet/ydk-gen/pull/382))
+   * Use header-only [spdlog](https://github.com/gabime/spdlog) library for logging
+   * Use header-only [catch](https://github.com/philsquared/Catch) library for testing
+   * Completely remove boost dependency
+ * Create default yang models repository for each bundle. Install yang models as part of bundle shared library ([#292](https://github.com/CiscoDevNet/ydk-gen/pull/292))
+   * Make passing in `path::Repository` object optional for `CodecServiceProvider`
+ * Use smart pointers (like `shared_ptr`) in place of raw pointers ([#382](https://github.com/CiscoDevNet/ydk-gen/pull/382)), ([#393](https://github.com/CiscoDevNet/ydk-gen/pull/393))
+ * Support linking to multiple bundles ([#349](https://github.com/CiscoDevNet/ydk-gen/pull/349))
+ * Added sample code for using YDK with JSON configs in combination with CRUD service ([#387](https://github.com/CiscoDevNet/ydk-gen/pull/387))
+
+#### ydk-gen
+ * Improved generation of C++ code to consume less compile-time memory for large yang models ([#386](https://github.com/CiscoDevNet/ydk-gen/pull/386)), ([#336](https://github.com/CiscoDevNet/ydk-gen/pull/336))
+ * Add check for valid profile file to ydkgen ([#378](https://github.com/CiscoDevNet/ydk-gen/pull/378))
+ * Added code coverage for C++ code ([#373](https://github.com/CiscoDevNet/ydk-gen/pull/373))
+
+#### Documentation
+ * Separated top data classes from type classes in table of contents ([#372](https://github.com/CiscoDevNet/ydk-gen/pull/372))
+ * Fixed ydk version not being correctly printed for C++ documentation ([#374](https://github.com/CiscoDevNet/ydk-gen/pull/374))
+ * Indicate bundle version in C++ and python bundle documentation ([#383](https://github.com/CiscoDevNet/ydk-gen/pull/383))
+
+### 2017-01-30 version 0.5.3
+
+#### Python
 
 * Fixed issues with netconf service ([#323](https://github.com/CiscoDevNet/ydk-gen/issues/323), [#305](https://github.com/CiscoDevNet/ydk-gen/issues/305))
 * Disambiguated model API classes called 'None' ([#318](https://github.com/CiscoDevNet/ydk-gen/issues/318))
 * Removed 'Bits' from classes representing bits leafs ([#318](https://github.com/CiscoDevNet/ydk-gen/issues/318), [#320](https://github.com/CiscoDevNet/ydk-gen/issues/320))
 
-### C++
+#### C++
 
 * Introduced support for two new service providers ([#365](https://github.com/CiscoDevNet/ydk-gen/pull/365))
   * RestconfServiceProvider
@@ -16,7 +45,7 @@
 * Added support for generated CRUD model tests based on bundles ([#354](https://github.com/CiscoDevNet/ydk-gen/pull/354))
 * Improved negative test cases and added support for netconf operations on leafs and leaf-lists ([#324](https://github.com/CiscoDevNet/ydk-gen/pull/324))
 
-### Documentation
+#### Documentation
 
 * Added documentation with examples for C++ OpenDaylightServiceProvider and RestconfServiceProvider ([#365](https://github.com/CiscoDevNet/ydk-gen/pull/365))
 * Included model revision in documentation ([#272](https://github.com/CiscoDevNet/ydk-gen/issues/272))
@@ -25,9 +54,9 @@
 * Improved look and feel of documentation ([#361](https://github.com/CiscoDevNet/ydk-gen/pull/361), [#356](https://github.com/CiscoDevNet/ydk-gen/pull/356))
 * Cleaned up unused bundle profiles and added READMEs ([#208](https://github.com/CiscoDevNet/ydk-gen/issues/208))
 
-**2016-11-30 version 0.5.2:**
+### 2016-11-30 version 0.5.2
 
-### Python
+#### Python
 
 * CRUD service / Codec service / Netconf service improvements
   * Improved error handling for mismatched model API types ([#241](https://github.com/CiscoDevNet/ydk-gen/issues/241))
@@ -47,7 +76,7 @@
   * Improved documentation of YANG attributes like data type (configuration or state), default value, units, status etc ([#249](https://github.com/CiscoDevNet/ydk-gen/issues/249), [#290](https://github.com/CiscoDevNet/ydk-gen/issues/290))  
   * Improved netconf service documentation ([#235](https://github.com/CiscoDevNet/ydk-gen/issues/235))
 
-### C++ (alpha)
+#### C++ (alpha)
 
 * Introduced support for C++ YDK bindings ([issue#118](https://github.com/CiscoDevNet/ydk-gen/issues/118), related [commits](https://github.com/manradhaCisco/ydk-gen/commits/ydk_core) and [pull requests](https://github.com/manradhaCisco/ydk-gen/pulls?q=is%3Apr+is%3Aclosed))
 * Added support for CRUD, Validation and Codec services, along with Netconf and Codec providers, YDK types and errors
@@ -59,7 +88,7 @@
 * Added documentation using `sphinx`
 * Integrated C++ testing into CI using travis-ci ([#286](https://github.com/CiscoDevNet/ydk-gen/issues/286))
 
-**2016-10-10 version 0.5.1:**
+### 2016-10-10 version 0.5.1
 
 * Support for Python3
   * Introduced support for Python 3 ([#60](https://github.com/CiscoDevNet/ydk-gen/issues/60))
@@ -74,7 +103,7 @@
   * Improved documentation for bundle installation ([#244](https://github.com/CiscoDevNet/ydk-gen/pull/244))
   * Added documentation for executor service ([#263](https://github.com/CiscoDevNet/ydk-gen/pull/263))
 
-**2016-08-03 version 0.5.0:**
+### 2016-08-03 version 0.5.0
  * Introduced YDK bundles ([#43](https://github.com/CiscoDevNet/ydk-gen/issues/43), [#148](https://github.com/CiscoDevNet/ydk-gen/issues/148), [#149](https://github.com/CiscoDevNet/ydk-gen/issues/149))
   * Created YDK core library and pluggable namespace packages that share the same module prefix `ydk.models`
   * Generated documentation for YDK core and bundles
@@ -97,7 +126,7 @@
   * Enhanced documentation of leafs of identityref type by indicating all the subclasses of identity base class referred to by the identityref ([#161](https://github.com/CiscoDevNet/ydk-gen/issues/161))
   * Added documentation on how to use YDK delete operation and improved documentation for YDK read operation ([#204](https://github.com/CiscoDevNet/ydk-gen/pull/204))
 
-**2016-06-17 version 0.4.2:**
+### 2016-06-17 version 0.4.2
  * Error handling improvements
   * Fixed local validation to correctly check for types and values ([#116](https://github.com/CiscoDevNet/ydk-gen/issues/116))
   * Introduced error hierarchy to represent errors from various components, viz.: YPYModelErrors, YPYServiceError, YPYServiceProviderError ([#133](https://github.com/CiscoDevNet/ydk-gen/issues/133))
@@ -113,7 +142,7 @@
  * Enforce PEP8 naming for Identity classes ([#152](https://github.com/CiscoDevNet/ydk-gen/issues/152))
  * Added full ydk-py version to the documentation ([#144](https://github.com/CiscoDevNet/ydk-gen/issues/144))
 
-**2016-05-20 version 0.4.1:**
+### 2016-05-20 version 0.4.1
  * Added openconfig bgp-policy APIs to ydk-py ([#102](https://github.com/CiscoDevNet/ydk-gen/issues/102))
  * Introduced ability to programmatically retrieve SDK version of ydk-py ([#8](https://github.com/CiscoDevNet/ydk-gen/issues/8))
  * Removed unused dependencies from ydk-py's requirements.txt ([#48](https://github.com/CiscoDevNet/ydk-gen/issues/48))
@@ -128,7 +157,7 @@
   * Indicate in documentation YDK class attributes that are keys ([#41](https://github.com/CiscoDevNet/ydk-gen/issues/41))
   * Made top containers show up at the top of the table of contents for every module document ([#39](https://github.com/CiscoDevNet/ydk-gen/issues/39))
 
-**2016-04-15 version 0.4.0:**
+### 2016-04-15 version 0.4.0
 
   * Introduced netconf service and codec service
     * Netconf service provides APIs to execute netconf operations
@@ -144,6 +173,6 @@
     * Improved enum documentation
   * Improved error reporting for ydk-py and ydk-gen
 
-**2016-03-11 version 0.3.0:**
+### 2016-03-11 version 0.3.0:
 
   * First public release.

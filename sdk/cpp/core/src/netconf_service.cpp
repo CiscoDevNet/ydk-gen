@@ -28,6 +28,7 @@
 #include "errors.hpp"
 #include "netconf_service.hpp"
 #include "path_api.hpp"
+#include "validation_service.hpp"
 #include "logger.hpp"
 
 using namespace std;
@@ -176,6 +177,8 @@ bool NetconfService::edit_config(NetconfServiceProvider & provider, DataStore ta
     Entity& config, std::string default_operation, std::string test_option, std::string error_option)
 {
 	YLOG_INFO("Executing edit-config RPC");
+	ValidationService validation{};
+	validation.validate(provider, config, ValidationService::Option::DATASTORE);
 
     // Get the root schema node
     shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:edit-config");

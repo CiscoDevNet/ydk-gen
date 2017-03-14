@@ -33,6 +33,8 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/null_sink.h>
 
+#include "Python.h"
+
 using namespace std;
 using namespace pybind11;
 
@@ -480,6 +482,7 @@ PYBIND11_PLUGIN(ydk_)
 
     logging.def("EnableLogging", []()
                                  {
+                                    Py_Initialize();
                                     // throw away cpp logging records
                                     auto ydk_logger = spdlog::get("ydk");
                                     if (ydk_logger == nullptr)

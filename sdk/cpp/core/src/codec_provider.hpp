@@ -41,7 +41,7 @@ public:
 	~CodecServiceProvider();
 
 	void initialize(const std::string & bundle_name, const std::string & models_path, augment_capabilities_function get_caps_func);
-	path::RootSchemaNode& get_root_schema(const std::string & bundle_name);
+	path::RootSchemaNode& get_root_schema_for_bundle(const std::string & bundle_name);
 
 private:
 	void initialize_root_schema(const std::string & bundle_name, path::Repository & repo);
