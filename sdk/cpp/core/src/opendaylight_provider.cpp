@@ -13,13 +13,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 ------------------------------------------------------------------*/
-#include "logger.hpp"
 #include "netconf_provider.hpp"
 #include "opendaylight_parser.hpp"
 #include "opendaylight_provider.hpp"
 #include "path_api.hpp"
 #include "restconf_client.hpp"
 #include "restconf_provider.hpp"
+#include "logger.hpp"
 
 
 using namespace std;

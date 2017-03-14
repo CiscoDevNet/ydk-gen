@@ -28,9 +28,9 @@
 #include "errors.hpp"
 #include "netconf_client.hpp"
 #include "netconf_model_provider.hpp"
-#include "logger.hpp"
 #include "types.hpp"
 #include "ydk_yang.hpp"
+#include "logger.hpp"
 
 using namespace std;
 using namespace ydk;

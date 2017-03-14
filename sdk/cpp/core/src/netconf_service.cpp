@@ -26,9 +26,9 @@
 
 #include "entity_data_node_walker.hpp"
 #include "errors.hpp"
-#include "logger.hpp"
 #include "netconf_service.hpp"
 #include "path_api.hpp"
+#include "logger.hpp"
 
 using namespace std;
 

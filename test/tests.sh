@@ -361,8 +361,8 @@ function cpp_test_gen_test {
 
     cd $YDKGEN_HOME
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/testgen/confd
-    mkdir -p gen-api/cpp/models_test-bundle/ydk/tests/build
-    cd gen-api/cpp/models_test-bundle/ydk/tests/build
+    mkdir -p gen-api/cpp/models_test-bundle/ydk/models/models_test/test/build
+    cd gen-api/cpp/models_test-bundle/ydk/models/models_test/test/build
     run_exec_test cmake -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ ..
     run_exec_test make
     ctest --output-on-failure
@@ -385,7 +385,9 @@ function py_test_gen_test {
 
     cd $YDKGEN_HOME
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/testgen/confd
-    cd gen-api/python/models_test-bundle/ydk/tests/models_test/
+    cd gen-api/python/models_test-bundle/ydk/models/models_test/test/
+    python import_tests.py
+    cd models_test/
     python -m unittest discover
 }
 

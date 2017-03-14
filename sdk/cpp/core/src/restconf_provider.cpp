@@ -24,7 +24,6 @@
 #include <iostream>
 #include <sstream>
 #include <memory>
-#include "logger.hpp"
 
 #include <libyang/libyang.h>
 
@@ -34,6 +33,7 @@
 #include "restconf_client.hpp"
 #include "restconf_provider.hpp"
 #include "types.hpp"
+#include "logger.hpp"
 
 using namespace std;
 

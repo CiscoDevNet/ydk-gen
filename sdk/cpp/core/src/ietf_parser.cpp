@@ -18,9 +18,9 @@
 #include <sstream>
 
 #include "ietf_parser.hpp"
-#include "logger.hpp"
 #include "path_api.hpp"
 #include "ydk_yang.hpp"
+#include "logger.hpp"
 
 
 using namespace std;

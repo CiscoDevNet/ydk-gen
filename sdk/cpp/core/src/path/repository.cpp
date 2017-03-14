@@ -28,9 +28,9 @@
 #include <fstream>
 
 #include "path_private.hpp"
-#include "../logger.hpp"
 #include "../ydk_yang.hpp"
 #include "core_info.hpp"
+#include "../logger.hpp"
 
 
 //////////////////////////////////////////////////////////////////////////

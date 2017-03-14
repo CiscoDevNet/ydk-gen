@@ -24,16 +24,6 @@
 #ifndef YDK_PRIVATE_HPP
 #define YDK_PRIVATE_HPP
 
-#include <map>
-#include <iostream>
-
-#include "libyang/libyang.h"
-#include "libyang/tree_schema.h"
-#include "libyang/tree_data.h"
-#include "libyang/xml.h"
-
-#include "../path_api.hpp"
-
 #include <algorithm>
 #include <map>
 #include <cstdlib>
@@ -43,6 +33,13 @@
 #include <cassert>
 #include <sstream>
 #include <regex>
+
+#include "libyang/libyang.h"
+#include "libyang/tree_schema.h"
+#include "libyang/tree_data.h"
+#include "libyang/xml.h"
+
+#include "../path_api.hpp"
 
 
 namespace ydk {

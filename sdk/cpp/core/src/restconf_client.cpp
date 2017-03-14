@@ -19,9 +19,9 @@
 
 #include "capabilities_parser.hpp"
 #include "errors.hpp"
-#include "logger.hpp"
 #include "restconf_client.hpp"
 #include "types.hpp"
+#include "logger.hpp"
 
 
 using namespace std;

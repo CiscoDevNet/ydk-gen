@@ -25,10 +25,10 @@
 
 #include "codec_provider.hpp"
 #include "codec_service.hpp"
-#include "logger.hpp"
 #include "entity_data_node_walker.hpp"
 #include "path_api.hpp"
 #include "types.hpp"
+#include "logger.hpp"
 
 namespace ydk
 {

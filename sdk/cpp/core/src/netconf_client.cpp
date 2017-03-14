@@ -29,9 +29,9 @@
 #include <libnetconf.h>
 #include <libnetconf_ssh.h>
 
-#include "logger.hpp"
 #include "netconf_client.hpp"
 #include "types.hpp"
+#include "logger.hpp"
 
 using namespace std;
 using namespace ydk;

@@ -17,9 +17,10 @@
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
-#include "Python.h"
 #include <memory>
 #include <string>
+#include "Python.h"
+
 #include "spdlog/spdlog.h"
 
 namespace spdlog
@@ -41,7 +42,9 @@ public:
         py_logging  = PyImport_ImportModule("logging");
 
         PyObject* ydk_arg = Py_BuildValue("s", "ydk");
-        py_logger = PyObject_CallMethod(py_logging, "getLogger", "O", ydk_arg);
+        const char* method = "getLogger";
+        const char* fmt = "O";
+        py_logger = PyObject_CallMethod(py_logging, (char *)method, (char *)fmt, ydk_arg);
         Py_DECREF(ydk_arg);
     }
     ~PyLogger()
@@ -58,48 +61,61 @@ public:
     }
 
     template <typename... Args> void trace(const std::string& name, const char* fmt, const Args&... args) {
-        py_fmt_log(name, fmt, spdlog::level::trace, "debug", args...);
+        const char* py_lvl = "debug";
+        py_fmt_log(name, fmt, spdlog::level::trace, py_lvl, args...);
     }
     template <typename... Args> void debug(const std::string& name, const char* fmt, const Args&... args) {
-        py_fmt_log(name, fmt, spdlog::level::debug, "debug", args...);
+        const char* py_lvl = "debug";
+        py_fmt_log(name, fmt, spdlog::level::trace, py_lvl, args...);
     }
     template <typename... Args> void info(const std::string& name, const char* fmt, const Args&... args) {
-        py_fmt_log(name, fmt, spdlog::level::info, "info", args...);
+        const char* py_lvl = "info";
+        py_fmt_log(name, fmt, spdlog::level::trace, py_lvl, args...);
     }
     template <typename... Args> void warn(const std::string& name, const char* fmt, const Args&... args) {
-        py_fmt_log(name, fmt, spdlog::level::warn, "warn", args...);
+        const char* py_lvl = "warn";
+        py_fmt_log(name, fmt, spdlog::level::trace, py_lvl, args...);
     }
     template <typename... Args> void error(const std::string& name, const char* fmt, const Args&... args) {
-        py_fmt_log(name, fmt, spdlog::level::err, "error", args...);
+        const char* py_lvl = "error";
+        py_fmt_log(name, fmt, spdlog::level::trace, py_lvl, args...);
     }
     template <typename... Args> void critical(const std::string& name, const char* fmt, const Args&... args) {
-        py_fmt_log(name, fmt, spdlog::level::critical, "critical", args...);
+        const char* py_lvl = "critical";
+        py_fmt_log(name, fmt, spdlog::level::trace, py_lvl, args...);
     }
 
     template <typename T> void py_log(const T& msg, const char* py_lvl)
     {
         PyObject* py_msg_arg = Py_BuildValue("s", msg);
-        PyObject_CallMethod(py_logger, py_lvl, "O", py_msg_arg);
+        const char* fmt = "O";
+        PyObject_CallMethod(py_logger, (char *)py_lvl, (char *)fmt, py_msg_arg);
         Py_DECREF(py_msg_arg);
     }
 
     template <typename T> void trace(const T& msg) {
-        py_log(msg, "debug");
+        const char* py_lvl = "debug";
+        py_log(msg, py_lvl);
     }
     template <typename T> void debug(const T& msg) {
-        py_log(msg, "debug");
+        const char* py_lvl = "debug";
+        py_log(msg, py_lvl);
     }
     template <typename T> void info(const T& msg) {
-        py_log(msg, "info");
+        const char* py_lvl = "info";
+        py_log(msg, py_lvl);
     }
     template <typename T> void warn(const T& msg) {
-        py_log(msg, "warn");
+        const char* py_lvl = "warn";
+        py_log(msg, py_lvl);
     }
     template <typename T> void error(const T& msg) {
-        py_log(msg, "error");
+        const char* py_lvl = "error";
+        py_log(msg, py_lvl);
     }
     template <typename T> void critical(const T& msg) {
-        py_log(msg, "critical");
+        const char* py_lvl = "critical";
+        py_log(msg, py_lvl);
     }
 
 
