@@ -633,4 +633,28 @@ TEST_CASE("parent_empty")
 	REQUIRE(r_read!=nullptr);
 }
 
+TEST_CASE("aug_leaf")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    r_1->one->augmented_leaf = "test";
+    reply = crud.create(provider, *r_1);
+    REQUIRE(reply);
+
+    //READ
+    auto r_filter = make_unique<ydktest_sanity::Runner>();
+    auto r_read = crud.read(provider, *r_filter);
+    ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
+    REQUIRE(r_2->one->augmented_leaf==r_1->one->augmented_leaf);
+}
+
+
 

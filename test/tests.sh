@@ -282,7 +282,7 @@ function cpp_sanity_core_test {
     local status=$?
     if [ $status -ne 0 ]; then
     # If the tests fail, try to run them in verbose to get more details for  # debug
-        ./tests/ydk_core_test -s
+        ./tests/ydk_core_test -d yes
         exit $status
     fi
     cd $YDKGEN_HOME
@@ -323,7 +323,7 @@ function cpp_sanity_ydktest_test {
     local status=$?
     if [ $status -ne 0 ]; then
     # If the tests fail, try to run them in verbose to get more details for  # debug
-        ./ydk_bundle_test -s
+        ./ydk_bundle_test -d yes
         exit $status
     fi
 }

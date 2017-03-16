@@ -64,7 +64,17 @@ class ClassConstructorPrinter(object):
     def _print_class_inits(self, clazz, leafs, children):
         if len(leafs) > 0:
             self.ctx.writeln(':')
-            self.ctx.writeln('\t%s' % ',\n\t '.join('%s{YType::%s, "%s"}' % (prop.name, get_type_name(prop.property_type), prop.stmt.arg) for prop in leafs))
+            index = 0
+            while index < len(leafs):
+                prop = leafs[index]
+                leaf_name = ''
+                if prop.stmt.i_module.arg != clazz.stmt.i_module.arg:
+                    leaf_name = prop.stmt.i_module.arg + ':' + prop.stmt.arg
+                else:
+                    leaf_name = prop.stmt.arg
+                self.ctx.writeln('%s{YType::%s, "%s"}%s' % (prop.name,
+                            get_type_name(prop.property_type), leaf_name, (',' if index != len(leafs) - 1 else '')))
+                index += 1
 
         init_stmts = []
         for child in children:

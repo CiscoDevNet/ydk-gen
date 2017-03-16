@@ -28,13 +28,13 @@ module ydktest-sanity-augm {
 
      E-mail: cs-yang@cisco.com";
 
-  description 
+  description
     "This module contains a collection of YANG definitions
      for sanity package.
 
      This module contains LIST definitions
      for the following management objects:
-    
+
 
      Copyright (c) 2013-2014 by Cisco Systems, Inc.
      All rights reserved.";
@@ -79,11 +79,22 @@ module ydktest-sanity-augm {
       }
     }
   }
-
   
+  grouping leaf-aug {
+    leaf augmented-leaf {
+        type string;
+    }
+  }
+
+
   augment "/ysanity:runner/ysanity:one" {
     description "augment to one";
     uses one-aug-level;
+  }
+  
+    augment "/ysanity:runner/ysanity:one" {
+    description "augment leaf to one";
+    uses leaf-aug;
   }
 
   augment "/ysanity:runner/ysanity:one-list" {
