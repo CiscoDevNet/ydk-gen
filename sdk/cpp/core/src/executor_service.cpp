@@ -35,10 +35,10 @@ namespace ydk{
 
 // static string get_data_payload(Entity & entity, string data_tag, path::RootSchemaNode & root_schema);
 string get_netconf_payload(path::DataNode* input, string data_value, string data_tag);
-static void walk_children(Entity* entity, path::DataNode & rpc_input,
+static void walk_children(std::shared_ptr<Entity> entity, path::DataNode & rpc_input,
     path::RootSchemaNode & root_schema, std::string path);
-static void create_from_entity_path(Entity* entity, path::DataNode & rpc_input, std::string path);
-static void create_from_children(std::map<string, Entity*> & children, path::DataNode & rpc_input,
+static void create_from_entity_path(std::shared_ptr<Entity> entity, path::DataNode & rpc_input, std::string path);
+static void create_from_children(std::map<string, std::shared_ptr<Entity>> & children, path::DataNode & rpc_input,
     path::RootSchemaNode & root_schema);
 static std::string get_data_payload(Entity& entity, path::RootSchemaNode& root_schema);
 shared_ptr<Entity> get_top_entity_from_filter(Entity & filter);
@@ -73,27 +73,29 @@ shared_ptr<Entity> ExecutorService::execute_rpc(NetconfServiceProvider & provide
         auto filter = output->get_children()[0];
 
         shared_ptr<Entity> top_entity = get_top_entity_from_filter(*filter);
-        get_entity_from_data_node(result_datanode->children()[0].get(), top_entity.get());
+        get_entity_from_data_node(result_datanode->children()[0].get(), top_entity);
         return top_entity;
     }
     else
         return nullptr;
 }
 
-static void walk_children(Entity* entity, path::DataNode & rpc_input, path::RootSchemaNode & root_schema,
+static void walk_children(std::shared_ptr<Entity> entity, path::DataNode & rpc_input, path::RootSchemaNode & root_schema,
     std::string path)
 {
     if (entity != nullptr)
     {
-        std::map<string, Entity*> & children = entity->get_children();
+        std::map<string, std::shared_ptr<Entity>> & children = entity->get_children();
         auto entity_path = entity->get_entity_path(entity->parent);
-        YLOG_TRACE("Children count for: {} : {}", entity_path.path, children.size());
+        YLOG_DEBUG("Children count for: {} : {}", entity_path.path, children.size());
 
         if (path != "")
             path = path + '/';
 
         if (entity_path.path != "input")
             path = path + entity_path.path;
+
+        YLOG_DEBUG("Path: {}", path);
 
         if (entity_path.value_paths.size() == 0)
         {
@@ -107,13 +109,13 @@ static void walk_children(Entity* entity, path::DataNode & rpc_input, path::Root
     }
 }
 
-static void create_from_entity_path(Entity* entity, path::DataNode & rpc_input, std::string path)
+static void create_from_entity_path(std::shared_ptr<Entity> entity, path::DataNode & rpc_input, std::string path)
 {
     auto entity_path = entity->get_entity_path(entity->parent);
 
     for (std::pair<std::string, LeafData> child : entity_path.value_paths)
     {
-        YLOG_TRACE("Creating leaf '{}' in {}", child.first, entity_path.path);
+        YLOG_DEBUG("Creating leaf '{}' in {}", child.first, entity_path.path);
 
         std::string temp_path = "";
         if (path != "")
@@ -123,14 +125,14 @@ static void create_from_entity_path(Entity* entity, path::DataNode & rpc_input, 
     }
 }
 
-static void create_from_children(std::map<string, Entity*> & children, path::DataNode & rpc_input,
+static void create_from_children(std::map<string, std::shared_ptr<Entity>> & children, path::DataNode & rpc_input,
     path::RootSchemaNode & root_schema)
 {
     for( auto const & child : children )
     {
         if ( child.second->get_children().size() == 0 )
         {
-            YLOG_TRACE("Creating child '{}': {}",child.first, child.second->get_entity_path(child.second->parent).path);
+            YLOG_DEBUG("Creating child '{}': {}",child.first, child.second->get_entity_path(child.second->parent).path);
 
             std::string payload = get_data_payload(*child.second, root_schema);
             rpc_input.create(child.first, payload);
