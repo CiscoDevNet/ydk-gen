@@ -1,6 +1,6 @@
 {
    "name":"cisco-ios-xr",
-   "description":"A profile file contains the metadata for generating a number of SDKs of varying languages from a single set of yang models.",
+   "description":"YDK bundle for Cisco IOS XR models",
    "version":"6.1.1",
    "ydk_version": "0.5.1",
    "author":"Cisco",

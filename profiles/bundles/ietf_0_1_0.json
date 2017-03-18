@@ -2,9 +2,9 @@
    "name":"ietf",
    "version":"0.1.0",
    "ydk_version":"0.5.0",
-   "Author":"Cisco",
-   "Copyright":"Cisco",
-   "Description":"YDK Test Profile",
+   "author":"Cisco",
+   "copyright":"Cisco",
+   "description":"YDK bundle for IETF models",
    "models":{
        "file" : [
            "profiles/bundles/yang/ietf/ietf-interfaces-ext.yang"
