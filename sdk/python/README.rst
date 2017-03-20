@@ -86,17 +86,17 @@ You may want to perform the installation under a Python virtual environment (`vi
 
 To install virtual environment support in your system, execute::
 
-  ydk-py$ pip install virtualenv virtualenvwrapper
-  ydk-py$ source /usr/local/bin/virtualenvwrapper.sh
+  $ pip install virtualenv virtualenvwrapper
+  $ source /usr/local/bin/virtualenvwrapper.sh
 
 In some systems (e.g. Debian-based Linux), you need to install support for Python virtual environments as root::
 
-  ydk-py$ sudo pip install virtualenv virtualenvwrapper
-  ydk-py$ source /usr/local/bin/virtualenvwrapper.sh
+  $ sudo pip install virtualenv virtualenvwrapper
+  $ source /usr/local/bin/virtualenvwrapper.sh
 
 Create a new virtual environment::
 
-  ydk-py$ mkvirtualenv -p python2.7 ydk-py
+  $ mkvirtualenv -p python2.7 ydk-py
 
 At this point, you can perform the quick install or the installation from source described above.  Take into account that must not attempt to install YDK as root under a virtual environment.
 
