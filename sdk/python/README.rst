@@ -1,5 +1,5 @@
 .. image::  https://travis-ci.org/CiscoDevNet/ydk-.svg?branch=master
-    :target: https://travis-ci.org/CiscoDevNet/ydkpy-py
+    :target: https://travis-ci.org/CiscoDevNet/ydk-py
 
 .. contents:: Table of Contents
 
@@ -23,7 +23,7 @@ Centos (Fedora-based) - The following packages must be present in your system be
 
 macOS
 ~~~~~
-It is recommended to install Xcode command line tools, homebrew (http://brew.sh) and the following homebrew packages on your system before installing YDK-Py::
+It is required to install Xcode command line tools, homebrew (http://brew.sh) and the following homebrew packages on your system before installing YDK-Py::
 
   $ xcode-select --install
   $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -31,7 +31,9 @@ It is recommended to install Xcode command line tools, homebrew (http://brew.sh)
 
 Windows
 ~~~~~~~
-It is recommended to install a python distribution like `PythonXY <https://python-xy.github.io/>`_ on your system before installing YDK-Py
+You must install the following requirements:
+  * `Python Releases for Windows <https://www.python.org/downloads/windows/>`_
+  * `Visual C++ Build Tools <http://landinghub.visualstudio.com/visual-cpp-build-tools>`_
 
 Python Requirements
 -------------------
