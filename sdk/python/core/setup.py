@@ -46,8 +46,7 @@ LONG_DESCRIPTION = '''
                     expressing the model semantics in an API and abstracting
                     protocol/encoding details. YDK is composed of a core package
                     that defines services and providers, plus one or more module
-                    bundles that are based on YANG models. Each module bundle
-                    is generated using a bundle profile and the ydk-gen tool.
+                    bundles that are based on YANG models.
                    '''
 
 
