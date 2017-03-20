@@ -5,6 +5,7 @@
  * Provide more details for validation error message for leaf-lists ([#398](https://github.com/CiscoDevNet/ydk-gen/pull/398))
  * Remove indirect python requirements from `setup.py` ([#392](https://github.com/CiscoDevNet/ydk-gen/pull/392))
  * If validation error occurs when decoding payload, include payload as an attribute of the `YPYModelError` raised ([#381](https://github.com/CiscoDevNet/ydk-gen/pull/381))
+ * Update Python package generation and post YDK-Py on the Python package index - PyPi ([#404](https://github.com/CiscoDevNet/ydk-gen/issues/404), [#406](https://github.com/CiscoDevNet/ydk-gen/issues/406))
 
 #### C++
  * Changed dependent libraries ([#382](https://github.com/CiscoDevNet/ydk-gen/pull/382))
