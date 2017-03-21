@@ -23,35 +23,86 @@
 
 
 #include "path_private.hpp"
+#include <pcre.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include "../logger.hpp"
 
+#define SLASH_CHAR "##SLASH##"
 
 ////////////////////////////////////////////////////////////////////
 /// Function segmentalize()
 ////////////////////////////////////////////////////////////////////
-std::vector<std::string>
-ydk::path::segmentalize(const std::string& path)
+namespace ydk
+{
+static bool replace(std::string& subject, const std::string& search, const std::string& replace)
+{
+    size_t pos = 0;
+    int replace_count = 0;
+    while ((pos = subject.find(search, pos)) != std::string::npos)
+    {
+         subject.replace(pos, search.length(), replace);
+         pos += replace.length();
+         replace_count+=1;
+    }
+    return replace_count>0;
+}
+
+static void escape_slashes(std::string& data)
+{
+    pcre *re = NULL;
+    const char *err_msg;
+    int err;
+    int offsets[3000];
+    const char* pattern = "'[^\[]+'";
+    const char *psubStrMatchStr = NULL;
+    unsigned int offset = 0;
+    int rc;
+
+    re = pcre_compile(pattern, 0, &err_msg, &err, NULL);
+    if(re == NULL)
+    {
+        YLOG_ERROR("ERROR: Could not compile '{}': {}", pattern, err_msg);
+        return;
+    }
+
+    while (offset < data.size() && (rc = pcre_exec(re, 0, data.c_str(), data.size(), offset, 0, offsets, sizeof(offsets))) >= 0)
+    {
+       for(int i = 0; i < rc; ++i)
+       {
+           pcre_get_substring(data.c_str(), offsets, rc, i, &(psubStrMatchStr));
+           std::string original{psubStrMatchStr};
+           std::string s{psubStrMatchStr};
+           if(replace(s,"/",SLASH_CHAR))
+           {
+               replace(data, original, s);
+           }
+       }
+       offset = offsets[1];
+    }
+    if(psubStrMatchStr != NULL)
+        pcre_free_substring(psubStrMatchStr);
+}
+}
+
+std::vector<std::string> ydk::path::segmentalize(const std::string& path)
 {
     const std::string token {"/"};
     std::vector<std::string> output;
     size_t pos = std::string::npos; // size_t to avoid improbable overflow
-    size_t prev_pos = 0;
     std::string data{path};
+    escape_slashes(data);
     do
     {
         pos = data.find(token);
-        size_t first_quote_pos = data.find("'", prev_pos+1);
-        size_t second_quote_pos = data.find("'", first_quote_pos+1);
-        while((pos<second_quote_pos) && (pos>first_quote_pos))
-            pos = data.find(token, pos+1);
-        output.push_back(data.substr(0, pos));
+        auto q=data.substr(0, pos);
+        replace(q, SLASH_CHAR, "/");
+        output.push_back(q);
         if (std::string::npos != pos)
             data = data.substr(pos + token.size());
-        prev_pos = pos;
     } while (std::string::npos != pos);
+
     return output;
 }
 
@@ -214,3 +265,4 @@ ydk::path::CodecService::decode(const RootSchemaNode & root_schema, const std::s
 
     return std::shared_ptr<ydk::path::DataNode>(rd);
 }
+#undef SLASH_CHAR

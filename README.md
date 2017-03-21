@@ -55,7 +55,8 @@ $ sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-de
 Centos (Fedora-based): The following packages must be present in your system before installing YDK-Py:
 ```
 $ sudo yum install epel-release
-$ sudo yum install python-pip python-devel libxml2-devel libxslt-devel libssh-devel libcurl-devel libtool clang cmake
+$ sudo yum install python-pip python-devel libxml2-devel libxslt-devel libssh-devel libcurl-devel libtool clang cmake3 pcre-devel
+$ sudo ln -fs /usr/bin/cmake3 /usr/bin/cmake
 ```
 
 ####Mac

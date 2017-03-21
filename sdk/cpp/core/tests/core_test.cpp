@@ -29,12 +29,20 @@
 
 TEST_CASE( "test_segmentalize"  )
 {
-	std::string test_string = "Cisco-IOS-XR-clns-isis-cfg:isis/instances/instance/interfaces[interface-name='GigabitEthernet0/0/0/0']";
-	std::vector<std::string> segments = ydk::path::segmentalize(test_string);
-	std::vector<std::string> expected {"Cisco-IOS-XR-clns-isis-cfg:isis", "instances", "instance", "interfaces[interface-name='GigabitEthernet0/0/0/0']"};
+    std::string test_string = "Cisco-IOS-XR-clns-isis-cfg:isis/instances/instance/interfaces[active='act'][interface-name='GigabitEthernet0/0/0/0']";
+    std::vector<std::string> segments = ydk::path::segmentalize(test_string);
+    std::vector<std::string> expected {"Cisco-IOS-XR-clns-isis-cfg:isis", "instances", "instance", "interfaces[active='act'][interface-name='GigabitEthernet0/0/0/0']"};
 
-	for (size_t index = 0;index<segments.size();index++)
-	{
-		REQUIRE(segments[index] == expected[index]);
-	}
+    REQUIRE(segments==expected);
 }
+
+
+TEST_CASE( "test_segmentalize_relative_path"  )
+{
+    std::string test_string = "interface-configuration[active='act'][interface-name='GigabitEthernet0/0/0/0']";
+    std::vector<std::string> segments = ydk::path::segmentalize(test_string);
+    std::vector<std::string> expected {"interface-configuration[active='act'][interface-name='GigabitEthernet0/0/0/0']"};
+
+    REQUIRE(segments == expected);
+}
+
