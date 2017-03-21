@@ -88,7 +88,7 @@ class GetEntityPathPrinter(object):
             self.ctx.lvl_inc()
 
             if self._is_parent_needed_for_abs_path(clazz):
-                self.ctx.writeln('throw(YCPPInvalidArgumentError{"ancestor cannot be nullptr as one of the ancestors is a list"});')
+                self.ctx.writeln('throw(YCPPInvalidArgumentError{"ancestor for \'%s\' in %s cannot be nullptr as one of the ancestors is a list"});' % (clazz.name, clazz.get_package().name))
             else:
                 parents = []
                 p = clazz
