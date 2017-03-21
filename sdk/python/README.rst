@@ -1,4 +1,4 @@
-.. image::  https://travis-ci.org/CiscoDevNet/ydk-.svg?branch=master
+.. image::  https://travis-ci.org/CiscoDevNet/ydk-py.svg?branch=master
     :target: https://travis-ci.org/CiscoDevNet/ydk-py
 
 .. contents:: Table of Contents
