@@ -1,190 +1,115 @@
+[![Build Status](https://travis-ci.org/CiscoDevNet/ydk-cpp.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-cpp)
+
+![ydk-logo-128](https://cloud.githubusercontent.com/assets/16885441/24175899/2010f51e-0e56-11e7-8fb7-30a9f70fbb86.png)
+
+YANG Development Kit (C++)
+==========================
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Getting Started](#getting-started)
-  - [Overview](#overview)
-  - [System Requirements](#system-requirements)
-  - [Install Tips](#install-tips)
-- [Example Usage](#example-usage)
-  - [Service Providers](#service-providers)
-  - [Using the model APIs](#using-the-model-apis)
-  - [Invoking the CRUD Service](#invoking-the-crud-service)
-  - [Logging](#logging)
-- [Release Notes](#release-notes)
+- [Overview](#overview)
+- [How to Install](#how-to-install)
+  - [Quick Install](#quick-install)
+  - [Installing from source](#installing-from-source)
+    - [System Requirements](#system-requirements)
+    - [Building YDK](#building-ydk)
 - [Documentation and Support](#documentation-and-support)
+- [Release Notes](#release-notes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-<a href="https://github.com/CiscoDevNet/ydk-gen"><img src="https://cloud.githubusercontent.com/assets/17089095/14834057/2e1fe270-0bb7-11e6-9e94-73dd7d71e87d.png" height="240" width="240" ></a>
-
-
-Getting Started
-===============
-
 Overview
---------
+========
 
-The YANG Development Kit (YDK) is a Software Development Kit that provides API's that are modeled in YANG. The main goal of YDK is to reduce the learning curve of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles that are based on YANG models.  Each module bundle is generated using a [`bundle profile`](https://github.com/CiscoDevNet/ydk-gen/blob/master/profiles/bundles) and the [`ydk-gen`](https://github.com/CiscoDevNet/ydk-gen) tool.
+The YANG Development Kit (YDK) is a Software Development Kit that provides API's that are modeled in YANG. The main goal of YDK is to reduce the learning curve of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles that are based on YANG models.  
 
-System Requirements
--------------------
+How to Install
+==============
+You can install YDK-Cpp on macOS or Linux.  It is not currently supported on Windows.
+
+Quick Install
+-------------
+**macOS**
+You can install the latest model packages using [homebrew](http://brew.sh).  It will manage the dependencies between YDK packages and all other sytem dependencies.  First, add the third-party repository (homebrew tap) for YDK:
+```
+$ brew tap CiscoDevNet/ydk
+```
+
+You get a fully operational YDK environment by installing the ``cisco-ios-xr`` bundle which automatically installs all other YDK-related packages (``ydk``, ``cisco-ios-xr``, ``openconfig`` and ``ietf`` packages):
+```
+$ brew install ydk-cisco-ios-xr
+```
+
+Alternatively, you can perform a partial installation.  If you only want to install the ``openconfig`` bundle and its dependencies (``ydk`` and ``ietf`` packages), execute::
+```
+$ brew install ydk-openconfig
+```
+
+If you only want to install the ``ietf`` bundle and its dependencies (``ydk`` package), execute::
+```
+$ brew install ydk-ietf
+```
+
 **Linux**
+Debian and RPM packages are coming soon.  Currently, you have to install it from source (see below).
 
-  Ubuntu (Debian-based) - The following packages must be present in your system before installing YDK-Cpp
- 
+Installing from source
+----------------------
+### System Requirements
+**Linux**
+Ubuntu (Debian-based) - The following packages must be present in your system before installing YDK-Cpp:
 ```
-    $ sudo apt-get install libcurl4-openssl-dev libpcre3-dev libssh-dev libxml2-dev libxslt1-dev libtool-bin cmake
+$ sudo apt-get install libcurl4-openssl-dev libpcre3-dev libssh-dev libxml2-dev libxslt1-dev libtool-bin cmake
 ```
 
-  Centos (Fedora-based) - The following packages must be present in your system before installing YDK-Cpp
-
+Centos (Fedora-based) - The following packages must be present in your system before installing YDK-Cpp:
 ```
-    $ sudo yum install epel-release
-    $ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake
+$ sudo yum install epel-release
+$ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake
 ```
 
 **Mac**
+It is recommended to install homebrew (http://brew.sh) and Xcode command line tools on your system before installing YDK-Cpp
+```
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+$ brew install curl libssh pcre xml2 cmake
+$ xcode-select --install
+```
+### Building YDK
+YDK uses ``cmake`` as the build system of choice. To install the ``core`` package, execute:
+```
+$ ydk-cpp$ cd core/ydk
+$ core$ mkdir build && cd build
+$ build$ cmake .. && make
+$ build$ sudo make install
+```
 
-  It is recommended to install homebrew (http://brew.sh) and Xcode command line tools on your system before installing YDK-Cpp
-  
+Once you have installed the ``core`` package, you can install one or more model bundles.  Note that some bundles have dependencies on other bundles.  Those dependencies are captured in the bundle packages used for quick installation. To install the IETF bundle, execute
 ```
-    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install curl libssh pcre xml2 cmake
-    $ xcode-select --install
+$ core$ cd ../../ietf
+$ ietf$ mkdir build && cd build
+$ build$ cmake .. && make
+$ build$ sudo make install
 ```
 
-**Windows**
-    
-   YDK-Cpp is not currently supported on Windows
-
-Install Tips
-------------
-YDK uses ``cmake`` as the build system of choice. To install the ``core`` package
-```
-  ydk-cpp$ cd core/ydk
-  core$ mkdir build && cd build
-  build$ cmake .. && make
-  build$ sudo make install
-```
-Once you have installed the ``core`` package, you can install one or more model bundles.  Note that some bundles have dependencies on other bundles.  Those dependencies are already captured in the bundle package. To install the IETF bundle, execute
-```
-  core$ cd ../../ietf
-  ietf$ mkdir build && cd build
-  build$ cmake .. && make
-  build$ sudo make install
-```
 To install the openconfig bundle, execute
 ```
-  ietf$ cd ../openconfig
-  openconfig$ mkdir build && cd build
-  build$ cmake .. && make
-  build$ sudo make install
+$ ietf$ cd ../openconfig
+$ openconfig$ mkdir build && cd build
+$ build$ cmake .. && make
+$ build$ sudo make install
 ```
+
 To install the cisco-ios-xr bundle, execute
 ```
-  openconfig$ cd ../cisco-ios-xr
-  cisco-ios-xr$ mkdir build && cd build
-  build$ cmake .. && make
-  build$ sudo make install
-  build$ cd ../..
+$ openconfig$ cd ../cisco-ios-xr
+$ cisco-ios-xr$ mkdir build && cd build
+$ build$ cmake .. && make
+$ build$ sudo make install
+$ build$ cd ../..
 ```
-
-Example Usage
-=============
-
-In this example, we set some BGP configuration using the OpenConfig model, the CRUD (Create/Read/Update/Delete) service and the NETCONF service provider. The example in this document is a simplified version of the more complete sample that is available in `core/samples/bgp_create.cpp`. Assuming you have performed the above core and bundle installations first, that more complete sample can be run with the below steps
-
-```
-    ydk-py$ cd core/samples
-    samples$ mkdir build && cd build
-    build$ cmake .. && make
-    build$ ./bgp_create ssh://<username>:<password>@<ip-address-of-netconf-server>:<port> [-v]
-```
-
-In our example YDK application, first, let us include the necessary header files
-```c++
- #include <iostream>
- #include <spdlog/spdlog.h>
-  
- #include "ydk/crud_service.hpp"
- #include "ydk/netconf_provider.hpp"
- 
- #include "ydk_openconfig/openconfig_bgp.hpp"
- 
- using namespace std;
- using namespace ydk; 
-```
-
-Service Providers
------------------
-The first step in any application is to create a service provider instance. In this case, the NETCONF service provider (defined in `ydk/netconf_provider.hpp`) is responsible for mapping between the CRUD service API and the underlying manageability protocol (NETCONF RPCs).
-
-We instantiate an instance of the service provider that creates a NETCONF session to the machine with address 10.0.0.1
-
-```c++ 
- NetconfServiceProvider provider{"10.0.0.1", "test", "test", 830};
-```
-
-Using the model APIs
-------------------------
-After establishing the connection, we instantiate the entities and set some data. Now, create a BGP configuration object and set the attributes
-```c++
- // Create BGP object
- auto bgp = make_unique<openconfig_bgp::Bgp>();
-
- // Set the Global AS
- bgp->global->config->as = 65001;
- bgp->global->config->router_id = "1.2.3.4";
-
- // Create a neighbor
- auto neighbor = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
- neighbor->neighbor_address = "6.7.8.9";
- neighbor->config->neighbor_address = "6.7.8.9";
- neighbor->config->peer_as = 65001;
- neighbor->config->local_as = 65001;
- neighbor->config->peer_group = "IBGP";
- 
- // Set the parent container of the neighbor
- neighbor->parent = bgp->neighbors.get();
- 
- // Add the neighbor config to the BGP neighbors list
- bgp->neighbors->neighbor.push_back(move(neighbor));
-```
-
-Invoking the CRUD Service
---------------------------
-The CRUD service provides methods to create, read, update and delete entities on a device making use of the session provided by a service provider (NETCONF in this case).  In order to use the CRUD service, we need to instantiate the `CrudService` class
-```c++
- CrudService crud_service{};
-```
-Finally, we invoke the create method of the `CRUDService` class passing in the service provider instance and our entity, `bgp`
-```c++
- try
- {
-   crud_service.create(provider, *bgp);
- }
- catch(YDKException & e)
- {
-   cerr << "Error details: " << e.what() << endl;
- }
-```
-Note if there were any errors the above API will raise an exception with the base type `YDKException`
-
-Logging
--------
-YDK uses the `spdlog` logging library. The logging can be enabled as follows by creating a logger called "ydk". For other options like logging the "ydk" log to a file, see the [spdlog reference](https://github.com/gabime/spdlog#usage-example).
-
-```c++
- if(verbose)
- {
-   auto console = spdlog::stdout_color_mt("ydk");
- }
-```
-
-Release Notes
-===============
-The current YDK release version is 0.5.4 (alpha). YDK-Cpp is licensed under the Apache 2.0 License.
 
 Documentation and Support
 ===============
@@ -192,3 +117,7 @@ Documentation and Support
 - API documentation can be found at http://ydk.cisco.com/cpp/docs
 - Additional samples can be found at https://github.com/CiscoDevNet/ydk-cpp-samples
 - For queries related to usage of the API, please join the YDK community at https://communities.cisco.com/community/developer/ydk
+
+Release Notes
+===============
+The current YDK release version is 0.5.4 (alpha). YDK-Cpp is licensed under the Apache 2.0 License.
