@@ -1,6 +1,10 @@
 .. image::  https://travis-ci.org/CiscoDevNet/ydk-py.svg?branch=master
     :target: https://travis-ci.org/CiscoDevNet/ydk-py
 
+=============================
+YANG Development Kit (Python)
+=============================
+
 .. contents:: Table of Contents
 
 Overview
@@ -23,7 +27,7 @@ Centos (Fedora-based) - The following packages must be present in your system be
 
 macOS
 ~~~~~
-It is required to install Xcode command line tools, homebrew (http://brew.sh) and the following homebrew packages on your system before installing YDK-Py::
+It is required to install Xcode command line tools, `homebrew <http://brew.sh>`_ and the following homebrew packages on your system before installing YDK-Py::
 
   $ xcode-select --install
   $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -43,7 +47,7 @@ How to install
 --------------
 Quick Install
 ~~~~~~~~~~~~~
-You can install the latest model package from the Python package index.  Note that, in some systems, you need to install the new package as root.  You get a fully operational YDK environment by installing the ``cisco-ios-xr`` bundle which automatically installs all other YDK-related packages (``ydk``, ``cisco-ios-xr``, ``openconfig`` and ``ietf`` packages)::
+You can install the latest model packages from the Python package index.  Note that, in some systems, you need to install the new package as root.  You get a fully operational YDK environment by installing the ``cisco-ios-xr`` bundle which automatically installs all other YDK-related packages (``ydk``, ``cisco-ios-xr``, ``openconfig`` and ``ietf`` packages)::
 
   $ pip install ydk-models-cisco-ios-xr
 
@@ -104,7 +108,7 @@ At this point, you can perform the quick install or the installation from source
 
 Documentation and Support
 --------------------------
-- Samples can be found under the ``samples`` directory
+- Samples can be found under the ``core/samples`` directory
 - API documentation can be found at http://ydk.cisco.com/py/docs
 - Hundreds of samples can be found at https://github.com/CiscoDevNet/ydk-py-samples
 - For queries related to usage of the API, please join the YDK community at https://communities.cisco.com/community/developer/ydk
