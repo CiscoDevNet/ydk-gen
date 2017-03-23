@@ -35,7 +35,7 @@ It is required to install Xcode command line tools, `homebrew <http://brew.sh>`_
 
 Windows
 ~~~~~~~
-You must install the following requirements:
+You must install the following requirements::
   * `Python Releases for Windows <https://www.python.org/downloads/windows/>`_
   * `Visual C++ Build Tools <http://landinghub.visualstudio.com/visual-cpp-build-tools>`_
 
@@ -86,7 +86,7 @@ To install the cisco-ios-xr bundle, execute::
   cisco-ios-xr$ pip install dist/ydk*.gz
   cisco-ios-xr$ cd ..
 
-Using a Virtual environment
+Using a Virtual Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 You may want to perform the installation under a Python virtual environment (`virtualenv <https://pypi.python.org/pypi/virtualenv/>`_/`virtualenvwrapper  <https://pypi.python.org/pypi/virtualenvwrapper>`_).  A virtual environment allows you to install multiple versions of YDK if needed.  In addition, it prevents any potential conflicts between package dependencies in your system.
 
