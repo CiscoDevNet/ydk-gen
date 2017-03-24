@@ -320,7 +320,7 @@ def _modify_python_setup(gen_api_root, package_name, version, dependencies, desc
     for line in fileinput.input(setup_file, inplace=True):
         if not replaced_package and "$PACKAGE$" in line:
             replaced_package = True
-            print(line.replace("$PACKAGE$", package_name), end='')
+            print(line.replace("$PACKAGE$", package_name.replace('_', '-')), end='')
         elif not replaced_version and "$VERSION$" in line:
             replaced_version = True
             print(line.replace("$VERSION$", version), end='')
