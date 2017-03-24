@@ -122,7 +122,6 @@ namespace ydk {
             // and value is ignored
             //
             // returns the first created or updated node
-            DataNode& create_filter(const std::string& path, const std::string& value);
 
             virtual DataNode& create(const std::string& path, const std::string& value);
 
@@ -150,7 +149,7 @@ namespace ydk {
 
         private:
 
-            DataNode& create_helper(const std::string& path, const std::string& value, bool is_filter);
+            DataNode& create_helper(const std::string& path, const std::string& value);
 
         public:
 

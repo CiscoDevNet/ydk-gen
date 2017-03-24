@@ -41,7 +41,6 @@ using namespace std;
 namespace ydk
 {
 static void populate_data_node(Entity & entity, path::DataNode & data_node);
-static Entity & get_top_entity(Entity & entity);
 static void walk_children(Entity & entity, path::DataNode & data_node);
 static void populate_name_values(path::DataNode & parent_data_node, EntityPath & path);
 static bool data_node_is_leaf(path::DataNode & data_node);
@@ -57,17 +56,16 @@ static path::Annotation get_annotation(EditOperation operation);
 //////////////////////////////////////////////////////////////////////////
 path::DataNode& get_data_node_from_entity(Entity & entity, ydk::path::RootSchemaNode & root_schema)
 {
-    Entity & top_entity = get_top_entity(entity);
-    EntityPath root_path = top_entity.get_entity_path(nullptr);
+    EntityPath root_path = entity.get_entity_path(nullptr);
     auto & root_data_node = root_schema.create(root_path.path);
-    if(is_set(top_entity.operation))
+    if(is_set(entity.operation))
     {
-        add_annotation_to_datanode(top_entity, root_data_node);
+        add_annotation_to_datanode(entity, root_data_node);
     }
 
     YLOG_DEBUG("Root entity: {}", root_path.path);
     populate_name_values(root_data_node, root_path);
-    walk_children(top_entity, root_data_node)
+    walk_children(entity, root_data_node)
 ;
     return root_data_node;
 }
@@ -92,14 +90,7 @@ static void populate_data_node(Entity & entity, path::DataNode & parent_data_nod
     EntityPath path = entity.get_entity_path(entity.parent);
     path::DataNode* data_node = nullptr;
 
-    if(entity.has_data())
-    {
-        data_node = &parent_data_node.create(path.path);
-    }
-    else
-    {
-        data_node = &parent_data_node.create_filter(entity.yang_name);
-    }
+    data_node = &parent_data_node.create(path.path);
 
     if(is_set(entity.operation))
     {
@@ -124,10 +115,6 @@ static void populate_name_values(path::DataNode & data_node, EntityPath & path)
         {
             result = &data_node.create(name_value.first, leaf_data.value);
         }
-        else
-        {
-            result = &data_node.create_filter(name_value.first, leaf_data.value);
-        }
 
         if(is_set(leaf_data.operation))
         {
@@ -136,15 +123,6 @@ static void populate_name_values(path::DataNode & data_node, EntityPath & path)
 
         YLOG_DEBUG("Result: {}", (result?"success":"failure"));
         }
-}
-
-static Entity & get_top_entity(Entity & entity)
-{
-    if (entity.parent == nullptr)
-    {
-        return entity;
-    }
-    return get_top_entity(*entity.parent);
 }
 
 static void add_annotation_to_datanode(const Entity & entity, path::DataNode & data_node)

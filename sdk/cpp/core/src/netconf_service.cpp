@@ -177,8 +177,8 @@ bool NetconfService::edit_config(NetconfServiceProvider & provider, DataStore ta
     Entity& config, std::string default_operation, std::string test_option, std::string error_option)
 {
 	YLOG_INFO("Executing edit-config RPC");
-	ValidationService validation{};
-	validation.validate(provider, config, ValidationService::Option::DATASTORE);
+//	ValidationService validation{};
+//	validation.validate(provider, config, ValidationService::Option::DATASTORE);
 
     // Get the root schema node
     shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:edit-config");
@@ -341,9 +341,13 @@ static shared_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider,
 
 static std::string get_data_payload(Entity & entity, path::RootSchemaNode & root_schema)
 {
-    path::DataNode& data_node = get_data_node_from_entity(entity, root_schema);
+    path::DataNode& datanode = get_data_node_from_entity(entity, root_schema);
+    const path::DataNode* dn = &datanode;
+    while(dn!= nullptr && dn->parent()!=nullptr)
+        dn = dn->parent();
+
     path::CodecService codec{};
-    return codec.encode(data_node, ydk::EncodingFormat::XML, true);
+    return codec.encode(*dn, ydk::EncodingFormat::XML, true);
 }
 
 static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter)

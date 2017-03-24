@@ -57,9 +57,12 @@ CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pret
     path::RootSchemaNode& root_schema = get_root_schema(provider, entity);
     try
     {
-        path::DataNode& data_node = get_data_node_from_entity(entity, root_schema);
+        path::DataNode& datanode = get_data_node_from_entity(entity, root_schema);
+        const path::DataNode* dn = &datanode;
+        while(dn!= nullptr && dn->parent()!=nullptr)
+            dn = dn->parent();
         path::CodecService core_codec_service{};
-        std::string result = core_codec_service.encode(data_node, provider.m_encoding, pretty);
+        std::string result = core_codec_service.encode(*dn, provider.m_encoding, pretty);
         YLOG_INFO("Performing encode operation, resulting in {}", result);
         return result;
     }
