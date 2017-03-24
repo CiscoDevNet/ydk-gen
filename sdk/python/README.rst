@@ -67,19 +67,19 @@ If you prefer not to use the YDK packages in the Python package index, you need 
   core$ python setup.py sdist
   core$ pip install dist/ydk*.gz
 
-Once you have installed the ``ydk`` core package, you can install one more model bundles.  Note that some bundles have dependencies on other bundles.  Those dependencies are already captured in the bundle package.  Make sure you install the desired bundles in the order below.  To install the IETF bundle, execute::
+Once you have installed the ``ydk`` core package, you can install one more model bundles.  Note that some bundles have dependencies on other bundles.  Those dependencies are already captured in the bundle package.  Make sure you install the desired bundles in the order below.  To install the ``ietf`` bundle, execute::
 
   core$ cd ../ietf
   ietf$ python setup.py sdist
   ietf$ pip install dist/ydk*.gz
 
-To install the OpenConfig bundle, execute::
+To install the ``openconfig`` bundle, execute::
 
   ietf$ cd ../openconfig
   openconfig$ python setup.py sdist
   openconfig$ pip install dist/ydk*.gz
 
-To install the cisco-ios-xr bundle, execute::
+To install the ``cisco-ios-xr`` bundle, execute::
 
   openconfig$ cd ../cisco-ios-xr
   cisco-ios-xr$ python setup.py sdist
@@ -108,8 +108,8 @@ At this point, you can perform the quick install or the installation from source
 
 Documentation and Support
 --------------------------
-- Samples can be found under the `samples directory <https://github.com/CiscoDevNet/ydk-py/tree/master/core/samples>`_
 - Read the `API documentation <http://ydk.cisco.com/py/docs>`_ for details on how to use the API and specific models
+- Samples can be found under the `samples directory <https://github.com/CiscoDevNet/ydk-py/tree/master/core/samples>`_
 - Hundreds of additional samples can be found in the `YDK-PY samples repository <https://github.com/CiscoDevNet/ydk-py-samples>`_
 - Join the `YDK community <https://communities.cisco.com/community/developer/ydk>`_ to connect with other users and with the makers of YDK
 
