@@ -40,13 +40,6 @@ ydk::path::DataNode::create(const std::string& path)
     return create(path, "");
 }
 
-
-ydk::path::DataNode&
-ydk::path::DataNode::create_filter(const std::string& path)
-{
-    return create_filter(path, "");
-}
-
 ////////////////////////////////////////////////////////////////////////////
 // class ydk::DataNodeImpl
 //////////////////////////////////////////////////////////////////////////
@@ -96,21 +89,14 @@ ydk::path::DataNodeImpl::path() const
     return str;
 }
 
-
-ydk::path::DataNode&
-ydk::path::DataNodeImpl::create_filter(const std::string& path, const std::string& value)
-{
-	return create_helper(path, value, true);
-}
-
 ydk::path::DataNode&
 ydk::path::DataNodeImpl::create(const std::string& path, const std::string& value)
 {
-	return create_helper(path, value, false);
+	return create_helper(path, value);
 }
 
 ydk::path::DataNode&
-ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::string& value, bool is_filter)
+ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::string& value)
 {
     if(path.empty())
     {
@@ -187,12 +173,7 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
 		}
 
     	auto child_segment = segments[i];
-    	if(is_filter)
-		{
-			YLOG_DEBUG("Creating new filter path '{}' in '{}'", child_segment, cn->schema->name);
-			cn = lyd_new_output(cn, nullptr, child_segment.c_str());
-		}
-    	else if (i != segments.size() - 1)
+    	if (i != segments.size() - 1)
         {
     		YLOG_DEBUG("Creating new data path '{}' in '{}'", child_segment, cn->schema->name);
 			cn = lyd_new_path(cn, nullptr, child_segment.c_str(), nullptr, LYD_ANYDATA_SXML, 0);

@@ -36,7 +36,7 @@ TEST_CASE("one_level_pos_set")
 
     r_1->one->number = 1;
     r_1->one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
-    bool reply = crud.create(provider, *r_1);
+    bool reply = crud.create(provider, *r_1->one);
     REQUIRE(reply);
 }
 
@@ -104,7 +104,7 @@ TEST_CASE("two_level_pos")
     REQUIRE(reply);
 
     auto filter = make_unique<ydktest_sanity::Runner>();
-    auto r_2 = crud.read(provider, *filter);
+    auto r_2 = crud.read(provider, *filter->two);
     REQUIRE(r_2!=nullptr);
     ydktest_sanity::Runner * r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
     REQUIRE(r_2_ptr!=nullptr);
@@ -120,7 +120,7 @@ TEST_CASE("two_level_pos")
     r_1->two->sub1->number = 210;
 
     filter = make_unique<ydktest_sanity::Runner>();
-    reply = crud.update(provider, *r_1);
+    reply = crud.update(provider, *r_1->two);
     r_2 = crud.read(provider, *filter);
     REQUIRE(r_2!=nullptr);
     r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
@@ -359,7 +359,7 @@ TEST_CASE("test_threelist_pos")
     r_1->three_list->ldata.push_back(move(l_1));
     r_1->three_list->ldata.push_back(move(l_2));
 
-    reply = crud.create(provider, *r_1);
+    reply = crud.create(provider, *r_1->three_list);
     REQUIRE(reply);
 
     //READ

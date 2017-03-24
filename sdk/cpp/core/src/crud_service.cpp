@@ -105,11 +105,11 @@ static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter)
 static shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, Entity & entity,
         const string & operation, const string & data_tag, bool set_config_flag)
 {
-    if(data_tag == "entity")
-    {
-        ValidationService validation{};
-        validation.validate(provider, entity, ValidationService::Option::DATASTORE);
-    }
+//    if(data_tag == "entity")
+//    {
+//        ValidationService validation{};
+//        validation.validate(provider, entity, ValidationService::Option::DATASTORE);
+//    }
     path::RootSchemaNode& root_schema = provider.get_root_schema();
     shared_ptr<ydk::path::Rpc> ydk_rpc { root_schema.rpc(operation) };
     string data = get_data_payload(entity, provider);
@@ -124,9 +124,12 @@ static shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, 
 
 static string get_data_payload(Entity & entity, path::ServiceProvider & provider)
 {
-	const ydk::path::DataNode& data_node = get_data_node_from_entity(entity, provider.get_root_schema());
+	const ydk::path::DataNode& datanode = get_data_node_from_entity(entity, provider.get_root_schema());
+    const path::DataNode* dn = &datanode;
+    while(dn!= nullptr && dn->parent()!=nullptr)
+        dn = dn->parent();
     path::CodecService codec{};
-	return codec.encode(data_node, provider.get_encoding(), false);
+	return codec.encode(*dn, provider.get_encoding(), false);
 }
 
 }
