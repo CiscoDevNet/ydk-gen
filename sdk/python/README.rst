@@ -108,11 +108,10 @@ At this point, you can perform the quick install or the installation from source
 
 Documentation and Support
 --------------------------
-- Samples can be found under the ``core/samples`` directory
-- API documentation can be found at http://ydk.cisco.com/py/docs
-- Hundreds of samples can be found at https://github.com/CiscoDevNet/ydk-py-samples
-- For queries related to usage of the API, please join the YDK community at https://communities.cisco.com/community/developer/ydk
-
+- Samples can be found under the `samples directory <https://github.com/CiscoDevNet/ydk-py/tree/master/core/samples>`_
+- Read the `API documentation <http://ydk.cisco.com/py/docs>`_ for details on how to use the API and specific models
+- Hundreds of additional samples can be found in the `YDK-PY samples repository <https://github.com/CiscoDevNet/ydk-py-samples>`_
+- Join the `YDK community <https://communities.cisco.com/community/developer/ydk>`_ to connect with other users and with the makers of YDK
 
 Release Notes
 --------------
