@@ -65,7 +65,7 @@ $ sudo ln -fs /usr/bin/cmake3 /usr/bin/cmake
 ```
 
 ## macOS
-It is recommended to install homebrew (http://brew.sh) and Xcode command line tools on your system before installing YDK-Py:
+It is recommended to install [homebrew](http://brew.sh) and Xcode command line tools on your system before installing YDK-Py:
 ```
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ xcode-select --install
@@ -73,7 +73,9 @@ $ brew install pkg-config cmake libssh xml2 curl pcre
 ```
 
 ## Windows
-It is recommended to install a python distribution like [PythonXY](https://python-xy.github.io/) on your system before installing YDK-Py
+You must install the following requirements::
+* [Python Releases for Windows](https://www.python.org/downloads/windows)
+* [Visual C++ Build Tools](http://landinghub.visualstudio.com/visual-cpp-build-tools)
 
 # Installation
 ## Setting up your environment
@@ -319,3 +321,11 @@ $ cd ydk-gen/sdk/cpp/tests
 $ mkdir build && cd build
 $ cmake .. && make all test
 ```
+
+Support
+=======
+Join the [YDK community](https://communities.cisco.com/community/developer/ydk) to connect with other users and with the makers of YDK.
+
+Release Notes
+===============
+The current YDK release version is 0.5.4 (alpha). YDK-Gen is licensed under the Apache 2.0 License.
