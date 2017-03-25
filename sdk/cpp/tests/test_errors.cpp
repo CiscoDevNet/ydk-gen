@@ -270,3 +270,23 @@ TEST_CASE("leaflist_max_elements")
     //CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE); //TODO
     CHECK_THROWS(crud.create(provider, *r_1));
 }
+
+TEST_CASE("leaflist_duplicate")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::local);
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::not_set);
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::remote);
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::none);
+    r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::none);
+    CHECK_THROWS_WITH(crud.create(provider, *r_1), CONTAINS_ERROR_MESSAGE); //TODO
+}

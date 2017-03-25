@@ -107,7 +107,7 @@ static shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, 
 {
 //    if(data_tag == "entity")
 //    {
-//        ValidationService validation{};
+//        ValidationService validation{}; //TODO
 //        validation.validate(provider, entity, ValidationService::Option::DATASTORE);
 //    }
     path::RootSchemaNode& root_schema = provider.get_root_schema();

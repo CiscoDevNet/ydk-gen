@@ -106,6 +106,8 @@ CodecService::decode(CodecServiceProvider & provider, const std::string & payloa
         for (auto data_node: root_data_node->children())
         {
             get_entity_from_data_node(data_node.get(), entity);
+            // Required for validation of decoded entity
+            path::DataNode& dn = get_data_node_from_entity(*entity, root_schema);
         }
     }
     return entity;
