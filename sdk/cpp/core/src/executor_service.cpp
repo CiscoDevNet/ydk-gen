@@ -52,7 +52,6 @@ shared_ptr<Entity> ExecutorService::execute_rpc(NetconfServiceProvider & provide
     Entity & rpc_entity, std::shared_ptr<Entity> top_entity)
 {
     // Get the operation - RPC Name
-    // auto operation = rpc_entity.get_entity_path(rpc_entity.parent).path;
     auto const & operation = rpc_entity.get_segment_path();
 
     // Create RPC instance
