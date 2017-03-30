@@ -56,7 +56,7 @@ class ClassMembersPrinter(object):
     def _get_leafs(self, clazz):
         leafs = []
         for child in clazz.owned_elements:
-            if child.stmt.keyword == 'leaf':
+            if child.stmt.keyword in ('leaf', 'anyxml'):
                 leafs.append(child)
         return leafs
 
@@ -159,7 +159,9 @@ class ClassMembersPrinter(object):
         class_inits_properties = []
         for prop in clazz.properties():
             result = None
-            if not prop.is_many:
+            if prop.stmt.keyword == 'anyxml':
+                pass
+            elif not prop.is_many:
                 result = self._get_class_inits_unique(prop)
             else:
                 result = self._get_class_inits_many(prop)
