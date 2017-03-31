@@ -49,7 +49,8 @@ class ExecutorService : public Service
 {
 	public:
 		ExecutorService();
-		bool execute_rpc(NetconfServiceProvider & provider, Entity & entity);
+		std::shared_ptr<Entity> execute_rpc(NetconfServiceProvider & provider,
+			Entity & rpc_entity, std::shared_ptr<Entity> top_entity = nullptr);
 };
 
 }

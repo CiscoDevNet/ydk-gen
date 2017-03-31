@@ -45,7 +45,6 @@ class ClassMembersPrinter(object):
             return
         self._print_common_method_declarations(clazz)
         self._print_top_level_entity_functions(clazz)
-        self.ctx.bline()
 
     def _print_constructor_destructor(self, clazz):
         self.ctx.writeln('public:')
@@ -57,7 +56,7 @@ class ClassMembersPrinter(object):
     def _get_leafs(self, clazz):
         leafs = []
         for child in clazz.owned_elements:
-            if child.stmt.keyword == 'leaf':
+            if child.stmt.keyword in ('leaf', 'anyxml'):
                 leafs.append(child)
         return leafs
 
@@ -138,11 +137,9 @@ class ClassMembersPrinter(object):
 
     def _print_class_child_members(self, clazz):
         if clazz.is_identity() and len(clazz.extends) == 0:
-            self.ctx.bline()
             return
         class_inits_properties = self._get_children(clazz)
         if len(class_inits_properties) > 0:
-            self.ctx.bline()
             self.ctx.lvl_inc()
             self.ctx.writelns(class_inits_properties)
             self.ctx.lvl_dec()
@@ -162,19 +159,21 @@ class ClassMembersPrinter(object):
         class_inits_properties = []
         for prop in clazz.properties():
             result = None
-            if not prop.is_many:
+            if prop.stmt.keyword == 'anyxml':
+                pass
+            elif not prop.is_many:
                 result = self._get_class_inits_unique(prop)
             else:
                 result = self._get_class_inits_many(prop)
             if result is not None:
                 class_inits_properties.append(result)
+        if class_inits_properties:
+            class_inits_properties.append('')
         return class_inits_properties
 
     def _print_class_enums_forward_declarations(self, clazz):
-        self.ctx.bline()
         self.ctx.lvl_inc()
         for child in clazz.owned_elements:
             if isinstance(child, Enum):
                 self.ctx.writeln('class %s;' % child.name)
         self.ctx.lvl_dec()
-        self.ctx.bline()

@@ -584,6 +584,7 @@ class AnyXml(NamedElement):
 
     @stmt.setter
     def stmt(self, stmt):
+        self.name = 'string'
         self._stmt = stmt
         desc = stmt.search_one('description')
         if desc is not None:

@@ -124,10 +124,10 @@ class HeaderPrinter(MultiFilePrinter):
         child_classes = [nested_class for nested_class in clazz.owned_elements if isinstance(nested_class, Class)]
         if len(child_classes) == 0:
             return
-        self.ctx.bline()
         self.ctx.lvl_inc()
         for child in child_classes:
             self._print_forward_declaration(child)
+        self.ctx.bline()
         self.ctx.lvl_dec()
 
     def _print_forward_declaration(self, clazz):

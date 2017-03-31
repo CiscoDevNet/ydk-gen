@@ -17,9 +17,14 @@
 #include <string.h>
 #include <iostream>
 
+#include "ydk/crud_service.hpp"
+#include <ydk/codec_provider.hpp>
+#include <ydk/codec_service.hpp>
 #include <ydk/netconf_provider.hpp>
 #include <ydk/executor_service.hpp>
 #include <ydk_ydktest/ydktest_sanity.hpp>
+#include <ydk_ydktest/ietf_netconf.hpp>
+#include <ydk_ydktest/openconfig_bgp.hpp>
 #include <ydk/types.hpp>
 
 #include "config.hpp"
@@ -28,80 +33,318 @@
 using namespace ydk;
 using namespace std;
 
-TEST_CASE("dummy")
+TEST_CASE("es_close_session_rpc")
 {
-    bool foo = true;
-    REQUIRE(foo);
+    // provider
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
+
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
+
+    ydk::ietf_netconf::CloseSessionRpc rpc{};
+
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
 }
 
-// TEST_CASE("execute_validate_rpc_source_1")
-// {
-//     ydk::path::Repository repo{TEST_HOME};
-//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-//     ExecutorService es{};
+// persist-id is broken?
+TEST_CASE("es_commit_rpc")
+{
+    // provider
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
 
-//     auto r_1 = make_unique<ydktest_sanity::Runner>();
-//     ydk::ietf_netconf::ValidateRpc rpc{};
-//     rpc.source->candidate = "candidate";
-//     bool reply = es.execute_rpc(provider, rpc);
-//     REQUIRE(reply);
-// }
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
 
-// TEST_CASE("execute_validate_rpc_source_2")
-// {
-//     ydk::path::Repository repo{TEST_HOME};
-//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-//     ExecutorService es{};
+    ydk::ietf_netconf::CommitRpc rpc{};
+    Empty e;
+    e.set = true;
+    rpc.input->confirmed = e;
+    rpc.input->confirm_timeout = 5;
+    // rpc.input->persist = "2";
+    // rpc.input->persist_id = "2";
 
-//     auto r_1 = make_unique<ydktest_sanity::Runner>();
-//     ydk::ietf_netconf::ValidateRpc rpc{};
-//     Empty e;
-//     e.set = true;
-//     rpc.source->running = e;
-//     bool reply = es.execute_rpc(provider, rpc);
-//     REQUIRE(reply);
-// }
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
 
-// TEST_CASE("execute_validate_rpc_source_3")
-// {
-//     ydk::path::Repository repo{TEST_HOME};
-//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-//     ExecutorService es{};
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
 
-//     auto r_1 = make_unique<ydktest_sanity::Runner>();
-//     ydk::ietf_netconf::ValidateRpc rpc{};
-//     Empty e;
-//     e.set = true;
-//     rpc.source->startup = e;
-//     bool reply = es.execute_rpc(provider, rpc);
-//     REQUIRE(reply);
-// }
+TEST_CASE("es_copy_config_rpc")
+{
+    // provider
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
 
-// TEST_CASE("execute_validate_rpc_source_4")
-// {
-//     ydk::path::Repository repo{TEST_HOME};
-//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-//     ExecutorService es{};
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
 
-//     auto r_1 = make_unique<ydktest_sanity::Runner>();
-//     ydk::ietf_netconf::ValidateRpc rpc{};
-//     Empty e;
-//     e.set = true;
-//     rpc.source->url = e;
-//     bool reply = es.execute_rpc(provider, rpc);
-//     REQUIRE(reply);
-// }
+    ydk::ietf_netconf::CopyConfigRpc rpc{};
+    Empty e;
+    e.set = true;
+    rpc.input->target->candidate = Empty();
+    rpc.input->source->running = e;
 
-// TEST_CASE("execute_validate_rpc_source_5")
-// {
-//     ydk::path::Repository repo{TEST_HOME};
-//     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
-//     ExecutorService es{};
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
 
-//     auto r_1 = make_unique<ydktest_sanity::Runner>();
-//     ydk::ietf_netconf::ValidateRpc rpc{};
-//     // rpc.source->config = // openconfg_bgp::Bgp -- create bgp object and assign
-//     bool reply = es.execute_rpc(provider, rpc);
-//     REQUIRE(reply);
-// }
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
+
+// issues in netsim
+TEST_CASE("es_delete_config_rpc")
+{
+    // provider
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
+
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
+
+    ydk::ietf_netconf::DeleteConfigRpc rpc{};
+
+    rpc.input->target->url = "http://test";
+    // std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
+
+    CHECK_THROWS_AS(es.execute_rpc(provider, rpc), YCPPServiceProviderError);
+
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
+
+TEST_CASE("es_discard_changes_rpc")
+{
+    // provider
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
+
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
+
+    ydk::ietf_netconf::DiscardChangesRpc rpc{};
+
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
+
+// edit_config, get_config, commit, get
+TEST_CASE("es_edit_config_rpc")
+{
+    // provider
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
+    CodecServiceProvider codec_provider{EncodingFormat::XML};
+    CodecService codec_service{};
+
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
+
+    // runner and filter
+    auto runner = make_shared<ydktest_sanity::Runner>();
+    runner->one->number = 1;
+    runner->one->name = "runner:one:name";
+    std::string runner_xml = codec_service.encode(codec_provider, *runner, true);
+
+    auto filter = make_unique<ydktest_sanity::Runner>();
+    std::string filter_xml = codec_service.encode(codec_provider, *filter, true);
+
+    // Edit Config Rpc
+    ydk::ietf_netconf::EditConfigRpc edit_config_rpc{};
+    edit_config_rpc.input->target->candidate = Empty();
+    edit_config_rpc.input->config = runner_xml;
+
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, edit_config_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    // Get Config Rpc
+    ydk::ietf_netconf::GetConfigRpc get_config_rpc{};
+    get_config_rpc.input->source->candidate = Empty();
+    get_config_rpc.input->filter = filter_xml;
+
+    reply = es.execute_rpc(provider, get_config_rpc, runner);
+    REQUIRE(reply);
+
+    // Commit Rpc
+    ydk::ietf_netconf::CommitRpc commit_rpc{};
+
+    reply = es.execute_rpc(provider, commit_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    // // Get Rpc
+    ydk::ietf_netconf::GetRpc get_rpc{};
+    get_rpc.input->filter = filter_xml;
+
+    reply = es.execute_rpc(provider, get_rpc, runner);
+    REQUIRE(reply);
+
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
+
+// kill_session
+TEST_CASE("es_kill_session_rpc")
+{
+    // provider
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
+
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
+
+    ydk::ietf_netconf::KillSessionRpc rpc{};
+    rpc.input->session_id = 3;
+
+   // std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
+    CHECK_THROWS_AS(es.execute_rpc(provider, rpc), YCPPServiceProviderError);
+
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
+
+// lock, unlock
+TEST_CASE("es_lock_rpc")
+{
+    // provider
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
+
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
+
+    ydk::ietf_netconf::LockRpc lock_rpc{};
+    lock_rpc.input->target->candidate = Empty();
+
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, lock_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    ydk::ietf_netconf::UnlockRpc unlock_rpc{};
+    unlock_rpc.input->target->candidate = Empty();
+
+    reply = es.execute_rpc(provider, unlock_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
+
+TEST_CASE("es_validate_rpc_1")
+{
+    path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
+
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
+
+    ydk::ietf_netconf::ValidateRpc rpc{};
+    rpc.input->source->candidate = Empty();
+    // rpc.input->source->config = r_1;
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
+
+TEST_CASE("es_validate_rpc_2")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ExecutorService es{};
+
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
+
+    ydk::ietf_netconf::ValidateRpc rpc{};
+    Empty e;
+    e.set = true;
+    rpc.input->source->running = e;
+    std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    // Discard Changes
+    ydk::ietf_netconf::DiscardChangesRpc discard_rpc{};
+    reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+}
 

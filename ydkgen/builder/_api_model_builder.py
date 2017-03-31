@@ -24,7 +24,7 @@ from pyang import statements
 
 from ._types_extractor import TypesExtractor
 from ydkgen.common import YdkGenException
-from ydkgen.api_model import Enum, Class, Bits, Package, Property, Deviation
+from ydkgen.api_model import AnyXml, Enum, Class, Bits, Package, Property, Deviation
 
 
 class ApiModelBuilder(object):
@@ -114,7 +114,8 @@ class ApiModelBuilder(object):
                 if not hasattr(enum_type.parent, 'i_enum'):
                     # case where the type is a leafref pointing to a leaf with an
                     # embedded enum definition
-                    if hasattr(enum_type.parent, 'i_property') and isinstance(enum_type.parent.i_property.property_type, Enum):
+                    if (hasattr(enum_type.parent, 'i_property') and
+                        isinstance(enum_type.parent.i_property.property_type, Enum)):
                         element.property_type = enum_type.parent.i_property.property_type
                     else:
                         raise YdkGenException(
@@ -182,20 +183,27 @@ class ApiModelBuilder(object):
         union_type = self.types_extractor.get_union_type_stmt(stmt)
         # if the type statement is totally self contained
         # then we need to extract this type
-        if enum_type is not None and enum_type == stmt.search_one('type'):
-                # we have to create the enum
-                enum_class = Enum(self.iskeyword)
-                enum_class.stmt = enum_type
-                parent_element.owned_elements.append(enum_class)
-                enum_class.owner = parent_element
-                prop.property_type = enum_class
+
+        if stmt.keyword == 'anyxml':
+            anyxml = AnyXml()
+            anyxml.stmt = stmt
+            # parent_element.owned_elements.append(anyxml)
+            # anyxml.owner = parent_element
+            prop.property_type = anyxml
+        elif enum_type is not None and enum_type == stmt.search_one('type'):
+            # we have to create the enum
+            enum_class = Enum(self.iskeyword)
+            enum_class.stmt = enum_type
+            parent_element.owned_elements.append(enum_class)
+            enum_class.owner = parent_element
+            prop.property_type = enum_class
         elif bits_type is not None and bits_type == stmt.search_one('type'):
-                # we have to create the specific subclass of FixedBitsDict
-                bits_class = Bits(self.iskeyword)
-                bits_class.stmt = bits_type
-                parent_element.owned_elements.append(bits_class)
-                bits_class.owner = parent_element
-                prop.property_type = bits_class
+            # we have to create the specific subclass of FixedBitsDict
+            bits_class = Bits(self.iskeyword)
+            bits_class.stmt = bits_type
+            parent_element.owned_elements.append(bits_class)
+            bits_class.owner = parent_element
+            prop.property_type = bits_class
         elif union_type is not None and union_type == stmt.search_one('type'):
             def _add_union_type(union_type_stmt, parent_element):
                 for contained_type in union_type_stmt.i_type_spec.types:
@@ -268,8 +276,8 @@ class ApiModelBuilder(object):
         if stmt.keyword == 'module':
             pass
 
-        elif stmt.keyword == 'container' or stmt.keyword == 'list' or stmt.keyword == 'rpc' or stmt.keyword == 'input' or stmt.keyword == 'output':
-            if (stmt.keyword == 'input' or stmt.keyword == 'output') and len(stmt.substmts) == 0:
+        elif stmt.keyword in ('container', 'list', 'rpc', 'input', 'output'):
+            if stmt.keyword in ('input', 'output') and len(stmt.substmts) == 0:
                 pass
             else:
                 clazz = Class(self.iskeyword)
@@ -326,16 +334,9 @@ class ApiModelBuilder(object):
         if hasattr(stmt, 'i_key') and stmt.i_key is not None:
             children.extend([s for s in stmt.i_key if s not in children])
 
-        black_sheep = []
         for child in stmt.i_children:
             if child not in children and child.keyword in keywords:
-                if child.keyword == 'input':
-                    black_sheep.append(child)
-                else:
                     children.append(child)
-
-        for child in black_sheep:
-            children.extend(self._walk_children(child, keywords))
 
         return children
 
@@ -578,7 +579,8 @@ class GroupingClassApiModelBuilder(ApiModelBuilder):
                         [s.arg for s in grouping.i_children])
 
             chs = [ch for ch in stmt.i_children
-                   if ch.keyword in statements.data_definition_keywords and ch.arg not in grouping_stmt_names]
+                    if (ch.keyword in statements.data_definition_keywords and
+                    ch.arg not in grouping_stmt_names)]
             for child_stmt in chs:
                 self._create_grouping_class_api_model(child_stmt, element)
 
