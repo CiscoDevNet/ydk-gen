@@ -40,7 +40,6 @@ class ClassSourcePrinter(object):
         leafs = []
         children = []
         self._get_class_members(clazz, leafs, children)
-
         self._print_class_constructor(clazz, leafs, children)
         self._print_class_destructor(clazz)
         self._print_class_method_definitions(clazz, leafs, children)
@@ -112,7 +111,7 @@ class ClassSourcePrinter(object):
     def _get_class_members(self, clazz, leafs, children):
         for prop in clazz.properties():
             ptype = prop.property_type
-            if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
+            if isinstance(ptype, Class) and not ptype.is_identity():
                 children.append(prop)
             elif ptype is not None:
                 leafs.append(prop)

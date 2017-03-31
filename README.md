@@ -52,12 +52,12 @@ The output of ydk-gen is either a core package, that defines services and provid
 # System requirements
 
 ## Linux
-Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py:
+Ubuntu (Debian-based): The following packages must be present in your system before installing YDK-Py/YDK-Cpp:
 ```
 $ sudo apt-get install python-pip zlib1g-dev python-lxml libxml2-dev libxslt1-dev python-dev libssh-dev libcurl4-openssl-dev libtool-bin libpcre3-dev libpcre++-dev libtool pkg-config python3-dev python3-lxml cmake clang
 ```
 
-Centos (Fedora-based): The following packages must be present in your system before installing YDK-Py:
+Centos (Fedora-based): The following packages must be present in your system before installing YDK-Py/YDK-Cpp:
 ```
 $ sudo yum install epel-release
 $ sudo yum install python-pip python-devel libxml2-devel libxslt-devel libssh-devel libcurl-devel libtool clang cmake3 pcre-devel
@@ -65,7 +65,7 @@ $ sudo ln -fs /usr/bin/cmake3 /usr/bin/cmake
 ```
 
 ## macOS
-It is recommended to install [homebrew](http://brew.sh) and Xcode command line tools on your system before installing YDK-Py:
+It is recommended to install [homebrew](http://brew.sh) and Xcode command line tools on your system before installing YDK-Py/YDK-Cpp:
 ```
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ xcode-select --install
