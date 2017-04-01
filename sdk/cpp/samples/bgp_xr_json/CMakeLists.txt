@@ -38,8 +38,8 @@ foreach(sample IN LISTS samples)
     add_executable(${sample} ${sample}.cpp ../args_parser.cpp)
 
     target_link_libraries(${sample}
-            ${ydk_location} 
             ${ydk_cisco_ios_xr_location} 
+            ${ydk_location}
             ${xml2_location}
             ${curl_location}
             ${ssh_location}
