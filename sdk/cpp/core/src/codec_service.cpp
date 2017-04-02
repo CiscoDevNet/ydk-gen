@@ -33,7 +33,7 @@
 namespace ydk
 {
 
-const char * REPO_ERROR_MSG ="Failed to initialize provider.";
+const char * REPO_ERROR_MSG ="Failed to initialize codec provider.";
 
 const char * PAYLOAD_ERROR_MSG ="Codec service only supports one entity per payload, please split payload";
 

@@ -177,6 +177,7 @@ void get_entity_from_data_node(path::DataNode * node, std::shared_ptr<Entity> en
 			{
 				child_entity = entity->get_child_by_name(child_name);
 			}
+			child_entity->parent = entity.get();
 
 			if(child_entity == nullptr)
 			{
