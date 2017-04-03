@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 	if(verbose)
     {
         auto logger = spdlog::stdout_color_mt("ydk");
-        logger->set_level(spdlog::level::debug);
+        logger->set_level(spdlog::level::info);
     }
 
 	try
