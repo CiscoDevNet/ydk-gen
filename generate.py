@@ -141,12 +141,18 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
     if is_core:
         copy_docs_from_bundles(output_directory, py_api_doc_gen)
     # build docs
-    p = subprocess.Popen(['sphinx-build',
-                          '-D', release,
-                          '-D', version,
-                          py_api_doc_gen, py_api_doc],
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
+    if is_core:
+        p = subprocess.Popen(['sphinx-build',
+                              '-D', release,
+                              '-D', version,
+                              py_api_doc_gen, py_api_doc],
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+    else:
+        p = subprocess.Popen(['sphinx-build',
+                              py_api_doc_gen, py_api_doc],
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
     logger.debug(stdout)
     logger.error(stderr)

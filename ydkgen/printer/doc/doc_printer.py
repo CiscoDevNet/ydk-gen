@@ -20,6 +20,7 @@ doc_printer.py
 
 Print rst documents for the generated Python api
 """
+from operator import attrgetter
 
 from ydkgen.api_model import Bits, Class, Enum, Package
 from ydkgen.common import get_rst_file_name, is_config_stmt
@@ -62,7 +63,7 @@ class DocPrinter(object):
         description = '\nModel API documentation for the {0} bundle.\n Version: **{1}**.\n'.format(bundle_name, bundle_version)
         self._print_title(title)
         self._append(description)
-        self._print_toctree(packages, is_package=True)
+        self._print_toctree(sorted(packages, key=attrgetter('name')), is_package=True)
 
         self.ctx.writelns(self.lines)
         del self.lines
