@@ -25,61 +25,49 @@ CONFD_FLAGS = --addloadpath $(CONFD_DIR)/etc/confd --addloadpath $(CONFD_DIR)/sr
 START_FLAGS ?=
 
 
-all:  bgp.deviation routing-policy.deviation bgp-policy.deviation ydktest-sanity.deviation \
-		policy-types.fxs bgp-policy.fxs bgp-types.fxs bgp-operational.fxs bgp-multiprotocol.fxs \
-		ydktest-types.fxs \
+all: openconfig-bgp.deviation ydktest-sanity.deviation \
+	openconfig-bgp.fxs openconfig-routing-policy.fxs openconfig-policy-types.fxs openconfig-bgp-types.fxs \
+	openconfig-types.fxs openconfig-bgp-operational.fxs openconfig-bgp-multiprotocol.fxs \
+	ydktest-types.fxs \
 		$(CDB_DIR) ssh-keydir
 	@echo "Build complete"
 
-bgp.deviation: cisco-xr-bgp-deviations.yang \
- 		bgp.yang bgp-multiprotocol.yang bgp-operational.yang bgp-types.yang policy-types.yang routing-policy.yang
+openconfig-bgp.deviation: cisco-xr-openconfig-bgp-deviations.yang \
+ 		openconfig-bgp.yang openconfig-bgp-multiprotocol.yang openconfig-bgp-types.yang openconfig-policy-types.yang openconfig-routing-policy.yang
 	$(CONFDC) $(FXS_WERR) $(EXTRA_LINK_FLAGS) -o $(basename $@).fxs -c $(basename $@).yang \
 		--deviation $(word 1, $^)
 
-routing-policy.deviation:  cisco-xr-bgp-policy-deviations.yang cisco-xr-routing-policy-deviations.yang \
-		bgp-policy.yang policy-types.yang routing-policy.yang
+ydktest-sanity.deviation: ydktest-sanity-deviations-types.yang ydktest-sanity-deviations-another.yang ydktest-sanity.yang
 	$(CONFDC) $(FXS_WERR) $(EXTRA_LINK_FLAGS) -o $(basename $@).fxs -c $(basename $@).yang \
 		--deviation $(word 1, $^) --deviation $(word 2, $^)
 
-bgp-policy.deviation: cisco-xr-bgp-policy-deviations.yang \
-		bgp-policy.yang bgp-types.yang policy-types.yang routing-policy.yang
-	$(CONFDC) $(FXS_WERR) $(EXTRA_LINK_FLAGS) -o $(basename $@).fxs -c $(basename $@).yang \
-		--deviation $(word 1, $^)
+openconfig-bgp-multiprotocol.yang:
+	cp ../../../../../../yang/deviation/openconfig-bgp-multiprotocol.yang openconfig-bgp-multiprotocol.yang
 
-ydktest-sanity.deviation: ydktest-sanity-deviations-types.yang ydktest-sanity-deviations-another.yang \
-		ydktest-sanity.yang
-	$(CONFDC) $(FXS_WERR) $(EXTRA_LINK_FLAGS) -o $(basename $@).fxs -c $(basename $@).yang \
-		--deviation $(word 1, $^) --deviation $(word 2, $^)
+openconfig-bgp-operational.yang:
+	cp ../../../../../../yang/deviation/openconfig-bgp-operational.yang openconfig-bgp-operational.yang
 
-bgp.yang:
-	cp ../../../../../../yang/deviation/bgp.yang bgp.yang
+openconfig-bgp-types.yang:
+	cp ../../../../../../yang/deviation/openconfig-bgp-types.yang openconfig-bgp-types.yang
 
-bgp-multiprotocol.yang:
-	cp ../../../../../../yang/deviation/bgp-multiprotocol.yang bgp-multiprotocol.yang
+openconfig-bgp.yang: openconfig-bgp-multiprotocol.yang openconfig-routing-policy.yang openconfig-bgp-types.yang \
+		openconfig-bgp-operational.yang openconfig-types.yang openconfig-extensions.yang openconfig-policy-types.yang
+	cp ../../../../../../yang/deviation/openconfig-bgp.yang openconfig-bgp.yang
 
-bgp-operational.yang:
-	cp ../../../../../../yang/deviation/bgp-operational.yang bgp-operational.yang
+openconfig-extensions.yang:
+	cp ../../../../../../yang/deviation/openconfig-extensions.yang openconfig-extensions.yang
 
-bgp-policy.yang:
-	cp ../../../../../../yang/deviation/bgp-policy.yang bgp-policy.yang
+openconfig-policy-types.yang:
+	cp ../../../../../../yang/deviation/openconfig-policy-types.yang openconfig-policy-types.yang
 
-bgp-types.yang:
-	cp ../../../../../../yang/deviation/bgp-types.yang bgp-types.yang
+openconfig-routing-policy.yang:
+	cp ../../../../../../yang/deviation/openconfig-routing-policy.yang openconfig-routing-policy.yang
 
-cisco-xr-bgp-deviations.yang:
-	cp ../../../../../../yang/deviation/cisco-xr-bgp-deviations.yang cisco-xr-bgp-deviations.yang
+openconfig-types.yang:
+	cp ../../../../../../yang/deviation/openconfig-types.yang openconfig-types.yang
 
-cisco-xr-bgp-policy-deviations.yang:
-	cp ../../../../../../yang/deviation/cisco-xr-bgp-policy-deviations.yang cisco-xr-bgp-policy-deviations.yang
-
-cisco-xr-routing-policy-deviations.yang:
-	cp ../../../../../../yang/deviation/cisco-xr-routing-policy-deviations.yang cisco-xr-routing-policy-deviations.yang
-
-policy-types.yang:
-	cp ../../../../../../yang/deviation/policy-types.yang policy-types.yang
-
-routing-policy.yang:
-	cp ../../../../../../yang/deviation/routing-policy.yang routing-policy.yang
+cisco-xr-openconfig-bgp-deviations.yang:
+	cp ../../../../../../yang/deviation/cisco-xr-openconfig-bgp-deviations.yang cisco-xr-openconfig-bgp-deviations.yang
 
 ydktest-types.yang:
 	cp ../../../../../../yang/ydktest/ydktest-types@2016-05-23.yang ydktest-types.yang
@@ -93,7 +81,6 @@ ydktest-sanity-deviations-types.yang:
 
 ydktest-sanity-deviations-another.yang:
 	cp ../../../../../../yang/ydktest/ydktest-sanity-deviations-another@2015-11-17.yang ydktest-sanity-deviations-another.yang
-
 
 
 ######################################################################

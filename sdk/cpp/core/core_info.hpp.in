@@ -27,7 +27,7 @@
 
 namespace ydk
 {
-#define ydk_models_path "@CMAKE_INSTALL_PREFIX@/share/ydk"
+#define ydk_models_path "@HOME_DIRECTORY@/.ydk"
 }
 
 #endif /* _BUNDLE_INFO_HPP_ */

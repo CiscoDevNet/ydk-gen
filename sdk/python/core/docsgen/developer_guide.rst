@@ -1,12 +1,14 @@
 Developer Guide
-================
+===============
+
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   introduction.rst
-   read_filter.rst
-   delete_operation.rst
-   presence_class.rst
-   types_doc.rst
-   deviation.rst
+    guides/introduction.rst
+    guides/opendaylight.rst
+    guides/netconf_operations.rst
+    guides/read_filter.rst
+    guides/presence_class.rst
+    guides/deviation.rst
+    guides/path.rst

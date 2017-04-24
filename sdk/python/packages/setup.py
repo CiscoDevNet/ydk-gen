@@ -24,10 +24,7 @@ from setuptools import setup, find_packages
 
 HERE = path.abspath(path.dirname(__file__))
 
-INSTALL_REQUIREMENTS = ['enum34==1.1.3',
-                        'lxml==3.4.4',
-                        'ncclient>=0.4.7',
-                        'ydk>=0.5.2']
+INSTALL_REQUIREMENTS = ['ydk>=0.5.2']
 
 NMSP_PKG_NAME = "$PACKAGE$"
 NMSP_PKG_VERSION = "$VERSION$"
@@ -74,5 +71,6 @@ setup(
     keywords='yang, C++11, python bindings',
     packages=YDK_PACKAGES,
     namespace_packages=NMSP_PACKAGES,
-    install_requires=INSTALL_REQUIREMENTS
+    install_requires=INSTALL_REQUIREMENTS,
+    include_package_data=True
 )

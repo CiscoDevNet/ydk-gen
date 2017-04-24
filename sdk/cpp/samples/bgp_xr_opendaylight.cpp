@@ -47,7 +47,7 @@ static void config_bgp(Bgp *bgp)
 
 	// global address family
 	auto global_af = make_unique<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::Global::GlobalAfs::GlobalAf>();
-	global_af->af_name = BgpAddressFamilyEnum::ipv4_unicast;
+	global_af->af_name = BgpAddressFamily::ipv4_unicast;
 	global_af->enable = Empty();
 	global_af->parent = four_byte_as->default_vrf->global->global_afs.get();
 	four_byte_as->default_vrf->global->global_afs->global_af.push_back(move(global_af));
@@ -62,7 +62,7 @@ static void config_bgp(Bgp *bgp)
 	neighbor_group->update_source_interface = "Loopback0";
 	// ipv4 unicast
 	auto neighbor_group_af = make_unique<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::NeighborGroups::NeighborGroup::NeighborGroupAfs::NeighborGroupAf>();
-	neighbor_group_af->af_name = BgpAddressFamilyEnum::ipv4_unicast;
+	neighbor_group_af->af_name = BgpAddressFamily::ipv4_unicast;
 	neighbor_group_af->activate = Empty();
 	neighbor_group_af->parent = neighbor_group->neighbor_group_afs.get();
 	neighbor_group->parent = four_byte_as->default_vrf->bgp_entity->neighbor_groups.get();

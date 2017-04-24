@@ -25,13 +25,14 @@
 //
 //////////////////////////////////////////////////////////////////
 
+#include <iostream>
 #include "types.hpp"
 
 using namespace std;
 
 namespace ydk
 {
-LeafData::LeafData(std::string value, EditOperation operation, bool is_set)
+LeafData::LeafData(std::string value, YFilter operation, bool is_set)
 	: value(value), operation(operation), is_set(is_set)
 {
 
@@ -56,5 +57,6 @@ std::ostream& operator<< (std::ostream& stream, const LeafData& value)
     stream<<value.value;
     return stream;
 }
+
 
 }

@@ -285,9 +285,9 @@ class ApiModelBuilder(object):
                 clazz.stmt = stmt
 
                 parent_element.owned_elements.append(clazz)
-                clazz.owner = parent_element
+                clazz.set_owner(parent_element, self.language)
 
-                if name_matches_ancestor(clazz.name, parent_element):
+                if self.language == 'cpp' and name_matches_ancestor(clazz.name, parent_element):
                     clazz.name = clazz.name + '_'
 
                 element = clazz
@@ -517,7 +517,7 @@ class GroupingClassApiModelBuilder(ApiModelBuilder):
             stmt.i_class = clazz
             clazz.stmt = stmt
             parent_element.owned_elements.append(clazz)
-            clazz.owner = parent_element
+            clazz.set_owner(parent_element, self.language)
             element = clazz
 
         elif stmt.keyword == 'container' or stmt.keyword == 'list':
@@ -525,7 +525,7 @@ class GroupingClassApiModelBuilder(ApiModelBuilder):
             stmt.i_class = clazz
             clazz.stmt = stmt
             parent_element.owned_elements.append(clazz)
-            clazz.owner = parent_element
+            clazz.set_owner(parent_element, self.language)
             element = clazz
 
             if not isinstance(parent_element, Package):

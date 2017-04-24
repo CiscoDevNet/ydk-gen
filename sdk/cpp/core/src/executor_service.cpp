@@ -43,7 +43,11 @@ shared_ptr<Entity> get_top_entity_from_filter(Entity & filter);
 
 ExecutorService::ExecutorService()
 {
+}
 
+
+ExecutorService::~ExecutorService()
+{
 }
 
 shared_ptr<Entity> ExecutorService::execute_rpc(NetconfServiceProvider & provider,

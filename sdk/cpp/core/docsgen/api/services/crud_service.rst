@@ -1,5 +1,5 @@
-CrudService
-===========
+CRUD Service
+============
 
 .. cpp:namespace:: ydk
 
@@ -12,24 +12,6 @@ CRUD Service class for supporting CRUD operations on entities.
     .. cpp:function:: bool create(path::ServiceProvider & provider, Entity & entity)
 
         Create the entity.
-        
-        :param provider: An instance of :cpp:class:`ServiceProvider<path::ServiceProvider>`
-        :param entity: An instance of :cpp:class:`Entity<ydk::Entity>` class defined under a bundle
-        :return: ``true`` if successful, ``false`` if not
-        :raises YCPPError: If an error has occurred        
-
-    .. cpp:function:: bool update(path::ServiceProvider & provider, Entity & entity)
-
-        Update the entity.
-
-        :param provider: An instance of :cpp:class:`ServiceProvider<path::ServiceProvider>`
-        :param entity: An instance of :cpp:class:`Entity<ydk::Entity>` class defined under a bundle
-        :return: ``true`` if successful, ``false`` if not
-        :raises YCPPError: If an error has occurred
-
-    .. cpp:function:: bool delete\_(path::ServiceProvider & provider, Entity & entity)
-
-        Delete the entity.
         
         :param provider: An instance of :cpp:class:`ServiceProvider<path::ServiceProvider>`
         :param entity: An instance of :cpp:class:`Entity<ydk::Entity>` class defined under a bundle
@@ -53,4 +35,21 @@ CRUD Service class for supporting CRUD operations on entities.
         :param filter: An instance of :cpp:class:`entity<ydk::Entity>` class defined under a bundle
         :return: A pointer to an instance of :cpp:class:`Entity<ydk::Entity>` as identified by the ``filter`` if successful, ``nullptr`` if not
         :raises YCPPError: If an error has occurred
+
+    .. cpp:function:: bool update(path::ServiceProvider & provider, Entity & entity)
+
+        Update the entity.
+
+        :param provider: An instance of :cpp:class:`ServiceProvider<path::ServiceProvider>`
+        :param entity: An instance of :cpp:class:`Entity<ydk::Entity>` class defined under a bundle
+        :return: ``true`` if successful, ``false`` if not
+        :raises YCPPError: If an error has occurred
+
+    .. cpp:function:: bool delete\_(path::ServiceProvider & provider, Entity & entity)
+
+        Delete the entity.
         
+        :param provider: An instance of :cpp:class:`ServiceProvider<path::ServiceProvider>`
+        :param entity: An instance of :cpp:class:`Entity<ydk::Entity>` class defined under a bundle
+        :return: ``true`` if successful, ``false`` if not
+        :raises YCPPError: If an error has occurred

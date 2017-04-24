@@ -13,24 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
+from ydk.ext.logging import EnableLogging
+EnableLogging()
+del EnableLogging
 
-""" services
- 
-   The Services module. 
-   
-   Supported Services Include
-   
-     - CRUDService: Provide Create/Read/Update/Delete API's
-     - ExecutorService: Provide API to execute RPC 
-     
-"""
-from .service import Service
-from .crud_service import CRUDService
-from .executor_service import ExecutorService
-from .netconf_service import Datastore
-from .netconf_service import NetconfService
 from .codec_service import CodecService
-import logging
+from .crud_service import CRUDService
+from .netconf_service import NetconfService
+from .executor_service import ExecutorService
+from ydk.ext.services import DataStore
 
 
-logging.getLogger('ydk').addHandler(logging.NullHandler())
+__all__ = [ "CodecService" "CRUDService",
+            "ExecutorService", "NetconfService", "DataStore" ]

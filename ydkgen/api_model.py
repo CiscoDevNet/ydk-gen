@@ -148,8 +148,6 @@ class NamedElement(Element):
         pkg = get_top_pkg(self)
         if not pkg.bundle_name:
             py_mod_name = 'ydk.models.%s' % pkg.name
-        elif pkg.aug_bundle_name:
-            py_mod_name = 'ydk.models.%s.%s' % (pkg.aug_bundle_name, pkg.name)
         else:
             py_mod_name = 'ydk.models.%s.%s' % (pkg.bundle_name, pkg.name)
         return py_mod_name
@@ -175,8 +173,6 @@ class NamedElement(Element):
         pkg = get_top_pkg(self)
         if not pkg.bundle_name:
             meta_py_mod_name = 'ydk.models._meta'
-        elif pkg.aug_bundle_name:
-            meta_py_mod_name = 'ydk.models.%s._meta' % pkg.aug_bundle_name
         else:
             meta_py_mod_name = 'ydk.models.%s._meta' % pkg.bundle_name
         return meta_py_mod_name
@@ -239,7 +235,6 @@ class Package(NamedElement):
         self._stmt = None
         self._sub_name = ''
         self._bundle_name = ''
-        self._aug_bundle_name = ''
         self._curr_bundle_name = ''
         self._augments_other = False
         self.identity_subclasses = {}
@@ -271,14 +266,6 @@ class Package(NamedElement):
     @bundle_name.setter
     def bundle_name(self, bundle_name):
         self._bundle_name = bundle_name
-
-    @property
-    def aug_bundle_name(self):
-        return self._aug_bundle_name
-
-    @aug_bundle_name.setter
-    def aug_bundle_name(self, aug_bundle_name):
-        self._aug_bundle_name = aug_bundle_name
 
     @property
     def curr_bundle_name(self):
@@ -509,14 +496,8 @@ class Class(NamedElement):
     @stmt.setter
     def stmt(self, stmt):
         name = escape_name(stmt.arg)
-        if stmt.keyword == 'grouping':
-            name = '%sGrouping' % camel_case(name)
-        elif stmt.keyword == 'identity':
-            name = '%sIdentity' % camel_case(name)
-        elif stmt.keyword == 'rpc':
-            name = camel_case(name) + 'Rpc'
-        else:
-            name = camel_case(name)
+        name = camel_case(name)
+
         if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
         self.name = name
@@ -563,6 +544,11 @@ class Class(NamedElement):
     def owner(self, owner):
         self._owner = owner
         self.name = _modify_nested_container_with_same_name(self)
+
+    def set_owner(self, owner, language):
+        self._owner = owner
+        if language == 'cpp':
+            self.name = _modify_nested_container_with_same_name(self)
 
     __hash__ = NamedElement.__hash__
 
@@ -766,7 +752,7 @@ class Enum(DataType):
         while leaf_or_typedef.parent is not None and not leaf_or_typedef.keyword in ('leaf', 'leaf-list', 'typedef'):
             leaf_or_typedef = leaf_or_typedef.parent
 
-        name = '%sEnum' % camel_case(escape_name(leaf_or_typedef.arg))
+        name = camel_case(escape_name(leaf_or_typedef.arg))
         if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
 

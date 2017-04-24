@@ -31,7 +31,7 @@ namespace ydk
 class Entity;
 
 std::string get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::string path);
-bool is_set(const EditOperation & operation);
+bool is_set(const YFilter & operation);
 
 }
 

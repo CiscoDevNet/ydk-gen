@@ -237,9 +237,9 @@ TEST_CASE("test_create")
 	TestEntity test{};
 	string test_value = "value for test";
 	EntityPath expected {"test",
-							{{"name", {test_value, EditOperation::not_set, true}},
-							 {"enabled", {"true", EditOperation::not_set, true}},
-							 {"bits-field", {"bit1 bit2", EditOperation::not_set, true}}}};
+							{{"name", {test_value, YFilter::not_set, true}},
+							 {"enabled", {"true", YFilter::not_set, true}},
+							 {"bits-field", {"bit1 bit2", YFilter::not_set, true}}}};
 
 	REQUIRE(test.get_entity_path(nullptr).path == "test");
 	REQUIRE(test.has_data() == false);

@@ -33,8 +33,8 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
 	bgp->global->config->router_id = "1.2.3.4";
 
 	auto afi_safi = make_unique<openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi>();
-	afi_safi->afi_safi_name = openconfig_bgp_types::L3VpnIpv4UnicastIdentity();
-	afi_safi->config->afi_safi_name = openconfig_bgp_types::L3VpnIpv4UnicastIdentity();
+	afi_safi->afi_safi_name = openconfig_bgp_types::L3VpnIpv4Unicast();
+	afi_safi->config->afi_safi_name = openconfig_bgp_types::L3VpnIpv4Unicast();
 	afi_safi->config->enabled = false;
 	afi_safi->parent = bgp->global->afi_safis.get();
 	bgp->global->afi_safis->afi_safi.push_back(move(afi_safi));
@@ -47,7 +47,7 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
 	neighbor->config->peer_group = "IBGP";
 	neighbor->config->peer_type = "INTERNAL";
 //	neighbor->config->remove_private_as =
-//	openconfig_bgp_types::Private_As_Remove_AllIdentity();
+//	openconfig_bgp_types::Private_As_Remove_All();
 	neighbor->parent = bgp->neighbors.get();
 	bgp->neighbors->neighbor.push_back(move(neighbor));
 
@@ -59,7 +59,7 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
 	peer_group->config->peer_as = 65001;
 	peer_group->config->local_as = 65001;
 	peer_group->config->peer_type = "INTERNAL";
-	//peer_group->config->remove_private_as = openconfig_bgp_types::Remove_Private_As_OptionIdentity();
+	//peer_group->config->remove_private_as = openconfig_bgp_types::Remove_Private_As_Option();
 	peer_group->parent = bgp->peer_groups.get();
 	bgp->peer_groups->peer_group.push_back(move(peer_group));
 }

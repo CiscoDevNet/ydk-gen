@@ -157,14 +157,36 @@ class DocPrinter(object):
 
     def _print_toctree(self, elements, is_package=False):
         if not is_package:
-            elements.reverse()
-            data_classes = [elem for elem in elements if (isinstance(elem, Class) and not elem.is_identity())]
-            self._print_toctree_section(data_classes, 'Data Classes')
+            # Data Classes
+            elements = sorted(elements, key=attrgetter('name'))
 
-            type_classes = [elem for elem in elements if any((isinstance(elem, Class) and elem.is_identity(),
-                                                    isinstance(elem, Enum),
-                                                    isinstance(elem, Bits) and self.lang == 'py'))]
-            self._print_toctree_section(type_classes, 'Type Classes')
+            data_classes = []
+            rpc_classes = []
+            bits_classes = []
+            enum_classes = []
+            idty_classes = []
+
+            for elem in elements:
+                if isinstance(elem, Enum):
+                    enum_classes.append(elem)
+
+                if self.lang == 'py' and isinstance(elem, Bits):
+                    bits_classes.append(elem)
+
+                if (isinstance(elem, Class)):
+                    if elem.is_identity():
+                        idty_classes.append(elem)
+                    elif elem.is_rpc():
+                        rpc_classes.append(elem)
+                    else:
+                        data_classes.append(elem)
+
+            self._print_toctree_section(data_classes, 'Data Classes')
+            self._print_toctree_section(rpc_classes, 'RPC Classes')
+            self._print_toctree_section(bits_classes, 'Bits Classes')
+            self._print_toctree_section(enum_classes, 'Enum Classes')
+            self._print_toctree_section(idty_classes, 'Identity Classes')
+
         else:
             self._print_toctree_section(elements, '')
 

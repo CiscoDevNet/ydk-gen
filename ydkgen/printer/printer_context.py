@@ -34,8 +34,6 @@ class PrinterContext(object):
         self.lvl = 0
         # internal
         self.all_classes = []
-        self.aug_stmt = None
-        self.augment_path = ''
         self.class_list = []
         self.class_name = ''
         self.class_stack = []

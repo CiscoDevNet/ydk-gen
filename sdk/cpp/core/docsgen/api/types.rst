@@ -1,13 +1,11 @@
 .. _ref-types:
 
 Types
-============
+=====
 
 .. contents::
 .. toctree::
    :maxdepth: 2
-
-   edit_operations.rst
 
 The C++ types present in ydk namespace corresponding to YANG types. See below for example usage.
 
@@ -43,9 +41,9 @@ The C++ types present in ydk namespace corresponding to YANG types. See below fo
 
 Super class of all classes that represents containers in YANG. YANG lists are represented as ``std::vector`` of Entity objects, with support for hanging a parent
 
-    .. cpp:member:: EditOperation operation
+    .. cpp:member:: YFilter filter
     
-        Optional attribute of the Entity class which can be set to perform various :cpp:class:`operations<EditOperation>`
+        Optional attribute of the Entity class which can be set to perform various :cpp:class:`filtering<YFilter>`
 
 
 YANG container and list
@@ -55,9 +53,9 @@ YANG container and list
 
 Super class of all classes that represents containers in YANG. YANG lists are represented as ``std::vector`` of Entity objects, with support for hanging a parent
 
-    .. cpp:member:: EditOperation operation
+    .. cpp:member:: YFilter filter
     
-        Optional attribute of the Entity class which can be set to perform various :cpp:class:`operations<EditOperation>`
+        Optional attribute of the Entity class which can be set to perform various :cpp:class:`filtering<YFilter>`
 
 YANG leaf and leaf-list
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,17 +64,17 @@ YANG leaf and leaf-list
 
 Concrete class that represents a YANG leaf to which data can be assigned.
 
-    .. cpp:member:: EditOperation operation
+    .. cpp:member:: YFilter filter
     
-        Optional attribute of the YLeaf class which can be set to perform various :cpp:class:`operations<EditOperation>`
+        Optional attribute of the YLeaf class which can be set to perform various :cpp:class:`filtering<YFilter>`
 
 .. cpp:class:: YLeafList
 
 Concrete class that represents a YANG leaf-list to which multiple instances of data can be appended to.
 
-    .. cpp:member:: EditOperation operation
+    .. cpp:member:: YFilter filter
     
-        Optional attribute of the YLeafList class which can be set to perform various :cpp:class:`operations<EditOperation>`
+        Optional attribute of the YLeafList class which can be set to perform various :cpp:class:`filtering<YFilter>`
 
 YANG type
 ~~~~~~~~~~
@@ -128,9 +126,9 @@ Examples of assigning values to leafs are shown below
   
   bgp->global->config->as = 65172; // uint32
   bgp->global->config->router_id = "1.2.3.4"; //ip-address   
-  afi_safi->afi_safi_name = L3VpnIpv4UnicastIdentity(); //identityref
+  afi_safi->afi_safi_name = L3VpnIpv4Unicast(); //identityref
   afi_safi->config->enabled = false; //boolean
-  neighbor->config->peer_type = PeerTypeEnum::INTERNAL // enum
+  neighbor->config->peer_type = PeerType::INTERNAL // enum
   Decimal64 deci{"1.2"};
   node->decimal_value = deci; //decimal64
   node->empty_value = Empty(); // empty
@@ -146,10 +144,10 @@ Examples of appending values to leaf-lists are shown below
 
   config->as_list.append(65172); // uint32
   config->router_id.append("1.2.3.4"); //ip-address   
-  L3VpnIpv4UnicastIdentity id{}; //identityref
+  L3VpnIpv4Unicast id{}; //identityref
   config->types_list.append(id); //identityref
   config->enabled_list.append(false); //boolean
-  config->peer_types.append(PeerTypeEnum::INTERNAL) // enum
+  config->peer_types.append(PeerType::INTERNAL) // enum
   Decimal64 deci{"1.2"};
   node->decimal_values.append(deci); //decimal64
 

@@ -38,83 +38,83 @@ class EditOperationTypeEnum(Enum):
 
     .. data:: MERGE = 0
 
-    	The configuration data identified by the
+        The configuration data identified by the
 
-    	element containing this attribute is merged
+        element containing this attribute is merged
 
-    	with the configuration at the corresponding
+        with the configuration at the corresponding
 
-    	level in the configuration datastore identified
+        level in the configuration datastore identified
 
-    	by the target parameter.
+        by the target parameter.
 
     .. data:: REPLACE = 1
 
-    	The configuration data identified by the element
+        The configuration data identified by the element
 
-    	containing this attribute replaces any related
+        containing this attribute replaces any related
 
-    	configuration in the configuration datastore
+        configuration in the configuration datastore
 
-    	identified by the target parameter.  If no such
+        identified by the target parameter.  If no such
 
-    	configuration data exists in the configuration
+        configuration data exists in the configuration
 
-    	datastore, it is created.  Unlike a
+        datastore, it is created.  Unlike a
 
-    	<copy-config> operation, which replaces the
+        <copy-config> operation, which replaces the
 
-    	entire target configuration, only the configuration
+        entire target configuration, only the configuration
 
-    	actually present in the config parameter is affected.
+        actually present in the config parameter is affected.
 
     .. data:: CREATE = 2
 
-    	The configuration data identified by the element
+        The configuration data identified by the element
 
-    	containing this attribute is added to the
+        containing this attribute is added to the
 
-    	configuration if and only if the configuration
+        configuration if and only if the configuration
 
-    	data does not already exist in the configuration
+        data does not already exist in the configuration
 
-    	datastore.  If the configuration data exists, an
+        datastore.  If the configuration data exists, an
 
-    	<rpc-error> element is returned with an
+        <rpc-error> element is returned with an
 
-    	<error-tag> value of 'data-exists'.
+        <error-tag> value of 'data-exists'.
 
     .. data:: DELETE = 3
 
-    	The configuration data identified by the element
+        The configuration data identified by the element
 
-    	containing this attribute is deleted from the
+        containing this attribute is deleted from the
 
-    	configuration if and only if the configuration
+        configuration if and only if the configuration
 
-    	data currently exists in the configuration
+        data currently exists in the configuration
 
-    	datastore.  If the configuration data does not
+        datastore.  If the configuration data does not
 
-    	exist, an <rpc-error> element is returned with
+        exist, an <rpc-error> element is returned with
 
-    	an <error-tag> value of 'data-missing'.
+        an <error-tag> value of 'data-missing'.
 
     .. data:: REMOVE = 4
 
-    	The configuration data identified by the element
+        The configuration data identified by the element
 
-    	containing this attribute is deleted from the
+        containing this attribute is deleted from the
 
-    	configuration if the configuration
+        configuration if the configuration
 
-    	data currently exists in the configuration
+        data currently exists in the configuration
 
-    	datastore.  If the configuration data does not
+        datastore.  If the configuration data does not
 
-    	exist, the 'remove' operation is silently ignored
+        exist, the 'remove' operation is silently ignored
 
-    	by the server.
+        by the server.
 
     """
 
@@ -143,11 +143,11 @@ class ErrorSeverityTypeEnum(Enum):
 
     .. data:: ERROR = 0
 
-    	Error severity
+        Error severity
 
     .. data:: WARNING = 1
 
-    	Warning severity
+        Warning severity
 
     """
 
@@ -170,127 +170,127 @@ class ErrorTagTypeEnum(Enum):
 
     .. data:: IN_USE = 0
 
-    	The request requires a resource that
+        The request requires a resource that
 
-    	already is in use.
+        already is in use.
 
     .. data:: INVALID_VALUE = 1
 
-    	The request specifies an unacceptable value for one
+        The request specifies an unacceptable value for one
 
-    	or more parameters.
+        or more parameters.
 
     .. data:: TOO_BIG = 2
 
-    	The request or response (that would be generated) is
+        The request or response (that would be generated) is
 
-    	too large for the implementation to handle.
+        too large for the implementation to handle.
 
     .. data:: MISSING_ATTRIBUTE = 3
 
-    	An expected attribute is missing.
+        An expected attribute is missing.
 
     .. data:: BAD_ATTRIBUTE = 4
 
-    	An attribute value is not correct; e.g., wrong type,
+        An attribute value is not correct; e.g., wrong type,
 
-    	out of range, pattern mismatch.
+        out of range, pattern mismatch.
 
     .. data:: UNKNOWN_ATTRIBUTE = 5
 
-    	An unexpected attribute is present.
+        An unexpected attribute is present.
 
     .. data:: MISSING_ELEMENT = 6
 
-    	An expected element is missing.
+        An expected element is missing.
 
     .. data:: BAD_ELEMENT = 7
 
-    	An element value is not correct; e.g., wrong type,
+        An element value is not correct; e.g., wrong type,
 
-    	out of range, pattern mismatch.
+        out of range, pattern mismatch.
 
     .. data:: UNKNOWN_ELEMENT = 8
 
-    	An unexpected element is present.
+        An unexpected element is present.
 
     .. data:: UNKNOWN_NAMESPACE = 9
 
-    	An unexpected namespace is present.
+        An unexpected namespace is present.
 
     .. data:: ACCESS_DENIED = 10
 
-    	Access to the requested protocol operation or
+        Access to the requested protocol operation or
 
-    	data model is denied because authorization failed.
+        data model is denied because authorization failed.
 
     .. data:: LOCK_DENIED = 11
 
-    	Access to the requested lock is denied because the
+        Access to the requested lock is denied because the
 
-    	lock is currently held by another entity.
+        lock is currently held by another entity.
 
     .. data:: RESOURCE_DENIED = 12
 
-    	Request could not be completed because of
+        Request could not be completed because of
 
-    	insufficient resources.
+        insufficient resources.
 
     .. data:: ROLLBACK_FAILED = 13
 
-    	Request to roll back some configuration change (via
+        Request to roll back some configuration change (via
 
-    	rollback-on-error or <discard-changes> operations)
+        rollback-on-error or <discard-changes> operations)
 
-    	was not completed for some reason.
+        was not completed for some reason.
 
     .. data:: DATA_EXISTS = 14
 
-    	Request could not be completed because the relevant
+        Request could not be completed because the relevant
 
-    	data model content already exists.  For example,
+        data model content already exists.  For example,
 
-    	a 'create' operation was attempted on data that
+        a 'create' operation was attempted on data that
 
-    	already exists.
+        already exists.
 
     .. data:: DATA_MISSING = 15
 
-    	Request could not be completed because the relevant
+        Request could not be completed because the relevant
 
-    	data model content does not exist.  For example,
+        data model content does not exist.  For example,
 
-    	a 'delete' operation was attempted on
+        a 'delete' operation was attempted on
 
-    	data that does not exist.
+        data that does not exist.
 
     .. data:: OPERATION_NOT_SUPPORTED = 16
 
-    	Request could not be completed because the requested
+        Request could not be completed because the requested
 
-    	operation is not supported by this implementation.
+        operation is not supported by this implementation.
 
     .. data:: OPERATION_FAILED = 17
 
-    	Request could not be completed because the requested
+        Request could not be completed because the requested
 
-    	operation failed for some reason not covered by
+        operation failed for some reason not covered by
 
-    	any other error condition.
+        any other error condition.
 
     .. data:: PARTIAL_OPERATION = 18
 
-    	This error-tag is obsolete, and SHOULD NOT be sent
+        This error-tag is obsolete, and SHOULD NOT be sent
 
-    	by servers conforming to this document.
+        by servers conforming to this document.
 
     .. data:: MALFORMED_MESSAGE = 19
 
-    	A message could not be handled because it failed to
+        A message could not be handled because it failed to
 
-    	be parsed correctly.  For example, the message is not
+        be parsed correctly.  For example, the message is not
 
-    	well-formed XML or it uses an invalid character set.
+        well-formed XML or it uses an invalid character set.
 
     """
 
@@ -351,8 +351,8 @@ class CancelCommitRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.CancelCommitRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.CancelCommitRpc.Input>`
     
     
 
@@ -374,8 +374,8 @@ class CancelCommitRpc(object):
         
         .. attribute:: persist_id
         
-        	This parameter is given in order to cancel a persistent confirmed commit.  The value must be equal to the value given in the 'persist' parameter to the <commit> operation. If it does not match, the operation fails with an 'invalid\-value' error
-        	**type**\:  str
+            This parameter is given in order to cancel a persistent confirmed commit.  The value must be equal to the value given in the 'persist' parameter to the <commit> operation. If it does not match, the operation fails with an 'invalid\-value' error
+            **type**\:  str
         
         
 
@@ -477,8 +477,8 @@ class CommitRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.CommitRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.CommitRpc.Input>`
     
     
 
@@ -500,25 +500,25 @@ class CommitRpc(object):
         
         .. attribute:: confirm_timeout
         
-        	The timeout interval for a confirmed commit
-        	**type**\:  int
+            The timeout interval for a confirmed commit
+            **type**\:  int
         
-        	**range:** 1..4294967295
+            **range:** 1..4294967295
         
         .. attribute:: confirmed
         
-        	Requests a confirmed commit
-        	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+            Requests a confirmed commit
+            **type**\:  :py:class:`Empty <ydk.types.Empty>`
         
         .. attribute:: persist
         
-        	This parameter is used to make a confirmed commit persistent.  A persistent confirmed commit is not aborted if the NETCONF session terminates.  The only way to abort a persistent confirmed commit is to let the timer expire, or to use the <cancel\-commit> operation.  The value of this parameter is a token that must be given in the 'persist\-id' parameter of <commit> or <cancel\-commit> operations in order to confirm or cancel the persistent confirmed commit.  The token should be a random string
-        	**type**\:  str
+            This parameter is used to make a confirmed commit persistent.  A persistent confirmed commit is not aborted if the NETCONF session terminates.  The only way to abort a persistent confirmed commit is to let the timer expire, or to use the <cancel\-commit> operation.  The value of this parameter is a token that must be given in the 'persist\-id' parameter of <commit> or <cancel\-commit> operations in order to confirm or cancel the persistent confirmed commit.  The token should be a random string
+            **type**\:  str
         
         .. attribute:: persist_id
         
-        	This parameter is given in order to commit a persistent confirmed commit.  The value must be equal to the value given in the 'persist' parameter to the <commit> operation. If it does not match, the operation fails with an 'invalid\-value' error
-        	**type**\:  str
+            This parameter is given in order to commit a persistent confirmed commit.  The value must be equal to the value given in the 'persist' parameter to the <commit> operation. If it does not match, the operation fails with an 'invalid\-value' error
+            **type**\:  str
         
         
 
@@ -597,8 +597,8 @@ class CopyConfigRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.CopyConfigRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.CopyConfigRpc.Input>`
     
     
 
@@ -620,18 +620,18 @@ class CopyConfigRpc(object):
         
         .. attribute:: source
         
-        	Particular configuration to copy from
-        	**type**\:  :py:class:`Source <ydk.models.ietf_netconf.CopyConfigRpc.Input.Source>`
+            Particular configuration to copy from
+            **type**\:  :py:class:`Source <ydk.models.ietf_netconf.CopyConfigRpc.Input.Source>`
         
         .. attribute:: target
         
-        	Particular configuration to copy to
-        	**type**\:  :py:class:`Target <ydk.models.ietf_netconf.CopyConfigRpc.Input.Target>`
+            Particular configuration to copy to
+            **type**\:  :py:class:`Target <ydk.models.ietf_netconf.CopyConfigRpc.Input.Target>`
         
         .. attribute:: with_defaults
         
-        	The explicit defaults processing mode requested
-        	**type**\:  :py:class:`WithDefaultsModeEnum <ydk.models.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
+            The explicit defaults processing mode requested
+            **type**\:  :py:class:`WithDefaultsModeEnum <ydk.models.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
         
         
 
@@ -655,28 +655,28 @@ class CopyConfigRpc(object):
             
             .. attribute:: candidate
             
-            	The candidate configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The candidate configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: config
             
-            	Inline Config content\: <config> element.  Represents an entire configuration datastore, not a subset of the running datastore
-            	**type**\:  anyxml
+                Inline Config content\: <config> element.  Represents an entire configuration datastore, not a subset of the running datastore
+                **type**\:  anyxml
             
             .. attribute:: running
             
-            	The running configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The running configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: startup
             
-            	The startup configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The startup configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: url
             
-            	The URL\-based configuration is the config source
-            	**type**\:  str
+                The URL\-based configuration is the config source
+                **type**\:  str
             
             
 
@@ -736,23 +736,23 @@ class CopyConfigRpc(object):
             
             .. attribute:: candidate
             
-            	The candidate configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The candidate configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: running
             
-            	The running configuration is the config target. This is optional\-to\-implement on the server
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The running configuration is the config target. This is optional\-to\-implement on the server
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: startup
             
-            	The startup configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The startup configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: url
             
-            	The URL\-based configuration is the config target
-            	**type**\:  str
+                The URL\-based configuration is the config target
+                **type**\:  str
             
             
 
@@ -860,8 +860,8 @@ class DeleteConfigRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.DeleteConfigRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.DeleteConfigRpc.Input>`
     
     
 
@@ -883,8 +883,8 @@ class DeleteConfigRpc(object):
         
         .. attribute:: target
         
-        	Particular configuration to delete
-        	**type**\:  :py:class:`Target <ydk.models.ietf_netconf.DeleteConfigRpc.Input.Target>`
+            Particular configuration to delete
+            **type**\:  :py:class:`Target <ydk.models.ietf_netconf.DeleteConfigRpc.Input.Target>`
         
         
 
@@ -905,13 +905,13 @@ class DeleteConfigRpc(object):
             
             .. attribute:: startup
             
-            	The startup configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The startup configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: url
             
-            	The URL\-based configuration is the config target
-            	**type**\:  str
+                The URL\-based configuration is the config target
+                **type**\:  str
             
             
 
@@ -1042,8 +1042,8 @@ class EditConfigRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.EditConfigRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.EditConfigRpc.Input>`
     
     
 
@@ -1065,33 +1065,33 @@ class EditConfigRpc(object):
         
         .. attribute:: config
         
-        	Inline Config content
-        	**type**\:  anyxml
+            Inline Config content
+            **type**\:  anyxml
         
         .. attribute:: default_operation
         
-        	The default operation to use
-        	**type**\:  :py:class:`DefaultOperationEnum <ydk.models.ietf_netconf.EditConfigRpc.Input.DefaultOperationEnum>`
+            The default operation to use
+            **type**\:  :py:class:`DefaultOperationEnum <ydk.models.ietf_netconf.EditConfigRpc.Input.DefaultOperationEnum>`
         
         .. attribute:: error_option
         
-        	The error option to use
-        	**type**\:  :py:class:`ErrorOptionEnum <ydk.models.ietf_netconf.EditConfigRpc.Input.ErrorOptionEnum>`
+            The error option to use
+            **type**\:  :py:class:`ErrorOptionEnum <ydk.models.ietf_netconf.EditConfigRpc.Input.ErrorOptionEnum>`
         
         .. attribute:: target
         
-        	Particular configuration to edit
-        	**type**\:  :py:class:`Target <ydk.models.ietf_netconf.EditConfigRpc.Input.Target>`
+            Particular configuration to edit
+            **type**\:  :py:class:`Target <ydk.models.ietf_netconf.EditConfigRpc.Input.Target>`
         
         .. attribute:: test_option
         
-        	The test option to use
-        	**type**\:  :py:class:`TestOptionEnum <ydk.models.ietf_netconf.EditConfigRpc.Input.TestOptionEnum>`
+            The test option to use
+            **type**\:  :py:class:`TestOptionEnum <ydk.models.ietf_netconf.EditConfigRpc.Input.TestOptionEnum>`
         
         .. attribute:: url
         
-        	URL\-based config content
-        	**type**\:  str
+            URL\-based config content
+            **type**\:  str
         
         
 
@@ -1118,15 +1118,15 @@ class EditConfigRpc(object):
 
             .. data:: MERGE = 0
 
-            	The default operation is merge.
+                The default operation is merge.
 
             .. data:: REPLACE = 1
 
-            	The default operation is replace.
+                The default operation is replace.
 
             .. data:: NONE = 2
 
-            	There is no default operation.
+                There is no default operation.
 
             """
 
@@ -1151,19 +1151,19 @@ class EditConfigRpc(object):
 
             .. data:: STOP_ON_ERROR = 0
 
-            	The server will stop on errors.
+                The server will stop on errors.
 
             .. data:: CONTINUE_ON_ERROR = 1
 
-            	The server may continue on errors.
+                The server may continue on errors.
 
             .. data:: ROLLBACK_ON_ERROR = 2
 
-            	The server will roll back on errors.
+                The server will roll back on errors.
 
-            	This value can only be used if the 'rollback-on-error'
+                This value can only be used if the 'rollback-on-error'
 
-            	feature is supported.
+                feature is supported.
 
             """
 
@@ -1188,17 +1188,17 @@ class EditConfigRpc(object):
 
             .. data:: TEST_THEN_SET = 0
 
-            	The server will test and then set if no errors.
+                The server will test and then set if no errors.
 
             .. data:: SET = 1
 
-            	The server will set without a test first.
+                The server will set without a test first.
 
             .. data:: TEST_ONLY = 2
 
-            	The server will only test and not set, even
+                The server will only test and not set, even
 
-            	if there are no errors.
+                if there are no errors.
 
             """
 
@@ -1222,13 +1222,13 @@ class EditConfigRpc(object):
             
             .. attribute:: candidate
             
-            	The candidate configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The candidate configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: running
             
-            	The running configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The running configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             
 
@@ -1337,13 +1337,13 @@ class GetConfigRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.GetConfigRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.GetConfigRpc.Input>`
     
     .. attribute:: output
     
-    	
-    	**type**\:  :py:class:`Output <ydk.models.ietf_netconf.GetConfigRpc.Output>`
+        
+        **type**\:  :py:class:`Output <ydk.models.ietf_netconf.GetConfigRpc.Output>`
     
     
 
@@ -1367,18 +1367,18 @@ class GetConfigRpc(object):
         
         .. attribute:: filter
         
-        	Subtree or XPath filter to use
-        	**type**\:  anyxml
+            Subtree or XPath filter to use
+            **type**\:  anyxml
         
         .. attribute:: source
         
-        	Particular configuration to retrieve
-        	**type**\:  :py:class:`Source <ydk.models.ietf_netconf.GetConfigRpc.Input.Source>`
+            Particular configuration to retrieve
+            **type**\:  :py:class:`Source <ydk.models.ietf_netconf.GetConfigRpc.Input.Source>`
         
         .. attribute:: with_defaults
         
-        	The explicit defaults processing mode requested
-        	**type**\:  :py:class:`WithDefaultsModeEnum <ydk.models.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
+            The explicit defaults processing mode requested
+            **type**\:  :py:class:`WithDefaultsModeEnum <ydk.models.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
         
         
 
@@ -1401,18 +1401,18 @@ class GetConfigRpc(object):
             
             .. attribute:: candidate
             
-            	The candidate configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The candidate configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: running
             
-            	The running configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The running configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: startup
             
-            	The startup configuration is the config source. This is optional\-to\-implement on the server because not all servers will support filtering for this datastore
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The startup configuration is the config source. This is optional\-to\-implement on the server because not all servers will support filtering for this datastore
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             
 
@@ -1494,8 +1494,8 @@ class GetConfigRpc(object):
         
         .. attribute:: data
         
-        	Copy of the source datastore subset that matched the filter criteria (if any).  An empty data container indicates that the request did not produce any results
-        	**type**\:  anyxml
+            Copy of the source datastore subset that matched the filter criteria (if any).  An empty data container indicates that the request did not produce any results
+            **type**\:  anyxml
         
         
 
@@ -1564,13 +1564,13 @@ class GetRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.GetRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.GetRpc.Input>`
     
     .. attribute:: output
     
-    	
-    	**type**\:  :py:class:`Output <ydk.models.ietf_netconf.GetRpc.Output>`
+        
+        **type**\:  :py:class:`Output <ydk.models.ietf_netconf.GetRpc.Output>`
     
     
 
@@ -1594,13 +1594,13 @@ class GetRpc(object):
         
         .. attribute:: filter
         
-        	This parameter specifies the portion of the system configuration and state data to retrieve
-        	**type**\:  anyxml
+            This parameter specifies the portion of the system configuration and state data to retrieve
+            **type**\:  anyxml
         
         .. attribute:: with_defaults
         
-        	The explicit defaults processing mode requested
-        	**type**\:  :py:class:`WithDefaultsModeEnum <ydk.models.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
+            The explicit defaults processing mode requested
+            **type**\:  :py:class:`WithDefaultsModeEnum <ydk.models.ietf_netconf_with_defaults.WithDefaultsModeEnum>`
         
         
 
@@ -1648,8 +1648,8 @@ class GetRpc(object):
         
         .. attribute:: data
         
-        	Copy of the running datastore subset and/or state data that matched the filter criteria (if any). An empty data container indicates that the request did not produce any results
-        	**type**\:  anyxml
+            Copy of the running datastore subset and/or state data that matched the filter criteria (if any). An empty data container indicates that the request did not produce any results
+            **type**\:  anyxml
         
         
 
@@ -1718,8 +1718,8 @@ class KillSessionRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.KillSessionRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.KillSessionRpc.Input>`
     
     
 
@@ -1741,12 +1741,12 @@ class KillSessionRpc(object):
         
         .. attribute:: session_id
         
-        	Particular session to kill
-        	**type**\:  int
+            Particular session to kill
+            **type**\:  int
         
-        	**range:** 1..4294967295
+            **range:** 1..4294967295
         
-        	**mandatory**\: True
+            **mandatory**\: True
         
         
 
@@ -1813,8 +1813,8 @@ class LockRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.LockRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.LockRpc.Input>`
     
     
 
@@ -1836,8 +1836,8 @@ class LockRpc(object):
         
         .. attribute:: target
         
-        	Particular configuration to lock
-        	**type**\:  :py:class:`Target <ydk.models.ietf_netconf.LockRpc.Input.Target>`
+            Particular configuration to lock
+            **type**\:  :py:class:`Target <ydk.models.ietf_netconf.LockRpc.Input.Target>`
         
         
 
@@ -1858,18 +1858,18 @@ class LockRpc(object):
             
             .. attribute:: candidate
             
-            	The candidate configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The candidate configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: running
             
-            	The running configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The running configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: startup
             
-            	The startup configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The startup configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             
 
@@ -1968,8 +1968,8 @@ class UnlockRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.UnlockRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.UnlockRpc.Input>`
     
     
 
@@ -1991,8 +1991,8 @@ class UnlockRpc(object):
         
         .. attribute:: target
         
-        	Particular configuration to unlock
-        	**type**\:  :py:class:`Target <ydk.models.ietf_netconf.UnlockRpc.Input.Target>`
+            Particular configuration to unlock
+            **type**\:  :py:class:`Target <ydk.models.ietf_netconf.UnlockRpc.Input.Target>`
         
         
 
@@ -2013,18 +2013,18 @@ class UnlockRpc(object):
             
             .. attribute:: candidate
             
-            	The candidate configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The candidate configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: running
             
-            	The running configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The running configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: startup
             
-            	The startup configuration is the config target
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The startup configuration is the config target
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             
 
@@ -2122,8 +2122,8 @@ class ValidateRpc(object):
     
     .. attribute:: input
     
-    	
-    	**type**\:  :py:class:`Input <ydk.models.ietf_netconf.ValidateRpc.Input>`
+        
+        **type**\:  :py:class:`Input <ydk.models.ietf_netconf.ValidateRpc.Input>`
     
     
 
@@ -2145,8 +2145,8 @@ class ValidateRpc(object):
         
         .. attribute:: source
         
-        	Particular configuration to validate
-        	**type**\:  :py:class:`Source <ydk.models.ietf_netconf.ValidateRpc.Input.Source>`
+            Particular configuration to validate
+            **type**\:  :py:class:`Source <ydk.models.ietf_netconf.ValidateRpc.Input.Source>`
         
         
 
@@ -2167,28 +2167,28 @@ class ValidateRpc(object):
             
             .. attribute:: candidate
             
-            	The candidate configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The candidate configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: config
             
-            	Inline Config content\: <config> element.  Represents an entire configuration datastore, not a subset of the running datastore
-            	**type**\:  anyxml
+                Inline Config content\: <config> element.  Represents an entire configuration datastore, not a subset of the running datastore
+                **type**\:  anyxml
             
             .. attribute:: running
             
-            	The running configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The running configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: startup
             
-            	The startup configuration is the config source
-            	**type**\:  :py:class:`Empty <ydk.types.Empty>`
+                The startup configuration is the config source
+                **type**\:  :py:class:`Empty <ydk.types.Empty>`
             
             .. attribute:: url
             
-            	The URL\-based configuration is the config source
-            	**type**\:  str
+                The URL\-based configuration is the config source
+                **type**\:  str
             
             
 
@@ -2286,5 +2286,4 @@ class ValidateRpc(object):
     def _meta_info():
         from ydk.models._meta import _ietf_netconf as meta
         return meta._meta_table['ValidateRpc']['meta_info']
-
 

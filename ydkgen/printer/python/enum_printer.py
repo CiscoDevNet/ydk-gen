@@ -57,8 +57,6 @@ class EnumPrinter(object):
     def _print_enum_body(self, enum_class, no_meta_assign):
         self._print_enum_docstring(enum_class)
         self._print_enum_literals(enum_class)
-        if not no_meta_assign:
-            self._print_enum_meta_assignment(enum_class)
 
     def _print_enum_docstring(self, enum_class):
         self.ctx.writeln('"""')
@@ -76,19 +74,9 @@ class EnumPrinter(object):
             self._print_enum_literal(enum_literal)
 
     def _print_enum_literal(self, enum_literal):
-        self.ctx.writeln('%s = %s' % (enum_literal.name, enum_literal.value))
-        self.ctx.bline()
-
-    def _print_enum_meta_assignment(self, enum_class):
-        self.ctx.bline()
-        self.ctx.writeln('@staticmethod')
-        self.ctx.writeln('def _meta_info():')
-        self.ctx.lvl_inc()
-
-        self.ctx.writeln('from %s import _%s as meta' % (
-            enum_class.get_meta_py_mod_name(), enum_class.get_package().name))
-        self.ctx.writeln("return meta._meta_table['%s']" % (enum_class.qn()))
-        self.ctx.lvl_dec()
+        name = enum_literal.name
+        value = enum_literal.value
+        self.ctx.writeln('%s = Enum.YLeaf(%s, "%s")' % (name, value, enum_literal.stmt.arg))
         self.ctx.bline()
 
     def _print_enum_trailer(self, enum_class):

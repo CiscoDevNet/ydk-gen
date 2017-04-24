@@ -37,7 +37,7 @@ void config_isis(Isis* isis)
 	auto instance = make_unique<Isis::Instances::Instance>();
 	instance->instance_name = "DEFAULT";
 	instance->running = Empty();
-	instance->is_type = IsisConfigurableLevelsEnum::level2;
+	instance->is_type = IsisConfigurableLevels::level2;
 	auto net = make_unique<Isis::Instances::Instance::Nets::Net>();
 	net->net_name = "49.0000.1720.1625.5001.00";
 	net->parent = instance->nets.get();
@@ -45,14 +45,14 @@ void config_isis(Isis* isis)
 
 	// global address family
 	auto af = make_unique<Isis::Instances::Instance::Afs::Af>();
-	af->af_name = IsisAddressFamilyEnum::ipv4;
-	af->saf_name = IsisSubAddressFamilyEnum::unicast;
+	af->af_name = IsisAddressFamily::ipv4;
+	af->saf_name = IsisSubAddressFamily::unicast;
 	af->af_data = make_unique<Isis::Instances::Instance::Afs::Af::AfData>(); // instantiate the presence node
 	af->af_data->parent = af.get(); // set the parent
 	auto metric_style = make_unique<Isis::Instances::Instance::Afs::Af::AfData::MetricStyles::MetricStyle>();
-	metric_style->style = IsisMetricStyleEnum::new_metric_style;
-	metric_style->level = IsisInternalLevelEnum::not_set;
-	metric_style->transition_state = IsisMetricStyleTransitionEnum::disabled;
+	metric_style->style = IsisMetricStyle::new_metric_style;
+	metric_style->level = IsisInternalLevel::not_set;
+	metric_style->transition_state = IsisMetricStyleTransition::disabled;
 	metric_style->parent = af->af_data->metric_styles.get();
 	af->af_data->metric_styles->metric_style.push_back(move(metric_style));
 	af->parent = instance->afs.get();
@@ -62,11 +62,11 @@ void config_isis(Isis* isis)
 	auto interface = make_unique<Isis::Instances::Instance::Interfaces::Interface>();
 	interface->interface_name = "Loopback0";
 	interface->running = Empty();
-	interface->state = IsisInterfaceStateEnum::passive;
+	interface->state = IsisInterfaceState::passive;
 	// interface address family
 	auto interface_af = make_unique<Isis::Instances::Instance::Interfaces::Interface::InterfaceAfs::InterfaceAf>();
-	interface_af->af_name = IsisAddressFamilyEnum::ipv4;
-	interface_af->saf_name = IsisSubAddressFamilyEnum::unicast;
+	interface_af->af_name = IsisAddressFamily::ipv4;
+	interface_af->saf_name = IsisSubAddressFamily::unicast;
 	interface_af->interface_af_data->running = Empty();
 	interface_af->parent = interface->interface_afs.get();
 	interface->interface_afs->interface_af.push_back(move(interface_af));
@@ -80,8 +80,8 @@ void config_isis(Isis* isis)
 	interface->point_to_point = Empty();
 	// interface address familiy
 	interface_af = make_unique<Isis::Instances::Instance::Interfaces::Interface::InterfaceAfs::InterfaceAf>();
-	interface_af->af_name = IsisAddressFamilyEnum::ipv4;
-	interface_af->saf_name = IsisSubAddressFamilyEnum::unicast;
+	interface_af->af_name = IsisAddressFamily::ipv4;
+	interface_af->saf_name = IsisSubAddressFamily::unicast;
 	interface_af->interface_af_data->running = Empty();
 	interface_af->parent = interface->interface_afs.get();
 	interface->interface_afs->interface_af.push_back(move(interface_af));

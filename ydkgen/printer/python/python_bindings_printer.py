@@ -22,14 +22,13 @@ from __future__ import print_function
 
 
 import os
+from distutils import dir_util
 
 from ydkgen.api_model import Bits, Class, Enum
 from ydkgen.common import get_rst_file_name
 
-from .deviation_printer import DeviationPrinter
 from .import_test_printer import ImportTestPrinter
 from .module_printer import ModulePrinter
-from .module_meta_printer import ModuleMetaPrinter
 from .namespace_printer import NamespacePrinter
 from .init_file_printer import InitPrinter
 from ..doc import DocPrinter
@@ -41,23 +40,26 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
     def __init__(self, ydk_root_dir, bundle, generate_tests, sort_clazz):
         super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, sort_clazz)
+        self.bundle = bundle
+        self.bundle_name = bundle.name
+        self.bundle_version = bundle.str_version
 
     def print_files(self):
         self._print_init_file(self.models_dir)
         self._print_yang_ns_file()
         self._print_modules()
         self._print_import_tests_file()
-        self._print_deviate_file()
 
         # Sub package
         if self.sub_dir != '':
-            self._print_nmsp_declare_init(self.ydk_dir)
-            self._print_nmsp_declare_init(os.path.join(self.ydk_dir, 'models'))
-            self._print_nmsp_declare_init(self.models_dir)
+            self._print_nmsp_declare_init_files()
 
         # RST Documentation
         if self.ydk_doc_dir is not None:
             self._print_python_rst_ydk_models()
+
+        # YANG models
+        self._print_yang_files()
         return ()
 
     def _print_modules(self):
@@ -76,22 +78,14 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
         sub = package.sub_name
 
-        if package.aug_bundle_name != '':
-            package.augments_other = True
-            module_dir = self.initialize_output_directory(
-                '%s/%s/%s' % (self.models_dir, self.bundle_name, '_aug'))
-        else:
-            module_dir = self.initialize_output_directory(self.models_dir)
-
-        meta_dir = self.initialize_output_directory(module_dir + '/_meta')
-        test_output_dir = self.initialize_output_directory(
-            '%s/%s' % (self.test_dir, sub))
+        test_output_dir = self.initialize_output_directory(self.test_dir)
 
         # RST Documentation
-        self._print_python_module(package, index, module_dir, size, sub)
-        self._print_meta_module(package, meta_dir)
+        self._print_python_module(package, index, self.models_dir, size, sub)
+
         if self.generate_tests:
             self._print_tests(package, test_output_dir)
+
         if self.ydk_doc_dir is not None:
             self._print_python_rst_module(package)
 
@@ -131,12 +125,6 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
                         emit_module,
                         _EmitArgs(self.ypy_ctx, package, extra_args))
 
-    def _print_meta_module(self, package, path):
-        self._print_init_file(path)
-        self.print_file(get_meta_module_file_name(path, package),
-                        emit_meta,
-                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
-
     def _print_tests(self, package, path):
         self._print_init_file(self.test_dir)
         empty = self.is_empty_package(package)
@@ -146,18 +134,11 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
                             _EmitArgs(self.ypy_ctx, package, self.identity_subclasses))
 
     def _print_yang_ns_file(self):
-        packages = self.packages + self.deviation_packages
+        packages = self.packages
 
         self.print_file(get_yang_ns_file_name(self.models_dir),
                         emit_yang_ns,
-                        _EmitArgs(self.ypy_ctx, packages))
-
-    def _print_deviate_file(self):
-        self._print_nmsp_declare_init(self.deviation_dir)
-        for package in self.deviation_packages:
-            self.print_file(get_meta_module_file_name(self.deviation_dir, package),
-                            emit_deviation,
-                            _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
+                        _EmitArgs(self.ypy_ctx, packages, self.bundle_name))
 
     def _print_import_tests_file(self):
         self.print_file(get_import_test_file_name(self.test_dir),
@@ -169,17 +150,21 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         if not os.path.isfile(file_name):
             self.print_file(file_name)
 
-    def _print_nmsp_declare_init(self, path):
+    def _print_nmsp_declare_init_files(self):
+        self._print_nmsp_decalre_init(self.ydk_dir)
+        self._print_nmsp_decalre_init(os.path.join(self.ydk_dir, 'models'))
+        self._print_nmsp_decalre_init(self.models_dir)
+
+    def _print_nmsp_decalre_init(self, path):
         file_name = get_init_file_name(path)
         self.print_file(file_name,
                         emit_nmsp_declare_init,
                         _EmitArgs(self.ypy_ctx, self.packages))
 
-    def _print_nmsp_augment_finder_init(self, path, is_meta=False):
-        file_name = get_init_file_name(path)
-        self.print_file(file_name,
-                        emit_nmsp_augment_finder_init,
-                        _EmitArgs(self.ypy_ctx, self.packages, is_meta))
+    def _print_yang_files(self):
+        yang_files_dir = os.path.sep.join([self.models_dir, '_yang'])
+        os.mkdir(yang_files_dir)
+        dir_util.copy_tree(self.bundle.resolved_models_dir, yang_files_dir)
 
 
 def get_init_file_name(path):
@@ -206,16 +191,12 @@ def get_python_module_file_name(path, package):
     return '%s/%s.py' % (path, package.name)
 
 
-def get_meta_module_file_name(path, package):
-    return '%s/_%s.py' % (path, package.name)
-
-
 def get_test_module_file_name(path, package):
     return '%s/test_%s.py' % (path, package.stmt.arg.replace('-', '_'))
 
 
-def emit_yang_ns(ctx, packages):
-    NamespacePrinter(ctx).print_output(packages)
+def emit_yang_ns(ctx, packages, bundle_name):
+    NamespacePrinter(ctx).print_output(packages, bundle_name)
 
 
 def emit_importests(ctx, packages):
@@ -238,17 +219,5 @@ def emit_test_module(ctx, package, identity_subclasses):
     TestPrinter(ctx, 'py').print_tests(package, identity_subclasses)
 
 
-def emit_meta(ctx, package, sort_clazz):
-    ModuleMetaPrinter(ctx, sort_clazz).print_output(package)
-
-
-def emit_deviation(ctx, package, sort_clazz):
-    DeviationPrinter(ctx, sort_clazz).print_deviation(package)
-
-
 def emit_nmsp_declare_init(ctx, package):
     InitPrinter(ctx).print_nmsp_declare_init(package)
-
-
-def emit_nmsp_augment_finder_init(ctx, package, is_meta):
-    InitPrinter(ctx).print_nmsp_augment_finder_init(package, is_meta)

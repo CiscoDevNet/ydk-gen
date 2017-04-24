@@ -98,9 +98,6 @@ def get_class_docstring(clazz, language, identity_subclasses=None):
 
         properties_description.extend(get_type_doc(meta_info_data, type_depth=1))
 
-    if clazz.stmt.search_one('presence') and language == 'py':
-        properties_description.append(add_presence_property_docstring(clazz))
-
     return convert_to_reStructuredText(class_description) + '\n\n' + ''.join(properties_description)
 
 
@@ -138,15 +135,6 @@ def get_type_doc(meta_info_data, type_depth):
             properties_description.append('\t**status**\: %s\n\n' % meta_info_data.status)
 
     return properties_description
-
-
-def add_presence_property_docstring(clazz):
-    description = []
-    description.append(".. attribute:: %s\n\n" % ("_is_presence"))
-    description.append("\tIs present if this instance represents presence container else not\n")
-    description.append("\t**type**\: bool\n\n")
-
-    return ''.join(description)
 
 
 def get_enum_class_docstring(enumz):
@@ -493,8 +481,8 @@ def get_primitive_type_tag(typ, language):
         ('py', 'bool'): 'bool',
         ('py', 'Decimal64'): ':py:class:`Decimal64<ydk.types.Decimal64>`',
         ('py', 'Empty'): ':py:class:`Empty<ydk.types.Empty>`',
-        ('py', 'Enum'): ':py:class:`enum.Enum`',
-        ('py', 'Identity'): ':py:class:`object`',
+        ('py', 'Enum'): ':py:class:`Enum<ydk.types.Enum>`',
+        ('py', 'Identity'): ':py:class:`Identity<ydk.types.Identity>`',
 
         ('cpp', 'int'): '``int``',
         ('cpp', 'str'): '``std::string``',
@@ -607,7 +595,7 @@ def get_langage_spec_tags(named_element, language):
 def get_class_bases(clazz, language):
     bases = []
     if language == 'py':
-        bases.append(':class:`object`')
+        bases.append(':py:class:`Entity<ydk.types.Entity>`')
     if isinstance(clazz, Enum):
         bases.append(get_primitive_type_tag('Enum', language))
     elif clazz.is_identity():

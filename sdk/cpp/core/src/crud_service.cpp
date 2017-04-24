@@ -28,6 +28,10 @@
 #include "entity_data_node_walker.hpp"
 #include "validation_service.hpp"
 #include "logger.hpp"
+#include <sstream>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xpath.h>
 
 using namespace std;
 
@@ -122,14 +126,68 @@ static shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, 
     return (*ydk_rpc)(provider);
 }
 
+static void modify_xml_tree(xmlNodePtr root, const string & data_path,
+        const string & leaf_name, YFilter operation)
+{
+    int i;
+    xmlNodePtr node = NULL;
+
+    for (node = root, i= 0; node; node = node->next, i=i+1)
+    {
+        ostringstream os{};
+        xmlNodePtr n = node;
+        os<<leaf_name<<"/";
+        while(n && n->parent)
+        {
+            os<<n->name<<"/";
+            n = n->parent;
+        }
+        if(os.str() == data_path)
+        {
+            YLOG_INFO("Setting leaf {} to operation {}", leaf_name, to_string(operation));
+            xmlNodePtr child = xmlNewChild(node, NULL, (const unsigned char *)leaf_name.c_str(), NULL);
+            if(operation!=YFilter::read)
+            {
+                xmlNewProp(child, (const unsigned char *)"operation", (const unsigned char *)(to_string(operation)).c_str());
+            }
+        }
+        modify_xml_tree(node->children, data_path, leaf_name, operation);
+    }
+}
+
 static string get_data_payload(Entity & entity, path::ServiceProvider & provider)
 {
-	const ydk::path::DataNode& datanode = get_data_node_from_entity(entity, provider.get_root_schema());
+    map<string, pair<string, YFilter>> leaf_operations;
+	const ydk::path::DataNode& datanode = get_data_node_from_entity(entity, provider.get_root_schema(), leaf_operations);
+
     const path::DataNode* dn = &datanode;
     while(dn!= nullptr && dn->parent()!=nullptr)
         dn = dn->parent();
     path::CodecService codec{};
-	return codec.encode(*dn, provider.get_encoding(), false);
+	string payload = codec.encode(*dn, provider.get_encoding(), false);
+	if(provider.get_encoding() == EncodingFormat::XML && leaf_operations.size()>0)
+	{
+        xmlDocPtr doc = xmlParseDoc((const unsigned char *)payload.c_str());
+        xmlNodePtr root = xmlDocGetRootElement(doc);
+        for(auto & leaf_operation : leaf_operations)
+        {
+            modify_xml_tree(root, leaf_operation.first, leaf_operation.second.first, leaf_operation.second.second);
+        }
+        xmlBufferPtr buf = xmlBufferCreate();
+        if (buf != NULL)
+        {
+            xmlNodeDump(buf, doc, root, 0, 1);
+            payload.clear();
+            string path{reinterpret_cast<char*>(buf->content)};
+            payload = path;
+            xmlBufferFree(buf);
+        }
+        else
+        {
+            YLOG_ERROR("Error creating the xml buffer");
+        }
+	}
+	return payload;
 }
 
 }

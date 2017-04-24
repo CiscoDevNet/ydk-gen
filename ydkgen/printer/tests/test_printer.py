@@ -117,6 +117,11 @@ class TestPrinter(FixturePrinter):
             self._write_end(self.ref_fmt.format(path, val))
 
     def _print_requisite_adjustments(self, stmts):
+        if self.lang == 'cpp':
+            for path in sorted(stmts.presence_container_parent_stmts):
+                val = stmts.presence_container_parent_stmts[path]
+                self._write_end(self.cpp_leaf_fmt.format(path, val))
+
         for path in sorted(stmts.adjustment_stmts):
             val = stmts.adjustment_stmts[path]
             self._write_end(self.ref_fmt.format(path, val))
@@ -158,9 +163,9 @@ class TestPrinter(FixturePrinter):
         if self.lang == 'py':
             self._write_end(fmt.format(read_obj_name, stmt))
         elif self.lang == 'cpp':
-            self._write_end('auto read_unique_ptr = {}'.format(stmt))
-            self._write_end('CHECK( read_unique_ptr != nullptr)')
-            self._write_end(fmt.format(read_obj_name, qn, 'read_unique_ptr'))
+            self._write_end('auto read_shared_ptr = {}'.format(stmt))
+            self._write_end('CHECK( read_shared_ptr != nullptr)')
+            self._write_end(fmt.format(read_obj_name, qn, 'read_shared_ptr'))
 
     def _print_test_case_cleanup(self, clazz, top_classes):
         self._print_crud_delete_stmts(clazz)
@@ -215,7 +220,7 @@ class TestPrinter(FixturePrinter):
     def _print_logging(self, msg):
         self._bline()
         if self.lang == 'py':
-            self._write_end('logger.info("{}")'.format(msg))
+            self._write_end('# logger.info("{}")'.format(msg))
 
     def get_assignment_fmt(self, path):
         fmt = '{} = {}'
@@ -236,21 +241,21 @@ class TestPrinter(FixturePrinter):
     def declaration_fmt(self):
         fmt = '{} = {}()'
         if self.lang == 'cpp':
-            fmt = 'auto {} = std::make_unique<{}>()'
+            fmt = 'auto {} = std::make_shared<{}>()'
         return fmt
 
     @property
     def leaflist_append_fmt(self):
         fmt = '{}.append({})'
         if self.lang == 'cpp':
-            fmt = '{}.append(std::move({}))'
+            fmt = '{}.append({})'
         return fmt
 
     @property
     def append_fmt(self):
         fmt = '{}.append({})'
         if self.lang == 'cpp':
-            fmt = '{}.emplace_back(std::move({}))'
+            fmt = '{}.emplace_back({})'
         return fmt
 
     @property

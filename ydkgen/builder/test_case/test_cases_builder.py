@@ -101,6 +101,7 @@ class Statements(object):
         self.leaflist_append_stmts = {}
         self.reference_adjustment_stmts = {}
         self.adjusted_leaflist_appends = {}
+        self.presence_container_parent_stmts = {}
         self.key_properties = set()
 
     def add_append(self, path, val):
@@ -129,6 +130,9 @@ class Statements(object):
             self.reference_adjustment_stmts[path] = reference_path
         else:
             self.reference_stmts[path] = reference_path
+
+    def add_presence_parent(self, path, val):
+        self.presence_container_parent_stmts[path] = val
 
     @property
     def unadjusted_leaflist_appends(self):
@@ -232,11 +236,24 @@ class TestCasesBuilder(ValueBuilder):
         """Add requisite statements for presence container."""
         self._add_declaration_stmt(clazz)
         self._add_assignment_stmt(clazz)
+        if self.lang == 'cpp' and not isinstance(clazz.owner, atypes.Package):
+            self._add_presence_parent_stmt(clazz)
+
+    def _add_presence_parent_stmt(self, clazz):
+        """Add presence container's parent pointer for C++ tests.
+        In Python side, parent assignment is taken care of by glue code.
+        """
+        parent = self._get_element_path(clazz.owner)
+        name = get_obj_name(clazz)
+        path = self.path_sep.join([name, 'parent'])
+        self.stmts.add_presence_parent(path, parent)
 
     def _add_presence_prop_stmts(self, prop):
         """Add requisite statements for presence leaf or leaf-list."""
         self._add_declaration_stmt(prop.property_type)
         self._add_assignment_stmt(prop)
+        if self.lang == 'cpp' and not isinstance(prop.owner, atypes.Package):
+            self._add_presence_parent_stmt(prop.property_type)
 
     def _add_mandatory_stmts(self, clazz):
         """Add requisite statements for mandatory nodes."""
@@ -254,7 +271,7 @@ class TestCasesBuilder(ValueBuilder):
         if path not in self.stmts.declaration_stmts:
             obj_name = get_obj_name(ptype)
             if is_class_element(ptype):
-                obj_name = self.assignment_fmt.format(obj_name)
+                obj_name = obj_name
             self.stmts.add_assignment(path, obj_name)
 
     def _add_list_stmts(self, clazz):
@@ -481,8 +498,10 @@ class TestCasesBuilder(ValueBuilder):
         return path, value
 
     @property
-    def assignment_fmt(self):
-        fmt = '{}'
+    def path_sep(self):
+        sep = ''
         if self.lang == 'cpp':
-            fmt = 'std::move({})'
-        return fmt
+            sep = '->'
+        elif self.lang == 'py':
+            sep = '.'
+        return sep

@@ -92,10 +92,14 @@ class FixturePrinter(Printer):
 
     def _print_py_common_stmts(self):
         """Print Python common statements."""
-        self._writeln('')
-        self._writeln("logger = logging.getLogger('ydk')")
-        self._writeln("# logger.setLevel(logging.DEBUG)")
+        self._bline()
+        self._writeln('# logger = logging.getLogger("ydk")')
+        self._writeln('# logger.setLevel(logging.DEBUG)')
         self._writeln('# handler = logging.StreamHandler()')
+        self._writeln('# formatter = logging.Formatter(fmt="[%(asctime)s.%(msecs)03d] [%(name)s] "')
+        self._writeln('#                                      "[%(levelname)s] %(message)s",')
+        self._writeln('#                               datefmt=\'%Y-%m-%d %H:%M:%S\')')
+        self._writeln('# handler.setFormatter(formatter)')
         self._writeln('# logger.addHandler(handler)')
 
     def _print_cpp_common_stmts(self):
@@ -118,8 +122,7 @@ class FixturePrinter(Printer):
         self._writeln('def setUpClass(cls):')
         self._lvl_inc()
         self._writeln("cls.ncc = NetconfServiceProvider("
-                      "address='{0}', username='{1}', "
-                      "password='{2}', port={3})"
+                      "'{0}', '{1}', '{2}', {3})"
                       .format(self.address, self.username,
                               self.password, self.port))
         self._writeln('cls.crud = CRUDService()')
@@ -131,7 +134,7 @@ class FixturePrinter(Printer):
         self._writeln('@classmethod')
         self._writeln('def tearDownClass(cls):')
         self._lvl_inc()
-        self._writeln('cls.ncc.close()')
+        self._writeln('pass')
         self._bline()
         self._lvl_dec()
 
@@ -153,7 +156,7 @@ class FixturePrinter(Printer):
         self._bline()
         self._writeln('m_crud = CrudService{};')
         self._writeln("m_provider = "
-                      "std::make_unique<NetconfServiceProvider>"
+                      "std::make_shared<NetconfServiceProvider>"
                       "(\"{0}\", \"{1}\", \"{2}\", {3});"
                       .format(self.address, self.username,
                               self.password, self.port))
@@ -161,7 +164,7 @@ class FixturePrinter(Printer):
         self._writeln('}')
         self._writeln('~ConnectionFixture() {}')
         self._writeln('CrudService m_crud;')
-        self._writeln("std::unique_ptr<NetconfServiceProvider> "
+        self._writeln("std::shared_ptr<NetconfServiceProvider> "
                       "m_provider;")
         self._lvl_dec()
         self._writeln('};')

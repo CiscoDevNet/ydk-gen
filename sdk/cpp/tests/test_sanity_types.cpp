@@ -353,7 +353,7 @@ TEST_CASE("test_types_embeded_enum")
 	REQUIRE(reply);
 
 	//CREATE
-	r_1->ytypes->built_in_t->embeded_enum = ydktest_sanity::Runner::Ytypes::BuiltInT::EmbededEnumEnum::zero;
+	r_1->ytypes->built_in_t->embeded_enum = ydktest_sanity::Runner::Ytypes::BuiltInT::EmbededEnum::zero;
 	reply = crud.create(provider, *r_1);
 	REQUIRE(reply);
 
@@ -377,7 +377,7 @@ TEST_CASE("test_types_enum")
 	REQUIRE(reply);
 
 	//CREATE
-	r_1->ytypes->built_in_t->enum_value = ydktest_sanity::YdkEnumTestEnum::none;
+	r_1->ytypes->built_in_t->enum_value = ydktest_sanity::YdkEnumTest::none;
 	reply = crud.create(provider, *r_1);
 	REQUIRE(reply);
 
@@ -401,7 +401,7 @@ TEST_CASE("test_types_younion")
 	REQUIRE(reply);
 
 	//CREATE
-	r_1->ytypes->built_in_t->younion = ydktest_sanity::YdkEnumTestEnum::none;
+	r_1->ytypes->built_in_t->younion = ydktest_sanity::YdkEnumTest::none;
 	reply = crud.create(provider, *r_1);
 	REQUIRE(reply);
 
@@ -425,7 +425,7 @@ TEST_CASE("test_types_identity")
 	REQUIRE(reply);
 
 	//CREATE
-	r_1->ytypes->built_in_t->identity_ref_value = ydktest_sanity_types::OtherIdentity();
+	r_1->ytypes->built_in_t->identity_ref_value = ydktest_sanity_types::Other();
 	reply = crud.create(provider, *r_1);
 	REQUIRE(reply);
 
@@ -478,7 +478,7 @@ TEST_CASE("test_types_identity_other_module")
 	REQUIRE(reply);
 
 	//CREATE
-	r_1->ytypes->built_in_t->identity_ref_value = ydktest_sanity_types::YdktestTypeIdentity();
+	r_1->ytypes->built_in_t->identity_ref_value = ydktest_sanity_types::YdktestType();
 	reply = crud.create(provider, *r_1);
 	REQUIRE(reply);
 
@@ -502,8 +502,8 @@ TEST_CASE("test_types_enum_leaflist")
 	REQUIRE(reply);
 
 	//CREATE
-	r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::local);
-	r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTestEnum::remote);
+	r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTest::local);
+	r_1->ytypes->built_in_t->enum_llist.append(ydktest_sanity::YdkEnumTest::remote);
 	reply = crud.create(provider, *r_1);
 	REQUIRE(reply);
 
@@ -527,8 +527,8 @@ TEST_CASE("test_types_identity_leaflist")
 	REQUIRE(reply);
 
 	//CREATE
-	r_1->ytypes->built_in_t->identity_llist.append(ydktest_sanity::ChildIdentityIdentity());
-	r_1->ytypes->built_in_t->identity_llist.append(ydktest_sanity::ChildChildIdentityIdentity());
+	r_1->ytypes->built_in_t->identity_llist.append(ydktest_sanity::ChildIdentity());
+	r_1->ytypes->built_in_t->identity_llist.append(ydktest_sanity::ChildChildIdentity());
 	reply = crud.create(provider, *r_1);
 	REQUIRE(reply);
 

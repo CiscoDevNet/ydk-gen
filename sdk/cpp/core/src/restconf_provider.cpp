@@ -190,7 +190,7 @@ std::shared_ptr<path::DataNode> RestconfServiceProvider::handle_edit(path::Rpc& 
     auto datanode = codec_service.decode(*root_schema, header_data, encoding);
 	string url = config_url_root + get_module_url_path(datanode->children()[0]->schema().path());
 
-    YLOG_INFO("Performing {} on URL {}. Payload: ", operation, url, header_data);
+    YLOG_INFO("Performing {} on URL {}. Payload: {}", operation, url, header_data);
     client->execute(operation, url, header_data);
 
     return nullptr;

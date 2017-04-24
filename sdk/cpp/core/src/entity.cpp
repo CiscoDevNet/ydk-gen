@@ -38,7 +38,7 @@ namespace ydk
 /// Entity
 //////////////////////////////////////////////////////////////////
 Entity::Entity()
-  : parent(nullptr), operation(EditOperation::not_set)
+  : parent(nullptr), operation(YFilter::not_set)
 {
 }
 

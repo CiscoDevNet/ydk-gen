@@ -8,18 +8,6 @@ Path Syntax
 
 Full XPath notation is supported for find operations on :cpp:class:`DataNode<DataNode>`\(s\). This XPath conforms to the YANG specification \(`RFC 6020 section 6.4 <https://tools.ietf.org/html/rfc6020#section-6.4>`_\). Some useful examples:
 
-- Get all top-level nodes of the ``module-name``
-
-.. code-block:: bash
-
-    /module-name:*
-
-- Get all the descendants of ``container`` \(excluding ``container``\)
-
-.. code-block:: bash
-
-    /module-name:container//*
-
 - Get ``list`` instance with ``key1`` of value ``1`` and ``key2`` of value ``2`` \(this can return more ``list`` instances if there are more keys than ``key1`` and ``key2``\)
 
 .. code-block:: bash

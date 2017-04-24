@@ -1,11 +1,8 @@
 API Guide
-===========
-
+=========
 
 .. toctree::
+    :maxdepth: 3
 
-   ydk.errors
-   ydk.providers
-   ydk.services
-   ydk.types
- 
+    api/class_hierarchy.rst
+    api/path/path.rst

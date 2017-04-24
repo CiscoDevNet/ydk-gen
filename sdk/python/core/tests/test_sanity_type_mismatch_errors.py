@@ -19,37 +19,39 @@
 Test type mismatch errors not covered by test_sanity_types.py
 """
 from __future__ import absolute_import
-
-import re
 import unittest
+
 from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.models.ydktest import ydktest_sanity_types as ytypes
-from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
+from ydk.providers import NetconfServiceProvider
 from ydk.services import CRUDService
+from ydk.errors import YPYModelError
+from test_utils import assert_with_error
+
+
+test_invalid_class_assignment_int_pattern = "Invalid value '1' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>'"
+test_invalid_class_assignment_str_pattern = "Invalid value 'haha' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>'"
+test_invalid_class_assignment_identity_pattern = "Invalid value '<ydk.models.ydktest.ydktest_sanity_types.AnotherOne object at [0-9a-z]+>' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>'"
+test_invalid_class_assignment_enum_pattern = "Invalid value 'ydk.types.Enum.YLeaf\(none\)' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>'"
+test_invalid_class_assignment_ylist_pattern = "Invalid value '\[<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*Ldata object at [0-9a-z]+>\]' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>"
+test_invalid_class_assignment_yleaflist_pattern = "Invalid value 'YLeafList\('llstring', \[0, 1, 2, 3, 4\]\)' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>'"
+test_invalid_list_assignment_int_pattern = "Attempt to assign value of '1' to YList ldata. Please use list append or extend method."
+test_invalid_list_assignment_entity_pattern = "Attempt to assign value of '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>' to YList ldata. Please use list append or extend method."
+test_invalid_list_assignment_llist_pattern = "Attempt to assign value of 'YLeafList\('llstring', \[0, 1, 2, 3, 4\]\)' to YList ldata. Please use list append or extend method."
+test_invalid_llist_assignment_int_pattern = "Invalid value '1' in 'llstring'"
+test_invalid_llist_assignment_list_pattern = "Invalid value '\[<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*Ldata object at [0-9a-z]+>\]' in 'llstring'"
 
 
 class SanityYang(unittest.TestCase):
-    PROVIDER_TYPE = "non-native"
 
     @classmethod
     def setUpClass(self):
-        if SanityYang.PROVIDER_TYPE == "native":
-            self.ncc = NativeNetconfServiceProvider(address='127.0.0.1',
-                                                    username='admin',
-                                                    password='admin',
-                                                    protocol='ssh',
-                                                    port=12022)
-        else:
-            self.ncc = NetconfServiceProvider(address='127.0.0.1',
-                                              username='admin',
-                                              password='admin',
-                                              protocol='ssh',
-                                              port=12022)
+        self.ncc = NetconfServiceProvider('127.0.0.1', 'admin', 'admin', 12022)
         self.crud = CRUDService()
 
     @classmethod
     def tearDownClass(self):
-        self.ncc.close()
+        pass
 
     def setUp(self):
         runner = ysanity.Runner()
@@ -59,110 +61,78 @@ class SanityYang(unittest.TestCase):
         runner = ysanity.Runner()
         self.crud.delete(self.ncc, runner)
 
-    def assertRaisesWithPattern(self, pattern, func, *args, **kwargs):
-        try:
-            func(*args, **kwargs)
-            self.assertFail()
-        except Exception as inst:
-            res = re.match(pattern, inst.message)
-            self.assertEqual(res is not None, True)
-
+    @assert_with_error(test_invalid_class_assignment_int_pattern, YPYModelError)
     def test_invalid_class_assignment_int(self):
         runner = ysanity.Runner()
         runner.one = 1
-        self.assertRaisesWithPattern(
-            "Attempt to assign non YDK entity object of type "
-            "int to [a-zA-Z\.]*One",
-            self.crud.create, self.ncc, runner)
+        self.crud.create(self.ncc, runner)
 
+    @assert_with_error(test_invalid_class_assignment_str_pattern, YPYModelError)
     def test_invalid_class_assignment_str(self):
         runner = ysanity.Runner()
         runner.one = "haha"
-        self.assertRaisesWithPattern(
-            "Attempt to assign non YDK entity object of type "
-            "str to [a-zA-Z\.]*One",
-            self.crud.create, self.ncc, runner)
+        self.crud.create(self.ncc, runner)
 
+    @assert_with_error(test_invalid_class_assignment_identity_pattern, YPYModelError)
     def test_invalid_class_assignment_identity(self):
         runner = ysanity.Runner()
-        runner.one = ytypes.AnotherOneIdentity()
-        self.assertRaisesWithPattern(
-            "Attempt to assign non YDK entity object of type "
-            "AnotherOneIdentity to [a-zA-Z\.]*One",
-            self.crud.create, self.ncc, runner)
+        runner.one = ytypes.AnotherOne()
+        self.crud.create(self.ncc, runner)
 
+    @assert_with_error(test_invalid_class_assignment_enum_pattern, YPYModelError)
     def test_invalid_class_assignment_enum(self):
         runner = ysanity.Runner()
-        runner.one = ysanity.YdkEnumTestEnum.none
-        self.assertRaisesWithPattern(
-            "Attempt to assign non YDK entity object of type "
-            "YdkEnumTestEnum to [a-zA-Z\.]*One",
-            self.crud.create, self.ncc, runner)
+        runner.one = ysanity.YdkEnumTest.none
+        self.crud.create(self.ncc, runner)
 
+    @assert_with_error(test_invalid_class_assignment_ylist_pattern, YPYModelError)
     def test_invalid_class_assignment_ylist(self):
         runner = ysanity.Runner()
         elem = ysanity.Runner.OneList.Ldata()
         elem.number, elem.name = 1, '1'
         runner.one_list.ldata.append(elem)
         runner.one = runner.one_list.ldata
-        self.assertRaisesWithPattern(
-            "Attempt to assign non YDK entity object of type "
-            "YList to [a-zA-Z\.]*One",
-            self.crud.create, self.ncc, runner)
+        self.crud.create(self.ncc, runner)
 
+    @assert_with_error(test_invalid_class_assignment_yleaflist_pattern, YPYModelError)
     def test_invalid_class_assignment_yleaflist(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.llstring.extend([str(i) for i in range(5)])
         runner.one = runner.ytypes.built_in_t.llstring
-        self.assertRaisesWithPattern(
-            "Attempt to assign non YDK entity object of type "
-            "YLeafList to [a-zA-Z\.]*One",
-            self.crud.create, self.ncc, runner)
 
+    @assert_with_error(test_invalid_list_assignment_int_pattern, YPYModelError)
     def test_invalid_list_assignment_int(self):
         runner = ysanity.Runner()
         runner.one_list.ldata = 1
-        self.assertRaisesWithPattern(
-            "Attempt to assign object of type int to YList ldata. "
-            "Please use list append or extend method.",
-            self.crud.create, self.ncc, runner)
+        self.crud.create(self.ncc, runner)
 
+    @assert_with_error(test_invalid_list_assignment_entity_pattern, YPYModelError)
     def test_invalid_list_assignment_entity(self):
         runner = ysanity.Runner()
         runner.one_list.ldata = runner.one
-        self.assertRaisesWithPattern(
-            "Attempt to assign object of type One to YList ldata. "
-            "Please use list append or extend method.",
-            self.crud.create, self.ncc, runner)
+        self.crud.crud(self.ncc, runner)
 
+    @assert_with_error(test_invalid_list_assignment_llist_pattern, YPYModelError)
     def test_invalid_list_assignment_llist(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.llstring.extend([str(i) for i in range(5)])
         runner.one_list.ldata = runner.ytypes.built_in_t.llstring
-        self.assertRaisesWithPattern(
-            "Attempt to assign object of type YLeafList to YList ldata. "
-            "Please use list append or extend method.",
-            self.crud.create, self.ncc, runner)
+        self.crud.crud(self.ncc, runner)
 
+    @assert_with_error(test_invalid_llist_assignment_int_pattern, YPYModelError)
     def test_invalid_llist_assignment_int(self):
-        # Wrongly assign empty YList or YLeaflist will not change payload.
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.llstring = 1
-        self.assertRaisesWithPattern(
-            "Attempt to assign object of type int to YLeafList llstring. "
-            "Please use list append or extend method.",
-            self.crud.create, self.ncc, runner)
+        self.crud.create(self.ncc, runner)
 
+    @assert_with_error(test_invalid_llist_assignment_list_pattern, YPYModelError)
     def test_invalid_llist_assignment_list(self):
         runner = ysanity.Runner()
         elem = ysanity.Runner.OneList.Ldata()
         elem.number, elem.name = 1, '1'
         runner.one_list.ldata.append(elem)
         runner.ytypes.built_in_t.llstring = runner.one_list.ldata
-        self.assertRaisesWithPattern(
-            "Attempt to assign object of type YList to YLeafList llstring. "
-            "Please use list append or extend method.",
-            self.crud.create, self.ncc, runner)
+        self.crud.create(self.ncc, runner)
 
 
 if __name__ == '__main__':

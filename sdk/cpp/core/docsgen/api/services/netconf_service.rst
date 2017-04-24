@@ -1,8 +1,5 @@
-NetconfService
-==============
-
-.. toctree::
-   :maxdepth: 2
+Netconf Service
+===============
 
 .. cpp:namespace:: ydk
 
@@ -17,7 +14,7 @@ Type of datastore to perform operation on
 
 .. cpp:class:: NetconfService : public Service
 
-Netconf Service class for supporting encoding and decoding C++ model API objects of type :cpp:class:`Entity<Entity>`
+    Netconf Service class for supporting encoding and decoding C++ model API objects of type :cpp:class:`Entity<Entity>`
 
     .. cpp:function:: NetconfService()
 

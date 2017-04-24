@@ -345,8 +345,8 @@ module ydktest-sanity {
           }
           default "auto-sense-speed";
         }
-
-//TODO
+        
+        //TODO
         /*leaf-list bits-list {
           description "this is bits type list";
           type bits {
@@ -357,7 +357,7 @@ module ydktest-sanity {
             bit val2 {
               position 1;
             }
-          }
+          }          
         }*/
 
         leaf younion {
@@ -400,8 +400,8 @@ module ydktest-sanity {
 
         leaf-list enum-llist {
           type Ydk-Enum-test;
-          max-elements 3;
           description "A leaf-list of enum";
+          max-elements 3;
         }
 
         leaf-list identity-llist {
@@ -472,7 +472,7 @@ module ydktest-sanity {
           type string;
         }
       }
-
+      
       list identity-list {
         description "one list data";
         key "id-ref";
@@ -494,7 +494,7 @@ module ydktest-sanity {
         }
       }
     }
-
+  
   }
 
 
@@ -578,7 +578,7 @@ module ydktest-sanity {
     }
   }
 
-    grouping three-level-w-list-at-two {
+  grouping three-level-w-list-at-two {
     container inbtw-list {
       description "config for one_level list data";
       list ldata {
@@ -644,7 +644,21 @@ module ydktest-sanity {
     }
   }
 
+  grouping nested-naming {
+    container nested-naming {
+      container nested-naming {
+        container nested-naming {
+          leaf nested-naming {
+            type int32;
+          }
+        }
+      }
+    }
+  }
+
   container runner {
+
+    uses nested-naming;
 
     //container at 1,2,3 nested level
     uses one-level;

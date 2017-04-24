@@ -15,32 +15,28 @@
 # ------------------------------------------------------------------
 
 from __future__ import absolute_import
-import ydk.types as ytypes
+import re
 import unittest
 
-from ydk.services import CRUDService, ExecutorService
-from ydk.services.meta_service import MetaService
+from ydk.services import CRUDService, DataStore, ExecutorService, CodecService, NetconfService
 from ydk.models.ydktest import ydktest_sanity as ysanity
-from ydk.models.ydktest import ydktest_sanity_types as ysanity_types
-from ydk.models.ydktest import ydktest_types as y_types
-from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
-from ydk.types import Empty, DELETE, Decimal64
-from compare import is_equal
+from ydk.providers import NetconfServiceProvider, CodecServiceProvider
+from ydk.types import Empty, Decimal64, EncodingFormat
 from ydk.errors import YPYServiceError
+from test_utils import assert_with_error
+
 try:
     from ydk.models.ydktest import ietf_netconf
 except:
     pass
 
-from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
+from ydk.models.ydktest.ydktest_sanity import YdkEnumTest, YdkEnumIntTest
 
 class SanityCodec(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        from ydk.providers import CodecServiceProvider
-        from ydk.services import CodecService
         self.codec = CodecService()
-        self.provider = CodecServiceProvider(type='xml')
+        self.provider = CodecServiceProvider(type=EncodingFormat.XML)
 
         self._enum_payload_1 = """<built-in-t xmlns="http://cisco.com/ns/yang/ydktest-sanity">
   <enum-value>local</enum-value>
@@ -117,87 +113,43 @@ class SanityCodec(unittest.TestCase):
         r_1.two_list.ldata.extend([e_1, e_2])
         return r_1
 
+    _entity_pattern = "'provider' and 'entity_holder' cannot be None"
+    _payload_pattern = "'provider' and 'payload_holder' cannot be None"
+
+    @assert_with_error(_entity_pattern, YPYServiceError)
     def test_encode_invalid_1(self):
-        try:
-            self.codec.encode(self.provider, None)
-        except YPYServiceError as err:
-            self.assertEqual(
-                err.message, "'encoder' and 'entity' cannot be None")
-        else:
-            raise Exception('YPYServiceError not raised')
+        self.codec.encode(self.provider, None)
 
+    @assert_with_error(_entity_pattern, YPYServiceError)
     def test_encode_invalid_2(self):
-        try:
             self.codec.encode(None, self._get_runner_entity())
-        except YPYServiceError as e:
-            err = e
-            self.assertEqual(
-                err.message, "'encoder' and 'entity' cannot be None")
-        else:
-            raise Exception('YPYServiceError not raised')
 
+    @assert_with_error(_entity_pattern, YPYServiceError)
     def test_encode_invalid_3(self):
-        try:
             self.codec.encode(None, None)
-        except YPYServiceError as e:
-            err = e
-            self.assertEqual(
-                err.message, "'encoder' and 'entity' cannot be None")
-        else:
-            raise Exception('YPYServiceError not raised')
 
+    @assert_with_error(_payload_pattern, YPYServiceError)
     def test_decode_invalid_1(self):
-        try:
-            self.codec.decode(None, self._enum_payload_2)
-        except YPYServiceError as e:
-            err = e
-            self.assertEqual(
-                err.message, "'decoder' and 'payload' cannot be None")
-        else:
-            raise Exception('YPYServiceError not raised')
+        self.codec.decode(None, self._enum_payload_2)
 
+    @assert_with_error(_payload_pattern, YPYServiceError)
     def test_decode_invalid_2(self):
-        try:
-            self.codec.decode(self.provider, None)
-        except YPYServiceError as e:
-            err = e
-            self.assertEqual(
-                err.message, "'decoder' and 'payload' cannot be None")
-        else:
-            raise Exception('YPYServiceError not raised')
+        self.codec.decode(self.provider, None)
 
+    @assert_with_error(_payload_pattern, YPYServiceError)
     def test_decode_invalid_3(self):
-        try:
-            self.codec.decode(None, None)
-        except YPYServiceError as e:
-            err = e
-            self.assertEqual(
-                err.message, "'decoder' and 'payload' cannot be None")
-        else:
-            raise Exception('YPYServiceError not raised')
+        self.codec.decode(None, None)
 
-class SanityCrud(unittest.TestCase):
-    PROVIDER_TYPE = "non-native"
+class SanityCRUD(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        if SanityCrud.PROVIDER_TYPE == "native":
-            self.ncc = NativeNetconfServiceProvider(address='127.0.0.1',
-                                                    username='admin',
-                                                    password='admin',
-                                                    protocol='ssh',
-                                                    port=12022)
-        else:
-            self.ncc = NetconfServiceProvider(address='127.0.0.1',
-                                              username='admin',
-                                              password='admin',
-                                              protocol='ssh',
-                                              port=12022)
+        self.ncc = NetconfServiceProvider('127.0.0.1', 'admin', 'admin', 12022)
         self.crud = CRUDService()
 
     @classmethod
     def tearDownClass(self):
-        self.ncc.close()
+        pass
 
     def setUp(self):
         runner = ysanity.Runner()
@@ -207,171 +159,82 @@ class SanityCrud(unittest.TestCase):
         runner = ysanity.Runner()
         self.crud.delete(self.ncc, runner)
 
-    def _create_runner(self):
-        runner = ysanity.Runner()
-        runner.ytypes = runner.Ytypes()
-        runner.ytypes.built_in_t = runner.ytypes.BuiltInT()
-        return runner
+    _error_pattern_entity = "'provider' and 'entity' cannot be None"
+    _error_pattern_filter = "'provider' and 'filter' cannot be None"
 
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_create_invalid_1(self):
-        try:
-            runner = self._create_runner()
-            runner.ytypes.built_in_t.number8 = 0
-            self.crud.create(None, runner)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not raised')
+        runner = ysanity.Runner()
+        runner.ytypes.built_in_t.number8 = 0
+        self.crud.create(None, runner)
 
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_create_invalid_2(self):
-        try:
-            runner = self._create_runner()
-            runner.ytypes.built_in_t.number8 = 0
-            self.crud.create(self.ncc, None)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not raised')
+        self.crud.create(self.ncc, None)
 
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_create_invalid_3(self):
-        try:
-            runner = self._create_runner()
-            runner.ytypes.built_in_t.number8 = 0
-            self.crud.create(None, None)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not raised')
+        self.crud.create(None, None)
 
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_delete_invalid_1(self):
-        try:
-            runner = self._create_runner()
-            self.crud.delete(None, runner)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
+        runner = ysanity.Runner()
+        self.crud.delete(None, runner)
 
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_delete_invalid_2(self):
-        try:
-            self.crud.delete(self.ncc, None)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
+        self.crud.delete(self.ncc, None)
 
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_delete_invalid_3(self):
-        try:
-            self.crud.delete(None, None)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
+        self.crud.delete(None, None)
 
+    @assert_with_error(_error_pattern_filter, YPYServiceError)
     def test_crud_read_invalid_1(self):
-        try:
-            runner = self._create_runner()
-            runner.ytypes.built_in_t.bool_value = True
-            self.crud.create(self.ncc, runner)
-            # Read into Runner2
-            runner1 = ysanity.Runner()
-            self.crud.read(None, runner1)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'read_filter' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
+        runner_read = ysanity.Runner()
+        self.crud.read(None, runner_read)
 
+    @assert_with_error(_error_pattern_filter, YPYServiceError)
     def test_crud_read_invalid_2(self):
-        try:
-            self.crud.read(self.ncc, None)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'read_filter' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
+        self.crud.read(self.ncc, None)
 
+    @assert_with_error(_error_pattern_filter, YPYServiceError)
     def test_crud_read_invalid_3(self):
-        try:
-            self.crud.read(None, None)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'read_filter' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
+        self.crud.read(None, None)
 
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_update_invalid_1(self):
-        try:
-            runner = self._create_runner()
-            runner.ytypes.built_in_t.bool_value = True
-            self.crud.create(self.ncc, runner)
+        runner = ysanity.Runner()
+        runner.ytypes.built_in_t.bool_value = True
+        self.crud.update(None, runner)
 
-            # Read into Runner2
-            runner1 = ysanity.Runner()
-            runner1 = self.crud.read(self.ncc, runner1)
-
-            # Compare runners
-            result = is_equal(runner, runner1)
-            self.assertEqual(result, True)
-
-            runner = self._create_runner()
-            runner.ytypes.built_in_t.bool_value = False
-            self.crud.update(None, runner)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
-
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_update_invalid_2(self):
-        try:
-            self.crud.update(self.ncc, None)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
+        self.crud.update(self.ncc, None)
 
+    @assert_with_error(_error_pattern_entity, YPYServiceError)
     def test_crud_update_invalid_3(self):
-        try:
-            self.crud.update(None, None)
-        except YPYServiceError as err:
-            expected_msg = "'provider' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not Raised')
+        self.crud.update(None, None)
+
 
 class SanityExecutor(unittest.TestCase):
-    PROVIDER_TYPE = "non-native"
 
     @classmethod
     def setUpClass(self):
-        if SanityExecutor.PROVIDER_TYPE == "native":
-            self.ncc = NativeNetconfServiceProvider(address='127.0.0.1',
-                                                    username='admin',
-                                                    password='admin',
-                                                    protocol='ssh',
-                                                    port=12022)
-        else:
-            self.ncc = NetconfServiceProvider(address='127.0.0.1',
-                                              username='admin',
-                                              password='admin',
-                                              protocol='ssh',
-                                              port=12022)
+        self.ncc = NetconfServiceProvider(address='127.0.0.1',
+                                          username='admin',
+                                          password='admin',
+                                          protocol='ssh',
+                                          port=12022)
         self.executor = ExecutorService()
+        self.codec = CodecService()
+        self.codec_provider = CodecServiceProvider(type=EncodingFormat.XML)
 
     @classmethod
     def tearDownClass(self):
-        self.ncc.close()
+        pass
 
     def setUp(self):
-        from ydk.services import CRUDService
         crud = CRUDService()
         runner = ysanity.Runner()
         crud.delete(self.ncc, runner)
@@ -384,13 +247,14 @@ class SanityExecutor(unittest.TestCase):
         runner.one.number = 1
         runner.one.name = 'runner:one:name'
 
-        edit_rpc = ietf_netconf.EditConfigRpc()
+        edit_rpc = ietf_netconf.EditConfig()
         edit_rpc.input.target.candidate = Empty()
-        edit_rpc.input.config = runner
+        runner_xml = self.codec.encode(self.codec_provider, runner)
+        edit_rpc.input.config = runner_xml
         try:
             op = self.executor.execute_rpc(None, edit_rpc)
         except YPYServiceError as err:
-            expected_msg = "'provider' and 'rpc' cannot be None"
+            expected_msg = "provider and entity cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
@@ -399,7 +263,7 @@ class SanityExecutor(unittest.TestCase):
         try:
             op = self.executor.execute_rpc(self.ncc, None)
         except YPYServiceError as err:
-            expected_msg = "'provider' and 'rpc' cannot be None"
+            expected_msg = "provider and entity cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
@@ -408,98 +272,27 @@ class SanityExecutor(unittest.TestCase):
         try:
             op = self.executor.execute_rpc(None, None)
         except YPYServiceError as err:
-            expected_msg = "'provider' and 'rpc' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not raised')
-
-class SanityMeta(unittest.TestCase):
-    PROVIDER_TYPE = "non-native"
-
-    @classmethod
-    def setUpClass(self):
-        if SanityMeta.PROVIDER_TYPE == "native":
-            self.ncc = NativeNetconfServiceProvider(address='127.0.0.1',
-                                                    username='admin',
-                                                    password='admin',
-                                                    protocol='ssh',
-                                                    port=12022)
-        else:
-            self.ncc = NetconfServiceProvider(address='127.0.0.1',
-                                              username='admin',
-                                              password='admin',
-                                              protocol='ssh',
-                                              port=12022)
-
-    @classmethod
-    def tearDownClass(self):
-        self.ncc.close()
-
-    def setUp(self):
-        crud = CRUDService()
-        runner = ysanity.Runner()
-        crud.delete(self.ncc, runner)
-
-    def tearDown(self):
-        pass
-
-    def test_normalize_meta_invalid_1(self):
-        try:
-            runner = ysanity.Runner()
-            MetaService.normalize_meta(None, runner)
-        except YPYServiceError as err:
-            expected_msg = "'capabilities' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not raised')
-
-    def test_normalize_meta_invalid_2(self):
-        try:
-            MetaService.normalize_meta(self.ncc._get_capabilities(), None)
-        except YPYServiceError as err:
-            expected_msg = "'capabilities' and 'entity' cannot be None"
-            self.assertEqual(err.message, expected_msg)
-        else:
-            raise Exception('YPYServiceError not raised')
-
-    def test_normalize_meta_invalid_3(self):
-        try:
-            runner = ysanity.Runner()
-            MetaService.normalize_meta(None, None)
-        except YPYServiceError as err:
-            expected_msg = "'capabilities' and 'entity' cannot be None"
+            expected_msg = "provider and entity cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
 class SanityNetconf(unittest.TestCase):
-    PROVIDER_TYPE = "non-native"
 
     @classmethod
     def setUpClass(self):
-        from ydk.providers import NetconfServiceProvider
-        from ydk.services import NetconfService
-
-        if SanityNetconf.PROVIDER_TYPE == "native":
-            self.ncc = NativeNetconfServiceProvider(address='127.0.0.1',
-                                                    username='admin',
-                                                    password='admin',
-                                                    protocol='ssh',
-                                                    port=12022)
-        else:
-            self.ncc = NetconfServiceProvider(address='127.0.0.1',
-                                              username='admin',
-                                              password='admin',
-                                              protocol='ssh',
-                                              port=12022)
+        self.ncc = NetconfServiceProvider(address='127.0.0.1',
+                                          username='admin',
+                                          password='admin',
+                                          protocol='ssh',
+                                          port=12022)
         self.netconf_service = NetconfService()
 
     @classmethod
     def tearDownClass(self):
-        self.ncc.close()
+        pass
 
     def setUp(self):
-        from ydk.services import CRUDService
         crud = CRUDService()
         runner = ysanity.Runner()
         crud.delete(self.ncc, runner)
@@ -516,20 +309,18 @@ class SanityNetconf(unittest.TestCase):
 
     def test_copy_config_invalid_1(self):
         try:
-            from ydk.services import Datastore
-            op = self.netconf_service.copy_config(self.ncc, target=None, source=Datastore.running)
+            op = self.netconf_service.copy_config(self.ncc, target=None, source=DataStore.running)
         except YPYServiceError as err:
-            expected_msg = "'target' and 'source' cannot be None"
+            expected_msg = "provider, target, and source/source_config cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_copy_config_invalid_2(self):
         try:
-            from ydk.services import Datastore
-            op = self.netconf_service.copy_config(self.ncc, target=Datastore.candidate, source=None)
+            op = self.netconf_service.copy_config(self.ncc, target=DataStore.candidate, source=None)
         except YPYServiceError as err:
-            expected_msg = "'target' and 'source' cannot be None"
+            expected_msg = "provider, target, and source/source_config cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
@@ -538,19 +329,18 @@ class SanityNetconf(unittest.TestCase):
         try:
             op = self.netconf_service.copy_config(self.ncc, target=None, source=None)
         except YPYServiceError as err:
-            expected_msg = "'target' and 'source' cannot be None"
+            expected_msg = "provider, target, and source/source_config cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_copy_config_invalid_4(self):
         try:
-            from ydk.services import Datastore
             op = self.netconf_service.copy_config(
-                self.ncc, target=Datastore.candidate, source=Datastore.running, with_defaults_option=1)
-        except YPYServiceError as err:
-            expected_msg = "optional arg 'with_defaults_option' must be of type ietf_netconf_with_defaults.WithDefaultsModeEnum"
-            self.assertEqual(err.message, expected_msg)
+                self.ncc, target=DataStore.candidate, source=DataStore.running, with_defaults_option=1)
+        except TypeError as err:
+            expected_msg = "copy_config() got an unexpected keyword argument 'with_defaults_option'"
+            self.assertEqual(err.args[0], expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
@@ -558,7 +348,7 @@ class SanityNetconf(unittest.TestCase):
         try:
             op = self.netconf_service.delete_config(self.ncc, target=None)
         except YPYServiceError as err:
-            expected_msg = "'target' cannot be None"
+            expected_msg = "provider and target cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
@@ -568,17 +358,16 @@ class SanityNetconf(unittest.TestCase):
             runner = self._create_runner()
             op = self.netconf_service.edit_config(self.ncc, None, runner)
         except YPYServiceError as err:
-            expected_msg = "'target' and 'config' cannot be None"
+            expected_msg = "provider, target, and config cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_edit_config_invalid_2(self):
         try:
-            from ydk.services import Datastore
-            op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, None)
+            op = self.netconf_service.edit_config(self.ncc, DataStore.candidate, None)
         except YPYServiceError as err:
-            expected_msg = "'target' and 'config' cannot be None"
+            expected_msg = "provider, target, and config cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
@@ -587,114 +376,119 @@ class SanityNetconf(unittest.TestCase):
         try:
             op = self.netconf_service.edit_config(self.ncc, None, None)
         except YPYServiceError as err:
-            expected_msg = "'target' and 'config' cannot be None"
+            expected_msg = "provider, target, and config cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_edit_config_invalid_4(self):
         try:
-            from ydk.services import Datastore
             runner = self._create_runner()
-            op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner, default_operation=1)
+            op = self.netconf_service.edit_config(self.ncc, DataStore.candidate, runner, default_operation=1)
         except YPYServiceError as err:
-            expected_msg = "optional arg 'default_operation' must be of type ietf_netconf.EditConfigRpc.Input.DefaultOperationEnum"
-            self.assertEqual(err.message, expected_msg)
+            expected_msg = """incompatible function arguments. The following argument types are supported:
+    1. \(self: ydk_.services.NetconfService, provider: ydk_.providers.NetconfServiceProvider, target: ydk_.services.DataStore, config: ydk_.types.Entity, default_operation: (unicode|str)=[u]?'', test_option: (unicode|str)=[u]?'', error_option: (unicode|str)=[u]?''\) -> bool
+
+Invoked with: <ydk_.services.NetconfService object at [0-9a-z]+>, <ydk_.providers.NetconfServiceProvider object at [0-9a-z]+>, DataStore.candidate, <ydk.models.ydktest.ydktest_sanity.Runner object at [0-9a-z]+>, 1, '', ''"""
+            res = re.match(expected_msg, err.message.strip())
+            self.assertEqual(res is not None, True)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_edit_config_invalid_5(self):
         try:
-            from ydk.services import Datastore
             runner = self._create_runner()
-            op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner, error_option=1)
+            op = self.netconf_service.edit_config(self.ncc, DataStore.candidate, runner, error_option=1)
         except YPYServiceError as err:
-            expected_msg = "optional arg 'error_option' must be of type ietf_netconf.EditConfigRpc.Input.ErrorOptionEnum"
-            self.assertEqual(err.message, expected_msg)
+            expected_msg = """incompatible function arguments. The following argument types are supported:
+    1. \(self: ydk_.services.NetconfService, provider: ydk_.providers.NetconfServiceProvider, target: ydk_.services.DataStore, config: ydk_.types.Entity, default_operation: (unicode|str)=[u]?'', test_option: (unicode|str)=[u]?'', error_option: (unicode|str)=[u]?''\) -> bool
+
+Invoked with: <ydk_.services.NetconfService object at [0-9a-z]+>, <ydk_.providers.NetconfServiceProvider object at [0-9a-z]+>, DataStore.candidate, <ydk.models.ydktest.ydktest_sanity.Runner object at [0-9a-z]+>, '', '', 1"""
+            res = re.match(expected_msg, err.message.strip())
+            self.assertEqual(res is not None, True)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_edit_config_invalid_6(self):
         try:
-            from ydk.services import Datastore
             runner = self._create_runner()
-            op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner, test_option=1)
+            op = self.netconf_service.edit_config(self.ncc, DataStore.candidate, runner, test_option=1)
         except YPYServiceError as err:
-            expected_msg = "optional arg 'test_option' must be of type ietf_netconf.EditConfigRpc.Input.TestOptionEnum"
-            self.assertEqual(err.message, expected_msg)
+            expected_msg = """incompatible function arguments. The following argument types are supported:
+    1. \(self: ydk_.services.NetconfService, provider: ydk_.providers.NetconfServiceProvider, target: ydk_.services.DataStore, config: ydk_.types.Entity, default_operation: (unicode|str)=[u]?'', test_option: (unicode|str)=[u]?'', error_option: (unicode|str)=[u]?''\) -> bool
+
+Invoked with: <ydk_.services.NetconfService object at [0-9a-z]+>, <ydk_.providers.NetconfServiceProvider object at [0-9a-z]+>, DataStore.candidate, <ydk.models.ydktest.ydktest_sanity.Runner object at [0-9a-z]+>, '', 1, ''"""
+            res = re.match(expected_msg, err.message.strip())
+            self.assertEqual(res is not None, True)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_get_config_invalid_1(self):
         try:
-            from ydk.services import Datastore
             runner = self._create_runner()
             get_filter = ysanity.Runner()
 
-            op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
+            op = self.netconf_service.edit_config(self.ncc, DataStore.candidate, runner)
             result = self.netconf_service.get_config(self.ncc, None, get_filter)
         except YPYServiceError as err:
-            expected_msg = "'source' cannot be None"
+            expected_msg = "provider, source, and filter cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_get_config_invalid_2(self):
         try:
-            from ydk.services import Datastore
             runner = self._create_runner()
             get_filter = ysanity.Runner()
 
-            op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-            result = self.netconf_service.get_config(self.ncc, Datastore.candidate, get_filter, with_defaults_option=1)
-        except YPYServiceError as err:
-            expected_msg = "optional arg 'with_defaults_option' must be of type ietf_netconf_with_defaults.WithDefaultsModeEnum"
-            self.assertEqual(err.message, expected_msg)
+            op = self.netconf_service.edit_config(self.ncc, DataStore.candidate, runner)
+            result = self.netconf_service.get_config(self.ncc, DataStore.candidate, get_filter, with_defaults_option=1)
+        except TypeError as err:
+            expected_msg = "get_config() got an unexpected keyword argument 'with_defaults_option'"
+            self.assertEqual(err.args[0], expected_msg)
         else:
-            raise Exception('YPYServiceError not raised')
+            raise Exception('TypeError not raised')
 
     def test_get_invalid(self):
         try:
-            from ydk.services import Datastore
             runner = self._create_runner()
             get_filter = ysanity.Runner()
 
-            op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-            self.assertIn('ok', op)
+            op = self.netconf_service.edit_config(self.ncc, DataStore.candidate, runner)
+            self.assertEqual(op, True)
 
             op = self.netconf_service.discard_changes(self.ncc)
-            self.assertIn('ok', op)
+            self.assertEqual(op, True)
 
-            op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-            self.assertIn('ok', op)
+            op = self.netconf_service.edit_config(self.ncc, DataStore.candidate, runner)
+            self.assertEqual(op, True)
 
             op = self.netconf_service.commit(self.ncc)
-            self.assertIn('ok', op)
+            self.assertEqual(op, True)
 
             result = self.netconf_service.get(self.ncc, get_filter, with_defaults_option=1)
             self.assertEqual(is_equal(runner, result), True)
-        except YPYServiceError as err:
-            expected_msg = "optional arg 'with_defaults_option' must be of type ietf_netconf_with_defaults.WithDefaultsModeEnum"
-            self.assertEqual(err.message, expected_msg)
+        except TypeError as err:
+            expected_msg = "get() got an unexpected keyword argument 'with_defaults_option'"
+            self.assertEqual(err.args[0], expected_msg)
         else:
-            raise Exception('YPYServiceError not raised')
+            raise Exception('TypeError not raised')
 
     def test_lock_invalid(self):
         try:
             op = self.netconf_service.lock(self.ncc, None)
         except YPYServiceError as err:
-            expected_msg = "'target' cannot be None"
+            expected_msg = "provider and target cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
 
     def test_unlock_invalid(self):
         try:
-            from ydk.services import Datastore
-            op = self.netconf_service.lock(self.ncc, Datastore.candidate)
+            op = self.netconf_service.lock(self.ncc, DataStore.candidate)
             op = self.netconf_service.unlock(self.ncc, None)
         except YPYServiceError as err:
-            expected_msg = "'target' cannot be None"
+            expected_msg = "provider and target cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
@@ -703,7 +497,7 @@ class SanityNetconf(unittest.TestCase):
         try:
             op = self.netconf_service.validate(self.ncc)
         except YPYServiceError as err:
-            expected_msg = "'source' cannot be None"
+            expected_msg = "provider and source/source_config cannot be None"
             self.assertEqual(err.message, expected_msg)
         else:
             raise Exception('YPYServiceError not raised')
@@ -711,16 +505,17 @@ class SanityNetconf(unittest.TestCase):
 
 if __name__ == '__main__':
     import sys
-    if len(sys.argv) > 1:
-        provider_type = sys.argv.pop()
-    else:
-        provider_type = "non-native"
-
     loader = unittest.TestLoader()
+    suite = unittest.TestSuite()
     testCaseList = []
-    for testCase in [SanityCrud, SanityExecutor, SanityMeta, SanityNetconf]:
-        testCase.PROVIDER_TYPE = provider_type
+    for testCase in [SanityCRUD, SanityExecutor, SanityNetconf, SanityCodec]:
         testCaseList.append(loader.loadTestsFromTestCase(testCase))
     suite = unittest.TestSuite(testCaseList)
-    ret = not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
-    sys.exit(ret)
+    res=unittest.TextTestRunner(verbosity=2).run(suite)
+    # sys.exit expects an integer, will throw libc++ abi error if use:
+    # ret = res.wasSuccessful() # <-- ret is a bool
+    # sys.exit(ret)
+    if not res.wasSuccessful():
+        sys.exit(1)
+    else:
+        sys.exit(0)

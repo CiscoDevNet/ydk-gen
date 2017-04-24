@@ -37,7 +37,6 @@ find_library(pcre_location pcre)
 find_library(xslt_location xslt)
 find_library(pthread_location pthread)
 find_library(dl_location dl)
-find_package(PythonLibs REQUIRED)
 
 include_directories(SYSTEM)
 
@@ -61,7 +60,6 @@ foreach(sample IN LISTS samples)
             ${xslt_location}
             ${pthread_location}
             ${dl_location}
-            ${PYTHON_LIBRARIES}
             -rdynamic
             )
 

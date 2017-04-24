@@ -49,7 +49,7 @@ class BitsPrinter(object):
         self._print_bits_trailer(bits)
 
     def _print_bits_header(self, bits):
-        self.ctx.writeln('class %s(FixedBitsDict):' % bits.name)
+        self.ctx.writeln('class %s(Bits):' % bits.name)
 
     def _print_bits_body(self, bits):
         self.ctx.lvl_inc()
@@ -72,8 +72,11 @@ class BitsPrinter(object):
 
     def _print_bits_init(self, bits):
         self.ctx.writeln('def __init__(self):')
-        self._print_bits_dictionary(bits)
-        self._print_bits_pos_map(bits)
+        self.ctx.lvl_inc()
+        self.ctx.writeln('super(%s, self).__init__()' % bits.qn())
+        self.ctx.lvl_dec()
+        # self._print_bits_dictionary(bits)
+        # self._print_bits_pos_map(bits)
 
     def _print_bits_dictionary(self, bits):
         self.ctx.lvl_inc()

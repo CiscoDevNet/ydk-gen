@@ -1,1 +1,3 @@
-../core/MANIFEST.in
+include README.md
+include setup.py
+include ydk/models/$NAME$/_yang/*.yang

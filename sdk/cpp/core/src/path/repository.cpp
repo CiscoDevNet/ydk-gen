@@ -51,8 +51,8 @@ static void create_if_does_not_exist(const std::string & path)
     {
         if(mkdir(path.c_str(), 0700) != 0)
         {
-            YLOG_ERROR("Could not create repository");
-            throw(YCPPIllegalStateError{"Could not create repository"});
+            YLOG_ERROR("Could not create repository: {}", path);
+            throw(YCPPIllegalStateError{"Could not create repository: "+path});
         }
     }
 }
@@ -282,7 +282,7 @@ ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & 
                 YLOG_DEBUG("Cache hit deviation module name: {}", d);
             }
             if (!res) {
-                YLOG_DEBUG("Unable to parse deviation module: {}", d);
+                YLOG_WARN("Unable to parse deviation module: {}. This model cannot be used with YDK.", d);
                 continue;
             }
         }
@@ -299,7 +299,7 @@ ydk::path::Repository::create_root_schema(const std::vector<path::Capability> & 
         }
 
         if (!p) {
-            YLOG_DEBUG("Unable to parse module: {}", c.module);
+            YLOG_WARN("Unable to parse module: {}. This model cannot be used with YDK", c.module);
             continue;
         }
         for (auto f : c.features)

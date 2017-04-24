@@ -14,83 +14,62 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-'''
-   YDK PY converter
+""" capabilities_printer.py
 
-'''
-import sys
-from ydkgen.common import yang_id
-
-from ydkgen.api_model import Class
-from ydkgen.common import get_module_name
+Print capabilities for bundle package.
+"""
+from ydkgen.printer.file_printer import FilePrinter
 
 
-class NamespacePrinter(object):
+class NamespacePrinter(FilePrinter):
     def __init__(self, ctx):
-        self.ctx = ctx
-        self.namespace_list = []
-        self.namespace_map = {}
+        super(NamespacePrinter, self).__init__(ctx)
+        self.bundle_name = ''
+        self.packages = None
 
-    def print_output(self, packages):
-        self._init_namespace_info(packages)
+    def print_output(self, packages, bundle_name):
+        self.packages = packages = [p for p in packages if p.bundle_name == bundle_name]
+        self._print_bundle_name(bundle_name)
+        self._print_capabilities(packages)
+        self._print_entity_lookup(packages)
 
-        self._print_namespaces(self.namespace_list)
-        self._print_identity_map(packages)
-        self._print_namespaces_map(self.namespace_map)
+    def _get_imports(self, packages):
+        imports = set()
+        for p in packages:
+            for e in p.owned_elements:
+                if e.stmt.keyword in ('container', 'list'):
+                    imports.add(e.get_py_mod_name())
+        return imports
 
-    def _init_namespace_info(self, packages):
-        module_map = {}
-
-        for m in [p.stmt for p in packages]:
-            ns = m.search_one('namespace')
-            if ns is not None:
-                self.namespace_list.append((m.arg.replace('-', '_'), ns.arg, yang_id(m)))
-                module_map[m.arg] = ns.arg
-
-        for m in [p.stmt for p in packages]:
-            if m.keyword == 'submodule':
-                including_module = m.i_including_modulename
-                if including_module is not None and including_module in module_map:
-                    main_ns = module_map[including_module]
-                    self.namespace_list.append((m.arg.replace('-', '_'), main_ns, yang_id(m)))
-
-        for package in packages:
-            ns = package.stmt.search_one('namespace')
-            for ele in package.owned_elements:
-                if hasattr(ele, 'stmt') and ele.stmt is not None and (ele.stmt.keyword == 'container' or ele.stmt.keyword == 'list'):
-                    self.namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
-
-    def _print_namespaces(self, ns):
-        ns = sorted(ns)
-        for n in ns:
-            self.ctx.writeln("_global_%s_nsp = '%s'" % (n[0], n[1]))
-        self.ctx.writeln("_namespaces = { \\")
-        for n in ns:
-            self.ctx.writeln("'%s' : '%s', " % (n[2], n[1]), 1)
-        self.ctx.writeln("}")
+    def _print_bundle_name(self, bundle_name):
+        self.ctx.writeln('BUNDLE_NAME = "{}"'.format(bundle_name))
         self.ctx.bline()
 
-    def _print_namespaces_map(self, namespace_map):
-        self.ctx.writeln("_namespace_package_map = { \\")
-        items = namespace_map.items()
-        if sys.version_info < (3,):
-            items = namespace_map.iteritems()
-        for namespace, python_import in sorted(items):
-            self.ctx.writeln("('%s', '%s') : 'from %s import %s', " % (namespace[0], namespace[1], python_import[0], python_import[1]))
-        self.ctx.writeln("}")
-        self.ctx.bline()
-
-    def _print_identity_map(self, packages):
-        packages = sorted(packages, key=lambda p:p.name)
-        self.ctx.writeln("_identity_map = { \\")
+    def _print_capabilities(self, packages):
+        self.ctx.writeln('CAPABILITIES = {')
         self.ctx.lvl_inc()
-        for package in packages:
-            identities = [idx for idx in package.owned_elements if isinstance(
-                idx, Class) and idx.is_identity()]
-            identities = sorted(identities, key=lambda c: c.name)
-            for identity_clazz in identities:
-                self.ctx.writeln("('%s', '%s'):('%s', '%s')," % (get_module_name(identity_clazz.stmt), identity_clazz.stmt.arg,
-                                                                 identity_clazz.get_py_mod_name(), identity_clazz.qn()))
+        for p in self.packages:
+            revision = p.stmt.search_one('revision')
+            revision = '' if revision is None else revision.arg
+            name = p.stmt.arg
+            self.ctx.writeln('"{}": "{}",'.format(name, revision))
         self.ctx.lvl_dec()
-        self.ctx.writeln("}")
+        self.ctx.writeln('}')
+        self.ctx.bline()
+
+    def _print_entity_lookup(self, packages):
+        self.ctx.writeln('ENTITY_LOOKUP = {')
+        self.ctx.lvl_inc()
+        for p in packages:
+            ns = p.stmt.search_one('namespace')
+            for e in p.owned_elements:
+                if all((hasattr(e, 'stmt'), e.stmt is not None,
+                        e.stmt.keyword in ('container', 'list'))):
+                    self.ctx.writeln('("{}", "{}"): "{}",'
+                                     .format(ns.arg, e.stmt.arg, e.fqn()))
+                    self.ctx.writeln('("{}", "{}"): "{}",'
+                                     .format(p.stmt.arg, e.stmt.arg, e.fqn()))
+
+        self.ctx.lvl_dec()
+        self.ctx.writeln('}')
         self.ctx.bline()

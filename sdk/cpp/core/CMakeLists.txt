@@ -21,6 +21,8 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE debug)
 endif()
 
+set(HOME_DIRECTORY $ENV{HOME})
+
 configure_file("${CMAKE_SOURCE_DIR}/core_info.hpp.in" "${CMAKE_SOURCE_DIR}/src/path/core_info.hpp" ESCAPE_QUOTES @ONLY)
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
@@ -51,6 +53,7 @@ set(libydk_src
     src/executor_service.cpp
     src/ietf_parser.cpp
     src/leaf_data.cpp
+    src/logging_callback.cpp
     src/netconf_client.cpp    
     src/netconf_model_provider.cpp
     src/netconf_provider.cpp
@@ -98,6 +101,8 @@ set(libydk_install_headers
     src/entity_util.hpp
     src/errors.hpp
     src/executor_service.hpp
+    src/filters.hpp
+    src/logging_callback.hpp
     src/netconf_provider.hpp
     src/network_topology.hpp
     src/netconf_service.hpp
@@ -234,7 +239,6 @@ find_library(pthread_location pthread)
 find_library(dl_location dl)
 find_package(LibXml2 REQUIRED)
 find_package(LibSSH REQUIRED)
-find_package(PythonLibs REQUIRED)
 
 # Add LibNetconf
 set(libnetconf_include_location include/libnetconf)
@@ -320,7 +324,6 @@ include_directories(
     ${libyang_headers_location}
     ${libyang_location}/headers
     ${PROJECT_SOURCE_DIR}/src
-    ${PYTHON_INCLUDE_PATH}
 )
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -338,7 +341,6 @@ target_link_libraries(ydk
     ${dl_location}
     libnetconf
     libyang
-    ${PYTHON_LIBRARIES}
 )
 
 set_property(TARGET ydk PROPERTY CXX_STANDARD 11)

@@ -176,6 +176,55 @@ TEST_CASE("bgp_read_create")
 	REQUIRE(reply);
 }
 
+TEST_CASE("read_leaves")
+{
+	ydk::path::Repository repo{TEST_HOME};
+	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+	CrudService crud{};
+
+	auto bgp_delete = make_unique<openconfig_bgp::Bgp>();
+	bool reply = crud.delete_(provider, *bgp_delete);
+	REQUIRE(reply);
+
+	auto bgp_create = make_unique<openconfig_bgp::Bgp>();
+	bgp_create->global->config->as = 65001;
+	bgp_create->global->config->router_id = "1.1.1.1";
+	reply = crud.create(provider, *bgp_create);
+	REQUIRE(reply);
+
+	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
+	bgp_filter->global->config->as.operation = YFilter::read;
+	bgp_filter->global->config->router_id.operation = YFilter::read;
+
+	auto bgp_read = crud.read(provider, *bgp_filter);
+	REQUIRE(*(bgp_read) == *(bgp_create));
+}
+
+TEST_CASE("read_leaf")
+{
+	ydk::path::Repository repo{TEST_HOME};
+	NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+	CrudService crud{};
+
+	auto bgp_delete = make_unique<openconfig_bgp::Bgp>();
+	bool reply = crud.delete_(provider, *bgp_delete);
+	REQUIRE(reply);
+
+	auto bgp_create = make_unique<openconfig_bgp::Bgp>();
+	bgp_create->global->config->as = 65001;
+	bgp_create->global->config->router_id = "1.1.1.1";
+	reply = crud.create(provider, *bgp_create);
+	REQUIRE(reply);
+
+	auto bgp_cfg = make_unique<openconfig_bgp::Bgp>();
+	bgp_cfg->global->config->as = 65001;
+
+	auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
+	bgp_filter->global->config->as.operation = YFilter::read;
+
+	auto bgp_read = crud.read(provider, *bgp_filter);
+	REQUIRE(*(bgp_read) == *(bgp_cfg));
+}
 
 TEST_CASE("bgp_read_non_top")
 {
@@ -196,6 +245,8 @@ TEST_CASE("bgp_read_non_top")
     auto q = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
     q->neighbor_address = "1.2.3.5";
     q->config->neighbor_address = "1.2.3.5";
+    // need to set parent pointer explicitly, otherwise the equal operator
+    // uses absolute path for entity without parent, and fails.
     q->parent = bgp_set->neighbors.get();
     bgp_set->neighbors->neighbor.push_back(move(q));
 	reply = crud.create(provider, *bgp_set);

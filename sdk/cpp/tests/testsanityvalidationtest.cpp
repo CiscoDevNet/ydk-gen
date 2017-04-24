@@ -269,7 +269,7 @@ TEST_CASE("validation_embedded_enum")
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
 
-    builtInT.embeded_enum = ydk::ydktest_sanity::Runner::Ytypes::BuiltInT::EmbededEnumEnum::seven;
+    builtInT.embeded_enum = ydk::ydktest_sanity::Runner::Ytypes::BuiltInT::EmbededEnum::seven;
 
     CHECK_NOTHROW(validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG));
 
@@ -289,7 +289,7 @@ TEST_CASE("validation_enum")
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
 
-    builtInT.enum_value = ydk::ydktest_sanity::YdkEnumTestEnum::none;
+    builtInT.enum_value = ydk::ydktest_sanity::YdkEnumTest::none;
 
     CHECK_NOTHROW(validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG));
 
@@ -309,7 +309,7 @@ TEST_CASE("validation_union")
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
 
-    builtInT.younion = ydk::ydktest_sanity::YdkEnumTestEnum::none;
+    builtInT.younion = ydk::ydktest_sanity::YdkEnumTest::none;
 
     CHECK_NOTHROW(validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG));
 
@@ -329,7 +329,7 @@ TEST_CASE("validation_union_enum")
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
 
-    builtInT.enum_int_value = ydk::ydktest_sanity::YdkEnumIntTestEnum::any;
+    builtInT.enum_int_value = ydk::ydktest_sanity::YdkEnumIntTest::any;
 
     CHECK_NOTHROW(validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG));
 
@@ -385,8 +385,8 @@ TEST_CASE("test_v_enum_leaflist")
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
 
-    builtInT.enum_llist.append(ydk::ydktest_sanity::YdkEnumTestEnum::local);
-    builtInT.enum_llist.append(ydk::ydktest_sanity::YdkEnumTestEnum::remote);
+    builtInT.enum_llist.append(ydk::ydktest_sanity::YdkEnumTest::local);
+    builtInT.enum_llist.append(ydk::ydktest_sanity::YdkEnumTest::remote);
 
     CHECK_NOTHROW(validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG));
 
@@ -404,8 +404,8 @@ TEST_CASE("test_v_identity_leaflist")
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
 
-    builtInT.identity_llist.append(ydk::ydktest_sanity::ChildIdentityIdentity{});
-    builtInT.identity_llist.append(ydk::ydktest_sanity::ChildChildIdentityIdentity{});
+    builtInT.identity_llist.append(ydk::ydktest_sanity::ChildIdentity{});
+    builtInT.identity_llist.append(ydk::ydktest_sanity::ChildChildIdentity{});
 
     CHECK_NOTHROW(validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG));
 
@@ -444,7 +444,7 @@ TEST_CASE("test_v_identityref")
 
     ydk::ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
 
-    auto identity = ydk::ydktest_sanity::ChildChildIdentityIdentity{};
+    auto identity = ydk::ydktest_sanity::ChildChildIdentity{};
     builtInT.identity_ref_value = identity;
 
     CHECK_NOTHROW(validation_service.validate(sp, builtInT, ydk::ValidationService::Option::EDIT_CONFIG));

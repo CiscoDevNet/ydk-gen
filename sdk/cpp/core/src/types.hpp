@@ -29,10 +29,13 @@
 #define _TYPES_HPP_
 
 #include <map>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
 #include <utility>
+
+#include "filters.hpp"
 
 namespace std
 {
@@ -56,15 +59,16 @@ typedef signed int int16;
 typedef signed int int32;
 typedef signed long long int64;
 
-enum class EditOperation
-{
-    merge,
-    create,
-    remove,
-    delete_,
-    replace,
-    not_set
-};
+// enum class YFilter
+// {
+//     merge,
+//     create,
+//     remove,
+//     delete_,
+//     replace,
+//     read,
+//     not_set
+// };
 
 typedef struct Empty {
     bool set;
@@ -75,15 +79,17 @@ class Entity;
 class LeafData
 {
   public:
-    LeafData(std::string value, EditOperation operation, bool is_set);
+    LeafData(std::string value, YFilter operation, bool is_set);
     ~LeafData();
 
     bool operator == (LeafData & other) const;
     bool operator == (const LeafData & other) const;
+    friend std::ostream& operator<<(std::ostream& stream, const LeafData& value);
+
 
   public:
     std::string value;
-    EditOperation operation;
+    YFilter operation;
     bool is_set;
 };
 
@@ -148,7 +154,7 @@ class Entity {
     Entity* parent;
     std::string yang_name;
     std::string yang_parent_name;
-    EditOperation operation;
+    YFilter operation;
 };
 
 class Bits {
@@ -285,7 +291,7 @@ class YLeaf
 
   public:
     bool is_set;
-    EditOperation operation;
+    YFilter operation;
 
   private:
     void store_value(std::string && val);
@@ -333,7 +339,7 @@ class YLeafList {
     virtual std::vector<YLeaf> getYLeafs() const;
 
   public:
-    EditOperation operation;
+    YFilter operation;
 
   private:
     std::vector<YLeaf> values;
@@ -351,7 +357,7 @@ enum class EncodingFormat {
     JSON
 };
 
-std::string to_string(EditOperation operation);
+std::string to_string(YFilter operation);
 
 enum class Protocol
 {
