@@ -70,7 +70,7 @@ class BundleDefinition(object):
         Attributes:
             name (str): bundle name.
             _version (Version): bundle version.
-            _ydk_version (Version): ydk core library version.
+            _core_version (Version): ydk core library version.
             _description (str): description for bundle package
             _long_description (str): long description for bundle package
 
@@ -81,7 +81,7 @@ class BundleDefinition(object):
     def __init__(self, data):
         self._name = data['name'].replace('-', '_')
         self._version = Version(*tuple(data['version'].split('.')))
-        self._ydk_version = Version(*tuple(data['ydk-version'].split('.')))
+        self._core_version = Version(*tuple(data['core-version'].split('.')))
         self._description = data['description'] if 'description' in data else str()
         self._long_description = data['long-description'] if 'long-description' in data else str()
 
@@ -100,9 +100,9 @@ class BundleDefinition(object):
         return self._version
 
     @property
-    def ydk_version(self):
+    def core_version(self):
         """ Return ydk version."""
-        return self._ydk_version
+        return self._core_version
 
     @property
     def str_version(self):
@@ -110,9 +110,9 @@ class BundleDefinition(object):
         return "%s.%s.%s" % self.version
 
     @property
-    def str_ydk_version(self):
+    def str_core_version(self):
         """ Return string representation of ydk version."""
-        return "%s.%s.%s" % self.ydk_version
+        return "%s.%s.%s" % self.core_version
 
     @property
     def description(self):

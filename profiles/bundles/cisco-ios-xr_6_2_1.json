@@ -1,7 +1,7 @@
 {
   "name": "cisco-ios-xr",
   "version": "6.2.1",
-  "ydk_version": "0.5.4",
+  "core_version": "0.5.4",
   "author": "Cisco",
   "copyright": "Cisco",
   "description": "YDK bundle for Cisco IOS XR models",
@@ -712,13 +712,13 @@
     {
       "name": "ietf",
       "version": "0.1.1",
-      "ydk_version": "0.5.1",
+      "core_version": "0.5.1",
       "uri": "file://profiles/bundles/ietf_0_1_1.json"
     },
     {
       "name": "openconfig",
       "version": "0.1.2",
-      "ydk_version": "0.5.4",
+      "core_version": "0.5.4",
       "uri": "file://profiles/bundles/openconfig_0_1_2.json"
     }
   ]

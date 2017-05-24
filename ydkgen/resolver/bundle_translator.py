@@ -43,8 +43,8 @@ Local_URI = namedtuple('Local_URI', ['url'])
 Remote = namedtuple('Remote', ['url', 'commitid'])
 Remote_URI = namedtuple('RemoteURI', ['url', 'commitid', 'path'])
 
-Bundle = namedtuple('Bundle', ['name', 'version', 'ydk_version', 'description', 'long_description'])
-BundleDependency = namedtuple('BundleDependency', ['name', 'version', 'ydk_version', 'uri'])
+Bundle = namedtuple('Bundle', ['name', 'version', 'core_version', 'description', 'long_description'])
+BundleDependency = namedtuple('BundleDependency', ['name', 'version', 'core_version', 'uri'])
 
 TEMPLATE = """{% set comma = joiner(",") %}
 {
@@ -60,14 +60,14 @@ TEMPLATE = """{% set comma = joiner(",") %}
     "bundle" : {
         "name" : "{{ definition.name }}",
         "version" : "{{ definition.version}}",
-        "ydk-version" : "{{ definition.ydk_version }}",
+        "core-version" : "{{ definition.core_version }}",
         "description" : "{{ definition.description }}",
         "long-description" : "{{ definition.long_description }}"{% if dependency is not none %},
         "dependencies" : [{% for d in dependency %}
             {
                 "name" : "{{ d.name }}",
                 "version" : "{{ d.version }}",
-                "ydk-version" : "{{ d.ydk_version }}",
+                "core-version" : "{{ d.core_version }}",
                 "uri" : "{{ d.uri }}"
             }{% if not loop.last %},{% endif %}{% endfor %}
         ]{% endif %}
@@ -203,9 +203,9 @@ def translate(in_file, out_file, root_dir):
     except KeyError:
         raise YdkGenException('Bundle file requires version and description.')
 
-    ydk_version = data['ydk_version'] if 'ydk_version' in data else version
+    core_version = data['core_version'] if 'core_version' in data else version
     long_description = data['long_description'] if 'long_description' in data else str()
-    definition = Bundle(load_profile_attr(in_file, 'name'), version, ydk_version, description, long_description)
+    definition = Bundle(load_profile_attr(in_file, 'name'), version, core_version, description, long_description)
     dependency = load_profile_attr(in_file, 'dependency')
 
     output = Environment().from_string(TEMPLATE).render(

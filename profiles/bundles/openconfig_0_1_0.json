@@ -2,7 +2,7 @@
    "name":"openconfig",
    "description":"YDK bundle for OpenConfig models",
    "version":"0.1.0",
-   "ydk_version":"0.5.0",
+   "core_version":"0.5.0",
    "author":"Cisco",
    "copyright":"Cisco",
    "models":{
@@ -45,7 +45,7 @@
       {
          "name":"ietf",
          "version":"0.1.0",
-         "ydk_version":"0.5.0",
+         "core_version":"0.5.0",
          "uri":"file://profiles/bundles/ietf_0_1_0.json"
       }
    ]

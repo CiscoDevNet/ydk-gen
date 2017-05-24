@@ -34,7 +34,7 @@ NMSP_PKG_DEPENDENCIES = ["$DEPENDENCY$"]
 NAME = 'ydk'
 VERSION = '0.5.4'
 INSTALL_REQUIREMENTS = ['enum34==1.1.3',
-                        'lxml==3.4.4',
+                        'lxml>=3.4.4',
                         'ncclient>=0.4.7',
                         'pybind11==2.0.1']
 
