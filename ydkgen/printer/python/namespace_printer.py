@@ -57,8 +57,15 @@ class NamespacePrinter(object):
         for package in packages:
             ns = package.stmt.search_one('namespace')
             for ele in package.owned_elements:
-                if hasattr(ele, 'stmt') and ele.stmt is not None and (ele.stmt.keyword == 'container' or ele.stmt.keyword == 'list'):
-                    self.namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
+                if hasattr(ele, 'stmt') and ele.stmt is not None:
+                    if (ele.stmt.keyword == 'container' or ele.stmt.keyword == 'list'):
+                        self.namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
+                    elif ele.stmt.keyword == 'rpc':
+                        for rpc_child in ele.owned_elements:
+                            if isinstance(rpc_child, Class) and rpc_child.stmt.keyword == 'output':
+                                for child in rpc_child.owned_elements:
+                                    if isinstance(child, Class):
+                                        self.namespace_map[(ns.arg, child.stmt.arg)] = (package.get_py_mod_name(), ele.name)
 
     def _print_namespaces(self, ns):
         ns = sorted(ns)

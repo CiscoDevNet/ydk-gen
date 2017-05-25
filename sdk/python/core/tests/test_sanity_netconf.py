@@ -70,27 +70,27 @@ class SanityNetconf(unittest.TestCase):
         get_filter = ysanity.Runner()
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         result = self.netconf_service.get_config(self.ncc, Datastore.candidate, get_filter)
         self.assertEqual(is_equal(runner, result), True)
 
         op = self.netconf_service.commit(self.ncc)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         result = self.netconf_service.get(self.ncc, get_filter)
         self.assertEqual(is_equal(runner, result), True)
 
     def test_lock_unlock(self):
         op = self.netconf_service.lock(self.ncc, Datastore.running)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         op = self.netconf_service.unlock(self.ncc, Datastore.running)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
     def test_lock_unlock_fail(self):
         op = self.netconf_service.lock(self.ncc, Datastore.candidate)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         try:
             op = self.netconf_service.unlock(self.ncc, Datastore.running)
@@ -99,13 +99,13 @@ class SanityNetconf(unittest.TestCase):
 
     def test_validate(self):
         op = self.netconf_service.validate(self.ncc, source=Datastore.candidate)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         runner = ysanity.Runner()
         runner.one.number = 1
         runner.one.name = 'runner:one:name'
         op = self.netconf_service.validate(self.ncc, source=runner)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
     def test_validate_fail(self):
         # should have been handled by YDK local validation
@@ -118,16 +118,16 @@ class SanityNetconf(unittest.TestCase):
         get_filter = ysanity.Runner()
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         op = self.netconf_service.discard_changes(self.ncc)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         op = self.netconf_service.commit(self.ncc)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         result = self.netconf_service.get(self.ncc, get_filter)
         self.assertEqual(is_equal(runner, result), True)
@@ -139,20 +139,20 @@ class SanityNetconf(unittest.TestCase):
         get_filter = ysanity.Runner()
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         op = self.netconf_service.commit(self.ncc, confirmed=True, confirm_timeout=120)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         result = self.netconf_service.get(self.ncc, get_filter)
         self.assertEqual(is_equal(runner, result), True)
 
         op = self.netconf_service.cancel_commit(self.ncc)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
     def test_copy_config(self):
         op = self.netconf_service.copy_config(self.ncc, Datastore.candidate, Datastore.running)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         runner = ysanity.Runner()
         runner.two.number = 2
@@ -160,10 +160,10 @@ class SanityNetconf(unittest.TestCase):
         get_filter = ysanity.Runner()
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         op = self.netconf_service.copy_config(self.ncc, Datastore.running, Datastore.candidate)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         result = self.netconf_service.get_config(self.ncc, Datastore.running, get_filter)
         self.assertEqual(is_equal(result, runner), True)
@@ -171,7 +171,7 @@ class SanityNetconf(unittest.TestCase):
         runner.two.name += 'modified'
 
         op = self.netconf_service.copy_config(self.ncc, Datastore.running, runner)
-        self.assertIn('ok', op)
+        self.assertEqual(None, op)
 
         result = self.netconf_service.get_config(self.ncc, Datastore.running, get_filter)
         self.assertEqual(is_equal(result, runner), True)
@@ -180,7 +180,7 @@ class SanityNetconf(unittest.TestCase):
         pass
         # startup and candidate cannot be both enabled in ConfD
         # op = self.netconf_service.delete_config(self.ncc, Datastore.startup)
-        # self.assertIn('ok', op)
+        # self.assertEqual(None, op)
 
     def test_delete_config_fail(self):
         self.assertRaises(YPYServiceError,

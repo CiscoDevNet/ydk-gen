@@ -4,6 +4,7 @@
 .project
 .externalToolBuilders/
 .temp
+.idea*
 *.pyc
 *~
 *.swp

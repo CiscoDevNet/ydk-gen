@@ -28,7 +28,6 @@ from ydk.services.meta_service import MetaService
 from ydk.errors import YPYServiceProviderError, YPYErrorCode
 
 import logging
-import re
 import importlib
 from functools import reduce
 
@@ -39,6 +38,10 @@ class XmlDecoder(object):
         payload_tree = etree.fromstring(payload.encode('utf-8'))
         top_entity = self._get_top_entity(payload_tree)
         rt = payload_tree.getroottree().getroot()
+
+        if self._is_rpc_reply(top_entity):
+            top_entity = self._get_top_entity_for_rpc_reply(top_entity, rt)
+
         curr_rt = get_root(rt, top_entity, _yang_ns._namespaces)
         try:
             XmlDecoder._bind_to_object_helper(curr_rt, top_entity)
@@ -102,7 +105,7 @@ class XmlDecoder(object):
                 if instance is None:
                     instance = []
                     entity.__dict__[member] = instance
-                module = importlib.import_module(member.pmodule_name)
+                importlib.import_module(member.pmodule_name)
                 for rtchild in rt:
                     # get nested class
                     child = get_class_instance(member.pmodule_name, member.clazz_name)
@@ -277,6 +280,18 @@ class XmlDecoder(object):
         if py_mod_name is not None:
             instance = get_class_instance(py_mod_name, identity_clazz_name)
             return instance
+
+    def _is_rpc_reply(self, top_entity):
+        return hasattr(top_entity, 'is_rpc') and top_entity.is_rpc and hasattr(top_entity, 'output')
+
+    def _get_top_entity_for_rpc_reply(self, top_entity, rt):
+        prefix = top_entity._meta_info().module_name
+        namespace = _yang_ns._namespaces[prefix]
+        for child in top_entity.output._meta_info().meta_info_class_members:
+            if rt.tag == '{{{}}}{}'.format(namespace, child.name) and hasattr(top_entity.output, child.presentation_name):
+                top_entity = getattr(top_entity.output, child.presentation_name)
+                break
+        return top_entity
 
 
 def get_class(py_mod_name, clazz_name):

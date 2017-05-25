@@ -334,11 +334,7 @@ class NetconfService(Service):
         rpc.input.source = _get_rpc_datastore_object(source, rpc.input.source)
         rpc.input.with_defaults = with_defaults_option
 
-        payload = self.executor.execute_rpc(provider, rpc)
-        data = payload_convert(payload)
-        if len(data) == 0:
-            return None
-        return provider.decode(data, None)
+        return self.executor.execute_rpc(provider, rpc)
 
     def get(self, provider, get_filter, with_defaults_option=None):
         """Execute a get operation to retrieve running configuration and device
@@ -374,11 +370,7 @@ class NetconfService(Service):
         rpc.input.filter = get_filter
         rpc.input.with_defaults = with_defaults_option
 
-        payload = self.executor.execute_rpc(provider, rpc)
-        data = payload_convert(payload)
-        if len(data) == 0:
-            return None
-        return provider.decode(data, None)
+        return self.executor.execute_rpc(provider, rpc)
 
     def kill_session(self, provider, session_id):
         """Execute a kill-session operation to force the termination of a
@@ -522,16 +514,6 @@ def _get_rpc_datastore_object(datastore, rpc_datastore_type):
         rpc_datastore_type.config = datastore
         return rpc_datastore_type
     raise YPYModelError('Invalid datastore specified')
-
-
-def payload_convert(payload):
-    from lxml import etree
-
-    rt = etree.fromstring(payload.encode('utf-8'))
-    chchs = rt.getchildren()[0].getchildren()
-    if len(chchs) == 0:
-        return ''
-    return etree.tostring(chchs[0], pretty_print=True, encoding='utf-8').decode('utf-8')
 
 
 def _validate_datastore_options(datastore, option):

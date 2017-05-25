@@ -126,6 +126,19 @@ class _ClientSPPlugin(_SPPlugin):
     def decode(self, payload, read_filter):
         if read_filter is None:
             return XmlDecoder().decode(payload)
+        if hasattr(read_filter, 'is_rpc') and read_filter.is_rpc:
+            if 'ok' in payload:
+                return None
+            r = etree.fromstring(payload)
+            ch = r.getchildren()[0]
+            # TODO HACK
+            if ch.tag == '{urn:ietf:params:xml:ns:netconf:base:1.0}data':
+                if len (ch.getchildren()) > 0:
+                    ch = ch.getchildren()[0]
+                else:
+                    return None
+            return XmlDecoder().decode(etree.tostring(ch))
+
         # In order to figure out which fields are the
         # ones we are interested find the field list
         entity = self._create_top_level_entity_from_read_filter(read_filter)
