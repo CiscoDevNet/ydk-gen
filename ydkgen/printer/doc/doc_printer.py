@@ -94,11 +94,13 @@ class DocPrinter(object):
         self._print_class_hierarchy(clazz)
         if clazz.stmt.search_one('presence') is not None:
             self._append('This class is a :ref:`presence class<presence-class>`\n')
-        if clazz.stmt.arg != 'rpc':
+        if clazz.stmt.keyword != 'rpc':
             if is_config_stmt(clazz.stmt):
                 self._append('This class represents configuration data.\n')
             else:
                 self._append('This class represents state data.\n')
+        else:
+            self._append('This class defines parameters to the RPC operation\n')
         self._print_docstring(clazz, get_class_docstring(
             clazz, self.lang, identity_subclasses=self.identity_subclasses))
         self.ctx.lvl_dec()
