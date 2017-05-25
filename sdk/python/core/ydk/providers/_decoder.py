@@ -22,7 +22,7 @@ from lxml import etree
 from ydk._core._dm_meta_info import ATTRIBUTE, REFERENCE_CLASS, REFERENCE_LEAFLIST, \
             REFERENCE_LIST, REFERENCE_IDENTITY_CLASS, REFERENCE_ENUM_CLASS, \
             REFERENCE_BITS, REFERENCE_UNION
-from ydk.types import Empty, Decimal64, YLeafList, YListItem
+from ydk.types import Empty, Decimal64, YLeafList
 from ._importer import _yang_ns
 from ydk.services.meta_service import MetaService
 from ydk.errors import YPYServiceProviderError, YPYErrorCode

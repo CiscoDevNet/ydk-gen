@@ -660,16 +660,16 @@ class SanityNetconf(unittest.TestCase):
             get_filter = ysanity.Runner()
 
             op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-            self.assertIn('ok', op)
+            self.assertEqual(None, op)
 
             op = self.netconf_service.discard_changes(self.ncc)
-            self.assertIn('ok', op)
+            self.assertEqual(None, op)
 
             op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
-            self.assertIn('ok', op)
+            self.assertEqual(None, op)
 
             op = self.netconf_service.commit(self.ncc)
-            self.assertIn('ok', op)
+            self.assertEqual(None, op)
 
             result = self.netconf_service.get(self.ncc, get_filter, with_defaults_option=1)
             self.assertEqual(is_equal(runner, result), True)
