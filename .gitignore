@@ -41,6 +41,6 @@ sdk/cpp/libydk_client.a
 sdk/cpp/netconf_client.o
 sdk/cpp/tests/ydk_test
 sdk/cpp/ydk_client.so
-
+gen-api/
 *.sublime-project
 *.sublime-workspace
