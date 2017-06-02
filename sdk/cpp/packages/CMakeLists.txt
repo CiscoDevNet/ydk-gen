@@ -2,6 +2,100 @@ cmake_minimum_required(VERSION 2.8.9)
 cmake_policy(SET CMP0048 NEW)
 project(ydk_@BRIEF_NAME@ VERSION @VERSION@ LANGUAGES C CXX)
 
+# CPack Dynamic Settings
+set (CPACK_PACKAGE_NAME "libydk")
+set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set (CPACK_PACKAGE_RELEASE "1")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "YDK Core Library")
+# set (CPACK_PACKAGE_DESCRIPTION_SUMMARY ${YDK_DESCRIPTION})
+
+# CPack Static Settings
+set (CPACK_PACKAGE_DESCRIPTION "An SDK that provides API's that are modeled in YANG.
+The main goal of YDK is to reduce the learning curve of YANG data
+models by expressing the model semantics in an API and abstracting
+protocol/encoding details. YDK is composed of a core package that
+defines services and providers, plus one or more module bundles that
+are based on YANG models. Each module bundle is generated using a
+bundle profile and the ydk-gen tool.")
+
+set (CPACK_PACKAGE_CONTACT "ydk-admin@cisco.com")
+set (CPACK_PACKAGE_VENDOR "Cisco")
+set (CPACK_PACKAGE_INSTALL_DIRECTORY "/usr/local")
+
+# MAC OS -- not working
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    message("CMake System: MacOS")
+    # set(CPACK_GENERATOR "productbuild")
+    # set(CPACK_COMMAND_PKGBUILD "/usr/bin/pkgbuild")
+
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    find_program(LSB_RELEASE lsb_release)
+    execute_process(COMMAND ${LSB_RELEASE} -is
+        OUTPUT_VARIABLE LSB_RELEASE_ID_SHORT
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    
+    set (CMAKE_BUILD_TYPE "Release")
+    set (CMAKE_C_COMPILER "/usr/bin/clang")
+    set (CMAKE_CXX_COMPILER "/usr/bin/clang++")
+
+    # Linux Debian
+    if (${LSB_RELEASE_ID_SHORT} MATCHES "Ubuntu")
+        message("CMake System: Ubuntu")
+        set (CPACK_GENERATOR "DEB")
+
+        set (CPACK_DEBIAN_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
+        set (CPACK_DEBIAN_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION})
+        set (CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+        set (CPACK_DEBIAN_PACKAGE_DEPENDS 
+            "libcurl4-openssl-dev, 
+            libpcre3-dev, 
+            libssh-dev, 
+            libxml2-dev, 
+            libxslt1-dev, 
+            libtool-bin, 
+            cmake (>=3), 
+            git, 
+            pkg-config")
+        set (CPACK_DEBIAN_PACKAGE_MAINTAINER ${CPACK_PACKAGE_CONTACT})
+        set (CPACK_DEBIAN_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION_SUMMARY})
+        set (CPACK_DEBIAN_PACKAGE_SECTION "devel")
+        set (CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+        set (CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/CiscoDevNet/ydk-cpp")
+
+        # <foo>_<VersionNumber>-<DebianRevisionNumber>_<DebianArchitecture>.deb
+        # libydk_0.6.0-0.1.alpha_amd64.deb   // Debian
+        set (CPACK_PACKAGE_FILE_NAME 
+            "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
+
+    # Linux Fedora
+    elseif(${LSB_RELEASE_ID_SHORT} MATCHES "CentOS")
+        message("CMake System: CentOS")
+
+        set (CPACK_GENERATOR "RPM")
+
+        set (CPACK_RPM_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
+        set (CPACK_RPM_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION})
+        set (CPACK_RPM_PACKAGE_RELEASE ${CPACK_PACKAGE_RELEASE})
+        set (CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
+        set (CPACK_RPM_PACKAGE_SUMMARY ${CPACK_PACKAGE_DESCRIPTION_SUMMARY})
+        set (CPACK_RPM_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
+
+        set (CPACK_RPM_PACKAGE_LICENSE "Apache 2.0")
+        set (CPACK_RPM_PACKAGE_GROUP "Development/Libraries")
+        set (CPACK_RPM_PACKAGE_VENDOR ${CPACK_PACKAGE_VENDOR})
+        set (CPACK_RPM_PACKAGE_URL "https://github.com/CiscoDevNet/ydk-cpp")
+        set (CPACK_RPM_PACKAGE_REQUIRES "epel-release, python-pip, python-devel, libxml2-devel, libxslt-devel, libssh-devel, libcurl-devel, libtool, clang, cmake3, pcre-devel")
+
+        # <name>-<version>-<release>.<architecture>.(src).rpm
+        # libydk-0.6.0-0.1.alpha.x86_64.rpm  // RPM
+        set (CPACK_PACKAGE_FILE_NAME 
+            "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CPACK_RPM_PACKAGE_ARCHITECTURE}")
+    endif()
+endif()
+
+include(CPack)
+
 # include custom Modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 
