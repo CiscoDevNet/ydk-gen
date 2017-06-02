@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.9)
 cmake_policy(SET CMP0048 NEW)
-project(ydk VERSION 0.5.4 LANGUAGES C CXX)
+project(ydk VERSION 0.5.5 LANGUAGES C CXX)
 
 
 set(YDK_DESCRIPTION "YANG Development Kit Library. The library for  YDK API.")
