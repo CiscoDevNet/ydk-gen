@@ -20,6 +20,7 @@
 """
 from .executor_service import ExecutorService
 from .service import Service
+from .meta_service import MetaService
 from enum import Enum
 from ydk.errors import YPYModelError, YPYServiceError
 from . import ietf_netconf
@@ -333,8 +334,16 @@ class NetconfService(Service):
         _validate_datastore_options(source, 'get-config:source')
         rpc.input.source = _get_rpc_datastore_object(source, rpc.input.source)
         rpc.input.with_defaults = with_defaults_option
+        rpc = MetaService.normalize_meta(provider._get_capabilities(), rpc)
 
-        return self.executor.execute_rpc(provider, rpc)
+        result = provider.execute(
+                                    provider.sp_instance.encode_rpc(rpc),
+                                    ''
+                                    )
+        result = payload_convert(result)
+        if len(result) == 0:
+            return None
+        return provider.decode(result, None)
 
     def get(self, provider, get_filter, with_defaults_option=None):
         """Execute a get operation to retrieve running configuration and device
@@ -369,8 +378,16 @@ class NetconfService(Service):
         rpc = ietf_netconf.GetRpc()
         rpc.input.filter = get_filter
         rpc.input.with_defaults = with_defaults_option
+        rpc = MetaService.normalize_meta(provider._get_capabilities(), rpc)
 
-        return self.executor.execute_rpc(provider, rpc)
+        result = provider.execute(
+                                    provider.sp_instance.encode_rpc(rpc),
+                                    ''
+                                    )
+        result = payload_convert(result)
+        if len(result) == 0:
+            return None
+        return provider.decode(result, None)
 
     def kill_session(self, provider, session_id):
         """Execute a kill-session operation to force the termination of a
@@ -546,3 +563,13 @@ def _get_datastore_errmsg(option, datastore):
     if ':' in option:
         option = option[:option.find(':')]
     return ("%s datastore is not supported by Netconf %s operation" % (datastore, option))
+
+
+def payload_convert(payload):
+    from lxml import etree
+
+    rt = etree.fromstring(payload.encode('utf-8'))
+    chchs = rt.getchildren()[0].getchildren()
+    if len(chchs) == 0:
+        return ''
+    return etree.tostring(chchs[0], pretty_print=True, encoding='utf-8').decode('utf-8')
