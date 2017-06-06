@@ -1,10 +1,10 @@
-### 2017-05-06 version 0.5.5
+### 2017-06-06 version 0.5.5
 
 #### Python
  * Fixed bundle `setup.py` to match ydk `core` dependency in bundle profile ([#433](https://github.com/CiscoDevNet/ydk-gen/issues/443))
- * Updated `lxml` dependency for ydk `core` package ([427](https://github.com/CiscoDevNet/ydk-gen/issues/427))
- * Improved reading of data using `ExecutorService` ([332](https://github.com/CiscoDevNet/ydk-gen/issues/332)) and `CRUDService` ([457](https://github.com/CiscoDevNet/ydk-gen/issues/457))
- * Fixed encoding key elements of yang `list`s ([363](https://github.com/CiscoDevNet/ydk-gen/issues/363))
+ * Updated `lxml` dependency for ydk `core` package ([#427](https://github.com/CiscoDevNet/ydk-gen/issues/427))
+ * Improved reading of data using `ExecutorService` ([#332](https://github.com/CiscoDevNet/ydk-gen/issues/332)) and `CRUDService` ([#457](https://github.com/CiscoDevNet/ydk-gen/issues/457))
+ * Fixed encoding key elements of yang `list`s ([#363](https://github.com/CiscoDevNet/ydk-gen/issues/363))
 
 #### C++
  * Added equality operator for model API objects ([#432](https://github.com/CiscoDevNet/ydk-gen/pull/432))

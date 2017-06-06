@@ -1,3 +1,14 @@
+### 2017-06-06 version 0.5.5
+
+* Added equality operator for model API objects ([#432](https://github.com/CiscoDevNet/ydk-gen/pull/432))
+* Improved handling of presence `container`s ([#437](https://github.com/CiscoDevNet/ydk-gen/pull/437))
+* Added [`cisco-ios-xe` bundle](https://github.com/CiscoDevNet/ydk-gen/blob/master/profiles/bundles/cisco-ios-xe_16_5_1.json) to support Cisco IOS XE 16.5.1 release
+
+#### Documentation
+* Improved getting-started guides for YDK-Py and YDK-Cpp  ([#418](https://github.com/CiscoDevNet/ydk-gen/pull/418), [#419](https://github.com/CiscoDevNet/ydk-gen/pull/419))
+* Made table of contents for bundle documentation be sorted alphabetically ([#446](https://github.com/CiscoDevNet/ydk-gen/pull/418), [#419](https://github.com/CiscoDevNet/ydk-gen/pull/446))
+* Improved documentation of `rpc` classes ([#435](https://github.com/CiscoDevNet/ydk-gen/issues/435))
+
 ### 2017-03-17 version 0.5.4
 
  * Changed dependent libraries ([#382](https://github.com/CiscoDevNet/ydk-gen/pull/382))
