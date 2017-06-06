@@ -12,7 +12,7 @@
 
 #### ydk-gen
  * Added [`cisco-ios-xe` bundle](https://github.com/CiscoDevNet/ydk-gen/blob/master/profiles/bundles/cisco-ios-xe_16_5_1.json) to support Cisco IOS XE 16.5.1 release
- * Improved exception handling in the ydk-gen `generate.py` script ([#440](https://github.com/CiscoDevNet/ydk-gen/pull/440)
+ * Improved exception handling in the ydk-gen `generate.py` script ([#440](https://github.com/CiscoDevNet/ydk-gen/pull/440))
 
 #### Documentation
  * Improved getting-started guides for YDK-Py and YDK-Cpp  ([#418](https://github.com/CiscoDevNet/ydk-gen/pull/418), [#419](https://github.com/CiscoDevNet/ydk-gen/pull/419))
