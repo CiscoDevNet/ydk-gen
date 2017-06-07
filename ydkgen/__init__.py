@@ -388,6 +388,9 @@ def _modify_cpp_cmake(gen_api_root, bundle_name, version, core_version, source_f
             elif "@YANG_FILES@" in line:
                 line = line.replace("@YANG_FILES@", model_file_names)
             print(line, end='')
+        elif "@BRIEF_NAME_WITH_DASHES@" in line:
+            line = line.replace("@BRIEF_NAME_WITH_DASHES@", bundle_name.replace('_', '-'))
+            print(line, end='')
         else:
             print(line, end='')
 

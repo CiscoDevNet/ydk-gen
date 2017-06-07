@@ -75,6 +75,7 @@ class MultiFileBuilder(object):
         self._populate_class_list(package)
         self._populate_multi_file_data(package)
         self._populate_imports_for_fragmented_files()
+
 #         for x in self._multi_file_data.multi_file_list:
 #             print (x.file_name, x.imports)
 #             for y in x.class_list:
@@ -96,7 +97,6 @@ class MultiFileBuilder(object):
                 self.is_all_identities = False
             self.class_list.append(clazz)
             self._populate_class_list(clazz)
-            
     def _populate_multi_file_data(self, package):
         file_index = -1
         self._create_and_append_multi_file(MultiFileHeader, package, file_index, False, self.class_list)
@@ -125,7 +125,7 @@ class MultiFileBuilder(object):
         multi_file = class_type(package, file_index, fragmented)
         self._populate_multi_file(multi_file, class_list)
         self._multi_file_data.append(multi_file)
-            
+
     def _populate_multi_file(self, multi_file, class_list):
         index = 0
         if isinstance(multi_file, MultiFileHeader):

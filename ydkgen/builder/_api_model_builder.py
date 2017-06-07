@@ -115,7 +115,7 @@ class ApiModelBuilder(object):
                     # case where the type is a leafref pointing to a leaf with an
                     # embedded enum definition
                     if (hasattr(enum_type.parent, 'i_property') and
-                        isinstance(enum_type.parent.i_property.property_type, Enum)):
+                            isinstance(enum_type.parent.i_property.property_type, Enum)):
                         element.property_type = enum_type.parent.i_property.property_type
                     else:
                         raise YdkGenException(
@@ -234,7 +234,6 @@ class ApiModelBuilder(object):
                 # any of them need to be handled differently
                 _add_union_type(union_type, parent_element)
 
-
     def _create_expanded_api_model(self, stmt, parent_element, deviation_packages):
         """
             Converts the stmt to an Element in the api_model according
@@ -283,6 +282,9 @@ class ApiModelBuilder(object):
                 clazz = Class(self.iskeyword)
                 stmt.i_class = clazz
                 clazz.stmt = stmt
+                for e in parent_element.owned_elements:
+                    if e.name == clazz.name:
+                        clazz.name = clazz.name + '_'
 
                 parent_element.owned_elements.append(clazz)
                 clazz.owner = parent_element
@@ -298,6 +300,12 @@ class ApiModelBuilder(object):
                     stmt.i_property = prop
                     prop.stmt = stmt
                     prop.property_type = clazz
+                    for e in parent_element.owned_elements:
+                        if isinstance(e, Property):
+                            s = snake_case(e.stmt.arg)
+                            if snake_case(prop.stmt.arg) == s:
+                                prop.name = prop.name + '_'
+
                     parent_element.owned_elements.append(prop)
                     prop.owner = parent_element
 
@@ -339,7 +347,6 @@ class ApiModelBuilder(object):
                     children.append(child)
 
         return children
-
 
     def _sanitize_namespace(self, stmt):
         """
@@ -457,7 +464,6 @@ class GroupingClassApiModelBuilder(ApiModelBuilder):
         if hasattr(element, 'owned_elements'):
             for owned_element in element.owned_elements:
                 self._resolve_grouping_class_cross_references(owned_element)
-
 
     def _create_grouping_class_api_model(self, stmt, parent_element):
         """
@@ -607,3 +613,9 @@ def name_matches_ancestor(name, parent_element):
         return False
 
     return name_matches_ancestor(name, parent_element.owner)
+
+
+def snake_case(input_text):
+    s = input_text.replace('-', '_')
+    s = s.replace('.', '_')
+    return s.lower()

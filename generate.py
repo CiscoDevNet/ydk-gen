@@ -283,7 +283,7 @@ if __name__ == '__main__':
         help="Generate C++ SDK")
 
     parser.add_argument(
-        "--verbose",
+        "-v", "--verbose",
         action="store_true",
         default=False,
         help="Verbose mode")
