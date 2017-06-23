@@ -15,11 +15,11 @@ uses ncclient (a Netconf client library) to provide CRUD services.
 	
 	Initialization parameter of NetconfServiceProvider
 	
-	:param address: The address of the netconf server
+	:param address: The address of the netconf server(ignored if protocol is onbox)
 	:param port: The port to use default is 830
 	:param username: The name of the user
 	:param password: The password to use
-	:param protocol: One of either ssh or tcp
+	:param protocol: One of either ssh or tcp or onbox(use pipe to communicate with netconf agent)
 	:timeout: Default to 45
 	
 	.. py:method:: close()
