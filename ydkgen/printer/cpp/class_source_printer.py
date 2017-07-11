@@ -32,9 +32,10 @@ from .class_get_entity_path_printer import GetEntityPathPrinter, GetSegmentPathP
 
 
 class ClassSourcePrinter(object):
-    def __init__(self, ctx, bundle_name):
+    def __init__(self, ctx, bundle_name, module_namespace_lookup):
         self.ctx = ctx
         self.bundle_name = bundle_name
+        self.module_namespace_lookup = module_namespace_lookup
 
     def print_output(self, clazz):
         leafs = []
@@ -45,7 +46,7 @@ class ClassSourcePrinter(object):
         self._print_class_method_definitions(clazz, leafs, children)
 
     def _print_class_constructor(self, clazz, leafs, children):
-        ClassConstructorPrinter(self.ctx).print_constructor(clazz, leafs, children)
+        ClassConstructorPrinter(self.ctx, self.module_namespace_lookup).print_constructor(clazz, leafs, children)
 
     def _print_class_destructor(self, clazz):
         self.ctx.writeln(clazz.qualified_cpp_name() + '::~' + clazz.name + '()')

@@ -25,6 +25,7 @@ import shutil
 
 from ydkgen.printer import printer_context
 from ydkgen.api_model import Class
+from ydkgen.common import get_module_name
 
 
 class _EmitArgs:
@@ -58,6 +59,7 @@ class LanguageBindingsPrinter(object):
         self.packages = sorted(self.packages, key=lambda package: package.name)
         self.packages = [p for p in self.packages if p.is_deviation is not True]
         self.identity_subclasses = self._get_identity_subclasses_map()
+        self.module_namespace_lookup  = self._get_module_namespace_lookup(self.packages)
         self.initialize_print_environment()
         return self.print_files()
 
@@ -138,3 +140,15 @@ class LanguageBindingsPrinter(object):
                 else:
                     identity_subclasses.extend(self._get_identity_subclasses_for_package(subelement))
         return identity_subclasses
+
+    def _get_module_namespace_lookup(self, packages):
+        module_namespace_lookup = {}
+        for p in packages:
+            module_name = get_module_name(p.stmt)
+            if module_name is None:
+                continue
+            ns = p.stmt.search_one('namespace')
+            assert ns is not None, '%s has no namespace!!' % module_name
+            namespace = ns.arg
+            module_namespace_lookup[module_name] = namespace
+        return module_namespace_lookup

@@ -21,16 +21,17 @@ entity_lookup_printer.py
 
 """
 from ydkgen.api_model import Class
-from ydkgen.common import snake_case, get_include_guard_name
+from ydkgen.common import snake_case, get_include_guard_name, get_module_name
 from ydkgen.printer.file_printer import FilePrinter
 
 
 class EntityLookUpPrinter(FilePrinter):
-    def __init__(self, ctx):
+    def __init__(self, ctx, module_namespace_lookup):
         super(EntityLookUpPrinter, self).__init__(ctx)
         self.headers = None
         self.entity_lookup = None
         self.capability_lookup = None
+        self.module_namespace_lookup = module_namespace_lookup
 
     def print_header(self, bundle_name):
         self.bundle_name = bundle_name
@@ -135,9 +136,9 @@ class EntityLookUpPrinter(FilePrinter):
         self.ctx.bline()
 
     def _print_namespace_identity_lookup_statement(self, identity):
-        namespace = identity.module.search_one('namespace')
-        assert namespace is not None
-        self.ctx.writeln('{ {"%s", "%s"},  "%s"},' % (identity.stmt.arg, namespace.arg, identity.module.arg))
+        module_name = get_module_name(identity.stmt)
+        namespace = self.module_namespace_lookup[module_name]
+        self.ctx.writeln('{ {"%s", "%s"},  "%s"},' % (identity.stmt.arg, namespace, module_name))
 
     def _get_identities(self, element):
         identities = set()

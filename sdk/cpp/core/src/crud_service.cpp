@@ -144,6 +144,7 @@ static string get_config_data_payload(Entity & entity, path::ServiceProvider & p
     while(dn!= nullptr && dn->parent()!=nullptr)
         dn = dn->parent();
     path::Codec codec{};
+    YLOG_DEBUG("Encoding the subtree filter request using path API DataNode");
     string payload = codec.encode(*dn, provider.get_encoding(), false);
     return payload;
 }
@@ -151,7 +152,7 @@ static string get_config_data_payload(Entity & entity, path::ServiceProvider & p
 static string get_xml_subtree_filter_payload(Entity & entity, path::ServiceProvider & provider)
 {
     XmlSubtreeCodec xml_subtree_codec{};
-    //auto top = get_top_entity_from_filter(entity);
+    YLOG_DEBUG("Encoding the subtree filter request using XML subtree codec");
     return xml_subtree_codec.encode(entity, provider.get_root_schema());
 }
 }

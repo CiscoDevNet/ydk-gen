@@ -219,6 +219,8 @@ def get_module_name(stmt):
         return stmt.arg
 
     module_stmt = stmt.i_module
+    if module_stmt is None:
+        return None
     if module_stmt.i_including_modulename is not None:
         return module_stmt.i_including_modulename
     else:

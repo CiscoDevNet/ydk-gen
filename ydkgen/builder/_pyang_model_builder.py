@@ -216,12 +216,11 @@ class PyangModelBuilder(object):
                 raise YdkGenException(err_msg)
 
             match = regex_expression.search(filename)
-            self.ctx.yin_module_map = {}
             if match is not None:
                 (name, _dummy, rev, _) = match.groups()
                 name = os.path.basename(name)
                 logger.debug(
-                    'Parsing file %s format %s name %s revision %s', filename, format, name, rev)
+                    'Parsing file %s. Module name: %s. Revision: %s', filename, name, rev)
                 module = self.ctx.add_module(filename, text, format, name, rev,
                                         expect_failure_error=False)
             else:

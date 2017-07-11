@@ -21,11 +21,13 @@ source_printer.py
 
 """
 from ydkgen.api_model import Bits, Class, DataType, Enum
+from ydkgen.common import get_module_name
 
 
 class ClassConstructorPrinter(object):
-    def __init__(self, ctx):
+    def __init__(self, ctx, module_namespace_lookup):
         self.ctx = ctx
+        self.module_namespace_lookup = module_namespace_lookup
 
     def print_constructor(self, clazz, leafs, children):
         self._print_class_constructor_header(clazz, leafs, children)
@@ -36,9 +38,9 @@ class ClassConstructorPrinter(object):
         self.ctx.writeln(clazz.qualified_cpp_name() + '::' + clazz.name + '()')
         self.ctx.lvl_inc()
         if clazz.is_identity():
-            ns = clazz.module.search_one('namespace')
-            assert ns is not None
-            self.ctx.writeln(' : Identity("%s", "%s", "%s:%s")' % (ns.arg, clazz.module.arg, clazz.module.arg, clazz.stmt.arg))
+            module_name = get_module_name(clazz.stmt)
+            namespace = self.module_namespace_lookup[module_name]
+            self.ctx.writeln(' : Identity("%s", "%s", "%s:%s")' % (namespace, module_name, module_name, clazz.stmt.arg))
         else:
             self._print_class_inits(clazz, leafs, children)
         self.ctx.lvl_dec()

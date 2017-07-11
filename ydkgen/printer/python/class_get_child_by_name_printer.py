@@ -33,8 +33,9 @@ class ClassGetChildByNamePrinter(object):
         leafs = []
         for prop in clazz.properties():
             ptype = prop.property_type
-            if ptype is not None and not isinstance(ptype, Class):
-                leafs.append(prop)
+            if ptype is not None:
+                if (isinstance(ptype, Class) and ptype.is_identity()) or not isinstance(ptype, Class):
+                    leafs.append(prop)
         self._print_has_leaf_or_child_of_name(clazz, children, leafs)
 
     def _print_has_leaf_or_child_of_name(self, clazz, children, leafs):

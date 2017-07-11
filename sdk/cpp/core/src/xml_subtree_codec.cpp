@@ -235,6 +235,7 @@ static void check_and_set_leaf(Entity & entity, Entity * parent, xmlNodePtr xml_
     string current_node_name{to_string(xml_node->name)};
     if(xml_node->children == NULL)
     {
+        YLOG_DEBUG("XML: Creating leaf '{}' with no value", current_node_name);
         entity.set_filter(current_node_name, YFilter::read);
     }
     else
@@ -259,6 +260,7 @@ static string resolve_leaf_value_namespace(const string & content, const string 
             p = p->parent;
         }
         auto m = p->get_namespace_identity_lookup();
+        YLOG_DEBUG("XML: Got namespace identity lookup with '{}' elements", m.size());
         if(m.find({c,name_space}) != m.end())
         {
             string module_name = m[{c, name_space}];
@@ -286,6 +288,7 @@ static void check_and_set_content(Entity & entity, const string & leaf_name, xml
         }
         string c = resolve_leaf_value_namespace(to_string(content), name_space, name_space_prefix, &entity);
 
+        YLOG_DEBUG("XML: Creating leaf '{}' with value '{}'", leaf_name, c);
         entity.set_value(leaf_name, c, name_space, name_space_prefix);
     }
 }
@@ -303,6 +306,7 @@ static void check_payload_to_raise_exception(Entity & entity, const xmlChar * na
 
 static void check_and_set_node(Entity & entity, Entity * parent, xmlNodePtr xml_node, xmlDocPtr doc)
 {
+    YLOG_DEBUG("Looking for child '{}' in '{}'", to_string(xml_node->name), entity.yang_name);
     check_payload_to_raise_exception(entity, xml_node->name);
 
     auto child = entity.get_child_by_name(to_string(xml_node->name));

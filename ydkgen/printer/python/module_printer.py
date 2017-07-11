@@ -36,10 +36,10 @@ class ModulePrinter(FilePrinter):
         super(ModulePrinter, self).__init__(ctx)
         self.sort_clazz = extra_args.get('sort_clazz', False)
         self.identity_subclasses = extra_args.get('identity_subclasses', {})
+        self.module_namespace_lookup = extra_args.get('module_namespace_lookup', {})
 
     def print_header(self, package):
         self._print_module_description(package)
-        # self._print_imports(package)
 
         self.ctx.writeln("from ydk.entity_utils import get_relative_entity_path as _get_relative_entity_path")
         self.ctx.writeln("from ydk.types import Entity, EntityPath, Identity, Enum, YType, YLeaf, YLeafList, YList, LeafDataList, Bits, Empty, Decimal64")
@@ -109,7 +109,7 @@ class ModulePrinter(FilePrinter):
             self._print_bits(bit)
 
     def _print_module_classes(self, package):
-        ClassPrinter(self.ctx, self.sort_clazz).print_output(
+        ClassPrinter(self.ctx, self.sort_clazz, self.module_namespace_lookup).print_output(
             [clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
 
     def _print_bits(self, bits):

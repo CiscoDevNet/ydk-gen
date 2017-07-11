@@ -120,7 +120,8 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
         package.parent_pkg_name = sub
         extra_args = {'sort_clazz': False,
-                      'identity_subclasses': self.identity_subclasses}
+                      'identity_subclasses': self.identity_subclasses,
+                      'module_namespace_lookup' : self.module_namespace_lookup}
         self.print_file(get_python_module_file_name(path, package),
                         emit_module,
                         _EmitArgs(self.ypy_ctx, package, extra_args))
