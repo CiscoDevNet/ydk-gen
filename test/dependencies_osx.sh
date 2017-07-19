@@ -29,13 +29,19 @@ function print_msg {
 function install_dependencies {
     print_msg "install_dependencies"
 
-    brew install curl \
+    brew install autoconf \
+                 automake \
+                 curl \
                  doxygen \
+                 gflags \
+                 lcov \
                  libssh \
+                 libtool \
                  pcre \
+                 protobuf \
+                 shtool \
                  wget \
-                 xml2 \
-                 lcov
+                 xml2 
 
     brew install libssh
     brew link libssh
@@ -56,8 +62,33 @@ function download_moco {
     cd -
 }
 
+function install_protobuf {
+    print_msg "Installing protobuf and protoc"
+
+    wget https://github.com/google/protobuf/releases/download/v3.3.0/protobuf-cpp-3.3.0.zip
+    unzip protobuf-cpp-3.3.0.zip
+    cd protobuf-cpp-3.3.0
+    ./configure
+    make
+    make check
+    sudo make install
+}
+
+function install_grpc {
+    print_msg "Installing grpc"
+
+    LIBTOOL=glibtool LIBTOOLIZE=glibtoolize make
+    git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
+    cd grpc
+    git submodule update --init
+    make
+    sudo make install
+}
+
 ########################## EXECUTION STARTS HERE #############################
 
 install_dependencies
 install_confd
 download_moco
+install_protobuf
+install_grpc
