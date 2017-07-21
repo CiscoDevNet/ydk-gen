@@ -81,10 +81,10 @@ TEST_CASE("test_sanity_types_int8 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
     //find the number8 node
-    auto number8_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/number8");
+    auto number8_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/number8");
 
     REQUIRE(!number8_read_vec.empty());
 
@@ -148,10 +148,10 @@ TEST_CASE("test_sanity_types_int16 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
     //find the number8 node
-    auto number16_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/number16");
+    auto number16_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/number16");
 
     REQUIRE(!number16_read_vec.empty());
 
@@ -213,9 +213,9 @@ TEST_CASE("test_sanity_types_int32 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto number32_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/number32");
+    auto number32_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/number32");
 
     REQUIRE(!number32_read_vec.empty());
 
@@ -276,9 +276,9 @@ TEST_CASE("test_sanity_types_int64 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto number64_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/number64");
+    auto number64_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/number64");
 
     REQUIRE(!number64_read_vec.empty());
 
@@ -340,9 +340,9 @@ TEST_CASE("test_sanity_types_uint8 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto unumber8_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/u_number8");
+    auto unumber8_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/u_number8");
 
     REQUIRE(!unumber8_read_vec.empty());
 
@@ -404,9 +404,9 @@ TEST_CASE("test_sanity_types_uint16 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto unumber16_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/u_number16");
+    auto unumber16_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/u_number16");
 
     REQUIRE(!unumber16_read_vec.empty());
 
@@ -469,9 +469,9 @@ TEST_CASE("test_sanity_types_uint32 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto unumber32_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/u_number32");
+    auto unumber32_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/u_number32");
 
     REQUIRE(!unumber32_read_vec.empty());
 
@@ -532,9 +532,9 @@ TEST_CASE("test_sanity_types_uint64 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto unumber64_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/u_number64");
+    auto unumber64_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/u_number64");
 
     REQUIRE(!unumber64_read_vec.empty());
 
@@ -598,9 +598,9 @@ TEST_CASE("test_sanity_types_bits ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto bits_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/bits-value");
+    auto bits_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/bits-value");
 
     REQUIRE(!bits_read_vec.empty());
 
@@ -661,9 +661,9 @@ TEST_CASE("test_sanity_types_decimal64 ")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto deci64_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/deci64");
+    auto deci64_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/deci64");
 
     REQUIRE(!deci64_read_vec.empty());
 
@@ -727,9 +727,9 @@ TEST_CASE("test_sanity_types_string")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto str_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/name");
+    auto str_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/name");
 
     REQUIRE(!str_read_vec.empty());
 
@@ -792,9 +792,9 @@ TEST_CASE("test_sanity_types_empty")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto emptee_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/emptee");
+    auto emptee_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/emptee");
 
     REQUIRE(!emptee_read_vec.empty());
 
@@ -855,9 +855,9 @@ TEST_CASE("test_sanity_types_boolean")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto bool_val_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/bool-value");
+    auto bool_val_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/bool-value");
 
     REQUIRE(!bool_val_read_vec.empty());
 
@@ -919,9 +919,9 @@ TEST_CASE("test_sanity_types_embedded_enum")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto embedded_enum_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/embeded-enum");
+    auto embedded_enum_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/embeded-enum");
 
     REQUIRE(!embedded_enum_read_vec.empty());
 
@@ -982,9 +982,9 @@ TEST_CASE("test_sanity_types_enum")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto enum_value_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/enum-value");
+    auto enum_value_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/enum-value");
 
     REQUIRE(!enum_value_read_vec.empty());
 
@@ -1046,9 +1046,9 @@ TEST_CASE("test_sanity_types_union")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto union_value_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/younion");
+    auto union_value_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/younion");
 
     REQUIRE(!union_value_read_vec.empty());
 
@@ -1110,10 +1110,10 @@ TEST_CASE("test_sanity_types_union_enum")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
 
-    auto enum_int_value_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/enum-int-value");
+    auto enum_int_value_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/enum-int-value");
 
     REQUIRE(!enum_int_value_read_vec.empty());
 
@@ -1177,10 +1177,10 @@ TEST_CASE("test_sanity_types_union_int")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
 
-    auto enum_int_value_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/enum-int-value");
+    auto enum_int_value_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/enum-int-value");
 
     REQUIRE(!enum_int_value_read_vec.empty());
 
@@ -1244,13 +1244,13 @@ TEST_CASE("test_union_leaflist")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto llunion1_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/llunion[.='1']");
+    auto llunion1_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/llunion[.='1']");
 
     REQUIRE(!llunion1_read_vec.empty());
 
-    auto llunion2_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/llunion[.='2']");
+    auto llunion2_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/llunion[.='2']");
 
     REQUIRE(!llunion2_read_vec.empty());
 
@@ -1309,13 +1309,13 @@ TEST_CASE("test_enum_leaflist")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto enumllist_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/enum-llist[.='local']");
+    auto enumllist_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/enum-llist[.='local']");
 
     REQUIRE(!enumllist_read_vec.empty());
 
-    enumllist_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/enum-llist[.='remote']");
+    enumllist_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/enum-llist[.='remote']");
 
     REQUIRE(!enumllist_read_vec.empty());
 
@@ -1374,13 +1374,13 @@ TEST_CASE("test_identity_leaflist")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto identityllist_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/identity-llist[.='ydktest-sanity:child-identity']");
+    auto identityllist_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/identity-llist[.='ydktest-sanity:child-identity']");
 
     REQUIRE(!identityllist_read_vec.empty());
 
-    identityllist_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/identity-llist[.='ydktest-sanity:child-child-identity']");
+    identityllist_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/identity-llist[.='ydktest-sanity:child-child-identity']");
 
     REQUIRE(!identityllist_read_vec.empty());
 
@@ -1438,9 +1438,9 @@ TEST_CASE("test_union_complex_list")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto younionlist_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/younion-list[.='123:45']");
+    auto younionlist_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/younion-list[.='123:45']");
 
     REQUIRE(!younionlist_read_vec.empty());
 
@@ -1497,9 +1497,9 @@ TEST_CASE("test_identityref")
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    auto identityref_value_read_vec = read_result->find("ydktest-sanity:runner/ytypes/built-in-t/identity-ref-value");
+    auto identityref_value_read_vec = read_result.get_data_nodes()["ydktest-sanity:runner"]->find("ytypes/built-in-t/identity-ref-value");
 
     REQUIRE(!identityref_value_read_vec.empty());
 

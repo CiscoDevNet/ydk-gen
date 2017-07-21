@@ -136,6 +136,7 @@ set(libydk_src
     src/capabilities_parser.cpp
     src/crud_service.cpp
     src/entity.cpp
+    src/entity_collection.cpp
     src/entity_data_node_walker.cpp
     src/entity_lookup.cpp
     src/entity_util.cpp
@@ -164,6 +165,7 @@ set(libydk_src
     src/path/annotation.cpp
     src/path/capability.cpp
     src/path/data_node.cpp
+    src/path/data_node_collection.cpp
     src/path/path.cpp
     src/path/repository.cpp
     src/path/root_data_node.cpp

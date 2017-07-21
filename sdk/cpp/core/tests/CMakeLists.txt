@@ -9,6 +9,8 @@ set(core_tests_src bgptest.cpp
                test_value.cpp
                test_value_list.cpp
                test_capabilities_parser.cpp
+               test_codec.cpp
+               test_collection.cpp
                main.cpp)
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")

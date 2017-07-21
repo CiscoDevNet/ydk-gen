@@ -47,7 +47,7 @@ static void get_namespaces_from_xml_doc(xmlNodePtr root, std::unordered_set<std:
 namespace ydk
 {
 
-using json = nlohmann::json;
+    using json = nlohmann::json;
 
     static std::unordered_set<std::string>
     get_namespaces_from_xml_payload(const std::string& payload)

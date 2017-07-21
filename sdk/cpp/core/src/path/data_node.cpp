@@ -46,6 +46,16 @@ ydk::path::DataNode::create_datanode(const std::string& path)
 //////////////////////////////////////////////////////////////////////////
 ydk::path::DataNodeImpl::DataNodeImpl(DataNode* parent, lyd_node* node, const std::shared_ptr<RepositoryPtr> repo): m_parent{parent}, m_node{node}, m_priv_repo{repo}
 {
+    initialize_child_map();
+}
+
+ydk::path::DataNodeImpl::DataNodeImpl(DataNodeImpl* other): m_parent{other->m_parent}, m_node{other->m_node}, m_priv_repo{other->m_priv_repo}
+{
+    initialize_child_map();
+}
+
+void ydk::path::DataNodeImpl::initialize_child_map()
+{
     //add the children
     if(m_node && m_node->child && !(m_node->schema->nodetype == LYS_LEAF ||
                           m_node->schema->nodetype == LYS_LEAFLIST ||
@@ -56,7 +66,6 @@ ydk::path::DataNodeImpl::DataNodeImpl(DataNode* parent, lyd_node* node, const st
             child_map.insert(std::make_pair(iter, std::make_shared<DataNodeImpl>(this, iter, m_priv_repo)));
         }
     }
-
 }
 
 ydk::path::DataNodeImpl::~DataNodeImpl()

@@ -314,6 +314,13 @@ PYBIND11_PLUGIN(ydk_)
         .def("create_datanode", (ydk::path::DataNode& (ydk::path::RootSchemaNode::*)(const string&, const string&)) &ydk::path::RootSchemaNode::create_datanode, return_value_policy::reference, arg("path"), arg("value"))
         .def("create_rpc", &ydk::path::RootSchemaNode::create_rpc, arg("path"), return_value_policy::reference);
 
+    class_<ydk::path::DataNodeCollection>(path, "DataNodeCollection")
+        .def(init<>())
+        .def(init<std::vector<ydk::path::DataNode*> >())
+        .def(init<std::vector<std::shared_ptr<ydk::path::DataNode>> >())
+        .def(init<std::map<std::string, std::shared_ptr<ydk::path::DataNode>> >())
+        .def("get_data_nodes", &ydk::path::DataNodeCollection::get_data_nodes, return_value_policy::reference);
+
     class_<ydk::path::ServiceProvider>(path, "ServiceProvider")
         .def("invoke", &ydk::path::ServiceProvider::invoke, return_value_policy::reference)
         .def("get_root_schema", &ydk::path::ServiceProvider::get_root_schema, return_value_policy::reference);
@@ -342,8 +349,19 @@ PYBIND11_PLUGIN(ydk_)
 
     codec
         .def(init<>())
-        .def("encode", &ydk::path::Codec::encode, arg("data_node"), arg("encoding"), arg("pretty"))
-        .def("decode", &ydk::path::Codec::decode, arg("root_schema_node"), arg("payload"), arg("encoding"))
+        .def("encode", (std::string (ydk::path::Codec::*)(const ydk::path::DataNode & data_node,
+                                    ydk::EncodingFormat format, bool pretty) const) &ydk::path::Codec::encode,
+                                    arg("data_node"), arg("encoding"), arg("pretty"))
+        .def("encode", (std::map<std::string, std::string> (ydk::path::Codec::*)(const ydk::path::DataNodeCollection & data_nodes,
+                                    ydk::EncodingFormat format, bool pretty) const) &ydk::path::Codec::encode,
+                                    arg("data_nodes"), arg("encoding"), arg("pretty"))
+        .def("decode", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Codec::*)(ydk::path::RootSchemaNode & root_schema, const std::string& buffer,
+                                    ydk::EncodingFormat format) const) &ydk::path::Codec::decode,
+                                    arg("root_schema_node"), arg("payload"), arg("encoding"))
+        .def("decode", (ydk::path::DataNodeCollection (ydk::path::Codec::*)(ydk::path::RootSchemaNode & root_schema,
+                                    std::map<std::string, std::string> & payload_lookup,
+                                    ydk::EncodingFormat format) const) &ydk::path::Codec::decode,
+                                    arg("root_schema_node"), arg("payload_lookup"), arg("encoding"))
         .def("decode_rpc_output", &ydk::path::Codec::decode_rpc_output, arg("root_schema_node"), arg("payload"), arg("rpc_path"), arg("encoding"));
 
     enum_<ydk::DataStore>(services, "DataStore")
@@ -675,9 +693,9 @@ PYBIND11_PLUGIN(ydk_)
     entity_utils.def("get_relative_entity_path", &ydk::get_relative_entity_path);
     entity_utils.def("get_entity_from_data_node", &ydk::get_entity_from_data_node);
     #if defined(PYBIND11_OVERLOAD_CAST)
-    entity_utils.def("get_data_node_from_entity", overload_cast<ydk::Entity&, ydk::path::RootSchemaNode&>(&ydk::get_data_node_from_entity), return_value_policy::reference);
+    entity_utils.def("get_data_node_from_entity", overload_cast<const ydk::Entity&, ydk::path::RootSchemaNode&>(&ydk::get_data_node_from_entity), return_value_policy::reference);
     #else
-    entity_utils.def("get_data_node_from_entity", static_cast<ydk::path::DataNode& (*)(ydk::Entity&, ydk::path::RootSchemaNode&)>(&ydk::get_data_node_from_entity), return_value_policy::reference);
+    entity_utils.def("get_data_node_from_entity", static_cast<ydk::path::DataNode& (*)(const ydk::Entity&, ydk::path::RootSchemaNode&)>(&ydk::get_data_node_from_entity), return_value_policy::reference);
     #endif
 
     ydk.def("is_set", &ydk::is_set);

@@ -94,7 +94,7 @@ path::RootSchemaNode& RestconfServiceProvider::get_root_schema() const
     return *root_schema;
 }
 
-std::shared_ptr<path::DataNode> RestconfServiceProvider::invoke(path::Rpc& rpc) const
+path::DataNodeCollection RestconfServiceProvider::invoke(path::Rpc& rpc) const
 {
     path::SchemaNode* create_schema = get_schema_for_operation(*root_schema, "ydk:create");
     path::SchemaNode* read_schema = get_schema_for_operation(*root_schema, "ydk:read");
@@ -102,19 +102,18 @@ std::shared_ptr<path::DataNode> RestconfServiceProvider::invoke(path::Rpc& rpc) 
     path::SchemaNode* delete_schema = get_schema_for_operation(*root_schema, "ydk:delete");
 
     path::SchemaNode* rpc_schema = &(rpc.get_schema_node());
-    std::shared_ptr<path::DataNode> datanode = nullptr;
 
     if(rpc_schema == create_schema || rpc_schema == update_schema)
     {
-        return handle_edit(rpc, edit_method);
+        return {{handle_edit(rpc, edit_method)}};
     }
     else if(rpc_schema == read_schema)
     {
-        return handle_read(rpc);
+        return {{handle_read(rpc)}};
     }
     else if(rpc_schema == delete_schema)
     {
-       return handle_edit(rpc, "DELETE");
+       return {{handle_edit(rpc, "DELETE")}};
     }
     else
     {
@@ -122,7 +121,7 @@ std::shared_ptr<path::DataNode> RestconfServiceProvider::invoke(path::Rpc& rpc) 
         throw(YCPPOperationNotSupportedError{"rpc is not supported!"});
     }
 
-    return datanode;
+    return {};
 }
 
 static string get_module_url_path(const string & path)

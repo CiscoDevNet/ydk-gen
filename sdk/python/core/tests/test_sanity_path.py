@@ -20,7 +20,7 @@ import sys
 import unittest
 
 from ydk.providers import NetconfServiceProvider
-from ydk.path import Codec
+from ydk.path import Codec, DataNodeCollection
 from ydk.types import EncodingFormat
 
 from test_utils import assert_with_error
@@ -80,9 +80,9 @@ class SanityTest(unittest.TestCase):
         runner_read = read_rpc(self.ncc)
         xml_read = self.codec.encode(runner_read, EncodingFormat.XML, True)
         self.maxDiff = None
-        self.assertEqual(xml, xml_read)
+        self.assertEqual(xml, xml_read['ydktest-sanity:runner'])
 
-    def test_rpcs(self):        
+    def test_rpcs(self):
         getc = self.root_schema.create_rpc("ietf-netconf:get-config")
         self.assertEqual(getc.has_output_node() , True)
         get = self.root_schema.create_rpc("ietf-netconf:get")
@@ -95,6 +95,34 @@ class SanityTest(unittest.TestCase):
         self.assertEqual(com.has_output_node() , False)
         lo = self.root_schema.create_rpc("ietf-netconf:lock")
         self.assertEqual(lo.has_output_node() , False)
+
+    def test_get_config_no_filter(self):
+        runner = self.root_schema.create_datanode("ydktest-sanity:runner")
+        xml = self.codec.encode(runner, EncodingFormat.XML, True)
+
+        # delete
+        delete_rpc = self.root_schema.create_rpc("ydk:delete")
+        delete_rpc.get_input_node().create_datanode("entity", xml)
+        delete_rpc(self.ncc)
+
+        # create
+        editc = self.root_schema.create_rpc('ietf-netconf:edit-config')
+        editc.get_input_node().create_datanode('target/candidate')
+        runner.create_datanode('ytypes/built-in-t/number8', '2')
+        xml = self.codec.encode(runner, EncodingFormat.XML, True)
+        editc.get_input_node().create_datanode("config", xml)
+        res = editc(self.ncc)
+
+        # read
+        getc = self.root_schema.create_rpc('ietf-netconf:get-config')
+        getc.get_input_node().create_datanode('source/candidate')
+        res = getc(self.ncc)
+        runner_read = res.get_data_nodes()['ydktest-sanity:runner']
+        xml_read = self.codec.encode(runner, EncodingFormat.XML, True)
+        self.assertEqual(xml, xml_read)
+
+        # delete
+        delete_rpc(self.ncc)
 
     def test_codec(self):
         self.root_schema.create_datanode('ydktest-sanity:runner')
@@ -126,7 +154,25 @@ class SanityTest(unittest.TestCase):
 
         xml = self.codec.encode(res, EncodingFormat.XML, False)
         self.assertNotEqual( len(xml), 0 )
+        
+    def test_collection(self):
+        bgp = self.root_schema.create_datanode("openconfig-bgp:bgp", "")
+        bgp.create_datanode("global/config/as", "65172")
 
+        rp = self.root_schema.create_datanode("ydktest-sanity:runner", "")
+        rp.create_datanode("ytypes/built-in-t/number8", "2")
+
+        a = DataNodeCollection([bgp, rp])
+        b = a.get_data_nodes()
+        r_1 = b["openconfig-bgp:bgp"]
+        r_2 = b["ydktest-sanity:runner"]
+
+        self.assertNotEqual(r_1, None)
+        self.assertNotEqual(r_2, None)
+
+        self.assertEqual(r_1.get_path(), bgp.get_path())
+        self.assertEqual(r_2.get_path(), rp.get_path())
+        self.assertEqual(len(b), 2)
 
 if __name__ == '__main__':
     device, non_demand, common_cache = get_device_info()

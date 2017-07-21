@@ -152,13 +152,9 @@ TEST_CASE( "bgp_netconf_create" )
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 
-    print_tree(read_result.get(),"");
-
-    xml = s.encode(*read_result, ydk::EncodingFormat::XML, false);
-
-    REQUIRE(xml == expected_bgp_read);
+    auto a = s.encode(read_result, ydk::EncodingFormat::XML, false);
 
     peer_as.set_value("6500");
 
@@ -203,40 +199,9 @@ TEST_CASE("core_validate")
     ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
     ydk::path::RootSchemaNode& schema = sp.get_root_schema();
 
-    auto & runner = schema.create_datanode("ietf-netconf:validate", "");
-
-    auto & ysanity = runner.create_datanode("source/candidate", "");
-
-    ydk::path::Codec s{};
-    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
-
-    CHECK( !xml.empty());
-
-    std::cout << xml << std::endl;
-
-    //call create
-    // std::shared_ptr<ydk::path::Rpc> create_rpc { schema.create_rpc("ydk:create") };
-    // create_rpc->get_input_node().create_datanode("entity", xml);
-    // (*create_rpc)(sp);
-}
-
-
-TEST_CASE( "get_schema"  )
-{
-    ydk::path::Repository repo{TEST_HOME};
-
-    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
-    ydk::path::RootSchemaNode& schema = sp.get_root_schema();
-
-    std::shared_ptr<ydk::path::Rpc> get_schema_rpc { schema.create_rpc("ietf-netconf-monitoring:get-schema") };
-    get_schema_rpc->get_input_node().create_datanode("identifier", "ydktest-sanity");
-
-    auto res = (*get_schema_rpc)(sp);
-
-    ydk::path::Codec s{};
-
-    auto xml = s.encode(*res, ydk::EncodingFormat::XML, false);
-    REQUIRE( !xml.empty() );
+    auto val = schema.create_rpc("ietf-netconf:validate");
+    val->get_input_node().create_datanode("source/candidate", "");
+    REQUIRE_NOTHROW((*val)(sp));
 
 }
 
@@ -278,13 +243,13 @@ TEST_CASE( "bgp_xr_openconfig"  )
     auto & enable = l3vpn_ipv4_unicast.create_datanode("config/enabled","true");
     //bgp/neighbors/neighbor
     auto & neighbor = bgp.create_datanode("neighbors/neighbor[neighbor-address='172.16.255.2']", "");
-    auto & neighbor_address = neighbor.create_datanode("config/neighbor-address", "172.16.255.2");
-    auto & peer_as = neighbor.create_datanode("config/peer-as","65172");
-    auto & peer_group = neighbor.create_datanode("config/peer-group","IBGP");
+    neighbor.create_datanode("config/neighbor-address", "172.16.255.2");
+    neighbor.create_datanode("config/peer-as","65172");
+    neighbor.create_datanode("config/peer-group","IBGP");
     //bgp/peer-groups/peer-group
     auto & ppeer_group = bgp.create_datanode("peer-groups/peer-group[peer-group-name='IBGP']", "");
-    auto & peer_group_name = ppeer_group.create_datanode("config/peer-group-name", "IBGP");
-    auto & ppeer_as = ppeer_group.create_datanode("config/peer-as","65172");
+    ppeer_group.create_datanode("config/peer-group-name", "IBGP");
+    ppeer_group.create_datanode("config/peer-as","65172");
 
     std::shared_ptr<ydk::path::Rpc> create_rpc { schema.create_rpc("ydk:create") };
     auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
@@ -307,7 +272,7 @@ TEST_CASE( "bgp_xr_openconfig"  )
 
     auto read_result = (*read_rpc)(sp);
 
-    REQUIRE(read_result != nullptr);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
 }
 //
 //TEST_CASE( bgp_xr_native  )
@@ -354,4 +319,93 @@ TEST_CASE( "bgp_xr_openconfig"  )
 //    REQUIRE(read_result != nullptr);
 //
 //
+//}
+
+TEST_CASE( "read_no_filter" )
+{
+    ydk::NetconfServiceProvider sp{"127.0.0.1", "admin", "admin",  12022, "ssh", false};
+    ydk::path::RootSchemaNode& schema = sp.get_root_schema();
+    ydk::path::Codec s{};
+
+    // first delete
+    auto & bgp = schema.create_datanode("openconfig-bgp:bgp");
+    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.create_rpc("ydk:delete") };
+    auto xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
+    delete_rpc->get_input_node().create_datanode("entity", xml);
+    (*delete_rpc)(sp);
+
+    // create
+    auto & as = bgp.create_datanode("global/config/as", "65172");
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.create_rpc("ydk:create") };
+    xml = s.encode(bgp, ydk::EncodingFormat::XML, false);
+    create_rpc->get_input_node().create_datanode("entity", xml);
+    (*create_rpc)(sp);
+
+    // read
+    std::shared_ptr<ydk::path::Rpc> get_config_rpc { schema.create_rpc("ietf-netconf:get-config") };
+    get_config_rpc->get_input_node().create_datanode("source/running");
+    auto read_result = (*get_config_rpc)(sp);
+    REQUIRE(read_result.get_data_nodes().size() != 0);
+    auto f = s.encode(read_result, ydk::EncodingFormat::XML, false);
+    REQUIRE(f["openconfig-bgp:bgp"] == "<bgp xmlns=\"http://openconfig.net/yang/bgp\"><global><config><as>65172</as></config></global></bgp>");
+
+    //delete
+    (*delete_rpc)(sp);
+}
+
+TEST_CASE( "get_schema_rpc" )
+{
+    ydk::NetconfServiceProvider sp{"127.0.0.1", "admin", "admin",  12022, "ssh", false};
+    ydk::path::RootSchemaNode& schema = sp.get_root_schema();
+
+    ydk::path::Codec s{};
+
+    //call get-schema
+    std::shared_ptr<ydk::path::Rpc> get_schema_rpc { schema.create_rpc("ietf-netconf-monitoring:get-schema") };
+    get_schema_rpc->get_input_node().create_datanode("identifier", "ydktest-sanity-types");
+
+    auto read_result = (*get_schema_rpc)(sp);
+
+    REQUIRE(read_result.get_data_nodes().size() != 0);
+
+    auto f = s.encode(read_result, ydk::EncodingFormat::XML, false);
+    REQUIRE(f.find("ietf-netconf-monitoring:get-schema") != f.end());
+}
+
+//
+//TEST_CASE( "read_collection" )
+//{
+//    ydk::NetconfServiceProvider sp{"127.0.0.1", "admin", "admin",  12022, "ssh", false};
+//    ydk::path::RootSchemaNode& schema = sp.get_root_schema();
+//    ydk::path::Codec s{};
+//
+//    // first delete
+//    auto & bgp = schema.create_datanode("openconfig-bgp:bgp");
+//    auto & rp = schema.create_datanode("openconfig-routing-policy:routing-policy");
+//    std::shared_ptr<ydk::path::Rpc> delete_rpc { schema.create_rpc("ydk:delete") };
+//    std::vector<ydk::path::DataNode*> d{&bgp, &rp};
+//    auto xml = s.encode({d}, ydk::EncodingFormat::XML, false);
+//    std::string g;
+//    for(auto t:xml)
+//        g+=t.second;
+//    delete_rpc->get_input_node().create_datanode("entity", g);
+//    (*delete_rpc)(sp);
+//
+//    // create
+//    auto & as = bgp.create_datanode("global/config/as", "65172");
+//    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.create_rpc("ydk:create") };
+//    auto xml1 = s.encode(bgp, ydk::EncodingFormat::XML, false);
+//    create_rpc->get_input_node().create_datanode("entity", xml1);
+//    (*create_rpc)(sp);
+//
+//    // read
+//    std::shared_ptr<ydk::path::Rpc> get_config_rpc { schema.create_rpc("ietf-netconf:get-config") };
+//    get_config_rpc->get_input_node().create_datanode("source/running");
+//    auto read_result = (*get_config_rpc)(sp);
+//    REQUIRE(read_result.get_data_nodes().size() != 0);
+//    auto f = s.encode(read_result, ydk::EncodingFormat::XML, false);
+//    REQUIRE(f["openconfig-bgp:bgp"] == "<bgp xmlns=\"http://openconfig.net/yang/bgp\"><global><config><as>65172</as></config></global></bgp>");
+//
+//    //delete
+//    (*delete_rpc)(sp);
 //}

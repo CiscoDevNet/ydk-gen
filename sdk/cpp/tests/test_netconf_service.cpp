@@ -126,7 +126,7 @@ TEST_CASE("edit_config")
     REQUIRE(reply);
 
     auto data = ns.get_config(provider, source, filter);
-    REQUIRE(data);
+    REQUIRE(data!=nullptr);
 
     auto data_ptr = dynamic_cast<openconfig_bgp::Bgp*>(data.get());
     REQUIRE(data_ptr != nullptr);

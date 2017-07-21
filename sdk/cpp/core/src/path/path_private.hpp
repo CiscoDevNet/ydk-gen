@@ -24,16 +24,9 @@
 #ifndef YDK_PRIVATE_HPP
 #define YDK_PRIVATE_HPP
 
-#include <algorithm>
 #include <map>
-#include <cstdlib>
-#include <functional>
 #include <iostream>
-#include <cstring>
-#include <cassert>
-#include <sstream>
 #include <unordered_set>
-#include <unordered_map>
 
 #include "libyang/libyang.h"
 #include "libyang/tree_schema.h"
@@ -167,7 +160,7 @@ namespace ydk {
 
         public:
             DataNodeImpl(DataNode* parent, struct lyd_node* node, const std::shared_ptr<RepositoryPtr> repo);
-
+            DataNodeImpl(DataNodeImpl* other);
             //no copy constructor
             DataNodeImpl(const DataNodeImpl& dn) = delete;
 
@@ -212,7 +205,7 @@ namespace ydk {
             std::shared_ptr<DataNode> get_dn_for_desc_node(struct lyd_node* desc_node) const;
 
         private:
-
+            void initialize_child_map();
             DataNode& create_helper(const std::string& path, const std::string& value);
 
             void populate_new_schemas_from_path(const std::string& path);
@@ -272,7 +265,7 @@ namespace ydk {
 
             ~RpcImpl();
 
-            std::shared_ptr<DataNode> operator()(const ServiceProvider& provider);
+            DataNodeCollection operator()(const ServiceProvider& provider);
 
             DataNode& get_input_node() const;
 

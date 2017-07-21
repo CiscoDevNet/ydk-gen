@@ -195,7 +195,7 @@ ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::Vali
 ///////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
-// class ydk::Codec
+// class ydk::path::Codec
 //////////////////////////////////////////////////////////////////////////
 ydk::path::Codec::Codec()
 {
@@ -205,8 +205,22 @@ ydk::path::Codec::~Codec()
 {
 }
 
+//////////////////////////////////////////////////////////////////////////
+// ydk::path::Codec::encode
+//////////////////////////////////////////////////////////////////////////
+std::map<std::string, std::string> ydk::path::Codec::encode(const DataNodeCollection & data, EncodingFormat format, bool pretty) const
+{
+    std::map<std::string, std::string> buffer_lookup;
+    auto data_node_entries = data.get_data_nodes();
+    for(auto entry : data_node_entries)
+    {
+        buffer_lookup[entry.first] = encode(*entry.second, format, pretty);
+    }
+    return buffer_lookup;
+}
+
 std::string
-ydk::path::Codec::encode(const ydk::path::DataNode& dn, ydk::EncodingFormat format, bool pretty)
+ydk::path::Codec::encode(const ydk::path::DataNode& dn, ydk::EncodingFormat format, bool pretty) const
 {
     std::string ret{};
 
@@ -250,6 +264,22 @@ ydk::path::Codec::encode(const ydk::path::DataNode& dn, ydk::EncodingFormat form
 
 }
 
+//////////////////////////////////////////////////////////////////////////
+// ydk::path::Codec::decode
+//////////////////////////////////////////////////////////////////////////
+ydk::path::DataNodeCollection ydk::path::Codec::decode(RootSchemaNode & root_schema, std::map<std::string, std::string> & buffer_lookup, EncodingFormat format) const
+{
+     std::map<std::string, std::shared_ptr<DataNode>> data_nodes{};
+     for(auto entry : buffer_lookup)
+     {
+        auto p = decode(root_schema, entry.second, format);
+        YLOG_DEBUG("Decoded datanode for module '{}'", entry.first);
+        data_nodes[entry.first] = p;
+     }
+     ydk::path::DataNodeCollection d{data_nodes};
+     return d;
+}
+
 static LYD_FORMAT get_ly_format(ydk::EncodingFormat format)
 {
     LYD_FORMAT scheme = LYD_XML;
@@ -273,7 +303,6 @@ static ydk::path::RootSchemaNodeImpl & get_root_schema_impl(ydk::path::RootSchem
 
 static std::shared_ptr<ydk::path::DataNode> perform_decode(ydk::path::RootSchemaNodeImpl & rs_impl, struct lyd_node *root)
 {
-    ydk::YLOG_DEBUG("Performing decode operation");
     ydk::path::RootDataImpl* rd = new ydk::path::RootDataImpl{rs_impl, rs_impl.m_ctx, "/"};
     rd->m_node = root;
 
@@ -287,8 +316,11 @@ static std::shared_ptr<ydk::path::DataNode> perform_decode(ydk::path::RootSchema
     return std::shared_ptr<ydk::path::DataNode>(rd);
 }
 
+//////////////////////////////////////////////////////////////////////////
+// ydk::path::Codec::decode
+//////////////////////////////////////////////////////////////////////////
 std::shared_ptr<ydk::path::DataNode>
-ydk::path::Codec::decode(RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format)
+ydk::path::Codec::decode(RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format) const
 {
     RootSchemaNodeImpl & rs_impl = get_root_schema_impl(root_schema);
     rs_impl.populate_new_schemas_from_payload(buffer, format);
@@ -303,6 +335,10 @@ ydk::path::Codec::decode(RootSchemaNode & root_schema, const std::string& buffer
     return perform_decode(rs_impl, root);
 }
 
+//////////////////////////////////////////////////////////////////////////
+// ydk::path::Codec::decode_rpc_output
+//////////////////////////////////////////////////////////////////////////
+
 static const struct lyd_node* create_ly_rpc_node(ydk::path::RootSchemaNodeImpl & rs_impl, const std::string & rpc_path)
 {
     const struct lyd_node* rpc = lyd_new_path(NULL, rs_impl.m_ctx, rpc_path.c_str(), NULL, LYD_ANYDATA_SXML, 0);
@@ -316,7 +352,7 @@ static const struct lyd_node* create_ly_rpc_node(ydk::path::RootSchemaNodeImpl &
 
 std::shared_ptr<ydk::path::DataNode>
 ydk::path::Codec::decode_rpc_output(RootSchemaNode & root_schema, const std::string& buffer,
-            const std::string & rpc_path, EncodingFormat format)
+            const std::string & rpc_path, EncodingFormat format) const
 {
     RootSchemaNodeImpl & rs_impl = get_root_schema_impl(root_schema);
     rs_impl.populate_new_schemas_from_payload(buffer, format);

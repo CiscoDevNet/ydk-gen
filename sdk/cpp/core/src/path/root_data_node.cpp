@@ -50,7 +50,13 @@ ydk::path::RootDataImpl::get_schema_node() const
 std::string
 ydk::path::RootDataImpl::get_path() const
 {
-    return m_schema.get_path();
+    char* path = lyd_path(m_node);
+    if (!path) {
+        return std::string{};
+    }
+    std::string str{path};
+    std::free(path);
+    return str;
 }
 
 void

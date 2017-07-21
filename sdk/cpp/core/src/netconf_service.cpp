@@ -65,7 +65,7 @@ bool NetconfService::cancel_commit(NetconfServiceProvider & provider, int persis
     }
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //close_session
@@ -77,7 +77,7 @@ bool NetconfService::close_session(NetconfServiceProvider & provider)
     shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:close-session");
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //commit
@@ -110,7 +110,7 @@ bool NetconfService::commit(NetconfServiceProvider & provider, bool confirmed,
     }
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //copy_config
@@ -126,7 +126,7 @@ bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore ta
     create_input_leaf(rpc->get_input_node(), source, "source", url);
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore target, Entity& source)
@@ -144,7 +144,7 @@ bool NetconfService::copy_config(NetconfServiceProvider & provider, DataStore ta
     rpc->get_input_node().create_datanode("source/config", entity_string);
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //delete_config
@@ -159,7 +159,7 @@ bool NetconfService::delete_config(NetconfServiceProvider & provider, DataStore 
     create_input_leaf(rpc->get_input_node(), target, "target", url);
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //discard_changes
@@ -171,7 +171,7 @@ bool NetconfService::discard_changes(NetconfServiceProvider & provider)
     shared_ptr<path::Rpc> rpc = get_rpc_instance(provider, "ietf-netconf:discard-changes");
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //edit_config
@@ -208,7 +208,7 @@ bool NetconfService::edit_config(NetconfServiceProvider & provider, DataStore ta
     }
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //get_config
@@ -227,11 +227,16 @@ shared_ptr<Entity> NetconfService::get_config(NetconfServiceProvider & provider,
     rpc->get_input_node().create_datanode("filter", filter_string);
 
     auto read_datanode = (*rpc)(provider);
-    if (read_datanode == nullptr)
+    if (read_datanode.get_data_nodes().size() == 0)
         return nullptr;
 
     shared_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
-    get_entity_from_data_node(read_datanode->get_children()[0].get(), top_entity);
+    for(auto entry : read_datanode.get_data_nodes())
+    {
+        auto filter = entry.second->get_children()[0].get();
+        get_entity_from_data_node(filter, top_entity);
+        break;
+    }
     return top_entity;
 
 }
@@ -249,10 +254,16 @@ shared_ptr<Entity> NetconfService::get(NetconfServiceProvider & provider, Entity
     rpc->get_input_node().create_datanode("filter", filter_string);
 
     auto result_datanode = (*rpc)(provider);
-    if (result_datanode == nullptr)
-        return {};
+    if (result_datanode.get_data_nodes().size() == 0)
+        return nullptr;
+
     shared_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
-    get_entity_from_data_node(result_datanode->get_children()[0].get(), top_entity);
+    for(auto entry : result_datanode.get_data_nodes())
+    {
+        auto filter = entry.second->get_children()[0].get();
+        get_entity_from_data_node(filter, top_entity);
+        break;
+    }
     return top_entity;
 }
 
@@ -268,7 +279,7 @@ bool NetconfService::kill_session(NetconfServiceProvider & provider, int session
     rpc->get_input_node().create_datanode("session-id", sid_string);
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //lock
@@ -283,7 +294,7 @@ bool NetconfService::lock(NetconfServiceProvider & provider, DataStore target)
     create_input_leaf(rpc->get_input_node(), target, "target");
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //unlock
@@ -298,7 +309,7 @@ bool NetconfService::unlock(NetconfServiceProvider & provider, DataStore target)
     create_input_leaf(rpc->get_input_node(), target, "target");
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 //validate
@@ -313,7 +324,7 @@ bool NetconfService::validate(NetconfServiceProvider & provider, DataStore sourc
     create_input_leaf(rpc->get_input_node(), source, "source", url);
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 bool NetconfService::validate(NetconfServiceProvider & provider, Entity& source)
@@ -328,7 +339,7 @@ bool NetconfService::validate(NetconfServiceProvider & provider, Entity& source)
     rpc->get_input_node().create_datanode("source/config", entity_string);
 
     auto read_datanode = (*rpc)(provider);
-    return read_datanode == nullptr;
+    return read_datanode.get_data_nodes().size() == 0;
 }
 
 static shared_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider & provider, string && yfilter)

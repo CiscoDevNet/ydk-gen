@@ -36,7 +36,7 @@ static void decode_xml(xmlDocPtr doc, xmlNodePtr root, Entity & entity, Entity *
 static string to_string(const xmlChar * s);
 static const xmlChar * to_xmlchar(const string & s);
 
-static void walk_children(Entity & entity, const path::SchemaNode & parent_schema, xmlNodePtr root_node);
+static void walk_children(const Entity & entity, const path::SchemaNode & parent_schema, xmlNodePtr root_node);
 static void populate_xml_node(Entity & entity, const path::SchemaNode & parent_schema, xmlNodePtr xml_node);
 static void populate_xml_node_contents(const path::SchemaNode & parent_schema, EntityPath & path, xmlNodePtr xml_node);
 static string to_string(xmlDocPtr doc, xmlNodePtr xml_node);
@@ -48,7 +48,7 @@ XmlSubtreeCodec::XmlSubtreeCodec()
 //////////////////////////////////////////////////////////////////
 // XmlSubtreeCodec::encode
 //////////////////////////////////////////////////////////////////
-std::string XmlSubtreeCodec::encode(Entity & entity, path::RootSchemaNode & root_schema)
+std::string XmlSubtreeCodec::encode(const Entity & entity, path::RootSchemaNode & root_schema)
 {
     EntityPath root_path = entity.get_entity_path(nullptr);
     auto & root_data_node = root_schema.create_datanode(root_path.path);
@@ -62,7 +62,7 @@ std::string XmlSubtreeCodec::encode(Entity & entity, path::RootSchemaNode & root
     return to_string(doc, root_node);
 }
 
-static void walk_children(Entity & entity, const path::SchemaNode & schema, xmlNodePtr xml_node)
+static void walk_children(const Entity & entity, const path::SchemaNode & schema, xmlNodePtr xml_node)
 {
     std::map<string, shared_ptr<Entity>> children = entity.get_children();
     YLOG_DEBUG("XML: Children count for: {} : {}",entity.get_entity_path(entity.parent).path, children.size());

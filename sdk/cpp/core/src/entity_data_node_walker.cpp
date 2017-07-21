@@ -40,8 +40,8 @@ using namespace std;
 
 namespace ydk
 {
-static void populate_data_node(Entity & entity, path::DataNode & data_node);
-static void walk_children(Entity & entity, path::DataNode & data_node);
+static void populate_data_node(const Entity & entity, path::DataNode & data_node);
+static void walk_children(const Entity & entity, path::DataNode & data_node);
 static void populate_name_values(path::DataNode & parent_data_node, EntityPath & path);
 static bool data_node_is_leaf(path::DataNode & data_node);
 static bool data_node_is_list(path::DataNode & data_node);
@@ -54,7 +54,7 @@ static path::Annotation get_annotation(YFilter yfilter);
 //////////////////////////////////////////////////////////////////////////
 // DataNode* from Entity
 //////////////////////////////////////////////////////////////////////////
-path::DataNode& get_data_node_from_entity(Entity & entity, path::RootSchemaNode & root_schema)
+path::DataNode& get_data_node_from_entity(const Entity & entity, path::RootSchemaNode & root_schema)
 {
     EntityPath root_path = entity.get_entity_path(nullptr);
     auto & root_data_node = root_schema.create_datanode(root_path.path);
@@ -69,7 +69,7 @@ path::DataNode& get_data_node_from_entity(Entity & entity, path::RootSchemaNode 
     return root_data_node;
 }
 
-static void walk_children(Entity & entity, path::DataNode & data_node)
+static void walk_children(const Entity & entity, path::DataNode & data_node)
 {
     std::map<string, shared_ptr<Entity>> children = entity.get_children();
     YLOG_DEBUG("Children count for: {} : {}",entity.get_entity_path(entity.parent).path, children.size());
@@ -84,7 +84,7 @@ static void walk_children(Entity & entity, path::DataNode & data_node)
     }
 }
 
-static void populate_data_node(Entity & entity, path::DataNode & parent_data_node)
+static void populate_data_node(const Entity & entity, path::DataNode & parent_data_node)
 {
     EntityPath path = entity.get_entity_path(entity.parent);
     path::DataNode* data_node = nullptr;

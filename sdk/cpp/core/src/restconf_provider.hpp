@@ -52,7 +52,7 @@ public:
         ~RestconfServiceProvider();
 
         path::RootSchemaNode& get_root_schema() const;
-        std::shared_ptr<path::DataNode> invoke(path::Rpc& rpc) const;
+        path::DataNodeCollection invoke(path::Rpc& rpc) const;
         EncodingFormat get_encoding() const;
 
 private:

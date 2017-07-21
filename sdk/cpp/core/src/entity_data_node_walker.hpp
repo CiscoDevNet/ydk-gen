@@ -36,7 +36,7 @@ namespace ydk {
 
 class Entity;
 
-path::DataNode& get_data_node_from_entity(Entity & entity, path::RootSchemaNode & root_schema);
+path::DataNode& get_data_node_from_entity(const Entity & entity, path::RootSchemaNode & root_schema);
 
 void get_entity_from_data_node(path::DataNode * node, std::shared_ptr<Entity> entity);
 

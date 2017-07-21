@@ -349,6 +349,19 @@ class YLeafList {
     std::string name;
 };
 
+class EntityCollection {
+    public:
+        EntityCollection();
+        EntityCollection(std::vector<Entity*> data);
+        EntityCollection(std::vector<std::shared_ptr<Entity>> data);
+        ~EntityCollection();
+
+        const std::map<std::string, std::shared_ptr<Entity>> & get_entities() const;
+
+    private:
+        std::map<std::string, std::shared_ptr<Entity>> entities;
+};
+
 std::ostream& operator<< (std::ostream& stream, const YLeaf& value);
 std::ostream& operator<< (std::ostream& stream, const EntityPath& value);
 std::ostream& operator<< (std::ostream& stream, Entity& value);

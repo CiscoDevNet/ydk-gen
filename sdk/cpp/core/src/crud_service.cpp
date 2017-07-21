@@ -38,12 +38,12 @@ using namespace std;
 
 namespace ydk {
 
-static string get_config_data_payload(Entity & entity, path::ServiceProvider & provider);
-static string get_xml_subtree_filter_payload(Entity & entity, path::ServiceProvider & provider);
-static std::shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, Entity & entity,
+static string get_config_data_payload(const Entity & entity, path::ServiceProvider & provider);
+static string get_xml_subtree_filter_payload(const Entity & entity, path::ServiceProvider & provider);
+static path::DataNodeCollection execute_rpc(path::ServiceProvider & provider, const Entity & entity,
         const string & operation, const string & data_tag, bool set_config_flag);
-static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter);
-static bool operation_succeeded(shared_ptr<path::DataNode> node);
+static shared_ptr<Entity> get_top_entity_from_filter(const Entity & filter);
+static bool operation_succeeded(const path::DataNodeCollection & node);
 
 CrudService::CrudService()
 {
@@ -85,22 +85,27 @@ shared_ptr<Entity> CrudService::read_config(path::ServiceProvider & provider, En
     return read_datanode(filter, execute_rpc(provider, filter, "ydk:read", "filter", true));
 }
 
-shared_ptr<Entity> CrudService::read_datanode(Entity & filter, shared_ptr<path::DataNode> read_data_node)
+shared_ptr<Entity> CrudService::read_datanode(const Entity & filter, const path::DataNodeCollection & read_data_nodes) const
 {
-    if (read_data_node == nullptr)
+    if (read_data_nodes.get_data_nodes().size() == 0)
         return {};
     shared_ptr<Entity> top_entity = get_top_entity_from_filter(filter);
-    get_entity_from_data_node(read_data_node->get_children()[0].get(), top_entity);
+    for(auto entry : read_data_nodes.get_data_nodes())
+    {
+        get_entity_from_data_node(entry.second->get_children()[0].get(), top_entity);
+        break;
+    }
     return top_entity;
 }
 
-static bool operation_succeeded(shared_ptr<path::DataNode> node)
+static bool operation_succeeded(const path::DataNodeCollection & node)
 {
-    YLOG_INFO("Operation {}", ((node == nullptr)?"succeeded":"failed"));
-    return node == nullptr;
+    auto n = node.get_data_nodes();
+    YLOG_INFO("Operation {}", ((n.size() == 0)?"succeeded":"failed"));
+    return n.size() == 0;
 }
 
-static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter)
+static shared_ptr<Entity> get_top_entity_from_filter(const Entity & filter)
 {
     if(filter.parent == nullptr)
         return filter.clone_ptr();
@@ -108,7 +113,7 @@ static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter)
     return get_top_entity_from_filter(*(filter.parent));
 }
 
-static shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, Entity & entity,
+static path::DataNodeCollection execute_rpc(path::ServiceProvider & provider, const Entity & entity,
         const string & operation, const string & data_tag, bool set_config_flag)
 {
 //    if(data_tag == "entity")
@@ -136,9 +141,9 @@ static shared_ptr<path::DataNode> execute_rpc(path::ServiceProvider & provider, 
     return (*ydk_rpc)(provider);
 }
 
-static string get_config_data_payload(Entity & entity, path::ServiceProvider & provider)
+static string get_config_data_payload(const Entity & entity, path::ServiceProvider & provider)
 {
-    const ydk::path::DataNode& datanode = get_data_node_from_entity(entity, provider.get_root_schema());
+    ydk::path::DataNode& datanode = get_data_node_from_entity(entity, provider.get_root_schema());
 
     const path::DataNode* dn = &datanode;
     while(dn!= nullptr && dn->get_parent()!=nullptr)
@@ -149,7 +154,7 @@ static string get_config_data_payload(Entity & entity, path::ServiceProvider & p
     return payload;
 }
 
-static string get_xml_subtree_filter_payload(Entity & entity, path::ServiceProvider & provider)
+static string get_xml_subtree_filter_payload(const Entity & entity, path::ServiceProvider & provider)
 {
     XmlSubtreeCodec xml_subtree_codec{};
     YLOG_DEBUG("Encoding the subtree filter request using XML subtree codec");

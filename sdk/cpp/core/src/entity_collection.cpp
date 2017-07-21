@@ -1,5 +1,5 @@
 //
-// @file crud_service.hpp
+// @file any_data.cpp
 // @brief The main ydk public header.
 //
 // YANG Development Kit
@@ -25,44 +25,47 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#ifndef CRUD_SERVICE_HPP
-#define CRUD_SERVICE_HPP
+#include <vector>
 
-#include <map>
-#include <memory>
-#include <string>
-#include "service.hpp"
+#include "logger.hpp"
+#include "types.hpp"
+
+using namespace std;
 
 namespace ydk
 {
-
-namespace path
+EntityCollection::EntityCollection()
 {
-class DataNodeCollection;
-class ServiceProvider;
 }
 
-class Entity;
-
-class CrudService : public Service
+EntityCollection::EntityCollection(std::vector<Entity*> data)
 {
-    public:
-        CrudService();
-
-        bool create(path::ServiceProvider & provider, Entity & entity);
-
-        bool update(path::ServiceProvider & provider, Entity & entity);
-
-        bool delete_(path::ServiceProvider & provider, Entity & entity);
-
-        std::shared_ptr<Entity> read(path::ServiceProvider & provider, Entity & filter);
-
-        std::shared_ptr<Entity> read_config(path::ServiceProvider & provider, Entity & filter);
-
-    private:
-        std::shared_ptr<Entity> read_datanode(const Entity & filter, const path::DataNodeCollection & read_data_node) const;
-};
-
+    for(auto d : data)
+    {
+        if(d!=nullptr)
+        {
+            entities[d->get_segment_path()] = shared_ptr<Entity>(d);
+        }
+    }
 }
 
-#endif /* CRUD_SERVICE_HPP */
+EntityCollection::EntityCollection(std::vector<std::shared_ptr<Entity>> data)
+{
+    for(auto d : data)
+    {
+        if(d!=nullptr)
+        {
+            entities[d->get_segment_path()] = d;
+        }
+    }
+}
+
+EntityCollection::~EntityCollection()
+{
+}
+
+const std::map<std::string, std::shared_ptr<Entity>> & EntityCollection::get_entities() const
+{
+    return entities;
+}
+}

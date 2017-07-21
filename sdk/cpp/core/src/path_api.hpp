@@ -236,7 +236,8 @@ namespace path {
 ///
 
 // Forward References
-class DataNode;
+class DataNodeCollection;
+class DataNode ;
 class Rpc;
 class SchemaNode;
 class RootSchemaNode;
@@ -290,19 +291,22 @@ public:
     /// @return The encoded string.
     //  @throws YCPPInvalidArgumentError if the arguments are invalid.
     ///
-    std::string encode(const DataNode & dn, EncodingFormat format, bool pretty);
+    std::string encode(const DataNode & dn, EncodingFormat format, bool pretty) const;
+    std::map<std::string, std::string> encode(const DataNodeCollection & data, EncodingFormat format, bool pretty) const;
 
     ///
     /// @brief decode the buffer to return a DataNode
     ///
     /// @param[in] root_schema The root schema to use.
     /// @param[in] buffer The string representation of the DataNode.
-    /// @param[in] format .Note ::TREE is not supported.
+    /// @param[in] format
     /// @return The DataNode instantiated or nullptr in case of error.
     /// @throws YCPPInvalidArgumentError if the arguments are invalid.
     ///
-    std::shared_ptr<DataNode> decode(RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format);
-    std::shared_ptr<DataNode> decode_rpc_output(RootSchemaNode & root_schema, const std::string& buffer, const std:: string & rpc_path, EncodingFormat format);
+    std::shared_ptr<DataNode> decode(RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format) const;
+    DataNodeCollection decode(RootSchemaNode & root_schema, std::map<std::string, std::string> & buffer_lookup, EncodingFormat format) const;
+
+    std::shared_ptr<DataNode> decode_rpc_output(RootSchemaNode & root_schema, const std::string& buffer, const std:: string & rpc_path, EncodingFormat format) const;
 };
 
 ///
@@ -673,6 +677,21 @@ public:
     virtual std::shared_ptr<Rpc> create_rpc(const std::string& path) = 0;
 };
 
+/// Class represents a collection of top-level datanodes
+class DataNodeCollection {
+    public:
+        DataNodeCollection();
+        DataNodeCollection(std::vector<DataNode*> data_nodes);
+        DataNodeCollection(std::vector<std::shared_ptr<DataNode>> data_nodes);
+        DataNodeCollection(std::map<std::string, std::shared_ptr<DataNode>> data_nodes);
+        ~DataNodeCollection();
+
+        std::map<std::string, std::shared_ptr<DataNode>> get_data_nodes() const;
+
+    private:
+        std::map<std::string, std::shared_ptr<DataNode>> data_nodes;
+};
+
 ///
 /// @brief DataNode
 ///
@@ -972,7 +991,6 @@ public:
     std::string path;
  private:
     std::vector<ModelProvider*> model_providers;
-    bool using_temp_directory;
 
     // class Repository is the resource manager class for RepositoryPtr,
     // which is shared by all DataNode/SchemaNode/RootDataNode/RootSchemaNode
@@ -1009,7 +1027,8 @@ public:
     /// @param[in] pointer to the Rpc node
     /// @return The pointer to the DataNode representing the output.
     ///
-    virtual std::shared_ptr<DataNode> invoke(Rpc& rpc) const = 0 ;
+    //virtual std::shared_ptr<DataNode> invoke(Rpc& rpc) const = 0 ;
+    virtual DataNodeCollection invoke(Rpc& rpc) const = 0 ;
 
 };
 
@@ -1035,7 +1054,8 @@ public:
     /// @param[in] sp The Service provider
     /// @areturn pointer to the DataNode or nullptr if none exists
     ///
-    virtual std::shared_ptr<DataNode> operator()(const ServiceProvider& provider) = 0;
+    //virtual std::shared_ptr<DataNode> operator()(const ServiceProvider& provider) = 0;
+    virtual DataNodeCollection operator()(const ServiceProvider& provider) = 0;
 
     ///
     /// @brief get the input data tree

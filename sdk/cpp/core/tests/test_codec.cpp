@@ -1,8 +1,4 @@
-//
-// @file types.hpp
-// @brief Header for ydk entity
-//
-// YANG Development Kit
+/// YANG Development Kit
 // Copyright 2016 Cisco Systems. All rights reserved
 //
 ////////////////////////////////////////////////////////////////
@@ -25,13 +21,57 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include "../src/types.hpp"
+#include <iostream>
+#include "../src/path_api.hpp"
+#include "config.hpp"
 #include "catch.hpp"
 #include "mock_data.hpp"
-#include <iostream>
 
-using namespace ydk;
 using namespace std;
+using namespace ydk;
+
+TEST_CASE( "codec_collection" )
+{
+    std::string searchdir{TEST_HOME};
+    mock::MockServiceProvider sp{searchdir, test_openconfig};
+    ydk::path::Codec s{};
+    auto & schema = sp.get_root_schema();
+
+    auto & bgp = schema.create_datanode("openconfig-bgp:bgp", "");
+    bgp.create_datanode("global/config/as", "65172");
+
+    auto & rp = schema.create_datanode("openconfig-routing-policy:routing-policy", "");
+    rp.create_datanode("policy-definitions/policy-definition[name='POLICY1']");
+
+    std::vector<path::DataNode*> dn {&bgp, &rp};
+
+    path::DataNodeCollection d{dn};
+
+    auto buf = s.encode(d, EncodingFormat::XML, false);
+
+    auto b_1 = buf.at("openconfig-bgp:bgp");
+    auto b_2 = buf.at("openconfig-routing-policy:routing-policy");
+
+    REQUIRE(b_1 == "<bgp xmlns=\"http://openconfig.net/yang/bgp\"><global><config><as>65172</as></config></global></bgp>");
+    REQUIRE(b_2 == "<routing-policy xmlns=\"http://openconfig.net/yang/routing-policy\"><policy-definitions><policy-definition><name>POLICY1</name></policy-definition></policy-definitions></routing-policy>");
+
+    REQUIRE(buf.size() == 2);
+
+    auto data = s.decode(schema, buf, EncodingFormat::XML);
+
+    auto b = data.get_data_nodes();
+
+    auto r_1 = b.at("openconfig-bgp:bgp");
+    auto r_2 = b.at("openconfig-routing-policy:routing-policy");
+
+    REQUIRE(r_1 != nullptr);
+    REQUIRE(r_2 != nullptr);
+
+    REQUIRE(s.encode(*r_1, EncodingFormat::XML, false) == b_1);
+    REQUIRE(s.encode(*r_2, EncodingFormat::XML, false) == b_2);
+    REQUIRE(b.size() == 2);
+}
+
 
 TEST_CASE( "test_codec_rpc" )
 {
