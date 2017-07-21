@@ -221,6 +221,25 @@ TEST_CASE("core_validate")
 }
 
 
+TEST_CASE( "get_schema"  )
+{
+    ydk::path::Repository repo{TEST_HOME};
+
+    ydk::NetconfServiceProvider sp{repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::path::RootSchemaNode& schema = sp.get_root_schema();
+
+    std::shared_ptr<ydk::path::Rpc> get_schema_rpc { schema.create_rpc("ietf-netconf-monitoring:get-schema") };
+    get_schema_rpc->get_input_node().create_datanode("identifier", "ydktest-sanity");
+
+    auto res = (*get_schema_rpc)(sp);
+
+    ydk::path::Codec s{};
+
+    auto xml = s.encode(*res, ydk::EncodingFormat::XML, false);
+    REQUIRE( !xml.empty() );
+
+}
+
 TEST_CASE( "bgp_xr_openconfig"  )
 {
     ydk::path::Repository repo{TEST_HOME};

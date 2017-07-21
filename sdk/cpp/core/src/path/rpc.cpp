@@ -43,8 +43,8 @@ ydk::path::RpcImpl::RpcImpl(SchemaNodeImpl& sn, struct ly_ctx* ctx, const std::s
     struct lyd_node* dnode = lyd_new_path(nullptr, ctx, sn.get_path().c_str(), (void*)"", LYD_ANYDATA_SXML, 0);
 
     if(!dnode){
-        YLOG_ERROR("Cannot find DataNode with path {}", sn.get_path());
-        throw(YCPPIllegalStateError{"Illegal state"});
+        YLOG_ERROR("Cannot find RPC with path {}", sn.get_path());
+        throw(YCPPModelError{"Invalid RPC"});
     }
 
     data_node = std::make_unique<DataNodeImpl>(nullptr, dnode, m_priv_repo);
@@ -72,4 +72,49 @@ ydk::path::SchemaNode&
 ydk::path::RpcImpl::get_schema_node() const
 {
     return schema_node;
+}
+
+static bool is_output(const std::string & str)
+{
+    return str == "output";
+}
+
+static bool is_part_of_output(lys_node* node_result)
+{
+    lys_node* parent = node_result->parent;
+    if(parent == NULL)
+    {
+        return is_output(node_result->name);
+    }
+    if(parent->parent == NULL)
+    {
+        return is_output(parent->name);
+    }
+    else
+    {
+        while(parent->parent)
+        {
+            if(is_output(parent->name))
+                return true;
+            parent = parent->parent;
+        }
+    }
+    return false;
+}
+
+bool ydk::path::RpcImpl::has_output_node() const
+{
+    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
+    ly_set* result_set = lys_find_xpath(data_node->m_node->schema, "*", LYS_FIND_OUTPUT);
+    ly_verb(LY_LLVRB); // enable libyang logging after find has completed
+    if(result_set && result_set->number > 0)
+    {
+        for(size_t i=0; i < result_set->number; i++)
+        {
+            lys_node* node_result = result_set->set.s[i];
+            if(is_part_of_output(node_result))
+                return true;
+        }
+    }
+    return false;
 }

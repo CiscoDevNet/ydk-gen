@@ -264,9 +264,11 @@ namespace ydk {
 
             SchemaNode& get_schema_node() const;
 
+            bool has_output_node() const;
+
 
             SchemaNodeImpl& schema_node;
-            std::unique_ptr<DataNode> data_node;
+            std::unique_ptr<DataNodeImpl> data_node;
 
         private:
             const std::shared_ptr<RepositoryPtr> m_priv_repo;

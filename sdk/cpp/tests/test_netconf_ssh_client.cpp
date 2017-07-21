@@ -285,31 +285,31 @@ TEST_CASE("WrongXml")
 
     REQUIRE(result == OK);
 }
-
-TEST_CASE("CorrectXmlWrongRpc")
-{
-    NetconfSSHClient client{"admin", "admin", "127.0.0.1", 12022};
-    int OK = 0;
-
-    int result = client.connect();
-    REQUIRE(result == OK);
-
-    try
-    {
-        string reply = client.execute_payload(
-                "<testing/>"
-        );
-        REQUIRE(reply== "");
-    }
-    catch (YCPPError & e)
-    {
-        REQUIRE(e.err_msg=="YCPPClientError: Could not build payload");
-    }
-
-
-
-    REQUIRE(result == OK);
-}
+// Disabled as we want to be able to send any RPC via client
+//TEST_CASE("CorrectXmlWrongRpc")
+//{
+//    NetconfSSHClient client{"admin", "admin", "127.0.0.1", 12022};
+//    int OK = 0;
+//
+//    int result = client.connect();
+//    REQUIRE(result == OK);
+//
+//    try
+//    {
+//        string reply = client.execute_payload(
+//                "<testing/>"
+//        );
+//        REQUIRE(reply== "");
+//    }
+//    catch (YCPPError & e)
+//    {
+//        REQUIRE(e.err_msg=="YCPPClientError: Could not build payload");
+//    }
+//
+//
+//
+//    REQUIRE(result == OK);
+//}
 
 TEST_CASE("EmptyRpc")
 {

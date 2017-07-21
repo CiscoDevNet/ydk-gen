@@ -25,62 +25,8 @@
 #include "../src/path_api.hpp"
 #include "config.hpp"
 #include "catch.hpp"
+#include "mock_data.hpp"
 
-namespace mock {
-class MockServiceProvider : public ydk::path::ServiceProvider
-{
-public:
-    MockServiceProvider(const std::string searchdir, const std::vector<ydk::path::Capability> capabilities) : m_searchdir{searchdir}, m_capabilities{capabilities}
-    {
-        ydk::path::Repository repo{m_searchdir};
-        root_schema = repo.create_root_schema(m_capabilities);
-    }
-
-    virtual ~MockServiceProvider()
-    {
-    }
-
-
-    ydk::path::RootSchemaNode& get_root_schema() const
-    {
-        return *root_schema;
-    }
-
-    ydk::EncodingFormat get_encoding() const
-    {
-        return ydk::EncodingFormat::XML;
-    }
-
-    std::shared_ptr<ydk::path::DataNode> invoke(ydk::path::Rpc& rpc) const
-    {
-        ydk::path::Codec s{};
-
-        std::cout << s.encode(rpc.get_input_node(), ydk::EncodingFormat::XML, true) << std::endl;
-
-        return nullptr;
-    }
-private:
-    std::string m_searchdir;
-    std::vector<ydk::path::Capability> m_capabilities;
-    std::shared_ptr<ydk::path::RootSchemaNode> root_schema;
-
-};
-}
-
-
-std::vector<ydk::path::Capability> test_openconfig {
-    {"openconfig-bgp-types", "" },
-    {"openconfig-bgp", ""},
-    {"openconfig-extensions", ""},
-    {"openconfig-interfaces", ""},
-    {"openconfig-policy-types", ""},
-    {"openconfig-routing-policy", ""},
-    {"openconfig-types", ""},
-    {"ietf-interfaces", ""},
-    {"ydk", ""},
-    {"ydktest-sanity", ""}
-
-};
 const char* m = "\
 <bgp xmlns=\"http://openconfig.net/yang/bgp\">\
 <global>\
@@ -366,6 +312,28 @@ TEST_CASE( "bits_order" )
 
     auto expected = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><ytypes><built-in-t><bits-value>disable-nagle auto-sense-speed</bits-value></built-in-t></ytypes></runner>";
     REQUIRE( new_xml == expected );
+}
+
+TEST_CASE("rpc_output")
+{
+    std::string searchdir{TEST_HOME};
+    mock::MockServiceProvider sp{searchdir, test_openconfig};
+    ydk::path::Codec s{};
+
+    auto & schema = sp.get_root_schema();
+
+    auto getc = schema.create_rpc("ietf-netconf:get-config");
+    REQUIRE(getc->has_output_node() == true);
+    auto get = schema.create_rpc("ietf-netconf:get");
+    REQUIRE(get->has_output_node() == true);
+    auto editc = schema.create_rpc("ietf-netconf:edit-config");
+    REQUIRE(editc->has_output_node() == false);
+    auto val = schema.create_rpc("ietf-netconf:validate");
+    REQUIRE(val->has_output_node() == false);
+    auto com = schema.create_rpc("ietf-netconf:commit");
+    REQUIRE(com->has_output_node() == false);
+    auto lo = schema.create_rpc("ietf-netconf:lock");
+    REQUIRE(lo->has_output_node() == false);
 }
 
 TEST_CASE( "submodule" )

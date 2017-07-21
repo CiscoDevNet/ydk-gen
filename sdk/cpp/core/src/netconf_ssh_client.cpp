@@ -121,12 +121,12 @@ nc_rpc* NetconfSSHClient::build_rpc_request(const string & payload)
           YLOG_ERROR("Could not build rpc payload: {}", payload );
           throw(YCPPClientError{"Could not build payload"});
     }
-    else if(NC_RPC_UNKNOWN==nc_rpc_get_type(rpc))
-    {
-        nc_rpc_free(rpc);
-        YLOG_ERROR("Rpc type is unknown");
-        throw(YCPPClientError{"Could not build payload"});
-    }
+//    else if(NC_RPC_UNKNOWN==nc_rpc_get_type(rpc))
+//    {
+//        nc_rpc_free(rpc);
+//        YLOG_ERROR("Rpc type is unknown");
+//        throw(YCPPClientError{"Could not build payload"});
+//    }
     return rpc;
 }
 

@@ -4,6 +4,7 @@ set(YDK_UNITTEST_TARGET_NAME "ydk_core_test")
 
 set(core_tests_src bgptest.cpp
                core_test.cpp
+               test_codec.cpp
                test_entity.cpp
                test_value.cpp
                test_value_list.cpp

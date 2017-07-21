@@ -295,6 +295,7 @@ public:
     /// @throws YCPPInvalidArgumentError if the arguments are invalid.
     ///
     std::shared_ptr<DataNode> decode(const RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format);
+    std::shared_ptr<DataNode> decode_rpc_output(const RootSchemaNode & root_schema, const std::string& buffer, const std:: string & rpc_path, EncodingFormat format);
 };
 
 ///
@@ -1036,6 +1037,8 @@ public:
     /// an input element in the schema.
     ///
     virtual DataNode& get_input_node() const = 0;
+
+    virtual bool has_output_node() const = 0;
 
     ///
     /// @brief return the SchemaNode associated with this rpc
