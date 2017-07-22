@@ -321,6 +321,7 @@ PYBIND11_PLUGIN(ydk_)
     class_<ydk::path::Rpc, shared_ptr<ydk::path::Rpc>>(path, "Rpc")
         .def("get_schema_node", &ydk::path::Rpc::get_schema_node, return_value_policy::reference)
         .def("get_input_node", &ydk::path::Rpc::get_input_node, return_value_policy::reference)
+        .def("has_output_node", &ydk::path::Rpc::has_output_node)
         .def("__call__", &ydk::path::Rpc::operator(), arg("service_provider"));
 
     class_<ydk::path::Repository>(path, "Repository")
@@ -338,7 +339,8 @@ PYBIND11_PLUGIN(ydk_)
     codec
         .def(init<>())
         .def("encode", &ydk::path::Codec::encode, arg("data_node"), arg("encoding"), arg("pretty"))
-        .def("decode", &ydk::path::Codec::decode, arg("root_schema_node"), arg("payload"), arg("encoding"));
+        .def("decode", &ydk::path::Codec::decode, arg("root_schema_node"), arg("payload"), arg("encoding"))
+        .def("decode_rpc_output", &ydk::path::Codec::decode_rpc_output, arg("root_schema_node"), arg("payload"), arg("rpc_path"), arg("encoding"));
 
     enum_<ydk::DataStore>(services, "DataStore")
         .value("candidate", ydk::DataStore::candidate)

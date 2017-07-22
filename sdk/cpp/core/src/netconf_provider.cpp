@@ -233,7 +233,7 @@ std::string NetconfServiceProvider::execute_payload(const std::string & payload)
 {
     std::string reply = client->execute_payload(payload);
     YLOG_INFO("=============Reply payload received from device=============");
-    YLOG_INFO(reply.c_str());
+    YLOG_INFO("{}", reply.c_str());
     YLOG_INFO("\n");
     return reply;
 }
@@ -431,16 +431,15 @@ static std::shared_ptr<path::DataNode> handle_rpc_output(const string & reply, p
     }
 
     path::Codec codec_service{};
+
     auto data_start = reply.find("<rpc-reply ");
-
     auto data_end = reply.find("</rpc-reply>", data_start);
-
     //need to find the end of the "<rpc-reply start tag
     auto data_start_end = reply.find(">", data_start);
     data_start = data_start_end + 1;
-
     data_end -= 1;
     string data = reply.substr(data_start, data_end-data_start+1);
+
     std::shared_ptr<path::DataNode> datanode = codec_service.decode_rpc_output(
                                                     root_schema,
                                                     data,

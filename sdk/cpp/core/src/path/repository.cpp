@@ -142,7 +142,7 @@ void libyang_log_callback(LY_LOG_LEVEL level, const char *msg, const char *path)
         case LY_LLWRN:
         case LY_LLVRB:
         case LY_LLDBG:
-            YLOG_DEBUG("Libyang TRACE: {}", error_message.str());
+            YLOG_DEBUG("Libyang DEBUG: {}", error_message.str());
             break;
     }
 }
