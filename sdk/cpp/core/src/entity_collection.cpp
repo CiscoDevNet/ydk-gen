@@ -38,7 +38,7 @@ EntityCollection::EntityCollection()
 {
 }
 
-EntityCollection::EntityCollection(std::vector<Entity*> data)
+EntityCollection::EntityCollection(const std::vector<Entity*> & data)
 {
     for(auto d : data)
     {
@@ -49,7 +49,7 @@ EntityCollection::EntityCollection(std::vector<Entity*> data)
     }
 }
 
-EntityCollection::EntityCollection(std::vector<std::shared_ptr<Entity>> data)
+EntityCollection::EntityCollection(const std::vector<std::shared_ptr<Entity>> & data)
 {
     for(auto d : data)
     {

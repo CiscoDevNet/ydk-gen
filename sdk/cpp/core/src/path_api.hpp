@@ -681,9 +681,9 @@ public:
 class DataNodeCollection {
     public:
         DataNodeCollection();
-        DataNodeCollection(std::vector<DataNode*> data_nodes);
-        DataNodeCollection(std::vector<std::shared_ptr<DataNode>> data_nodes);
-        DataNodeCollection(std::map<std::string, std::shared_ptr<DataNode>> data_nodes);
+        DataNodeCollection(const std::vector<DataNode*> & data_nodes);
+        DataNodeCollection(const std::vector<std::shared_ptr<DataNode>> & data_nodes);
+        DataNodeCollection(const std::map<std::string, std::shared_ptr<DataNode>> & data_nodes);
         ~DataNodeCollection();
 
         std::map<std::string, std::shared_ptr<DataNode>> get_data_nodes() const;

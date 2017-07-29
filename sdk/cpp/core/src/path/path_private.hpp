@@ -159,8 +159,8 @@ namespace ydk {
         class DataNodeImpl : public DataNode{
 
         public:
-            DataNodeImpl(DataNode* parent, struct lyd_node* node, const std::shared_ptr<RepositoryPtr> repo);
-            DataNodeImpl(DataNodeImpl* other);
+            explicit DataNodeImpl(DataNode* parent, struct lyd_node* node, const std::shared_ptr<RepositoryPtr> repo);
+            explicit DataNodeImpl(DataNodeImpl* other);
             //no copy constructor
             DataNodeImpl(const DataNodeImpl& dn) = delete;
 

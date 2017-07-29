@@ -43,7 +43,7 @@ DataNodeCollection::DataNodeCollection()
 {
 }
 
-DataNodeCollection::DataNodeCollection(std::vector<std::shared_ptr<DataNode>> data)
+DataNodeCollection::DataNodeCollection(const std::vector<std::shared_ptr<DataNode>> & data)
 {
     for(auto d : data)
     {
@@ -56,7 +56,7 @@ DataNodeCollection::DataNodeCollection(std::vector<std::shared_ptr<DataNode>> da
     }
 }
 
-DataNodeCollection::DataNodeCollection(std::vector<DataNode*> data)
+DataNodeCollection::DataNodeCollection(const std::vector<DataNode*> & data)
 {
     for(auto d : data)
     {
@@ -69,7 +69,7 @@ DataNodeCollection::DataNodeCollection(std::vector<DataNode*> data)
     }
 }
 
-DataNodeCollection::DataNodeCollection(std::map<std::string, std::shared_ptr<DataNode>> data_nodes)
+DataNodeCollection::DataNodeCollection(const std::map<std::string, std::shared_ptr<DataNode>> & data_nodes)
     : data_nodes(data_nodes)
 {
 }

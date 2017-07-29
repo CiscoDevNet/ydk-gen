@@ -352,8 +352,8 @@ class YLeafList {
 class EntityCollection {
     public:
         EntityCollection();
-        EntityCollection(std::vector<Entity*> data);
-        EntityCollection(std::vector<std::shared_ptr<Entity>> data);
+        EntityCollection(const std::vector<Entity*> & data);
+        EntityCollection(const std::vector<std::shared_ptr<Entity>> & data);
         ~EntityCollection();
 
         const std::map<std::string, std::shared_ptr<Entity>> & get_entities() const;

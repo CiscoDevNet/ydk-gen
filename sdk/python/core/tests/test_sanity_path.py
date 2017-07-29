@@ -118,7 +118,7 @@ class SanityTest(unittest.TestCase):
         getc.get_input_node().create_datanode('source/candidate')
         res = getc(self.ncc)
         runner_read = res.get_data_nodes()['ydktest-sanity:runner']
-        xml_read = self.codec.encode(runner, EncodingFormat.XML, True)
+        xml_read = self.codec.encode(runner_read, EncodingFormat.XML, True)
         self.assertEqual(xml, xml_read)
 
         # delete

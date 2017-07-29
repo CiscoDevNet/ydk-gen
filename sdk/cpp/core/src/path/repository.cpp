@@ -74,36 +74,6 @@ static void create_if_does_not_exist(const std::string & path)
     }
 }
 
-static std::vector<path::Capability>
-get_capability_from_module_name(const std::string& module_name, std::vector<path::Capability>& caps) {
-    std::vector<path::Capability> ret;
-
-    for (auto c: caps) {
-        if (c.module == module_name) {
-            ret.emplace_back(c);
-            break;
-        }
-    }
-
-    return ret;
-}
-
-static std::vector<path::Capability>
-get_module_capabilities_from_namespaces(const std::unordered_set<std::string>& module_names, std::vector<path::Capability>& caps)
-{
-    std::vector<path::Capability> module_caps;
-
-    for (auto &c: caps)
-    {
-        if (module_names.find(c.module) != module_names.end())
-        {
-            module_caps.emplace_back(c);
-        }
-    }
-
-    return module_caps;
-}
-
 namespace path
 {
 
