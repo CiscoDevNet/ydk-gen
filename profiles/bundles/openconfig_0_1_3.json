@@ -1,0 +1,71 @@
+{
+  "name": "openconfig",
+  "version": "0.1.3",
+  "core_version": "0.6.0",
+  "author": "Cisco",
+  "copyright": "Cisco",
+  "description": "YDK bundle for OpenConfig models",
+  "long_description": "This YANG Development Kit (YDK) bundle provides APIs for OpenConfig YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for OpenConfig models uses the YDK core package and additional model bundles.  You can find the SDK documentation at http://ydk.cisco.com/py/docs",
+  "models": {
+    "description": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
+    "git": [
+      {
+        "url": "https://github.com/YangModels/yang.git",
+        "commits": [
+          {
+            "commitid": "5e74f5b0356b68bfe732bad37045c47d7c8acc74",
+            "file": [
+                     "vendor/cisco/xr/622/cisco-xr-openconfig-interfaces-types.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp-common-multiprotocol.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp-common-structure.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp-common.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp-global.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp-neighbor.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp-peer-group.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp-policy.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp-types.yang",
+                     "vendor/cisco/xr/622/openconfig-bgp.yang",
+                     "vendor/cisco/xr/622/openconfig-extensions.yang",
+                     "vendor/cisco/xr/622/openconfig-if-aggregate.yang",
+                     "vendor/cisco/xr/622/openconfig-if-ethernet.yang",
+                     "vendor/cisco/xr/622/openconfig-if-ip.yang",
+                     "vendor/cisco/xr/622/openconfig-interfaces.yang",
+                     "vendor/cisco/xr/622/openconfig-lacp.yang",
+                     "vendor/cisco/xr/622/openconfig-local-routing.yang",
+                     "vendor/cisco/xr/622/openconfig-mpls-igp.yang",
+                     "vendor/cisco/xr/622/openconfig-mpls-ldp.yang",
+                     "vendor/cisco/xr/622/openconfig-mpls-rsvp.yang",
+                     "vendor/cisco/xr/622/openconfig-mpls-sr.yang",
+                     "vendor/cisco/xr/622/openconfig-mpls-static.yang",
+                     "vendor/cisco/xr/622/openconfig-mpls-te.yang",
+                     "vendor/cisco/xr/622/openconfig-mpls-types.yang",
+                     "vendor/cisco/xr/622/openconfig-mpls.yang",
+                     "vendor/cisco/xr/622/openconfig-platform-transceiver.yang",
+                     "vendor/cisco/xr/622/openconfig-platform-types.yang",
+                     "vendor/cisco/xr/622/openconfig-platform.yang",
+                     "vendor/cisco/xr/622/openconfig-policy-types.yang",
+                     "vendor/cisco/xr/622/openconfig-rib-bgp-types.yang",
+                     "vendor/cisco/xr/622/openconfig-rib-bgp.yang",
+                     "vendor/cisco/xr/622/openconfig-routing-policy.yang",
+                     "vendor/cisco/xr/622/openconfig-telemetry.yang",
+                     "vendor/cisco/xr/622/openconfig-terminal-device.yang",
+                     "vendor/cisco/xr/622/openconfig-transport-types.yang",
+                     "vendor/cisco/xr/622/openconfig-types.yang",
+                     "vendor/cisco/xr/622/openconfig-vlan-types.yang",
+                     "vendor/cisco/xr/622/openconfig-vlan.yang"
+
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "dependency": [
+    {
+      "name": "ietf",
+      "version": "0.1.3",
+      "core_version": "0.6.0",
+      "uri": "file://profiles/bundles/ietf_0_1_3.json"
+    }
+  ]
+}

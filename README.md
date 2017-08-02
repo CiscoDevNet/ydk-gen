@@ -21,7 +21,7 @@ YANG Development Kit (Generator)
   - [Clone ydk-gen and install the requirements](#clone-ydk-gen-and-install-the-requirements)
 - [Usage](#usage)
   - [First step: choose your bundle profile](#first-step-choose-your-bundle-profile)
-    - [Details](#details)
+    - [Details](#Details)
   - [Second step: Generate & install the core](#second-step-generate--install-the-core)
   - [Third step: Generate & install your bundle](#third-step-generate--install-your-bundle)
   - [Fourth step: Writing your first app](#fourth-step-writing-your-first-app)
@@ -59,16 +59,16 @@ Please follow the below instructions to install the system requirements before i
 ## Linux
 Ubuntu (Debian-based):
 ```
-   $ sudo apt-get install gdebi-core
+   $ sudo apt-get install gdebi-core python3-dev python-dev
    $ wget https://devhub.cisco.com/artifactory/debian-ydk/0.6.0/libydk_0.6.0-1_amd64.deb
    $ sudo gdebi libydk_0.6.0-1_amd64.deb
 ```
 
 Centos (Fedora-based):
 ```
-   $ sudo yum install epel-release
+   $ sudo yum install epel-release libssh-devel gcc-c++
    $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.6.0/libydk-0.6.0-1.x86_64.rpm
-   $ sudo ln –s /usr/bin/cmake3 /usr/bin/cmake && export PATH=/usr/bin/cmake:$PATH
+   $ sudo ln –fs /usr/bin/cmake3 /usr/bin/cmake && export PATH=/usr/bin:$PATH
 ```
 
 ## macOS
@@ -77,7 +77,7 @@ It is recommended to install [homebrew](http://brew.sh) and Xcode command line t
    $ xcode-select --install
    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
    $ brew install python pkg-config libssh xml2 curl pcre cmake
-   $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.6.0/libydk_0.6.0_Darwin.pkg
+   $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.6.0/libydk-0.6.0-Darwin.tar.gz
    $ sudo installer -pkg libydk_0.6.0_Darwin.pkg -target /
 ```
 
