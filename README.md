@@ -48,7 +48,7 @@ Other tools and libraries are used to deliver `ydk-gen`'s functionality. In part
 * YANG model analysis and code generation is implemented using APIs from the [pyang](https://github.com/mbj4668/pyang) library
 * Documentation is generated using [Sphinx](http://www.sphinx-doc.org/en/stable/)
 
-Of course, many other libraries are used as an integral part of ydk-gen and its dependencies, too many to mention!
+Of course, many other libraries are used as an integral part of ydk-gen and it's dependencies, too many to mention!
 
 The output of ydk-gen is either a core package, that defines services and providers, or a module bundle, consisting of APIs based on YANG models. Each module bundle is generated using a bundle profile and the ydk-gen tool. Developers can either use pre-packaged generated bundles (e.g. [ydk-py](http://cs.co/ydk-py)), or they can define their own bundle, consisting of a set of YANG models, using a bundle profile (e.g. [```ietf_0_1_1.json```](profiles/bundles/ietf_0_1_1.json)). This gives a developer the ability to customize the scope of their bundle based on their requirements.
 
