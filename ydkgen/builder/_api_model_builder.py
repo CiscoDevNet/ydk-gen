@@ -78,6 +78,7 @@ class ApiModelBuilder(object):
         if enum_type_stmt is not None:
             enum_class = Enum(self.iskeyword)
             enum_class.stmt = enum_type_stmt
+            disambiguate_class_name_from_ancestors_and_siblings(self.language, enum_class, pe)
             enum_type_stmt.parent.i_enum = enum_class
             enum_type_stmt.i_enum = enum_class
             pe.owned_elements.append(enum_class)
@@ -194,6 +195,7 @@ class ApiModelBuilder(object):
             # we have to create the enum
             enum_class = Enum(self.iskeyword)
             enum_class.stmt = enum_type
+            disambiguate_class_name_from_ancestors_and_siblings(self.language, enum_class, parent_element)
             parent_element.owned_elements.append(enum_class)
             enum_class.owner = parent_element
             prop.property_type = enum_class
@@ -214,6 +216,7 @@ class ApiModelBuilder(object):
                     if contained_enum_type is not None and contained_enum_type == contained_type:
                         enum_class = Enum(self.iskeyword)
                         enum_class.stmt = contained_enum_type
+                        disambiguate_class_name_from_ancestors_and_siblings(self.language, enum_class, parent_element)
                         parent_element.owned_elements.append(enum_class)
                         enum_class.owner = parent_element
                         contained_enum_type.i_enum = enum_class
@@ -619,3 +622,13 @@ def snake_case(input_text):
     s = input_text.replace('-', '_')
     s = s.replace('.', '_')
     return s.lower()
+
+
+def disambiguate_class_name_from_ancestors_and_siblings(language, clazz, parent_element):
+    if language == 'cpp':
+        if name_matches_ancestor(clazz.name, parent_element):
+            clazz.name = clazz.name + '_'
+        for e in parent_element.owned_elements:
+            if e.name == clazz.name:
+                clazz.name = clazz.name + '_'
+

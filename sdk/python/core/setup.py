@@ -108,7 +108,7 @@ def get_python_library():
         library_prefix = sysconfig.get_config_var('PYTHONFRAMEWORKPREFIX')
         library_path = os.path.join(library_prefix, sysconfig.get_config_var('LDLIBRARY'))
 
-    assert os.path.exists(library_path), 'Could not find python library in {0}. Check your python installation'.format(library_path)
+#assert os.path.exists(library_path), 'Could not find python library in {0}. Check your python installation'.format(library_path)
     return library_path
 
 

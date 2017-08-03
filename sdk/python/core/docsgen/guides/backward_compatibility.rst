@@ -24,3 +24,4 @@ API Changes
 2. :py:class:`YFilter<ydk.filters.YFilter>` has replaced the functionality of the ``READ`` and ``DELETE`` objects
 3. When using YDK's :ref:`howto-logging`, the suggested level to be used is ``INFO``
 4. The type names of ``enumerations`` and ``identities`` no longer have ``Enum`` or ``Identity`` in their names. For example, the  identity ``InterfaceTypeIdentity`` in ``ydk.models.ietf.ietf_interfaces`` is now renamed to just :py:class:`InterfaceType<ydk.models.ietf.ietf_interfaces.InterfaceType>`.
+5. The ``is_config()`` method is no longer available for the YDK model APIs. This may be added back in a future release.

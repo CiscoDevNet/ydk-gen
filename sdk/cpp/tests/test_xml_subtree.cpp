@@ -194,8 +194,8 @@ bgp->global->config->as = 65172;
 bgp->global->config->router_id = "1.2.3.4";
 
 auto afi_safi = make_unique<openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi>();
-afi_safi->afi_safi_name = openconfig_bgp_types::L3Vpn_Ipv4_Unicast();
-afi_safi->config->afi_safi_name = openconfig_bgp_types::L3Vpn_Ipv4_Unicast();
+afi_safi->afi_safi_name = openconfig_bgp_types::L3VPN_IPV4_UNICAST();
+afi_safi->config->afi_safi_name = openconfig_bgp_types::L3VPN_IPV4_UNICAST();
 afi_safi->config->enabled = true;
 afi_safi->parent = bgp->global->afi_safis.get();
 bgp->global->afi_safis->afi_safi.push_back(move(afi_safi));

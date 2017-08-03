@@ -177,59 +177,11 @@ class ClassSetAttrPrinter(object):
     def _print_class_setattr_header(self):
         self.ctx.writeln('def __setattr__(self, name, value):')
         self.ctx.lvl_inc()
-        self.ctx.writeln('self._check_monkey_patching_error(name, value)')
-        self.ctx.writeln('with _handle_type_error():')
-        self.ctx.lvl_inc()
 
     def _print_class_setattr_body(self, clazz, leafs):
-        leaf_names = [ '"%s"' % (leaf.name) for leaf in leafs ]
-        separator = ',\n%s%s' % (self.ctx.tab(), ' '*12)
-
-        self.ctx.writeln('if name in self.__dict__ and isinstance(self.__dict__[name], YList):')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('raise YPYModelError("Attempt to assign value of \'{}\' to YList ldata. "')
-        self.ctx.writeln('                    "Please use list append or extend method."')
-        self.ctx.writeln('                    .format(value))')
-        self.ctx.lvl_dec()
-        self.ctx.writeln('if isinstance(value, Enum.YLeaf):')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('value = value.name')
-        self.ctx.lvl_dec()
-        self.ctx.writeln('if name in (%s) and name in self.__dict__:' %
-            separator.join(leaf_names))
-        self.ctx.lvl_inc()
-        self.ctx.writeln('if isinstance(value, YLeaf):')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('self.__dict__[name].set(value.get())')
-        self.ctx.lvl_dec()
-        self.ctx.writeln('elif isinstance(value, YLeafList):')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('super(%s, self).__setattr__(name, value)' % clazz.qn())
-        self.ctx.lvl_dec()
-
-        self.ctx.writeln('else:')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('self.__dict__[name].set(value)')
-        self.ctx.lvl_dec()
-
-        self.ctx.lvl_dec()
-        self.ctx.writeln('else:')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('if hasattr(value, "parent") and name != "parent":')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('if hasattr(value, "is_presence_container") and value.is_presence_container:')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('value.parent = self')
-        self.ctx.lvl_dec()
-        self.ctx.writeln('elif value.parent is None and value.yang_name in self._children_yang_names:')
-        self.ctx.lvl_inc()
-        self.ctx.writeln('value.parent = self')
-        self.ctx.lvl_dec()
-        self.ctx.lvl_dec()
-        self.ctx.writeln('super(%s, self).__setattr__(name, value)' % clazz.qn())
-        self.ctx.lvl_dec()
+        leaf_names = ['%s' % (leaf.name) for leaf in leafs]
+        self.ctx.writeln('self._perform_setattr(%s, %s, name, value)'%(clazz.qn(), leaf_names))
 
     def _print_class_setattr_trailer(self):
-        self.ctx.lvl_dec()
         self.ctx.lvl_dec()
         self.ctx.bline()

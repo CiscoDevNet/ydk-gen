@@ -120,6 +120,7 @@ class ClassPrinter(FilePrinter):
         ClassDocstringPrinter(self.ctx).print_output(clazz)
 
     def _print_class_attributes(self, clazz):
+        self.ctx.lvl_inc()
         module = clazz.stmt
         if not clazz.stmt.keyword == 'module':
             module = clazz.stmt.i_module

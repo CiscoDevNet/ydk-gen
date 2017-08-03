@@ -12,13 +12,18 @@ Overview
 
 The YANG Development Kit (YDK) is a Software Development Kit that provides API's that are modeled in YANG. The main goal of YDK is to reduce the learning curve of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles that are based on YANG models.
 
+Backward Compatibility
+----------------------
+Please see `the release notes <https://github.com/CiscoDevNet/ydk-py/releases/tag/0.6.0>`_ and `documentation <http://ydk.cisco.com/py/docs/backward_compatibility.html>`_ for details on some backward incompatible changes introduced as part of the 0.6.0 release.
+
+
 System Requirements
 -------------------
 Linux
 ~~~~~
 Ubuntu (Debian-based) - The following packages must be present in your system before installing YDK-Py::
 
-   $ sudo apt-get install gdebi-core python3-dev python-dev
+   $ sudo apt-get install gdebi-core python3-dev python-dev libtool-bin
    $ wget https://devhub.cisco.com/artifactory/debian-ydk/0.6.0/libydk_0.6.0-1_amd64.deb
    $ sudo gdebi libydk_0.6.0-1_amd64.deb
 

@@ -21,7 +21,7 @@
 from __future__ import print_function
 
 
-import os
+import os, shutil
 from distutils import dir_util
 
 from ydkgen.api_model import Bits, Class, Enum
@@ -59,7 +59,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
             self._print_python_rst_ydk_models()
 
         # YANG models
-        self._print_yang_files()
+        self._copy_yang_files()
         return ()
 
     def _print_modules(self):
@@ -162,10 +162,20 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
                         emit_nmsp_declare_init,
                         _EmitArgs(self.ypy_ctx, self.packages))
 
-    def _print_yang_files(self):
+    def _copy_yang_files_from_subdirectories(self, yang_files_dir):
+        subdirs = [os.path.join(yang_files_dir, o) for o in os.listdir(yang_files_dir) if os.path.isdir(os.path.join(yang_files_dir, o))]
+        for subdir in subdirs:
+            files = os.listdir(subdir)
+            for file in files:
+                file_path = os.path.join(subdir, file)
+                if os.path.isfile(file_path):
+                    shutil.copy(file_path, yang_files_dir)
+
+    def _copy_yang_files(self):
         yang_files_dir = os.path.sep.join([self.models_dir, '_yang'])
         os.mkdir(yang_files_dir)
         dir_util.copy_tree(self.bundle.resolved_models_dir, yang_files_dir)
+        self._copy_yang_files_from_subdirectories(yang_files_dir)
 
 
 def get_init_file_name(path):

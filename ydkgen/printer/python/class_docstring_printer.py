@@ -47,6 +47,7 @@ class ClassDocstringPrinter(object):
         self._print_class_docstring_presence(clazz)
         self.ctx.writeln('"""')
         self.ctx.bline()
+        self.ctx.lvl_dec()
 
     def _print_class_docstring_text(self, clazz):
         class_docstring = get_class_docstring(clazz, 'py')

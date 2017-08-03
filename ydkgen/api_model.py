@@ -214,6 +214,7 @@ class NamedElement(Element):
 
     def fully_qualified_cpp_name(self):
         ''' get the C++ qualified name '''
+        pkg = get_top_pkg(self)
         names = []
         element = self
         while element is not None:
@@ -221,7 +222,7 @@ class NamedElement(Element):
                 element = element.owner
             names.append(element.name)
             element = element.owner
-        return '::'.join(reversed(names))
+        return pkg.bundle_name + '::' + '::'.join(reversed(names))
 
 
 class Package(NamedElement):
@@ -874,7 +875,11 @@ def snake_case(input_text):
 
 
 def camel_case(input_text):
-    return ''.join([word.title() for word in input_text.split('-')])
+    def _title(str):
+        if len(str) > 0  and str.startswith(str[0].upper()):
+            return str
+        return str.title()
+    return ''.join([_title(word) for word in input_text.split('-')])
 
 
 def escape_name(name):

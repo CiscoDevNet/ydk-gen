@@ -122,9 +122,9 @@ class YdkGenerator(object):
         _set_original_bundle_name_for_packages(all_bundles, packages, curr_bundle)
         gen_api_root = self._init_bundle_directories(packages=packages, bundle=curr_bundle)
 
-        generated_files = self._print_packages(packages, gen_api_root, curr_bundle)
+        yang_models = _create_models_archive(curr_bundle, gen_api_root)
 
-        yang_models = self._create_models_archive(curr_bundle, gen_api_root)
+        generated_files = self._print_packages(packages, gen_api_root, curr_bundle)
 
         if self.language == 'cpp':
             _modify_cpp_cmake(gen_api_root, curr_bundle.name, curr_bundle.str_version, 
@@ -179,8 +179,9 @@ class YdkGenerator(object):
         """
         global classes_per_source_file
         factory = printer_factory.PrinterFactory()
+        bundle_packages = _filter_bundle_from_packages(pkgs, bundle)
         ydk_printer = factory.get_printer(self.language)(output_dir, bundle, self.generate_tests, self.sort_clazz)
-        generated_files = ydk_printer.emit(pkgs, classes_per_source_file)
+        generated_files = ydk_printer.emit(bundle_packages, classes_per_source_file)
         return generated_files
 
     # Initialize generated API directory ######################################
@@ -255,30 +256,56 @@ class YdkGenerator(object):
         logger.debug('Copying %s to %s' % (target_dir, gen_api_root))
         dir_util.copy_tree(target_dir, gen_api_root)
 
-    def _create_models_archive(self, bundle, target_dir):
-        '''
-        Creates yang models archive as part of bundle package.
-        Args:
-            source_dir (str): Directory where models are located
-            bundle_qualified_name (st): Bundle name with version
-            target_dir (str): Directory where archive is to be created
-        '''
-        global YDK_YANG_MODEL
-        assert isinstance(bundle, bundle_resolver.Bundle)
-        tar_file = '{}.tar.gz'.format(bundle.fqn)
-        tar_file_path = os.path.join(target_dir, tar_file)
-        ydk_yang = os.path.join(target_dir, YDK_YANG_MODEL)
-        if os.path.isfile(ydk_yang):
-            shutil.copy(ydk_yang, bundle.resolved_models_dir)
-        yang_models = []
-        with tarfile.open(tar_file_path, 'w:gz') as tar:
-            for yang_model in os.listdir(bundle.resolved_models_dir):
-                if yang_model.endswith(".yang"):
-                    yang_models.append(yang_model)
-                    yang_model_path = os.path.join(bundle.resolved_models_dir, yang_model)
-                    tar.add(yang_model_path, arcname=os.path.basename(yang_model_path))
-        logger.debug('\nCreated models archive: {}'.format(tar_file_path))
-        return yang_models
+
+def _filter_bundle_from_packages(pkgs, bundle):
+    bundle_packages = []
+    bundle_package_names = [x.name for x in bundle.models]
+    for package in pkgs:
+        if package.stmt.arg in bundle_package_names:
+            bundle_packages.append(package)
+    return bundle_packages
+
+
+def _get_yang_models_filenames_from_directory(path, prefix):
+    yang_models = []
+    for file in os.listdir(path):
+        file_path = os.path.join(path, file)
+        if file.endswith(".yang"):
+            yang_models.append(os.path.join(prefix, file))
+        elif os.path.islink(file_path):
+            yang_models.extend(_get_yang_models_filenames_from_directory(file_path, file))
+    return yang_models
+
+
+def _create_tar(resolved_models_dir, tar_file_path):
+    yang_models = _get_yang_models_filenames_from_directory(resolved_models_dir, '')
+    with tarfile.open(tar_file_path, 'w:gz') as tar:
+        for y in yang_models:
+            yang_model_path = os.path.join(resolved_models_dir, y)
+            tar.add(yang_model_path, arcname=os.path.basename(yang_model_path))
+    yang_models_base_names = [os.path.basename(file) for file in yang_models]
+    return yang_models_base_names
+
+
+def _create_models_archive(bundle, target_dir):
+    '''
+    Creates yang models archive as part of bundle package.
+    Args:
+        source_dir (str): Directory where models are located
+        bundle_qualified_name (st): Bundle name with version
+        target_dir (str): Directory where archive is to be created
+    '''
+    global YDK_YANG_MODEL
+    assert isinstance(bundle, bundle_resolver.Bundle)
+    tar_file = '{}.tar.gz'.format(bundle.fqn)
+    tar_file_path = os.path.join(target_dir, tar_file)
+    ydk_yang = os.path.join(target_dir, YDK_YANG_MODEL)
+    if os.path.isfile(ydk_yang):
+        shutil.copy(ydk_yang, bundle.resolved_models_dir)
+    yang_models = _create_tar(bundle.resolved_models_dir, tar_file_path)
+
+    logger.debug('\nCreated models archive: {}'.format(tar_file_path))
+    return yang_models
 
 
 def _set_original_bundle_name_for_packages(bundles, packages, curr_bundle):
@@ -433,4 +460,3 @@ def _check_description_file(description_file):
     if not os.path.isfile(description_file):
         logger.error('Path to description file is not valid.')
         raise YdkGenException('Path to description file is not valid.')
-

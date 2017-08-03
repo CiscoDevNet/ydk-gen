@@ -22,11 +22,13 @@
         - Entity
 """
 from ydk.ext.types import ChildrenMap
+from ydk.ext.types import Enum as _Enum
 from ydk.ext.types import YLeaf as _YLeaf
 from ydk.ext.types import YLeafList as _YLeafList
 from ydk.ext.types import Entity as _Entity
 from ydk.filters import YFilter as _YFilter
 from ydk.errors import YPYModelError as _YPYModelError
+from ydk.errors.error_handler import handle_type_error as _handle_type_error
 
 
 class YList(list):
@@ -159,3 +161,28 @@ class Entity(_Entity):
         if not isinstance(value, obj.__class__):
             raise _YPYModelError("Invalid value '{!s}' in '{}'"
                                  .format(value, obj))
+
+    def _perform_setattr(self, clazz, leaf_names, name, value):
+        self._check_monkey_patching_error(name, value)
+        with _handle_type_error():
+            if name in self.__dict__ and isinstance(self.__dict__[name], YList):
+                raise _YPYModelError("Attempt to assign value of '{}' to YList ldata. "
+                                    "Please use list append or extend method."
+                                    .format(value))
+            if isinstance(value, _Enum.YLeaf):
+                value = value.name
+            if name in leaf_names and name in self.__dict__:
+                if isinstance(value, _YLeaf):
+                    self.__dict__[name].set(value.get())
+                elif isinstance(value, _YLeafList):
+                    super(clazz, self).__setattr__(name, value)
+                else:
+                    self.__dict__[name].set(value)
+            else:
+                if hasattr(value, "parent") and name != "parent":
+                    if hasattr(value, "is_presence_container") and value.is_presence_container:
+                        value.parent = self
+                    elif value.parent is None and value.yang_name in self._children_yang_names:
+                        value.parent = self
+                super(clazz, self).__setattr__(name, value)
+
