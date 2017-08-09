@@ -875,10 +875,10 @@ def snake_case(input_text):
 
 
 def camel_case(input_text):
-    def _title(str):
-        if len(str) > 0  and str.startswith(str[0].upper()):
-            return str
-        return str.title()
+    def _title(s):
+        if len(s) > 0  and str.startswith(s[0].upper()):
+            return s
+        return s.title()
     return ''.join([_title(word) for word in input_text.split('-')])
 
 

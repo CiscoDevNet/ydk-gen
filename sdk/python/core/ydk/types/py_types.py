@@ -175,7 +175,7 @@ class Entity(_Entity):
                 if isinstance(value, _YLeaf):
                     self.__dict__[name].set(value.get())
                 elif isinstance(value, _YLeafList):
-                    super(clazz, self).__setattr__(name, value)
+                    super(Entity, self).__setattr__(name, value)
                 else:
                     self.__dict__[name].set(value)
             else:
@@ -184,5 +184,5 @@ class Entity(_Entity):
                         value.parent = self
                     elif value.parent is None and value.yang_name in self._children_yang_names:
                         value.parent = self
-                super(clazz, self).__setattr__(name, value)
+                super(Entity, self).__setattr__(name, value)
 
