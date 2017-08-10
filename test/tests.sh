@@ -162,7 +162,7 @@ function py_sanity_ydktest_test {
     run_test sdk/python/core/tests/test_sanity_codec.py
 
     py_sanity_ydktest_test_tcp
-    py_sanity_ydktest_test_ncclient
+    py_sanity_ydktest_test_netconf_ssh
 
     git checkout .
     export PYTHONPATH=
@@ -171,8 +171,8 @@ function py_sanity_ydktest_test {
     source test_env/bin/activate
 }
 
-function py_sanity_ydktest_test_ncclient {
-    print_msg "py_sanity_ydktest_test_ncclient"
+function py_sanity_ydktest_test_netconf_ssh {
+    print_msg "py_sanity_ydktest_test_netconf_ssh"
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/ydktest
 
     run_test sdk/python/core/tests/test_netconf_operations.py
@@ -358,10 +358,10 @@ function generate_install_cpp_bundle {
 }
 
 function cpp_sanity_ydktest_gen_install {
-    print_msg "Generating and installing ydktest bundle"
+    print_msg "Generating and installing C++ ydktest bundle"
     generate_install_cpp_bundle profiles/test/ydktest-cpp.json ydktest-bundle
 
-    print_msg "Generating and installing new ydktest bundle"
+    print_msg "Generating and installing new C++ ydktest bundle"
     generate_install_cpp_bundle profiles/test/ydktest-cpp-new.json ydktest_new-bundle
 }
 

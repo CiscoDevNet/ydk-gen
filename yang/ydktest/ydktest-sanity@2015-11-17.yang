@@ -311,6 +311,12 @@ module ydktest-sanity {
           }
         }
 
+        leaf enum-leafref {
+            type leafref {
+                path "../embeded-enum";
+            }
+        }
+
         leaf enum-value {
           description "this is enum type value";
           type Ydk-Enum-test;

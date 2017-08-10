@@ -199,6 +199,8 @@ class ApiModelBuilder(object):
             parent_element.owned_elements.append(enum_class)
             enum_class.owner = parent_element
             prop.property_type = enum_class
+            enum_type.i_enum = enum_class
+            enum_type.parent.i_enum = enum_class
         elif bits_type is not None and bits_type == stmt.search_one('type'):
             # we have to create the specific subclass of FixedBitsDict
             bits_class = Bits(self.iskeyword)
@@ -220,6 +222,7 @@ class ApiModelBuilder(object):
                         parent_element.owned_elements.append(enum_class)
                         enum_class.owner = parent_element
                         contained_enum_type.i_enum = enum_class
+                        contained_enum_type.parent.i_enum = enum_class
 
                     if contained_bits_type is not None and contained_bits_type == contained_type:
                         bits_class = Bits(self.iskeyword)
@@ -564,6 +567,7 @@ class GroupingClassApiModelBuilder(ApiModelBuilder):
                     enum_class.owner = parent_element
                     prop.property_type = enum_class
                     enum_type.parent.i_enum = enum_class
+                    enum_type.i_enum = enum_class
             elif bits_type is not None:
                 if bits_type == stmt.search_one('type'):
                     # we have to create the specific subclass of FixedBitsDict

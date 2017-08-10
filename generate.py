@@ -371,7 +371,7 @@ if __name__ == '__main__':
                                 'core').generate(options.core))
     except YdkGenException as e:
         print('Error(s) occurred in YdkGenerator()!')
-        if not options.verbose:
+        if options.verbose:
             print(e.msg)
         sys.exit(1)
 
