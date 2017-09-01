@@ -22,6 +22,7 @@
 //////////////////////////////////////////////////////////////////
 
 #include "entity_data_node_walker.hpp"
+#include "entity_util.hpp"
 #include "executor_service.hpp"
 #include "logger.hpp"
 #include "service_provider.hpp"
@@ -82,7 +83,7 @@ static void walk_children(std::shared_ptr<Entity> entity, path::DataNode & rpc_i
     if (entity != nullptr)
     {
         std::map<string, std::shared_ptr<Entity>> children = entity->get_children();
-        auto entity_path = entity->get_entity_path(entity->parent);
+        auto entity_path = get_entity_path(*entity, entity->parent);
         YLOG_DEBUG("Children count for: {} : {}", entity_path.path, children.size());
 
         if (path != "")
@@ -106,7 +107,7 @@ static void walk_children(std::shared_ptr<Entity> entity, path::DataNode & rpc_i
 
 static void create_from_entity_path(std::shared_ptr<Entity> entity, path::DataNode & rpc_input, const std::string & path)
 {
-    auto entity_path = entity->get_entity_path(entity->parent);
+    auto entity_path = get_entity_path(*entity, entity->parent);
 
     for (std::pair<std::string, LeafData> child : entity_path.value_paths)
     {
@@ -127,7 +128,7 @@ static void create_from_children(std::map<string, std::shared_ptr<Entity>> & chi
         if ( child.second->get_children().size() == 0 )
         {
             YLOG_DEBUG("Creating child '{}': {}",child.first,
-                child.second->get_entity_path(child.second->parent).path);
+                get_entity_path(*(child.second), child.second->parent).path);
 
             rpc_input.create_datanode(child.first);
         }

@@ -50,7 +50,7 @@ XmlSubtreeCodec::XmlSubtreeCodec()
 //////////////////////////////////////////////////////////////////
 std::string XmlSubtreeCodec::encode(Entity & entity, path::RootSchemaNode & root_schema)
 {
-    EntityPath root_path = entity.get_entity_path(nullptr);
+    EntityPath root_path = get_entity_path(entity, nullptr);
     auto & root_data_node = root_schema.create_datanode(root_path.path);
     xmlDocPtr doc = xmlNewDoc(to_xmlchar("1.0"));
     xmlNodePtr root_node = xmlNewNode(NULL, to_xmlchar(entity.yang_name));
@@ -65,11 +65,13 @@ std::string XmlSubtreeCodec::encode(Entity & entity, path::RootSchemaNode & root
 static void walk_children(Entity & entity, const path::SchemaNode & schema, xmlNodePtr xml_node)
 {
     std::map<string, shared_ptr<Entity>> children = entity.get_children();
-    YLOG_DEBUG("XML: Children count for: {} : {}",entity.get_entity_path(entity.parent).path, children.size());
+    YLOG_DEBUG("XML: Children count for: {} : {}",get_entity_path(entity, entity.parent).path, children.size());
     for(auto const& child : children)
     {
+        if(child.second == nullptr)
+            continue;
         YLOG_DEBUG("==================");
-        YLOG_DEBUG("XML: Looking at child '{}': {}",child.first, child.second->get_entity_path(child.second->parent).path);
+        YLOG_DEBUG("XML: Looking at child '{}': {}",child.first, get_entity_path(*(child.second), child.second->parent).path);
         if(child.second->has_operation() || child.second->has_data() || child.second->is_presence_container)
             populate_xml_node(*(child.second), schema, xml_node);
         else
@@ -125,7 +127,7 @@ static xmlNodePtr create_and_populate_xml_node(const path::SchemaNode & parent_s
 
 static void populate_xml_node(Entity & entity, const path::SchemaNode & parent_schema, xmlNodePtr xml_node)
 {
-    EntityPath path = entity.get_entity_path(entity.parent);
+    EntityPath path = get_entity_path(entity, entity.parent);
     const path::SchemaNode* schema = find_child_by_name(parent_schema, entity.get_segment_path());
 
     xmlNodePtr child = create_and_populate_xml_node(parent_schema, *schema, entity.yfilter, xml_node, NULL);

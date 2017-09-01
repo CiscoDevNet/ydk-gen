@@ -39,8 +39,6 @@ using namespace std;
 
 namespace ydk
 {
-static string get_encoding_string(EncodingFormat encoding);
-
 RestconfServiceProvider::RestconfServiceProvider(path::Repository & repo,
                                                  const string & address,
                                                  const string & username,
@@ -78,13 +76,6 @@ EncodingFormat RestconfServiceProvider::get_encoding() const
 const path::Session& RestconfServiceProvider::get_session() const
 {
     return session;
-}
-
-static string get_encoding_string(EncodingFormat encoding)
-{
-    return (encoding == EncodingFormat::XML)?
-        ("application/yang-data+xml"):
-        ("application/yang-data+json");
 }
 
 }

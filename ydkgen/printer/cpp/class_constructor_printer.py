@@ -21,7 +21,41 @@ source_printer.py
 
 """
 from ydkgen.api_model import Bits, Class, DataType, Enum
-from ydkgen.common import get_module_name
+from ydkgen.common import get_module_name, has_list_ancestor, is_top_level_class
+
+
+def get_type_name(prop_type):
+    if prop_type.name == 'string':
+        return 'str'
+    elif prop_type.name == 'leafref':
+        return 'str'
+    elif prop_type.name == 'decimal64':
+        return 'str'
+    elif prop_type.name == 'union':
+        return 'str'
+    elif prop_type.name == 'binary':
+        return 'str'
+    elif prop_type.name == 'instance-identifier':
+        return 'str'
+    elif isinstance(prop_type, Bits):
+        return 'bits'
+    elif isinstance(prop_type, Class) and prop_type.is_identity():
+        return 'identityref'
+    elif isinstance(prop_type, Enum):
+        return 'enumeration'
+    elif isinstance(prop_type, DataType):
+        return 'str'
+    return prop_type.name
+
+
+def get_yang_name_for_leaf(clazz, prop):
+    if all((prop.stmt.top.arg != clazz.stmt.top.arg,
+            hasattr(prop.stmt.top, 'i_aug_targets') and
+                    clazz.stmt.top in prop.stmt.top.i_aug_targets)):
+        name = ':'.join([prop.stmt.top.arg, prop.stmt.arg])
+    else:
+        name = prop.stmt.arg
+    return name
 
 
 class ClassConstructorPrinter(object):
@@ -50,14 +84,16 @@ class ClassConstructorPrinter(object):
     def _print_class_constructor_body(self, clazz, leafs, children):
         self._print_init_children(children)
         if not clazz.is_identity():
-            self.ctx.writeln('yang_name = "%s"; yang_parent_name = "%s";' % (clazz.stmt.arg, clazz.owner.stmt.arg))
+            self.ctx.writeln('yang_name = "%s"; yang_parent_name = "%s"; is_top_level_class = %s; has_list_ancestor = %s;' \
+                             % (clazz.stmt.arg, clazz.owner.stmt.arg, ('true' if is_top_level_class(clazz) else 'false'),
+                                ('true' if has_list_ancestor(clazz) else 'false')))
 
     def _print_init_children(self, children):
         for child in children:
             if child.is_many or child.stmt.search_one('presence') is not None:
                 continue
             self.ctx.writeln('%s->parent = this;' % child.name)
-            self.ctx.bline()
+        self.ctx.bline()
 
     def _print_class_constructor_trailer(self):
         self.ctx.lvl_dec()
@@ -93,26 +129,3 @@ class ClassConstructorPrinter(object):
                 self.ctx.writeln('\t,')
             self.ctx.writeln('\n\t,'.join(init_stmts))
 
-
-def get_type_name(prop_type):
-    if prop_type.name == 'string':
-        return 'str'
-    elif prop_type.name == 'leafref':
-        return 'str'
-    elif prop_type.name == 'decimal64':
-        return 'str'
-    elif prop_type.name == 'union':
-        return 'str'
-    elif prop_type.name == 'binary':
-        return 'str'
-    elif prop_type.name == 'instance-identifier':
-        return 'str'
-    elif isinstance(prop_type, Bits):
-        return 'bits'
-    elif isinstance(prop_type, Class) and prop_type.is_identity():
-        return 'identityref'
-    elif isinstance(prop_type, Enum):
-        return 'enumeration'
-    elif isinstance(prop_type, DataType):
-        return 'str'
-    return prop_type.name

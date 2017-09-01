@@ -74,4 +74,58 @@ bool is_set(const YFilter & yfilter)
     return yfilter != YFilter::not_set;
 }
 
+static const EntityPath get_entity_path(const Entity & entity, const string & path_buffer)
+{
+    std::vector<std::pair<std::string, LeafData> > leaf_name_data  = entity.get_name_leaf_data();
+
+    EntityPath entity_path {path_buffer, leaf_name_data};
+    return entity_path;
+}
+
+static bool is_absolute_path(Entity* ancestor)
+{
+    return ancestor == nullptr;
+}
+
+//
+// @brief Get the EntityPath relative to the parent passed in
+//
+// Returns the EntityPath relative to the ancestor passed in.
+// The ancestor must either be null, in which case the absolute path
+// from the root is returned, or some other ancestor of this Entity.
+//
+// @param[in] parent The ancestor relative to which the path is calculated or nullptr
+// @return EntityPath
+// @throws YCPPInvalidArgumentError if the parent is invalid
+
+const EntityPath get_entity_path(const Entity & entity, Entity* ancestor)
+{
+    std::ostringstream path_buffer;
+    if (is_absolute_path(ancestor))
+    {
+        if(entity.has_list_ancestor)
+        {
+            throw(YCPPInvalidArgumentError{"ancestor for entity cannot be nullptr as one of the ancestors is a list. Path: "+entity.get_segment_path()});
+        }
+        auto a = entity.get_absolute_path();
+        if(a.size() == 0)
+        {
+            path_buffer << entity.get_segment_path();
+        }
+        else
+        {
+            path_buffer << a;
+        }
+    }
+    else
+    {
+        if(entity.is_top_level_class)
+        {
+            throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node. Path: "+entity.get_segment_path()});
+        }
+        path_buffer << get_relative_entity_path(&entity, ancestor, path_buffer.str());
+    }
+    return get_entity_path(entity, path_buffer.str());
+}
+
 }

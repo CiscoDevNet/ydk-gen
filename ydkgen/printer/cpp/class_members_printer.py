@@ -25,6 +25,7 @@ from pyang.types import UnionTypeSpec
 from ydkgen.api_model import Class, Enum, Package
 from ydkgen.builder import TypesExtractor
 from pyang.types import PathTypeSpec
+from ydkgen.common import has_list_ancestor, is_top_level_class
 
 
 class ClassMembersPrinter(object):
@@ -70,13 +71,15 @@ class ClassMembersPrinter(object):
     def _print_common_method_declarations(self, clazz):
         self.ctx.writeln('bool has_data() const override;')
         self.ctx.writeln('bool has_operation() const override;')
-        self.ctx.writeln('const ydk::EntityPath get_entity_path(ydk::Entity* parent) const override;')
+        self.ctx.writeln('std::vector<std::pair<std::string, ydk::LeafData> > get_name_leaf_data() const override;')
         self.ctx.writeln('std::string get_segment_path() const override;')
         self.ctx.writeln('std::shared_ptr<ydk::Entity> get_child_by_name(const std::string & yang_name, const std::string & segment_path) override;')
         self.ctx.writeln('void set_value(const std::string & value_path, const std::string & value, const std::string & name_space, const std::string & name_space_prefix) override;')
         self.ctx.writeln('void set_filter(const std::string & value_path, ydk::YFilter yfliter) override;')
         self.ctx.writeln('std::map<std::string, std::shared_ptr<ydk::Entity>> get_children() const override;')
         self.ctx.writeln('bool has_leaf_or_child_of_name(const std::string & name) const override;')
+        if not is_top_level_class(clazz) and not has_list_ancestor(clazz):
+            self.ctx.writeln('std::string get_absolute_path() const override;')
 
     def _print_top_level_entity_functions(self, clazz):
         if clazz.owner is not None and isinstance(clazz.owner, Package):

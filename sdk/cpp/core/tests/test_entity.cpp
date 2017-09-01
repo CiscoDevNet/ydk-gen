@@ -26,6 +26,7 @@
 //////////////////////////////////////////////////////////////////
 
 #include "../src/types.hpp"
+#include "../src/entity_util.hpp"
 #include "catch.hpp"
 #include <iostream>
 
@@ -61,9 +62,9 @@ class TestEntity:public Entity
         return "test";
     }
 
-    const EntityPath get_entity_path(Entity* parent) const
+    std::vector<std::pair<std::string, LeafData> > get_name_leaf_data() const
     {
-        return {{"test"}, {name.get_name_leafdata(), enabled.get_name_leafdata(), bits_field.get_name_leafdata()}};
+        return {name.get_name_leafdata(), enabled.get_name_leafdata(), bits_field.get_name_leafdata()};
     }
 
     std::shared_ptr<Entity> get_child_by_name(const std::string & child_path, const string & u)
@@ -144,9 +145,9 @@ class TestEntity:public Entity
             return "child";
         }
 
-        const EntityPath get_entity_path(Entity* parent) const
+        std::vector<std::pair<std::string, LeafData> > get_name_leaf_data() const
         {
-            return {{"child"}, {child_val.get_name_leafdata()}};
+            return {child_val.get_name_leafdata()};
         }
 
         std::shared_ptr<Entity> get_child_by_name(const std::string & child_path, const string & u)
@@ -219,9 +220,9 @@ class TestEntity:public Entity
                 return "multi-child[child-key='"+child_key.get()+"']";
             }
 
-            const EntityPath get_entity_path(Entity* parent) const
+            std::vector<std::pair<std::string, LeafData> > get_name_leaf_data() const
             {
-                return {{"multi-child[child-key='"+child_key.get()+"']"}, {child_key.get_name_leafdata()}};
+                return {child_key.get_name_leafdata()};
             }
 
             std::shared_ptr<Entity> get_child_by_name(const std::string & child_path, const string & u)
@@ -268,7 +269,7 @@ TEST_CASE("test_create")
                              {"enabled", {"true", YFilter::not_set, true, "", ""}},
                              {"bits-field", {"bit1 bit2", YFilter::not_set, true, "", ""}}}};
 
-    REQUIRE(test.get_entity_path(nullptr).path == "test");
+    REQUIRE(get_entity_path(test, nullptr).path == "test");
     REQUIRE(test.has_data() == false);
 
     test.name = test_value;
@@ -278,7 +279,7 @@ TEST_CASE("test_create")
     test.bits_field["bit2"] = true;
 
     REQUIRE(test.has_data() == true);
-    REQUIRE(test.get_entity_path(nullptr) == expected);
+    REQUIRE(get_entity_path(test, nullptr) == expected);
 }
 
 TEST_CASE("test_unequal")
@@ -377,7 +378,7 @@ TEST_CASE("test_read")
 {
     TestEntity test{};
 
-    REQUIRE(test.get_entity_path(nullptr).path == "test");
+    REQUIRE(get_entity_path(test, nullptr).path == "test");
     REQUIRE(test.has_data() == false);
 
     test.set_value("name", "test test", "", "");
@@ -394,7 +395,7 @@ TEST_CASE("test_multi_create")
 {
     TestEntity test{};
 
-    REQUIRE(test.get_entity_path(nullptr).path == "test");
+    REQUIRE(get_entity_path(test, nullptr).path == "test");
     REQUIRE(test.has_data() == false);
 
     test.set_value("name", "test test", "", "");
@@ -408,7 +409,7 @@ TEST_CASE("test_multi_read")
 {
     TestEntity test{};
 
-    REQUIRE(test.get_entity_path(nullptr).path == "test");
+    REQUIRE(get_entity_path(test, nullptr).path == "test");
     REQUIRE(test.has_data() == false);
 
     test.set_value("name", "test test", "", "");
@@ -416,7 +417,7 @@ TEST_CASE("test_multi_read")
 
     auto mchild = make_shared<TestEntity::Child::MultiChild>();
     mchild->parent = test.child.get();
-    test.child->multi_child.push_back(move(mchild));
+    test.child->multi_child.push_back(mchild);
 
     auto m = test.child->get_child_by_name("multi-child", "multi-child[multi-key='abc']");
     REQUIRE(m != nullptr);

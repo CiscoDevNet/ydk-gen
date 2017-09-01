@@ -613,7 +613,7 @@ def name_matches_ancestor(name, parent_element):
     if parent_element is None or isinstance(parent_element, Package):
         return False
 
-    if name == parent_element.name:
+    if hasattr(parent_element, 'name') and name == parent_element.name:
         return True
 
     if not hasattr(parent_element, 'owner'):

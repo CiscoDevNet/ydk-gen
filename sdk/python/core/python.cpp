@@ -132,12 +132,19 @@ public:
         );
     }
 
-    const ydk::EntityPath get_entity_path(ydk::Entity* ancestor) const override {
-        PYBIND11_OVERLOAD_PURE(
-            ydk::EntityPath,
+    std::string get_absolute_path() const override {
+        PYBIND11_OVERLOAD(
+            std::string,
             ydk::Entity,
-            get_entity_path,
-            ancestor
+            get_absolute_path
+        );
+    }
+
+    LeafDataList get_name_leaf_data() const override {
+        PYBIND11_OVERLOAD_PURE(
+            LeafDataList,
+            ydk::Entity,
+            get_name_leaf_data
         );
     }
 
@@ -252,9 +259,8 @@ public:
 };
 
 
-PYBIND11_PLUGIN(ydk_)
+PYBIND11_MODULE(ydk_, ydk)
 {
-    module ydk("ydk_", "YDK module");
     module providers = ydk.def_submodule("providers", "providers module");
     module services = ydk.def_submodule("services", "services module");
     module filters = ydk.def_submodule("filters", "filters module");
@@ -450,7 +456,8 @@ PYBIND11_PLUGIN(ydk_)
 
     class_<ydk::Entity, PyEntity, shared_ptr<ydk::Entity>>(types, "Entity")
         .def(init<>())
-        .def("get_entity_path", &ydk::Entity::get_entity_path, return_value_policy::reference)
+        .def("get_name_leaf_data", &ydk::Entity::get_name_leaf_data, return_value_policy::reference)
+        .def("get_absolute_path", &ydk::Entity::get_absolute_path, return_value_policy::reference)
         .def("get_segment_path", &ydk::Entity::get_segment_path, return_value_policy::reference)
         .def("get_child_by_name", &ydk::Entity::get_child_by_name, return_value_policy::reference)
         .def("set_value", &ydk::Entity::set_value, return_value_policy::reference)
@@ -471,6 +478,8 @@ PYBIND11_PLUGIN(ydk_)
         .def_readwrite("yang_name", &ydk::Entity::yang_name, return_value_policy::reference)
         .def_readwrite("yang_parent_name", &ydk::Entity::yang_parent_name, return_value_policy::reference)
         .def_readwrite("is_presence_container", &ydk::Entity::is_presence_container, return_value_policy::reference)
+        .def_readwrite("is_top_level_class", &ydk::Entity::is_top_level_class)
+        .def_readwrite("has_list_ancestor", &ydk::Entity::has_list_ancestor)
         .def_property("parent", &ydk::Entity::get_parent, &ydk::Entity::set_parent);
 
 
@@ -539,6 +548,8 @@ PYBIND11_PLUGIN(ydk_)
         .def("set", (void (ydk::YLeaf::*)(ydk::Enum::YLeaf)) &ydk::YLeaf::set, arg("value"))
         .def("set", (void (ydk::YLeaf::*)(ydk::Decimal64)) &ydk::YLeaf::set, arg("value"))
         .def_readonly("is_set", &ydk::YLeaf::is_set, return_value_policy::reference)
+        .def_readonly("name", &ydk::YLeaf::name, return_value_policy::reference)
+        .def_readonly("type", &ydk::YLeaf::type, return_value_policy::reference)
         .def_readwrite("yfilter", &ydk::YLeaf::yfilter)
         .def_readwrite("value_namespace", &ydk::YLeaf::value_namespace)
         .def_readwrite("value_namespace_prefix", &ydk::YLeaf::value_namespace_prefix);
@@ -571,6 +582,8 @@ PYBIND11_PLUGIN(ydk_)
                         {
                             l.clear();
                         })
+        .def_readonly("name", &ydk::YLeafList::name, return_value_policy::reference)
+        .def_readonly("type", &ydk::YLeafList::type, return_value_policy::reference)
         .def_readwrite("yfilter", &ydk::YLeafList::yfilter);
 
     class_<ydk::NetconfServiceProvider, ydk::ServiceProvider>(providers, "NetconfServiceProvider")
@@ -722,7 +735,6 @@ PYBIND11_PLUGIN(ydk_)
         .def("encode", &ydk::XmlSubtreeCodec::encode, return_value_policy::reference)
         .def("decode", &ydk::XmlSubtreeCodec::decode);
 
-    entity_utils.def("get_relative_entity_path", &ydk::get_relative_entity_path);
     entity_utils.def("get_entity_from_data_node", &ydk::get_entity_from_data_node);
     #if defined(PYBIND11_OVERLOAD_CAST)
     entity_utils.def("get_data_node_from_entity", overload_cast<ydk::Entity&, ydk::path::RootSchemaNode&>(&ydk::get_data_node_from_entity), return_value_policy::reference);
@@ -734,5 +746,4 @@ PYBIND11_PLUGIN(ydk_)
 
     setup_logging();
 
-    return ydk.ptr();
 };

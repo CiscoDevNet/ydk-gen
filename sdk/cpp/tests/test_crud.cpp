@@ -22,6 +22,7 @@
 #include "catch.hpp"
 
 #include <ydk_ydktest/openconfig_bgp.hpp>
+#include <ydk_ydktest/openconfig_bgp_types.hpp>
 
 #include "config.hpp"
 
@@ -37,8 +38,8 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
     bgp->global->config->router_id = "1.2.3.4";
 
     auto afi_safi = make_unique<openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi>();
-    afi_safi->afi_safi_name = "openconfig-bgp-types:L3VPN_IPV4_UNICAST";
-    afi_safi->config->afi_safi_name = "openconfig-bgp-types:L3VPN_IPV4_UNICAST";
+    afi_safi->afi_safi_name = openconfig_bgp_types::L3VPN_IPV4_UNICAST();
+    afi_safi->config->afi_safi_name = openconfig_bgp_types::L3VPN_IPV4_UNICAST();
     afi_safi->config->enabled = true;
     afi_safi->parent = bgp->global->afi_safis.get();
     bgp->global->afi_safis->afi_safi.push_back(move(afi_safi));
@@ -198,6 +199,7 @@ TEST_CASE("read_leaves")
     bgp_filter->global->config->router_id.yfilter = YFilter::read;
 
     auto bgp_read = crud.read(provider, *bgp_filter);
+    REQUIRE(bgp_read!=nullptr);
     REQUIRE(*(bgp_read) == *(bgp_create));
 }
 
@@ -224,6 +226,7 @@ TEST_CASE("read_leaf")
     bgp_filter->global->config->as.yfilter = YFilter::read;
 
     auto bgp_read = crud.read(provider, *bgp_filter);
+    REQUIRE(bgp_read!=nullptr);
     REQUIRE(*(bgp_read) == *(bgp_cfg));
 }
 

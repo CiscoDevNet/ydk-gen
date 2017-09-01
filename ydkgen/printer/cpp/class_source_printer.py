@@ -28,7 +28,7 @@ from .class_has_data_printer import ClassHasDataPrinter
 from .class_get_children_printer import ClassGetChildrenPrinter
 from .class_get_child_printer import ClassGetChildPrinter
 from .class_set_value_printer import ClassSetYLeafPrinter
-from .class_get_entity_path_printer import GetEntityPathPrinter, GetSegmentPathPrinter
+from .class_get_entity_path_printer import GetEntityPathPrinter, GetSegmentPathPrinter, GetAbsolutePathPrinter
 
 
 class ClassSourcePrinter(object):
@@ -59,6 +59,7 @@ class ClassSourcePrinter(object):
             return
         self._print_class_has_data(clazz, leafs, children)
         self._print_class_has_operation(clazz, leafs, children)
+        self._print_class_get_absolute_path(clazz)
         self._print_class_get_segment_path(clazz)
         self._print_class_get_path(clazz, leafs)
         self._print_class_set_child(clazz, children)
@@ -152,6 +153,9 @@ class ClassSourcePrinter(object):
 
     def _print_class_has_operation(self, clazz, leafs, children):
         ClassHasDataPrinter(self.ctx).print_class_has_operation(clazz, leafs, children)
+
+    def _print_class_get_absolute_path(self, clazz):
+        GetAbsolutePathPrinter(self.ctx).print_output(clazz)
 
     def _print_class_get_segment_path(self, clazz):
         GetSegmentPathPrinter(self.ctx).print_output(clazz)

@@ -23,6 +23,7 @@
 
 #include <iostream>
 
+#include "ydk/entity_util.hpp"
 #include "ydk/path_api.hpp"
 #include "ydk_ydktest/ydktest_sanity.hpp"
 #include "ydk/types.hpp"
@@ -170,7 +171,7 @@ TEST_CASE("validation_uint64 ")
 }
 
 
-TEST_CASE("bits ")
+TEST_CASE("validation_bits ")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -181,7 +182,7 @@ TEST_CASE("bits ")
     ydktest_sanity::Runner::Ytypes::BuiltInT builtInT{};
     builtInT.bits_value["disable-nagle"] = true;
     builtInT.bits_value["auto-sense-speed"] = true;
-    auto r = builtInT.get_entity_path(nullptr);
+    auto r = get_entity_path(builtInT, nullptr);
     INFO(r.path);
 
     CHECK_NOTHROW(validation_service.validate(session, builtInT, ydk::ValidationService::Option::EDIT_CONFIG));
@@ -356,7 +357,7 @@ TEST_CASE("validation_union_int")
 }
 
 
-TEST_CASE("test_v_union_leaflist")
+TEST_CASE("validation_test_v_union_leaflist")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -375,7 +376,7 @@ TEST_CASE("test_v_union_leaflist")
 
 }
 
-TEST_CASE("test_v_enum_leaflist")
+TEST_CASE("validation_test_v_enum_leaflist")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -394,7 +395,7 @@ TEST_CASE("test_v_enum_leaflist")
 
 }
 
-TEST_CASE("test_v_identity_leaflist")
+TEST_CASE("validation_test_v_identity_leaflist")
 {
     ydk::path::Repository repo{TEST_HOME};
 
@@ -414,7 +415,7 @@ TEST_CASE("test_v_identity_leaflist")
 }
 
 
-TEST_CASE("test_v_union_complex_list")
+TEST_CASE("validation_test_v_union_complex_list")
 {
 
     ydk::path::Repository repo{TEST_HOME};
@@ -434,7 +435,7 @@ TEST_CASE("test_v_union_complex_list")
 }
 
 
-TEST_CASE("test_v_identityref")
+TEST_CASE("validation_test_v_identityref")
 {
     ydk::path::Repository repo{TEST_HOME};
 

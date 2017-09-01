@@ -186,7 +186,7 @@ class SanityYang(unittest.TestCase):
         runner_read_filter = ysanity.Runner()
         runner_read = self.crud.read(self.ncc, runner_read_filter)
 
-        # delete contianer two
+        # delete container two
         runner_update = ysanity.Runner()
         runner_update.two.yfilter = YFilter.delete
         self.crud.update(self.ncc, runner_update)

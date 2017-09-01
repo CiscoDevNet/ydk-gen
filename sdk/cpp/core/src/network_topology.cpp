@@ -47,21 +47,9 @@ std::string NetworkTopology::get_segment_path() const
 
 }
 
-const EntityPath NetworkTopology::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor != nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor has to be nullptr for top-level node. Path: "+get_segment_path()});
-    }
-
-    path_buffer << get_segment_path();
-    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
-
-
-
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return {};
 
 }
 
@@ -187,26 +175,15 @@ std::string NetworkTopology::Topology::get_segment_path() const
 
 }
 
-const EntityPath NetworkTopology::Topology::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        path_buffer << "network-topology:network-topology/" << get_segment_path();
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
-
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
     if (topology_id.is_set || is_set(topology_id.yfilter)) leaf_name_data.push_back(topology_id.get_name_leafdata());
     if (server_provided.is_set || is_set(server_provided.yfilter)) leaf_name_data.push_back(server_provided.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -366,25 +343,14 @@ std::string NetworkTopology::Topology::TopologyTypes::get_segment_path() const
 
 }
 
-const EntityPath NetworkTopology::Topology::TopologyTypes::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::TopologyTypes::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'TopologyTypes' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
-
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
-
+    return leaf_name_data;;
+ 
 }
 
 std::shared_ptr<Entity> NetworkTopology::Topology::TopologyTypes::get_child_by_name(const std::string & child_yang_name, const std::string & segment_path)
@@ -455,24 +421,9 @@ std::string NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_segme
 
 }
 
-const EntityPath NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::TopologyTypes::TopologyNetconf::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'TopologyNetconf' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
-
-    std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
-
-
-
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return {};
 
 }
 
@@ -531,25 +482,14 @@ std::string NetworkTopology::Topology::UnderlayTopology::get_segment_path() cons
 
 }
 
-const EntityPath NetworkTopology::Topology::UnderlayTopology::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::UnderlayTopology::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'UnderlayTopology' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
-
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
     if (topology_ref.is_set || is_set(topology_ref.yfilter)) leaf_name_data.push_back(topology_ref.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -722,17 +662,8 @@ std::string NetworkTopology::Topology::Node::get_segment_path() const
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'Node' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -756,8 +687,7 @@ const EntityPath NetworkTopology::Topology::Node::get_entity_path(Entity* ancest
     if (username.is_set || is_set(username.yfilter)) leaf_name_data.push_back(username.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1127,17 +1057,8 @@ std::string NetworkTopology::Topology::Node::SupportingNode::get_segment_path() 
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::SupportingNode::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::SupportingNode::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'SupportingNode' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -1145,8 +1066,7 @@ const EntityPath NetworkTopology::Topology::Node::SupportingNode::get_entity_pat
     if (node_ref.is_set || is_set(node_ref.yfilter)) leaf_name_data.push_back(node_ref.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1239,17 +1159,8 @@ std::string NetworkTopology::Topology::Node::TerminationPoint::get_segment_path(
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::TerminationPoint::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::TerminationPoint::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'TerminationPoint' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -1258,8 +1169,7 @@ const EntityPath NetworkTopology::Topology::Node::TerminationPoint::get_entity_p
     auto tp_ref_name_datas = tp_ref.get_name_leafdata();
     leaf_name_data.insert(leaf_name_data.end(), tp_ref_name_datas.begin(), tp_ref_name_datas.end());
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1350,17 +1260,8 @@ std::string NetworkTopology::Topology::Node::YangModuleCapabilities::get_segment
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::YangModuleCapabilities::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::YangModuleCapabilities::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'YangModuleCapabilities' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -1369,8 +1270,7 @@ const EntityPath NetworkTopology::Topology::Node::YangModuleCapabilities::get_en
     auto capability_name_datas = capability.get_name_leafdata();
     leaf_name_data.insert(leaf_name_data.end(), capability_name_datas.begin(), capability_name_datas.end());
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1459,25 +1359,15 @@ std::string NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_segm
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::ClusteredConnectionStatus::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'ClusteredConnectionStatus' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
     if (netconf_master_node.is_set || is_set(netconf_master_node.yfilter)) leaf_name_data.push_back(netconf_master_node.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1572,17 +1462,8 @@ std::string NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStat
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::ClusteredConnectionStatus::NodeStatus::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'NodeStatus' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -1590,8 +1471,7 @@ const EntityPath NetworkTopology::Topology::Node::ClusteredConnectionStatus::Nod
     if (status.is_set || is_set(status.yfilter)) leaf_name_data.push_back(status.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1679,24 +1559,14 @@ std::string NetworkTopology::Topology::Node::AvailableCapabilities::get_segment_
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::AvailableCapabilities::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::AvailableCapabilities::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'AvailableCapabilities' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1781,17 +1651,8 @@ std::string NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCap
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::AvailableCapabilities::AvailableCapability::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'AvailableCapability' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -1799,8 +1660,7 @@ const EntityPath NetworkTopology::Topology::Node::AvailableCapabilities::Availab
     if (capability_origin.is_set || is_set(capability_origin.yfilter)) leaf_name_data.push_back(capability_origin.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1888,24 +1748,14 @@ std::string NetworkTopology::Topology::Node::UnavailableCapabilities::get_segmen
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::UnavailableCapabilities::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::UnavailableCapabilities::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'UnavailableCapabilities' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -1990,26 +1840,15 @@ std::string NetworkTopology::Topology::Node::UnavailableCapabilities::Unavailabl
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::UnavailableCapabilities::UnavailableCapability::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'UnavailableCapability' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
-
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
     if (capability.is_set || is_set(capability.yfilter)) leaf_name_data.push_back(capability.get_name_leafdata());
     if (failure_reason.is_set || is_set(failure_reason.yfilter)) leaf_name_data.push_back(failure_reason.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -2087,24 +1926,14 @@ std::string NetworkTopology::Topology::Node::PassThrough::get_segment_path() con
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::PassThrough::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::PassThrough::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'PassThrough' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -2169,17 +1998,9 @@ std::string NetworkTopology::Topology::Node::YangLibrary::get_segment_path() con
 
 }
 
-const EntityPath NetworkTopology::Topology::Node::YangLibrary::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Node::YangLibrary::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'YangLibrary' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
+
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -2188,8 +2009,7 @@ const EntityPath NetworkTopology::Topology::Node::YangLibrary::get_entity_path(E
     if (yang_library_url.is_set || is_set(yang_library_url.yfilter)) leaf_name_data.push_back(yang_library_url.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -2301,25 +2121,15 @@ std::string NetworkTopology::Topology::Link::get_segment_path() const
 
 }
 
-const EntityPath NetworkTopology::Topology::Link::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Link::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'Link' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
     if (link_id.is_set || is_set(link_id.yfilter)) leaf_name_data.push_back(link_id.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -2442,17 +2252,8 @@ std::string NetworkTopology::Topology::Link::Source::get_segment_path() const
 
 }
 
-const EntityPath NetworkTopology::Topology::Link::Source::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Link::Source::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'Source' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -2460,8 +2261,7 @@ const EntityPath NetworkTopology::Topology::Link::Source::get_entity_path(Entity
     if (source_tp.is_set || is_set(source_tp.yfilter)) leaf_name_data.push_back(source_tp.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -2545,17 +2345,8 @@ std::string NetworkTopology::Topology::Link::Destination::get_segment_path() con
 
 }
 
-const EntityPath NetworkTopology::Topology::Link::Destination::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Link::Destination::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'Destination' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
@@ -2563,8 +2354,7 @@ const EntityPath NetworkTopology::Topology::Link::Destination::get_entity_path(E
     if (dest_tp.is_set || is_set(dest_tp.yfilter)) leaf_name_data.push_back(dest_tp.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 
@@ -2645,25 +2435,15 @@ std::string NetworkTopology::Topology::Link::SupportingLink::get_segment_path() 
 
 }
 
-const EntityPath NetworkTopology::Topology::Link::SupportingLink::get_entity_path(Entity* ancestor) const
+std::vector<std::pair<std::string, LeafData> > NetworkTopology::Topology::Link::SupportingLink::get_name_leaf_data() const
 {
-    std::ostringstream path_buffer;
-    if (ancestor == nullptr)
-    {
-        throw(YCPPInvalidArgumentError{"ancestor for 'SupportingLink' in network_topology cannot be nullptr as one of the ancestors is a list"});
-    }
-    else
-    {
-        path_buffer << get_relative_entity_path(this, ancestor, path_buffer.str());
-    }
 
     std::vector<std::pair<std::string, LeafData> > leaf_name_data {};
 
     if (link_ref.is_set || is_set(link_ref.yfilter)) leaf_name_data.push_back(link_ref.get_name_leafdata());
 
 
-    EntityPath entity_path {path_buffer.str(), leaf_name_data};
-    return entity_path;
+    return leaf_name_data;
 
 }
 

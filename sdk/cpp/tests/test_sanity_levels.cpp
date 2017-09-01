@@ -655,6 +655,7 @@ TEST_CASE("aug_leaf")
     //READ
     auto r_filter = make_unique<ydktest_sanity::Runner>();
     auto r_read = crud.read(provider, *r_filter);
+    REQUIRE(r_read != nullptr);
     ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
     REQUIRE(r_2->one->augmented_leaf==r_1->one->augmented_leaf);
 }

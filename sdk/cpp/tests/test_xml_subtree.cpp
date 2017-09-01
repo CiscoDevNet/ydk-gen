@@ -256,6 +256,7 @@ auto g = codec.decode(R"(<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"
 </runner>
 )", r_1);
 auto r = crud.read(provider, *g);
+REQUIRE(r!=nullptr);
 
 REQUIRE(
         ((ydktest_sanity::Runner&)*s).ytypes->built_in_t->number8
@@ -277,6 +278,9 @@ CrudService crud{};
 
 XmlSubtreeCodec codec{};
 auto bgp = make_shared<openconfig_bgp::Bgp>();
+
+openconfig_bgp::Bgp bgp_set{};
+bool reply = crud.delete_(provider, bgp_set);
 
 auto payload = R"(<bgp xmlns="http://openconfig.net/yang/bgp">
           <global>
@@ -304,5 +308,6 @@ crud.create(provider, *a);
 auto v=make_shared<openconfig_bgp::Bgp>();
 v->global->yfilter = YFilter::read;
 auto r = crud.read_config(provider, *v);
+REQUIRE(r!=nullptr);
 REQUIRE(*r==*g);
 }

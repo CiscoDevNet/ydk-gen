@@ -22,7 +22,8 @@ class_inits_printer.py
 """
 from pyang.types import PathTypeSpec
 from ydkgen.api_model import Bits, Class, Package, DataType, Enum
-from ydkgen.common import get_module_name
+from ydkgen.common import get_module_name, has_list_ancestor, is_top_level_class
+from .class_get_entity_path_printer import GetAbsolutePathPrinter, GetSegmentPathPrinter
 
 
 def get_leafs(clazz):
@@ -47,6 +48,22 @@ def get_lists(clazz):
         if child.stmt.keyword == 'list':
             lists.append(child)
     return lists
+
+
+def get_child_container_classes(clazz):
+    m = []
+    for prop in clazz.properties():
+        if prop.stmt.keyword == 'container':
+            m.append('"%s" : ("%s", %s)'%(prop.stmt.arg, prop.name, prop.property_type.qn()))
+    return '%s' % (', '.join(m))
+
+
+def get_child_list_classes(clazz):
+    m = []
+    for prop in clazz.properties():
+        if prop.stmt.keyword == 'list':
+            m.append('"%s" : ("%s", %s)' % (prop.stmt.arg, prop.name, prop.property_type.qn()))
+    return '%s' % (', '.join(m))
 
 
 class ClassInitsPrinter(object):
@@ -77,11 +94,17 @@ class ClassInitsPrinter(object):
             self.ctx.bline()
             self.ctx.writeln('self.yang_name = "%s"' % clazz.stmt.arg)
             self.ctx.writeln('self.yang_parent_name = "%s"' % clazz.owner.stmt.arg)
+            self.ctx.writeln('self.is_top_level_class = %s' % ('True' if is_top_level_class(clazz) else 'False'))
+            self.ctx.writeln('self.has_list_ancestor = %s' % ('True' if has_list_ancestor(clazz) else 'False'))
+            self.ctx.writeln('self._child_container_classes = {%s}' % (get_child_container_classes(clazz)))
+            self.ctx.writeln('self._child_list_classes = {%s}' % (get_child_list_classes(clazz)))
             if clazz.stmt.search_one('presence') is not None:
                 self.ctx.writeln('self.is_presence_container = True')
             self._print_init_leafs_and_leaflists(clazz, leafs)
             self._print_init_children(children)
-        self._print_init_lists(clazz)
+            self._print_init_lists(clazz)
+            self._print_class_segment_path(clazz)
+            self._print_class_absolute_path(clazz, leafs)
 
     def _print_init_leafs_and_leaflists(self, clazz, leafs):
         yleafs = get_leafs(clazz)
@@ -125,12 +148,18 @@ class ClassInitsPrinter(object):
         for prop in clazz.properties():
             if (prop.is_many and
                 isinstance(prop.property_type, Class) and
-                not prop.property_type.is_identity()):
+                    not prop.property_type.is_identity()):
                 output.append('self.%s = YList(self)' % prop.name)
         if len(output) > 0:
             self.ctx.bline()
             self.ctx.writelns(output)
             self.ctx.bline()
+
+    def _print_class_segment_path(self, clazz):
+        GetSegmentPathPrinter(self.ctx).print_output(clazz)
+
+    def _print_class_absolute_path(self, clazz, leafs):
+        GetAbsolutePathPrinter(self.ctx).print_output(clazz, leafs)
 
     def _print_class_inits_trailer(self, clazz):
         self.ctx.lvl_dec()

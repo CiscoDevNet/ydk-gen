@@ -469,3 +469,22 @@ def get_path_sep(lang):
     elif lang == 'cpp':
         sep = '->'
     return sep
+
+
+def has_list_ancestor(clazz):
+    c = clazz.owner
+    parents = []
+
+    while c is not None and not isinstance(c,atypes.Package):
+        parents.append(c)
+        c = c.owner
+
+    for p in parents:
+        key_props = p.get_key_props()
+        if key_props is not None and len(key_props) > 0:
+            return True
+    return False
+
+
+def is_top_level_class(clazz):
+    return clazz.owner is not None and isinstance(clazz.owner, atypes.Package)
