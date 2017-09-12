@@ -54,20 +54,6 @@ class ClassMembersPrinter(object):
         self.ctx.writeln('~' + clazz.name + '();')
         self.ctx.bline()
 
-    def _get_leafs(self, clazz):
-        leafs = []
-        for child in clazz.owned_elements:
-            if child.stmt.keyword in ('leaf', 'anyxml'):
-                leafs.append(child)
-        return leafs
-
-    def _get_leaf_lists(self, clazz):
-        leaf_lists = []
-        for child in clazz.owned_elements:
-            if child.stmt.keyword == 'leaf-list':
-                leaf_lists.append(child)
-        return leaf_lists
-
     def _print_common_method_declarations(self, clazz):
         self.ctx.writeln('bool has_data() const override;')
         self.ctx.writeln('bool has_operation() const override;')
@@ -98,9 +84,9 @@ class ClassMembersPrinter(object):
         self.ctx.lvl_dec()
 
     def _print_value_members(self, clazz):
-        for leaf in self._get_leafs(clazz):
+        for leaf in _get_leafs(clazz):
             self._print_value_member(leaf, 'ydk::YLeaf', '')
-        for leaf in self._get_leaf_lists(clazz):
+        for leaf in _get_leaf_lists(clazz):
             self._print_value_member(leaf, 'ydk::YLeafList', ' list of ')
 
     def _print_value_member(self, leaf, leaf_type, description):
@@ -123,23 +109,14 @@ class ClassMembersPrinter(object):
             if isinstance(contained_property_type, UnionTypeSpec):
                 contained_types.update(self._get_union_types(contained_property_type))
             elif isinstance(contained_property_type, PathTypeSpec):
-                contained_types.add('%s' % self._get_leafref_comment(union_leaf))
+                contained_types.add('%s' % _get_leafref_comment(union_leaf))
             else:
                 contained_types.add(contained_type_stmt.i_type_spec.name)
         return contained_types
 
     def _print_leafref(self, leaf, leaf_type, description):
-        self.ctx.writeln('//type:%s %s' % (description, self._get_leafref_comment(leaf)))
+        self.ctx.writeln('//type:%s %s' % (description, _get_leafref_comment(leaf)))
         self.ctx.writeln('%s %s;' % (leaf_type, leaf.name))
-
-    def _get_leafref_comment(self, leaf):
-        if leaf.stmt.i_leafref_ptr is not None:
-            reference_class = leaf.stmt.i_leafref_ptr[0].parent.i_class
-            reference_prop = leaf.stmt.i_leafref_ptr[0].i_property
-            return ('%s (refers to %s::%s)' %
-                             (reference_prop.property_type.name,
-                              reference_class.fully_qualified_cpp_name(),
-                              reference_prop.name))
 
     def _print_class_child_members(self, clazz):
         if clazz.is_identity() and len(clazz.extends) == 0:
@@ -150,17 +127,6 @@ class ClassMembersPrinter(object):
             self.ctx.writelns(class_inits_properties)
             self.ctx.lvl_dec()
 
-    def _get_class_inits_unique(self, prop):
-        if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
-            presence_stmt = ''
-            if prop.property_type.stmt.search_one('presence') is not None:
-                presence_stmt = ' // presence node'
-            return 'std::shared_ptr<%s> %s;%s' % (prop.property_type.fully_qualified_cpp_name(), prop.name, presence_stmt)
-
-    def _get_class_inits_many(self, prop):
-        if prop.is_many and isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
-            return 'std::vector<std::shared_ptr<%s> > %s;' % (prop.property_type.fully_qualified_cpp_name(), prop.name)
-
     def _get_children(self, clazz):
         class_inits_properties = []
         for prop in clazz.properties():
@@ -168,9 +134,9 @@ class ClassMembersPrinter(object):
             if prop.stmt.keyword == 'anyxml':
                 pass
             elif not prop.is_many:
-                result = self._get_class_inits_unique(prop)
+                result = _get_class_inits_unique(prop)
             else:
-                result = self._get_class_inits_many(prop)
+                result = _get_class_inits_many(prop)
             if result is not None:
                 class_inits_properties.append(result)
         if class_inits_properties:
@@ -183,3 +149,42 @@ class ClassMembersPrinter(object):
             if isinstance(child, Enum):
                 self.ctx.writeln('class %s;' % child.name)
         self.ctx.lvl_dec()
+
+
+def _get_leafs(clazz):
+    leafs = []
+    for child in clazz.owned_elements:
+        if child.stmt.keyword in ('leaf', 'anyxml'):
+            leafs.append(child)
+    return leafs
+
+
+def _get_leaf_lists(clazz):
+    leaf_lists = []
+    for child in clazz.owned_elements:
+        if child.stmt.keyword == 'leaf-list':
+            leaf_lists.append(child)
+    return leaf_lists
+
+
+def _get_leafref_comment(leaf):
+    if leaf.stmt.i_leafref_ptr is not None:
+        reference_class = leaf.stmt.i_leafref_ptr[0].parent.i_class
+        reference_prop = leaf.stmt.i_leafref_ptr[0].i_property
+        return ('%s (refers to %s::%s)' %
+                         (reference_prop.property_type.name,
+                          reference_class.fully_qualified_cpp_name(),
+                          reference_prop.name))
+
+
+def _get_class_inits_unique(prop):
+    if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
+        presence_stmt = ''
+        if prop.property_type.stmt.search_one('presence') is not None:
+            presence_stmt = ' // presence node'
+        return 'std::shared_ptr<%s> %s;%s' % (prop.property_type.fully_qualified_cpp_name(), prop.name, presence_stmt)
+
+
+def _get_class_inits_many(prop):
+    if prop.is_many and isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
+        return 'std::vector<std::shared_ptr<%s> > %s;' % (prop.property_type.fully_qualified_cpp_name(), prop.name)

@@ -27,7 +27,6 @@ from ydkgen.common import has_list_ancestor, is_top_level_class
 def get_leafs_children(clazz, leafs, children):
     leaf_names_list = []
     leaflist_names_list = []
-    child_names_list = []
     for leaf in leafs:
         if leaf.is_many:
             l = leaflist_names_list

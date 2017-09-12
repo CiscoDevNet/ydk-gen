@@ -20,7 +20,7 @@ class_printer.py
  YANG model driven API, class emitter.
 
 """
-from ydkgen.api_model import Class, Package, Enum, Bits
+from ydkgen.api_model import Class, Package, Enum
 from ydkgen.common import sort_classes_at_same_level
 from ydkgen.printer.file_printer import FilePrinter
 

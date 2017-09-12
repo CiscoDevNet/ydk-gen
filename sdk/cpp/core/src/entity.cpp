@@ -40,7 +40,7 @@ namespace ydk
 /// Entity
 //////////////////////////////////////////////////////////////////
 Entity::Entity()
-  : parent(nullptr), yfilter(YFilter::not_set), is_presence_container(false)
+  : parent(nullptr), yfilter(YFilter::not_set), is_presence_container(false), is_top_level_class(false), has_list_ancestor(false)
 {
 }
 
@@ -107,7 +107,7 @@ bool Entity::operator == (Entity & other) const
         {
             for(map<std::string, shared_ptr<Entity>>::const_iterator rit = this_children.begin(), lit = other_children.begin() ;
                     rit!=this_children.end() && lit!=other_children.end();
-                    rit++, lit++)
+                    ++rit, ++lit)
             {
                 if(*(rit->second) != *(lit->second))
                 {
@@ -181,7 +181,7 @@ std::ostream& operator<< (std::ostream& stream, Entity& entity)
 /// EntityPath
 //////////////////////////////////////////////////////////////////
 
-EntityPath::EntityPath(std::string path, std::vector<std::pair<std::string, LeafData> > value_paths)
+EntityPath::EntityPath(const std::string & path, std::vector<std::pair<std::string, LeafData> > value_paths)
     : path(path), value_paths(value_paths)
 {
 }

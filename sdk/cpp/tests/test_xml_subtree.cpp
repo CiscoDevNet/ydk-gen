@@ -281,6 +281,7 @@ auto bgp = make_shared<openconfig_bgp::Bgp>();
 
 openconfig_bgp::Bgp bgp_set{};
 bool reply = crud.delete_(provider, bgp_set);
+REQUIRE(reply);
 
 auto payload = R"(<bgp xmlns="http://openconfig.net/yang/bgp">
           <global>

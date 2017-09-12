@@ -21,7 +21,7 @@
 
 """
 
-from ydkgen.api_model import Class, Enum, Bits
+from ydkgen.api_model import Class, Enum
 from ydkgen.common import convert_to_reStructuredText
 
 from .class_printer import ClassPrinter

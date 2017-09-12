@@ -89,7 +89,7 @@ struct EntityPath {
     std::string path;
     std::vector<std::pair<std::string, LeafData>> value_paths;
 
-    EntityPath(std::string path, std::vector<std::pair<std::string, LeafData> > value_paths);
+    EntityPath(const std::string & path, std::vector<std::pair<std::string, LeafData> > value_paths);
 
     ~EntityPath();
 

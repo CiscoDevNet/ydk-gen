@@ -32,7 +32,7 @@ using namespace std;
 namespace ydk
 {
 
-std::string get_relative_entity_path(const Entity* current_node, const Entity* ancestor, std::string path)
+std::string get_relative_entity_path(const Entity* current_node, const Entity* ancestor, const std::string & path)
 {
     std::ostringstream path_buffer;
     path_buffer << path;

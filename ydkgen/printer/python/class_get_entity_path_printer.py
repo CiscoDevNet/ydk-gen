@@ -136,5 +136,3 @@ class GetAbsolutePathPrinter(object):
             slash = "/"
         path = "%s%s" % (path, slash)
         self.ctx.writeln('self._absolute_path = lambda: "%s%%s" %% self._segment_path()' % path)
-
-
