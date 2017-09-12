@@ -145,7 +145,7 @@ bool Entity::operator != (Entity & other) const
         {
             for(map<std::string, shared_ptr<Entity>>::const_iterator rit = this_children.begin(), lit = other_children.begin() ;
                     rit!=this_children.end() && lit!=other_children.end();
-                    rit++, lit++)
+                    ++rit, ++lit)
             {
                 if(*(rit->second) != *(lit->second))
                 {
@@ -181,7 +181,7 @@ std::ostream& operator<< (std::ostream& stream, Entity& entity)
 /// EntityPath
 //////////////////////////////////////////////////////////////////
 
-EntityPath::EntityPath(const std::string & path, std::vector<std::pair<std::string, LeafData> > value_paths)
+EntityPath::EntityPath(const std::string & path, std::vector<std::pair<std::string, LeafData> > & value_paths)
     : path(path), value_paths(value_paths)
 {
 }

@@ -484,7 +484,7 @@ PYBIND11_MODULE(ydk_, ydk)
 
 
     class_<ydk::EntityPath>(types, "EntityPath")
-        .def(init<string, vector<pair<std::string, ydk::LeafData> > >())
+        .def(init<const string &, vector<pair<std::string, ydk::LeafData> > &>())
         .def_readonly("path", &ydk::EntityPath::path, return_value_policy::reference)
         .def_readonly("value_paths", &ydk::EntityPath::value_paths, return_value_policy::reference)
         .def(self == self);

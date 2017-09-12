@@ -56,7 +56,7 @@ class GetSegmentPathPrinter(object):
         path+='"'
         predicates = ''
         insert_token = ' + '
-        
+
         key_props = clazz.get_key_props()
         for key_prop in key_props:
             predicates += insert_token

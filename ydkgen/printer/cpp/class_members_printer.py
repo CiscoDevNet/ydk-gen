@@ -121,27 +121,11 @@ class ClassMembersPrinter(object):
     def _print_class_child_members(self, clazz):
         if clazz.is_identity() and len(clazz.extends) == 0:
             return
-        class_inits_properties = self._get_children(clazz)
+        class_inits_properties = _get_children(clazz)
         if len(class_inits_properties) > 0:
             self.ctx.lvl_inc()
             self.ctx.writelns(class_inits_properties)
             self.ctx.lvl_dec()
-
-    def _get_children(self, clazz):
-        class_inits_properties = []
-        for prop in clazz.properties():
-            result = None
-            if prop.stmt.keyword == 'anyxml':
-                pass
-            elif not prop.is_many:
-                result = _get_class_inits_unique(prop)
-            else:
-                result = _get_class_inits_many(prop)
-            if result is not None:
-                class_inits_properties.append(result)
-        if class_inits_properties:
-            class_inits_properties.append('')
-        return class_inits_properties
 
     def _print_class_enums_forward_declarations(self, clazz):
         self.ctx.lvl_inc()
@@ -188,3 +172,20 @@ def _get_class_inits_unique(prop):
 def _get_class_inits_many(prop):
     if prop.is_many and isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
         return 'std::vector<std::shared_ptr<%s> > %s;' % (prop.property_type.fully_qualified_cpp_name(), prop.name)
+
+
+def _get_children(clazz):
+    class_inits_properties = []
+    for prop in clazz.properties():
+        result = None
+        if prop.stmt.keyword == 'anyxml':
+            pass
+        elif not prop.is_many:
+            result = _get_class_inits_unique(prop)
+        else:
+            result = _get_class_inits_many(prop)
+        if result is not None:
+            class_inits_properties.append(result)
+    if class_inits_properties:
+        class_inits_properties.append('')
+    return class_inits_properties

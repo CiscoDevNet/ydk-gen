@@ -125,6 +125,7 @@ TEST_CASE("two_level_pos")
 
     filter = make_unique<ydktest_sanity::Runner>();
     reply = crud.update(provider, *r_1->two);
+    REQUIRE(reply);
     r_2 = crud.read(provider, *filter);
     REQUIRE(r_2!=nullptr);
     r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
