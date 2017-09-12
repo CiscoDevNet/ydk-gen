@@ -56,9 +56,10 @@ How to install
 --------------
 Quick Install
 ~~~~~~~~~~~~~
-You can install the latest model packages from the Python package index.  Note that, in some systems, you need to install the new package as root.  You get a fully operational YDK environment by installing the ``cisco-ios-xr`` bundle which automatically installs all other YDK-related packages (``ydk``, ``cisco-ios-xr``, ``openconfig`` and ``ietf`` packages)::
+You can install the latest model packages from the Python package index.  Note that, in some systems, you need to install the new package as root.  You get a fully operational YDK environment by installing the ``cisco-ios-xr`` and/or ``cisco-ios-xe`` bundle(s) (depending on whether you're developing for an IOS XR or IOS XE platform) which automatically installs all other YDK-related packages (``ydk``, ``openconfig`` and ``ietf`` packages)::
 
   $ pip install ydk-models-cisco-ios-xr
+  $ pip install ydk-models-cisco-ios-xe
 
 Alternatively, you can perform a partial installation.  If you only want to install the ``openconfig`` bundle and its dependencies (``ydk`` and ``ietf`` packages), execute::
 
@@ -121,6 +122,7 @@ Documentation and Support
 - Samples can be found under the `samples directory <https://github.com/CiscoDevNet/ydk-py/tree/master/core/samples>`_
 - Hundreds of additional samples can be found in the `YDK-PY samples repository <https://github.com/CiscoDevNet/ydk-py-samples>`_
 - Join the `YDK community <https://communities.cisco.com/community/developer/ydk>`_ to connect with other users and with the makers of YDK
+- Additional YDK information can be found at `ydk.io <http://ydk.io>`_
 
 Release Notes
 --------------

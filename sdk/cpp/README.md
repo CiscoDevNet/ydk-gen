@@ -37,9 +37,10 @@ You can install the latest model packages using [homebrew](http://brew.sh).  Thi
 $ brew tap CiscoDevNet/ydk
 ```
 
-You get a fully operational YDK environment by installing the ``cisco-ios-xr`` bundle which automatically installs all other YDK-related packages (``ydk``, ``cisco-ios-xr``, ``openconfig`` and ``ietf`` packages):
+You get a fully operational YDK environment by installing the ``cisco-ios-xr`` and/or ``cisco-ios-xe`` bundle(s) (depending on whether you're developing for an IOS XR or IOS XE platform) which automatically installs all other YDK-related packages (``ydk``, ``openconfig`` and ``ietf`` packages):
 ```
 $ brew install ydk-cisco-ios-xr
+$ brew install ydk-cisco-ios-xe
 ```
 
 Alternatively, you can perform a partial installation.  If you only want to install the ``openconfig`` bundle and its dependencies (``ydk`` and ``ietf`` packages), execute:
@@ -111,12 +112,22 @@ $ build$ sudo make install
 $ build$ cd ../..
 ```
 
+To install the `cisco-ios-xe` bundle, execute:
+```
+$ openconfig$ cd ../cisco-ios-xe
+$ cisco-ios-xe$ mkdir build && cd build
+$ build$ cmake .. && make
+$ build$ sudo make install
+$ build$ cd ../..
+```
+
 Documentation and Support
 =========================
 - Read the [API documentation](http://ydk.cisco.com/cpp/docs) for details on how to use the API and specific models
 - Samples can be found under the [samples directory](https://github.com/CiscoDevNet/ydk-cpp/tree/master/core/samples)
-- Additional samples can be found in the [YDK-Cpp samples repository](https://github.com/CiscoDevNet/ydk-cpp-samples)
+- Additional samples can be found in the [YDK-Cpp samples repository](https://github.com/CiscoDevNet/ydk-cpp-samples) (coming soon)
 - Join the [YDK community](https://communities.cisco.com/community/developer/ydk) to connect with other users and with the makers of YDK
+- Additional YDK information can be found at [ydk.io](http://ydk.io)
 
 Release Notes
 ===============
