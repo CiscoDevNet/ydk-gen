@@ -29,3 +29,9 @@ NetconfSession
         Invokes or executes the given rpc and returns a :py:class:`DataNode<DataNode>` pointer if the Rpc has an output modelled in YANG.
 
         :returns: :py:class:`DataNode<DataNode>`.
+
+    .. py:method:: get_capabilities()
+
+        Returns a list of capabilities of the client
+
+        :returns: A list of ``str`` representing the client's/server's capabilities

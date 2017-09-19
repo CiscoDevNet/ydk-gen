@@ -50,4 +50,10 @@ NetconfServiceProvider
 
         Returns a reference of the :cpp:class:`NetconfSession<path::NetconfSession>` used to connect to the netconf server.
 
+    .. cpp:function:: std::vector<std::string> get_capabilities() const
+
+        Returns a vector of the client's capabilities
+
+        :return: A vector of ``std::string`` representing the client/server capabilities
+
     .. cpp:function:: ~NetconfServiceProvider()

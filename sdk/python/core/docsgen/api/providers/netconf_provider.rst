@@ -23,3 +23,9 @@ NETCONF Service Provider
         Returns the instance of the :py:class:`NetconfSession<ydk.path.NetconfSession>` used to connect to the netconf server
 
         :return: A :py:class:`NetconfSession<ydk.path.NetconfSession>` instance.
+
+    .. py:method:: get_capabilities()
+
+        Returns a list of capabilities of the client
+
+        :returns: A list of ``str`` representing the client's/server's capabilities

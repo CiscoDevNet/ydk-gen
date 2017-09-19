@@ -57,4 +57,10 @@ NetconfSession
         :param rpc: Reference to the :cpp:class:`Rpc<Rpc>` node.
         :return: Shared pointer to the :cpp:class:`DataNode<DataNode>` representing the output.
 
+    .. cpp:function:: std::vector<std::string> get_capabilities() const
+
+        Returns a vector of the client's capabilities
+
+        :return: A vector of ``std::string`` representing the client/server capabilities
+
     .. cpp:function:: ~NetconfSession()
