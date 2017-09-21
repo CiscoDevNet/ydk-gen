@@ -24,8 +24,8 @@ from __future__ import print_function
 import os, shutil
 from distutils import dir_util
 
-from ydkgen.api_model import Bits, Class, Enum
-from ydkgen.common import get_rst_file_name
+from ydkgen.api_model import Bits, Class, Enum, Package
+from ydkgen.common import get_rst_file_name, snake_case
 
 from .import_test_printer import ImportTestPrinter
 from .module_printer import ModulePrinter
@@ -38,8 +38,8 @@ from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _E
 
 class PythonBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle, generate_tests, sort_clazz):
-        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, sort_clazz)
+    def __init__(self, ydk_root_dir, bundle, generate_tests, one_class_per_module):
+        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
         self.bundle = bundle
         self.bundle_name = bundle.name
         self.bundle_version = bundle.str_version
@@ -80,8 +80,22 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
         test_output_dir = self.initialize_output_directory(self.test_dir)
 
+        if self.one_class_per_module:
+            path = os.path.join(self.models_dir, package.name)
+            self.initialize_output_directory(path, True)
+            self._print_init_file(path)
+
+            extra_args = {'one_class_per_module': self.one_class_per_module,
+                          'identity_subclasses': self.identity_subclasses,
+                          'module_namespace_lookup': self.module_namespace_lookup}
+            self.print_file(get_python_module_file_name(path, package),
+                            emit_module,
+                            _EmitArgs(self.ypy_ctx, package, extra_args))
+
+            self._print_python_modules(package, index, path, size, sub)
+        else:
         # RST Documentation
-        self._print_python_module(package, index, self.models_dir, size, sub)
+            self._print_python_module(package, index, self.models_dir, size, sub)
 
         if self.generate_tests:
             self._print_tests(package, test_output_dir)
@@ -115,16 +129,26 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
                         emit_table_of_contents,
                         _EmitArgs(self.ypy_ctx, packages, (self.bundle_name, self.bundle_version)))
 
+    def _print_python_modules(self, element, index, path, size, sub):
+        for c in [clazz for clazz in element.owned_elements if isinstance(clazz, Class)]:
+            if not c.is_identity():
+                self._print_python_module(c, index, os.path.join(path, snake_case(c.stmt.arg)), size, sub)
+
     def _print_python_module(self, package, index, path, size, sub):
-        self._print_init_file(path)
+        if self.one_class_per_module:
+            self.initialize_output_directory(path, True)
+            self._print_init_file(path)
 
         package.parent_pkg_name = sub
-        extra_args = {'sort_clazz': False,
+        extra_args = {'one_class_per_module': self.one_class_per_module,
                       'identity_subclasses': self.identity_subclasses,
                       'module_namespace_lookup' : self.module_namespace_lookup}
         self.print_file(get_python_module_file_name(path, package),
                         emit_module,
                         _EmitArgs(self.ypy_ctx, package, extra_args))
+
+        if self.one_class_per_module:
+            self._print_python_modules(package, index, path, size, sub)
 
     def _print_tests(self, package, path):
         self._print_init_file(self.test_dir)
@@ -152,11 +176,11 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
             self.print_file(file_name)
 
     def _print_nmsp_declare_init_files(self):
-        self._print_nmsp_decalre_init(self.ydk_dir)
-        self._print_nmsp_decalre_init(os.path.join(self.ydk_dir, 'models'))
-        self._print_nmsp_decalre_init(self.models_dir)
+        self._print_nmsp_declare_init(self.ydk_dir)
+        self._print_nmsp_declare_init(os.path.join(self.ydk_dir, 'models'))
+        self._print_nmsp_declare_init(self.models_dir)
 
-    def _print_nmsp_decalre_init(self, path):
+    def _print_nmsp_declare_init(self, path):
         file_name = get_init_file_name(path)
         self.print_file(file_name,
                         emit_nmsp_declare_init,
@@ -200,7 +224,10 @@ def get_table_of_contents_file_name(path):
 
 
 def get_python_module_file_name(path, package):
-    return '%s/%s.py' % (path, package.name)
+    if isinstance(package, Package):
+        return '%s/%s.py' % (path, package.name)
+    else:
+        return '%s/%s.py' % (path, snake_case(package.stmt.arg))
 
 
 def get_test_module_file_name(path, package):

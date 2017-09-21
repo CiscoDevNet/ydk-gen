@@ -231,10 +231,12 @@ def get_module_name(stmt):
         return module_stmt.arg
 
 
-def sort_classes_at_same_level(classes, sort_clazz):
+def sort_classes_at_same_level(classes):
     ''' Returns a list of the classes in the same order  '''
-    if sort_clazz:
-        classes = sorted(classes, key=lambda cls: cls.name)
+    if len(classes) <= 1:
+        return classes
+
+    classes = sorted(classes, key=lambda cls: cls.name)
     classes_processed = []
     classes_not_processed = OrderedDict()
     for clazz in classes:

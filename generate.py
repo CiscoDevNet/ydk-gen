@@ -308,6 +308,12 @@ if __name__ == '__main__':
         default=False,
         help="Consider yang groupings as classes.")
 
+    parser.add_argument(
+        "-o", "--one-class-per-module",
+        action="store_true",
+        default=False,
+        help="Generate separate modules for each python class corresponding to yang containers or lists.")
+
     # try:
     #     arg = sys.argv[1]
     # except IndexError:
@@ -359,7 +365,8 @@ if __name__ == '__main__':
                                 options.groupings_as_class,
                                 options.gentests,
                                 language,
-                                'bundle').generate(options.bundle))
+                                'bundle',
+                                options.one_class_per_module).generate(options.bundle))
 
         if options.core:
             output_directory = (YdkGenerator(
@@ -368,7 +375,8 @@ if __name__ == '__main__':
                                 options.groupings_as_class,
                                 options.gentests,
                                 language,
-                                'core').generate(options.core))
+                                'core',
+                                options.one_class_per_module).generate(options.core))
     except YdkGenException as e:
         print('Error(s) occurred in YdkGenerator()!')
         if options.verbose:

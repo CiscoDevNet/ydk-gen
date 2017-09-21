@@ -37,8 +37,8 @@ from ..tests import TestPrinter
 
 class CppBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle, generate_tests, sort_clazz):
-        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, sort_clazz)
+    def __init__(self, ydk_root_dir, bundle, generate_tests, one_class_per_module):
+        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
         self.source_files = []
         self.header_files = []
 
@@ -62,7 +62,7 @@ class CppBindingsPrinter(LanguageBindingsPrinter):
         # Skip generating module for empty modules
         if len(package.owned_elements) == 0:
             return
-        builder = MultiFileBuilder(package, self.classes_per_source_file, self.sort_clazz)
+        builder = MultiFileBuilder(package, self.classes_per_source_file)
         self._print_header_file(package, builder.multi_file_data, self.models_dir)
         self._print_source_file(package, builder.multi_file_data, self.models_dir)
         self._print_cpp_rst_doc(package)

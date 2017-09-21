@@ -315,6 +315,17 @@ function py_sanity_common_cache {
     run_test sdk/python/core/tests/test_sanity_types.py --common-cache
 }
 
+function py_sanity_one_class_per_module {
+    print_msg "deactivate virtualenv to gather coverage"
+    deactivate
+    cd $YDKGEN_HOME && source gen_env/bin/activate
+    run_test generate.py --bundle profiles/test/ydktest.json -o
+    source test_env/bin/activate
+    pip install gen-api/python/ydktest-bundle/dist/ydktest*.tar.gz
+    run_test sdk/python/core/tests/test_sanity_levels.py
+    run_test sdk/python/core/tests/test_sanity_types.py
+}
+
 function cpp_sanity_core_gen_install {
     print_msg "cpp_sanity_core_gen_install"
 
@@ -399,6 +410,7 @@ function py_tests {
     py_sanity_deviation
     py_sanity_augmentation
     py_sanity_common_cache
+    py_sanity_one_class_per_module
     teardown_env
 }
 

@@ -56,13 +56,12 @@ class YdkGenerator(object):
             package_type (str): Package type for generated APIs.
                             Valid options for bundle approach are: 'core',
                                                                    'packages'.
-            sort_clazz (bool): Option to sort generated classes at same leve.
 
         Raises:
             YdkGenException: If an error has occurred
     """
 
-    def __init__(self, output_dir, ydk_root, groupings_as_class, generate_tests, language, package_type, sort_clazz=False):
+    def __init__(self, output_dir, ydk_root, groupings_as_class, generate_tests, language, package_type, one_class_per_module):
 
         _check_generator_args(output_dir, ydk_root, language, package_type)
 
@@ -72,7 +71,7 @@ class YdkGenerator(object):
         self.language = language
         self.package_type = package_type
         self.generate_tests = generate_tests
-        self.sort_clazz = sort_clazz
+        self.one_class_per_module = one_class_per_module
         if self.language == 'cpp':
             self.iskeyword = iscppkeyword
         else:
@@ -180,7 +179,7 @@ class YdkGenerator(object):
         global classes_per_source_file
         factory = printer_factory.PrinterFactory()
         bundle_packages = _filter_bundle_from_packages(pkgs, bundle)
-        ydk_printer = factory.get_printer(self.language)(output_dir, bundle, self.generate_tests, self.sort_clazz)
+        ydk_printer = factory.get_printer(self.language)(output_dir, bundle, self.generate_tests, self.one_class_per_module)
         generated_files = ydk_printer.emit(bundle_packages, classes_per_source_file)
         return generated_files
 

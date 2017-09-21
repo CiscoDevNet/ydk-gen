@@ -32,16 +32,16 @@ from .enum_printer import EnumPrinter
 
 class ClassPrinter(FilePrinter):
 
-    def __init__(self, ctx, sort_clazz, module_namespace_lookup):
+    def __init__(self, ctx, module_namespace_lookup, one_class_per_module):
         super(ClassPrinter, self).__init__(ctx)
-        self.sort_clazz = sort_clazz
         self.module_namespace_lookup = module_namespace_lookup
+        self.one_class_per_module = one_class_per_module
 
     def print_body(self, unsorted_classes):
         ''' This arranges the classes at the same level
             so that super references are printed before
             the subclassess'''
-        sorted_classes = sort_classes_at_same_level(unsorted_classes, self.sort_clazz)
+        sorted_classes = sort_classes_at_same_level(unsorted_classes)
 
         for clazz in sorted_classes:
             self._print_class(clazz)
@@ -63,7 +63,8 @@ class ClassPrinter(FilePrinter):
         self._print_class_inits(clazz, leafs, children)
         self._print_class_setattr(clazz, leafs)
         self._print_child_enums(clazz)
-        self._print_child_classes(clazz)
+        if not self.one_class_per_module:
+            self._print_child_classes(clazz)
         self._print_class_functions(clazz, leafs, children)
 
     def _print_class_functions(self, clazz, leafs, children):
@@ -120,10 +121,10 @@ class ClassPrinter(FilePrinter):
                 leafs.append(prop)
 
     def _print_class_inits(self, clazz, leafs, children):
-        ClassInitsPrinter(self.ctx, self.module_namespace_lookup).print_output(clazz, leafs, children)
+        ClassInitsPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module).print_output(clazz, leafs, children)
 
     def _print_class_setattr(self, clazz, leafs):
-        ClassSetAttrPrinter(self.ctx).print_setattr(clazz, leafs)
+        ClassSetAttrPrinter(self.ctx, self.one_class_per_module).print_setattr(clazz, leafs)
 
     def _print_class_clone_ptr(self, clazz):
         if clazz.owner is not None and isinstance(clazz.owner, Package):

@@ -63,9 +63,8 @@ class MultiFileData(object):
 
 
 class MultiFileBuilder(object):
-    def __init__(self, package, classes_per_source_file, sort_clazz):
+    def __init__(self, package, classes_per_source_file):
         self._multi_file_data = MultiFileData()
-        self.sort_clazz = sort_clazz
         self.classes_per_source_file = classes_per_source_file
         self.is_all_identities = False
         self.class_list = []
@@ -89,7 +88,7 @@ class MultiFileBuilder(object):
 
     def _populate_class_list(self, element):
         clazzes = [n for n in element.owned_elements if isinstance(n, Class)]
-        sorted_classes = sort_classes_at_same_level(clazzes, self.sort_clazz)
+        sorted_classes = sort_classes_at_same_level(clazzes)
         for clazz in sorted_classes:
             if clazz.is_identity():
                 self.is_all_identities = True

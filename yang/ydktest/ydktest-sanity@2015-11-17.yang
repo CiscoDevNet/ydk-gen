@@ -664,7 +664,7 @@ module ydktest-sanity {
 
   container runner {
 
-    uses nested-naming;
+    //uses nested-naming;
 
     //container at 1,2,3 nested level
     uses one-level;
