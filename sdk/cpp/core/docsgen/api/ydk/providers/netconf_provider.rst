@@ -13,7 +13,8 @@ NetconfServiceProvider
         int port = 830, \
         const std::string& protocol = "ssh", \
         bool on_demand = true, \
-        bool common_cache = false)
+        bool common_cache = false,
+        int timeout = -1)
 
         Constructs an instance of ``NetconfServiceProvider`` connect to a server which **has** to support model download
 
@@ -24,6 +25,7 @@ NetconfServiceProvider
         :param protocol: ``ssh`` or ``tcp``.
         :param on_demand: On demand downloading by default.
         :param common_cache: Use common caching directory if enabled.
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
 
     .. cpp:function:: NetconfServiceProvider(\
         const path::Repository& repo, \
@@ -32,7 +34,8 @@ NetconfServiceProvider
         std::string password, \
         int port = 830, \
         const std::string& protocol = "ssh", \
-        bool on_demand = true)
+        bool on_demand = true,
+        int timeout = -1)
 
         Constructs an instance of ``NetconfServiceProvider`` using the provided :cpp:class:`repository<path::Repository>`
 
@@ -41,6 +44,7 @@ NetconfServiceProvider
         :param username: Username to log in to the device
         :param password: Password to log in to the device
         :param port: Device port used to access the netconf interface. Default value is 830
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
 
     .. cpp:function:: EncodingFormat get_encoding() const
 

@@ -13,7 +13,8 @@ NetconfSession
         int port = 830, \
         const std::string& protocol = "ssh", \
         bool on_demand = true, \
-        bool common_cache = false)
+        bool common_cache = false\
+        int timeout = -1)
 
         Constructs an instance of the ``NetconfSession`` to connect to a server which **has** to support model download
 
@@ -24,6 +25,7 @@ NetconfSession
         :param protocol: ``ssh`` or ``tcp``.
         :param on_demand: Enable on demand downloading by default.
         :param common_cache: Use different directories for different connections by default.
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
 
     .. cpp:function:: NetconfSession(\
         const path::Repository& repo, \
@@ -32,7 +34,8 @@ NetconfSession
         const std::string& password, \
         int port = 830, \
         const std::string& protocol = "ssh", \
-        bool on_demand = true)
+        bool on_demand = true
+        int timeout = -1)
 
         Constructs an instance of the ``NetconfSession`` using the provided :cpp:class:`Repository<Repository>`
 
@@ -43,6 +46,7 @@ NetconfSession
         :param port: Device port used to access the netconf interface. Default value is 830
         :param protocol: ``ssh`` or ``tcp``.
         :param on_demand: Enable on demand downloading by default.
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
 
     .. cpp:function:: virtual path::RootSchemaNode& get_root_schema() const
 
