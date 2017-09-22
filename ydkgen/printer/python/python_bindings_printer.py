@@ -23,8 +23,8 @@ from __future__ import print_function
 
 import os
 
-from ydkgen.api_model import Bits, Class, Enum
-from ydkgen.common import get_rst_file_name
+from ydkgen.api_model import Bits, Class, Enum, Package
+from ydkgen.common import get_rst_file_name, get_property_name
 
 from .deviation_printer import DeviationPrinter
 from .import_test_printer import ImportTestPrinter
@@ -39,8 +39,8 @@ from ydkgen.printer.language_bindings_printer import LanguageBindingsPrinter, _E
 
 class PythonBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle, generate_tests, sort_clazz):
-        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, sort_clazz)
+    def __init__(self, ydk_root_dir, bundle, generate_tests, one_class_per_module, sort_clazz):
+        super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module, sort_clazz)
 
     def print_files(self):
         self._print_init_file(self.models_dir)
@@ -87,8 +87,23 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
         test_output_dir = self.initialize_output_directory(
             '%s/%s' % (self.test_dir, sub))
 
-        # RST Documentation
-        self._print_python_module(package, index, module_dir, size, sub)
+
+        if self.one_class_per_module:
+            path = os.path.join(self.models_dir, package.name)
+            self.initialize_output_directory(path, True)
+            self._print_init_file(path)
+
+            extra_args = {'one_class_per_module': self.one_class_per_module,
+                          'identity_subclasses': self.identity_subclasses}
+            self.print_file(get_python_module_file_name(path, package),
+                            emit_module,
+                            _EmitArgs(self.ypy_ctx, package, extra_args))
+
+            self._print_python_modules(package, index, path, size, sub)
+        else:
+            # RST Documentation
+            self._print_python_module(package, index, module_dir, size, sub)
+
         self._print_meta_module(package, meta_dir)
         if self.generate_tests:
             self._print_tests(package, test_output_dir)
@@ -121,21 +136,36 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
                         emit_table_of_contents,
                         _EmitArgs(self.ypy_ctx, packages, (self.bundle_name, self.bundle_version)))
 
+    def _print_python_modules(self, element, index, path, size, sub):
+        for c in [clazz for clazz in element.owned_elements if isinstance(clazz, Class)]:
+            if not c.is_identity():
+                self._print_python_module(c, index, os.path.join(path, get_property_name(c, c.iskeyword)), size, sub)
+
     def _print_python_module(self, package, index, path, size, sub):
+        if self.one_class_per_module:
+            self.initialize_output_directory(path, True)
+            self._print_init_file(path)
+
         self._print_init_file(path)
 
         package.parent_pkg_name = sub
-        extra_args = {'sort_clazz': False,
+        extra_args = {'one_class_per_module': self.one_class_per_module,
+                      'sort_clazz': self.sort_clazz,
                       'identity_subclasses': self.identity_subclasses}
         self.print_file(get_python_module_file_name(path, package),
                         emit_module,
                         _EmitArgs(self.ypy_ctx, package, extra_args))
 
+        if self.one_class_per_module:
+            self._print_python_modules(package, index, path, size, sub)
+
     def _print_meta_module(self, package, path):
         self._print_init_file(path)
+        extra_args = {'one_class_per_module': self.one_class_per_module,
+                      'sort_clazz': self.sort_clazz}
         self.print_file(get_meta_module_file_name(path, package),
                         emit_meta,
-                        _EmitArgs(self.ypy_ctx, package, self.sort_clazz))
+                        _EmitArgs(self.ypy_ctx, package, extra_args))
 
     def _print_tests(self, package, path):
         self._print_init_file(self.test_dir)
@@ -150,7 +180,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
         self.print_file(get_yang_ns_file_name(self.models_dir),
                         emit_yang_ns,
-                        _EmitArgs(self.ypy_ctx, packages))
+                        _EmitArgs(self.ypy_ctx, packages, self.one_class_per_module))
 
     def _print_deviate_file(self):
         self._print_nmsp_declare_init(self.deviation_dir)
@@ -203,7 +233,10 @@ def get_table_of_contents_file_name(path):
 
 
 def get_python_module_file_name(path, package):
-    return '%s/%s.py' % (path, package.name)
+    if isinstance(package, Package):
+        return '%s/%s.py' % (path, package.name)
+    else:
+        return '%s/%s.py' % (path, get_property_name(package, package.iskeyword))
 
 
 def get_meta_module_file_name(path, package):
@@ -214,8 +247,8 @@ def get_test_module_file_name(path, package):
     return '%s/test_%s.py' % (path, package.stmt.arg.replace('-', '_'))
 
 
-def emit_yang_ns(ctx, packages):
-    NamespacePrinter(ctx).print_output(packages)
+def emit_yang_ns(ctx, packages, one_class_per_module):
+    NamespacePrinter(ctx, one_class_per_module).print_output(packages)
 
 
 def emit_importests(ctx, packages):
@@ -238,8 +271,8 @@ def emit_test_module(ctx, package, identity_subclasses):
     TestPrinter(ctx, 'py').print_tests(package, identity_subclasses)
 
 
-def emit_meta(ctx, package, sort_clazz):
-    ModuleMetaPrinter(ctx, sort_clazz).print_output(package)
+def emit_meta(ctx, package, extra_args):
+    ModuleMetaPrinter(ctx, extra_args['one_class_per_module'], extra_args['sort_clazz']).print_output(package)
 
 
 def emit_deviation(ctx, package, sort_clazz):

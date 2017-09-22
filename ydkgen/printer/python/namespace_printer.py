@@ -26,10 +26,11 @@ from ydkgen.common import get_module_name
 
 
 class NamespacePrinter(object):
-    def __init__(self, ctx):
+    def __init__(self, ctx, one_class_per_module):
         self.ctx = ctx
         self.namespace_list = []
         self.namespace_map = {}
+        self.one_class_per_module = one_class_per_module
 
     def print_output(self, packages):
         self._init_namespace_info(packages)
@@ -59,11 +60,11 @@ class NamespacePrinter(object):
             for ele in package.owned_elements:
                 if hasattr(ele, 'stmt') and ele.stmt is not None:
                     if (ele.stmt.keyword == 'container' or ele.stmt.keyword == 'list'):
-                        self.namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
+                        self.namespace_map[(ns.arg, ele.stmt.arg)] = (ele.get_py_mod_name(self.one_class_per_module), ele.name)
                     elif ele.stmt.keyword == 'rpc':
                         for rpc_child in ele.owned_elements:
                             if isinstance(rpc_child, Class) and rpc_child.stmt.keyword == 'output':
-                                self.namespace_map[(ns.arg, ele.stmt.arg)] = (package.get_py_mod_name(), ele.name)
+                                self.namespace_map[(ns.arg, ele.stmt.arg)] = (ele.get_py_mod_name(self.one_class_per_module), ele.name)
 
     def _print_namespaces(self, ns):
         ns = sorted(ns)
@@ -95,7 +96,7 @@ class NamespacePrinter(object):
             identities = sorted(identities, key=lambda c: c.name)
             for identity_clazz in identities:
                 self.ctx.writeln("('%s', '%s'):('%s', '%s')," % (get_module_name(identity_clazz.stmt), identity_clazz.stmt.arg,
-                                                                 identity_clazz.get_py_mod_name(), identity_clazz.qn()))
+                                                                 identity_clazz.get_py_mod_name(self.one_class_per_module), identity_clazz.qn()))
         self.ctx.lvl_dec()
         self.ctx.writeln("}")
         self.ctx.bline()

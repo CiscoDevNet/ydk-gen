@@ -22,12 +22,28 @@ from __future__ import print_function
 import unittest
 
 from ydk.errors import YPYError, YPYErrorCode
-from ydk.models.ydktest import ydktest_sanity as ysanity
 try:
-    from ydk.models.ydktest import ietf_netconf
-    from ydk.models.ydktest import ietf_netconf_monitoring
+    from ydk.models.ydktest.ydktest_sanity import Runner
 except:
-    pass
+    from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner
+
+try:
+    from ydk.models.ydktest.ietf_netconf import EditConfigRpc, GetRpc, GetConfigRpc, ValidateRpc,  CommitRpc, \
+        UnlockRpc, LockRpc
+    #from ydk.models.ydktest.ietf_netconf_monitoring import GetSchemaRpc
+except:
+    try:
+        from ydk.models.ydktest.ietf_netconf.edit_config.edit_config import EditConfigRpc
+        from ydk.models.ydktest.ietf_netconf.get.get import GetRpc
+        from ydk.models.ydktest.ietf_netconf.get_config.get_config import GetConfigRpc
+        from ydk.models.ydktest.ietf_netconf.validate.validate import ValidateRpc
+        from ydk.models.ydktest.ietf_netconf.commit.commit import CommitRpc
+        from ydk.models.ydktest.ietf_netconf.unlock.unlock import UnlockRpc
+        from ydk.models.ydktest.ietf_netconf.lock.lock import LockRpc
+        # from ydk.models.ydktest.ietf_netconf_monitoring.ietf_netconf_monitoring import GetSchemaRpc
+    except:
+        pass
+
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import ExecutorService
 from ydk.types import Empty
@@ -59,7 +75,7 @@ class SanityRpc(unittest.TestCase):
     def setUp(self):
         from ydk.services import CRUDService
         crud = CRUDService()
-        runner = ysanity.Runner()
+        runner = Runner()
         crud.delete(self.ncc, runner)
 
 
@@ -67,36 +83,36 @@ class SanityRpc(unittest.TestCase):
         pass
 
     def test_execute_edit_commit_get_rpc(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.one.number = 1
         runner.one.name = 'runner:one:name'
 
-        edit_rpc = ietf_netconf.EditConfigRpc()
+        edit_rpc = EditConfigRpc()
         edit_rpc.input.target.candidate = Empty()
         edit_rpc.input.config = runner
         op = self.executor.execute_rpc(self.ncc, edit_rpc)
         self.assertEqual(None, op)
 
-        commit_rpc = ietf_netconf.CommitRpc()
+        commit_rpc = CommitRpc()
         op = self.executor.execute_rpc(self.ncc, commit_rpc)
         self.assertEqual(None, op)
 
-        get_rpc = ietf_netconf.GetRpc()
-        get_rpc.input.filter = ysanity.Runner()
+        get_rpc = GetRpc()
+        get_rpc.input.filter = Runner()
         op = self.executor.execute_rpc(self.ncc, get_rpc)
         self.assertNotEqual(None, op)
 
     def test_execute_get_config_rpc(self):
-        get_config_rpc = ietf_netconf.GetConfigRpc()
+        get_config_rpc = GetConfigRpc()
         get_config_rpc.input.source.candidate = Empty()
-        get_config_rpc.input.filter = ysanity.Runner()
+        get_config_rpc.input.filter = Runner()
         initial_candidate_data = self.executor.execute_rpc(self.ncc, get_config_rpc)
 
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.two.number = 2
         runner.two.name = 'runner:two:name'
 
-        edit_rpc = ietf_netconf.EditConfigRpc()
+        edit_rpc = EditConfigRpc()
         edit_rpc.input.target.candidate = Empty()
         edit_rpc.input.config = runner
         op = self.executor.execute_rpc(self.ncc, edit_rpc)
@@ -109,29 +125,36 @@ class SanityRpc(unittest.TestCase):
         self.assertNotEqual(None, final_candidate_data)
 
     def test_execute_validate_rpc(self):
-        validate_rpc = ietf_netconf.ValidateRpc()
+        import logging
+        log = logging.getLogger('ydk')
+        log.setLevel(logging.INFO)
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+        handler.setFormatter(formatter)
+        log.addHandler(handler)
+        validate_rpc = ValidateRpc()
         validate_rpc.input.source.candidate = Empty()
         op = self.executor.execute_rpc(self.ncc, validate_rpc)
         self.assertEqual(None, op)
 
     def test_execute_lock_unlock_rpc(self):
-        lock_rpc = ietf_netconf.LockRpc()
+        lock_rpc = LockRpc()
         lock_rpc.input.target.candidate = Empty()
         op = self.executor.execute_rpc(self.ncc, lock_rpc)
         self.assertEqual(None, op)
 
-        unlock_rpc = ietf_netconf.UnlockRpc()
+        unlock_rpc = UnlockRpc()
         unlock_rpc.input.target.candidate = Empty()
         op = self.executor.execute_rpc(self.ncc, unlock_rpc)
         self.assertEqual(None, op)
 
     def test_execute_lock_unlock_rpc_fail(self):
-        lock_rpc = ietf_netconf.LockRpc()
+        lock_rpc = LockRpc()
         lock_rpc.input.target.candidate = Empty()
         op = self.executor.execute_rpc(self.ncc, lock_rpc)
         self.assertEqual(None, op)
 
-        unlock_rpc = ietf_netconf.UnlockRpc()
+        unlock_rpc = UnlockRpc()
         unlock_rpc.input.target.running = Empty()
         try:
             op = self.executor.execute_rpc(self.ncc, unlock_rpc)
@@ -139,20 +162,20 @@ class SanityRpc(unittest.TestCase):
             self.assertIsInstance(e, YPYError)
 
     def test_execute_non_rpc_fail(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         try:
             self.executor.execute_rpc(self.ncc, runner)
         except Exception as e:
             self.assertIsInstance(e, YPYError)
             self.assertEqual(e.code, YPYErrorCode.INVALID_RPC)
 
-    @unittest.skip('TODO: get-schema rpc is not yet supported on netsim')
-    def test_execute_get_schema(self):
-        get_schema_rpc = ietf_netconf_monitoring.GetSchemaRpc()
-        get_schema_rpc.input.identifier = 'ietf-netconf-monitoring'
-        get_schema_rpc.input.format = ietf_netconf_monitoring.Yang_Identity()
-        op = self.executor.execute_rpc(self.ncc, get_schema_rpc)
-        print(op)
+    # @unittest.skip('TODO: get-schema rpc is not yet supported on netsim')
+    # def test_execute_get_schema(self):
+    #     get_schema_rpc = ietf_netconf_monitoring.GetSchemaRpc()
+    #     get_schema_rpc.input.identifier = 'ietf-netconf-monitoring'
+    #     get_schema_rpc.input.format = ietf_netconf_monitoring.Yang_Identity()
+    #     op = self.executor.execute_rpc(self.ncc, get_schema_rpc)
+    #     print(op)
 
 if __name__ == '__main__':
     import sys

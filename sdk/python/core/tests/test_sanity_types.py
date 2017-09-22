@@ -19,15 +19,24 @@ import ydk.types as ytypes
 import unittest
 
 from ydk.services import CRUDService
-from ydk.models.ydktest import ydktest_sanity as ysanity
-from ydk.models.ydktest import ydktest_sanity_types as ysanity_types
-from ydk.models.ydktest import ydktest_types as y_types
+try:
+    from ydk.models.ydktest.ydktest_sanity import Runner, SubTest, ChildIdentityIdentity, ChildChildIdentityIdentity
+    from ydk.models.ydktest.ydktest_sanity_types import YdktestTypeIdentity
+except:
+    from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner
+    from ydk.models.ydktest.ydktest_sanity.sub_test.sub_test import SubTest
+    from ydk.models.ydktest.ydktest_sanity.ydktest_sanity import ChildIdentityIdentity, ChildChildIdentityIdentity
+    from ydk.models.ydktest.ydktest_sanity_types.ydktest_sanity_types import YdktestTypeIdentity
+
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.types import Empty, DELETE, Decimal64
 from compare import is_equal
 from ydk.errors import YPYError, YPYModelError
 
-from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
+try:
+    from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
+except:
+    from ydk.models.ydktest.ydktest_sanity.ydktest_sanity import YdkEnumTestEnum, YdkEnumIntTestEnum
 
 
 class SanityTest(unittest.TestCase):
@@ -54,15 +63,15 @@ class SanityTest(unittest.TestCase):
         self.ncc.close()
 
     def setUp(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         self.crud.delete(self.ncc, runner)
 
     def tearDown(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         self.crud.delete(self.ncc, runner)
 
     def _create_runner(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.ytypes = runner.Ytypes()
         runner.ytypes.built_in_t = runner.ytypes.BuiltInT()
 
@@ -75,7 +84,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -88,7 +97,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -101,7 +110,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -114,7 +123,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -127,7 +136,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -140,7 +149,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -153,7 +162,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -166,7 +175,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -179,7 +188,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -192,7 +201,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -205,7 +214,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -218,7 +227,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -232,7 +241,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -253,7 +262,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -265,7 +274,7 @@ class SanityTest(unittest.TestCase):
         self.crud.update(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -274,11 +283,11 @@ class SanityTest(unittest.TestCase):
 
     def test_embedded_enum(self):
         runner = self._create_runner()
-        runner.ytypes.built_in_t.embeded_enum = ysanity.Runner.Ytypes.BuiltInT.EmbededEnumEnum.zero
+        runner.ytypes.built_in_t.embeded_enum = Runner.Ytypes.BuiltInT.EmbededEnumEnum.zero
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -291,7 +300,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -304,7 +313,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -317,7 +326,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -330,7 +339,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -343,7 +352,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -358,7 +367,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -377,7 +386,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner1
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -391,7 +400,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -400,12 +409,12 @@ class SanityTest(unittest.TestCase):
 
     def test_identity_leaflist(self):
         runner = self._create_runner()
-        runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildIdentityIdentity())
-        runner.ytypes.built_in_t.identity_llist.append(ysanity.ChildChildIdentityIdentity())
+        runner.ytypes.built_in_t.identity_llist.append(ChildIdentityIdentity())
+        runner.ytypes.built_in_t.identity_llist.append(ChildChildIdentityIdentity())
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -418,7 +427,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -428,11 +437,11 @@ class SanityTest(unittest.TestCase):
     def test_identityref(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.identity_ref_value = \
-            ysanity.ChildIdentityIdentity()
+            ChildIdentityIdentity()
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -445,7 +454,7 @@ class SanityTest(unittest.TestCase):
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
@@ -463,7 +472,7 @@ class SanityTest(unittest.TestCase):
         elems = []
         n = 10
         for i in range(n):
-            l = ysanity.Runner.OneList.Ldata()
+            l = Runner.OneList.Ldata()
             l.number = i
             l.name = str(i)
             elems.append(l)
@@ -472,13 +481,13 @@ class SanityTest(unittest.TestCase):
                           self.crud.create, self.ncc, runner)
 
     def test_submodule(self):
-        subtest = ysanity.SubTest()
+        subtest = SubTest()
         subtest.one_aug.name = 'test'
         subtest.one_aug.number = 3
 
         res = self.crud.create(self.ncc, subtest)
 
-        subtest1 = self.crud.read(self.ncc, ysanity.SubTest())
+        subtest1 = self.crud.read(self.ncc, SubTest())
 
         # Compare runners
         result = is_equal(subtest, subtest1)
@@ -487,11 +496,11 @@ class SanityTest(unittest.TestCase):
     def test_identity_from_other_module(self):
         runner = self._create_runner()
         runner.ytypes.built_in_t.identity_ref_value = \
-            ysanity_types.YdktestTypeIdentity()
+            YdktestTypeIdentity()
         self.crud.create(self.ncc, runner)
 
         # Read into Runner2
-        runner1 = ysanity.Runner()
+        runner1 = Runner()
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners

@@ -140,12 +140,35 @@ class NamedElement(Element):
         super(NamedElement, self).__init__()
         self.name = None
 
-    def get_py_mod_name(self):
+    def get_py_mod_name(self, one_class_per_module=False):
         """
             Get the python module name that contains this
             NamedElement.
         """
         pkg = get_top_pkg(self)
+        if one_class_per_module:
+            names = []
+            element = self
+            while element is not None and not isinstance(element, Package):
+                if isinstance(element, Deviation):
+                    element = element.owner
+                names.append(get_property_name(element, element.iskeyword))
+                element = element.owner
+            rev_names = []
+            if (hasattr(self, 'is_identity') and self.is_identity()) or isinstance(self, Enum) or isinstance(self, Bits):
+                # if 'sanity' in pkg.name:
+                #     from pdb import set_trace as bp;bp()
+                names = names[1:]
+                rev_names.extend(reversed(names))
+                if len(rev_names)==0:
+                    rev_names.append(pkg.name)
+                else:
+                    rev_names.append(get_property_name(self.owner, self.owner.iskeyword))
+            else:
+                rev_names.extend(reversed(names))
+                rev_names.append(get_property_name(self, self.iskeyword))
+            return 'ydk.models.%s.%s.%s' % (pkg.bundle_name, pkg.name, ('.'.join(rev_names)))
+
         if not pkg.bundle_name:
             py_mod_name = 'ydk.models.%s' % pkg.name
         elif pkg.aug_bundle_name:
@@ -885,6 +908,14 @@ def snake_case(input_text):
     snake_case = input_text.replace('-', '_')
     snake_case = snake_case.replace('.', '_')
     return snake_case.lower()
+
+
+def get_property_name(element, iskeyword):
+    name = snake_case(element.stmt.arg)
+    if iskeyword(name) or iskeyword(name.lower()) or (
+            element.owner is not None and element.stmt.arg.lower() == element.owner.stmt.arg.lower()):
+        name = '%s_' % name
+    return name
 
 
 def camel_case(input_text):

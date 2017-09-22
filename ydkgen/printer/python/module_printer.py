@@ -21,7 +21,7 @@
 
 """
 
-from ydkgen.api_model import Class, Enum, Bits
+from ydkgen.api_model import Class, Enum, Bits, Package
 from ydkgen.common import convert_to_reStructuredText
 
 from .bits_printer import BitsPrinter
@@ -36,15 +36,24 @@ class ModulePrinter(FilePrinter):
         super(ModulePrinter, self).__init__(ctx)
         self.sort_clazz = extra_args.get('sort_clazz', False)
         self.identity_subclasses = extra_args.get('identity_subclasses', {})
+        self.one_class_per_module = extra_args.get('one_class_per_module', {})
 
     def print_header(self, package):
         self._print_module_description(package)
         self._print_imports(package)
 
     def print_body(self, package):
-        self._print_module_enums(package)
-        self._print_module_bits(package)
-        self._print_module_classes(package)
+        if self.one_class_per_module:
+            if isinstance(package, Package):
+                self._print_module_enums(package)
+                identities = [child for child in package.owned_elements if isinstance(child, Class) and child.is_identity()]
+                ClassPrinter(self.ctx, self.one_class_per_module, self.sort_clazz).print_output(identities)
+            else:
+                self._print_module_classes(package)
+        else:
+            self._print_module_enums(package)
+            self._print_module_bits(package)
+            self._print_module_classes(package)
         self.ctx.bline()
 
     def _print_module_description(self, package):
@@ -67,7 +76,7 @@ class ModulePrinter(FilePrinter):
             if all((id(imported_type) in self.identity_subclasses,
                     self.is_derived_identity(package, imported_type))):
                 imported_stmt = 'from %s import %s' % (
-                    imported_type.get_py_mod_name(),
+                    imported_type.get_py_mod_name(self.one_class_per_module),
                     imported_type.qn().split('.')[0])
                 imports_to_print.add(imported_stmt)
 
@@ -106,8 +115,11 @@ from ydk.errors import YPYError, YPYModelError
             self._print_bits(bit)
 
     def _print_module_classes(self, package):
-        ClassPrinter(self.ctx, self.sort_clazz).print_output(
-            [clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
+        if self.one_class_per_module:
+            ClassPrinter(self.ctx, self.one_class_per_module, self.sort_clazz).print_output([package])
+        else:
+            ClassPrinter(self.ctx, self.one_class_per_module, self.sort_clazz).print_output(
+                [clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
 
     def _print_bits(self, bits):
         BitsPrinter(self.ctx).print_bits(bits)

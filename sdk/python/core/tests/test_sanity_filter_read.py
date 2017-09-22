@@ -23,8 +23,12 @@ import unittest
 from compare import is_equal
 from ydk.types import READ, YList
 from ydk.services import CRUDService
-from ydk.models.ydktest import ydktest_filterread as ysanity
-from ydk.models.ydktest import oc_pattern
+try:
+    from ydk.models.ydktest.ydktest_filterread import A
+    from ydk.models.ydktest.oc_pattern import OcA
+except:
+    from ydk.models.ydktest.ydktest_filterread.a.a import A
+    from ydk.models.ydktest.oc_pattern.oc_a.oc_a import OcA
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 
 
@@ -101,7 +105,7 @@ class SanityYang(unittest.TestCase):
           </lst>
         </a>
         """
-        a = ysanity.A()
+        a = A()
         a.a1, a.a2, a.a3 = "some value", "value of a2", "value of a3"
         a.b.b1, a.b.b2, a.b.b3 = "some value", "value of b2", "value of b3"
         # config presence container
@@ -121,7 +125,7 @@ class SanityYang(unittest.TestCase):
 
     def test_CASE1(self):
         """Use crud read with top level entity returns all data."""
-        a = ysanity.A()
+        a = A()
         a_read = self.crud.read(self.ncc, a)
         preconfig_a = self.getInitEntity()
         self.assertEqual(is_equal(a_read, preconfig_a), True)
@@ -130,7 +134,7 @@ class SanityYang(unittest.TestCase):
         """ According to https://tools.ietf.org/html/rfc6241#section-6.2.5,
         `a.a1` is a content match node. Uses crud read on `a` returns all data.
         """
-        a = ysanity.A()
+        a = A()
         a.a1 = "some value"
         a_read = self.crud.read(self.ncc, a)
         preconfig_a = self.getInitEntity()
@@ -138,16 +142,16 @@ class SanityYang(unittest.TestCase):
 
     def test_CASE3(self):
         """Assign a READ object to `a.a1` should only return data on this leaf."""
-        a = ysanity.A()
+        a = A()
         a.a1 = READ()
         a_read = self.crud.read(self.ncc, a)
-        preconfig_a = ysanity.A()
+        preconfig_a = A()
         preconfig_a.a1 = "some value"
         self.assertEqual(is_equal(a_read, preconfig_a), True)
 
     def test_CASE4(self):
         """Now `a.b.b1` serves as a content match node."""
-        a = ysanity.A()
+        a = A()
         a.b.b1 = "some value"
         a_read = self.crud.read(self.ncc, a)
         preconfig_a = self.getInitEntity()
@@ -159,39 +163,39 @@ class SanityYang(unittest.TestCase):
 
     def test_CASE5(self):
         """Now `a.b.d.e` serves as a content match node."""
-        a = ysanity.A()
+        a = A()
         e = a.b.d.e
         e.e1 = "some value e1"
         a_read = self.crud.read(self.ncc, a)
-        preconfig_a = ysanity.A()
+        preconfig_a = A()
         preconfig_a.b.d.e.e1 = "some value e1"
         preconfig_a.b.d.e.e2 = "value of e2"
         self.assertEqual(is_equal(a_read, preconfig_a), True)
 
     def test_CASE6(self):
         """Assign `a.b.c` serves as an empty presence container."""
-        a = ysanity.A()
+        a = A()
         a.b.c = a.b.C()
         a_read = self.crud.read(self.ncc, a)
-        preconfig_a = ysanity.A()
+        preconfig_a = A()
         preconfig_a.b.c = preconfig_a.b.C()
         self.assertEqual(is_equal(a_read, preconfig_a), True)
 
     def test_CASE7(self):
         """`item1.number` and `item2.number` serves as content match nodes."""
-        a = ysanity.A()
+        a = A()
         item1, item2 = a.Lst(), a.Lst()
         item1.number, item2.number = 1, 2
         a.lst.extend([item1, item2])
         a_read = self.crud.read(self.ncc, a)
-        preconfig_a = ysanity.A()
+        preconfig_a = A()
         item1.value, item2.value = "one", "two"
         preconfig_a.lst.extend([item1, item2])
         self.assertEqual(is_equal(a_read, preconfig_a), True)
 
     def test_CASE8(self):
         """Assign presence class F to `a.b.f`."""
-        a = ysanity.A()
+        a = A()
         a.b.f = a.b.F()
         a.b.f.f1 = 'f'
         a_read = self.crud.read(self.ncc, a)
@@ -199,12 +203,12 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(is_equal(a_read, preconfig_a), True)
 
     def test_read_oc_patttern(self):
-        obj_A = oc_pattern.OcA()
+        obj_A = OcA()
         obj_A.a = 'hello'
         obj_A.b.b = obj_A.a # 'world' --> YPYServiceProviderError: illegal reference
         self.crud.create(self.ncc, obj_A)
 
-        obj_A_read = self.crud.read(self.ncc, oc_pattern.OcA(), True)
+        obj_A_read = self.crud.read(self.ncc, OcA(), True)
 
         self.assertEqual(is_equal(obj_A, obj_A_read), True)
 

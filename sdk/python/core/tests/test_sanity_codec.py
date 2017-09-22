@@ -21,8 +21,13 @@ from __future__ import absolute_import
 import unittest
 from compare import is_equal
 
-from ydk.models.ydktest import ydktest_sanity as ysanity
-from ydk.models.ydktest import oc_pattern
+try:
+    from ydk.models.ydktest.ydktest_sanity import Runner
+    from ydk.models.ydktest.oc_pattern import OcA
+except:
+    from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner
+    from ydk.models.ydktest.oc_pattern.oc_a.oc_a import OcA
+
 from ydk.providers import CodecServiceProvider
 from ydk.services import CodecService
 from ydk.errors import YPYServiceError
@@ -93,9 +98,9 @@ class SanityYang(unittest.TestCase):
         pass
 
     def _get_runner_entity(self):
-        r_1 = ysanity.Runner()
-        e_1, e_2 = ysanity.Runner.TwoList.Ldata(), ysanity.Runner.TwoList.Ldata()
-        e_11, e_12 = ysanity.Runner.TwoList.Ldata.Subl1(), ysanity.Runner.TwoList.Ldata.Subl1()
+        r_1 = Runner()
+        e_1, e_2 = Runner.TwoList.Ldata(), Runner.TwoList.Ldata()
+        e_11, e_12 = Runner.TwoList.Ldata.Subl1(), Runner.TwoList.Ldata.Subl1()
         e_1.number = 21
         e_1.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:name'
         e_11.number = 211
@@ -103,7 +108,7 @@ class SanityYang(unittest.TestCase):
         e_12.number = 212
         e_12.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:subl1[' + str(e_12.number) + ']:name'
         e_1.subl1.extend([e_11, e_12])
-        e_21, e_22 = ysanity.Runner.TwoList.Ldata.Subl1(), ysanity.Runner.TwoList.Ldata.Subl1()
+        e_21, e_22 = Runner.TwoList.Ldata.Subl1(), Runner.TwoList.Ldata.Subl1()
         e_2.number = 22
         e_2.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:name'
         e_21.number = 221
@@ -120,8 +125,11 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(self._runner_payload, payload)
 
     def test_encode_2(self):
-        from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum
-        r_1 = ysanity.Runner.Ytypes.BuiltInT()
+        try:
+            from ydk.models.ydktest.ydktest_sanity import YdkEnumTestEnum
+        except:
+            from ydk.models.ydktest.ydktest_sanity.ydktest_sanity import YdkEnumTestEnum
+        r_1 = Runner.Ytypes.BuiltInT()
         r_1.enum_value = YdkEnumTestEnum.local
 
         payload = self.codec.encode(self.provider, r_1)
@@ -208,7 +216,7 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(payload, self.codec.encode(self.provider, entity))
 
     def test_decode_oc_pattern(self):
-        obj_A = oc_pattern.OcA()
+        obj_A = OcA()
         obj_A.a = 'Hello'
         entity = self.codec.decode(self.provider, self._oc_pattern_payload)
 

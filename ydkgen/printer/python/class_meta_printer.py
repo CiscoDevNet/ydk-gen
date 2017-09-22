@@ -28,10 +28,11 @@ from .enum_printer import EnumPrinter
 
 class ClassMetaPrinter(object):
 
-    def __init__(self, ctx, sort_clazz):
+    def __init__(self, ctx, one_class_per_module, sort_clazz):
         self.ctx = ctx
         self.is_rpc = False
         self.sort_clazz = sort_clazz
+        self.one_class_per_module = one_class_per_module
 
     def print_output(self, unsorted_classes):
         ''' This arranges the classes at the same level
@@ -92,7 +93,7 @@ class ClassMetaPrinter(object):
 
         for prop in prop_list:
             meta_info_data = get_meta_info_data(
-                prop, prop.property_type, prop.stmt.search_one('type'), 'py')
+                prop, prop.property_type, prop.stmt.search_one('type'), 'py', self.one_class_per_module)
             self.print_meta_class_member(meta_info_data, self.ctx)
 
         '''
@@ -117,7 +118,7 @@ class ClassMetaPrinter(object):
         else:
             self.ctx.writeln("_yang_ns._namespaces['%s']," % module_name)
         self.ctx.lvl_dec()
-        self.ctx.writeln("'%s'" % clazz.get_py_mod_name())
+        self.ctx.writeln("'%s'" % clazz.get_py_mod_name(self.one_class_per_module))
         self.ctx.writeln('),')
 
         self.ctx.lvl_dec()
