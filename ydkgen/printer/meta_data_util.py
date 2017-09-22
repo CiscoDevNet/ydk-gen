@@ -81,7 +81,7 @@ def get_class_docstring(clazz, language, identity_subclasses=None):
             id_subclasses = identity_subclasses
 
         meta_info_data = get_meta_info_data(
-            prop, prop.property_type, prop.stmt.search_one('type'), language,
+            prop, prop.property_type, prop.stmt.search_one('type'), language, False,
             identity_subclasses=id_subclasses)
 
         if meta_info_data is None:
@@ -196,7 +196,7 @@ def format_range_string(ranges):
     return range_string
 
 
-def get_meta_info_data(prop, property_type, type_stmt, language, identity_subclasses=None):
+def get_meta_info_data(prop, property_type, type_stmt, language, one_class_per_module, identity_subclasses=None):
     """ Gets an instance of MetaInfoData that has the useful information about the property.
 
         Args:
@@ -230,8 +230,16 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
         meta_info_data.default_value = default_value.arg
 
     if isinstance(property_type, Class):
-        meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name()
-        meta_info_data.clazz_name = "'%s'" % property_type.qn()
+        meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name(one_class_per_module)
+        if one_class_per_module:
+            if property_type.is_identity():
+                meta_info_data.clazz_name = "'%s%s'" % (
+                    (property_type.owner.name + '.') if (not isinstance(property_type.owner, Package)) else '',
+                    property_type.name)
+            else:
+                meta_info_data.clazz_name = "'%s'" % property_type.name
+        else:
+            meta_info_data.clazz_name = "'%s'" % property_type.qn()
 
         if identity_subclasses is None:
             meta_info_data.doc_link = get_class_crossref_tag(
@@ -259,14 +267,19 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
         else:
             meta_info_data.mtype = 'REFERENCE_CLASS'
         # if the class is local use just the local name
-        if property_type in clazz.owned_elements:
+        if one_class_per_module or property_type in clazz.owned_elements:
             meta_info_data.ptype = property_type.name
         else:
             meta_info_data.ptype = property_type.qn()
 
     elif isinstance(property_type, Enum):
-        meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name()
-        meta_info_data.clazz_name = "'%s'" % property_type.qn()
+        meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name(one_class_per_module)
+        if one_class_per_module:
+            meta_info_data.clazz_name = "'%s%s'" % (
+                (property_type.owner.name + '.') if (not isinstance(property_type.owner, Package)) else '',
+                property_type.name)
+        else:
+            meta_info_data.clazz_name = "'%s'" % property_type.qn()
 
         meta_info_data.doc_link = get_class_crossref_tag(property_type.name,
                                                          property_type,
@@ -277,14 +290,19 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
             meta_info_data.doc_link = _get_list_doc_link_tag(
                 meta_info_data, 'doc_link', language, meta_info_data.mtype)
 
-        if prop.property_type in clazz.owned_elements:
+        if one_class_per_module or prop.property_type in clazz.owned_elements:
             meta_info_data.ptype = property_type.name
         else:
             meta_info_data.ptype = property_type.qn()
 
     elif isinstance(property_type, Bits):
-        meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name()
-        meta_info_data.clazz_name = "'%s'" % property_type.qn()
+        meta_info_data.pmodule_name = "'%s'" % property_type.get_py_mod_name(one_class_per_module)
+        if one_class_per_module:
+            meta_info_data.clazz_name = "'%s%s'" % (
+            (property_type.owner.name + '.') if (not isinstance(property_type.owner, Package)) else '',
+            property_type.name)
+        else:
+            meta_info_data.clazz_name = "'%s'" % property_type.qn()
         meta_info_data.doc_link = get_bits_doc_link(property_type, language)
         meta_info_data.mtype = 'REFERENCE_BITS'
         if prop.is_many:
@@ -292,7 +310,7 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
             meta_info_data.doc_link = _get_list_doc_link_tag(
                 meta_info_data, 'doc_link', language, meta_info_data.mtype)
 
-        if prop.property_type in clazz.owned_elements:
+        if one_class_per_module or prop.property_type in clazz.owned_elements:
             meta_info_data.ptype = property_type.name
         else:
             meta_info_data.ptype = property_type.qn()
@@ -383,7 +401,7 @@ def get_meta_info_data(prop, property_type, type_stmt, language, identity_subcla
             for contained_type_stmt in type_spec.types:
                 contained_property_type = types_extractor.get_property_type(contained_type_stmt)
                 child_meta_info_data = get_meta_info_data(
-                    prop, contained_property_type, contained_type_stmt, language,
+                    prop, contained_property_type, contained_type_stmt, language, one_class_per_module,
                     identity_subclasses=identity_subclasses)
                 meta_info_data.children.append(child_meta_info_data)
 

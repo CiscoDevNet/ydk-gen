@@ -117,6 +117,8 @@ Options:
   -h, --help          show this help message and exit
   -p, --python        Generate Python bundle/core. This is currently the default option
   -c, --cpp           Generate C++ bundle/core
+  -o, --one-class-per-module
+                      Generate separate modules for each python class corresponding to yang containers or lists.
   --core              Install the python/C++ core
   --bundle=PROFILE    Take options from a bundle profile file describing YANG
   -v, --verbose       Verbose mode

@@ -30,9 +30,10 @@ from ydkgen.printer.file_printer import FilePrinter
 
 class ModuleMetaPrinter(FilePrinter):
 
-    def __init__(self, ctx, sort_clazz):
+    def __init__(self, ctx, one_class_per_module, sort_clazz):
         super(ModuleMetaPrinter, self).__init__(ctx)
         self.sort_clazz = sort_clazz
+        self.one_class_per_module = one_class_per_module
 
     def print_header(self, package):
         self.ctx.str("""
@@ -63,10 +64,10 @@ from ydk.providers._importer import _yang_ns
             [c for c in package.owned_elements if isinstance(c, Class)])
 
     def print_classes_meta(self, unsorted_classes):
-        ClassMetaPrinter(self.ctx, self.sort_clazz).print_output(unsorted_classes)
+        ClassMetaPrinter(self.ctx, self.one_class_per_module, self.sort_clazz).print_output(unsorted_classes)
 
     def print_enum_meta(self, enum_class):
         EnumPrinter(self.ctx).print_enum_meta(enum_class)
 
     def print_classes_meta_parents(self, unsorted_classes):
-        ClassMetaPrinter(self.ctx, self.sort_clazz).print_parents(unsorted_classes)
+        ClassMetaPrinter(self.ctx, self.one_class_per_module, self.sort_clazz).print_parents(unsorted_classes)

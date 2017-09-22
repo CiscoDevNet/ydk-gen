@@ -37,8 +37,8 @@ from ..tests import TestPrinter
 
 class CppBindingsPrinter(LanguageBindingsPrinter):
 
-    def __init__(self, ydk_root_dir, bundle, generate_tests, sort_clazz):
-        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, sort_clazz)
+    def __init__(self, ydk_root_dir, bundle, generate_tests, one_class_per_module, sort_clazz):
+        super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module, sort_clazz)
         self.source_files = []
         self.header_files = []
 

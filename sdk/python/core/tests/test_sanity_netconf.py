@@ -23,7 +23,10 @@ import unittest
 from compare import is_equal
 
 from ydk.errors import YPYModelError, YPYError, YPYServiceError
-from ydk.models.ydktest import ydktest_sanity as ysanity
+try:
+    from ydk.models.ydktest.ydktest_sanity import Runner
+except:
+    from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner
 from ydk.providers import NetconfServiceProvider, NativeNetconfServiceProvider
 from ydk.services import NetconfService
 from ydk.services import Datastore
@@ -55,7 +58,7 @@ class SanityNetconf(unittest.TestCase):
     def setUp(self):
         from ydk.services import CRUDService
         crud = CRUDService()
-        runner = ysanity.Runner()
+        runner = Runner()
         crud.delete(self.ncc, runner)
 
 
@@ -63,11 +66,11 @@ class SanityNetconf(unittest.TestCase):
         pass
 
     def test_edit_commit_get(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.one.number = 1
         runner.one.name = 'runner:one:name'
 
-        get_filter = ysanity.Runner()
+        get_filter = Runner()
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
         self.assertEqual(None, op)
@@ -101,7 +104,7 @@ class SanityNetconf(unittest.TestCase):
         op = self.netconf_service.validate(self.ncc, source=Datastore.candidate)
         self.assertEqual(None, op)
 
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.one.number = 1
         runner.one.name = 'runner:one:name'
         op = self.netconf_service.validate(self.ncc, source=runner)
@@ -112,10 +115,10 @@ class SanityNetconf(unittest.TestCase):
         pass
 
     def test_commit_discard(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.two.number = 2
         runner.two.name = 'runner:two:name'
-        get_filter = ysanity.Runner()
+        get_filter = Runner()
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
         self.assertEqual(None, op)
@@ -133,10 +136,10 @@ class SanityNetconf(unittest.TestCase):
         self.assertEqual(is_equal(runner, result), True)
 
     def test_confirmed_commit(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.two.number = 2
         runner.two.name = 'runner:two:name'
-        get_filter = ysanity.Runner()
+        get_filter = Runner()
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
         self.assertEqual(None, op)
@@ -154,10 +157,10 @@ class SanityNetconf(unittest.TestCase):
         op = self.netconf_service.copy_config(self.ncc, Datastore.candidate, Datastore.running)
         self.assertEqual(None, op)
 
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.two.number = 2
         runner.two.name = 'runner:two:name'
-        get_filter = ysanity.Runner()
+        get_filter = Runner()
 
         op = self.netconf_service.edit_config(self.ncc, Datastore.candidate, runner)
         self.assertEqual(None, op)
@@ -207,7 +210,7 @@ class SanityNetconf(unittest.TestCase):
                           Datastore.candidate)
 
     def test_get_config_fail(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         self.assertRaises(YPYServiceError,
                           self.netconf_service.get_config,
                           self.ncc,

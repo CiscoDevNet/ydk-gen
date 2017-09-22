@@ -35,9 +35,10 @@ from .enum_printer import EnumPrinter
 
 class ClassPrinter(FilePrinter):
 
-    def __init__(self, ctx, sort_clazz):
+    def __init__(self, ctx, one_class_per_module, sort_clazz):
         super(ClassPrinter, self).__init__(ctx)
         self.sort_clazz = sort_clazz
+        self.one_class_per_module = one_class_per_module
 
     def print_body(self, unsorted_classes):
         ''' This arranges the classes at the same level
@@ -63,7 +64,8 @@ class ClassPrinter(FilePrinter):
 
         self._print_child_enums(clazz)
         self._print_child_bits(clazz)
-        self._print_child_classes(clazz)
+        if not self.one_class_per_module:
+            self._print_child_classes(clazz)
 
         if not clazz.is_identity() and not clazz.is_grouping():
             self._print_common_path_functions(clazz)
@@ -124,7 +126,7 @@ class ClassPrinter(FilePrinter):
         self.ctx.bline()
 
     def _print_class_inits(self, clazz):
-        ClassInitsPrinter(self.ctx).print_output(clazz)
+        ClassInitsPrinter(self.ctx, self.one_class_per_module).print_output(clazz)
 
     def _print_is_config_function(self, clazz):
         ClassIsConfigPrinter(self.ctx).print_output(clazz)

@@ -21,12 +21,14 @@ class_inits_printer.py
 
 """
 from ydkgen.api_model import Bits, Class, Package
+from ydkgen.common import get_property_name
 
 
 class ClassInitsPrinter(object):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx, one_class_per_module):
         self.ctx = ctx
+        self.one_class_per_module = one_class_per_module
 
     def print_output(self, clazz):
         self._print_class_inits_header(clazz)
@@ -38,6 +40,8 @@ class ClassInitsPrinter(object):
         self.ctx.lvl_inc()
         for super_class in clazz.extends:
             self.ctx.writeln('%s.__init__(self)' % super_class.qn())
+        if self.one_class_per_module:
+            self._print_children_imports(clazz)
 
     def _print_class_inits_body(self, clazz):
         if clazz.is_identity() and len(clazz.extends) == 0:
@@ -45,6 +49,13 @@ class ClassInitsPrinter(object):
         else:
             self._print_class_inits_properties(clazz)
             self.print_class_is_rpc(clazz)
+
+    def _print_children_imports(self, clazz):
+        for prop in clazz.properties():
+            if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
+                self.ctx.writeln('from .%s import %s' % (get_property_name(prop.property_type, prop.property_type.iskeyword), get_property_name(prop.property_type, prop.property_type.iskeyword)))
+                self.ctx.writeln('self.__class__.%s = %s.%s' % (prop.property_type.name, get_property_name(prop.property_type, prop.property_type.iskeyword), prop.property_type.name))
+        self.ctx.bline()
 
     def _print_class_inits_properties(self, clazz):
         # first the parent prop
@@ -58,13 +69,13 @@ class ClassInitsPrinter(object):
                 self.ctx.writeln('pass')
         else:
             for prop in properties:
-                self._print_class_inits_property(prop)
+                self._print_class_inits_property(prop, clazz)
 
-    def _print_class_inits_property(self, prop):
+    def _print_class_inits_property(self, prop, clazz):
         if prop.is_many:
             self._print_class_inits_is_many(prop)
         else:
-            self._print_class_inits_unique(prop)
+            self._print_class_inits_unique(prop, clazz)
 
     def _print_class_inits_is_many(self, prop):
         if prop.stmt.keyword == 'list':
@@ -78,19 +89,26 @@ class ClassInitsPrinter(object):
         else:
             self.ctx.writeln('self.%s = []' % prop.name)
 
-    def _print_class_inits_unique(self, prop):
+    def _print_class_inits_unique(self, prop, clazz):
         if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
             # instantiate the class only if it is not a presence class
             stmt = prop.property_type.stmt
             if stmt.search_one('presence') is None:
-                self.ctx.writeln('self.%s = %s()' %
-                                 (prop.name, prop.property_type.qn()))
-                self.ctx.writeln('self.%s.parent = self' % (prop.name))
+                if self.one_class_per_module:
+                    self.ctx.writeln('self.%s = %s.%s()' % (prop.name, get_property_name(prop.property_type, prop.property_type.iskeyword), prop.property_type.name))
+                else:
+                    self.ctx.writeln('self.%s = %s()' %
+                                     (prop.name, prop.property_type.qn()))
+                    self.ctx.writeln('self.%s.parent = self' % (prop.name))
             else:
                 self.ctx.writeln('self.%s = None' % (prop.name,))
         elif isinstance(prop.property_type, Bits):
-            self.ctx.writeln('self.%s = %s()' %
-                             (prop.name, prop.property_type.qn()))
+            if self.one_class_per_module:
+                self.ctx.writeln('self.%s = %s.%s()' %
+                                 (prop.name, clazz.name, prop.property_type.name))
+            else:
+                self.ctx.writeln('self.%s = %s()' %
+                                 (prop.name, prop.property_type.qn()))
         else:
             self.ctx.writeln('self.%s = None' % (prop.name,))
 

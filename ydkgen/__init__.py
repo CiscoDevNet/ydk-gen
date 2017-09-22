@@ -62,7 +62,7 @@ class YdkGenerator(object):
             YdkGenException: If an error has occurred
     """
 
-    def __init__(self, output_dir, ydk_root, groupings_as_class, generate_tests, language, package_type, sort_clazz=False):
+    def __init__(self, output_dir, ydk_root, groupings_as_class, generate_tests, language, package_type, one_class_per_module, sort_clazz=False):
 
         _check_generator_args(output_dir, ydk_root, language, package_type)
 
@@ -73,6 +73,7 @@ class YdkGenerator(object):
         self.package_type = package_type
         self.generate_tests = generate_tests
         self.sort_clazz = sort_clazz
+        self.one_class_per_module = one_class_per_module
         if self.language == 'cpp':
             self.iskeyword = iscppkeyword
         else:
@@ -179,7 +180,7 @@ class YdkGenerator(object):
         """
         global classes_per_source_file
         factory = printer_factory.PrinterFactory()
-        ydk_printer = factory.get_printer(self.language)(output_dir, bundle, self.generate_tests, self.sort_clazz)
+        ydk_printer = factory.get_printer(self.language)(output_dir, bundle, self.generate_tests, self.one_class_per_module, self.sort_clazz)
         generated_files = ydk_printer.emit(pkgs, classes_per_source_file)
         return generated_files
 
