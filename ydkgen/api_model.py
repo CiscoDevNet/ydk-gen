@@ -883,7 +883,10 @@ def camel_case(input_text):
             return s
         return s.title()
     result = ''.join([_title(word) for word in input_text.split('-')])
-    return ''.join([_title(word) for word in result.split('_')])
+    result = ''.join([_title(word) for word in result.split('_')])
+    if input_text.startswith('_'):
+        result = '_'+result;
+    return result
 
 
 def escape_name(name):

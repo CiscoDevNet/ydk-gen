@@ -237,7 +237,7 @@ Then, generate your bundle using a bundle profile and install it:
 
 For python:
 ```
-$ ./generate.py --python --bundle profiles/<name-of-profile>.json
+$ ./generate.py --python --bundle profiles/bundles/<name-of-profile>.json
 $ pip install gen-api/python/<name-of-bundle>-bundle/dist/ydk*.tar.gz
 ```
 
@@ -252,7 +252,7 @@ ydk-models-<name-of-bundle> (0.5.1)
 
 For C++:
 ```
-$ ./generate.py --cpp --bundle profiles/<name-of-profile>.json
+$ ./generate.py --cpp --bundle profiles/bundles/<name-of-profile>.json
 $ cd gen-api/cpp/<name-of-bundle>-bundle/build && make && make install
 ```
 

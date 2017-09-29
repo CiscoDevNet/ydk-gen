@@ -1,9 +1,9 @@
 # How to Package a YDK Library for RPM/Debian/MacOS
 We can use the CPack module in CMake to produce packages based off os.
 ```
-$ cd project_dir/ydk-gen/sdk/cpp/core
+$ cd project_dir/ydk-gen/sdk/cpp/core/ydk
 $ mkdir build && cd build
-$ cmake -DCMAKE_BUILD_TYPE=Release ..
+$ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER="/usr/bin/clang" -DCMAKE_CXX_COMPILER="usr/bin/clang++" ..
 $ make package
 ```
 That's all for RPM/Debian packages. Please see the following section for creating packages for Mac OS.
