@@ -1,0 +1,52 @@
+module ydktest-aug-ietf-2 {
+
+  namespace "http://cisco.com/ns/yang/yaug-two";
+
+  prefix "yaug-two";
+
+  import ietf-aug-base-1 { prefix "base-one"; }
+
+  organization "Cisco Systems, Inc.";
+
+  contact
+    "Cisco Systems, Inc.
+     Customer Service
+
+     Postal: 170 West Tasman Drive
+     San Jose, CA 95134
+
+     Tel: +1 800 553-NETS
+
+     E-mail: cs-yang@cisco.com";
+
+  description
+    "This module contains augmentation for ietf-aug-base-1 module,
+    for testing purpose.
+
+     Copyright (c) 2013-2014 by Cisco Systems, Inc.
+     All rights reserved.";
+
+  revision "2016-06-22" {
+    description
+      "Initial revision.";
+  }
+
+  augment /base-one:cpython/base-one:doc {
+    container ydktest-aug-2 {
+      leaf aug-two {
+        description "ydktest augmentation two";
+        type string;
+      }
+    }
+  }
+  augment /base-one:cpython/base-one:lib {
+    container ydktest-aug-2 {
+      container ydktest-aug-nested-2 {
+        leaf aug-two {
+          description "ydktest augmentation two";
+          type string;
+        }
+      }
+    }
+  }
+}

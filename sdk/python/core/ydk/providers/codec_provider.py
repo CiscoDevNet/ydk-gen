@@ -108,8 +108,8 @@ class CodecServiceProvider(object):
         self.logger.log(_TRACE_LEVEL_NUM, "Initializing root schema for {}".format(name))
         # TODO: turn on and off libyang logging
         capabilities = []
-        lookup_tables = self._get_bundle_capability_lookup_tables(bundle_name)
-        self._root_schema_table[name] = repo.create_root_schema(lookup_tables, capabilities)
+        lookup_tables = self._get_bundle_capability_lookup_table(bundle_name)
+        self._root_schema_table[name] = repo.create_root_schema(lookup_table, capabilities)
 
     def _get_bundle_yang_ns(self, bundle_name):
         """Search installed local ydk-models python packages, and return _yang_ns
@@ -131,7 +131,7 @@ class CodecServiceProvider(object):
 
         return mod_yang_ns
 
-    def _get_bundle_capability_lookup_tables(self, bundle_name):
+    def _get_bundle_capability_lookup_table(self, bundle_name):
         """Search installed local ydk-models python packages, and return corresponding
         capability lookup tables.
 
@@ -142,23 +142,23 @@ class CodecServiceProvider(object):
             lookup_tables(list of dict(str, ydk.types.Capability)): Capability lookup tables
         """
         lookup_tables = []
-        name_lookup = {}
-        namespace_lookup = {}
+        name_namespace_lookup = {}
 
         mod_yang_ns = self._get_bundle_yang_ns(bundle_name)
         if mod_yang_ns is not None:
             capability_map = mod_yang_ns.__dict__['CAPABILITIES']
             namespace_map = mod_yang_ns.__dict__['NAMESPACE_LOOKUP']
+            for d in (capability_map, namespace_map):
+                name_namespace_lookup.update(d)
+
             for name in capability_map:
                 cap = _Capability(name, capability_map[name])
-                name_lookup[name] = cap
+                name_namespace_lookup[name] = cap
                 # submodule
                 if name in namespace_map:
-                    namespace_lookup[namespace_map[name]] = cap
+                    name_namespace_lookup[namespace_map[name]] = cap
 
-        lookup_tables.append(name_lookup)
-        lookup_tables.append(namespace_lookup)
-        return lookup_tables
+        return name_namespace_lookup
 
     def _get_bundle_capabilities(self, bundle_name):
         """Search installed local ydk-models python packages, and return corresponding

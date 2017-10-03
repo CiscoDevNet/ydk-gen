@@ -1,2 +1,4 @@
 build*
 bin*
+dist*
+ydk.egg*

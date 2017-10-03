@@ -117,22 +117,18 @@ class EntityLookUpPrinter(FilePrinter):
     def _print_capabilities_lookup_tables_func_body(self):
         self.ctx.bline()
         self.ctx.writeln("ydk::ydk_global_capabilities_lookup_tables.clear();")
-        self.ctx.writeln("std::unordered_map<std::string, ydk::path::Capability> name_lookup;")
-        self.ctx.writeln("std::unordered_map<std::string, ydk::path::Capability> namespace_lookup;")
 
         for (module_name, revision, namespace) in self.capability_lookup:
             self._print_map_insert_statement(module_name, revision, namespace)
 
-        self.ctx.writeln("ydk::ydk_global_capabilities_lookup_tables.push_back(name_lookup);")
-        self.ctx.writeln("ydk::ydk_global_capabilities_lookup_tables.push_back(namespace_lookup);")
         self.ctx.bline()
 
     def _print_map_insert_statement(self, module_name, revision, namespace):
-        self.ctx.writeln("name_lookup.insert(std::make_pair<std::string, ydk::path::Capability>("
+        self.ctx.writeln("ydk::ydk_global_capabilities_lookup_tables.insert(std::make_pair<std::string, ydk::path::Capability>("
                          "std::string(\"%s\"), ydk::path::Capability{std::string{\"%s\"}, \"%s\", {}, {}}"
                          "));" % (module_name, module_name, revision))
         if namespace != "":
-            self.ctx.writeln("namespace_lookup.insert(std::make_pair<std::string, ydk::path::Capability>("
+            self.ctx.writeln("ydk::ydk_global_capabilities_lookup_tables.insert(std::make_pair<std::string, ydk::path::Capability>("
                              "std::string(\"%s\"), ydk::path::Capability{std::string{\"%s\"}, \"%s\", {}, {}}"
                              "));" % (namespace, module_name, revision))
 

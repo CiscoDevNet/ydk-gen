@@ -29,9 +29,9 @@
 namespace ydk
 {
 
-std::vector<std::unordered_map<std::string, path::Capability>> ydk_global_capabilities_lookup_tables;
+std::unordered_map<std::string, path::Capability> ydk_global_capabilities_lookup_tables;
 
-const std::vector<std::unordered_map<std::string, path::Capability>> get_global_capabilities_lookup_tables()
+const std::unordered_map<std::string, path::Capability> get_global_capabilities_lookup_tables()
 {
     return ydk_global_capabilities_lookup_tables;
 }

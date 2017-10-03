@@ -53,7 +53,7 @@ namespace ydk {
             explicit RepositoryPtr(const std::string& search_dir, ModelCachingOption caching_option);
             ~RepositoryPtr();
 
-            std::shared_ptr<RootSchemaNode> create_root_schema(const std::vector<std::unordered_map<std::string, path::Capability>>& lookup_tables,
+            std::shared_ptr<RootSchemaNode> create_root_schema(const std::unordered_map<std::string, path::Capability>& lookup_table,
                                                                const std::vector<path::Capability>& caps_to_load);
 
             void add_model_provider(ModelProvider* model_provider);
@@ -61,7 +61,7 @@ namespace ydk {
             std::vector<ModelProvider*> get_model_providers() const;
 
             std::vector<const lys_module*> get_new_ly_modules_from_lookup(ly_ctx* ctx,
-                                                                          const std::unordered_set<std::string>& keys,
+                                                                          const std::unordered_set<std::string>& namespace_module_names,
                                                                           const std::unordered_map<std::string, path::Capability>& lookup_table);
             std::vector<const lys_module*> get_new_ly_modules_from_path(ly_ctx* ctx,
                                                                         const std::string& path,
@@ -124,7 +124,7 @@ namespace ydk {
         public:
             explicit RootSchemaNodeImpl(struct ly_ctx* ctx, const std::shared_ptr<RepositoryPtr> & repo);
             explicit RootSchemaNodeImpl(struct ly_ctx* ctx, const std::shared_ptr<RepositoryPtr> & repo,
-                                                   const std::vector<std::unordered_map<std::string, path::Capability>>& lookup_tables);
+                                                   const std::unordered_map<std::string, path::Capability>& lookup_table);
 
             ~RootSchemaNodeImpl();
 
@@ -155,8 +155,7 @@ namespace ydk {
             void populate_new_schemas(std::vector<const lys_module*>& new_modules);
 
             const std::shared_ptr<RepositoryPtr> m_priv_repo;
-            const std::unordered_map<std::string, path::Capability> m_name_lookup;
-            const std::unordered_map<std::string, path::Capability> m_namespace_lookup;
+            const std::unordered_map<std::string, path::Capability> m_name_namespace_lookup;
         };
 
 

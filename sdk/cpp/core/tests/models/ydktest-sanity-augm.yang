@@ -1,0 +1,114 @@
+module ydktest-sanity-augm {
+
+  /*** NAMESPACE / PREFIX DEFINITION ***/
+
+  namespace "http://cisco.com/ns/yang/ydktest-sanity-augm";
+
+
+  prefix "ysanity-augm";
+
+  /*** LINKAGE (IMPORTS / INCLUDES) ***/
+
+  //import ietf-inet-types { prefix "inet"; }
+
+  //import Cisco-IOS-XR-types { prefix "xr"; }
+  import ydktest-sanity { prefix "ysanity"; }
+
+
+  organization "Cisco Systems, Inc.";
+
+  contact
+    "Cisco Systems, Inc.
+     Customer Service
+
+     Postal: 170 West Tasman Drive
+     San Jose, CA 95134
+
+     Tel: +1 800 553-NETS
+
+     E-mail: cs-yang@cisco.com";
+
+  description
+    "This module contains a collection of YANG definitions
+     for sanity package.
+
+     This module contains LIST definitions
+     for the following management objects:
+
+
+     Copyright (c) 2013-2014 by Cisco Systems, Inc.
+     All rights reserved.";
+
+  revision "2015-11-17" {
+    description
+      "Initial revision.";
+  }
+
+  grouping one-aug-level {
+    description "testing for couple of leaves";
+    container one-aug {
+      description "config for one_level data";
+      leaf number {
+        description "integer value type";
+        type int32;
+      }
+
+      leaf name {
+        description "this is string value";
+        type string;
+      }
+    }
+  }
+
+
+  grouping one-aug-level-w-list {
+    container one-aug-list {
+      description "config for one_level list data";
+      list ldata {
+        description "one list data";
+        key "number";
+        leaf number {
+          description "integer value type";
+          type int32;
+        }
+
+        leaf name {
+          description "this is string value";
+          type string;
+        }
+      }
+    }
+  }
+  
+  grouping leaf-aug {
+    leaf augmented-leaf {
+        type string;
+    }
+  }
+
+
+  augment "/ysanity:runner/ysanity:one" {
+    description "augment to one";
+    uses one-aug-level;
+  }
+  
+    augment "/ysanity:runner/ysanity:one" {
+    description "augment leaf to one";
+    uses leaf-aug;
+  }
+
+  augment "/ysanity:runner/ysanity:one-list" {
+    description "augment to one";
+    uses one-aug-level-w-list;
+  }
+
+  // 2 level augment
+  augment "/ysanity:runner/ysanity:one-list/ysanity-augm:one-aug-list" {
+    description "augment to one";
+    leaf enabled {
+      description "integer value type";
+      type boolean;
+    }
+  }
+
+}
