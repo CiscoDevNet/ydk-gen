@@ -141,7 +141,7 @@ void NetconfSession::initialize(path::Repository & repo, bool on_demand)
         }
     }
 
-    auto lookup_tables = capabilities_parser.get_lookup_tables(server_capabilities);
+    auto lookup_table = capabilities_parser.get_lookup_table(server_capabilities);
 
     std::vector<path::Capability> yang_caps;
     std::vector<std::string> empty_caps;
@@ -151,7 +151,7 @@ void NetconfSession::initialize(path::Repository & repo, bool on_demand)
     else
         yang_caps = capabilities_parser.parse(server_capabilities);
 
-    root_schema = repo.create_root_schema(lookup_tables, yang_caps);
+    root_schema = repo.create_root_schema(lookup_table, yang_caps);
 
     if(root_schema.get() == nullptr)
     {

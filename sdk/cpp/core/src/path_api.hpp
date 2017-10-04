@@ -936,7 +936,7 @@ public:
     /// @return pointer to the RootSchemaNode or nullptr if one could not be created.
     ///
     std::shared_ptr<RootSchemaNode> create_root_schema(const std::vector<Capability> & capabilities);
-    std::shared_ptr<RootSchemaNode> create_root_schema(const std::vector<std::unordered_map<std::string, Capability>>& lookup_tables,
+    std::shared_ptr<RootSchemaNode> create_root_schema(const std::unordered_map<std::string, Capability>& lookup_table,
                                                        const std::vector<Capability> &caps_to_load);
 
     ///

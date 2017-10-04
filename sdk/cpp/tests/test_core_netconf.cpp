@@ -352,3 +352,45 @@ TEST_CASE( "bgp_xr_openconfig"  )
 //
 //
 //}
+
+TEST_CASE("oc_interface")
+{
+    ydk::path::NetconfSession session{"127.0.0.1", "admin", "admin", 12022};
+    ydk::path::RootSchemaNode& schema = session.get_root_schema();
+
+    auto & runner = schema.create_datanode("openconfig-interfaces:interfaces", "");
+
+    runner.create_datanode("interface[name='GigabitEthernet0/0/0/2']/config/name", "GigabitEthernet0/0/0/2");
+    runner.create_datanode("interface[name='GigabitEthernet0/0/0/2']/config/type", "iana-if-type:ethernetCsmacd");
+
+    ydk::path::Codec s{};
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
+
+    CHECK( !xml.empty());
+
+    //call create
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.create_rpc("ydk:create") };
+    create_rpc->get_input_node().create_datanode("entity", xml);
+    (*create_rpc)(session);
+}
+
+TEST_CASE("oc_routing")
+{
+    ydk::path::NetconfSession session{"127.0.0.1", "admin", "admin", 12022};
+    ydk::path::RootSchemaNode& schema = session.get_root_schema();
+
+    auto & runner = schema.create_datanode("openconfig-routing-policy:routing-policy", "");
+
+    runner.create_datanode("defined-sets/openconfig-bgp-policy:bgp-defined-sets/community-sets/community-set[community-set-name='COMMUNITY-SET2']/config/community-set-name", "COMMUNITY-SET2");
+    runner.create_datanode("defined-sets/openconfig-bgp-policy:bgp-defined-sets/community-sets/community-set[community-set-name='COMMUNITY-SET2']/config/community-member", "65172:17001");
+
+    ydk::path::Codec s{};
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
+
+    CHECK( !xml.empty());
+
+    //call create
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.create_rpc("ydk:create") };
+    create_rpc->get_input_node().create_datanode("entity", xml);
+    (*create_rpc)(session);
+}

@@ -101,10 +101,10 @@ void RestconfSession::initialize(path::Repository & repo)
                                 )
                     );
 
-    auto lookup_tables = capabilities_parser.get_lookup_tables(server_capabilities);
+    auto lookup_table = capabilities_parser.get_lookup_table(server_capabilities);
     capabilities = capabilities_parser.parse(server_capabilities);
 
-    root_schema = repo.create_root_schema(lookup_tables, capabilities);
+    root_schema = repo.create_root_schema(lookup_table, capabilities);
 }
 
 RestconfSession::~RestconfSession()

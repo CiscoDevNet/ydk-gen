@@ -1,0 +1,46 @@
+module ydktest-aug-ietf-5 {
+
+  namespace "http://cisco.com/ns/yang/yaug-five";
+
+  prefix "yaug-five";
+
+  import ietf-aug-base-1 { prefix "base-one"; }
+
+  organization "Cisco Systems, Inc.";
+
+  contact
+    "Cisco Systems, Inc.
+     Customer Service
+
+     Postal: 170 West Tasman Drive
+     San Jose, CA 95134
+
+     Tel: +1 800 553-NETS
+
+     E-mail: cs-yang@cisco.com";
+
+  description
+    "This module contains augmentation for ietf-netconf module,
+    for testing purpose.
+
+     Copyright (c) 2013-2014 by Cisco Systems, Inc.
+     All rights reserved.";
+
+  revision "2017-07-26" {
+    description
+      "Initial revision.";
+  }
+
+  identity aug-identity {
+    description "aug-identity";
+  }
+
+  augment /base-one:cpython/base-one:doc {
+    leaf aug-5-identityref {
+      type identityref {
+        base aug-identity;
+      }
+      description "aug identityref";
+    }
+  }
+}

@@ -429,7 +429,7 @@ PYBIND11_MODULE(ydk_, ydk)
             (std::shared_ptr<ydk::path::RootSchemaNode> (ydk::path::Repository::*)(const std::vector<ydk::path::Capability>&)) &ydk::path::Repository::create_root_schema,
             return_value_policy::move)
         .def("create_root_schema",
-            (std::shared_ptr<ydk::path::RootSchemaNode> (ydk::path::Repository::*)(const std::vector<std::unordered_map<std::string, ydk::path::Capability>>& lookup_tables,
+            (std::shared_ptr<ydk::path::RootSchemaNode> (ydk::path::Repository::*)(const std::unordered_map<std::string, ydk::path::Capability>& lookup_tables,
                                                                                    const std::vector<ydk::path::Capability>& caps_to_load))
             &ydk::path::Repository::create_root_schema,
             return_value_policy::move);

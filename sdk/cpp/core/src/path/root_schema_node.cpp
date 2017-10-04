@@ -159,14 +159,14 @@ ydk::path::RootSchemaNode::get_keys() const
 // class RootSchemaNodeImpl
 /////////////////////////////////////////////////////////////////////////////////////
 ydk::path::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx, const std::shared_ptr<RepositoryPtr> & repo)
-    : m_ctx{ctx}, m_priv_repo{repo}, m_name_lookup(), m_namespace_lookup()
+    : m_ctx{ctx}, m_priv_repo{repo}, m_name_namespace_lookup()
 {
     populate_all_module_schemas();
 }
 
 ydk::path::RootSchemaNodeImpl::RootSchemaNodeImpl(struct ly_ctx* ctx, const std::shared_ptr<RepositoryPtr> & repo,
-                                                  const std::vector<std::unordered_map<std::string, path::Capability>>& lookup_tables)
-    : m_ctx{ctx}, m_priv_repo{repo}, m_name_lookup({lookup_tables[0]}), m_namespace_lookup({lookup_tables[1]})
+                                                  const std::unordered_map<std::string, path::Capability>& lookup_table)
+    : m_ctx{ctx}, m_priv_repo{repo}, m_name_namespace_lookup(lookup_table)
 {
     populate_all_module_schemas();
 }
@@ -208,12 +208,12 @@ ydk::path::RootSchemaNodeImpl::populate_new_schemas_from_payload(const std::stri
     if (format == ydk::EncodingFormat::XML)
     {
         auto namespaces = get_namespaces_from_xml_payload(payload);
-        modules = m_priv_repo->get_new_ly_modules_from_lookup(m_ctx, namespaces, m_namespace_lookup);
+        modules = m_priv_repo->get_new_ly_modules_from_lookup(m_ctx, namespaces, m_name_namespace_lookup);
     }
     else
     {
         auto module_names = get_module_names_from_json_payload(payload);
-        modules = m_priv_repo->get_new_ly_modules_from_lookup(m_ctx, module_names, m_name_lookup);
+        modules = m_priv_repo->get_new_ly_modules_from_lookup(m_ctx, module_names, m_name_namespace_lookup);
     }
 
     populate_new_schemas(modules);
@@ -221,7 +221,7 @@ ydk::path::RootSchemaNodeImpl::populate_new_schemas_from_payload(const std::stri
 
 void
 ydk::path::RootSchemaNodeImpl::populate_new_schemas_from_path(const std::string& path) {
-    auto new_modules = m_priv_repo->get_new_ly_modules_from_path(m_ctx, path, m_name_lookup);
+    auto new_modules = m_priv_repo->get_new_ly_modules_from_path(m_ctx, path, m_name_namespace_lookup);
     populate_new_schemas(new_modules);
 }
 
