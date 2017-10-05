@@ -24,6 +24,7 @@
 
 using namespace ydk;
 using namespace std;
+using namespace openconfig;
 
 int main(int argc, char* argv[])
 {

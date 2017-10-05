@@ -24,6 +24,7 @@
 #include "args_parser.h"
 
 using namespace ydk;
+using namespace openconfig;
 using namespace std;
 
 

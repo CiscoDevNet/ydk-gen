@@ -25,6 +25,7 @@
 
 using namespace ydk;
 using namespace std;
+using namespace openconfig;
 
 void config_bgp(openconfig_bgp::Bgp* bgp)
 {

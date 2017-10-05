@@ -78,7 +78,7 @@ static void walk_children(Entity & entity, path::DataNode & data_node)
     {
         for(auto child_seg : order)
         {
-            YLOG_DEBUG("!!INSERTING IN ORDER!!!");
+            YLOG_DEBUG("Inserting in order");
             auto child = children[child_seg];
             if(child == nullptr)
                 continue;

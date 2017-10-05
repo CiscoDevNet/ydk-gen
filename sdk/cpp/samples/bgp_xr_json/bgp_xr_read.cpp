@@ -28,7 +28,7 @@
 #include "../args_parser.h"
 
 using namespace ydk;
-using namespace ydk::Cisco_IOS_XR_ipv4_bgp_cfg;
+using namespace cisco_ios_xr::Cisco_IOS_XR_ipv4_bgp_cfg;
 using namespace std;
 
 #define CONFIG_FILE "../config_read.json"

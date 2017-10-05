@@ -26,8 +26,8 @@
 #include "args_parser.h"
 
 using namespace ydk;
-using namespace ydk::Cisco_IOS_XR_ipv4_bgp_cfg;
-using namespace ydk::Cisco_IOS_XR_ipv4_bgp_datatypes;
+using namespace cisco_ios_xr::Cisco_IOS_XR_ipv4_bgp_cfg;
+using namespace cisco_ios_xr::Cisco_IOS_XR_ipv4_bgp_datatypes;
 
 using namespace std;
 
