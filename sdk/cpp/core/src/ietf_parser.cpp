@@ -112,6 +112,18 @@ IetfCapabilitiesParser::~IetfCapabilitiesParser()
 
 }
 
+
+unordered_map<string, path::Capability>
+IetfCapabilitiesParser::get_lookup_table(vector<path::Capability>& capabilities) const
+{
+    unordered_map<string, path::Capability> name_namespace_lookup;
+    for (auto &c: capabilities)
+    {
+        name_namespace_lookup.insert(make_pair(c.module, c));
+    }
+    return name_namespace_lookup;
+}
+
 unordered_map<string, path::Capability>
 IetfCapabilitiesParser::get_lookup_table(vector<string>& capabilities) const
 {
@@ -119,10 +131,10 @@ IetfCapabilitiesParser::get_lookup_table(vector<string>& capabilities) const
 
     auto segs = segmentalize_capabilities(capabilities);
 
-    for (auto &c: segs)
+    for (auto &s: segs)
     {
-        name_namespace_lookup.insert(make_pair(c.second.module, c.second));
-        name_namespace_lookup.insert(make_pair(c.first, c.second));
+        name_namespace_lookup.insert(make_pair(s.second.module, s.second));
+        name_namespace_lookup.insert(make_pair(s.first, s.second));
     }
 
     return name_namespace_lookup;

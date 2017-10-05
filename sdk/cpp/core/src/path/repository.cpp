@@ -342,12 +342,12 @@ static bool contains_only_numbers(const std::string & module_name)
     return ret;
 }
 
-static bool contains_letters_dashes(const std::string & module_name)
+static bool contains_letters_dashes_colon_dot_slash(const std::string & module_name)
 {
     bool ret = false;
     for(char c:module_name)
     {
-        if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c=='-')
+        if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c=='-' || c==':' || c=='.' || c=='/')
         {
             ret = true;
         }
@@ -370,32 +370,40 @@ ydk::path::RepositoryPtr::get_new_ly_modules_from_lookup(ly_ctx* ctx,
     for (auto k: namespace_module_names)
     {
         bool new_module = true;
-        if(contains_letters_dashes(k) && !contains_only_numbers(k))
+        // k could be module namespace, which contains extra '/', ':', '.', need to add them to predicate function
+        if(contains_letters_dashes_colon_dot_slash(k) && !contains_only_numbers(k))
         {
-            auto m = load_module(ctx, k, new_module);
+            auto module_name = k;
 
+            // if k is module namespace, then we update module_name from lookup_table, and load deviation module if necessary
+            auto kit = lookup_table.find(k);
+            if (kit != lookup_table.end())
+            {
+                module_name = kit->second.module;
+            }
+
+            auto m = load_module(ctx, module_name, new_module);
 
             if (m && new_module)
             {
                 YLOG_DEBUG("Added new libyang module '{}'", std::string(m->name));
                 new_modules.emplace_back(m);
             }
-        }
 
-        auto it = lookup_table.find(k);
-        if (it != lookup_table.end())
-        {
-            auto capability = it->second;
-
-            for (auto& d: capability.deviations)
+            // resolve deviation module after main module
+            if (kit != lookup_table.end())
             {
-                new_module = true;
-                auto m = load_module(ctx, d, new_module);
-
-                if (m && new_module)
+                auto capability = kit->second;
+                for (auto& d: capability.deviations)
                 {
-                    YLOG_DEBUG("Added new libyang deviation module '{}'", std::string(m->name));
-                    new_modules.emplace_back(m);
+                    new_module = true;
+                    auto m = load_module(ctx, d, new_module);
+    
+                    if (m && new_module)
+                    {
+                        YLOG_DEBUG("Added new libyang deviation module '{}'", std::string(m->name));
+                        new_modules.emplace_back(m);
+                    }
                 }
             }
         }

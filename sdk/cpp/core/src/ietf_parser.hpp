@@ -50,6 +50,7 @@ class IetfCapabilitiesParser : public CapabilitiesParser
 
         std::vector<path::Capability> parse(std::vector<std::string> & capabilities) const;
         std::unordered_map<std::string, path::Capability> get_lookup_table(std::vector<std::string>& capabilities) const;
+        std::unordered_map<std::string, path::Capability> get_lookup_table(std::vector<path::Capability>& capabilities) const;
         std::vector<std::pair<std::string, path::Capability>> segmentalize_capabilities(std::vector<std::string>& capabilities) const;
 };
 }
