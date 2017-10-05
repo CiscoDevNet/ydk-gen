@@ -369,10 +369,11 @@ ydk::path::RepositoryPtr::get_new_ly_modules_from_lookup(ly_ctx* ctx,
 
     for (auto k: namespace_module_names)
     {
-        bool new_module = true;
-        // k could be module namespace, which contains extra '/', ':', '.', need to add them to predicate function
+        // k could be module namespace, which contains extra '/', ':', '.', need 
+        // to add them to predicate function
         if(contains_letters_dashes_colon_dot_slash(k) && !contains_only_numbers(k))
         {
+            bool new_module = true;
             auto module_name = k;
 
             // if k is module namespace, then we update module_name from lookup_table, and load deviation module if necessary

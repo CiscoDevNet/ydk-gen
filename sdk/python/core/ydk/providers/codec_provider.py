@@ -141,7 +141,6 @@ class CodecServiceProvider(object):
         Returns:
             lookup_tables(list of dict(str, ydk.types.Capability)): Capability lookup tables
         """
-        lookup_tables = []
         name_namespace_lookup = {}
 
         mod_yang_ns = self._get_bundle_yang_ns(bundle_name)
