@@ -109,7 +109,7 @@ class CodecServiceProvider(object):
         # TODO: turn on and off libyang logging
         capabilities = []
         lookup_tables = self._get_bundle_capability_lookup_table(bundle_name)
-        self._root_schema_table[name] = repo.create_root_schema(lookup_table, capabilities)
+        self._root_schema_table[name] = repo.create_root_schema(lookup_tables, capabilities)
 
     def _get_bundle_yang_ns(self, bundle_name):
         """Search installed local ydk-models python packages, and return _yang_ns
