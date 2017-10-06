@@ -131,7 +131,7 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
 
     while (iter != segments.end())
     {
-        if((*iter) == top_container_path || (*iter) == m_node->schema->name)
+        if((*iter) == top_container_path)
         {
             YLOG_DEBUG("Skipping segment same as {}", top_container_path);
             ++iter;
@@ -180,7 +180,7 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
 
     for(size_t i=start_index; i< segments.size(); i++)
     {
-        if(segments[i] == top_container_path || segments[i] == m_node->schema->name)
+        if(segments[i] == top_container_path)
         {
             YLOG_DEBUG("Skipping segment same as {}", top_container_path);
             continue;
