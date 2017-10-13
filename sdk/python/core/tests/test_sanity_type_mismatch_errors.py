@@ -73,25 +73,25 @@ class SanityYang(unittest.TestCase):
     @assert_with_error(test_invalid_class_assignment_int_pattern, YPYModelError)
     def test_invalid_class_assignment_int(self):
         runner = ysanity.Runner()
-        runner.one = 1
+        runner.ydktest_sanity_one = 1
         self.crud.create(self.ncc, runner)
 
     @assert_with_error(test_invalid_class_assignment_str_pattern, YPYModelError)
     def test_invalid_class_assignment_str(self):
         runner = ysanity.Runner()
-        runner.one = "haha"
+        runner.ydktest_sanity_one = "haha"
         self.crud.create(self.ncc, runner)
 
     @assert_with_error(test_invalid_class_assignment_identity_pattern, YPYModelError)
     def test_invalid_class_assignment_identity(self):
         runner = ysanity.Runner()
-        runner.one = ytypes.AnotherOne()
+        runner.ydktest_sanity_one = ytypes.AnotherOne()
         self.crud.create(self.ncc, runner)
 
     @assert_with_error(test_invalid_class_assignment_enum_pattern, YPYModelError)
     def test_invalid_class_assignment_enum(self):
         runner = ysanity.Runner()
-        runner.one = ysanity.YdkEnumTest.none
+        runner.ydktest_sanity_one = ysanity.YdkEnumTest.none
         self.crud.create(self.ncc, runner)
 
     @assert_with_error(test_invalid_class_assignment_ylist_pattern, YPYModelError)
@@ -100,14 +100,14 @@ class SanityYang(unittest.TestCase):
         elem = ysanity.Runner.OneList.Ldata()
         elem.number, elem.name = 1, '1'
         runner.one_list.ldata.append(elem)
-        runner.one = runner.one_list.ldata
+        runner.ydktest_sanity_one = runner.one_list.ldata
         self.crud.create(self.ncc, runner)
 
     @assert_with_error(test_invalid_class_assignment_yleaflist_pattern, YPYModelError)
     def test_invalid_class_assignment_yleaflist(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.llstring.extend([str(i) for i in range(5)])
-        runner.one = runner.ytypes.built_in_t.llstring
+        runner.ydktest_sanity_one = runner.ytypes.built_in_t.llstring
 
     @assert_with_error(test_invalid_list_assignment_int_pattern, YPYModelError)
     def test_invalid_list_assignment_int(self):
@@ -118,7 +118,7 @@ class SanityYang(unittest.TestCase):
     @assert_with_error(test_invalid_list_assignment_entity_pattern, YPYModelError)
     def test_invalid_list_assignment_entity(self):
         runner = ysanity.Runner()
-        runner.one_list.ldata = runner.one
+        runner.one_list.ldata = runner.ydktest_sanity_one
         self.crud.crud(self.ncc, runner)
 
     @assert_with_error(test_invalid_list_assignment_llist_pattern, YPYModelError)

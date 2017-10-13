@@ -22,6 +22,7 @@ source_printer.py
 """
 from ydkgen.api_model import Bits
 from .function_printer import FunctionPrinter
+from ydkgen.common import get_qualified_yang_name
 
 
 class ClassSetValuePrinter(FunctionPrinter):
@@ -33,7 +34,7 @@ class ClassSetValuePrinter(FunctionPrinter):
 
     def print_function_body(self):
         for leaf in self.leafs:
-            self.ctx.writeln('if value_path == "%s" {' % (leaf.stmt.arg))
+            self.ctx.writeln('if value_path == "%s" {' % get_qualified_yang_name(leaf))
             self.ctx.lvl_inc()
             line = '{0}.{1} = value'
             if leaf.is_many:

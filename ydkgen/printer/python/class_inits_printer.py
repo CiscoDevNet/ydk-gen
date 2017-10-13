@@ -22,7 +22,7 @@ class_inits_printer.py
 """
 from pyang.types import PathTypeSpec
 from ydkgen.api_model import Bits, Class, Package, DataType, Enum, snake_case
-from ydkgen.common import get_module_name, has_list_ancestor, is_top_level_class
+from ydkgen.common import get_module_name, has_list_ancestor, is_top_level_class, get_qualified_yang_name
 from .class_get_entity_path_printer import GetAbsolutePathPrinter, GetSegmentPathPrinter
 
 
@@ -55,9 +55,9 @@ def get_child_container_classes(clazz, one_class_per_module):
     for prop in clazz.properties():
         if prop.stmt.keyword == 'container':
             if one_class_per_module:
-                m.append('"%s" : ("%s", %s.%s)'%(prop.stmt.arg, prop.name, clazz.name, prop.property_type.name))
+                m.append('"%s" : ("%s", %s.%s)'%(get_qualified_yang_name(prop), prop.name, clazz.name, prop.property_type.name))
             else:
-                m.append('"%s" : ("%s", %s)'%(prop.stmt.arg, prop.name, prop.property_type.qn()))
+                m.append('"%s" : ("%s", %s)'%(get_qualified_yang_name(prop), prop.name, prop.property_type.qn()))
     return '%s' % (', '.join(m))
 
 
@@ -66,9 +66,9 @@ def get_child_list_classes(clazz, one_class_per_module):
     for prop in clazz.properties():
         if prop.stmt.keyword == 'list':
             if one_class_per_module:
-                m.append('"%s" : ("%s", %s.%s)' % (prop.stmt.arg, prop.name, clazz.name, prop.property_type.name))
+                m.append('"%s" : ("%s", %s.%s)' % (get_qualified_yang_name(prop), prop.name, clazz.name, prop.property_type.name))
             else:
-                m.append('"%s" : ("%s", %s)' % (prop.stmt.arg, prop.name, prop.property_type.qn()))
+                m.append('"%s" : ("%s", %s)' % (get_qualified_yang_name(prop), prop.name, prop.property_type.qn()))
     return '%s' % (', '.join(m))
 
 
@@ -240,3 +240,10 @@ class ClassSetAttrPrinter(object):
     def _print_class_setattr_trailer(self):
         self.ctx.lvl_dec()
         self.ctx.bline()
+
+
+def _get_qualified_yang_name(clazz):
+    yang_name = clazz.stmt.arg
+    if clazz.owner.stmt.i_module.arg != clazz.stmt.i_module.arg:
+        yang_name = clazz.stmt.i_module.arg + ':' + yang_name
+    return yang_name

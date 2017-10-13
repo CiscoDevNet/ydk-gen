@@ -86,6 +86,22 @@ module ydktest-sanity-augm {
     }
   }
 
+  grouping one-twin-aug {
+    description "augment runner with same name container but different namespace";
+    container one {
+      description "config for one_level data";
+      leaf twin-number {
+        description "integer value type";
+        type int32;
+      }
+    }
+  }
+
+
+  augment "/ysanity:runner" {
+    description "augment to one";
+    uses one-twin-aug;
+  }
 
   augment "/ysanity:runner/ysanity:one" {
     description "augment to one";

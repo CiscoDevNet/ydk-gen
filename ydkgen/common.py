@@ -451,3 +451,10 @@ def has_list_ancestor(clazz):
 
 def is_top_level_class(clazz):
     return clazz.owner is not None and isinstance(clazz.owner, atypes.Package)
+
+
+def get_qualified_yang_name(clazz):
+    yang_name = clazz.stmt.arg
+    if clazz.owner.stmt.i_module.arg != clazz.stmt.i_module.arg:
+        yang_name = clazz.stmt.i_module.arg + ':' + yang_name
+    return yang_name

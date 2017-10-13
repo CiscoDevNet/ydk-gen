@@ -62,6 +62,7 @@ func ExecuteRPC(
 	panicOnCStateError(cstate)
 
 	if rootSchema == nil {
+        ydk.YLogError("root schema is nil!")
 		panic(1)
 	}
 
@@ -141,6 +142,7 @@ func ExecuteRPCEntity(
 	panicOnCStateError(cstate)
 
 	if rootSchema == nil {
+        ydk.YLogError("root schema is nil!")
 		panic(1)
 	}
 
@@ -646,6 +648,7 @@ func populateDataNode(
 	panicOnCStateError(getCState(state))
 
 	if dataNode == nil {
+        ydk.YLogError(fmt.Sprintf("Datanode could not be created for: %v", path.Path))
 		panic("Datanode could not be created for: " + path.Path)
 	}
 
@@ -688,11 +691,17 @@ func getEntityFromDataNode(node C.DataNode, entity types.Entity) {
 	cchildren := C.DataNodeGetChildren(node)
 	children := (*[1 << 30]C.DataNode)(
 		unsafe.Pointer(cchildren.datanodes))[:cchildren.count:cchildren.count]
-	ydk.YLogDebug(fmt.Sprintf("Got %d datanode children", cchildren.count))
+    nodeName := C.GoString(C.DataNodeGetArgument(node))
+    ydk.YLogDebug(fmt.Sprintf("Got %d datanode children for %v", cchildren.count, nodeName))
+    moduleName := C.GoString(C.DataNodeGetModuleName(node))
 
 	for _, childDataNode := range children {
 		childName := C.GoString(C.DataNodeGetArgument(childDataNode))
+        childModuleName := C.GoString(C.DataNodeGetModuleName(childDataNode))
 		ydk.YLogDebug(fmt.Sprintf("Looking at child datanode: '%s'", childName))
+        if(moduleName != childModuleName) {
+            childName = childModuleName + ":" + childName;
+        }
 
 		if dataNodeIsLeaf(childDataNode) {
 
@@ -712,6 +721,7 @@ func getEntityFromDataNode(node C.DataNode, entity types.Entity) {
 				childEntity = entity.GetChildByName(childName, "")
 			}
 			if childEntity == nil {
+				ydk.YLogError(fmt.Sprintf("Could not create child entity '%s'!", childName))
 				panic("Could not create child entity!")
 			}
 			childEntity.SetParent(entity)

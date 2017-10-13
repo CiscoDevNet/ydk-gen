@@ -97,7 +97,7 @@ class SanityYang(unittest.TestCase):
     def test_delete_object_on_leaf(self):
         # create runner with two leaves, one and two
         runner_create = ysanity.Runner()
-        runner_create.one.name = 'one'
+        runner_create.ydktest_sanity_one.name = 'one'
         runner_create.two.name = 'two'
         self.crud.create(self.ncc, runner_create)
 
@@ -106,7 +106,7 @@ class SanityYang(unittest.TestCase):
 
         # use DELETE object to remove leaf one
         runner_update = runner_read
-        runner_update.one.name.yfilter = YFilter.delete
+        runner_update.ydktest_sanity_one.name.yfilter = YFilter.delete
         self.crud.update(self.ncc, runner_update)
 
         # manually create remaining runner with leaf two
@@ -118,7 +118,7 @@ class SanityYang(unittest.TestCase):
 
     def test_delete_on_leaflist_slice(self):
         runner_create = ysanity.Runner()
-        runner_create.one.name = 'one'
+        runner_create.ydktest_sanity_one.name = 'one'
         runner_create.ytypes.built_in_t.llstring.extend([str(i) for i in range(5)])
 
         self.crud.create(self.ncc, runner_create)
@@ -134,7 +134,7 @@ class SanityYang(unittest.TestCase):
         runner_read = self.read_from_empty_filter()
 
         runner_compare = runner_create
-        runner_compare.one.name = 'one'
+        runner_compare.ydktest_sanity_one.name = 'one'
 
         runner_compare.ytypes.built_in_t.llstring.clear()
         runner_compare.ytypes.built_in_t.llstring.extend(['1', '2', '4'])
@@ -143,7 +143,7 @@ class SanityYang(unittest.TestCase):
 
     def test_delete_on_leaflist(self):
         runner_create = ysanity.Runner()
-        runner_create.one.name = 'one'
+        runner_create.ydktest_sanity_one.name = 'one'
         runner_create.ytypes.built_in_t.llstring.extend(['0', '1', '2', '3', '4'])
 
         self.crud.create(self.ncc, runner_create)
@@ -156,7 +156,7 @@ class SanityYang(unittest.TestCase):
         runner_read = self.read_from_empty_filter()
 
         runner_compare = ysanity.Runner()
-        runner_compare.one.name = 'one'
+        runner_compare.ydktest_sanity_one.name = 'one'
         runner_compare.ytypes.built_in_t.llstring.extend(['0', '1', '2', '4'])
 
         self.assertEqual(runner_compare, runner_read)
@@ -187,7 +187,7 @@ class SanityYang(unittest.TestCase):
     def test_delete_on_container(self):
         # create runner with a container
         runner_create = ysanity.Runner()
-        runner_create.one.name = 'one'
+        runner_create.ydktest_sanity_one.name = 'one'
         runner_create.two.name = 'two'
         self.crud.create(self.ncc, runner_create)
 
@@ -201,7 +201,7 @@ class SanityYang(unittest.TestCase):
 
         runner_read = self.crud.read(self.ncc, runner_read_filter)
         runner_compare = ysanity.Runner()
-        runner_compare.one.name = 'one'
+        runner_compare.ydktest_sanity_one.name = 'one'
 
         self.assertEqual(runner_compare, runner_read)
 
@@ -257,7 +257,7 @@ class SanityYang(unittest.TestCase):
 
     def test_delete_on_list_elements(self):
         runner_create = ysanity.Runner()
-        runner_create.one.name = 'one'
+        runner_create.ydktest_sanity_one.name = 'one'
         foo = ysanity.Runner.OneList.Ldata()
         bar = ysanity.Runner.OneList.Ldata()
         baz = ysanity.Runner.OneList.Ldata()
@@ -286,7 +286,7 @@ class SanityYang(unittest.TestCase):
 
     def test_delete_on_list(self):
         runner_create = ysanity.Runner()
-        runner_create.one.name = 'one'
+        runner_create.ydktest_sanity_one.name = 'one'
         foo = ysanity.Runner.OneList.Ldata()
         bar = ysanity.Runner.OneList.Ldata()
         foo.number = 1

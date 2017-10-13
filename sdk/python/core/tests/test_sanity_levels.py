@@ -68,7 +68,7 @@ class SanityYang(unittest.TestCase):
     def test_one_level_pos(self):
         # READ
         r_1, r_2 = Runner(), Runner()
-        r_1.one.number, r_1.one.name = 1, 'runner:one:name'
+        r_1.ydktest_sanity_one.number, r_1.ydktest_sanity_one.name = 1, 'runner:one:name'
         self.crud.create(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
 
@@ -76,7 +76,7 @@ class SanityYang(unittest.TestCase):
 
         # UPDATE
         r_1, r_2 = Runner(), Runner()
-        r_1.one.number, r_1.one.name = 10, 'runner/one/name'
+        r_1.ydktest_sanity_one.number, r_1.ydktest_sanity_one.name = 10, 'runner/one/name'
         self.crud.update(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
 
@@ -86,6 +86,31 @@ class SanityYang(unittest.TestCase):
         r_1 = Runner()
         self.crud.delete(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_1)
+
+        self.assertEqual(r_2, None)
+
+
+    def test_one_aug_level_pos(self):
+        # READ
+        r_1 = Runner()
+        r_1.ydktest_sanity_augm_one_.twin_number = 1
+        self.crud.create(self.ncc, r_1)
+        r_2 = self.crud.read(self.ncc, Runner())
+
+        self.assertEqual(r_1, r_2)
+
+        # UPDATE
+        r_1= Runner()
+        r_1.ydktest_sanity_augm_one_.twin_number = 10
+        self.crud.update(self.ncc, r_1)
+        r_2 = self.crud.read(self.ncc, Runner())
+
+        self.assertEqual(r_1, r_2)
+
+        # DELETE
+        r_1 = Runner()
+        self.crud.delete(self.ncc, r_1)
+        r_2 = self.crud.read(self.ncc, Runner())
 
         self.assertEqual(r_2, None)
 
@@ -487,7 +512,7 @@ class SanityYang(unittest.TestCase):
     def test_leafref_pos(self):
         # CREATE
         r_1, r_2 = Runner(), Runner()
-        r_1.one.name = 'runner:one:name'
+        r_1.ydktest_sanity_one.name = 'runner:one:name'
         r_1.two.sub1.number = 21
         r_1.three.sub1.sub2.number = 311
         e_1 = Runner.InbtwList.Ldata()
@@ -516,12 +541,12 @@ class SanityYang(unittest.TestCase):
         e_2.subc.subc_subl1.extend([e_21, e_22])
         r_1.inbtw_list.ldata.extend([e_1, e_2])
 
-        r_1.leaf_ref.ref_one_name = r_1.one.name.get()
+        r_1.leaf_ref.ref_one_name = r_1.ydktest_sanity_one.name.get()
         r_1.leaf_ref.ref_two_sub1_number = r_1.two.sub1.number.get()
         r_1.leaf_ref.ref_three_sub1_sub2_number = r_1.three.sub1.sub2.number.get()
         r_1.leaf_ref.ref_inbtw = e_21.name.get()
-        r_1.leaf_ref.one.name = 'runner:leaf-ref:one:name'
-        r_1.leaf_ref.one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name.get()
+        r_1.leaf_ref.ydktest_sanity_one.name = 'runner:leaf-ref:one:name'
+        r_1.leaf_ref.ydktest_sanity_one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name.get()
         self.crud.create(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
 
@@ -529,7 +554,7 @@ class SanityYang(unittest.TestCase):
 
         # UPDATE
         r_1, r_2 = Runner(), Runner()
-        r_1.one.name = 'runner/one/name'
+        r_1.ydktest_sanity_one.name = 'runner/one/name'
         r_1.two.sub1.number = 21
         r_1.three.sub1.sub2.number = 311
         e_1 = Runner.InbtwList.Ldata()
@@ -558,12 +583,12 @@ class SanityYang(unittest.TestCase):
         e_2.subc.subc_subl1.extend([e_21, e_22])
         r_1.inbtw_list.ldata.extend([e_1, e_2])
 
-        r_1.leaf_ref.ref_one_name = r_1.one.name.get()
+        r_1.leaf_ref.ref_one_name = r_1.ydktest_sanity_one.name.get()
         r_1.leaf_ref.ref_two_sub1_number = r_1.two.sub1.number.get()
         r_1.leaf_ref.ref_three_sub1_sub2_number = r_1.three.sub1.sub2.number.get()
         r_1.leaf_ref.ref_inbtw = e_21.name.get()
-        r_1.leaf_ref.one.name = 'runner/leaf-ref/one/name'
-        r_1.leaf_ref.one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name.get()
+        r_1.leaf_ref.ydktest_sanity_one.name = 'runner/leaf-ref/one/name'
+        r_1.leaf_ref.ydktest_sanity_one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name.get()
         self.crud.update(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
 
@@ -579,8 +604,8 @@ class SanityYang(unittest.TestCase):
     def test_aug_one_pos(self):
         # CREATE
         r_1, r_2 = Runner(), Runner()
-        r_1.one.one_aug.number = 1
-        r_1.one.one_aug.name = "r_1.one.one_aug.name"
+        r_1.ydktest_sanity_one.one_aug.number = 1
+        r_1.ydktest_sanity_one.one_aug.name = "r_1.ydktest_sanity_one.one_aug.name"
         self.crud.create(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
 
@@ -588,8 +613,8 @@ class SanityYang(unittest.TestCase):
 
         # UPDATE
         r_1, r_2 = Runner(), Runner()
-        r_1.one.one_aug.number = 10
-        r_1.one.one_aug.name = "r_1.one.one_aug.name".replace('.', ':')
+        r_1.ydktest_sanity_one.one_aug.number = 10
+        r_1.ydktest_sanity_one.one_aug.name = "r_1.ydktest_sanity_one.one_aug.name".replace('.', ':')
         self.crud.update(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
 

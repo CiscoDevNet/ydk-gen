@@ -376,9 +376,9 @@ TEST_CASE("encode_decode")
 
      ydktest_sanity::Runner * entity_ptr = dynamic_cast<ydktest_sanity::Runner*>(redecode.get());
      auto runner = std::make_unique<ydktest_sanity::Runner>();
-     runner->one->name = "test";
+     runner->ydktest_sanity_one->name = "test";
 
-     CHECK(entity_ptr->one->name == runner->one->name);
+     CHECK(entity_ptr->ydktest_sanity_one->name == runner->ydktest_sanity_one->name);
 }
 
 TEST_CASE("multiple_bundles_codec")

@@ -30,14 +30,14 @@ all:  openconfig-platform.deviation\
 	ydktest-types.fxs openconfig-bgp-types.fxs openconfig-bgp-policy.fxs openconfig-extensions.fxs openconfig-policy-types.fxs\
 	ietf-interfaces.fxs openconfig-types.fxs openconfig-routing-policy.fxs openconfig-platform.fxs openconfig-interfaces.fxs openconfig-bgp.fxs\
 	openconfig-platform-types.fxs openconfig-platform-transceiver.fxs oc-pattern.fxs main.fxs main-aug1.fxs iana-if-type.fxs\
-	openconfig-transport-types.fxs ietf-aug-base-1.fxs ietf-aug-base-2.fxs\
+	openconfig-transport-types.fxs ietf-aug-base-1.fxs ietf-aug-base-2.fxs openconfig-terminal-device.fxs  openconfig-if-ethernet.fxs\
 	ydktest-aug-ietf-1.fxs ydktest-aug-ietf-2.fxs ydktest-aug-ietf-4.fxs ydktest-aug-ietf-5.fxs\
 		$(CDB_DIR) ssh-keydir
 	@echo "Build complete"
 
 openconfig-platform.deviation : cisco-xr-openconfig-platform-deviations.yang \
  		openconfig-platform.yang openconfig-platform-transceiver.yang openconfig-transport-types.yang openconfig-platform-types.yang\
-                openconfig-extensions.yang openconfig-interfaces.yang
+                openconfig-extensions.yang openconfig-interfaces.yang openconfig-terminal-device.yang openconfig-if-ethernet.yang
 	$(CONFDC) $(FXS_WERR) $(EXTRA_LINK_FLAGS) -o $(basename $@).fxs -c $(basename $@).yang \
 		--deviation $(word 1, $^)
 
@@ -97,6 +97,12 @@ openconfig-policy-types.yang:
 openconfig-platform.yang: openconfig-platform-types.yang openconfig-platform-transceiver.yang \
 				openconfig-transport-types.yang
 	cp ../../models/openconfig-platform.yang openconfig-platform.yang
+
+openconfig-terminal-device.yang: openconfig-platform.yang openconfig-if-ethernet.yang
+	cp ../../models/openconfig-terminal-device.yang openconfig-terminal-device.yang
+
+openconfig-if-ethernet.yang:
+	cp ../../models/openconfig-if-ethernet.yang openconfig-if-ethernet.yang
 
 openconfig-platform-types.yang:
 	cp ../../models/openconfig-platform-types.yang openconfig-platform-types.yang

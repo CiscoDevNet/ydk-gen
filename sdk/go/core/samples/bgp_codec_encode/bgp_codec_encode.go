@@ -40,8 +40,8 @@ func config(bgp *ysanity_bgp.Bgp) {
 	bgp.Global.Config.As = 65001 // yfilter.Delete
 
 	ipv6_afisafi := ysanity_bgp.Bgp_Global_AfiSafis_AfiSafi{}
-	ipv6_afisafi.AfiSafiName = &ysanity_bgp_types.Ipv6_Unicast{}
-	ipv6_afisafi.Config.AfiSafiName = &ysanity_bgp_types.Ipv6_Unicast{}
+	ipv6_afisafi.AfiSafiName = &ysanity_bgp_types.IPV6UNICAST{}
+	ipv6_afisafi.Config.AfiSafiName = &ysanity_bgp_types.IPV6UNICAST{}
 	ipv6_afisafi.Config.Enabled = true
 	bgp.Global.AfiSafis.AfiSafi = append(bgp.Global.AfiSafis.AfiSafi, ipv6_afisafi)
 
@@ -52,8 +52,8 @@ func config(bgp *ysanity_bgp.Bgp) {
 	peer_group.Transport.Config.LocalAddress = "Lookpback0"
 
 	peer_group_afisafi := ysanity_bgp.Bgp_PeerGroups_PeerGroup_AfiSafis_AfiSafi{}
-	peer_group_afisafi.AfiSafiName = &ysanity_bgp_types.Ipv6_Unicast{}
-	peer_group_afisafi.Config.AfiSafiName = &ysanity_bgp_types.Ipv6_Unicast{}
+	peer_group_afisafi.AfiSafiName = &ysanity_bgp_types.IPV6UNICAST{}
+	peer_group_afisafi.Config.AfiSafiName = &ysanity_bgp_types.IPV6UNICAST{}
 	peer_group_afisafi.Config.Enabled = true
 	// TODO
 	// peer_group_afisafi.ApplyPolicy.Config.ImportPolicy = append(peer_group_afisafi.ApplyPolicy.Config.ImportPolicy, "POLICY3")

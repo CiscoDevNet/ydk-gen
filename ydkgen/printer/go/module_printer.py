@@ -85,7 +85,7 @@ class ModulePrinter(FilePrinter):
     def _print_init(self, package):
         self.ctx.writeln('func init() {')
         self.ctx.lvl_inc()
-        self.ctx.writeln('fmt.Println("Registering top level entities for package {}")'.format(package.name))
+        #self.ctx.writeln('fmt.Println("Registering top level entities for package {}")'.format(package.name))
         for e in package.owned_elements:
             ns = package.stmt.search_one('namespace')
             if ns is not None and isinstance(e, Class) and not e.is_identity():
@@ -96,14 +96,14 @@ class ModulePrinter(FilePrinter):
         self.ctx.bline()
 
     def _print_static_imports(self, package):
-        self.ctx.writeln('"fmt"')
         if self._has_bits(package):
             self.ctx.writeln('"strings"')
         has_top_entity = False
         for c in package.owned_elements:
             if isinstance(c, Class) and not c.is_identity():
                 has_top_entity = True
-                break;
+                self.ctx.writeln('"fmt"')
+                break
         if has_top_entity:
             self.ctx.writeln('"github.com/CiscoDevNet/ydk-go/ydk"')
             self.ctx.writeln('"github.com/CiscoDevNet/ydk-go/ydk/types"')

@@ -56,6 +56,11 @@ class ClassGetChildrenPrinter(object):
         self.ctx.writeln('if(%s != nullptr)' % child.name)
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
-        self.ctx.writeln('children["%s"] = %s;' % (child.stmt.arg, child.name))
+        path = ''
+        if child.stmt.i_module.arg != child.owner.stmt.i_module.arg:
+            path += child.stmt.i_module.arg
+            path += ':'
+        path += child.stmt.arg
+        self.ctx.writeln('children["%s"] = %s;' % (path, child.name))
         self.ctx.lvl_dec()
         self.ctx.writeln('}')

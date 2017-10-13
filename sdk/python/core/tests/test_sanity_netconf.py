@@ -57,8 +57,8 @@ class SanityNetconf(ParametrizedTestCase):
 
     def test_edit_commit_get(self):
         runner = ysanity.Runner()
-        runner.one.number = 1
-        runner.one.name = 'runner:one:name'
+        runner.ydktest_sanity_one.number = 1
+        runner.ydktest_sanity_one.name = 'runner:one:name'
 
         get_filter = ysanity.Runner()
 
@@ -96,8 +96,8 @@ class SanityNetconf(ParametrizedTestCase):
         self.assertEqual(True, op)
 
         runner = ysanity.Runner()
-        runner.one.number = 1
-        runner.one.name = 'runner:one:name'
+        runner.ydktest_sanity_one.number = 1
+        runner.ydktest_sanity_one.name = 'runner:one:name'
         op = self.netconf_service.validate(self.ncc, source=runner)
         self.assertEqual(True, op)
 

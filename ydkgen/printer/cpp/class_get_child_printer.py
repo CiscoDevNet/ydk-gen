@@ -21,6 +21,8 @@ source_printer.py
 
 """
 
+from ydkgen.common import get_qualified_yang_name
+
 
 class ClassGetChildPrinter(object):
     def __init__(self, ctx):
@@ -42,7 +44,7 @@ class ClassGetChildPrinter(object):
             self.ctx.bline()
 
     def _print_class_get_child(self, child):
-        self.ctx.writeln('if(child_yang_name == "%s")' % (child.stmt.arg))
+        self.ctx.writeln('if(child_yang_name == "%s")' % get_qualified_yang_name(child))
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
         if child.is_many:

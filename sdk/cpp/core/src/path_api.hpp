@@ -469,6 +469,8 @@ struct Statement {
     std::string keyword;
     /// the arg if any
     std::string  arg;
+    /// the module name if any
+    std::string  module_name;
     /// the namespace if any
     std::string  name_space;
 

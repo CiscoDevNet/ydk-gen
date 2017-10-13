@@ -394,3 +394,29 @@ TEST_CASE("oc_routing")
     create_rpc->get_input_node().create_datanode("entity", xml);
     (*create_rpc)(session);
 }
+
+/* TODO
+TEST_CASE("oc_optic")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    ydk::path::NetconfSession session{repo, "127.0.0.1", "admin", "admin", 12022};
+    ydk::path::RootSchemaNode& schema = session.get_root_schema();
+
+    auto & runner = schema.create_datanode("openconfig-platform:components", "");
+
+    runner.create_datanode("component[name='0/0-OpticalChannel0/0/0/19']/openconfig-terminal-device:optical-channel/config/frequency", "191600000");
+    runner.create_datanode("component[name='0/0-OpticalChannel0/0/0/19']/openconfig-terminal-device:optical-channel/config/line-port", "0/0-Optics0/0/0/19");
+    runner.create_datanode("component[name='0/0-OpticalChannel0/0/0/19']/openconfig-terminal-device:optical-channel/config/operational-mode", "2");
+    runner.create_datanode("component[name='0/0-OpticalChannel0/0/0/19']/openconfig-terminal-device:optical-channel/config/target-output-power", "100");
+
+    ydk::path::Codec s{};
+    auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
+
+    CHECK( !xml.empty());
+
+    //call create
+    std::shared_ptr<ydk::path::Rpc> create_rpc { schema.create_rpc("ydk:create") };
+    create_rpc->get_input_node().create_datanode("entity", xml);
+    (*create_rpc)(session);
+}
+*/

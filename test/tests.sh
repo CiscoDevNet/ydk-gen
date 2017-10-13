@@ -97,17 +97,26 @@ function init_rest_server {
 }
 
 function init_tcp_server {
-    print_msg "starting tcp proxy server"
-    ./test/tcp_proxy_server.py -b 12307 -c 2023 &> /dev/null &
-    local status=$?
-    if [ $status -ne 0 ]; then
-        print_msg "Could not start tcp server"
-        exit $status
-    fi
+    print_msg "starting TCP server"
+    ./test/start_tcp_server.sh
+    print_msg "TCP server started"
+    export TCP_SERVER_PID=$tcp_pid
+    echo $TCP_SERVER_PID
+}
+
+function stop_tcp_server {
+    print_msg "stopping TCP server"
+    kill $TCP_SERVER_PID
 }
 
 function init_py_env {
     print_msg "Initializing python env"
+    os_type=$(uname)
+    print_msg "OS: $os_type"
+    if [[ ${os_type} == "Darwin" ]] ; then
+        virtualenv macos_pyenv -p python3.6
+        source macos_pyenv/bin/activate
+    fi
     pip install -r requirements.txt coverage
 }
 
@@ -121,17 +130,15 @@ function init_go_env {
     export PATH=$PATH:$GOROOT/bin
 
     cd $YDKGEN_HOME
-    export GOPATH="`pwd`/golang":$GOPATH
+    if [[ -z "${GOPATH// }" ]]; then
+        export GOPATH="`pwd`/golang"
+    else
+        export GOPATH="`pwd`/golang":$GOPATH
+    fi
 
     print_msg "new: ${GOPATH}"
 
     go get github.com/stretchr/testify
-}
-
-function teardown_env {
-    print_msg "teardown_env"
-    deactivate
-    cd $YDKGEN_HOME && rm -rf gen_env test_env
 }
 
 ######################################################################
@@ -193,7 +200,6 @@ function run_cpp_bundle_tests {
 
     cpp_sanity_ydktest_gen_install
     cpp_sanity_ydktest_test
-    teardown_env
 }
 
 function generate_install_specified_cpp_bundle {
@@ -245,6 +251,12 @@ function cpp_test_gen_test {
     run_exec_test cmake ..
     run_exec_test make
     ctest --output-on-failure
+
+    os_type=$(uname)
+    if [[ ${os_type} == "Linux" ]] ; then
+        print_msg "Running tcp tests on linux"
+        ./ydk_bundle_test *tcp*
+    fi
 }
 
 function cpp_test_gen {
@@ -311,8 +323,7 @@ function run_python_bundle_tests {
     py_sanity_deviation
     py_sanity_augmentation
     py_sanity_common_cache
-    py_sanity_one_class_per_module
-    teardown_env
+    #py_sanity_one_class_per_module
 }
 
 #--------------------------
@@ -366,8 +377,10 @@ function py_sanity_ydktest_test {
 
     run_test sdk/python/core/tests/test_sanity_codec.py
 
-    py_sanity_ydktest_test_tcp
     py_sanity_ydktest_test_netconf_ssh
+    py_sanity_ydktest_test_tcp
+
+    stop_tcp_server
 
     export PYTHONPATH=$OLDPYTHONPATH
 
@@ -408,7 +421,7 @@ function py_sanity_ydktest_test_netconf_ssh {
     run_test_no_coverage sdk/python/core/tests/test_sanity_executor_rpc.py --non-demand
 }
 
-function py_sanity_ydktest_test_tcp {    
+function py_sanity_ydktest_test_tcp {
     run_test sdk/python/core/tests/test_sanity_netconf.py tcp://admin:admin@127.0.0.1:12307
     run_test sdk/python/core/tests/test_sanity_netconf.py tcp://admin:admin@127.0.0.1:12307 --non-demand
 }
@@ -524,9 +537,11 @@ function py_sanity_common_cache {
 }
 
 function py_sanity_one_class_per_module {
+    print_msg "Running one class per module tests"
     cd $YDKGEN_HOME
     run_test generate.py --bundle profiles/test/ydktest.json -o
-    pip install gen-api/python/ydktest-bundle/dist/ydktest*.tar.gz
+    pip uninstall ydk-models-ydktest -y
+    pip install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
     run_test sdk/python/core/tests/test_sanity_levels.py
     run_test sdk/python/core/tests/test_sanity_types.py
 }
@@ -575,6 +590,9 @@ function py_test_gen {
 ######################################
 export YDKGEN_HOME="`pwd`"
 
+print_msg "python location: `which python`"
+print_msg "`python -V`"
+
 init_py_env
 init_confd_ydktest
 init_rest_server
@@ -593,10 +611,10 @@ install_py_core
 ######################################
 run_cpp_bundle_tests
 run_go_bundle_tests
-#run_python_bundle_tests
+run_python_bundle_tests
 # test_gen_tests
 
-#cd $YDKGEN_HOME
-#print_msg "gathering cpp coverage"
-#print_msg "combining python coverage"
+cd $YDKGEN_HOME
+print_msg "gathering cpp coverage"
+print_msg "combining python coverage"
 #coverage combine

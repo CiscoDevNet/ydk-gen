@@ -38,12 +38,12 @@ func (suite *FiltersTestSuite) BeforeTest(suiteName, testName string) {
 
 func (suite *FiltersTestSuite) TestReadOnRefClass() {
 	r1 := ysanity.Runner{}
-	r1.One.Number = 1
-	r1.One.Name = "r1.One.Name"
+	r1.YdktestSanityOne.Number = 1
+	r1.YdktestSanityOne.Name = "r1.YdktestSanityOne.Name"
 	suite.CRUD.Create(&suite.Provider, &r1)
 
 	r2 := ysanity.Runner{}
-	r2.One.YFilter = yfilter.Read
+	r2.YdktestSanityOne.YFilter = yfilter.Read
 	entity := suite.CRUD.Read(&suite.Provider, &r2)
 
 	suite.Equal(types.EntityEqual(entity, &r1), true)
@@ -52,26 +52,26 @@ func (suite *FiltersTestSuite) TestReadOnRefClass() {
 // TODO: Encoding error if using YFilter for non-top level leaf
 // func (suite *FiltersTestSuite) TestReadOnLeaf() {
 //     r1 := ysanity.Runner{}
-//     r1.One.Number = 1
-//     r1.One.Name = "r1.One.Name"
+//     r1.YdktestSanityOne.Number = 1
+//     r1.YdktestSanityOne.Name = "r1.YdktestSanityOne.Name"
 //     suite.CRUD.Create(&suite.Provider, &r1)
 
 //     r2 := ysanity.Runner{}
-//     r2.One.Number = yfilter.Read
+//     r2.YdktestSanityOne.Number = yfilter.Read
 //     entity := suite.CRUD.Read(&suite.Provider, &r2)
 
 //     suite.Equal(types.EntityEqual(entity, &r1), true)
 
-//     // r2.One.Number is a context match node:
+//     // r2.YdktestSanityOne.Number is a context match node:
 //     // https://tools.ietf.org/html/rfc6241#section-6.2.5
-//     // reads on r2.One.Number returns r2.One.Number and r2.One.Name
+//     // reads on r2.YdktestSanityOne.Number returns r2.YdktestSanityOne.Number and r2.YdktestSanityOne.Name
 //     r2 = ysanity.Runner{}
-//     r2.One.Number = 1
+//     r2.YdktestSanityOne.Number = 1
 //     entity = suite.CRUD.Read(&suite.Provider, &r2)
 //     suite.Equal(types.EntityEqual(entity, &r1), true)
 
 //     r2 = ysanity.Runner{}
-//     r2.One.Number = 2
+//     r2.YdktestSanityOne.Number = 2
 //     entity = suite.CRUD.Read(&suite.Provider, &r2)
 
 //     suite.Equal(types.EntityEqual(entity, &r2), true)
@@ -160,15 +160,15 @@ func (suite *FiltersTestSuite) TestReadOnLeaflist() {
 // TODO: Encoding error if using YFilter for non-top level leaf
 // func (suite *FiltersTestSuite) TestReadOnlyConfig() {
 //     r1 := ysanity.Runner{}
-//     r1.One.Number = 1
-//     r1.One.Name = "r1.One.Name"
+//     r1.YdktestSanityOne.Number = 1
+//     r1.YdktestSanityOne.Name = "r1.YdktestSanityOne.Name"
 //     suite.CRUD.Create(&suite.Provider, &r1)
 
 //     r2 := ysanity.Runner{}
 //     r3 := ysanity.Runner{}
 
-//     r2.One.Number = yfilter.Read
-//     r3.One.Number = yfilter.Read
+//     r2.YdktestSanityOne.Number = yfilter.Read
+//     r3.YdktestSanityOne.Number = yfilter.Read
 
 //     entity2 := suite.CRUD.ReadConfig(&suite.Provider, &r2)
 //     entity3 := suite.CRUD.Read(&suite.Provider, &r3)
@@ -176,8 +176,8 @@ func (suite *FiltersTestSuite) TestReadOnLeaflist() {
 //     r2Read := entity2.(*ysanity.Runner)
 //     r3Read := entity3.(*ysanity.Runner)
 
-//     suite.Equal(r2Read.One.Number, r3Read.One.Number)
-//     suite.Equal(r2Read.One.Name, r3Read.One.Name)
+//     suite.Equal(r2Read.YdktestSanityOne.Number, r3Read.YdktestSanityOne.Number)
+//     suite.Equal(r2Read.YdktestSanityOne.Name, r3Read.YdktestSanityOne.Name)
 // }
 
 func (suite *FiltersTestSuite) TestDecoder() {

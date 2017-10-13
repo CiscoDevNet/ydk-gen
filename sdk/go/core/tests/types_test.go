@@ -262,7 +262,7 @@ func (suite *SanityTypesTestSuite) TestUnionRecursive() {
 
 func (suite *SanityTypesTestSuite) TestIdentityRef() {
 	runner := ysanity.Runner{}
-	runner.Ytypes.BuiltInT.IdentityRefValue = ysanity.Child_Identity{}
+	runner.Ytypes.BuiltInT.IdentityRefValue = ysanity.ChildIdentity{}
 	suite.CRUD.Create(&suite.Provider, &runner)
 
 	entityRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
@@ -318,7 +318,7 @@ func (suite *SanityTypesTestSuite) TestSubmodule() {
 
 func (suite *SanityTypesTestSuite) TestIdentityFromOtherModule() {
 	runner := ysanity.Runner{}
-	runner.Ytypes.BuiltInT.IdentityRefValue = ysanity_types.Ydktest_Type{}
+	runner.Ytypes.BuiltInT.IdentityRefValue = ysanity_types.YdktestType{}
 	suite.CRUD.Create(&suite.Provider, &runner)
 
 	entityRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})

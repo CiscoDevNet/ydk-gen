@@ -36,10 +36,12 @@ function install_dependencies {
                  wget \
                  xml2 \
                  lcov \
-                 python3 python
-
+                 pybind11 > /dev/null
     brew install libssh
     brew link libssh
+    brew rm -f --ignore-dependencies python python3
+    wget https://www.python.org/ftp/python/3.6.3/python-3.6.3-macosx10.6.pkg
+    sudo installer -pkg python-3.6.3-macosx10.6.pkg  -target /
 
 }
 
@@ -63,3 +65,6 @@ function download_moco {
 install_dependencies
 install_confd
 download_moco
+
+sudo easy_install pip
+sudo pip install virtualenv

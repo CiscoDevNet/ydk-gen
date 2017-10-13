@@ -21,6 +21,7 @@ source_printer.py
 
 """
 from ydkgen.api_model import Bits, Class
+from ydkgen.common import get_qualified_yang_name
 
 
 class ClassSetYLeafPrinter(object):
@@ -46,7 +47,7 @@ class ClassSetYLeafPrinter(object):
             self._print_class_set_values(leaf)
 
     def _print_class_set_values(self, leaf):
-        self.ctx.writeln('if(value_path == "%s")' % (leaf.stmt.arg))
+        self.ctx.writeln('if(value_path == "%s")' % (get_qualified_yang_name(leaf)))
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
         if(isinstance(leaf.property_type, Bits)):

@@ -6,6 +6,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	"github.com/CiscoDevNet/ydk-go/ydk"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -38,16 +39,16 @@ func (suite *SanityLevelsTestSuite) TearDownSuite() {
 func (suite *SanityLevelsTestSuite) TestOneLevelPos() {
 	// READ
 	runner := ysanity.Runner{}
-	runner.One.Number = 1
-	runner.One.Name = "runner:one:name"
+	runner.YdktestSanityOne.Number = 1
+	runner.YdktestSanityOne.Name = "runner:one:name"
 	suite.CRUD.Create(&suite.Provider, &runner)
 	runnerRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
 	suite.Equal(types.EntityEqual(&runner, runnerRead), true)
 
 	// UPDATE
 	runner = ysanity.Runner{}
-	runner.One.Number = 10
-	runner.One.Name = "runner/one/name"
+	runner.YdktestSanityOne.Number = 10
+	runner.YdktestSanityOne.Name = "runner/one/name"
 	suite.CRUD.Update(&suite.Provider, &runner)
 	runnerRead = suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
 	suite.Equal(types.EntityEqual(&runner, runnerRead), true)
@@ -329,8 +330,8 @@ func (suite *SanityLevelsTestSuite) TestLeafrefSimplePos() {
 
 func (suite *SanityLevelsTestSuite) TestAugOnePos() {
 	runner := ysanity.Runner{}
-	runner.One.OneAug.Number = 1
-	runner.One.OneAug.Name = "runner:one:one_aug"
+	runner.YdktestSanityOne.OneAug.Number = 1
+	runner.YdktestSanityOne.OneAug.Name = "runner:one:one_aug"
 
 	suite.CRUD.Create(&suite.Provider, &runner)
 	runnerRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
@@ -368,5 +369,8 @@ func (suite *SanityLevelsTestSuite) TestParentEmpty() {
 }
 
 func TestSanityLevelsTestSuite(t *testing.T) {
+	if testing.Verbose() {
+		ydk.EnableLogging(ydk.Debug)
+	}
 	suite.Run(t, new(SanityLevelsTestSuite))
 }

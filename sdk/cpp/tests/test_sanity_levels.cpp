@@ -35,9 +35,9 @@ TEST_CASE("one_level_pos_set")
 
     auto r_1 = make_unique<ydktest_sanity::Runner>();
 
-    r_1->one->number = 1;
-    r_1->one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
-    bool reply = crud.create(provider, *r_1->one);
+    r_1->ydktest_sanity_one->number = 1;
+    r_1->ydktest_sanity_one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
+    bool reply = crud.create(provider, *r_1->ydktest_sanity_one);
     REQUIRE(reply);
 }
 
@@ -52,8 +52,8 @@ TEST_CASE("one_level_pos")
     bool reply = crud.delete_(provider, *r_1);
     REQUIRE(reply);
 
-    r_1->one->number = 1;
-    r_1->one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
+    r_1->ydktest_sanity_one->number = 1;
+    r_1->ydktest_sanity_one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
     reply = crud.create(provider, *r_1);
     REQUIRE(reply);
 
@@ -63,13 +63,13 @@ TEST_CASE("one_level_pos")
     ydktest_sanity::Runner * r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
     REQUIRE(r_2_ptr!=nullptr);
 
-    REQUIRE(r_1->one->number == r_2_ptr->one->number);
-    REQUIRE(r_1->one->name == r_2_ptr->one->name);
+    REQUIRE(r_1->ydktest_sanity_one->number == r_2_ptr->ydktest_sanity_one->number);
+    REQUIRE(r_1->ydktest_sanity_one->name == r_2_ptr->ydktest_sanity_one->name);
 
     //UPDATE
     r_1 = make_unique<ydktest_sanity::Runner>();
-    r_1->one->number = 10;
-    r_1->one->name = "runner/one/name";
+    r_1->ydktest_sanity_one->number = 10;
+    r_1->ydktest_sanity_one->name = "runner/one/name";
 
     filter = make_unique<ydktest_sanity::Runner>();
     reply = crud.update(provider, *r_1);
@@ -80,8 +80,53 @@ TEST_CASE("one_level_pos")
     r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
     REQUIRE(r_2_ptr!=nullptr);
 
-    REQUIRE(r_1->one->number == r_2_ptr->one->number);
-    REQUIRE(r_1->one->name == r_2_ptr->one->name);
+    REQUIRE(r_1->ydktest_sanity_one->number == r_2_ptr->ydktest_sanity_one->number);
+    REQUIRE(r_1->ydktest_sanity_one->name == r_2_ptr->ydktest_sanity_one->name);
+
+    // DELETE
+    filter = make_unique<ydktest_sanity::Runner>();
+    reply = crud.delete_(provider, *filter);
+    REQUIRE(reply);
+}
+
+
+TEST_CASE("one_level_aug_pos")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    // READ
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    r_1->ydktest_sanity_augm_one_->twin_number = 1;
+    reply = crud.create(provider, *r_1);
+    REQUIRE(reply);
+
+    auto filter = make_unique<ydktest_sanity::Runner>();
+    auto r_2 = crud.read(provider, *filter);
+    REQUIRE(r_2!=nullptr);
+    ydktest_sanity::Runner * r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
+    REQUIRE(r_2_ptr!=nullptr);
+
+    REQUIRE(r_1->ydktest_sanity_augm_one_->twin_number == r_2_ptr->ydktest_sanity_augm_one_->twin_number);
+
+    //UPDATE
+    r_1 = make_unique<ydktest_sanity::Runner>();
+    r_1->ydktest_sanity_augm_one_->twin_number = 10;
+
+    filter = make_unique<ydktest_sanity::Runner>();
+    reply = crud.update(provider, *r_1);
+    REQUIRE(reply);
+
+    r_2 = crud.read(provider, *filter);
+    REQUIRE(r_2!=nullptr);
+    r_2_ptr = dynamic_cast<ydktest_sanity::Runner*>(r_2.get());
+    REQUIRE(r_2_ptr!=nullptr);
+
+    REQUIRE(r_1->ydktest_sanity_augm_one_->twin_number == r_2_ptr->ydktest_sanity_augm_one_->twin_number);
 
     // DELETE
     filter = make_unique<ydktest_sanity::Runner>();
@@ -490,7 +535,7 @@ TEST_CASE("test_leafref_pos")
     REQUIRE(reply);
 
     //CREATE
-    r_1->one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
+    r_1->ydktest_sanity_one->name = "-|90|1-0|240|25-.-|90|199|200|25-.9|1-|1-9|240|250.-|99|199|2-9|25-";
     r_1->two->sub1->number = 21;
     r_1->three->sub1->sub2->number = 311;
     auto e_1  = make_unique<ydktest_sanity::Runner::InbtwList::Ldata>();
@@ -539,8 +584,8 @@ TEST_CASE("test_leafref_pos")
     auto r_filter = make_unique<ydktest_sanity::Runner>();
     auto r_read = crud.read(provider, *r_filter);
     ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-    REQUIRE(r_1->one->name == r_2->one->name);
-    REQUIRE(r_1->one->number == r_2->one->number);
+    REQUIRE(r_1->ydktest_sanity_one->name == r_2->ydktest_sanity_one->name);
+    REQUIRE(r_1->ydktest_sanity_one->number == r_2->ydktest_sanity_one->number);
     REQUIRE(r_1->inbtw_list->ldata[0]->number == r_2->inbtw_list->ldata[0]->number);
     REQUIRE(r_1->inbtw_list->ldata[0]->name == r_2->inbtw_list->ldata[0]->name);
     REQUIRE(r_1->inbtw_list->ldata[1]->number == r_2->inbtw_list->ldata[1]->number);
@@ -562,8 +607,8 @@ TEST_CASE("aug_one_pos")
     REQUIRE(reply);
 
     //CREATE
-    r_1->one->one_aug->number = 1;
-    r_1->one->one_aug->name = "one";
+    r_1->ydktest_sanity_one->one_aug->number = 1;
+    r_1->ydktest_sanity_one->one_aug->name = "one";
     reply = crud.create(provider, *r_1);
     REQUIRE(reply);
 
@@ -572,12 +617,12 @@ TEST_CASE("aug_one_pos")
     auto r_read = crud.read(provider, *r_filter);
     REQUIRE(r_read!=nullptr);
     ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-    REQUIRE(r_1->one->one_aug->number == r_2->one->one_aug->number);
-    REQUIRE(r_1->one->one_aug->name == r_2->one->one_aug->name);
+    REQUIRE(r_1->ydktest_sanity_one->one_aug->number == r_2->ydktest_sanity_one->one_aug->number);
+    REQUIRE(r_1->ydktest_sanity_one->one_aug->name == r_2->ydktest_sanity_one->one_aug->name);
 
     //UPDATE
-    r_1->one->one_aug->number = 10;
-    r_1->one->one_aug->name = "onenone";
+    r_1->ydktest_sanity_one->one_aug->number = 10;
+    r_1->ydktest_sanity_one->one_aug->name = "onenone";
     reply = crud.update(provider, *r_1);
     REQUIRE(reply);
 }
@@ -651,7 +696,7 @@ TEST_CASE("aug_leaf")
     REQUIRE(reply);
 
     //CREATE
-    r_1->one->augmented_leaf = "test";
+    r_1->ydktest_sanity_one->augmented_leaf = "test";
     reply = crud.create(provider, *r_1);
     REQUIRE(reply);
 
@@ -660,7 +705,7 @@ TEST_CASE("aug_leaf")
     auto r_read = crud.read(provider, *r_filter);
     REQUIRE(r_read != nullptr);
     ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
-    REQUIRE(r_2->one->augmented_leaf==r_1->one->augmented_leaf);
+    REQUIRE(r_2->ydktest_sanity_one->augmented_leaf==r_1->ydktest_sanity_one->augmented_leaf);
 }
 
 

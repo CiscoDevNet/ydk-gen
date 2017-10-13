@@ -25,6 +25,22 @@
 #include "path_private.hpp"
 #include "../logger.hpp"
 
+namespace ydk
+{
+namespace path
+{
+
+static void check_ly_schema_node_for_path(lyd_node* node, const std::string & path)
+{
+    if(node == nullptr || node->schema == nullptr || node->schema->priv == nullptr)
+    {
+        YLOG_ERROR("Couldn't fetch schema node {}!", path);
+        throw(YCPPCoreError{"Couldn't fetch schema node " + path});
+    }
+}
+
+}
+}
 
 ////////////////////////////////////////////////////////////////////////
 /// DataNode
@@ -70,6 +86,7 @@ ydk::path::DataNodeImpl::~DataNodeImpl()
 const ydk::path::SchemaNode&
 ydk::path::DataNodeImpl::get_schema_node() const
 {
+    check_ly_schema_node_for_path(m_node, get_path());
     auto schema_ptr = reinterpret_cast<const SchemaNode*>(m_node->schema->priv);
     return *schema_ptr;
 }
@@ -89,6 +106,7 @@ ydk::path::DataNodeImpl::get_path() const
 void
 ydk::path::DataNodeImpl::populate_new_schemas_from_path(const std::string& path)
 {
+    check_ly_schema_node_for_path(m_node, path);
     auto snode = reinterpret_cast<SchemaNodeImpl*>(m_node->schema->priv);
     snode->populate_new_schemas_from_path(path);
 }
@@ -96,7 +114,9 @@ ydk::path::DataNodeImpl::populate_new_schemas_from_path(const std::string& path)
 ydk::path::DataNode&
 ydk::path::DataNodeImpl::create_datanode(const std::string& path, const std::string& value)
 {
+    YLOG_DEBUG("Populating schemas for {}", path);
     populate_new_schemas_from_path(path);
+    YLOG_DEBUG("Populating schemas for {}", value);
     populate_new_schemas_from_path(value);
     return create_helper(path, value);
 }
@@ -109,6 +129,8 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
         YLOG_ERROR("Path is empty.");
         throw(YCPPInvalidArgumentError{"Path is empty."});
     }
+
+    YLOG_DEBUG("Creating node '{}' with value '{}'", path, value);
 
     std::vector<std::string> segments = segmentalize(path);
 

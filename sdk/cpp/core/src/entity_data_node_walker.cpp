@@ -47,7 +47,7 @@ static bool data_node_is_leaf(path::DataNode & data_node);
 static bool data_node_is_list(path::DataNode & data_node);
 static string get_segment_path(const string & path);
 static void add_annotation_to_datanode(const Entity & entity, path::DataNode & data_node);
-static void add_annotation_to_datanode(const std::pair<std::string, LeafData> & name_value, path::DataNode & data_node);
+static void add_annotation_to_datanode(const pair<string, LeafData> & name_value, path::DataNode & data_node);
 static path::Annotation get_annotation(YFilter yfilter);
 
 
@@ -124,21 +124,21 @@ static void populate_data_node(Entity & entity, path::DataNode & parent_data_nod
 static void populate_name_values(path::DataNode & data_node, EntityPath & path)
 {
     YLOG_DEBUG("Leaf count: {}", path.value_paths.size());
-    for(const std::pair<std::string, LeafData> & name_value : path.value_paths)
+    for(const pair<string, LeafData> & name_value : path.value_paths)
     {
-        path::DataNode* result = nullptr;
         LeafData leaf_data = name_value.second;
-        YLOG_DEBUG("Creating child {} of {} with value: '{}', is_set: {}", name_value.first, data_node.get_path(),
+        YLOG_DEBUG("Creating leaf {} of {} with value: '{}', is_set: {}", name_value.first, data_node.get_path(),
                 leaf_data.value, leaf_data.is_set);
 
         if(leaf_data.is_set)
         {
-            result = &data_node.create_datanode(name_value.first, leaf_data.value);
-            YLOG_DEBUG("Result: {}", (result?"success":"failure"));
+            YLOG_DEBUG("Creating datanode");
+            auto & result = data_node.create_datanode(name_value.first, leaf_data.value);
+            YLOG_DEBUG("Created datanode");
 
             if(is_set(leaf_data.yfilter))
             {
-                add_annotation_to_datanode(name_value, *result);
+                add_annotation_to_datanode(name_value, result);
             }
         }
     }
@@ -157,7 +157,7 @@ static void add_annotation_to_datanode(const Entity & entity, path::DataNode & d
     }
 }
 
-static void add_annotation_to_datanode(const std::pair<std::string, LeafData> & name_value, path::DataNode & data_node)
+static void add_annotation_to_datanode(const pair<string, LeafData> & name_value, path::DataNode & data_node)
 {
     YLOG_DEBUG("Got yfilter '{}' for {}", to_string(name_value.second.yfilter), name_value.first);
     if (name_value.second.yfilter != YFilter::read)
@@ -179,24 +179,35 @@ static path::Annotation get_annotation(YFilter yfilter)
 //////////////////////////////////////////////////////////////////////////
 // Entity from DataNode*
 //////////////////////////////////////////////////////////////////////////
-void get_entity_from_data_node(path::DataNode * node, std::shared_ptr<Entity> entity)
+void get_entity_from_data_node(path::DataNode * node, shared_ptr<Entity> entity)
 {
     if (entity == nullptr || node == nullptr)
         return;
 
+    YLOG_DEBUG("Looking at parent entity {}", entity->yang_name);
+    string module_name = node->get_schema_node().get_statement().module_name;
     for(auto & child_data_node:node->get_children())
     {
-        std::string child_name = child_data_node->get_schema_node().get_statement().arg;
+        string child_name = child_data_node->get_schema_node().get_statement().arg;
+        string child_module_name = child_data_node->get_schema_node().get_statement().module_name;
+        if(module_name != child_module_name)
+        {
+            child_name = child_module_name + ":" + child_name;
+        }
+
+        YLOG_DEBUG("Looking at child {} '{}'", child_data_node->get_schema_node().get_statement().keyword, child_data_node->get_path());
+        
         if(data_node_is_leaf(*child_data_node))
         {
-            YLOG_DEBUG("Creating leaf {} of value '{}' in parent {}", child_name,
+            YLOG_DEBUG("Creating entity leaf {} of value '{}' in parent {}", child_name,
                     child_data_node->get_value(), node->get_path());
             entity->set_value(child_name, child_data_node->get_value());
+            YLOG_DEBUG("Created leaf");
         }
         else
         {
             YLOG_DEBUG("Going into child {} in parent {}", child_name, node->get_path());
-            std::shared_ptr<Entity> child_entity;
+            shared_ptr<Entity> child_entity;
             if(data_node_is_list(*child_data_node))
             {
                 child_entity = entity->get_child_by_name(child_name, get_segment_path(child_data_node->get_path()));
@@ -205,12 +216,13 @@ void get_entity_from_data_node(path::DataNode * node, std::shared_ptr<Entity> en
             {
                 child_entity = entity->get_child_by_name(child_name);
             }
-            child_entity->parent = entity.get();
 
             if(child_entity == nullptr)
             {
                 YLOG_ERROR("Couldn't fetch child entity {} in parent {}!", child_name, node->get_path());
+                throw(path::YCPPCoreError{"Couldn't fetch child entity '" + child_name + "' in parent " + node->get_path()});
             }
+            child_entity->parent = entity.get();
             get_entity_from_data_node(child_data_node.get(), child_entity);
         }
     }
@@ -229,7 +241,7 @@ static bool data_node_is_list(path::DataNode & data_node)
 
 static string get_segment_path(const string & path)
 {
-    std::vector<std::string> segments = path::segmentalize(path);
+    vector<string> segments = path::segmentalize(path);
     return segments.back();
 }
 

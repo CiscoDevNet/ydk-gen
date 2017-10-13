@@ -25,6 +25,7 @@
 #include "path_private.hpp"
 #include "../logger.hpp"
 
+using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// SchemaNode
@@ -46,14 +47,14 @@ ydk::path::SchemaNodeImpl::SchemaNodeImpl(const SchemaNode* parent, struct lys_n
         const struct lys_node *last = nullptr;
 
         while( auto q = lys_getnext(last, node, nullptr, 0)) {
-            m_children.emplace_back(std::make_unique<SchemaNodeImpl>(this, const_cast<struct lys_node*>(q)));
+            m_children.emplace_back(make_unique<SchemaNodeImpl>(this, const_cast<struct lys_node*>(q)));
             last = q;
         }
     }
 }
 
 void
-ydk::path::SchemaNodeImpl::populate_augmented_schema_node(std::vector<lys_node*>& ancestors, struct lys_node* node) {
+ydk::path::SchemaNodeImpl::populate_augmented_schema_node(vector<lys_node*>& ancestors, struct lys_node* node) {
     if (!ancestors.empty()) {
         auto curr = ancestors.back();
         ancestors.pop_back();
@@ -70,8 +71,8 @@ ydk::path::SchemaNodeImpl::populate_augmented_schema_node(std::vector<lys_node*>
                 p = p->child;
             }
             if (p) {
-                YLOG_DEBUG("Populating new schema node '{}'", std::string(p->name));
-                m_children.emplace_back(std::make_unique<SchemaNodeImpl>(this, const_cast<struct lys_node*>(p)));
+                YLOG_DEBUG("Populating new schema node '{}'", string(p->name));
+                m_children.emplace_back(make_unique<SchemaNodeImpl>(this, const_cast<struct lys_node*>(p)));
             }
             node = node->next;
         }
@@ -82,12 +83,12 @@ ydk::path::SchemaNodeImpl::~SchemaNodeImpl()
 {
 }
 
-std::string
+string
 ydk::path::SchemaNodeImpl::get_path() const
 {
-    std::string ret{};
+    string ret{};
 
-    std::vector<std::string> segments;
+    vector<string> segments;
 
     struct lys_node* cur_node = m_node;
     struct lys_module* module = nullptr;
@@ -97,7 +98,7 @@ ydk::path::SchemaNodeImpl::get_path() const
     if (!cur_node->parent || cur_node->parent->module != module) {
         //qualify with module name
 
-        std::string segname {module->name};
+        string segname {module->name};
         segname+=':';
         segname+=cur_node->name;
         segments.push_back(segname);
@@ -107,7 +108,7 @@ ydk::path::SchemaNodeImpl::get_path() const
     cur_node = cur_node->parent;
     }
 
-    std::reverse(segments.begin(), segments.end());
+    reverse(segments.begin(), segments.end());
     for ( auto seg : segments ) {
     ret+="/";
     ret+=seg;
@@ -117,8 +118,8 @@ ydk::path::SchemaNodeImpl::get_path() const
     return ret;
 }
 
-std::vector<ydk::path::SchemaNode*>
-ydk::path::SchemaNodeImpl::find(const std::string& path)
+vector<ydk::path::SchemaNode*>
+ydk::path::SchemaNodeImpl::find(const string& path)
 {
     populate_new_schemas_from_path(path);
 
@@ -135,7 +136,7 @@ ydk::path::SchemaNodeImpl::find(const std::string& path)
         throw(YCPPInvalidArgumentError{"path must be a relative path"});
     }
 
-    std::vector<SchemaNode*> ret;
+    vector<SchemaNode*> ret;
     struct ly_ctx* ctx = m_node->module->ctx;
 
     const struct lys_node* found_node = ly_ctx_get_node(ctx, m_node, path.c_str());
@@ -158,7 +159,7 @@ ydk::path::SchemaNodeImpl::get_parent() const noexcept
     return m_parent;
 }
 
-const std::vector<std::unique_ptr<ydk::path::SchemaNode>> &
+const vector<unique_ptr<ydk::path::SchemaNode>> &
 ydk::path::SchemaNodeImpl::get_children() const
 {
 
@@ -179,9 +180,11 @@ ydk::path::SchemaNodeImpl::get_root() const noexcept
 }
 
 void
-ydk::path::SchemaNodeImpl::populate_new_schemas_from_path(const std::string& path) {
+ydk::path::SchemaNodeImpl::populate_new_schemas_from_path(const string& path) {
+    YLOG_DEBUG("Looking to populate schemas for {}", path);
     auto snode = const_cast<SchemaNode*>(&get_root());
     auto rsnode = reinterpret_cast<RootSchemaNodeImpl*>(snode);
+    YLOG_DEBUG("Ready to populate schemas for {}", path);
     rsnode->populate_new_schemas_from_path(path);
 }
 
@@ -195,6 +198,7 @@ ydk::path::SchemaNodeImpl::get_statement() const
 {
     Statement s{};
     s.arg = m_node->name;
+    s.module_name = m_node->module?m_node->module->name:"";
     if(is_submodule(m_node))
     {
         s.name_space = ((lys_submodule*)m_node->module)->belongsto->ns;
@@ -270,10 +274,10 @@ ydk::path::SchemaNodeImpl::get_statement() const
 /// Returns the vector of Statement keys
 /// @return vector of Statement that represent keys
 ///
-std::vector<ydk::path::Statement>
+vector<ydk::path::Statement>
 ydk::path::SchemaNodeImpl::get_keys() const
 {
-    std::vector<Statement> stmts{};
+    vector<Statement> stmts{};
 
     Statement stmt = get_statement();
     if(stmt.keyword == "list") {

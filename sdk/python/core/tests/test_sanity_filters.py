@@ -56,33 +56,33 @@ class SanityYang(unittest.TestCase):
 
     def test_read_on_ref_class(self):
         r_1 = ysanity.Runner()
-        r_1.one.number, r_1.one.name = 1, 'runner:one:name'
+        r_1.ydktest_sanity_one.number, r_1.ydktest_sanity_one.name = 1, 'runner:one:name'
         self.crud.create(self.ncc, r_1)
         r_2 = ysanity.Runner()
 
-        r_2.one.yfilter = YFilter.read
+        r_2.ydktest_sanity_one.yfilter = YFilter.read
         r_2 = self.crud.read(self.ncc, r_2)
-        self.assertEqual(r_1.one.number, r_2.one.number)
-        self.assertEqual(r_1.one.name, r_2.one.name)
+        self.assertEqual(r_1.ydktest_sanity_one.number, r_2.ydktest_sanity_one.number)
+        self.assertEqual(r_1.ydktest_sanity_one.name, r_2.ydktest_sanity_one.name)
 
     def test_read_on_leaf(self):
         r_1 = ysanity.Runner()
-        r_1.one.number, r_1.one.name = 1, 'runner:one:name'
+        r_1.ydktest_sanity_one.number, r_1.ydktest_sanity_one.name = 1, 'runner:one:name'
         self.crud.create(self.ncc, r_1)
         r_2 = ysanity.Runner()
-        r_2.one.number.yfilter = YFilter.read
+        r_2.ydktest_sanity_one.number.yfilter = YFilter.read
         r_2 = self.crud.read(self.ncc, r_2)
-        self.assertEqual(r_2.one.number, r_1.one.number)
+        self.assertEqual(r_2.ydktest_sanity_one.number, r_1.ydktest_sanity_one.number)
 
-        # this will also read r_2.one.name, not able to read only one of them
+        # this will also read r_2.ydktest_sanity_one.name, not able to read only one of them
         r_2 = ysanity.Runner()
-        r_2.one.number = 1
+        r_2.ydktest_sanity_one.number = 1
         r_2 = self.crud.read(self.ncc, r_2)
-        self.assertEqual(r_2.one.number, r_1.one.number)
+        self.assertEqual(r_2.ydktest_sanity_one.number, r_1.ydktest_sanity_one.number)
 
         # no such value, will return empty data
         r_2 = ysanity.Runner()
-        r_2.one.number = 2
+        r_2.ydktest_sanity_one.number = 2
         r_2 = self.crud.read(self.ncc, r_2)
         self.assertEqual(r_2, None)
 
@@ -158,17 +158,17 @@ class SanityYang(unittest.TestCase):
 
     def test_read_only_config(self):
         r_1 = ysanity.Runner()
-        r_1.one.number, r_1.one.name = 1, 'runner:one:name'
+        r_1.ydktest_sanity_one.number, r_1.ydktest_sanity_one.name = 1, 'runner:one:name'
         self.crud.create(self.ncc, r_1)
         r_2, r_3 = ysanity.Runner(), ysanity.Runner()
-        r_2.one.number.yfilter = YFilter.read
-        r_3.one.number.yfilter = YFilter.read
+        r_2.ydktest_sanity_one.number.yfilter = YFilter.read
+        r_3.ydktest_sanity_one.number.yfilter = YFilter.read
 
         r_2 = self.crud.read_config(self.ncc, r_2)
         r_3 = self.crud.read(self.ncc, r_3)
         # ysanity only have config data, ok to compare
-        self.assertEqual(r_2.one.number, r_3.one.number)
-        self.assertEqual(r_2.one.name, r_3.one.name)
+        self.assertEqual(r_2.ydktest_sanity_one.number, r_3.ydktest_sanity_one.number)
+        self.assertEqual(r_2.ydktest_sanity_one.name, r_3.ydktest_sanity_one.name)
 
     def test_decoder(self):
         # send payload to device

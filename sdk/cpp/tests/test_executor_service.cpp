@@ -199,8 +199,8 @@ TEST_CASE("es_edit_config_rpc")
 
     // runner and filter
     auto runner = make_shared<ydktest_sanity::Runner>();
-    runner->one->number = 1;
-    runner->one->name = "runner:one:name";
+    runner->ydktest_sanity_one->number = 1;
+    runner->ydktest_sanity_one->name = "runner:one:name";
     std::string runner_xml = codec_service.encode(codec_provider, *runner, true);
 
     auto filter = make_unique<ydktest_sanity::Runner>();

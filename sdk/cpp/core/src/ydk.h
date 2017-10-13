@@ -135,6 +135,7 @@ DataNode RpcExecute(YDKStatePtr, Rpc, ServiceProvider);
 
 DataNode DataNodeCreate(YDKStatePtr, DataNode, const char*, const char*);
 const char* DataNodeGetArgument(DataNode);
+const char* DataNodeGetModuleName(DataNode);
 const char* DataNodeGetKeyword(DataNode);
 const char* DataNodeGetPath(DataNode);
 const char* DataNodeGetValue(DataNode);

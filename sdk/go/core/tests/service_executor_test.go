@@ -50,8 +50,8 @@ func (suite *ExecutorServiceTestSuite) TestEditCommitGet() {
 	suite.CodecProvider.Encoding = encoding.XML
 
 	runner := ysanity.Runner{}
-	runner.One.Number = 1
-	runner.One.Name = "runner:one:name"
+	runner.YdktestSanityOne.Number = 1
+	runner.YdktestSanityOne.Name = "runner:one:name"
 	runnerXML := suite.CodecService.Encode(&suite.CodecProvider, &runner)
 
 	// Edit Config
@@ -123,8 +123,8 @@ func (suite *ExecutorServiceTestSuite) TestValidate() {
 
 	suite.CodecProvider.Encoding = encoding.XML
 	runner := ysanity.Runner{}
-	runner.One.Number = 1
-	runner.One.Name = "runner:one:name"
+	runner.YdktestSanityOne.Number = 1
+	runner.YdktestSanityOne.Name = "runner:one:name"
 	runnerXML := suite.CodecService.Encode(&suite.CodecProvider, &runner)
 
 	rpc = ietfNetconf.Validate{}

@@ -379,9 +379,9 @@ class ApiModelBuilder(object):
             clashes = []
 
             while len(stmts) > 0:
-                stmt = stmts.pop()
-                if stmt.arg in [s.arg for s in stmts] and stmt.arg not in clashes:
-                    clashes.append(stmt.arg)
+                ss = stmts.pop()
+                if ss.arg in [s.arg for s in stmts] and ss.arg not in clashes:
+                    clashes.append(ss.arg)
 
             return clashes
 
@@ -390,7 +390,7 @@ class ApiModelBuilder(object):
                 if clash == stmt.arg:
                     old_arg = stmt.arg
                     new_arg = '%s_%s' % (stmt.top.arg, old_arg)
-                    stmt.arg = new_arg
+                    stmt.unclashed_arg = new_arg #stmt.arg = new_arg
 
         clashes = _get_num_clashes(stmt.i_children)
 

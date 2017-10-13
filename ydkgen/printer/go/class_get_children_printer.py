@@ -36,8 +36,13 @@ class ClassGetChildrenPrinter(FunctionPrinter):
             if child.is_many:
                 self._print_many(child)
             else:
+                path = ''
+                if child.stmt.i_module.arg != child.owner.stmt.i_module.arg:
+                    path += child.stmt.i_module.arg
+                    path += ':'
+                path += child.stmt.arg
                 self.ctx.writeln('children["%s"] = &%s.%s' % (
-                    child.stmt.arg, self.class_alias, child.go_name()))
+                    path, self.class_alias, child.go_name()))
         self.ctx.bline()
         self.ctx.writeln('return children')
 

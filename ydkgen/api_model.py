@@ -228,13 +228,9 @@ class NamedElement(Element):
         if self.stmt is None:
             raise Exception('element is not yet defined')
 
-        if isinstance(self, Enum):
-            stmt = self.stmt.parent
-        else:
-            stmt = self.stmt
-
-        name = camel_case(stmt.arg)
-
+        name = self.name
+        if isinstance(self, Property):
+            name = camel_case(self.name)
         if case == 'UpperCamel':
             return name
         elif case == 'lowerCamel':
@@ -246,7 +242,7 @@ class NamedElement(Element):
     def qualified_go_name(self):
         ''' get the Go qualified name (sans package name) '''
         if self.stmt.keyword == 'identity':
-            return camel_snake(self.stmt.arg)
+            return self.go_name()
 
         names = []
         element = self
@@ -529,7 +525,7 @@ class Class(NamedElement):
 
     @stmt.setter
     def stmt(self, stmt):
-        name = escape_name(stmt.arg)
+        name = escape_name(stmt.unclashed_arg if hasattr(stmt, 'unclashed_arg') else stmt.arg)
         name = camel_case(name)
 
         if self.iskeyword(name) or self.iskeyword(name.lower()):
@@ -714,7 +710,8 @@ class Property(NamedElement):
     @stmt.setter
     def stmt(self, stmt):
         self._stmt = stmt
-        name = snake_case(stmt.arg)
+        #name = snake_case(stmt.arg)
+        name = snake_case(stmt.unclashed_arg if hasattr(stmt, 'unclashed_arg') else stmt.arg)
         if self.iskeyword(name) or self.iskeyword(name.lower()):
             name = '%s_' % name
         self.name = name

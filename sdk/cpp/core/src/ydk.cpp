@@ -645,6 +645,14 @@ const char* DataNodeGetKeyword(DataNode datanode)
     return string_to_array(s);
 }
 
+const char* DataNodeGetModuleName(DataNode datanode)
+{
+    DataNodeWrapper* datanode_wrapper = (DataNodeWrapper*)datanode;
+    ydk::path::DataNode* real_datanode = unwrap(datanode_wrapper);
+    string s = real_datanode->get_schema_node().get_statement().module_name;
+    return string_to_array(s);
+}
+
 const char* DataNodeGetPath(DataNode datanode)
 {
     DataNodeWrapper* datanode_wrapper = (DataNodeWrapper*)datanode;

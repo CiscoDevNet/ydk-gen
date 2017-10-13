@@ -61,8 +61,9 @@ class EnumPrinter(object):
         self.ctx.writeln('//////////////////////////////////////////////////////////////////////////')
         enum_class_prefix = enum_class.qualified_go_name()
 
-        for c in enum_class.comment.split('\n'):
-            self.ctx.writeln('// %s' % c)
+        if enum_class.comment is not None:
+            for c in enum_class.comment.split('\n'):
+                self.ctx.writeln('// %s' % c)
 
         for l in enum_class.literals:
             self.ctx.writeln('// %s_%s:' % (enum_class_prefix, l.go_name()))
