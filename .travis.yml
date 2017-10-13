@@ -6,7 +6,6 @@ matrix:
   include:
     - os: linux
       dist: trusty
-      python: 2.7
       go: 1.8
       group: edge
     - os: osx
@@ -21,7 +20,7 @@ before_install:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./test/dependencies_linux.sh                                             ; fi
 
 script:
-    - sudo ./test/tests.sh
+    - ./test/tests.sh
 
 after_success:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) ; fi  # Uploading python report to CodeCov

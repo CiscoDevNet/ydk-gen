@@ -35,14 +35,12 @@ function install_dependencies {
                  pcre \
                  wget \
                  xml2 \
-                 lcov
+                 lcov \
+                 python3 python
 
     brew install libssh
     brew link libssh
-    wget https://www.python.org/ftp/python/3.6.3/python-3.6.3-macosx10.6.pkg
-    sudo installer -pkg python-3.6.3-macosx10.6.pkg  -target /
-    wget https://www.python.org/ftp/python/2.7.14/python-2.7.14-macosx10.6.pkg
-    sudo installer -pkg python-2.7.14-macosx10.6.pkg  -target /
+
 }
 
 function install_confd {
