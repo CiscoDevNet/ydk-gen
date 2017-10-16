@@ -51,6 +51,11 @@ class XmlEncoder(object):
             elem = root
         else:
             elem = etree.SubElement(root, entity.i_meta.yang_name)
+            if hasattr(entity, 'yfilter'):
+                yfilter = getattr(entity, 'yfilter')
+                if isinstance(yfilter, DELETE):
+                    xc = 'urn:ietf:params:xml:ns:netconf:base:1.0'
+                    elem.set('{' + xc + '}operation', 'delete')
             parent_ns = None
             current_parent = root
             while current_parent != None and parent_ns is None:
