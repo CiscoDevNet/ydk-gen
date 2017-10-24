@@ -31,15 +31,16 @@ Centos (Fedora-based) - The following packages must be present in your system be
 
    $ sudo yum install epel-release libssh-devel gcc-c++ python-devel
    $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.6.1/libydk-0.6.1-1.x86_64.rpm
-   $ sudo ln –fs /usr/bin/cmake3 /usr/bin/cmake && export PATH=/usr/bin:$PATH
 
 macOS
 ~~~~~
-It is required to install Xcode command line tools, `homebrew <http://brew.sh>`_ and the following homebrew packages on your system before installing YDK-Py::
+It is required to install Xcode command line tools, `homebrew <http://brew.sh>`_ and the following homebrew packages on your system before installing YDK-Py.
+
+You can download the latest python package from `here <https://www.python.org/downloads/>`_. Please do not use the homebrew version of python as it causes issues with installing ydk packages. Please execute ``brew rm python python3`` to remove any homebrew python packages::
 
    $ xcode-select --install
    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-   $ brew install python pkg-config libssh xml2 curl pcre cmake
+   $ brew install pkg-config libssh xml2 libxml2 curl pcre cmake
    $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.6.1/libydk-0.6.1-Darwin.tar.gz
    $ sudo installer -pkg libydk-0.6.1-Darwin.pkg -target /
 

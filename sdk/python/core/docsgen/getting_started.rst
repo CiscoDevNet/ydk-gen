@@ -32,13 +32,15 @@ Centos (Fedora-based)
 
 macOS
 -----
-It is required to install Xcode command line tools, `homebrew <http://brew.sh>`_ and the following homebrew packages on your system before installing YDK-Py:
+You can download the latest python package from here. **Note:** Please do not use the homebrew version of python as it causes issues with installing ydk packages. Please execute ``brew rm python python3`` to remove any homebrew python packages.
+
+It is required to install Xcode command line tools, `homebrew <http://brew.sh>`_ and the following homebrew packages on your system before installing YDK-Py.
 
 .. code-block:: sh
 
    $ xcode-select --install
    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-   $ brew install python pkg-config libssh libxml2 curl pcre cmake
+   $ brew install pkg-config libssh libxml2 curl pcre cmake
    $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.6.1/libydk-0.6.1-Darwin.pkg
    $ sudo installer -pkg libydk-0.6.1-Darwin.pkg -target /
 

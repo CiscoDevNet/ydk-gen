@@ -20,6 +20,7 @@ source_printer.py
  prints Go class constructor
 
 """
+from functools import reduce
 
 from ydkgen.api_model import Bits, Class, DataType, Enum
 from ydkgen.builder import TypesExtractor

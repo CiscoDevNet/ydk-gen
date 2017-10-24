@@ -34,7 +34,7 @@ class GeneratedPackageMethodsPrinter(object):
         self.bundle_name = bundle_name
         self.packages = packages
 
-        self.packages.sort(lambda x, y: cmp(x.stmt.arg, y.stmt.arg))
+        self.packages.sort(key = lambda x:x.stmt.arg)
 
     def print_output(self):
         self.print_header()

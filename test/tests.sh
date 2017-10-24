@@ -159,6 +159,7 @@ function py_sanity_ydktest_install {
     print_msg "py_sanity_ydktest_install"
     print_msg "Installing"
     cd $YDKGEN_HOME && source test_env/bin/activate
+    cd gen-api/python/ydk && python setup.py build && cd -
     pip install gen-api/python/ydk/dist/ydk*.tar.gz
     pip install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
 }
