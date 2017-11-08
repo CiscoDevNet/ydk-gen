@@ -9,6 +9,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/datastore"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -46,11 +47,11 @@ func (suite *NetconfServiceTestSuite) TestEditCommitGet() {
 	runner.One.Name = "runner:one:name"
 
 	// Edit Config
-	op := suite.NS.EditConfig(&suite.Provider, types.Candidate, &runner, "", "", "")
+	op := suite.NS.EditConfig(&suite.Provider, datastore.Candidate, &runner, "", "", "")
 	suite.Equal(op, true)
 
 	// Get Config
-	readEntity := suite.NS.GetConfig(&suite.Provider, types.Candidate, &ysanity.Runner{})
+	readEntity := suite.NS.GetConfig(&suite.Provider, datastore.Candidate, &ysanity.Runner{})
 	suite.Equal(types.EntityEqual(readEntity, &runner), true)
 
 	// Commit
@@ -63,18 +64,18 @@ func (suite *NetconfServiceTestSuite) TestEditCommitGet() {
 }
 
 func (suite *NetconfServiceTestSuite) TestLockUnlock() {
-	op := suite.NS.Lock(&suite.Provider, types.Running)
+	op := suite.NS.Lock(&suite.Provider, datastore.Running)
 	suite.Equal(op, true)
 
-	op = suite.NS.Unlock(&suite.Provider, types.Running)
+	op = suite.NS.Unlock(&suite.Provider, datastore.Running)
 	suite.Equal(op, true)
 }
 
 func (suite *NetconfServiceTestSuite) TestLockUnlockFail() {
-	op := suite.NS.Lock(&suite.Provider, types.Candidate)
+	op := suite.NS.Lock(&suite.Provider, datastore.Candidate)
 	suite.Equal(op, true)
 
-	funcDidPanic, panicValue := didPanic(func() { suite.NS.Unlock(&suite.Provider, types.Running) })
+	funcDidPanic, panicValue := didPanic(func() { suite.NS.Unlock(&suite.Provider, datastore.Running) })
 	suite.Equal(funcDidPanic, true)
 	suite.Regexp("YGOServiceProviderError:", panicValue)
 	errMsg := `<rpc-error>
@@ -86,7 +87,7 @@ func (suite *NetconfServiceTestSuite) TestLockUnlockFail() {
 }
 
 func (suite *NetconfServiceTestSuite) TestValidate() {
-	op := suite.NS.Validate(&suite.Provider, types.Candidate, nil, "")
+	op := suite.NS.Validate(&suite.Provider, datastore.Candidate, nil, "")
 	suite.Equal(op, true)
 
 	runner := ysanity.Runner{}
@@ -102,7 +103,7 @@ func (suite *NetconfServiceTestSuite) TestDiscardChanges(){
 	runner.Two.Name = "runner:two:name"
 
 	// EditConfig
-	op := suite.NS.EditConfig(&suite.Provider, types.Candidate, &runner, "", "", "")
+	op := suite.NS.EditConfig(&suite.Provider, datastore.Candidate, &runner, "", "", "")
 	suite.Equal(op, true)
 
 	// DiscardChanges
@@ -110,7 +111,7 @@ func (suite *NetconfServiceTestSuite) TestDiscardChanges(){
 	suite.Equal(op, true)
 
 	// GetConfig
-	readEntity := suite.NS.GetConfig(&suite.Provider, types.Candidate, &ysanity.Runner{})
+	readEntity := suite.NS.GetConfig(&suite.Provider, datastore.Candidate, &ysanity.Runner{})
 	suite.Equal(types.EntityEqual(readEntity, &ysanity.Runner{}), true)
 }
 
@@ -119,7 +120,7 @@ func (suite *NetconfServiceTestSuite) TestConfirmedCommit() {
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"
 
-	op := suite.NS.EditConfig(&suite.Provider, types.Candidate, &runner, "", "", "")
+	op := suite.NS.EditConfig(&suite.Provider, datastore.Candidate, &runner, "", "", "")
 	suite.Equal(op, true)
 
 	op = suite.NS.Commit(&suite.Provider, true, 120, -1, -1)
@@ -137,7 +138,7 @@ func (suite *NetconfServiceTestSuite) TestCancelCommit() {
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"
 
-	op := suite.NS.EditConfig(&suite.Provider, types.Candidate, &runner, "", "", "")
+	op := suite.NS.EditConfig(&suite.Provider, datastore.Candidate, &runner, "", "", "")
 	suite.Equal(op, true)
 
 	op = suite.NS.Commit(&suite.Provider, true, 120, -1, -1)
@@ -163,28 +164,28 @@ func (suite *NetconfServiceTestSuite) TestCopyConfig() {
 	var readEntity types.Entity
 
 	// Modify Candidate via CopyConfig from runner
-	op = suite.NS.CopyConfig(&suite.Provider, types.Candidate, -1, &runner, "")
+	op = suite.NS.CopyConfig(&suite.Provider, datastore.Candidate, -1, &runner, "")
 	suite.Equal(op, true)
 
-	readEntity = suite.NS.GetConfig(&suite.Provider, types.Candidate, &getFilter)
+	readEntity = suite.NS.GetConfig(&suite.Provider, datastore.Candidate, &getFilter)
 	suite.Equal(types.EntityEqual(readEntity, &runner), true)
 	getFilter = ysanity.Runner{}
 
 	// Modify Candidate via CopyConfig from runner
 	runner.Two.Name = fmt.Sprintf("%s_modified", runner.Two.Name)
 
-	op = suite.NS.CopyConfig(&suite.Provider, types.Candidate, -1, &runner, "")
+	op = suite.NS.CopyConfig(&suite.Provider, datastore.Candidate, -1, &runner, "")
 	suite.Equal(op, true)
 
-	readEntity = suite.NS.GetConfig(&suite.Provider, types.Candidate, &getFilter)
+	readEntity = suite.NS.GetConfig(&suite.Provider, datastore.Candidate, &getFilter)
 	suite.Equal(types.EntityEqual(readEntity, &runner), true)
 	getFilter = ysanity.Runner{}
 
 	// Modify Candidate via CopyConfig from Running
-	op = suite.NS.CopyConfig(&suite.Provider, types.Candidate, types.Running, nil, "")
+	op = suite.NS.CopyConfig(&suite.Provider, datastore.Candidate, datastore.Running, nil, "")
 	suite.Equal(op, true)
 
-	readEntity = suite.NS.GetConfig(&suite.Provider, types.Candidate, &getFilter)
+	readEntity = suite.NS.GetConfig(&suite.Provider, datastore.Candidate, &getFilter)
 	suite.Equal(types.EntityEqual(readEntity, &ysanity.Runner{}), true)
 
 	// DiscardChanges
@@ -200,10 +201,10 @@ func (suite *NetconfServiceTestSuite) TestDeleteConfig() {
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"
 
-	op := suite.NS.CopyConfig(&suite.Provider, types.Startup, -1, &runner, "")
+	op := suite.NS.CopyConfig(&suite.Provider, datastore.Startup, -1, &runner, "")
 	suite.Equal(op, true)
 
-	op = suite.NS.DeleteConfig(&suite.Provider, types.Startup, "")
+	op = suite.NS.DeleteConfig(&suite.Provider, datastore.Startup, "")
 	suite.Equal(op, true)
 }
 
@@ -211,14 +212,14 @@ func (suite *NetconfServiceTestSuite) TestCloseSession() {
 	op := suite.NS.CloseSession(&suite.Provider)
 	suite.Equal(op, true)
 
-	funcDidPanic, panicValue := didPanic(func() { suite.NS.Lock(&suite.Provider, types.Running) })
+	funcDidPanic, panicValue := didPanic(func() { suite.NS.Lock(&suite.Provider, datastore.Running) })
 	suite.Equal(funcDidPanic, true)
 	suite.Equal(panicValue, "YGOClientError: Could not send payload")
 
 	suite.Provider.Connect()
 
-	op = suite.NS.Lock(&suite.Provider, types.Running)
-	op = suite.NS.Unlock(&suite.Provider, types.Running)
+	op = suite.NS.Lock(&suite.Provider, datastore.Running)
+	op = suite.NS.Unlock(&suite.Provider, datastore.Running)
 	suite.Equal(op, true)
 }
 
@@ -226,10 +227,10 @@ func (suite *NetconfServiceTestSuite) TestCloseSession() {
 func (suite *NetconfServiceTestSuite) TestKillSession() {
 	suite.T().Skip("session-id not recognized")
 
-	op := suite.NS.Lock(&suite.Provider, types.Candidate)
+	op := suite.NS.Lock(&suite.Provider, datastore.Candidate)
 	suite.Equal(op, true)
 
-	funcDidPanic, panicValue := didPanic(func() { suite.NS.Lock(&suite.Provider, types.Candidate) })
+	funcDidPanic, panicValue := didPanic(func() { suite.NS.Lock(&suite.Provider, datastore.Candidate) })
 	suite.Equal(funcDidPanic, true)
 	suite.Regexp("<session-id>", panicValue)
 

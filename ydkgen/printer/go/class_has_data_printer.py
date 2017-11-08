@@ -52,7 +52,7 @@ class ClassDataFilterPrinter(FunctionPrinter):
     def _get_conditions(self):
         conditions = []
 
-        conditions.append('{}.YFilter != types.NotSet'.format(self.class_alias))
+        conditions.append('{}.YFilter != yfilter.NotSet'.format(self.class_alias))
 
         line = '{0}.%s != nil'.format(self.class_alias)
         conditions.extend([line % l.go_name() for l in self.leafs if not l.is_many])

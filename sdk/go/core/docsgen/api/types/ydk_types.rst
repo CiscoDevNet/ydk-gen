@@ -6,18 +6,6 @@ YDK Types
 .. go:package:: ydk/types
     :synopsis: YDK Types
 
-.. attribute:: EncodingFormat
-
-    representing the encoding format with underlying type ``int``:
-
-    .. attribute:: XML
-
-        Represented by a value of 0
-
-    .. attribute:: JSON
-
-        Represented by a value of 1
-
 .. interface
 .. go:struct:: ServiceProvider
 
@@ -27,18 +15,6 @@ YDK Types
 .. go:struct:: CodecServiceProvider
 
     TODO
-
-.. attribute:: Protocol
-
-    Represents the protocol to use using underlying type ``int``
-
-    .. attribute Restconf
-
-        Represented by a value of 0
-
-    .. attribute Netconf
-
-        Represented by a value of 1
 
 .. go:struct:: DataNode
 

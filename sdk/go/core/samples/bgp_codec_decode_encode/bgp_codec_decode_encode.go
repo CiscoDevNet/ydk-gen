@@ -32,70 +32,71 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 )
 
 const (
 	json_payload = `{
-  "openconfig-bgp:bgp": {
-    "global": {
-      "afi-safis": {
-        "afi-safi": [
-          {
-            "afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
-            "config": {
-              "afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
-              "enabled": true
-            }
-          }
-        ]
-      },
-      "config": {
-        "as": 65001
-      }
-    },
-    "neighbors": {
-      "neighbor": [
-        {
-          "neighbor-address": "2001:db8:e:1::1",
-          "config": {
-            "neighbor-address": "2001:db8:e:1::1",
-            "peer-group": "EBGP"
-          }
-        }
-      ]
-    },
-    "peer-groups": {
-      "peer-group": [
-        {
-          "peer-group-name": "EBGP",
-          "afi-safis": {
-            "afi-safi": [
-              {
-                "afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
-                "config": {
-                  "afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
-                  "enabled": true
-                },
-                "apply-policy": {
-                  "config": {
-                  }
-                }
-              }
-            ]
-          },
-          "config": {
-            "peer-as": 65002,
-            "peer-group-name": "EBGP"
-          },
-          "transport": {
-            "config": {
-              "local-address": "Lookpback0"
-            }
-          }
-        }
-      ]
-    }
-  }
+	"openconfig-bgp:bgp": {
+		"global": {
+			"afi-safis": {
+				"afi-safi": [
+					{
+						"afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
+						"config": {
+							"afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
+							"enabled": true
+						}
+					}
+				]
+			},
+			"config": {
+				"as": 65001
+			}
+		},
+		"neighbors": {
+			"neighbor": [
+				{
+					"neighbor-address": "2001:db8:e:1::1",
+					"config": {
+						"neighbor-address": "2001:db8:e:1::1",
+						"peer-group": "EBGP"
+					}
+				}
+			]
+		},
+		"peer-groups": {
+			"peer-group": [
+				{
+					"peer-group-name": "EBGP",
+					"afi-safis": {
+						"afi-safi": [
+							{
+								"afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
+								"config": {
+									"afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
+									"enabled": true
+								},
+								"apply-policy": {
+									"config": {
+									}
+								}
+							}
+						]
+					},
+					"config": {
+						"peer-as": 65002,
+						"peer-group-name": "EBGP"
+					},
+					"transport": {
+						"config": {
+							"local-address": "Lookpback0"
+						}
+					}
+				}
+			]
+		}
+	}
 }
 `
 )
@@ -116,10 +117,10 @@ func main() {
 	fmt.Println(json_payload)
 	fmt.Printf("\n========================= Encoded for Decode =========================\n")
 
-	provider.Encoding = types.JSON
+	provider.Encoding = encoding.JSON
 	entity := service.Decode(&provider, json_payload)
 	bgp := entity.(*ysanity_bgp.Bgp)
-	provider.Encoding = types.XML
+	provider.Encoding = encoding.XML
 	payload := service.Encode(&provider, bgp)
 
 	fmt.Printf("\n========================= Encoded Payload =========================\n")

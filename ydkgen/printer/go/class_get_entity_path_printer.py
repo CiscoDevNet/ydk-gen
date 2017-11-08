@@ -103,9 +103,9 @@ class GetEntityPathPrinter(FunctionPrinter):
 
     def _print_check_leaf_switch_case_block(self, leaf_var):
         self.ctx.writeln('switch %s.(type) {' % leaf_var)
-        self.ctx.writeln('case types.YFilter:')
+        self.ctx.writeln('case yfilter.YFilter:')
         self.ctx.lvl_inc()
-        fvalue = 'Filter: %s.(types.YFilter)' % leaf_var
+        fvalue = 'Filter: %s.(yfilter.YFilter)' % leaf_var
         self.ctx.writeln("leafData = types.LeafData{IsSet: true, %s}" % fvalue)
         self.ctx.lvl_dec()
 

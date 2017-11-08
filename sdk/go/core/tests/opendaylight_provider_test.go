@@ -5,7 +5,8 @@ import (
 	oc_bgp "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/openconfig_bgp"
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
-	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/protocol"
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -24,8 +25,8 @@ func (suite *OpenDaylightProviderTestSuite) SetupSuite() {
 		Username:       "admin",
 		Password:       "admin",
 		Port:           12306,
-		EncodingFormat: types.JSON,
-		Protocol:       types.Restconf}
+		EncodingFormat: encoding.JSON,
+		Protocol:       protocol.Restconf}
 	suite.Provider.Connect()
 }
 

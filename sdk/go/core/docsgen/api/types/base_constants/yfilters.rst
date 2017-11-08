@@ -3,7 +3,7 @@
 YDK Filters
 ===========
 
-.. go:package:: ydk/types
+.. go:package:: ydk/yfilter
     :synopsis: YDK Go Filters
 
 Filters represent edit operation for YDK objects as specified in

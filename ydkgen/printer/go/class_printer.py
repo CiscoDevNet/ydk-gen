@@ -85,14 +85,14 @@ class ClassPrinter(object):
     # GetFilter
     def _print_class_get_filter(self, clazz):
         fp = FunctionPrinter(self.ctx, clazz)
-        fp.print_function_header_helper('GetFilter', return_type='types.YFilter')
+        fp.print_function_header_helper('GetFilter', return_type='yfilter.YFilter')
         fp.ctx.writeln('return %s.YFilter' % fp.class_alias)
         fp.print_function_trailer()
 
     # SetFilter
     def _print_class_set_filter(self, clazz):
         fp = FunctionPrinter(self.ctx, clazz)
-        fp.print_function_header_helper('SetFilter', args='yfilter types.YFilter')
+        fp.print_function_header_helper('SetFilter', args='yfilter yfilter.YFilter')
         fp.ctx.writeln('%s.YFilter = yfilter' % fp.class_alias)
         fp.print_function_trailer()
 

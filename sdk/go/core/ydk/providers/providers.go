@@ -28,6 +28,8 @@ import (
 	"fmt"
 	"github.com/CiscoDevNet/ydk-go/ydk/path"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/protocol"
 )
 
 // OpenDaylightServiceProvider A service provider to be used to communicate with an OpenDaylight instance: https://www.opendaylight.org
@@ -37,8 +39,8 @@ type OpenDaylightServiceProvider struct {
 	Username       string
 	Password       string
 	Port           int
-	EncodingFormat types.EncodingFormat
-	Protocol       types.Protocol
+	EncodingFormat encoding.EncodingFormat
+	Protocol       protocol.Protocol
 
 	Private types.COpenDaylightServiceProvider
 	// keep alive
@@ -66,7 +68,7 @@ type RestconfServiceProvider struct {
 	Username      string
 	Password      string
 	Port          int
-	Encoding      types.EncodingFormat
+	Encoding      encoding.EncodingFormat
 	StateURLRoot  string
 	ConfigURLRoot string
 
@@ -93,7 +95,7 @@ func (provider *OpenDaylightServiceProvider) GetNodeIDs() []string {
 // GetNodeProvider returns Node provider by ID
 func (provider *OpenDaylightServiceProvider) GetNodeProvider(nodeID string) types.ServiceProvider {
 	p := path.OpenDaylightServiceProviderGetNodeProvider(&provider.State, provider.Private, nodeID)
-	if provider.Protocol == types.Restconf {
+	if provider.Protocol == protocol.Restconf {
 
 		nodeProvider := RestconfServiceProvider{Path: provider.Path, Address: provider.Address, Password: provider.Password, Username: provider.Username, Port: provider.Port}
 		path.AddCState(&nodeProvider.State)
@@ -185,7 +187,7 @@ func (provider *RestconfServiceProvider) Disconnect() {
 // CodecServiceProvider Encode and decode to XML/JSON format
 type CodecServiceProvider struct {
 	Repo     types.Repository
-	Encoding types.EncodingFormat
+	Encoding encoding.EncodingFormat
 
 	RootSchemaTable map[string]types.RootSchemaNode
 	State           types.State
@@ -210,7 +212,7 @@ func (provider *CodecServiceProvider) Initialize(entity types.Entity) {
 }
 
 // GetEncoding returns encoding format for CodecServiceProvider
-func (provider *CodecServiceProvider) GetEncoding() types.EncodingFormat {
+func (provider *CodecServiceProvider) GetEncoding() encoding.EncodingFormat {
 	return provider.Encoding
 }
 

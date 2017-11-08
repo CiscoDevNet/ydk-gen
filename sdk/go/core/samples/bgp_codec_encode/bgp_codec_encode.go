@@ -33,10 +33,11 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 )
 
 func config(bgp *ysanity_bgp.Bgp) {
-	bgp.Global.Config.As = 65001 //types.Delete
+	bgp.Global.Config.As = 65001 // yfilter.Delete
 
 	ipv6_afisafi := ysanity_bgp.Bgp_Global_AfiSafis_AfiSafi{}
 	ipv6_afisafi.AfiSafiName = &ysanity_bgp_types.Ipv6_Unicast{}
@@ -79,13 +80,13 @@ func main() {
 	if *vPtr {
 		ydk.EnableLogging(ydk.Debug)
 	}
-	var encoding types.EncodingFormat
+	var ef types.EncodingFormat
 
 	switch encoding_fmt {
 	case "xml":
-		encoding = types.XML
+		ef = encoding.XML
 	case "json":
-		encoding = types.JSON
+		ef = encoding.JSON
 	default:
 		panic("Encoding format not supported!")
 	}
@@ -94,7 +95,7 @@ func main() {
 	config(&bgp)
 
 	var provider = providers.CodecServiceProvider{}
-	provider.Encoding = encoding
+	provider.Encoding = ef
 
 	var service = services.CodecService{}
 	payload := service.Encode(&provider, &bgp)

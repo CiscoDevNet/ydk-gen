@@ -6,6 +6,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -26,7 +27,7 @@ func (suite *RestconfProviderTestSuite) SetupSuite() {
 		Username: "admin",
 		Password: "admin",
 		Port:     12306,
-		Encoding: types.JSON}
+		Encoding: encoding.JSON}
 	suite.Provider.Connect()
 }
 

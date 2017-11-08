@@ -7,6 +7,8 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/protocol"
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -101,8 +103,8 @@ func (suite *CStateErrorsTestSuite) TestOpenDaylightNotSupportedProtocol() {
 		Username:       "admin",
 		Password:       "admin",
 		Port:           12306,
-		EncodingFormat: types.XML,
-		Protocol:       types.Netconf}
+		EncodingFormat: encoding.XML,
+		Protocol:       protocol.Netconf}
 	defer odlProvider.Disconnect()
 	errMsg := "YGOServiceProviderError: Netconf protocol currently not supported"
 	assert.PanicsWithValue(suite.T(), errMsg, func() { odlProvider.Connect() })
@@ -115,8 +117,8 @@ func (suite *CStateErrorsTestSuite) TestOpenDaylightInvalidNodeID() {
 		Username:       "admin",
 		Password:       "admin",
 		Port:           12306,
-		EncodingFormat: types.JSON,
-		Protocol:       types.Restconf}
+		EncodingFormat: encoding.JSON,
+		Protocol:       protocol.Restconf}
 	defer odlProvider.Disconnect()
 	odlProvider.Connect()
 
@@ -152,7 +154,7 @@ func (suite *CStateErrorsTestSuite) TestCodecInvalidDecode1() {
 func (suite *CStateErrorsTestSuite) TestCodecInvalidDecode2() {
 	codec := services.CodecService{}
 	provider := providers.CodecServiceProvider{}
-	provider.Encoding = types.XML
+	provider.Encoding = encoding.XML
 
 	errMsg := `YGOModelError: Value "wrong router id" does not satisfy the constraint ` +
 		`"(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}` +
