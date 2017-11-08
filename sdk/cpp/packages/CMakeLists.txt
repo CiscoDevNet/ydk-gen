@@ -36,8 +36,6 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     )
 
     set (CMAKE_BUILD_TYPE "Release")
-    set (CMAKE_C_COMPILER "/usr/bin/clang")
-    set (CMAKE_CXX_COMPILER "/usr/bin/clang++")
 
     # Linux Debian
     if (${LSB_RELEASE_ID_SHORT} MATCHES "Ubuntu")

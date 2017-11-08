@@ -38,9 +38,6 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
-    set (CMAKE_C_COMPILER "/usr/bin/clang")
-    set (CMAKE_CXX_COMPILER "/usr/bin/clang++")
-
     # Linux Debian
     if (${LSB_RELEASE_ID_SHORT} MATCHES "Ubuntu")
         message("CMake System: Ubuntu")
@@ -118,7 +115,7 @@ set(HOME_DIRECTORY $ENV{HOME})
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0 -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0")
 
 
 if(CMAKE_BUILD_TYPE STREQUAL debug)

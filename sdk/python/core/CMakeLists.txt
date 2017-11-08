@@ -10,7 +10,7 @@ set(python_src python.cpp)
 # set default build type if not specified by user
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG   "-g -O0 -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS_DEBUG   "-g -O0")
 
 if(PYTHON_VERSION)
     message( "python version: ${PYTHON_VERSION}" )
