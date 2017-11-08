@@ -35,3 +35,20 @@ const (
 	Startup
 	Url
 )
+
+// String returns the name of the given YFilter (string)
+func (ds DataStore) String() string {
+	switch ds {
+	case Candidate:
+		return "candidate"
+	case Running:
+		return "running"
+	case Startup:
+		return "startup"
+	case Url:
+		return "url"
+	case NotSet:
+		return ""
+	}
+	return ""
+}

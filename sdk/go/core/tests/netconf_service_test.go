@@ -93,7 +93,7 @@ func (suite *NetconfServiceTestSuite) TestValidate() {
 	runner := ysanity.Runner{}
 	runner.One.Number = 1
 	runner.One.Name = "runner:one:name"
-	op = suite.NS.Validate(&suite.Provider, -1, &runner, "")
+	op = suite.NS.Validate(&suite.Provider, datastore.NotSet, &runner, "")
 	suite.Equal(op, true)
 }
 
@@ -164,7 +164,8 @@ func (suite *NetconfServiceTestSuite) TestCopyConfig() {
 	var readEntity types.Entity
 
 	// Modify Candidate via CopyConfig from runner
-	op = suite.NS.CopyConfig(&suite.Provider, datastore.Candidate, -1, &runner, "")
+	op = suite.NS.CopyConfig(
+		&suite.Provider, datastore.Candidate, datastore.NotSet, &runner, "")
 	suite.Equal(op, true)
 
 	readEntity = suite.NS.GetConfig(&suite.Provider, datastore.Candidate, &getFilter)
@@ -174,7 +175,8 @@ func (suite *NetconfServiceTestSuite) TestCopyConfig() {
 	// Modify Candidate via CopyConfig from runner
 	runner.Two.Name = fmt.Sprintf("%s_modified", runner.Two.Name)
 
-	op = suite.NS.CopyConfig(&suite.Provider, datastore.Candidate, -1, &runner, "")
+	op = suite.NS.CopyConfig(
+		&suite.Provider, datastore.Candidate, datastore.NotSet, &runner, "")
 	suite.Equal(op, true)
 
 	readEntity = suite.NS.GetConfig(&suite.Provider, datastore.Candidate, &getFilter)
@@ -201,7 +203,8 @@ func (suite *NetconfServiceTestSuite) TestDeleteConfig() {
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"
 
-	op := suite.NS.CopyConfig(&suite.Provider, datastore.Startup, -1, &runner, "")
+	op := suite.NS.CopyConfig(
+		&suite.Provider, datastore.Startup, datastore.NotSet, &runner, "")
 	suite.Equal(op, true)
 
 	op = suite.NS.DeleteConfig(&suite.Provider, datastore.Startup, "")

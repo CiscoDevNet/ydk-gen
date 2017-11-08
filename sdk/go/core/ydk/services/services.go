@@ -222,8 +222,8 @@ func (ns *NetconfService) CopyConfig(
 		err := types.YGOError{Msg: "url must be specified"}
 		panic(err.Error())
 	}
-	if ((sourceDS != -1 && sourceEntity != nil) ||
-		sourceDS == -1 && sourceEntity == nil) {
+	if ((sourceDS != datastore.NotSet && sourceEntity != nil) ||
+		sourceDS == datastore.NotSet && sourceEntity == nil) {
 		err := types.YGOError{
 			Msg: "sourceDS OR sourceEntity must be valid, not neither nor both"}
 		panic(err.Error())
@@ -240,7 +240,7 @@ func (ns *NetconfService) CopyConfig(
 
 	data["target/" + dsStr] = dataValue
 
-	if (sourceDS != -1){
+	if (sourceDS != datastore.NotSet){
 		dsStr, dataValue, err := getDataStoreString(sourceDS, url)
 		if err != nil {
 			errMsg := fmt.Sprintf(
@@ -470,8 +470,8 @@ func (ns *NetconfService) Validate(
 	sourceEntity types.Entity,
 	url string) bool {
 
-	if ((sourceDS != -1 && sourceEntity != nil) ||
-		sourceDS == -1 && sourceEntity == nil) {
+	if ((sourceDS != datastore.NotSet && sourceEntity != nil) ||
+		sourceDS == datastore.NotSet && sourceEntity == nil) {
 		err := types.YGOError{
 			Msg: "sourceDS OR sourceEntity must be valid, not neither nor both"}
 		panic(err.Error())
@@ -482,7 +482,7 @@ func (ns *NetconfService) Validate(
 		panic(err.Error())
 	}
 	data := map[string]interface{} {}
-	if (sourceDS != -1){
+	if (sourceDS != datastore.NotSet){
 		dsStr, dataValue, err := getDataStoreString(sourceDS, url)
 		if err != nil {
 			errMsg := fmt.Sprintf(
