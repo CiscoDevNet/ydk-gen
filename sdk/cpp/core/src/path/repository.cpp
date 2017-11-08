@@ -93,16 +93,16 @@ void libyang_log_callback(LY_LOG_LEVEL level, const char *msg, const char *path)
                     || error_message.str().find("Unexpected character")!= std::string::npos
                     || error_message.str().find("does not satisfy the constraint")!= std::string::npos)
             {
-                YLOG_ERROR("Libyang ERROR: {}", error_message.str());
+                YLOG_ERROR("Data is invalid according to the yang model. Error details: {}", error_message.str());
                 throw(YCPPModelError{});
             }
-            YLOG_ERROR("Libyang ERROR: {}", error_message.str());
+            YLOG_ERROR("Data is invalid according to the yang model. Error details: {}", error_message.str());
             break;
         case LY_LLSILENT:
         case LY_LLWRN:
         case LY_LLVRB:
         case LY_LLDBG:
-            YLOG_DEBUG("Libyang DEBUG: {}", error_message.str());
+            YLOG_DEBUG("Debug: {}", error_message.str());
             break;
     }
 }
@@ -154,7 +154,7 @@ namespace ydk {
                 sink << contents ;
                 sink.close();
             } else {
-                YLOG_INFO("Cannot sink to file {}", filename);
+                YLOG_INFO("Cannot write to file {}", filename);
             }
         }
 
@@ -166,7 +166,7 @@ namespace ydk {
             auto len = std::strlen(data);
             enlarged_data = static_cast<char*>(std::malloc((len + 2) * sizeof *enlarged_data));
             if (!enlarged_data) {
-                YLOG_ERROR("Could not get model: {}", model_name);
+                YLOG_ERROR("Could not download model: {}", model_name);
                 throw(std::bad_alloc{});
             }
             memcpy(enlarged_data, data, len);

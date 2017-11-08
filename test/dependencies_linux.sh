@@ -63,6 +63,13 @@ function install_dependencies {
     sudo ln -f -s /usr/bin/clang++-3.8 /usr/bin/clang++
     sudo ln -f -s /usr/bin/clang-3.8 /usr/bin/clang
 
+    # gcc-5 and g++5 for modern c++
+    sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+    sudo apt-get update
+    sudo apt-get install gcc-5 g++-5 -y
+    sudo ln -f -s /usr/bin/g++-5 /usr/bin/g++
+    sudo ln -f -s /usr/bin/gcc-5 /usr/bin/gcc
+
 }
 
 function install_confd {

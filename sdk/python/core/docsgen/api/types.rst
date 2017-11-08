@@ -1,5 +1,5 @@
-YDK Types --- Datatypes
-=======================
+Types
+=====
 
 .. module:: ydk.types
     :synopsis: YDK Datatypes

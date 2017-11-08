@@ -34,8 +34,6 @@
 namespace ydk
 {
 
-const char * REPO_ERROR_MSG ="Failed to initialize codec provider.";
-
 const char * PAYLOAD_ERROR_MSG ="Codec service only supports one entity per payload, please split payload";
 
 static augment_capabilities_function get_augment_capabilities_function(Entity & entity);
@@ -66,22 +64,15 @@ CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pret
         XmlSubtreeCodec codec{};
         return codec.encode(entity, root_schema);
     }
-    try
-    {
-        path::DataNode& datanode = get_data_node_from_entity(entity, root_schema);
-        const path::DataNode* dn = &datanode;
-        while(dn!= nullptr && dn->get_parent()!=nullptr)
-            dn = dn->get_parent();
-        path::Codec core_codec_service{};
-        std::string result = core_codec_service.encode(*dn, provider.m_encoding, pretty);
-        YLOG_INFO("Performing encode operation, resulting in {}", result);
-        return result;
-    }
-    catch (const YCPPInvalidArgumentError& e)
-    {
-        YLOG_ERROR(REPO_ERROR_MSG);
-        throw(YCPPServiceProviderError(REPO_ERROR_MSG));
-    }
+
+    path::DataNode& datanode = get_data_node_from_entity(entity, root_schema);
+    const path::DataNode* dn = &datanode;
+    while(dn!= nullptr && dn->get_parent()!=nullptr)
+        dn = dn->get_parent();
+    path::Codec core_codec_service{};
+    std::string result = core_codec_service.encode(*dn, provider.m_encoding, pretty);
+    YLOG_INFO("Performing encode operation, resulting in {}", result);
+    return result;
     return {};
 }
 

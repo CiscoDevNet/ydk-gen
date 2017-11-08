@@ -1,10 +1,10 @@
-YDK Exceptions
-==============
+Errors
+======
 
 .. module:: ydk.errors
     :synopsis: YDK Exceptions
 
-This module contains YDK Python exceptions classes.
+This module contains YDK Python errors classes. These errors are thrown in case of data not conforming to the yang model or due to a server-side error.
 
 .. py:exception:: YPYError
 
@@ -12,11 +12,23 @@ This module contains YDK Python exceptions classes.
 
     Base class for YPY Errors. The subclasses give a specialized view of the error that has occurred.
 
+.. py:exception:: YPYModelError
+
+    Bases: :exc:`ydk.errors.YPYError`
+
+    Model Error. Thrown when a model constraint is violated.
+
+.. py:exception:: YPYServiceProviderError
+
+    Bases: :exc:`ydk.errors.YPYError`
+
+    Exception for Service Provider. Thrown in case of a server-side error.
+
 .. py:exception:: YPYClientError
 
     Bases: :exc:`ydk.errors.YPYError`
 
-    Exception for Client Side Validation
+    Exception for client connection
 
 .. py:exception:: YPYIllegalStateError
 
@@ -30,12 +42,6 @@ This module contains YDK Python exceptions classes.
 
     Invalid Argument. Use the error_msg for the error.
 
-.. py:exception:: YPYModelError
-
-    Bases: :exc:`ydk.errors.YPYError`
-
-    Model Error. Thrown when a model constraint is violated.
-
 .. py:exception:: YPYOperationNotSupportedError
 
     Bases: :exc:`ydk.errors.YPYError`
@@ -48,9 +54,4 @@ This module contains YDK Python exceptions classes.
 
     Exception for Service Side Validation
 
-.. py:exception:: YPYServiceProviderError
-
-    Bases: :exc:`ydk.errors.YPYError`
-
-    Exception for Provider Side Validation
 

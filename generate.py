@@ -56,8 +56,10 @@ def print_about_page(ydk_root, py_api_doc_gen, release, is_bundle):
     commit_id = str(repo.head.commit)
 
     if language == 'python':
+        lang = 'py'
         code_block_language = 'sh'
     elif language in ('cpp', 'go') :
+        lang = language
         code_block_language = 'bash'
     else:
         raise Exception('Language {0} not yet supported'.format(language))
@@ -73,7 +75,7 @@ def print_about_page(ydk_root, py_api_doc_gen, release, is_bundle):
     if 'version-id' in lines:
         lines = lines.replace('version-id', '{}'.format(release.replace('release=', '')))
     if 'language-version' in lines:
-        lines = lines.replace('language-version', language)
+        lines = lines.replace('language-version', lang)
     if 'code-block-language' in lines:
         lines = lines.replace('code-block-language', code_block_language)
     with open(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'w+') as fd:

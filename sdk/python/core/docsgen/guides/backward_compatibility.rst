@@ -1,6 +1,6 @@
 .. _compatibility:
 
-Backward Compatibility Notes
+Backward compatibility notes
 =============================
 
 .. contents:: Table of Contents
@@ -25,3 +25,26 @@ API Changes
 3. When using YDK's :ref:`howto-logging`, the suggested level to be used is ``INFO``
 4. The type names of ``enumerations`` and ``identities`` no longer have ``Enum`` or ``Identity`` in their names. For example, the  identity ``InterfaceTypeIdentity`` in ``ydk.models.ietf.ietf_interfaces`` is now renamed to just :py:class:`InterfaceType<ydk.models.ietf.ietf_interfaces.InterfaceType>`.
 5. The ``is_config()`` method is no longer available for the YDK model APIs. This may be added back in a future release.
+6. For ``CRUDService`` and other services, using a child container or list, which is not the top-level node in a yang model is no longer supported. For example:
+
+.. code-block:: python
+    :linenos:
+
+    from ydk.models.cisco_ios_xe import Cisco_IOS_XE_bgp_oper as bgp_oper
+
+    # connect to provider etc ...
+
+    neighbors = bgp_oper.BgpStateData.Neighbors()
+    crud.read(provider, neighbors)
+
+now has to be changed to:
+
+.. code-block:: python
+    :linenos:
+
+    from ydk.models.cisco_ios_xe import Cisco_IOS_XE_bgp_oper as bgp_oper
+
+    # connect to provider etc ...
+
+    bgp_state = bgp_oper.BgpStateData()
+    crud.read(provider, bgp_state)

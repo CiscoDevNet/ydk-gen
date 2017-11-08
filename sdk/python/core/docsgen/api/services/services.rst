@@ -1,7 +1,7 @@
 .. _ref-service:
 
-YDK Services
-============
+Services
+========
 
 .. toctree::
    :maxdepth: 2

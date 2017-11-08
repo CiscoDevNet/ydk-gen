@@ -45,7 +45,7 @@ namespace path
 static const std::string default_capabilities_url = "/ietf-restconf-monitoring:restconf-state/capabilities";
 
 static std::shared_ptr<path::DataNode> handle_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding);
-static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_schema, const string & yfilter);
+static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_schema, const string & operation);
 static string get_encoding_string(EncodingFormat encoding);
 
 static bool is_config(path::Rpc & rpc);
@@ -178,7 +178,7 @@ std::shared_ptr<path::DataNode> RestconfSession::handle_read(path::Rpc& rpc) con
     return handle_read_reply( client->execute("GET", url, ""), *root_schema, encoding);
 }
 
-std::shared_ptr<path::DataNode> RestconfSession::handle_edit(path::Rpc& rpc, const string & yfilter) const
+std::shared_ptr<path::DataNode> RestconfSession::handle_edit(path::Rpc& rpc, const string & operation) const
 {
     path::Codec codec_service{};
     auto entity = rpc.get_input_node().find("entity");
@@ -193,8 +193,8 @@ std::shared_ptr<path::DataNode> RestconfSession::handle_edit(path::Rpc& rpc, con
     auto datanode = codec_service.decode(*root_schema, header_data, encoding);
     string url = config_url_root + get_module_url_path(datanode->get_children()[0]->get_schema_node().get_path());
 
-    YLOG_INFO("Performing {} on URL {}. Payload: {}", yfilter, url, header_data);
-    client->execute(yfilter, url, header_data);
+    YLOG_INFO("Performing {} on URL {}. Payload: {}", operation, url, header_data);
+    client->execute(operation, url, header_data);
 
     return nullptr;
 }
@@ -212,13 +212,13 @@ static std::shared_ptr<path::DataNode> handle_read_reply(const string & reply, p
     return datanode;
 }
 
-static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_schema, const string & yfilter)
+static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_schema, const string & operation)
 {
-    auto c = root_schema.find(yfilter);
+    auto c = root_schema.find(operation);
     if(c.empty())
     {
-        YLOG_ERROR("{} rpc schema not found!", yfilter);
-        throw(YCPPIllegalStateError{yfilter + " rpc schema not found!"});
+        YLOG_ERROR("{} rpc schema not found!", operation);
+        throw(YCPPIllegalStateError{operation + " rpc schema not found!"});
     }
     return c[0];
 }

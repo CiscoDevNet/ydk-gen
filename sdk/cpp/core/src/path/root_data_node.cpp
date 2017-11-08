@@ -76,14 +76,14 @@ ydk::path::RootDataImpl::create_datanode(const std::string& path, const std::str
     //path should not start with /
     if(path.at(0) == '/')
     {
-        YLOG_ERROR("Path '{}' starts with /", path);
-        throw(YCPPInvalidArgumentError{"Path starts with /"});
+        YLOG_ERROR("Path '{}' should not start with /", path);
+        throw(YCPPInvalidArgumentError{"Path should not start with /"});
     }
     std::vector<std::string> segments = segmentalize(path);
     if(segments.size()<=0)
     {
-        YLOG_ERROR("Could not segmentalize");
-        throw(YCPPInvalidArgumentError{"Could not segmentalize"});
+        YLOG_ERROR("Could not segmentalize path");
+        throw(YCPPInvalidArgumentError{"Could not segmentalize path"});
     }
 
     std::string start_seg = m_path + segments[0];

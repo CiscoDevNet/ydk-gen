@@ -224,7 +224,7 @@ std::shared_ptr<path::DataNode> NetconfSession::handle_netconf_operation(path::R
     }
     if(reply.find("<ok/>") == std::string::npos)
     {
-        YLOG_ERROR("No ok in reply ");
+        YLOG_ERROR("The reply from the device is not OK");
         throw(YCPPServiceProviderError{reply});
     }
     return nullptr;
@@ -388,7 +388,7 @@ static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfCl
 {
     if(reply.find("<ok/>") == std::string::npos)
     {
-        YLOG_ERROR("No ok in reply received from device");
+        YLOG_ERROR("The reply from the device is not OK");
         throw(YCPPServiceProviderError{reply});
     }
 

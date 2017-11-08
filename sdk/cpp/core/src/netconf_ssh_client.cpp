@@ -170,12 +170,12 @@ void NetconfSSHClient::clb_print(NC_VERB_LEVEL level, const char* msg)
     switch (level)
     {
     case NC_VERB_ERROR:
-         YLOG_ERROR("libnetconf ERROR: {}", msg);
+         YLOG_ERROR("Connection error occurred: {}", msg);
         break;
     case NC_VERB_WARNING:
     case NC_VERB_VERBOSE:
     case NC_VERB_DEBUG:
-        YLOG_DEBUG("libnetconf TRACE: {}", msg);
+        YLOG_DEBUG("Trace: {}", msg);
         break;
     }
 }
@@ -223,7 +223,7 @@ int NetconfSSHClient::clb_ssh_host_authenticity_check(const char *hostname,
     return EXIT_SUCCESS;
 }
 
-void NetconfSSHClient::perform_session_check(string message)
+void NetconfSSHClient::perform_session_check(const string & message)
 {
     if (session == NULL)
     {

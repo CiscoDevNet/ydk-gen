@@ -1,5 +1,5 @@
-Using OpenDaylight with YDK
-============================
+How do I use OpenDaylight with YDK?
+===================================
 .. contents::
 
 YDK makes it easy to interact with OpenDaylight programmatically using the YANG model APIs.
@@ -9,7 +9,7 @@ Applications can be written using the Python model API in conjunction with a ser
 Writing the app
 ---------------
 
-In this example, we set some BGP configuration using the Cisco IOS XR model, the :py:class:`CRUD (Create/Read/Update/Delete) service<ydk.services.CRUDService>` and the :py:class:`OpenDaylightServiceProvider<ydk.providers.OpendaylightServiceProvider>`. The example in this document is a simplified version of the more complete sample that is available in ``core/samples/bgp_xr_opendaylight.py``. Assuming you have performed the ``core`` and ``cisco-ios-xr`` bundle installations first(see :ref:`howto-install`), more complete sample can be run with the below steps:
+In this example, we set some BGP configuration using the Cisco IOS XR model, the :py:class:`CRUD (Create/Read/Update/Delete) service<ydk.services.CRUDService>` and the :py:class:`OpenDaylightServiceProvider<ydk.providers.OpendaylightServiceProvider>`. The example in this document is a simplified version of the more complete sample that is available in ``core/samples/bgp_xr_opendaylight.py``. Assuming you have performed the ``core`` and ``cisco-ios-xr`` bundle installations first(see :ref:`howto-install`), the more complete sample can be run with the below steps:
 
 .. code-block:: sh
 

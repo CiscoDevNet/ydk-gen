@@ -151,7 +151,7 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
         {
             if (r[0] == nullptr)
             {
-                YLOG_ERROR("Invalid data node");
+                YLOG_ERROR("Invalid data node: {}", path);
                 throw(YCPPCoreError{"Invalid data node"});
             }
             dn = dynamic_cast<DataNodeImpl*>(r[0].get());
@@ -170,7 +170,7 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
 
     if (segments.empty())
     {
-        YLOG_ERROR("Path points to existing node", path);
+        YLOG_ERROR("Path points to existing node: {}", path);
         throw(YCPPInvalidArgumentError{"Path points to existing node: " + path});
     }
 

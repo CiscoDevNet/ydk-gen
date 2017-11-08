@@ -17,3 +17,5 @@ Contents:
    getting_started.rst
    developer_guide.rst
    api_guide.rst
+   faq.rst
+

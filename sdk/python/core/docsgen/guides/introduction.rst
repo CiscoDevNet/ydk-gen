@@ -46,7 +46,7 @@ YDK performs the below actions when running this application:
  5. Raise python exceptions for any errors that occurred
 
 
-Service Providers
+Service providers
 -----------------
 The first step in any application is to create a service provider instance. In this case, the NETCONF service provider (defined in :py:class:`NetconfServiceProvider<ydk.providers.NetconfServiceProvider>`) is responsible for mapping between the CRUD service API and the underlying manageability protocol (NETCONF RPCs).
 

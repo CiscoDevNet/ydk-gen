@@ -300,13 +300,13 @@ ydk::path::RootSchemaNodeImpl::find(const std::string& path)
     populate_new_schemas_from_path(path);
 
     if(path.empty()) {
-        YLOG_ERROR("path is empty");
+        YLOG_ERROR("Path is empty");
         throw(YCPPInvalidArgumentError{"path is empty"});
     }
 
     //has to be a relative path
     if(path.at(0) == '/') {
-        YLOG_ERROR("path must be a relative path");
+        YLOG_ERROR("Path must be a relative path");
         throw(YCPPInvalidArgumentError{"path must be a relative path"});
     }
 

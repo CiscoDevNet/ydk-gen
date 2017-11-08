@@ -76,7 +76,7 @@ private:
     nc_rpc* build_rpc_request(const std::string & payload);
     std::string process_rpc_reply(int reply_type, const nc_reply* reply);
     void init_capabilities();
-    void perform_session_check(std::string message);
+    void perform_session_check(const std::string & message);
 
 private:
     struct nc_session *session;

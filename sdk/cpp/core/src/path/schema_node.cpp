@@ -131,7 +131,7 @@ ydk::path::SchemaNodeImpl::find(const std::string& path)
     //has to be a relative path
     if(path.at(0) == '/')
     {
-        YLOG_ERROR("path must be a relative path");
+        YLOG_ERROR("Path must be a relative path");
         throw(YCPPInvalidArgumentError{"path must be a relative path"});
     }
 

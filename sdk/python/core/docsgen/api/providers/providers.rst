@@ -1,7 +1,7 @@
 .. _ydk-providers:
 
-YDK Service Providers
-=====================
+Service Providers
+=================
 
 .. toctree::
    :maxdepth: 2

@@ -9,4 +9,4 @@ YDK API
     providers/providers.rst
     filters.rst
     types.rst
-    exceptions.rst
+    errors.rst
