@@ -36,7 +36,7 @@ Also, the pypi page provides some information about this under the “Requires D
 
 Also, we use the `ydk-gen <https://github.com/CiscoDevNet/ydk-gen>`_ tool to generate the bundles. This tool is available for anyone to use in order to generate the bundle version in combination with ydk core version of their choice. For example, the below steps will generate & install the ``cisco-ios-xr 6.3.1`` bundle compatible with ``ydk core 0.6.2`` (assuming you have already installed the `system dependencies <https://github.com/CiscoDevNet/ydk-py#system-requirements>`_):
 
-1) Install libydk (taking CentOS as example)
+1) Install libydk (taking CentOS as example. For other OS, please see `here <https://github.com/CiscoDevNet/ydk-py#quick-install>`_)
 
 .. code-block:: sh
     :linenos:
