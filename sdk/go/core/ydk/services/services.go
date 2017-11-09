@@ -36,12 +36,11 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strconv"
-	"errors"
 	"github.com/CiscoDevNet/ydk-go/ydk"
 	"github.com/CiscoDevNet/ydk-go/ydk/path"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
 	"github.com/CiscoDevNet/ydk-go/ydk/types/datastore"
-	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
+	encodingFmt "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 )
 
 // CrudService supports CRUD operations on entities.
@@ -217,6 +216,11 @@ func (ns *NetconfService) CopyConfig(
 	url string) bool {
 
 	// target/source options: candidate | running | startup | url
+	if (target == datastore.NotSet) {
+		err := types.YGOError{Msg: "You must select target"}
+		panic(err.Error())
+	}
+
 	if ((target == datastore.Url ||
 		sourceDS == datastore.Url) && len(url) == 0){
 		err := types.YGOError{Msg: "url must be specified"}
@@ -230,24 +234,13 @@ func (ns *NetconfService) CopyConfig(
 	}
 
 	data := map[string]interface{} {}
-	dsStr, dataValue, err := getDataStoreString(target, url)
-	if err != nil {
-		errMsg := fmt.Sprintf(
-			"target: %v is not a valid DataStore value", target)
-		err := types.YGOError{Msg: errMsg}
-		panic(err.Error())
-	}
-
+	dsStr := target.String()
+	dataValue := getDataValue(dsStr, url)
 	data["target/" + dsStr] = dataValue
 
 	if (sourceDS != datastore.NotSet){
-		dsStr, dataValue, err := getDataStoreString(sourceDS, url)
-		if err != nil {
-			errMsg := fmt.Sprintf(
-				"sourceDS: %v is not a valid DataStore value", sourceDS)
-			err := types.YGOError{Msg: errMsg}
-			panic(err.Error())
-		}
+		dsStr = sourceDS.String()
+		dataValue = getDataValue(dsStr, url)
 		data["source/" + dsStr] = dataValue
 	} else {
 		data["source/config"] = sourceEntity
@@ -267,13 +260,8 @@ func (ns *NetconfService) DeleteConfig(
 	url string) bool {
 
 	// target options: startup | url
-	dsStr, dataValue, err := getDataStoreString(target, url)
-	if err != nil {
-		errMsg := fmt.Sprintf(
-			"target: %v is not a valid DataStore value", target)
-		err := types.YGOError{Msg: errMsg}
-		panic(err.Error())
-	}
+	dsStr := target.String()
+	dataValue := getDataValue(dsStr, url)
 	if (target == datastore.Candidate || target == datastore.Running ||
 		target == datastore.Url && len(url) == 0){
 
@@ -313,13 +301,9 @@ func (ns *NetconfService) EditConfig(
 	defaultOper, testOp, errorOp string) bool {
 
 	// target options: candidate | running
-	dsStr, dataValue, err := getDataStoreString(target, "")
-	if err != nil {
-		errMsg := fmt.Sprintf(
-			"target: %v is not a valid DataStore value", target)
-		err := types.YGOError{Msg: errMsg}
-		panic(err.Error())
-	}
+	dsStr := target.String()
+	dataValue := ""
+
 	if (target == datastore.Url || target == datastore.Startup){
 		errMsg := fmt.Sprintf(
 			"target: %v can only be Candidate or Running", dsStr)
@@ -357,13 +341,9 @@ func (ns *NetconfService) GetConfig(
 	filter types.Entity) types.Entity {
 
 	// source options: candidate | running | startup
-	dsStr, dataValue, err := getDataStoreString(source, "")
-	if err != nil {
-		errMsg := fmt.Sprintf(
-			"source: %v is not a valid DataStore value", source)
-		err := types.YGOError{Msg: errMsg}
-		panic(err.Error())
-	}
+	dsStr := source.String()
+	dataValue := ""
+
 	if (source == datastore.Url){
 		errMsg := fmt.Sprintf(
 			"source: %v can only be Candidate, Running, or Startup", dsStr)
@@ -413,13 +393,9 @@ func (ns *NetconfService) KillSession(
 func (ns *NetconfService) Lock(
 	provider types.ServiceProvider, target datastore.DataStore) bool {
 	// target options: candidate | running | startup
-	dsStr, dataValue, err := getDataStoreString(target, "")
-	if err != nil {
-		errMsg := fmt.Sprintf(
-			"target: %v is not a valid DataStore value", target)
-		err := types.YGOError{Msg: errMsg}
-		panic(err.Error())
-	}
+	dsStr := target.String()
+	dataValue := ""
+
 	if (target == datastore.Url){
 		err := types.YGOError{Msg: "url must be specified"}
 		panic(err.Error())
@@ -438,13 +414,9 @@ func (ns *NetconfService) Unlock(
 	provider types.ServiceProvider, target datastore.DataStore) bool {
 
 	// target options: candidate | running | startup
-	dsStr, dataValue, err := getDataStoreString(target, "")
-	if err != nil {
-		errMsg := fmt.Sprintf(
-			"target: %v is not a valid DataStore value", target)
-		err := types.YGOError{Msg: errMsg}
-		panic(err.Error())
-	}
+	dsStr := target.String()
+	dataValue := ""
+
 	if (target == datastore.Url){
 		err := types.YGOError{Msg: "url must be specified"}
 		panic(err.Error())
@@ -483,14 +455,8 @@ func (ns *NetconfService) Validate(
 	}
 	data := map[string]interface{} {}
 	if (sourceDS != datastore.NotSet){
-		dsStr, dataValue, err := getDataStoreString(sourceDS, url)
-		if err != nil {
-			errMsg := fmt.Sprintf(
-				"sourceDS: %v is not a valid DataStore value", sourceDS)
-			err := types.YGOError{Msg: errMsg}
-			panic(err.Error())
-		}
-
+		dsStr := sourceDS.String()
+		dataValue := getDataValue(dsStr, url)
 		data["source/" + dsStr] = dataValue
 	} else {
 		data["source/config"] = sourceEntity
@@ -501,21 +467,11 @@ func (ns *NetconfService) Validate(
 	return operationSucceeded(readDataNode)
 }
 
-func getDataStoreString(
-	ds datastore.DataStore, url string) (string, string, error) {
-
-	switch ds {
-	case datastore.Candidate:
-		return "candidate", "", nil
-	case datastore.Running:
-		return "running", "", nil
-	case datastore.Startup:
-		return "startup", "", nil
-	case datastore.Url:
-		return "url", url, nil
+func getDataValue(dataStoreStr, url string) string {
+	if (dataStoreStr == "url") {
+		return url
 	}
-
-	return "", "", errors.New("ds is not a valid DataStore value")
+	return ""
 }
 
 func operationSucceeded(node types.DataNode) bool {
@@ -526,11 +482,11 @@ func getEntityLookupKey(
 	provider types.CodecServiceProvider, payload string) string {
 
 	var nmsp string
-	ef := provider.GetEncoding()
+	encoding := provider.GetEncoding()
 
-	switch ef {
+	switch encoding {
 
-	case encoding.XML:
+	case encodingFmt.XML:
 		fmt.Println("Using XML encoding...")
 
 		type XMLObj struct {
@@ -546,7 +502,7 @@ func getEntityLookupKey(
 
 		nmsp = fmt.Sprintf("%v", xmlObj.XMLName)
 
-	case encoding.JSON:
+	case encodingFmt.JSON:
 		fmt.Println("Using JSON encoding...")
 
 		var jsonObj interface{}

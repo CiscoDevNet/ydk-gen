@@ -24,6 +24,11 @@
  */
 package datastore
 
+import (
+	"fmt"
+	"github.com/CiscoDevNet/ydk-go/ydk/types"
+)
+
 // DataStore is a complete set of configuration data that is required to get a
 // device from its initial default state into a desired operational state
 type DataStore int
@@ -50,5 +55,8 @@ func (ds DataStore) String() string {
 	case NotSet:
 		return ""
 	}
-	return ""
+
+	errMsg := fmt.Sprintf("%v is not a valid DataStore value", ds)
+	err := types.YGOError{Msg: errMsg}
+	panic(err.Error())
 }
