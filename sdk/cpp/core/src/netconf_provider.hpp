@@ -44,6 +44,23 @@ public:
                                bool on_demand = true,
                                bool common_cache = false,
                                int timeout = -1);
+
+        NetconfServiceProvider(path::Repository& repo,
+                               const std::string& address,
+                               const std::string& username,
+                               const std::string& private_key_path,
+                               const std::string& public_key_path,
+                               int port = 830,
+                               bool on_demand = true,
+                               int timeout = -1);
+        NetconfServiceProvider(const std::string& address,
+                               const std::string& username,
+                               const std::string& private_key_path,
+                               const std::string& public_key_path,
+                               int port = 830,
+                               bool on_demand = true,
+                               bool common_cache = false,
+                               int timeout = -1);
         ~NetconfServiceProvider();
         EncodingFormat get_encoding() const;
         const path::Session& get_session() const;

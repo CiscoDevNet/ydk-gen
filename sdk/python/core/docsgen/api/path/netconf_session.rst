@@ -5,17 +5,18 @@ NetconfSession
     :synopsis: NetconfSession
 
 
-.. py:class:: NetconfSession(address, usename, password, port=830, protocol="ssh", on_demand=True, common_cache=False, int timeout=-1, repo=None)
+.. py:class:: NetconfSession(address, usename, password, port=830, on_demand=True, common_cache=False, int timeout=-1, repo=None, private_key_path="", public_key_path="")
 
     :param address: (``str``) IP address of the device supporting a netconf interface.
     :param username: (``str``) Username to log in to the device.
-    :param password: (``str``) Password to log in to the device.
+    :param password: (``str``) Password to log in to the device
     :param port: (``int``) Device port used to access the netconf interface. Default value is 830.
-    :param protocol: (``str``) ``ssh`` or ``tcp``.
     :param on_demand: (``bool``) On demand model downloading by default.
     :param common_cache: (``bool``) Use common cache directory if enabled.
     :param timeout: (``int``) The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
     :param repo: (:py:class:`Repository<Repository>`) User customized repository.
+    :param private_key_path: (``str``) Path to private key file. Requires public_key_path field. Doesn't allow password field.
+    :param public_key_path: (``str``) Path to public key file. Requires private_key_path field. Doesn't allow password field.
 
     .. py:method:: get_root_schema()
 

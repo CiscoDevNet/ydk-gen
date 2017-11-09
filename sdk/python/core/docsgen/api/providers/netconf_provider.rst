@@ -2,7 +2,7 @@ NETCONF Service Provider
 ========================
 
 
-.. py:class:: ydk.providers.NetconfServiceProvider(address, username, password, port=830, protocol='ssh', timeout=-1, repo=None)
+.. py:class:: ydk.providers.NetconfServiceProvider(address, username, password, port=830, protocol='ssh', timeout=-1, repo=None, private_key_path="", public_key_path="")
 
     Constructs an instance of the ``NetconfServiceProvider`` to connect to a server which **has** to support model download. Since the class is a Python wrapper for C++ ``NetconfServiceProvider`` class, which has clean up methods implemented in its destructor. The user does not need to worry about close NETCONF session.
 
@@ -14,6 +14,8 @@ NETCONF Service Provider
     :param timeout: (``int``) The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
     :param repo: User provided repository stores cached models
     :type repo: :py:class:`Repository<ydk.path.Repository>`
+    :param private_key_path: (``str``) Path to private key file. Requires public_key_path field. Doesn't allow password field.
+    :param public_key_path: (``str``) Path to public key file. Requires private_key_path field. Doesn't allow password field.
 
     .. py:method:: get_encoding()
 

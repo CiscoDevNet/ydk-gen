@@ -66,6 +66,34 @@ NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo,
 {
 }
 
+NetconfServiceProvider::NetconfServiceProvider(path::Repository & repo,
+                                               const string& address,
+                                               const string& username,
+                                               const string& private_key_path,
+                                               const string& public_key_path,
+                                               int port,
+                                               bool on_demand,
+                                               int timeout)
+    : session{
+        repo, address, username, private_key_path, public_key_path,
+        port, on_demand, timeout }
+{
+}
+
+NetconfServiceProvider::NetconfServiceProvider(const string& address,
+                                               const string& username,
+                                               const string& private_key_path,
+                                               const string& public_key_path,
+                                               int port,
+                                               bool on_demand,
+                                               bool common_cache,
+                                               int timeout)
+    : session{ 
+        address, username, private_key_path, public_key_path,
+        port, on_demand, common_cache, timeout }
+{
+}
+
 NetconfServiceProvider::~NetconfServiceProvider()
 {
 }

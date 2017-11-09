@@ -208,6 +208,7 @@ function py_sanity_ydktest_test_netconf_ssh {
     run_test sdk/python/core/tests/test_sanity_levels.py
     run_test sdk/python/core/tests/test_sanity_netconf.py
     run_test sdk/python/core/tests/test_sanity_path.py
+    run_test sdk/python/core/tests/test_netconf_provider.py
     run_test sdk/python/core/tests/test_sanity_service_errors.py
     run_test sdk/python/core/tests/test_sanity_type_mismatch_errors.py
     run_test sdk/python/core/tests/test_sanity_types.py
@@ -221,6 +222,7 @@ function py_sanity_ydktest_test_netconf_ssh {
     run_test sdk/python/core/tests/test_sanity_levels.py --non-demand
     run_test sdk/python/core/tests/test_sanity_netconf.py --non-demand
     run_test sdk/python/core/tests/test_sanity_path.py --non-demand
+    run_test sdk/python/core/tests/test_netconf_provider.py --non-demand
     run_test sdk/python/core/tests/test_sanity_service_errors.py --non-demand
     run_test sdk/python/core/tests/test_sanity_type_mismatch_errors.py --non-demand
     run_test sdk/python/core/tests/test_sanity_types.py --non-demand
@@ -401,6 +403,10 @@ function cpp_sanity_ydktest_gen_install {
 
 function cpp_sanity_ydktest_test {
     print_msg "Running cpp bundle tests"
+
+    mkdir -p /var/confd/homes/admin/.ssh
+    touch /var/confd/homes/admin/.ssh/authorized_keys
+    cat $YDKGEN_HOME/sdk/cpp/tests/ssh_host_rsa_key.pub >> /var/confd/homes/admin/.ssh/authorized_keys
 
     mkdir -p $YDKGEN_HOME/sdk/cpp/tests/build && cd sdk/cpp/tests/build
     run_exec_test cmake -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ ..

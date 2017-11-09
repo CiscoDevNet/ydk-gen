@@ -68,6 +68,36 @@ NetconfSSHClient::NetconfSSHClient(
     session=NULL;
 }
 
+NetconfSSHClient::NetconfSSHClient(
+    string username,
+    string private_key_path,
+    string public_key_path,
+    string server_ip,
+    int port,
+    int timeout
+):
+    NetconfClient(),
+    username(username),
+    private_key_path(private_key_path),
+    public_key_path(public_key_path),
+    hostname(server_ip),
+    port(port),
+    timeout(timeout)
+{
+    nc_verbosity(NC_VERB_DEBUG);
+    nc_callback_print(clb_print);
+    nc_callback_sshauth_password(clb_set_password);
+    nc_callback_sshauth_interactive(clb_set_interactive);
+    nc_callback_sshauth_passphrase(clb_set_passphrase);
+    nc_callback_ssh_host_authenticity_check(clb_ssh_host_authenticity_check);
+    nc_ssh_pref(NC_SSH_AUTH_PUBLIC_KEYS, 100);
+    nc_session_transport(NC_TRANSPORT_SSH);
+
+    nc_set_keypair_path(private_key_path.c_str(), public_key_path.c_str());
+    // password_lookup.insert(make_pair(make_pair(username, hostname), password));
+    session=NULL;
+}
+
 
 int NetconfSSHClient::connect()
 {

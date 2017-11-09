@@ -84,7 +84,7 @@ NetconfSession::NetconfSession(path::Repository & repo,
                                int timeout)
 {
     initialize_client(address, username, password, port, protocol, timeout);
-    initialize(repo, on_demand);
+    initialize_repo(repo, on_demand);
     YLOG_INFO("Connected to {} on port {} using {} with timeout of {}", address, port, protocol, timeout);
 }
 
@@ -100,8 +100,57 @@ NetconfSession::NetconfSession(const string& address,
     initialize_client(address, username, password, port, protocol, timeout);
     auto caching_option = common_cache ? path::ModelCachingOption::COMMON : path::ModelCachingOption::PER_DEVICE;
     path::Repository repo(caching_option);
-    initialize(repo, on_demand);
+    initialize_repo(repo, on_demand);
     YLOG_INFO("Connected to {} on port {} using {} with timeout of {}", address, port, protocol, timeout);
+}
+
+// todo: decide whether or not to add TWO more signatures for 
+//       constructor to match above or just ONE more signature (go style)
+
+NetconfSession::NetconfSession(path::Repository& repo,
+                               const string& address,
+                               const string& username,
+                               const string& private_key_path,
+                               const string& public_key_path,
+                               int port,
+                               bool on_demand,
+                               int timeout)
+{
+    initialize_client_with_key(address, username, private_key_path, public_key_path,
+        port, timeout);
+    initialize_repo(repo, on_demand);
+   YLOG_INFO("Connected to {} on port {} using SSH with timeout of {}",
+       address, port, timeout);
+}
+
+NetconfSession::NetconfSession(const string& address,
+                               const string& username,
+                               const string& private_key_path,
+                               const string& public_key_path,
+                               int port,
+                               bool on_demand,
+                               bool common_cache,
+                               int timeout)
+{
+    initialize_client_with_key(address, username, private_key_path, public_key_path,
+        port, timeout);
+    auto caching_option = common_cache ? path::ModelCachingOption::COMMON : path::ModelCachingOption::PER_DEVICE;
+    path::Repository repo(caching_option);
+    initialize_repo(repo, on_demand);
+   YLOG_INFO("Connected to {} on port {} using SSH with timeout of {}",
+       address, port, timeout);
+}
+
+void NetconfSession::initialize_client_with_key(const string& address,
+                                       const string& username,
+                                       const string& private_key_path,
+                                       const string& public_key_path,
+                                       int port,
+                                       int timeout)
+{
+    client = make_unique<NetconfSSHClient>(
+        username, private_key_path, public_key_path, address, port, timeout);
+    model_provider = make_unique<NetconfModelProvider>(*client);
 }
 
 void NetconfSession::initialize_client(const string& address,
@@ -127,7 +176,7 @@ void NetconfSession::initialize_client(const string& address,
     model_provider = make_unique<NetconfModelProvider>(*client);
 }
 
-void NetconfSession::initialize(path::Repository & repo, bool on_demand)
+void NetconfSession::initialize_repo(path::Repository & repo, bool on_demand)
 {
     IetfCapabilitiesParser capabilities_parser{};
     client->connect();

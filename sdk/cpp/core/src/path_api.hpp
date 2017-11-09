@@ -1023,6 +1023,36 @@ public:
                    bool common_cache = false,
                    int timeout = -1);
 
+    // constructor(s) for key based authentication
+    NetconfSession(Repository& repo,
+                   const std::string& address,
+                   const std::string& username,
+                   const std::string& private_key_path,
+                   const std::string& public_key_path,
+                   int port = 830,
+                   bool on_demand = true,
+                   int timeout = -1);
+
+    NetconfSession(const std::string& address,
+                   const std::string& username,
+                   const std::string& private_key_path,
+                   const std::string& public_key_path,
+                   int port = 830,
+                   bool on_demand = true,
+                   bool common_cache = false,
+                   int timeout = -1);
+
+    // NetconfSession(
+    //     const std::string& address,
+    //     const std::string& username,
+    //     Repository& repo = "",
+    //     const std::string& private_key_path = "",
+    //     const std::string& public_key_path = "",
+    //     int port = 830,
+    //     bool on_demand = true,
+    //     bool common_cache = false,
+    //     int timeout = -1);
+
     virtual ~NetconfSession();
 
     virtual RootSchemaNode& get_root_schema() const;
@@ -1034,13 +1064,19 @@ private:
         Rpc& rpc, Annotation ann) const;
     std::shared_ptr<DataNode> handle_read(Rpc& rpc) const;
     std::shared_ptr<DataNode> handle_netconf_operation(Rpc& ydk_rpc) const;
-    void initialize(Repository& repo, bool on_demand);
+    void initialize_client_with_key(const std::string& address,
+                                    const std::string& username,
+                                    const std::string& private_key_path,
+                                    const std::string& public_key_path,
+                                    int port,
+                                    int timeout);
     void initialize_client(const std::string& address,
                            const std::string& username,
                            const std::string& password,
                            int port,
                            const std::string& protocol,
                            int timeout);
+    void initialize_repo(Repository& repo, bool on_demand);
     std::string execute_payload(const std::string & payload) const;
 private:
     std::unique_ptr<NetconfClient> client;

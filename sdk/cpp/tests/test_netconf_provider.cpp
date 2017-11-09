@@ -49,3 +49,13 @@ TEST_CASE("get_capabilities")
     NetconfServiceProvider provider{ "127.0.0.1", "admin", "admin", 12022};
     CHECK_NOTHROW(provider.get_capabilities());
 }
+
+TEST_CASE("CreateKeybaseAuthRepo_ConfD")
+{
+    ydk::path::Repository repo{};
+    const string& private_key_path = "../ssh_host_rsa_key";
+    const string& public_key_path = "../ssh_host_rsa_key.pub";
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", private_key_path, public_key_path, 12022};
+    CHECK_NOTHROW(provider.get_encoding());
+}
+

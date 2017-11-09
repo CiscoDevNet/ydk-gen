@@ -48,6 +48,48 @@ NetconfSession
         :param on_demand: Enable on demand downloading by default.
         :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
 
+    .. cpp:function:: NetconfSession(\
+        const std::string& address, \
+        const std::string& username, \
+        const std::string& private_key_path, \
+        const std::string& public_key_path, \
+        int port = 830, \
+        bool on_demand = true, \
+        bool common_cache = false\
+        int timeout = -1)
+
+        Constructs an instance of the ``NetconfSession`` to connect to a server which **has** to support model download
+
+        :param address: IP address of the device supporting a netconf interface
+        :param username: Username to log in to the device
+        :param private_key_path: Path to private key file.
+        :param public_key_path: Path to public key file.
+        :param port: Device port used to access the netconf interface. Default value is 830
+        :param on_demand: Enable on demand downloading by default.
+        :param common_cache: Use different directories for different connections by default.
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
+
+    .. cpp:function:: NetconfSession(\
+        const path::Repository& repo, \
+        const std::string& address, \
+        const std::string& username, \
+        const std::string& private_key_path, \
+        const std::string& public_key_path, \
+        int port = 830, \
+        bool on_demand = true
+        int timeout = -1)
+
+        Constructs an instance of the ``NetconfSession`` using the provided :cpp:class:`Repository<Repository>`
+
+        :param repo: Reference to an instance of :cpp:class:`Repository<Repository>`
+        :param address: IP address of the device supporting a netconf interface
+        :param username: Username to log in to the device
+        :param private_key_path: Path to private key file
+        :param public_key_path: Path to public key file.
+        :param port: Device port used to access the netconf interface. Default value is 830
+        :param on_demand: Enable on demand downloading by default.
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
+
     .. cpp:function:: virtual path::RootSchemaNode& get_root_schema() const
 
         Returns the :cpp:class:`RootSchemaNode<path::RootSchemaNode>` tree supported by this instance of the ``NetconfSession``.

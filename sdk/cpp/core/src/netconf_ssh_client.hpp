@@ -49,9 +49,18 @@ public:
     NetconfSSHClient(
         std::string  username, 
         std::string  password,
-        std::string  server_ip, 
+        std::string  server_ip,
         int port,
         int timeout = -1);
+
+    NetconfSSHClient(
+        std::string username, 
+        std::string private_key_path,
+        std::string public_key_path,
+        std::string server_ip,
+        int port,
+        int timeout = -1
+    );
 
     virtual ~NetconfSSHClient();
 
@@ -86,6 +95,9 @@ private:
     int port;
     int timeout;
     std::vector<std::string> capabilities;
+
+    std::string private_key_path;
+    std::string public_key_path;
 };
 
 
