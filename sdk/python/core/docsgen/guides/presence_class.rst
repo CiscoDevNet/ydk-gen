@@ -3,7 +3,7 @@
 What are presence classes?
 ==========================
 
-According to `RFC 6020 <https://tools.ietf.org/html/rfc6020#section-7.5.1>`_, YANG supports two styles of containers. One for organizing hierarchy, another for representing configuration data. For instance the existence of presence container ``ssh`` indicates the capability to log in to the device using ssh. Let us consider a presence node ``match-community-set`` in `openconfig-bgp-policy.yang <https://github.com/YangModels/yang/blob/96883adbf612605f02271523d7eaa731ded46b61/vendor/cisco/xr/621/openconfig-bgp-policy.yang#L126>`_. This node is generated as a YDK class shown below:
+According to `RFC 6020 <https://tools.ietf.org/html/rfc6020#section-7.5.1>`_, YANG supports two styles of containers. One is for organizing hierarchy. Another type (called 'presence container') is for representing configuration data. For instance the existence of presence container ``ssh`` indicates the capability to log in to the device using ssh. Let us consider a presence node ``match-community-set`` in `openconfig-bgp-policy.yang <https://github.com/YangModels/yang/blob/96883adbf612605f02271523d7eaa731ded46b61/vendor/cisco/xr/621/openconfig-bgp-policy.yang#L126>`_. This node is generated as a YDK class shown below:
 
 .. code-block:: python
     :linenos:

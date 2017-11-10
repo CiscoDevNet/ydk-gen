@@ -5,10 +5,43 @@ How do I create, update, read and delete?
 
 .. contents:: Table of Contents
 
-This document contains some examples of creating, reading and deleting yang data using YDK. To perform these operations, the :py:class:`CRUDService<ydk.services.CRUDService>` can be used. Also, in these examples, :py:class:`YFilter<ydk.filters.YFilter>` is used to mark parts of the data for particular operations.
+This document contains some examples of creating, reading and deleting yang data using YDK. To perform these operations, the :py:class:`CRUDService<ydk.services.CRUDService>` is used. Also, in these examples, :py:class:`YFilter<ydk.filters.YFilter>` is used to mark parts of the data for particular operations.
 
-Creating a configuration
--------------------------
+Creating a configuration with a list and a presence class
+---------------------------------------------------------
+
+To configure a rule in the SNMP trap correlator, the below approach can be used.
+
+Note that the :py:class:`Cisco_IOS_XR_snmp_agent_cfg.Snmp.Correlator.Rules.Rule<ydk.models.cisco_ios_xr.Cisco_IOS_XR_snmp_agent_cfg.Snmp.Correlator.Rules.Rule>` class is a :py:class:`YList<ydk.types.YList>`. So it needs to be instantiated and appended to its parent.
+
+Also, the attribute ``non_stateful`` is an instance of a :ref:`presence class<presence-class>`, which is set to ``None`` by default. So it needs to be assigned to a new instance of its class.
+
+.. code-block:: python
+    :linenos:
+
+    from ydk.models.cisco_ios_xr import Cisco_IOS_XR_snmp_agent_cfg
+
+    # Create the top-level container
+    snmp = Cisco_IOS_XR_snmp_agent_cfg.Snmp()
+
+    # Create the list instance
+    rule = Cisco_IOS_XR_snmp_agent_cfg.Snmp.Correlator.Rules.Rule()
+    rule.name = 'abc'
+
+    # Instantiate and assign the presence class
+    rule.non_stateful = Cisco_IOS_XR_snmp_agent_cfg.Snmp.Correlator.Rules.Rule.NonStateful()
+
+    rule.non_stateful.timeout = 3
+
+    # Append the list instance to its parent
+    snmp.correlator.rules.rule.append(rule)
+
+    # Call the CRUD create on the top-level snmp object
+    # (assuming you have already instantiated the service and provider)
+    result = crud.create(provider, snmp)
+
+Creating and replacing a configuration
+--------------------------------------
 
 First, let us create a configuration for the :py:class:`openconfig_bgp.Bgp.Global_.Config<ydk.models.openconfig.openconfig_bgp.Bgp.Global_.Config>` class. Here, we set the leaf ``as_``, which represents the autonomous system number, to ``65001`` and the leaf ``router_id`` to ``'10.0.0.1'``.
 
@@ -27,10 +60,7 @@ First, let us create a configuration for the :py:class:`openconfig_bgp.Bgp.Globa
 
     # Call the CRUD create on the top-level bgp object
     # (assuming you have already instantiated the service and provider)
-    rib_oper = crud.create(provider, bgp)
-
-Replacing a configuration
--------------------------
+    result = crud.create(provider, bgp)
 
 Now, let us replace the above configuration with a new configuration for the :py:class:`openconfig_bgp.Bgp.Global_.Config<ydk.models.openconfig.openconfig_bgp.Bgp.Global_.Config>` class using the below code.
 
@@ -52,7 +82,7 @@ Now, let us replace the above configuration with a new configuration for the :py
 
     # Call the CRUD update on the top-level bgp object
     # (assuming you have already instantiated the service and provider)
-    rib_oper = crud.update(provider, bgp)
+    result = crud.update(provider, bgp)
 
 
 Reading a list
