@@ -218,7 +218,14 @@ ydk::path::SchemaNodeImpl::get_statement() const
     s.keyword = "leaf-list";
     break;
     case LYS_LIST:
-        s.keyword = "list";
+        if(m_node->nodetype & LYS_LEAFLIST)
+        {
+            s.keyword = "leaf-list";
+        }
+        else
+        {
+            s.keyword = "list";
+        }
         break;
     case LYS_CASE:
         s.keyword = "case";
