@@ -140,7 +140,7 @@ func (es *ExecutorService) ExecuteRpc (
 	provider types.ServiceProvider,
 	rpcEntity, topEntity types.Entity) types.Entity {
 
-	return path.ExecuteRpcEntity(provider, rpcEntity, topEntity)
+	return path.ExecuteRPCEntity(provider, rpcEntity, topEntity)
 }
 
 // NetconfService implements the NETCONF Protocol Operations:
@@ -149,15 +149,15 @@ type NetconfService struct {
 }
 
 // CancelCommit cancels an ongoing confirmed commit.
-// If persist_id < 1, the operation MUST be issued on the same session
+// If persistID < 1, the operation MUST be issued on the same session
 // that issued the confirmed commit.
 // Returns whether the operation is successful or not
 func (ns *NetconfService) CancelCommit(
-	provider types.ServiceProvider, persistId int) bool {
+	provider types.ServiceProvider, persistID int) bool {
 
 	data := map[string]interface{} {}
-	if (persistId > 1) {
-		data["persist-id"] = strconv.Itoa(persistId)
+	if (persistID > 1) {
+		data["persist-id"] = strconv.Itoa(persistID)
 	}
 	readDataNode := path.ExecuteRPC(
 		provider, "ietf-netconf:cancel-commit", data, false)
@@ -179,7 +179,7 @@ func (ns *NetconfService) CloseSession(provider types.ServiceProvider) bool {
 func (ns *NetconfService) Commit(
 	provider types.ServiceProvider,
 	confirmed bool,
-	confirmTimeOut, persist, persistId int) bool {
+	confirmTimeOut, persist, persistID int) bool {
 
 	data := map[string]interface{} {}
 	if (confirmed) {
@@ -191,8 +191,8 @@ func (ns *NetconfService) Commit(
 	if (persist > -1) {
 		data["persist"] = strconv.Itoa(persist)
 	}
-	if (persistId > -1) {
-		data["persist-id"] = strconv.Itoa(persistId)
+	if (persistID > -1) {
+		data["persist-id"] = strconv.Itoa(persistID)
 	}
 
 	readDataNode := path.ExecuteRPC(
@@ -221,8 +221,8 @@ func (ns *NetconfService) CopyConfig(
 		panic(err.Error())
 	}
 
-	if ((target == datastore.Url ||
-		sourceDS == datastore.Url) && len(url) == 0){
+	if ((target == datastore.URL ||
+		sourceDS == datastore.URL) && len(url) == 0){
 		err := types.YGOError{Msg: "url must be specified"}
 		panic(err.Error())
 	}
@@ -263,7 +263,7 @@ func (ns *NetconfService) DeleteConfig(
 	dsStr := target.String()
 	dataValue := getDataValue(dsStr, url)
 	if (target == datastore.Candidate || target == datastore.Running ||
-		target == datastore.Url && len(url) == 0){
+		target == datastore.URL && len(url) == 0){
 
 		errMsg := "target: %v can only be Startup (url is ignored)"
 		errMsg += " or Url (url must be specified)"
@@ -304,7 +304,7 @@ func (ns *NetconfService) EditConfig(
 	dsStr := target.String()
 	dataValue := ""
 
-	if (target == datastore.Url || target == datastore.Startup){
+	if (target == datastore.URL || target == datastore.Startup){
 		errMsg := fmt.Sprintf(
 			"target: %v can only be Candidate or Running", dsStr)
 		err := types.YGOError{Msg: errMsg}
@@ -344,7 +344,7 @@ func (ns *NetconfService) GetConfig(
 	dsStr := source.String()
 	dataValue := ""
 
-	if (source == datastore.Url){
+	if (source == datastore.URL){
 		errMsg := fmt.Sprintf(
 			"source: %v can only be Candidate, Running, or Startup", dsStr)
 		err := types.YGOError{Msg: errMsg}
@@ -377,10 +377,10 @@ func (ns *NetconfService) Get(
 // KillSession forces the termination of a NETCONF session.
 // Returns whether the operation is successful or not
 func (ns *NetconfService) KillSession(
-	provider types.ServiceProvider, sessionId int) bool {
+	provider types.ServiceProvider, sessionID int) bool {
 
 	data := map[string]interface{} {}
-	data["session-id"] = strconv.Itoa(sessionId)
+	data["session-id"] = strconv.Itoa(sessionID)
 
 	readDataNode := path.ExecuteRPC(
 		provider, "ietf-netconf:kill-session", data, false)
@@ -396,7 +396,7 @@ func (ns *NetconfService) Lock(
 	dsStr := target.String()
 	dataValue := ""
 
-	if (target == datastore.Url){
+	if (target == datastore.URL){
 		err := types.YGOError{Msg: "url must be specified"}
 		panic(err.Error())
 	}
@@ -417,7 +417,7 @@ func (ns *NetconfService) Unlock(
 	dsStr := target.String()
 	dataValue := ""
 
-	if (target == datastore.Url){
+	if (target == datastore.URL){
 		err := types.YGOError{Msg: "url must be specified"}
 		panic(err.Error())
 	}
@@ -449,7 +449,7 @@ func (ns *NetconfService) Validate(
 		panic(err.Error())
 	}
 	// sourceDS options: candidate | running | startup | url
-	if (sourceDS == datastore.Url && len(url) == 0){
+	if (sourceDS == datastore.URL && len(url) == 0){
 		err := types.YGOError{Msg: "url must be specified"}
 		panic(err.Error())
 	}

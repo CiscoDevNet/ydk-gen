@@ -1,3 +1,4 @@
+package encodingformat
 /*
  * ------------------------------------------------------------------
  * YANG Development Kit
@@ -22,11 +23,11 @@
  * under the License.
  *----------------------------------------------
  */
-package encoding_format
 
 // EncodingFormat represents the encoding format
 type EncodingFormat int
 
+// EncodingFormat constants.
 const (
 	XML	EncodingFormat = iota
 	JSON

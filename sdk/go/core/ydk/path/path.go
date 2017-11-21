@@ -43,7 +43,7 @@ import (
 )
 
 
-// ExecuteRPC executes payload converted from entity.
+// ExecuteRPC executes payload converted from entity for CRUD/Netconf services.
 // Returns a data node (types.DataNode) representing the result of the executed rpc.
 func ExecuteRPC(
 	provider types.ServiceProvider,
@@ -121,7 +121,11 @@ func getDataPayload(
 	return (data)
 }
 
-func ExecuteRpcEntity(
+// ExecuteRPCEntity provides the functionality to execute RPCs with
+// executor service using an RPC class defined under a ydk.models subpackage
+// Optional args: topEntity to be passed in only when expecting return data
+// Returns nil or an instance of types.Entity when expecting return data
+func ExecuteRPCEntity(
 	provider types.ServiceProvider,
 	rpcEntity, topEntity types.Entity) types.Entity {
 
@@ -144,7 +148,7 @@ func ExecuteRpcEntity(
 	panicOnCStateError(cstate)
 
 	child := rpcEntity.GetChildByName("input", "")
-	walkRpcChildren(state, child, rpcInput, "")
+	walkRPCChildren(state, child, rpcInput, "")
 
 	readDataNode := types.DataNode{C.RpcExecute(*cstate, ydkRPC, realProvider)}
 	panicOnCStateError(cstate)
@@ -157,7 +161,7 @@ func ExecuteRpcEntity(
 	return ReadDatanode(topEntity, readDataNode)
 }
 
-func walkRpcChildren(
+func walkRPCChildren(
 	state *types.State, rpcEntity types.Entity, rpcInput C.DataNode, path string) {
 
 	ydk.YLogDebug("Walking Rpc Children...")
@@ -184,7 +188,7 @@ func walkRpcChildren(
 		for childName, _ := range children {
 			ydk.YLogDebug(fmt.Sprintf(
 				"Looking at entity child '%s'", children[childName].GetSegmentPath()))
-			walkRpcChildren(state, children[childName], rpcInput, path)
+			walkRPCChildren(state, children[childName], rpcInput, path)
 		}
 
 		// if there are leafs, create from entity path
@@ -532,7 +536,7 @@ func DisconnectFromOpenDaylightProvider(
 	C.OpenDaylightServiceProviderFree(realProvider)
 }
 
-// OpenDaylightServiceProviderGetNodeIDS is a getter function for the node ids
+// OpenDaylightServiceProviderGetNodeIDs is a getter function for the node ids
 // given the opendaylight service provider.
 // Returns node ids available ([]string).
 func OpenDaylightServiceProviderGetNodeIDs(

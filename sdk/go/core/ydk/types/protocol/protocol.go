@@ -1,3 +1,4 @@
+package protocol
 /*
  * ------------------------------------------------------------------
  * YANG Development Kit
@@ -22,11 +23,11 @@
  * under the License.
  *----------------------------------------------
  */
-package protocol
 
 // Protocol represents the protocol to use to connect to a device
 type Protocol int
 
+// Protocol constants.
 const (
 	Restconf Protocol = iota
 	Netconf

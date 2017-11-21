@@ -26,6 +26,6 @@ DataStore
 
         Represented by a value of 3
 
-    .. attribute:: Url
+    .. attribute:: URL
 
         Represented by a value of 4

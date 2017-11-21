@@ -129,12 +129,12 @@ type Enum struct {
 type YLeaf struct {
 	name string
 
-	leaf_type  ytype.YType
-	bits_value Bits
+	leafType  	ytype.YType
+	bitsValue 	Bits
 
-	Value  string
-	IsSet  bool
-	Filter yfilter.YFilter
+	Value  	string
+	IsSet  	bool
+	Filter 	yfilter.YFilter
 }
 
 // GetNameLeafdata instantiates and returns NameLeafData type for this leaf
@@ -144,11 +144,11 @@ func (y *YLeaf) GetNameLeafdata() NameLeafData {
 
 // YLeafList represents a YANG leaf-list to which multiple instances of data can be appended
 type YLeafList struct {
-	name   string
-	values []YLeaf
+	name   	string
+	values 	[]YLeaf
 
-	Filter    yfilter.YFilter
-	leaf_type ytype.YType
+	Filter    	yfilter.YFilter
+	leafType 	ytype.YType
 }
 
 // GetYLeafs is a getter function for YLeafList values

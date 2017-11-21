@@ -1,3 +1,4 @@
+package datastore
 /*
  * ------------------------------------------------------------------
  * YANG Development Kit
@@ -22,10 +23,8 @@
  * under the License.
  *----------------------------------------------
  */
-package datastore
 
 import (
-	"fmt"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
 )
 
@@ -33,12 +32,13 @@ import (
 // device from its initial default state into a desired operational state
 type DataStore int
 
+// DataStore constants.
 const (
 	NotSet DataStore = iota
 	Candidate
 	Running
 	Startup
-	Url
+	URL
 )
 
 // String returns the name of the given YFilter (string)
@@ -50,13 +50,12 @@ func (ds DataStore) String() string {
 		return "running"
 	case Startup:
 		return "startup"
-	case Url:
+	case URL:
 		return "url"
 	case NotSet:
 		return ""
 	}
 
-	errMsg := fmt.Sprintf("%v is not a valid DataStore value", ds)
-	err := types.YGOError{Msg: errMsg}
+	err := types.YGOError{Msg: "Invalid DataStore value"}
 	panic(err.Error())
 }

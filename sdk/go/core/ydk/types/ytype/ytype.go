@@ -1,3 +1,4 @@
+package ytype
 /*
  * ------------------------------------------------------------------
  * YANG Development Kit
@@ -22,25 +23,25 @@
  * under the License.
  *----------------------------------------------
  */
-package ytype
 
 // YType represents YANG data types
 type YType int
 
+// YType constants.
 const (
-	Uint_8 YType = iota
-	Uint_16
-	Uint_32
-	Uint_64
-	Int_8
-	Int_16
-	Int_32
-	Int_64
-	Empty_
+	Uint8 YType = iota
+	Uint16
+	Uint32
+	Uint64
+	Int8
+	Int16
+	Int32
+	Int64
+	Empty
 	Identityref
 	Str
 	Boolean
 	Enumeration
-	Bits_
-	Decimal64_
+	Bits
+	Decimal64
 )

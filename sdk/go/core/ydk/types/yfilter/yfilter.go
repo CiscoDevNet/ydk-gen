@@ -1,3 +1,4 @@
+package yfilter
 /*
  * ------------------------------------------------------------------
  * YANG Development Kit
@@ -22,14 +23,14 @@
  * under the License.
  *----------------------------------------------
  */
-package yfilter
 
-// Filters represent edit operation for YDK objects as specified in NETCONF RFC 6241, 
-// defaults to not_set, and read operation providing functionality to read a singal leaf. 
-// Operations as defined under netconf edit-config operation attribute in RFC 6241 
+// YFilters represent edit operation for YDK objects as specified in NETCONF RFC 6241,
+// defaults to not_set, and read operation providing functionality to read a singal leaf.
+// Operations as defined under netconf edit-config operation attribute in RFC 6241
 // and for filtering read operations by leaf to be used with various Services and entities.
 type YFilter int
 
+// YFilter constants.
 const (
 	NotSet YFilter = iota
 	Read

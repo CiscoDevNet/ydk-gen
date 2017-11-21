@@ -118,11 +118,11 @@ YANG Leaf and Leaf-list
 
         A Go ``string`` representing the name of the leaf
 
-    .. attribute:: leaf_type
+    .. attribute:: leafType
 
         :ref:`YType <y-type>` represents the YANG data type assigned to the leaf
 
-    .. attribute:: bits_value
+    .. attribute:: bitsValue
 
         The :ref:`Bits <bits>` value assigned to the leaf
 
@@ -152,7 +152,7 @@ Example usage for creating a ``YLeaf`` of YANG type ``int8``:
     import "github.com/CiscoDevNet/ydk-go/ydk/types"
 
     var yleaf YLeaf
-    yleaf.leaf_type = types.Int_8
+    yleaf.leafType = types.Int8
     yleaf.name = "afi-safi-name"
 
 .. go:struct:: YLeafList
@@ -171,7 +171,7 @@ Example usage for creating a ``YLeaf`` of YANG type ``int8``:
 
         :ref:`YFilter <y-filter>`
 
-    .. attribute:: leaf_type
+    .. attribute:: leafType
 
         :ref:`YType <y-type>` represents the YANG data type assigned to the leaf
 
