@@ -6,6 +6,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/yfilter"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -97,7 +98,7 @@ func (suite *FilterReadTestSuite) Test2() {
 func (suite *FilterReadTestSuite) Test3() {
 	// Read on leaf
 	a := filterread.A{}
-	a.A1 = types.Read
+	a.A1 = yfilter.Read
 	entity := suite.CRUD.Read(&suite.Provider, &a)
 
 	initEntity := filterread.A{}

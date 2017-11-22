@@ -27,22 +27,9 @@ package types
 import (
 	"reflect"
 	"sort"
-)
-
-// Filters represent edit operation for YDK objects as specified in NETCONF RFC 6241, 
-// defaults to not_set, and read operation providing functionality to read a singal leaf. 
-// Operations as defined under netconf edit-config operation attribute in RFC 6241 
-// and for filtering read operations by leaf to be used with various Services and entities.
-type YFilter int
-
-const (
-	NotSet YFilter = iota
-	Read
-	Merge
-	Create
-	Remove
-	Delete
-	Replace
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/yfilter"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/ytype"
 )
 
 // Empty represents a YANG built-in Empty type
@@ -57,7 +44,7 @@ func (e *Empty) String() string {
 // LeafData represents the data contained in a YANG leaf
 type LeafData struct {
 	Value  string
-	Filter YFilter
+	Filter yfilter.YFilter
 	IsSet  bool
 }
 
@@ -116,7 +103,7 @@ type Entity interface {
 	GetYangName() string
 	GetParentYangName() string
 
-	GetFilter() YFilter
+	GetFilter() yfilter.YFilter
 }
 
 // Entity is a basic type that represents containers in YANG
@@ -138,37 +125,16 @@ type Enum struct {
 	EnumYLeaf
 }
 
-// YType represents YANG data types
-type YType int
-
-const (
-	Uint_8 YType = iota
-	Uint_16
-	Uint_32
-	Uint_64
-	Int_8
-	Int_16
-	Int_32
-	Int_64
-	Empty_
-	Identityref
-	Str
-	Boolean
-	Enumeration
-	Bits_
-	Decimal64_
-)
-
 // YLeaf represents a YANG leaf to which data can be assigned.
 type YLeaf struct {
 	name string
 
-	leaf_type  YType
-	bits_value Bits
+	leafType  	ytype.YType
+	bitsValue 	Bits
 
-	Value  string
-	IsSet  bool
-	Filter YFilter
+	Value  	string
+	IsSet  	bool
+	Filter 	yfilter.YFilter
 }
 
 // GetNameLeafdata instantiates and returns NameLeafData type for this leaf
@@ -178,11 +144,11 @@ func (y *YLeaf) GetNameLeafdata() NameLeafData {
 
 // YLeafList represents a YANG leaf-list to which multiple instances of data can be appended
 type YLeafList struct {
-	name   string
-	values []YLeaf
+	name   	string
+	values 	[]YLeaf
 
-	Filter    YFilter
-	leaf_type YType
+	Filter    	yfilter.YFilter
+	leafType 	ytype.YType
 }
 
 // GetYLeafs is a getter function for YLeafList values
@@ -199,46 +165,6 @@ func (y *YLeafList) GetNameLeafdata() [](NameLeafData) {
 	return result
 }
 
-// DataStore is a complete set of configuration data that is required to get a
-// device from its initial default state into a desired operational state
-type DataStore int
-
-const (
-	Candidate DataStore = iota
-	Running
-	Startup
-	Url
-)
-
-// EncodingFormat represents the encoding format
-type EncodingFormat int
-
-const (
-	XML EncodingFormat = iota
-	JSON
-)
-
-// String returns the name of the given YFilter (string)
-func (e YFilter) String() string {
-	switch e {
-	case Read:
-		return "read"
-	case Replace:
-		return "replace"
-	case Delete:
-		return "delete"
-	case Merge:
-		return "merge"
-	case Create:
-		return "create"
-	case Remove:
-		return "remove"
-	case NotSet:
-		return ""
-	}
-	return ""
-}
-
 // ServiceProvider
 type ServiceProvider interface {
 	GetPrivate() interface{}
@@ -250,18 +176,10 @@ type ServiceProvider interface {
 // CodecServiceProvider
 type CodecServiceProvider interface {
 	Initialize(Entity)
-	GetEncoding() EncodingFormat
+	GetEncoding() encoding.EncodingFormat
 	GetRootSchemaNode(Entity) RootSchemaNode
 	GetState() *State
 }
-
-// Protocol represents the protocol to use to connect to a device
-type Protocol int
-
-const (
-	Restconf Protocol = iota
-	Netconf
-)
 
 // DataNode represents a containment hierarchy
 type DataNode struct {
@@ -286,7 +204,7 @@ type COpenDaylightServiceProvider struct {
 }
 
 // Repository represents the Repository of YANG models.
-// A instance of the Repository will be used to create a RootSchemaNode given a set of Capabilities.
+// A instance of the Repository will be used to create a RootSchemaNode given a set of ©pabilities.
 // Behind the scenes the repository is responsible for loading and parsing the YANG modules and creating the SchemaNode tree. 
 type Repository struct {
 	Path    string
@@ -496,8 +414,8 @@ func GetRelativeEntityPath(current_node Entity, ancestor Entity, path string) st
 }
 
 // IsSet returns whether the given filter is set or not
-func IsSet(Filter YFilter) bool {
-	return Filter != NotSet
+func IsSet(Filter yfilter.YFilter) bool {
+	return Filter != yfilter.NotSet
 }
 
 func sortValuePaths(v []NameLeafData) []NameLeafData {

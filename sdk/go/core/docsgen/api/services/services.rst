@@ -113,12 +113,12 @@ Netconf
 
 	Implements the NETCONF Protocol Operations: https://tools.ietf.org/html/rfc6241.
 
-.. function:: (ns *NetconfService) CancelCommit(provider ServiceProvider, persistId int)
+.. function:: (ns *NetconfService) CancelCommit(provider ServiceProvider, persistID int)
 
-	Cancels an ongoing confirmed commit. If the persist_id < 1, the operation **MUST** be issued on the same session that issued the confirmed commit.
+	Cancels an ongoing confirmed commit. If the persistID < 1, the operation **MUST** be issued on the same session that issued the confirmed commit.
 
 	:param provider: An instance of :go:struct:`NetconfServiceProvider<ydk/types/NetconfServiceProvider>`
-	:param persistId: An ``int``
+	:param persistID: An ``int``
 	:return: whether or not the operation succeeded
 	:rtype: ``bool``
 	:raises: `YGOError<ydk/errors/YGOError>` If error has occurred
@@ -133,7 +133,7 @@ Netconf
 	:raises: `YGOError<ydk/errors/YGOError>` If error has occurred
 
 .. function:: (ns *NetconfService) Commit(
-	provider ServiceProvider, confirmed bool, confirmTimeOut, persist, persistId int)
+	provider ServiceProvider, confirmed bool, confirmTimeOut, persist, persistID int)
 
 	Instructs the device to implement the configuration data contained in the candidate configuration.
 
@@ -141,7 +141,7 @@ Netconf
 	:param confirmed: A ``bool`` that signals a confirmed commit operation
 	:param comfirmTimeOut: An ``int`` representing the timeout interval for a confirmed commit
 	:param persist: An ``int`` that makes the confirmed commit persistent
-	:param persistId: An ``int`` that is given in order to commit a persistent confirmed commit
+	:param persistID: An ``int`` that is given in order to commit a persistent confirmed commit
 	:return: whether or not the operation succeeded
 	:rtype: ``bool``
 	:raises: `YGOError<ydk/errors/YGOError>` If error has occurred
@@ -217,12 +217,12 @@ Netconf
 	:rtype: :go:struct:`Entity<ydk/types/Entity>`
 	:raises: `YGOError<ydk/errors/YGOError>` If error has occurred
 
-.. function:: (ns *NetconfService) KillSession(provider ServiceProvider, sessionId int)
+.. function:: (ns *NetconfService) KillSession(provider ServiceProvider, sessionID int)
 
 	Force the termination of a NETCONF session.
 
 	:param provider: An instance of :go:struct:`NetconfServiceProvider<ydk/types/NetconfServiceProvider>`
-	:param sessionId: An ``int`` that is the session identifier of the NETCONF session to be terminated
+	:param sessionID: An ``int`` that is the session identifier of the NETCONF session to be terminated
 	:return: whether or not the operation succeeded
 	:rtype: ``bool``
 	:raises: `YGOError<ydk/errors/YGOError>` If error has occurred

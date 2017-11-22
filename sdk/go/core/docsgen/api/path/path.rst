@@ -16,6 +16,16 @@ Path
     :return: A data node representing the result of the executed rpc.
     :rtype: :go:struct:`DataNode<ydk/types/DataNode>`
 
+.. function:: ExecuteRPCEntity(provider ServiceProvider, rpcEntity, topEntity types.Entity)
+
+    Executes payload converted from entity.
+
+    :param provider: (:go:struct:`ServiceProvider<ydk/types/ServiceProvider>`).
+    :param rpcEntity: (:go:struct:`Entity<ydk/types/Entity>`).
+    :param topEntity: (:go:struct:`Entity<ydk/types/Entity>`). Optional arg. Use when expecting return data.
+    :return: An entity representing the result of the executed rpc.
+    :rtype: :go:struct:`Entity<ydk/types/Entity>`
+
 .. function:: ReadDatanode(filter Entity, readDataNode DataNode)
 
     Populates entity by reading the top level entity from a given data node

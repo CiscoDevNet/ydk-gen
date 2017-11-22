@@ -10,6 +10,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -46,7 +47,7 @@ func (suite *ExecutorServiceTestSuite) BeforeTest(suiteName, testName string) {
 }
 
 func (suite *ExecutorServiceTestSuite) TestEditCommitGet() {
-	suite.CodecProvider.Encoding = types.XML
+	suite.CodecProvider.Encoding = encoding.XML
 
 	runner := ysanity.Runner{}
 	runner.One.Number = 1
@@ -120,7 +121,7 @@ func (suite *ExecutorServiceTestSuite) TestValidate() {
 	readEntity := suite.ExecutorService.ExecuteRpc(&suite.NetconfProvider, &rpc, nil)
 	suite.Equal(readEntity, nil)
 
-	suite.CodecProvider.Encoding = types.XML
+	suite.CodecProvider.Encoding = encoding.XML
 	runner := ysanity.Runner{}
 	runner.One.Number = 1
 	runner.One.Name = "runner:one:name"
@@ -134,7 +135,7 @@ func (suite *ExecutorServiceTestSuite) TestValidate() {
 }
 
 func (suite *ExecutorServiceTestSuite) TestDiscardChanges(){
-	suite.CodecProvider.Encoding = types.XML
+	suite.CodecProvider.Encoding = encoding.XML
 	runner := ysanity.Runner{}
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"
@@ -165,7 +166,7 @@ func (suite *ExecutorServiceTestSuite) TestDiscardChanges(){
 }
 
 func (suite *ExecutorServiceTestSuite) TestConfirmedCommit() {
-	suite.CodecProvider.Encoding = types.XML
+	suite.CodecProvider.Encoding = encoding.XML
 	runner := ysanity.Runner{}
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"
@@ -200,7 +201,7 @@ func (suite *ExecutorServiceTestSuite) TestConfirmedCommit() {
 func (suite *ExecutorServiceTestSuite) TestCancelCommit() {
 	suite.T().Skip("No message id in cancel commit payload")
 
-	suite.CodecProvider.Encoding = types.XML
+	suite.CodecProvider.Encoding = encoding.XML
 	runner := ysanity.Runner{}
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"
@@ -233,7 +234,7 @@ func (suite *ExecutorServiceTestSuite) TestCancelCommit() {
 }
 
 func (suite *ExecutorServiceTestSuite) TestCopyConfig() {
-	suite.CodecProvider.Encoding = types.XML
+	suite.CodecProvider.Encoding = encoding.XML
 	runner := ysanity.Runner{}
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"
@@ -297,7 +298,7 @@ func (suite *ExecutorServiceTestSuite) TestCopyConfig() {
 func (suite *ExecutorServiceTestSuite) TestDeleteConfig() {
 	suite.T().Skip("startup/url not enabled in ConfD")
 
-	suite.CodecProvider.Encoding = types.XML
+	suite.CodecProvider.Encoding = encoding.XML
 	runner := ysanity.Runner{}
 	runner.Two.Number = 2
 	runner.Two.Name = "runner:two:name"

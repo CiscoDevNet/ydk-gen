@@ -12,6 +12,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	encoding "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -263,7 +264,7 @@ func (suite *CodecTestSuite) TestXMLEncode() {
 	bgp := ysanity_bgp.Bgp{}
 	config(&bgp)
 
-	suite.Provider.Encoding = types.XML
+	suite.Provider.Encoding = encoding.XML
 	payload := suite.Codec.Encode(&suite.Provider, &bgp)
 
 	result := equalPayload(payload, xmlBgpPayload, xml.Unmarshal, xml.Marshal)
@@ -276,7 +277,7 @@ func (suite *CodecTestSuite) TestXMLDecode() {
 		bgp := ysanity_bgp.Bgp{}
 		config(&bgp)
 
-		suite.Provider.Encoding = types.XML
+		suite.Provider.Encoding = encoding.XML
 
 		entity := suite.Codec.Decode(&suite.Provider, xmlBgpPayload)
 		bgpDecodec := entity.(*ysanity_bgp.Bgp)
@@ -289,7 +290,7 @@ func (suite *CodecTestSuite) TestXMLEncodeDecode() {
 	bgp := ysanity_bgp.Bgp{}
 	config(&bgp)
 
-	suite.Provider.Encoding = types.XML
+	suite.Provider.Encoding = encoding.XML
 
 	payload := suite.Codec.Encode(&suite.Provider, &bgp)
 	entity := suite.Codec.Decode(&suite.Provider, payload)
@@ -299,7 +300,7 @@ func (suite *CodecTestSuite) TestXMLEncodeDecode() {
 }
 
 func (suite *CodecTestSuite) TestXMLDecodeEncode() {
-	suite.Provider.Encoding = types.XML
+	suite.Provider.Encoding = encoding.XML
 
 	entity := suite.Codec.Decode(&suite.Provider, xmlBgpPayload)
 	bgpDecodec := entity.(*ysanity_bgp.Bgp)
@@ -313,7 +314,7 @@ func (suite *CodecTestSuite) TestJSONEncode() {
 	bgp := ysanity_bgp.Bgp{}
 	config(&bgp)
 
-	suite.Provider.Encoding = types.JSON
+	suite.Provider.Encoding = encoding.JSON
 	payload := suite.Codec.Encode(&suite.Provider, &bgp)
 
 	result := equalPayload(payload, jsonBgpPayload, json.Unmarshal, json.Marshal)
@@ -324,7 +325,7 @@ func (suite *CodecTestSuite) TestJSONDecode() {
 	bgp := ysanity_bgp.Bgp{}
 	config(&bgp)
 
-	suite.Provider.Encoding = types.JSON
+	suite.Provider.Encoding = encoding.JSON
 
 	entity := suite.Codec.Decode(&suite.Provider, jsonBgpPayload)
 	bgpDecodec := entity.(*ysanity_bgp.Bgp)
@@ -336,7 +337,7 @@ func (suite *CodecTestSuite) TestJSONDecodeEncode() {
 	bgp := ysanity_bgp.Bgp{}
 	config(&bgp)
 
-	suite.Provider.Encoding = types.JSON
+	suite.Provider.Encoding = encoding.JSON
 
 	entity := suite.Codec.Decode(&suite.Provider, jsonBgpPayload)
 	bgpDecodec := entity.(*ysanity_bgp.Bgp)
@@ -350,7 +351,7 @@ func (suite *CodecTestSuite) TestJSONEncodeDecode() {
 	bgp := ysanity_bgp.Bgp{}
 	config(&bgp)
 
-	suite.Provider.Encoding = types.JSON
+	suite.Provider.Encoding = encoding.JSON
 
 	payload := suite.Codec.Encode(&suite.Provider, &bgp)
 	entity := suite.Codec.Decode(&suite.Provider, payload)
@@ -360,7 +361,7 @@ func (suite *CodecTestSuite) TestJSONEncodeDecode() {
 }
 
 func (suite *CodecTestSuite) TestXMLEncode1() {
-	suite.Provider.Encoding = types.XML
+	suite.Provider.Encoding = encoding.XML
 	runner := ysanity.Runner{}
 	configRunner(&runner)
 
@@ -371,7 +372,7 @@ func (suite *CodecTestSuite) TestXMLEncode1() {
 }
 
 func (suite *CodecTestSuite) TestXMLEncode2() {
-	suite.Provider.Encoding = types.XML
+	suite.Provider.Encoding = encoding.XML
 	r1 := ysanity.Runner{}
 	r1.Ytypes.BuiltInT.EnumValue = ysanity.YdkEnumTest_local
 
@@ -382,7 +383,7 @@ func (suite *CodecTestSuite) TestXMLEncode2() {
 }
 
 func (suite *CodecTestSuite) TestJSONEncode1() {
-	suite.Provider.Encoding = types.JSON
+	suite.Provider.Encoding = encoding.JSON
 	runner := ysanity.Runner{}
 	configRunner(&runner)
 
@@ -393,7 +394,7 @@ func (suite *CodecTestSuite) TestJSONEncode1() {
 }
 
 func (suite *CodecTestSuite) TestJSONEncode2() {
-	suite.Provider.Encoding = types.JSON
+	suite.Provider.Encoding = encoding.JSON
 	r1 := ysanity.Runner{}
 	r1.Ytypes.BuiltInT.EnumValue = ysanity.YdkEnumTest_local
 
@@ -403,7 +404,7 @@ func (suite *CodecTestSuite) TestJSONEncode2() {
 }
 
 func (suite *CodecTestSuite) TestXMLDecodeOCPattern() {
-	suite.Provider.Encoding = types.XML
+	suite.Provider.Encoding = encoding.XML
 	objA := oc_pattern.OcA{}
 
 	objA.A = "Hello"

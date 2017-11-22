@@ -107,6 +107,7 @@ class ModulePrinter(FilePrinter):
         if has_top_entity:
             self.ctx.writeln('"github.com/CiscoDevNet/ydk-go/ydk"')
             self.ctx.writeln('"github.com/CiscoDevNet/ydk-go/ydk/types"')
+            self.ctx.writeln('"github.com/CiscoDevNet/ydk-go/ydk/types/yfilter"')
             self.ctx.writeln('"github.com/CiscoDevNet/ydk-go/ydk/models/{}"'.format(self.bundle_name))
             self.ctx.writeln('"reflect"')
 

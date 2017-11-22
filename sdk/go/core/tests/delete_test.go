@@ -6,6 +6,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/yfilter"
 	"github.com/stretchr/testify/suite"
 	"strconv"
 	"testing"
@@ -84,7 +85,7 @@ func (suite *DeleteTestSuite) TestDeleteObjectOnLeaf() {
 
 	// Use YFilter Delete and CRUD update to remove leaf
 	runnerUpdate := ysanity.Runner{}
-	runnerUpdate.One.Name = types.Delete
+	runnerUpdate.One.Name = yfilter.Delete
 	suite.CRUD.Update(&suite.Provider, &runnerUpdate)
 
 	entityRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
@@ -110,7 +111,7 @@ func (suite *DeleteTestSuite) TestDeleteObjectOnLeaf() {
 //     runnerUpdate.Ytypes.BuiltInT.Llstring = append(runnerUpdate.Ytypes.BuiltInT.Llstring, "1")
 //     runnerUpdate.Ytypes.BuiltInT.Llstring = append(runnerUpdate.Ytypes.BuiltInT.Llstring, "3")
 //     // TODO: leaf-list is declared as []interface, how to assign YFilter to them?
-//     runnerUpdate.Ytypes.BuiltInT.Llstring = types.Delete
+//     runnerUpdate.Ytypes.BuiltInT.Llstring = yfilter.Delete
 //     suite.CRUD.Update(&suite.Provider, &runnerUpdate)
 //     entityRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
 
@@ -137,7 +138,7 @@ func (suite *DeleteTestSuite) TestDeleteObjectOnLeaf() {
 //     runnerUpdate := ysanity.Runner{}
 //     // TODO: how to target a particular leaf from leaf-list using YFilter?
 //     runnerUpdate.Ytypes.BuiltInT.Llstring = append(runnerUpdate.Ytypes.BuiltInT.Llstring, "3")
-//     // runnerUpdate.Ytypes.BuiltInT.Llstring = types.Delete
+//     // runnerUpdate.Ytypes.BuiltInT.Llstring = yfilter.Delete
 //     suite.CRUD.Update(&suite.Provider, &runnerUpdate)
 
 //     entityRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
@@ -165,7 +166,7 @@ func (suite *DeleteTestSuite) TestDeleteOnListWithIdentitykey() {
 	k := ysanity.Runner_OneList_IdentityList{}
 	k.Config.Id = ysanity.Child_Identity{}
 	k.IdRef = ysanity.Child_Identity{}
-	k.YFilter = types.Delete
+	k.YFilter = yfilter.Delete
 	runnerUpdate.OneList.IdentityList = append(runnerUpdate.OneList.IdentityList, k)
 	suite.CRUD.Update(&suite.Provider, &runnerUpdate)
 
@@ -181,7 +182,7 @@ func (suite *DeleteTestSuite) TestDeleteOnContainer() {
 	suite.CRUD.Create(&suite.Provider, &runnerCreate)
 
 	runnerUpdate := ysanity.Runner{}
-	runnerUpdate.Two.YFilter = types.Delete
+	runnerUpdate.Two.YFilter = yfilter.Delete
 	suite.CRUD.Update(&suite.Provider, &runnerUpdate)
 
 	runnerCmp := ysanity.Runner{}
@@ -202,7 +203,7 @@ func (suite *DeleteTestSuite) TestDeleteOnContainer() {
 //     runnerUpdate := entity.(*ysanity.Runner)
 
 //     // TODO: YANG list is printed as []interface, not able to assign YFilter Delete to YANG list
-//     runnerUpdate.InbtwList.Ldata[1].Subc.SubcSubl1 = types.Delete
+//     runnerUpdate.InbtwList.Ldata[1].Subc.SubcSubl1 = yfilter.Delete
 //     suite.CRUD.Update(&suite.Provider, runnerUpdate)
 
 //     entity = suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
@@ -217,7 +218,7 @@ func (suite *DeleteTestSuite) TestDeleteOnListElement() {
 	suite.CRUD.Create(&suite.Provider, &runnerCreate)
 
 	runnerUpdate := runnerCreate
-	runnerUpdate.InbtwList.Ldata[1].YFilter = types.Delete
+	runnerUpdate.InbtwList.Ldata[1].YFilter = yfilter.Delete
 	suite.CRUD.Update(&suite.Provider, &runnerUpdate)
 
 	entity := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
@@ -249,8 +250,8 @@ func (suite *DeleteTestSuite) TestDeleteOnListElements() {
 
 	entity := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
 	runnerUpdate := entity.(*ysanity.Runner)
-	runnerUpdate.OneList.Ldata[1].YFilter = types.Delete
-	runnerUpdate.OneList.Ldata[2].YFilter = types.Delete
+	runnerUpdate.OneList.Ldata[1].YFilter = yfilter.Delete
+	runnerUpdate.OneList.Ldata[2].YFilter = yfilter.Delete
 
 	suite.CRUD.Update(&suite.Provider, runnerUpdate)
 
@@ -282,7 +283,7 @@ func (suite *DeleteTestSuite) TestDeleteOnListElements() {
 //     runnerUpdate := entity.(*ysanity.Runner)
 
 //     // TODO: Delete whole list using YFilter
-//     // runnerUpdate.OneList.Ldata = types.Delete
+//     // runnerUpdate.OneList.Ldata = yfilter.Delete
 //     // suite.CRUD.Update(&suite.Provider, runnerUpdate)
 
 //     runnerCmp := runnerCreate

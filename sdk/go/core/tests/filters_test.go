@@ -6,6 +6,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	"github.com/CiscoDevNet/ydk-go/ydk/types/yfilter"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -42,7 +43,7 @@ func (suite *FiltersTestSuite) TestReadOnRefClass() {
 	suite.CRUD.Create(&suite.Provider, &r1)
 
 	r2 := ysanity.Runner{}
-	r2.One.YFilter = types.Read
+	r2.One.YFilter = yfilter.Read
 	entity := suite.CRUD.Read(&suite.Provider, &r2)
 
 	suite.Equal(types.EntityEqual(entity, &r1), true)
@@ -56,7 +57,7 @@ func (suite *FiltersTestSuite) TestReadOnRefClass() {
 //     suite.CRUD.Create(&suite.Provider, &r1)
 
 //     r2 := ysanity.Runner{}
-//     r2.One.Number = types.Read
+//     r2.One.Number = yfilter.Read
 //     entity := suite.CRUD.Read(&suite.Provider, &r2)
 
 //     suite.Equal(types.EntityEqual(entity, &r1), true)
@@ -83,7 +84,7 @@ func (suite *FiltersTestSuite) TestReadOnRefClass() {
 //     suite.CRUD.Create(&suite.Provider, &r1)
 
 //     r2 := ysanity.Runner{}
-//     r2.Ytypes.BuiltInT.EnumValue = types.Read
+//     r2.Ytypes.BuiltInT.EnumValue = yfilter.Read
 //     entity := suite.CRUD.Read(&suite.Provider, &r1)
 //     suite.Equal(types.EntityEqual(entity, &r1), true)
 // }
@@ -100,7 +101,7 @@ func (suite *FiltersTestSuite) TestReadOnRefClass() {
 
 //     r2 := ysanity.Runner{}
 
-//     // r2.OneList.Ldata = types.Read
+//     // r2.OneList.Ldata = yfilter.Read
 //     entity := suite.CRUD.Read(&suite.Provider, r2)
 
 //     suite.Equal(types.EntityEqual(entity, &r1), true)
@@ -137,7 +138,7 @@ func (suite *FiltersTestSuite) TestReadOnLeaflist() {
 	r2 := ysanity.Runner{}
 	// TODO: r2.Ytypes.BuiltInT.Llstring is declared as []interface,
 	// how to use YFilter for leaf-list?
-	r2.Ytypes.BuiltInT.Llstring = append(r2.Ytypes.BuiltInT.Llstring, types.Read)
+	r2.Ytypes.BuiltInT.Llstring = append(r2.Ytypes.BuiltInT.Llstring, yfilter.Read)
 	// r2.Ytypes.BuiltInT.Llstring = append(r2.Ytypes.BuiltInT.Llstring, "1")
 	entity := suite.CRUD.Read(&suite.Provider, &r2)
 
@@ -151,7 +152,7 @@ func (suite *FiltersTestSuite) TestReadOnLeaflist() {
 //     suite.CRUD.Create(&suite.Provider, &r1)
 
 //     r2 := ysanity.Runner{}
-//     r2.Ytypes.BuiltInT.IdentityRefValue = types.Read
+//     r2.Ytypes.BuiltInT.IdentityRefValue = yfilter.Read
 //     entity := suite.CRUD.Read(&suite.Provider, &r2)
 //     suite.Equal(types.EntityEqual(entity, &r1), true)
 // }
@@ -166,8 +167,8 @@ func (suite *FiltersTestSuite) TestReadOnLeaflist() {
 //     r2 := ysanity.Runner{}
 //     r3 := ysanity.Runner{}
 
-//     r2.One.Number = types.Read
-//     r3.One.Number = types.Read
+//     r2.One.Number = yfilter.Read
+//     r3.One.Number = yfilter.Read
 
 //     entity2 := suite.CRUD.ReadConfig(&suite.Provider, &r2)
 //     entity3 := suite.CRUD.Read(&suite.Provider, &r3)

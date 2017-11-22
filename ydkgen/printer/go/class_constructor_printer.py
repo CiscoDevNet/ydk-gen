@@ -40,7 +40,7 @@ class ClassConstructorPrinter(FunctionPrinter):
 
     def print_function_body(self):
         self.ctx.writeln('parent types.Entity')
-        self.ctx.writeln('YFilter types.YFilter')
+        self.ctx.writeln('YFilter yfilter.YFilter')
         self._print_inits()
 
     def _print_docstring(self):

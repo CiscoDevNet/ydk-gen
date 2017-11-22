@@ -36,7 +36,7 @@ import (
 )
 
 func config_bgp(bgp *oc_bgp.Bgp) {
-	bgp.Global.Config.As = 65172 //types.Delete
+	bgp.Global.Config.As = 65172 // yfilter.Delete
 	bgp.Global.Config.RouterId = "1.2.3.4"
 
 	ipv6_afisafi := oc_bgp.Bgp_Global_AfiSafis_AfiSafi{}
