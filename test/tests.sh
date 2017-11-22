@@ -108,8 +108,6 @@ function init_tcp_server {
 
 function init_py_env {
     print_msg "Initializing python env"
-    virtualenv p -p python3
-    source p/bin/activate
     pip install -r requirements.txt coverage
 }
 
@@ -595,10 +593,10 @@ install_py_core
 ######################################
 run_cpp_bundle_tests
 run_go_bundle_tests
-run_python_bundle_tests
+#run_python_bundle_tests
 # test_gen_tests
 
-cd $YDKGEN_HOME
-print_msg "gathering cpp coverage"
-print_msg "combining python coverage"
-coverage combine
+#cd $YDKGEN_HOME
+#print_msg "gathering cpp coverage"
+#print_msg "combining python coverage"
+#coverage combine
