@@ -319,6 +319,7 @@ function run_go_sanity_tests {
 ######################################################################
 
 function run_python_bundle_tests {
+    print_msg "Running python bundle tests"
     py_sanity_ydktest
     py_sanity_deviation
     py_sanity_augmentation
@@ -422,7 +423,9 @@ function py_sanity_ydktest_test_netconf_ssh {
 }
 
 function py_sanity_ydktest_test_tcp {
+    print_msg "py_sanity_ydktest_test_tcp"
     run_test sdk/python/core/tests/test_sanity_netconf.py tcp://admin:admin@127.0.0.1:12307
+    init_confd_ydktest
     run_test sdk/python/core/tests/test_sanity_netconf.py tcp://admin:admin@127.0.0.1:12307 --non-demand
 }
 
