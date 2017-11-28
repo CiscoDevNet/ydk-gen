@@ -54,7 +54,7 @@ function run_test_no_coverage {
 }
 
 function run_test {
-    coverage_found=`coverage --version &> /dev/null`
+    coverage_found=$(coverage --version &> /dev/null)
     print_msg "Coverage found: ${coverage_found}"
     if [[ $coverage_found != 0 ]]; then
         run_test_no_coverage $@
@@ -131,9 +131,9 @@ function init_go_env {
 
     cd $YDKGEN_HOME
     if [[ -z "${GOPATH// }" ]]; then
-        export GOPATH="`pwd`/golang"
+        export GOPATH="$(pwd)/golang"
     else
-        export GOPATH="`pwd`/golang":$GOPATH
+        export GOPATH="$(pwd)/golang":$GOPATH
     fi
 
     print_msg "new: ${GOPATH}"
@@ -591,10 +591,10 @@ function py_test_gen {
 ######################################
 # Set up env
 ######################################
-export YDKGEN_HOME="`pwd`"
+export YDKGEN_HOME="$(pwd)"
 
-print_msg "python location: `which python`"
-print_msg "`python -V`"
+print_msg "python location: $(which python)"
+print_msg "$(python -V)"
 
 init_py_env
 init_confd_ydktest
