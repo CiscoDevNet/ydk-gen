@@ -21,6 +21,8 @@ prints Go class method
 
 """
 from .function_printer import FunctionPrinter
+from ydkgen.common import get_qualified_yang_name
+
 
 class ClassGetChildrenPrinter(FunctionPrinter):
     def __init__(self, ctx, clazz, leafs, children):
@@ -36,11 +38,7 @@ class ClassGetChildrenPrinter(FunctionPrinter):
             if child.is_many:
                 self._print_many(child)
             else:
-                path = ''
-                if child.stmt.i_module.arg != child.owner.stmt.i_module.arg:
-                    path += child.stmt.i_module.arg
-                    path += ':'
-                path += child.stmt.arg
+                path = get_qualified_yang_name(child)
                 self.ctx.writeln('children["%s"] = &%s.%s' % (
                     path, self.class_alias, child.go_name()))
         self.ctx.bline()

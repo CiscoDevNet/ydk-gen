@@ -77,7 +77,6 @@ class ModulePrinter(FilePrinter):
         self.ctx.writeln('import (')
         self.ctx.lvl_inc()
         self._print_static_imports(package)
-        # self._print_derived_imports(package)
         self.ctx.lvl_dec()
         self.ctx.writeln(')')
         self.ctx.bline()
@@ -85,7 +84,6 @@ class ModulePrinter(FilePrinter):
     def _print_init(self, package):
         self.ctx.writeln('func init() {')
         self.ctx.lvl_inc()
-        #self.ctx.writeln('fmt.Println("Registering top level entities for package {}")'.format(package.name))
         for e in package.owned_elements:
             ns = package.stmt.search_one('namespace')
             if ns is not None and isinstance(e, Class) and not e.is_identity():
@@ -110,20 +108,6 @@ class ModulePrinter(FilePrinter):
             self.ctx.writeln('"github.com/CiscoDevNet/ydk-go/ydk/types/yfilter"')
             self.ctx.writeln('"github.com/CiscoDevNet/ydk-go/ydk/models/{}"'.format(self.bundle_name))
             self.ctx.writeln('"reflect"')
-
-    def _print_derived_imports(self, package):
-        # derived_imports = ['"github.com/CiscoDevNet/ydk-go/ydk/models/%s"' % self.bundle_name]
-        derived_imports = []
-        for imported_type in package.imported_types():
-            if( self.is_derived_identity(package, imported_type) ):
-                stmt = '"github.com/CiscoDevNet/ydk-go/ydk/models/%s"' % (
-                    imported_type.get_py_mod_name().split('.')[2])
-                if stmt not in derived_imports:
-                    derived_imports.append(stmt)
-
-        if len(derived_imports) > 0:
-            self.ctx.writelns(derived_imports)
-        self.ctx.bline()
 
     def _has_bits(self, element):
         for e in element.owned_elements:

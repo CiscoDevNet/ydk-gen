@@ -62,7 +62,7 @@ func ExecuteRPC(
 	panicOnCStateError(cstate)
 
 	if rootSchema == nil {
-        ydk.YLogError("root schema is nil!")
+		ydk.YLogError("root schema is nil!")
 		panic(1)
 	}
 

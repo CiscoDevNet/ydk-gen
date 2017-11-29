@@ -241,9 +241,3 @@ class ClassSetAttrPrinter(object):
         self.ctx.lvl_dec()
         self.ctx.bline()
 
-
-def _get_qualified_yang_name(clazz):
-    yang_name = clazz.stmt.arg
-    if clazz.owner.stmt.i_module.arg != clazz.stmt.i_module.arg:
-        yang_name = clazz.stmt.i_module.arg + ':' + yang_name
-    return yang_name

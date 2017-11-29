@@ -27,6 +27,7 @@ using namespace ydk;
 using namespace std;
 #define NC_VERB_VERBOSE 2
 
+// NOTE: The ./ ensures this test has to be explicitly run by name
 TEST_CASE("./tcp_xr")
 {
     NetconfTCPClient client{"admin", "admin", "127.0.0.1", 12307};
