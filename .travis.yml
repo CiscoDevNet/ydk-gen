@@ -9,6 +9,7 @@ matrix:
       go: 1.8
       group: edge
     - os: osx
+      osx_image: xcode7.3
       language: generic
       go: 1.8
 
