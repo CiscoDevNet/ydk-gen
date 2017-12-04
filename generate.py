@@ -200,8 +200,7 @@ def create_pip_packages(output_directory):
         sys.exit(exit_code)
     print('=================================================')
     print('Successfully generated Python YDK at %s' % (py_sdk_root,))
-    print('Please read %s/README.md for information on how to install the package in your environment' % (
-        py_sdk_root,))
+    print('Please refer to the README for information on how to install the package in your environment')
 
 
 def generate_adhoc_bundle(adhoc_bundle_name, adhoc_bundle_files):
@@ -234,28 +233,27 @@ def generate_adhoc_bundle(adhoc_bundle_name, adhoc_bundle_files):
     return adhoc_bundle_file.name
 
 
-def create_shared_libraries(output_directory):
+def preconfigure_generated_cpp_code(output_directory):
     cpp_sdk_root = os.path.join(output_directory)
     cmake_build_dir = os.path.join(output_directory, 'build')
     if os.path.exists(cmake_build_dir):
         shutil.rmtree(cmake_build_dir)
     os.makedirs(cmake_build_dir)
     os.chdir(cmake_build_dir)
-    try:        
+    try:
         cmake3_installed = (0 == subprocess.call(['which', 'cmake3'], stdout=subprocess.PIPE, stderr=subprocess.PIPE))
-        if(cmake3_installed):
+        if cmake3_installed:
             cmake_executable = 'cmake3'
         else:
             cmake_executable = 'cmake'
         subprocess.check_call([cmake_executable, '-DCMAKE_BUILD_TYPE=Release', '..'])
     except subprocess.CalledProcessError as e:
-        print('\nERROR: Failed to create shared library!\n')
+        print('\nERROR: Failed to configure build!\n')
         sys.exit(e.returncode)
     print('\nSuccessfully generated code at {0}.\nTo build and install, run "make && [sudo] make install" from {1}'.format(output_directory, cmake_build_dir))
     print('\n=================================================')
     print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
-    print('Please read %s/README.md for information on how to use YDK\n' % (
-        cpp_sdk_root,))
+    print('Please refer to the README for information on how to use YDK\n')
 
 
 def _get_time_taken(start_time):
@@ -438,7 +436,7 @@ if __name__ == '__main__':
     print('\nCreating {0} package...\n'.format(language))
 
     if options.cpp:
-        create_shared_libraries(output_directory)
+        preconfigure_generated_cpp_code(output_directory)
     elif options.go:
         # todo: implement go packaging with the output_directory
         pass

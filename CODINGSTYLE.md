@@ -7,6 +7,6 @@ Some of the coding guidelines include:
  * Writing small functions (3-4 lines would be ideal. Max of 10 lines) and having only one purpose in one function
  * Every function, and every block within a function, should have one entry and one return statement
  * Avoid writing duplicate code
- * Follow the 'girl scout'/‘boy scout’ rule of leaving the code cleaner than one finds it
+ * Follow the ['girl scout'/‘boy scout’](http://programmer.97things.oreilly.com/wiki/index.php/The_Boy_Scout_Rule) rule of leaving the code cleaner than one finds it
  * For indentation, follow the [BSD/Allman style](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
- * Use 4 spaces for indentation in place of hard tabs
+ * Use 4 spaces for indentation in place of hard tabs (does not apply to golang as tabs are recommended there)

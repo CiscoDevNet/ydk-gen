@@ -6,6 +6,9 @@
 .externalToolBuilders/
 .temp
 .idea*
+.coverage*
+htmlcov
+coverage.xml
 *.pyc
 *~
 *.swp

@@ -13,4 +13,3 @@ function start_server {
 start_server
 tcp_pid=$!
 echo "$tcp_pid"
-exit $tcp_pid

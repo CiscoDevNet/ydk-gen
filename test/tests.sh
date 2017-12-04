@@ -62,13 +62,25 @@ function run_test {
         return $status
     fi
     print_msg "executing with coverage: $@"
-    coverage run --source=ydkgen,sdk,generate --branch --parallel-mode $@ > /dev/null
+    coverage run --omit=/usr/* --branch --parallel-mode $@ > /dev/null
     local status=$?
     print_msg "status is ${status}"
     if [ $status -ne 0 ]; then
         exit $status
     fi
     return $status
+}
+
+function pip_check_install {
+    if [[ $(uname) == "Linux" ]] ; then
+        os_info=$(cat /etc/*-release)
+        if [[ ${os_info} == *"fedora"* ]]; then
+            print_msg "custom pip install of $@ for centos"
+            pip install --install-option="--install-purelib=/usr/lib64/python2.7/site-packages" --no-deps $@
+            return
+        fi
+    fi
+    pip install $@
 }
 
 ######################################################################
@@ -105,7 +117,7 @@ function init_tcp_server {
 }
 
 function stop_tcp_server {
-    print_msg "stopping TCP server"
+    print_msg "stopping TCP server process id: $TCP_SERVER_PID"
     kill $TCP_SERVER_PID
 }
 
@@ -158,7 +170,7 @@ function install_cpp_core {
     mkdir -p $YDKGEN_HOME/sdk/cpp/core/build
     cd $YDKGEN_HOME/sdk/cpp/core/build
     
-    cmake .. && sudo make install
+    ${CMAKE_BIN} .. && sudo make install
 }
 
 function run_cpp_core_test {
@@ -188,6 +200,10 @@ function install_py_core {
     cd $YDKGEN_HOME/sdk/python/core
     python setup.py sdist
     pip install dist/ydk*.tar.gz
+
+    print_msg "Generating py binaries"
+    sudo ./generate_python_binary.sh
+
     cd $YDKGEN_HOME
 }
 
@@ -226,11 +242,13 @@ function cpp_sanity_ydktest_test {
     print_msg "Initializing ssh keys for key-based authentication"
     sudo mkdir -p /var/confd/homes/admin/.ssh
     sudo touch /var/confd/homes/admin/.ssh/authorized_keys
-    sudo sh -c 'cat $YDKGEN_HOME/sdk/cpp/tests/ssh_host_rsa_key.pub >> /var/confd/homes/admin/.ssh/authorized_keys'
+    cd $YDKGEN_HOME
+    sudo sh -c 'cat sdk/cpp/tests/ssh_host_rsa_key.pub >> /var/confd/homes/admin/.ssh/authorized_keys'
+    cd -
 
     print_msg "Building and running cpp bundle tests"
     mkdir -p $YDKGEN_HOME/sdk/cpp/tests/build && cd sdk/cpp/tests/build
-    run_exec_test cmake ..
+    run_exec_test ${CMAKE_BIN} ..
     run_exec_test make
     make test
     local status=$?
@@ -248,7 +266,7 @@ function cpp_test_gen_test {
     init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/testgen/confd
     mkdir -p gen-api/cpp/models_test-bundle/ydk/models/models_test/test/build
     cd gen-api/cpp/models_test-bundle/ydk/models/models_test/test/build
-    run_exec_test cmake ..
+    run_exec_test ${CMAKE_BIN} ..
     run_exec_test make
     ctest --output-on-failure
 
@@ -335,8 +353,8 @@ function py_sanity_ydktest {
     print_msg "Generating, installing and testing python ydktest bundle"
 
     py_sanity_ydktest_gen
-    py_sanity_ydktest_install
     py_sanity_ydktest_test
+    py_sanity_ydktest_install
 }
 
 function py_sanity_ydktest_gen {
@@ -358,7 +376,11 @@ function py_sanity_ydktest_install {
     print_msg "py_sanity_ydktest_install"
     print_msg "Installing"
     cd $YDKGEN_HOME
-    pip install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
+    pip_check_install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
+
+    print_msg "running import tests"
+    run_test gen-api/python/ydktest-bundle/ydk/models/ydktest/test/import_tests.py
+
 }
 
 function py_sanity_ydktest_test {
@@ -366,15 +388,17 @@ function py_sanity_ydktest_test {
 
     cd $YDKGEN_HOME && cp -r gen-api/python/ydktest-bundle/ydk/models/* sdk/python/core/ydk/models
 
-    print_msg "running import tests"
-    run_test gen-api/python/ydktest-bundle/ydk/models/ydktest/test/import_tests.py
-
+    print_msg "Uninstall ydk py core from pip for testing with coverage"
+    pip uninstall ydk -y
     export OLDPYTHONPATH=$PYTHONPATH
-    export PYTHONPATH=$PYTHONPATH:sdk/python/core
 
-    print_msg "Copy cpp-wrapper to sdk directory"
-    cd sdk/python/ydk/ && python setup.py build
+    print_msg "Build & copy cpp-wrapper to sdk directory to gather coverage"
+    cd $YDKGEN_HOME
+    cd sdk/python/core/ && python setup.py build
+    print_msg "Set new python path to gather coverage"
+    export PYTHONPATH=$PYTHONPATH:$(pwd)
     cp build/lib*/*.so .
+    cd -
 
     run_test sdk/python/core/tests/test_sanity_codec.py
 
@@ -383,7 +407,13 @@ function py_sanity_ydktest_test {
 
     stop_tcp_server
 
+    print_msg "Restore old python path"
     export PYTHONPATH=$OLDPYTHONPATH
+
+    cd sdk/python/core/
+    rm -f *.so
+    print_msg "Restore ydk py core to pip"
+    pip install dist/ydk*.tar.gz
 
     cd $YDKGEN_HOME
 }
@@ -407,6 +437,7 @@ function py_sanity_ydktest_test_netconf_ssh {
     run_test sdk/python/core/tests/test_sanity_types.py
     run_test_no_coverage sdk/python/core/tests/test_sanity_executor_rpc.py
 
+    print_msg "py_sanity_ydktest_test_netconf_ssh no on-demand"
     run_test sdk/python/core/tests/test_netconf_operations.py --non-demand
     run_test sdk/python/core/tests/test_sanity_delete.py --non-demand
     run_test sdk/python/core/tests/test_sanity_errors.py --non-demand
@@ -456,7 +487,7 @@ function py_sanity_deviation_ydktest_gen {
 function py_sanity_deviation_ydktest_install {
     print_msg "py_sanity_deviation_ydktest_install"
 
-    pip uninstall ydk-models-ydktest -y && pip install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
+    pip uninstall ydk-models-ydktest -y && pip_check_install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
 }
 
 function py_sanity_deviation_ydktest_test {
@@ -479,7 +510,7 @@ function py_sanity_deviation_bgp_install {
     print_msg "py_sanity_deviation_bgp_install"
 
     cd $YDKGEN_HOME
-    pip install gen-api/python/deviation-bundle/dist/*.tar.gz
+    pip_check_install gen-api/python/deviation-bundle/dist/*.tar.gz
 }
 
 function py_sanity_deviation_bgp_test {
@@ -514,7 +545,7 @@ function py_sanity_augmentation_install {
     cd $YDKGEN_HOME
     pip uninstall ydk -y
     pip install gen-api/python/ydk/dist/ydk*.tar.gz
-    pip install gen-api/python/augmentation-bundle/dist/*.tar.gz
+    pip_check_install gen-api/python/augmentation-bundle/dist/*.tar.gz
 }
 
 function py_sanity_augmentation_test {
@@ -544,7 +575,7 @@ function py_sanity_one_class_per_module {
     cd $YDKGEN_HOME
     run_test generate.py --bundle profiles/test/ydktest.json -o
     pip uninstall ydk-models-ydktest -y
-    pip install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
+    pip_check_install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
     run_test sdk/python/core/tests/test_sanity_levels.py
     run_test sdk/python/core/tests/test_sanity_types.py
 }
@@ -581,7 +612,7 @@ function py_test_gen {
     run_test generate.py --core --python
     run_test generate.py --bundle profiles/test/ydk-models-test.json  --generate-tests --python &> /dev/null
     pip install gen-api/python/ydk/dist/ydk*.tar.gz
-    pip install gen-api/python/models_test-bundle/dist/ydk*.tar.gz
+    pip_check_install gen-api/python/models_test-bundle/dist/ydk*.tar.gz
 
     # py_test_gen_test
 }
@@ -593,8 +624,16 @@ function py_test_gen {
 ######################################
 export YDKGEN_HOME="$(pwd)"
 
+print_msg "YDKGEN_HOME is ${YDKGEN_HOME}"
 print_msg "python location: $(which python)"
 print_msg "$(python -V)"
+
+CMAKE_BIN=cmake
+which cmake3
+status=$?
+if [[ ${status} == 0 ]] ; then
+    CMAKE_BIN=cmake3
+fi
 
 init_py_env
 init_confd_ydktest
@@ -618,6 +657,7 @@ run_python_bundle_tests
 # test_gen_tests
 
 cd $YDKGEN_HOME
-print_msg "gathering cpp coverage"
-print_msg "combining python coverage"
-#coverage combine
+
+print_msg "combining python coverage for Linux"
+#coverage combine || echo "Coverage not combined"
+

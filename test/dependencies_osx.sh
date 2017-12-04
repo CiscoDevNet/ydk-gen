@@ -53,18 +53,17 @@ function install_confd {
     ./confd-basic-6.2.darwin.x86_64.installer.bin ../confd
 }
 
-function download_moco {
-    print_msg "Downloading moco"
-    cd test
-    wget https://repo1.maven.org/maven2/com/github/dreamhead/moco-runner/0.11.0/moco-runner-0.11.0-standalone.jar
-    cd -
+function install_fpm {
+    print_msg "Installing fpm"
+    brew install gnu-tar > /dev/null
+    gem install --no-ri --no-rdoc fpm
 }
 
 ########################## EXECUTION STARTS HERE #############################
 
 install_dependencies
 install_confd
-download_moco
+install_fpm
 
 sudo easy_install pip
 sudo pip install virtualenv

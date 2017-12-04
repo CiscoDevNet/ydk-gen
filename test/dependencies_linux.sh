@@ -29,7 +29,14 @@ function print_msg {
 function install_dependencies {
     print_msg "Installing dependencies"
 
+    apt update -y > /dev/null
+    apt install sudo -y > /dev/null
     sudo apt-get update > /dev/null
+    sudo apt-get install libtool-bin -y > /dev/null
+    local status=$?
+    if [[ ${status} != 0 ]]; then
+        sudo apt-get install libtool -y > /dev/null
+    fi
     sudo apt-get install -y bison \
                             curl \
                             doxygen \
@@ -40,7 +47,6 @@ function install_dependencies {
                             libpcre3-dev \
                             libpcre++-dev \
                             libssh-dev \
-                            libtool \
                             libxml2-dev \
                             libxslt1-dev \
                             pkg-config \
@@ -55,6 +61,8 @@ function install_dependencies {
                             wget \
                             zlib1g-dev\
                             lcov \
+                            openjdk-8-jre \
+                            golang \
                             cmake > /dev/null
 
     # gcc-5 and g++5 for modern c++
@@ -73,16 +81,14 @@ function install_confd {
     ./confd-basic-6.2.linux.x86_64.installer.bin ../confd
 }
 
-function download_moco {
-    print_msg "Downloading moco"
-    cd test
-    wget https://repo1.maven.org/maven2/com/github/dreamhead/moco-runner/0.11.0/moco-runner-0.11.0-standalone.jar
-    cd -
+function install_fpm {
+    print_msg "Installing fpm"
+    apt-get install ruby ruby-dev rubygems build-essential -y > /dev/null
+    gem install --no-ri --no-rdoc fpm
 }
 
 ########################## EXECUTION STARTS HERE #############################
 
 install_dependencies
 install_confd
-download_moco
-
+install_fpm
