@@ -44,7 +44,7 @@ function run_exec_test {
 }
 
 function run_test_no_coverage {
-    print_msg "executing: $@"
+    print_msg "executing no coverage: $@"
     python $@
     local status=$?
     if [ $status -ne 0 ]; then
@@ -54,20 +54,18 @@ function run_test_no_coverage {
 }
 
 function run_test {
-    coverage_found=$(coverage --version &> /dev/null)
-    print_msg "Coverage found: ${coverage_found}"
-    if [[ $coverage_found != 0 ]]; then
-        run_test_no_coverage $@
+    if [[ $(command -v coverage) ]]; then
+        print_msg "executing with coverage: $@"
+        coverage run --omit=/usr/* --branch --parallel-mode $@ > /dev/null
         local status=$?
+        print_msg "status is ${status}"
+        if [ $status -ne 0 ]; then
+            exit $status
+        fi
         return $status
     fi
-    print_msg "executing with coverage: $@"
-    coverage run --omit=/usr/* --branch --parallel-mode $@ > /dev/null
+    run_test_no_coverage $@
     local status=$?
-    print_msg "status is ${status}"
-    if [ $status -ne 0 ]; then
-        exit $status
-    fi
     return $status
 }
 
@@ -659,5 +657,7 @@ run_python_bundle_tests
 cd $YDKGEN_HOME
 
 print_msg "combining python coverage for Linux"
-#coverage combine || echo "Coverage not combined"
-
+export CODECOV_TOKEN="12dd615d-fabd-4309-a95c-daceef069a83"
+coverage combine > /dev/null || echo "Coverage not combined"
+# Upload python report to CodeCov
+bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"

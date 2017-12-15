@@ -32,7 +32,7 @@ script:
     - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "ubuntu" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_linux.sh && ./test/tests.sh" ; fi
 
 after_success:
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports" ; fi  # Uploading python report to CodeCov
+#    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports" ; fi  # Uploading python report to CodeCov
 
 #    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd ${TRAVIS_BUILD_DIR}/sdk/cpp/core/build ; fi
 #    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --directory . --capture --output-file coverage.info ; fi # capture coverage info
