@@ -19,15 +19,15 @@ Ubuntu (Debian-based)
 .. code-block:: sh
 
    $ sudo apt-get install gdebi-core
-   $ wget https://devhub.cisco.com/artifactory/debian-ydk/0.6.2/libydk_0.6.2-1_amd64.deb
-   $ sudo gdebi libydk_0.6.2-1_amd64.deb
+   $ wget https://devhub.cisco.com/artifactory/debian-ydk/0.6.3/libydk_0.6.3-1_amd64.deb
+   $ sudo gdebi libydk_0.6.3-1_amd64.deb
 
 Centos (Fedora-based)
 
 .. code-block:: sh
 
    $ sudo yum install epel-release libssh-devel gcc-c++ python-devel
-   $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.6.2/libydk-0.6.2-1.x86_64.rpm
+   $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.6.3/libydk-0.6.3-1.x86_64.rpm
    $ sudo ln –s /usr/bin/cmake3 /usr/bin/cmake && export PATH=/usr/bin/cmake:$PATH
 
 Please see `this issue on YDK GitHub <https://github.com/CiscoDevNet/ydk-gen/issues/518>`_ for any potential/usage installation on CentOS.
@@ -43,8 +43,8 @@ It is required to install Xcode command line tools, `homebrew <http://brew.sh>`_
    $ xcode-select --install
    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
    $ brew install pkg-config libssh libxml2 curl pcre cmake
-   $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.6.2/libydk-0.6.2-Darwin.pkg
-   $ sudo installer -pkg libydk-0.6.2-Darwin.pkg -target /
+   $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.6.3/libydk-0.6.3-Darwin.pkg
+   $ sudo installer -pkg libydk-0.6.3-Darwin.pkg -target /
 
 Windows
 -------
