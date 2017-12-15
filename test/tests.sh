@@ -655,7 +655,9 @@ run_python_bundle_tests
 # test_gen_tests
 
 cd $YDKGEN_HOME
-
+find . -name '*gcda*'|xargs rm -f
+find . -name '*gcno*'|xargs rm -f
+find . -name '*gcov*'|xargs rm -f
 print_msg "combining python coverage for Linux"
 export CODECOV_TOKEN="12dd615d-fabd-4309-a95c-daceef069a83"
 coverage combine > /dev/null || echo "Coverage not combined"
