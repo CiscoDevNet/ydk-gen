@@ -234,8 +234,6 @@ module ietf-inet-types {
       interface.  If the zone index is not present, the default
       zone of the device will be used.
 
-
-
       The canonical format of IPv6 addresses uses the textual
       representation defined in Section 4 of RFC 5952.  The
       canonical format for the zone index is the numerical
@@ -330,8 +328,6 @@ module ietf-inet-types {
             + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
             + '(/.+)';
     }
-
-
     description
      "The ipv6-prefix type represents an IPv6 address prefix.
       The prefix length is given by the number following the
@@ -357,11 +353,11 @@ module ietf-inet-types {
 
   typedef domain-name {
     type string {
+      length "1..253";
       pattern
         '((([a-zA-Z0-9_]([a-zA-Z0-9\-_]){0,61})?[a-zA-Z0-9]\.)*'
       + '([a-zA-Z0-9_]([a-zA-Z0-9\-_]){0,61})?[a-zA-Z0-9]\.?)'
       + '|\.';
-      length "1..253";
     }
     description
      "The domain-name type represents a DNS domain name.  The

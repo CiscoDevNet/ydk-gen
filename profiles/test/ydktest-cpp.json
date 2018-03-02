@@ -37,10 +37,10 @@
             "sdk/cpp/core/tests/models/ydktest-sanity-types@2016-04-11.yang",
             "sdk/cpp/core/tests/models/ydktest-sanity@2015-11-17.yang",
             "sdk/cpp/core/tests/models/ydktest-types@2016-05-23.yang",
+            "sdk/cpp/core/tests/models/oc-pattern@2015-11-17.yang",
             "yang/ietf/ietf-inet-types@2013-07-15.yang",
             "yang/ietf/ietf-yang-types@2013-07-15.yang",
             "yang/ietf/iana-if-type.yang",
-            "yang/ydktest/oc-pattern@2015-11-17.yang",
             "yang/ietf/ietf-netconf-acm@2012-02-22.yang",
             "yang/ietf/ietf-netconf-with-defaults@2011-06-01.yang",
             "yang/ietf/ietf-netconf@2011-06-01.yang"

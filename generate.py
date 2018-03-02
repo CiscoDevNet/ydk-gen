@@ -337,12 +337,6 @@ if __name__ == '__main__':
         help="Generate tests")
 
     parser.add_argument(
-        "--groupings-as-class",
-        action="store_true",
-        default=False,
-        help="Consider yang groupings as classes.")
-
-    parser.add_argument(
         "-o", "--one-class-per-module",
         action="store_true",
         default=False,
@@ -389,7 +383,6 @@ if __name__ == '__main__':
             generator = YdkGenerator(
                 output_directory,
                 ydk_root,
-                options.groupings_as_class,
                 options.gentests,
                 language,
                 'bundle',
@@ -402,7 +395,6 @@ if __name__ == '__main__':
             generator = YdkGenerator(
                 output_directory,
                 ydk_root,
-                options.groupings_as_class,
                 options.gentests,
                 language,
                 'bundle',
@@ -414,7 +406,6 @@ if __name__ == '__main__':
             generator = YdkGenerator(
                 output_directory,
                 ydk_root,
-                options.groupings_as_class,
                 options.gentests,
                 language,
                 'core',

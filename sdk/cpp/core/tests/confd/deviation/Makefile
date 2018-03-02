@@ -70,17 +70,17 @@ cisco-xr-openconfig-bgp-deviations.yang:
 	cp ../../../../../../yang/deviation/cisco-xr-openconfig-bgp-deviations.yang cisco-xr-openconfig-bgp-deviations.yang
 
 ydktest-types.yang:
-	cp ../../../../../../yang/ydktest/ydktest-types@2016-05-23.yang ydktest-types.yang
+	cp ../../models/ydktest-types@2016-05-23.yang ydktest-types.yang
 
 ydktest-sanity.yang: ydktest-types.yang
-	cp ../../../../../../yang/ydktest/ydktest-sanity@2015-11-17.yang ydktest-sanity.yang
-	cp ../../../../../../yang/ydktest/ydktest-sanity-submodule@2016-04-25.yang ydktest-sanity-submodule.yang
+	cp ../../models/ydktest-sanity@2015-11-17.yang ydktest-sanity.yang
+	cp ../../models/ydktest-sanity-submodule@2016-04-25.yang ydktest-sanity-submodule.yang
 
 ydktest-sanity-deviations-types.yang:
-	cp ../../../../../../yang/ydktest/ydktest-sanity-deviations-types@2015-11-17.yang ydktest-sanity-deviations-types.yang
+	cp ../../models/ydktest-sanity-deviations-types@2015-11-17.yang ydktest-sanity-deviations-types.yang
 
 ydktest-sanity-deviations-another.yang:
-	cp ../../../../../../yang/ydktest/ydktest-sanity-deviations-another@2015-11-17.yang ydktest-sanity-deviations-another.yang
+	cp ../../models/ydktest-sanity-deviations-another@2015-11-17.yang ydktest-sanity-deviations-another.yang
 
 
 ######################################################################

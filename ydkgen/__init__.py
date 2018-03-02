@@ -29,8 +29,7 @@ import tarfile
 import tempfile
 
 from .common import YdkGenException, iscppkeyword, ispythonkeyword, isgokeyword
-from ydkgen.builder import (ApiModelBuilder, GroupingClassApiModelBuilder,
-                            PyangModelBuilder, SubModuleBuilder)
+from ydkgen.builder import (ApiModelBuilder, PyangModelBuilder, SubModuleBuilder)
 from .resolver import bundle_resolver, bundle_translator
 from ydkgen.printer import printer_factory
 
@@ -50,8 +49,6 @@ class YdkGenerator(object):
             output_dir (str): The output directory for generated APIs.
             ydk_root   (str): The ydk root directory. Relative file names in
                               the profile file are resolved relative to this.
-            groupings_as_class (bool): If set to true, YANG grouping is
-                                       converted to a class.
             language (str): Language for generated APIs
             package_type (str): Package type for generated APIs.
                             Valid options for bundle approach are: 'core',
@@ -61,13 +58,12 @@ class YdkGenerator(object):
             YdkGenException: If an error has occurred
     """
 
-    def __init__(self, output_dir, ydk_root, groupings_as_class, generate_tests, language, package_type, one_class_per_module):
+    def __init__(self, output_dir, ydk_root, generate_tests, language, package_type, one_class_per_module):
 
         _check_generator_args(output_dir, ydk_root, language, package_type)
 
         self.output_dir = output_dir
         self.ydk_root = ydk_root
-        self.groupings_as_class = groupings_as_class
         self.language = language
         self.package_type = package_type
         self.generate_tests = generate_tests
@@ -162,10 +158,7 @@ class YdkGenerator(object):
         modules = pyang_builder.parse_and_return_modules()
 
         # build api model packages
-        if not self.groupings_as_class:
-            packages = ApiModelBuilder(self.iskeyword, self.language, bundle.name).generate(modules)
-        else:
-            packages = GroupingClassApiModelBuilder(self.iskeyword, self.language, bundle.name).generate(modules)
+        packages = ApiModelBuilder(self.iskeyword, self.language, bundle.name).generate(modules)
         packages.extend(
             SubModuleBuilder().generate(pyang_builder.get_submodules(), self.iskeyword, self.language, bundle.name))
 

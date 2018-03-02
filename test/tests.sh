@@ -366,9 +366,6 @@ function py_sanity_ydktest_gen {
 
     cd $YDKGEN_HOME
 
-    print_msg "py_sanity_ydktest_gen: testing grouping as class"
-    run_test generate.py --bundle profiles/test/ydktest.json --python --groupings-as-class
-
     print_msg "py_sanity_ydktest_gen: testing bundle and documentation generation"
     run_test generate.py --bundle profiles/test/ydktest-cpp.json --python --generate-doc &> /dev/null
 

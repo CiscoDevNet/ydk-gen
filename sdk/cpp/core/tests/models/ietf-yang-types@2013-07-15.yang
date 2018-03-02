@@ -151,9 +151,6 @@ module ietf-yang-types {
      "The zero-based-counter64 type represents a counter64 that
       has the defined 'initial' value zero.
 
-
-
-
       A schema node of this type will be set to zero (0) on creation
       and will thereafter increase monotonically until it reaches
       a maximum value of 2^64-1 (18446744073709551615 decimal),
@@ -390,9 +387,6 @@ module ietf-yang-types {
     type string {
       pattern '([0-9a-fA-F]{2}(:[0-9a-fA-F]{2})*)?';
     }
-
-
-
 
     description
      "Represents media- or physical-level addresses represented
