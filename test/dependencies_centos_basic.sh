@@ -34,7 +34,7 @@ function install_dependencies {
     yum install https://centos7.iuscommunity.org/ius-release.rpm -y > /dev/null
     yum install git which libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel \
                 cmake3 wget curl-devel unzip python-devel python-pip make go java sudo \
-                python36u-devel python36u-pip  rpm-build redhat-lsb -y  \
+                python36u-devel python36u-pip  rpm-build redhat-lsb lcov -y  \
                 > /dev/null
 
      print_msg "Installing gcc5"
@@ -43,6 +43,7 @@ function install_dependencies {
 
      ln -sf /opt/rh/devtoolset-4/root/usr/bin/gcc /usr/bin/cc
      ln -sf /opt/rh/devtoolset-4/root/usr/bin/g++ /usr/bin/c++
+     ln -sf /opt/rh/devtoolset-4/root/usr/bin/gcov /usr/bin/gcov
 
      which gcc
      gcc --version

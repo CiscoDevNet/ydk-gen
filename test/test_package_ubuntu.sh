@@ -49,7 +49,6 @@ function init_confd {
 ######################################
 export YDKGEN_HOME="$(pwd)"
 
-./test/dependencies_ubuntu.sh
 init_confd $YDKGEN_HOME/sdk/cpp/core/tests/confd/ydktest
 
 ######################################
@@ -60,6 +59,7 @@ gdebi -n libydk*.deb
 
 print_msg "Installing ydk-py"
 cd sdk/python/core
+export YDK_COVERAGE=
 python setup.py sdist
 pip install dist/ydk*.tar.gz
 
