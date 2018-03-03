@@ -226,7 +226,7 @@ class PyangModelBuilder(object):
             else:
                 module = self.ctx.add_module(filename, text)
             if module is None:
-                raise YdkGenException('Could not add module ')
+                raise YdkGenException('Could not add module "%s", (%s). Please remove any duplicate files and verify that all the models pass pyang. Run "pyang *" on all the models.'%(name, filename))
             else:
                 modules.append(module)
         return modules
@@ -260,5 +260,5 @@ class PyangModelBuilder(object):
 
         if len(error_messages) > 0:
             err_msg = '\n'.join(error_messages)
-            raise YdkGenException(err_msg)
+            raise YdkGenException('Error occured: "%s". Verify that all the models pass pyang compilation. Run "pyang *" on all the models.'%err_msg)
 

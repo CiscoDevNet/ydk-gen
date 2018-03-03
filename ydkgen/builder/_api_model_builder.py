@@ -302,7 +302,7 @@ class ApiModelBuilder(object):
                 parent_element.owned_elements.append(clazz)
                 clazz.set_owner(parent_element, self.language)
 
-                if self.language == 'cpp' and name_matches_ancestor(clazz.name, parent_element):
+                if name_matches_ancestor(clazz.name, parent_element):
                     clazz.name = clazz.name + '_'
 
                 element = clazz
@@ -439,10 +439,9 @@ def name_matches_ancestor(name, parent_element):
 
 
 def disambiguate_class_name_from_ancestors_and_siblings(language, clazz, parent_element):
-    if language == 'cpp':
-        if name_matches_ancestor(clazz.name, parent_element):
+    if name_matches_ancestor(clazz.name, parent_element):
+        clazz.name = clazz.name + '_'
+    for e in parent_element.owned_elements:
+        if e.name == clazz.name:
             clazz.name = clazz.name + '_'
-        for e in parent_element.owned_elements:
-            if e.name == clazz.name:
-                clazz.name = clazz.name + '_'
 

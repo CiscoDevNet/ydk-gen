@@ -225,7 +225,7 @@ class Entity(_Entity):
 
         for name, value in vars(self).items():
             if value is not None:
-                if self._leafs.has_key(name):
+                if name in self._leafs:
                     leaf = self._leafs[name]
                     isYLeaf = isinstance(leaf, _YLeaf)
                     isYLeafList = isinstance(leaf, _YLeafList)
@@ -266,10 +266,10 @@ class Entity(_Entity):
             if name == leaf.name:
                 return True
 
-        if self._child_list_classes.has_key(name):
+        if name in self._child_list_classes:
             return True
 
-        if self._child_container_classes.has_key(name):
+        if name in self._child_container_classes:
             return True
 
         return False

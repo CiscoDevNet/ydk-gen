@@ -266,13 +266,13 @@ func (suite *SanityLevelsTestSuite) TestThreeListPos() {
 	suite.Equal(types.EntityEqual(&runner, entityRead), true)
 }
 
-func (suite *SanityLevelsTestSuite) TestNestedNaming() {
+/*func (suite *SanityLevelsTestSuite) TestNestedNaming() {
 	n1 := ysanity.Runner_NestedNaming_NestedNaming{}
 	n2 := ysanity.Runner_NestedNaming{}
 	n1.NestedNaming.NestedNaming = 1
 	n2.NestedNaming.NestedNaming.NestedNaming = 1
 	suite.Equal(n1.NestedNaming.NestedNaming, n2.NestedNaming.NestedNaming.NestedNaming)
-}
+}*/
 
 func (suite *SanityLevelsTestSuite) TestInbtwListPos() {
 	runner := ysanity.Runner{}

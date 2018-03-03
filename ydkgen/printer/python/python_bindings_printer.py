@@ -24,7 +24,7 @@ from __future__ import print_function
 import os, shutil
 from distutils import dir_util
 
-from ydkgen.api_model import Bits, Class, Enum, Package, snake_case
+from ydkgen.api_model import Bits, Class, Enum, Package, snake_case, get_property_name
 from ydkgen.common import get_rst_file_name
 
 from .import_test_printer import ImportTestPrinter
@@ -132,12 +132,14 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
     def _print_python_modules(self, element, index, path, size, sub):
         for c in [clazz for clazz in element.owned_elements if isinstance(clazz, Class)]:
             if not c.is_identity():
-                self._print_python_module(c, index, os.path.join(path, snake_case(c.stmt.arg)), size, sub)
+                self._print_python_module(c, index, os.path.join(path, get_property_name(c, c.iskeyword)), size, sub)
 
     def _print_python_module(self, package, index, path, size, sub):
         if self.one_class_per_module:
             self.initialize_output_directory(path, True)
             self._print_init_file(path)
+
+        self._print_init_file(path)
 
         package.parent_pkg_name = sub
         extra_args = {'one_class_per_module': self.one_class_per_module,
@@ -227,7 +229,7 @@ def get_python_module_file_name(path, package):
     if isinstance(package, Package):
         return '%s/%s.py' % (path, package.name)
     else:
-        return '%s/%s.py' % (path, snake_case(package.stmt.arg))
+        return '%s/%s.py' % (path, get_property_name(package, package.iskeyword))
 
 
 def get_test_module_file_name(path, package):

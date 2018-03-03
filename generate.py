@@ -414,9 +414,8 @@ if __name__ == '__main__':
             output_directory = (generator.generate(options.core))
 
     except YdkGenException as e:
-        print('Error(s) occurred in YdkGenerator()!')
-        if options.verbose:
-            print(e.msg)
+        print('\nError(s) occurred in YdkGenerator()!\n')
+        print(e.msg)
         sys.exit(1)
 
     if options.gendoc:

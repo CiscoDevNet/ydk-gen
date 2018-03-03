@@ -906,6 +906,15 @@ def snake_case(input_text):
     s = s.replace('.', '_')
     return s.lower()
 
+
+def get_property_name(element, iskeyword):
+    name = snake_case(element.stmt.unclashed_arg if hasattr(element.stmt, 'unclashed_arg') else element.stmt.arg)
+    if iskeyword(name) or iskeyword(name.lower()) or (
+            element.owner is not None and element.stmt.arg.lower() == element.owner.stmt.arg.lower()):
+        name = '%s_' % name
+    return name
+
+
 # capitalized input will not affected
 def camel_case(input_text):
     def _title(s):

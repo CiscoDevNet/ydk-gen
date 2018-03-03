@@ -84,7 +84,6 @@ ydk::path::DataNodeImpl::~DataNodeImpl()
 const ydk::path::SchemaNode&
 ydk::path::DataNodeImpl::get_schema_node() const
 {
-	YLOG_DEBUG("get_schema_node: Getting schema node for '{}'", m_node->schema->name);
     check_ly_schema_node_for_path(m_node, get_path());
     auto schema_ptr = reinterpret_cast<const SchemaNode*>(m_node->schema->priv);
     return *schema_ptr;
@@ -105,7 +104,6 @@ ydk::path::DataNodeImpl::get_path() const
 void
 ydk::path::DataNodeImpl::populate_new_schemas_from_path(const std::string& path)
 {
-	YLOG_DEBUG("populate_new_schemas_from_path: Getting schema node for '{}'", m_node->schema->name);
     check_ly_schema_node_for_path(m_node, path);
     auto snode = reinterpret_cast<SchemaNodeImpl*>(m_node->schema->priv);
     snode->populate_new_schemas_from_path(path);

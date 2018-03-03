@@ -167,6 +167,8 @@ function install_cpp_core {
     cd $YDKGEN_HOME/sdk/cpp/core/build
     
     ${CMAKE_BIN} .. && sudo make install
+    make package
+    cp libydk*rpm libydk*deb /ydk-gen &> /dev/null
 }
 
 function run_cpp_core_test {
@@ -338,7 +340,7 @@ function run_python_bundle_tests {
     py_sanity_deviation
     py_sanity_augmentation
     py_sanity_common_cache
-    #py_sanity_one_class_per_module
+#py_sanity_one_class_per_module
 }
 
 #--------------------------

@@ -22,7 +22,7 @@ class_inits_printer.py
 """
 from pyang.types import PathTypeSpec
 from ydkgen.api_model import Bits, Class, Package, DataType, Enum, snake_case
-from ydkgen.common import get_module_name, has_list_ancestor, is_top_level_class, get_qualified_yang_name
+from ydkgen.common import get_module_name, has_list_ancestor, is_top_level_class, get_qualified_yang_name, get_unclashed_name
 from .class_get_entity_path_printer import GetAbsolutePathPrinter, GetSegmentPathPrinter
 
 
@@ -108,6 +108,8 @@ class ClassInitsPrinter(object):
             self.ctx.writeln('self.yang_parent_name = "%s"' % clazz.owner.stmt.arg)
             self.ctx.writeln('self.is_top_level_class = %s' % ('True' if is_top_level_class(clazz) else 'False'))
             self.ctx.writeln('self.has_list_ancestor = %s' % ('True' if has_list_ancestor(clazz) else 'False'))
+            self.ctx.writeln(
+                'self.ylist_key_names = [%s]' % (','.join(["'%s'" % key.name for key in clazz.get_key_props()])))
             self.ctx.writeln('self._child_container_classes = {%s}' % (get_child_container_classes(clazz, self.one_class_per_module)))
             self.ctx.writeln('self._child_list_classes = {%s}' % (get_child_list_classes(clazz, self.one_class_per_module)))
             if clazz.stmt.search_one('presence') is not None:
@@ -156,8 +158,8 @@ class ClassInitsPrinter(object):
 
     def _print_children_imports(self, clazz, children):
         for child in children:
-            self.ctx.writeln('from .%s import %s' % (snake_case(child.property_type.stmt.arg), snake_case(child.property_type.stmt.arg)))
-            self.ctx.writeln('self.__class__.%s = %s.%s' % (child.property_type.name, snake_case(child.property_type.stmt.arg), child.property_type.name))
+            self.ctx.writeln('from .%s import %s' % (get_unclashed_name(child.property_type, child.property_type.iskeyword), get_unclashed_name(child.property_type, child.property_type.iskeyword)))
+            self.ctx.writeln('self.__class__.%s = %s.%s' % (child.property_type.name, get_unclashed_name(child.property_type, child.property_type.iskeyword), child.property_type.name))
         self.ctx.bline()
 
     def _print_init_children(self, children):
@@ -166,14 +168,14 @@ class ClassInitsPrinter(object):
                 self.ctx.bline()
                 if (child.stmt.search_one('presence') is None):
                     if self.one_class_per_module:
-                        self.ctx.writeln('self.%s = %s.%s()' % (child.name, snake_case(child.property_type.stmt.arg), child.property_type.name))
+                        self.ctx.writeln('self.%s = %s.%s()' % (child.name, get_unclashed_name(child.property_type, child.property_type.iskeyword), child.property_type.name))
                     else:
                         self.ctx.writeln('self.%s = %s()' % (child.name, child.property_type.qn()))
                     self.ctx.writeln('self.%s.parent = self' % child.name)
                 else:
                     self.ctx.writeln('self.%s = None' % (child.name))
-                self.ctx.writeln('self._children_name_map["%s"] = "%s"' % (child.name, child.stmt.arg))
-                self.ctx.writeln('self._children_yang_names.add("%s")' % (child.stmt.arg))
+                self.ctx.writeln('self._children_name_map["%s"] = "%s"' % (child.name, get_qualified_yang_name(child)))
+                self.ctx.writeln('self._children_yang_names.add("%s")' % (get_qualified_yang_name(child)))
 
     def _print_init_lists(self, clazz):
         if clazz.is_identity() and len(clazz.extends) == 0:

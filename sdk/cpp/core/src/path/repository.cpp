@@ -41,9 +41,8 @@ namespace ydk
 {
 static bool file_exists(const std::string & path)
 {
-    struct stat st;
+    struct stat st={0};
 
-    memset( &st, 0, sizeof(struct stat));
     return stat(path.c_str(), &st) == 0;
 }
 
@@ -300,12 +299,11 @@ std::shared_ptr<ydk::path::RootSchemaNode>
 ydk::path::RepositoryPtr::create_root_schema(const std::unordered_map<std::string, path::Capability>& lookup_table,
                                              const std::vector<path::Capability>& caps_to_load)
 {
-    ly_verb(LY_LLSILENT); //turn off libyang logging at the beginning
+    ly_verb(LY_LLVRB); // enable libyang logging
     ly_ctx* ctx = create_ly_context();
 
     load_module_from_capabilities(ctx, caps_to_load);
 
-    ly_verb(LY_LLVRB); // enable libyang logging after model download has completed
     RootSchemaNodeImpl* rs = new RootSchemaNodeImpl{ctx, shared_from_this(), lookup_table};
     return std::shared_ptr<RootSchemaNode>(rs);
 }

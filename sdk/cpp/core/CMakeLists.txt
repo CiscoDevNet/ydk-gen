@@ -23,7 +23,7 @@ bundle profile and the ydk-gen tool.")
 
 set (CPACK_PACKAGE_CONTACT "ydk-admin@cisco.com")
 set (CPACK_PACKAGE_VENDOR "Cisco")
-set (CPACK_PACKAGE_INSTALL_DIRECTORY "/usr/local")
+set(CPACK_SET_DESTDIR true)
 
 # MAC OS -- not working
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -383,13 +383,8 @@ add_library(libnetconf STATIC IMPORTED)
 set_property(TARGET libnetconf PROPERTY IMPORTED_LOCATION ${libnetconf_archive})
 add_dependencies(libnetconf project_libnetconf)
 
-if(LIBYANG_PLUGINS_DIR)
-    set(LIBYANG_EXT_PLUGINS_DIR ${LIBYANG_PLUGINS_DIR})
-else()
-    set(LIBYANG_EXT_PLUGINS_DIR ${LIB_INSTALL_DIR}/libyang)
-endif()
-set(LIBYANG_PLUGINS_INSTALL_DIR ${CPACK_PACKAGE_INSTALL_DIRECTORY}/${LIBYANG_EXT_PLUGINS_DIR})
-message("Set libyang plugin installation directory to: ${LIBYANG_PLUGINS_INSTALL_DIR}")
+set(LIBYANG_EXT_PLUGINS_DIR ${LIB_INSTALL_DIR}/libyang)
+message("Set libyang plugin installation directory to: ${LIBYANG_EXT_PLUGINS_DIR}")
 
 # Add LibYang
 set(libyang_include_location include/libyang)
@@ -397,7 +392,7 @@ set(libyang_headers_location ${CMAKE_CURRENT_BINARY_DIR}/project_libyang/headers
 ExternalProject_Add(project_libyang
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/project_libyang"
     URL "https://github.com/ygorelik/libyang/archive/master.zip"
-    CMAKE_ARGS -DSTATIC=true -DCMAKE_BUILD_TYPE=Debug -DPLUGINS_DIR=${LIBYANG_PLUGINS_INSTALL_DIR}
+    CMAKE_ARGS -DSTATIC=true -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_LIBDIR=lib
     INSTALL_DIR "${libyang_location}"
     INSTALL_COMMAND mkdir -p ${libyang_headers_location}/libyang && cp ${libyang_headers} ${libyang_headers_location}/libyang
 )

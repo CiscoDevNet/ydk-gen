@@ -458,3 +458,18 @@ def get_qualified_yang_name(clazz):
     if clazz.owner.stmt.i_module.arg != clazz.stmt.i_module.arg:
         yang_name = clazz.stmt.i_module.arg + ':' + yang_name
     return yang_name
+
+
+def get_unclashed_name(element, iskeyword):
+    name = snake_case(element.stmt.unclashed_arg if hasattr(element.stmt, 'unclashed_arg') else element.stmt.arg)
+    if iskeyword(name) or iskeyword(name.lower()) or (
+            element.owner is not None and element.stmt.arg.lower() == element.owner.stmt.arg.lower()):
+        name = '%s_' % name
+    return name
+
+
+def snake_case(input_text):
+    s = input_text.replace('-', '_')
+    s = s.replace('.', '_')
+    return s.lower()
+
