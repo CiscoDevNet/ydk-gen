@@ -295,7 +295,7 @@ function collect_cpp_coverage {
     print_msg "Collecting coverage for C++"
     cd ${YDKGEN_HOME}/sdk/cpp/core/build
     lcov --directory . --capture --output-file coverage.info # capture coverage info
-    lcov --remove coverage.info '/usr/*' '/Applications/*' '/opt/*' '*json.hpp' '*catch.hpp' --output-file coverage.info # filter out system
+    lcov --remove coverage.info '/usr/*' '/Applications/*' '/opt/*' '*json.hpp' '*catch.hpp' '*/spdlog/*' --output-file coverage.info # filter out system
     lcov --list coverage.info #debug info
     cp coverage.info ${YDKGEN_HOME}
 }
