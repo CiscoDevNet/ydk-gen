@@ -340,7 +340,8 @@ function run_go_samples {
 function run_go_sanity_tests {
     print_msg "Running go sanity tests"
     cd $YDKGEN_HOME/sdk/go/core/tests
-    run_exec_test go test
+    run_exec_test go test -race -coverpkg="github.com/CiscoDevNet/ydk-go/ydk/providers","github.com/CiscoDevNet/ydk-go/ydk/services","github.com/CiscoDevNet/ydk-go/ydk/types","github.com/CiscoDevNet/ydk-go/ydk/types/datastore","github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format","github.com/CiscoDevNet/ydk-go/ydk/types/protocol","github.com/CiscoDevNet/ydk-go/ydk/types/yfilter","github.com/CiscoDevNet/ydk-go/ydk/types/ytype","github.com/CiscoDevNet/ydk-go/ydk","github.com/CiscoDevNet/ydk-go/ydk/path" -coverprofile=coverage.txt -covermode=atomic
+    mv coverage.txt ${YDKGEN_HOME}
     cd -
 }
 
