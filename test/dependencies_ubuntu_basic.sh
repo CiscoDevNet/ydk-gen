@@ -73,7 +73,6 @@ function install_dependencies {
     sudo apt-get install gcc-5 g++-5 -y > /dev/null
     sudo ln -f -s /usr/bin/g++-5 /usr/bin/c++
     sudo ln -f -s /usr/bin/gcc-5 /usr/bin/cc
-    sudo ln -f -s /usr/bin/gcov-5 /usr/bin/gcov
 }
 
 ########################## EXECUTION STARTS HERE #############################
