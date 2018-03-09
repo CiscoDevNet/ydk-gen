@@ -270,7 +270,7 @@ ydk::path::Codec::encode(const ydk::path::DataNode& dn, ydk::EncodingFormat form
         std::free(buffer);
     }
 
-    auto cdata_start = ret.find("<![CDATA[");
+    /*auto cdata_start = ret.find("<![CDATA[");
     if (cdata_start == std::string::npos &&
         ydk::path::has_xml_escape_sequences(ret))
     {
@@ -296,7 +296,7 @@ ydk::path::Codec::encode(const ydk::path::DataNode& dn, ydk::EncodingFormat form
         data = replace_xml_escape_sequences(data);
 
         ret = ret.substr(0, data_start_end+1) + "<![CDATA[" + data + "]]>" + ret.substr(data_end);
-    }
+    }*/
     return ret;
 }
 
