@@ -22,8 +22,12 @@
 #include <vector>
 
 #include "network_topology.hpp"
-#include "types.hpp"
+#include "path_api.hpp"
 
+namespace ydk
+{
+class ServiceProvider;
+}
 namespace ydk
 {
 

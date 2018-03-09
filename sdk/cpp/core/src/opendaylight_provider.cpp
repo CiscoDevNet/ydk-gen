@@ -15,13 +15,11 @@
 ------------------------------------------------------------------*/
 
 #include "logger.hpp"
-#include "netconf_provider.hpp"
 #include "opendaylight_parser.hpp"
 #include "opendaylight_provider.hpp"
 #include "path_api.hpp"
 #include "restconf_client.hpp"
 #include "restconf_provider.hpp"
-#include "service_provider.hpp"
 
 
 using namespace std;

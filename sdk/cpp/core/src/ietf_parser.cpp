@@ -146,10 +146,6 @@ vector<pair<std::string, path::Capability>> IetfCapabilitiesParser::segmentalize
 
     for( string &c : capabilities )
     {
-        if(c.find("calvados") != string::npos || c.find("tailf") != string::npos || c.find("tail-f") != string::npos)
-        {
-            continue;
-        }
 
         auto p = find(c.begin(), c.end(),'?');
 
@@ -226,9 +222,6 @@ vector<pair<std::string, path::Capability>> IetfCapabilitiesParser::segmentalize
                 c_deviations.push_back(move(deviation));
             }
 
-        }
-        if(c_module.find("tailf") != string::npos) {
-            continue;
         }
 
         segs.emplace_back(make_pair(c_ns, path::Capability{c_module, c_revision, c_features, c_deviations}));

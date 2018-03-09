@@ -38,7 +38,6 @@
 
 
 using namespace std;
-using namespace ydk;
 
 namespace ydk
 {
@@ -57,22 +56,22 @@ static void create_input_source(path::DataNode & input, bool config);
 static void create_input_error_option(path::DataNode & input);
 static string get_annotated_config_payload(path::RootSchemaNode & root_schema, path::Rpc & rpc, path::Annotation & annotation);
 static string get_commit_rpc_payload();
-static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported);
+static shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported);
 
 static string get_read_rpc_name(bool config);
 static bool is_config(path::Rpc & rpc);
 static string get_filter_payload(path::Rpc & ydk_rpc);
 static string get_netconf_payload(path::DataNode & input, const string& data_tag, const string& data_value);
-static std::shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::RootSchemaNode & root_schema, path::Rpc & rpc);
+static shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::RootSchemaNode & root_schema, path::Rpc & rpc);
 
 const char* CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
 const string PROTOCOL_SSH = "ssh";
 const string PROTOCOL_TCP = "tcp";
 
 static bool is_netconf_get_rpc(path::Rpc & rpc);
-static std::shared_ptr<path::DataNode> handle_netconf_get_output(const string & reply, path::RootSchemaNode & root_schema);
+static shared_ptr<path::DataNode> handle_netconf_get_output(const string & reply, path::RootSchemaNode & root_schema);
 
-// static std::shared_ptr<path::DataNode> handle_read_reply(string reply, path::RootSchemaNode & root_schema);
+// static shared_ptr<path::DataNode> handle_read_reply(string reply, path::RootSchemaNode & root_schema);
 
 NetconfSession::NetconfSession(path::Repository & repo,
                                const string& address,
@@ -148,9 +147,9 @@ void NetconfSession::initialize_client_with_key(const string& address,
                                        int port,
                                        int timeout)
 {
-    client = make_unique<NetconfSSHClient>(
+    client = make_shared<NetconfSSHClient>(
         username, private_key_path, public_key_path, address, port, timeout);
-    model_provider = make_unique<NetconfModelProvider>(*client);
+    model_provider = make_shared<NetconfModelProvider>(*client);
 }
 
 void NetconfSession::initialize_client(const string& address,
@@ -162,18 +161,18 @@ void NetconfSession::initialize_client(const string& address,
 {
     if (protocol.compare(PROTOCOL_SSH) == 0)
     {
-        client = make_unique<NetconfSSHClient>(username, password, address, port, timeout);
+        client = make_shared<NetconfSSHClient>(username, password, address, port, timeout);
     }
     else if (protocol.compare(PROTOCOL_TCP) == 0)
     {
-        client = make_unique<NetconfTCPClient>(username, password, address, port);
+        client = make_shared<NetconfTCPClient>(username, password, address, port);
     }
     else
     {
         YLOG_ERROR("Protocol {} not supported.", protocol);
         throw(YOperationNotSupportedError{"Protocol is not supported!"});
     }
-    model_provider = make_unique<NetconfModelProvider>(*client);
+    model_provider = make_shared<NetconfModelProvider>(*client);
 }
 
 void NetconfSession::initialize_repo(path::Repository & repo, bool on_demand)
@@ -182,9 +181,9 @@ void NetconfSession::initialize_repo(path::Repository & repo, bool on_demand)
     client->connect();
     server_capabilities = client->get_capabilities();
 
-    for(std::string &c : server_capabilities )
+    for(string &c : server_capabilities )
     {
-        if(c.find("ietf-netconf-monitoring") != std::string::npos)
+        if(c.find("ietf-netconf-monitoring") != string::npos)
         {
             repo.add_model_provider(model_provider.get());
         }
@@ -195,6 +194,7 @@ void NetconfSession::initialize_repo(path::Repository & repo, bool on_demand)
     std::vector<path::Capability> yang_caps;
     std::vector<std::string> empty_caps;
     std::vector<path::Capability> all_caps = capabilities_parser.parse(server_capabilities);
+
     if (on_demand)
         yang_caps = capabilities_parser.parse(empty_caps);
     else
@@ -214,7 +214,7 @@ NetconfSession::~NetconfSession()
     YLOG_INFO("Disconnected from device");
 }
 
-std::vector<std::string> NetconfSession::get_capabilities() const
+vector<string> NetconfSession::get_capabilities() const
 {
     return server_capabilities;
 }
@@ -224,20 +224,20 @@ path::RootSchemaNode& NetconfSession::get_root_schema() const
     return *root_schema;
 }
 
-std::shared_ptr<path::DataNode> NetconfSession::handle_read(path::Rpc& ydk_rpc) const
+shared_ptr<path::DataNode> NetconfSession::handle_read(path::Rpc& ydk_rpc) const
 {
     //for now we only support crud rpc's
     bool config = is_config(ydk_rpc);
     auto netconf_rpc = create_rpc_instance(*root_schema, get_read_rpc_name(config));
     auto & input = create_rpc_input(*netconf_rpc);
     create_input_source(input, config);
-    std::string filter_value = get_filter_payload(ydk_rpc);
+    string filter_value = get_filter_payload(ydk_rpc);
 
     string netconf_payload = get_netconf_payload(input, "filter", filter_value);
     return handle_rpc_output(execute_payload(netconf_payload), *root_schema, *netconf_rpc );
 }
 
-std::shared_ptr<path::DataNode> NetconfSession::handle_edit(path::Rpc& ydk_rpc, path::Annotation annotation) const
+shared_ptr<path::DataNode> NetconfSession::handle_edit(path::Rpc& ydk_rpc, path::Annotation annotation) const
 {
     //for now we only support crud rpc's
     bool candidate_supported = is_candidate_supported(server_capabilities);
@@ -255,23 +255,23 @@ std::shared_ptr<path::DataNode> NetconfSession::handle_edit(path::Rpc& ydk_rpc, 
     return handle_edit_reply(execute_payload(netconf_payload), *client, candidate_supported);
 }
 
-std::shared_ptr<path::DataNode> NetconfSession::handle_netconf_operation(path::Rpc& ydk_rpc) const
+shared_ptr<path::DataNode> NetconfSession::handle_netconf_operation(path::Rpc& ydk_rpc) const
 {
     path::Codec codec_service{};
     auto netconf_payload = codec_service.encode(ydk_rpc.get_input_node(), EncodingFormat::XML, true);
-    std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
+    string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     netconf_payload = payload + netconf_payload + "</rpc>";
 
     YLOG_INFO("=============Generating payload to send to device=============");
     YLOG_INFO("\n{}", netconf_payload);
     YLOG_INFO("\n");
 
-    std::string reply = execute_payload(netconf_payload);
+    string reply = execute_payload(netconf_payload);
     if (ydk_rpc.has_output_node())
     {
         return handle_rpc_output(reply, *root_schema, ydk_rpc);
     }
-    if(reply.find("<ok/>") == std::string::npos)
+    if(reply.find("<ok/>") == string::npos)
     {
         YLOG_ERROR("Did not receive OK reply from the device");
         throw(YServiceProviderError{reply});
@@ -279,7 +279,7 @@ std::shared_ptr<path::DataNode> NetconfSession::handle_netconf_operation(path::R
     return nullptr;
 }
 
-std::shared_ptr<path::DataNode> NetconfSession::invoke(path::Rpc& rpc) const
+shared_ptr<path::DataNode> NetconfSession::invoke(path::Rpc& rpc) const
 {
     path::SchemaNode* create_schema = get_schema_for_operation(*root_schema, "ydk:create");
     path::SchemaNode* read_schema = get_schema_for_operation(*root_schema, "ydk:read");
@@ -288,7 +288,7 @@ std::shared_ptr<path::DataNode> NetconfSession::invoke(path::Rpc& rpc) const
 
     //for now we only support crud rpc's
     path::SchemaNode* rpc_schema = &(rpc.get_schema_node());
-    std::shared_ptr<path::DataNode> datanode = nullptr;
+    shared_ptr<path::DataNode> datanode = nullptr;
 
     if(rpc_schema == create_schema || rpc_schema == delete_schema || rpc_schema == update_schema)
     {
@@ -308,7 +308,7 @@ std::shared_ptr<path::DataNode> NetconfSession::invoke(path::Rpc& rpc) const
     return datanode;
 }
 
-std::string NetconfSession::execute_payload(const std::string & payload) const
+string NetconfSession::execute_payload(const string & payload) const
 {
     std::string reply = client->execute_payload(payload);
     YLOG_INFO("=============Reply payload received from device=============");
@@ -341,7 +341,8 @@ static string get_commit_rpc_payload()
 
 static bool is_candidate_supported(vector<string> capabilities)
 {
-    if(std::find(capabilities.begin(), capabilities.end(), CANDIDATE) != capabilities.end()){
+    if(find(capabilities.begin(), capabilities.end(), CANDIDATE) != capabilities.end())
+    {
         //candidate is supported
         return true;
     }
@@ -384,7 +385,7 @@ static string get_annotated_config_payload(path::RootSchemaNode & root_schema,
     }
 
     path::DataNode* entity_node = entity[0].get();
-    std::string entity_value = entity_node->get_value();
+    string entity_value = entity_node->get_value();
 
     //deserialize the entity_value
     auto datanode = codec_service.decode(root_schema, entity_value, EncodingFormat::XML);
@@ -394,7 +395,7 @@ static string get_annotated_config_payload(path::RootSchemaNode & root_schema,
         throw(YInvalidArgumentError{"Failed to decode entity node"});
     }
 
-    std::string config_payload {};
+    string config_payload {};
 
     for(auto const & child : datanode->get_children())
     {
@@ -424,7 +425,7 @@ static string get_netconf_payload(path::DataNode & input, const string &  data_t
     path::Codec codec_service{};
     input.create_datanode(data_tag, data_value);
 
-    std::string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">\n"};
+    string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">\n"};
     payload+=codec_service.encode(input, EncodingFormat::XML, true);
     payload+="</rpc>";
     YLOG_INFO("=============Generating payload to send to device=============");
@@ -433,9 +434,9 @@ static string get_netconf_payload(path::DataNode & input, const string &  data_t
     return payload;
 }
 
-static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported)
+static shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported)
 {
-    if(reply.find("<ok/>") == std::string::npos)
+    if(reply.find("<ok/>") == string::npos)
     {
         YLOG_ERROR("Did not receive OK reply from the device");
         throw(YServiceProviderError{reply});
@@ -453,7 +454,7 @@ static std::shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfCl
         YLOG_INFO("=============Reply payload received from device=============");
         YLOG_INFO("\n{}", reply.c_str());
         YLOG_INFO("\n");
-        if(reply.find("<ok/>") == std::string::npos)
+        if(reply.find("<ok/>") == string::npos)
         {
             YLOG_ERROR("RPC error occurred: {}", reply);
             throw(YServiceProviderError{reply});
@@ -470,25 +471,25 @@ static bool is_netconf_get_rpc(path::Rpc & rpc)
             or rpc.get_schema_node().get_path() == "/ietf-netconf:get-config");
 }
 
-static std::shared_ptr<path::DataNode> handle_netconf_get_output(const string & reply, path::RootSchemaNode & root_schema)
+static shared_ptr<path::DataNode> handle_netconf_get_output(const string & reply, path::RootSchemaNode & root_schema)
 {
     path::Codec codec_service{};
     auto empty_data = reply.find("<data/>");
-    if(empty_data != std::string::npos)
+    if(empty_data != string::npos)
     {
         YLOG_INFO( "Found empty data tag");
         return nullptr;
     }
 
     auto data_start = reply.find("<data>");
-    if(data_start == std::string::npos)
+    if(data_start == string::npos)
     {
         YLOG_ERROR( "Can't find data tag in reply sent by device {}", reply);
         throw(YServiceProviderError{reply});
     }
     data_start+= sizeof("<data>") - 1;
     auto data_end = reply.find("</data>", data_start);
-    if(data_end == std::string::npos)
+    if(data_end == string::npos)
     {
         YLOG_ERROR( "No end data tag found in reply sent by device {}", reply);
         throw(YError{"No end data tag found"});
@@ -496,7 +497,7 @@ static std::shared_ptr<path::DataNode> handle_netconf_get_output(const string & 
 
     string data = reply.substr(data_start, data_end-data_start);
 
-    auto datanode = std::shared_ptr<path::DataNode>(codec_service.decode(root_schema, data, EncodingFormat::XML));
+    auto datanode = shared_ptr<path::DataNode>(codec_service.decode(root_schema, data, EncodingFormat::XML));
 
     if(!datanode){
         YLOG_ERROR( "Codec service failed to decode datanode");
@@ -505,7 +506,7 @@ static std::shared_ptr<path::DataNode> handle_netconf_get_output(const string & 
     return datanode;
 }
 
-static std::shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::RootSchemaNode & root_schema, path::Rpc & rpc)
+static shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::RootSchemaNode & root_schema, path::Rpc & rpc)
 {
     if (is_netconf_get_rpc(rpc))
     {
@@ -522,7 +523,7 @@ static std::shared_ptr<path::DataNode> handle_rpc_output(const string & reply, p
     data_end -= 1;
     string data = reply.substr(data_start, data_end-data_start+1);
 
-    std::shared_ptr<path::DataNode> datanode = codec_service.decode_rpc_output(
+    shared_ptr<path::DataNode> datanode = codec_service.decode_rpc_output(
                                                     root_schema,
                                                     data,
                                                     rpc.get_schema_node().get_path(),

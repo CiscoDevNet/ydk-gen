@@ -148,6 +148,7 @@ class Entity {
     bool is_presence_container;
     bool is_top_level_class;
     bool has_list_ancestor;
+    std::vector<std::string> ylist_key_names;
 };
 
 class Bits {
@@ -364,6 +365,15 @@ enum class Protocol
     restconf,
     netconf
 };
+
+enum class DataStore {
+    candidate,
+    running,
+    startup,
+    url
+};
+
+std::string to_string(DataStore d);
 }
 
 #endif /* _TYPES_HPP_ */

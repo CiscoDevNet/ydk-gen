@@ -38,7 +38,7 @@ namespace ydk {
 
 static std::string get_data_payload(Entity& entity, path::RootSchemaNode& root_schema);
 static shared_ptr<Entity> get_top_entity_from_filter(Entity & filter);
-static shared_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider& provider, string && yfilter);
+static shared_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider& provider, string && operation);
 static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string, string & url);
 static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string);
 static string get_xml_subtree_filter_payload(Entity & entity, const path::Session & session);
@@ -331,10 +331,25 @@ bool NetconfService::validate(NetconfServiceProvider& provider, Entity& source)
     return read_datanode == nullptr;
 }
 
-static shared_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider& provider, string && yfilter)
+string to_string(DataStore datastore)
+{
+    switch(datastore)
+    {
+        case DataStore::candidate:
+            return "candidate";
+        case DataStore::running:
+            return "running";
+        case DataStore::startup:
+            return "startup";
+        case DataStore::url:
+            return "url";
+    }
+}
+
+static shared_ptr<path::Rpc> get_rpc_instance(NetconfServiceProvider& provider, string && operation)
 {
     path::RootSchemaNode & root_schema = provider.get_session().get_root_schema();
-    auto rpc =  root_schema.create_rpc(yfilter);
+    auto rpc =  root_schema.create_rpc(operation);
     if (rpc == nullptr)
         throw(YError{"Unable to create rpc"});
 
@@ -371,7 +386,7 @@ static void create_input_leaf(path::DataNode & input_datanode, DataStore datasto
         {
             throw(YServiceError{"URL needs to be specified"});
         }
-        os << "/url";
+        os << "/" << to_string(datastore);
 
         input_datanode.create_datanode(os.str(), url);
     }
@@ -384,26 +399,7 @@ static void create_input_leaf(path::DataNode & input_datanode, DataStore datasto
 static void create_input_leaf(path::DataNode & input_datanode, DataStore datastore, string && datastore_string)
 {
     ostringstream os;
-    os << datastore_string;
-
-    switch(datastore)
-    {
-        case DataStore::candidate:
-            os << "/candidate";
-            break;
-
-        case DataStore::running:
-            os << "/running";
-            break;
-
-        case DataStore::startup:
-            os << "/startup";
-            break;
-
-        case DataStore::url:
-            throw(YServiceError{"URL needs to be specified"});
-            break;
-    }
+    os << datastore_string << "/" << to_string(datastore);
 
     input_datanode.create_datanode(os.str());
 }

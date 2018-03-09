@@ -1045,21 +1045,10 @@ public:
                    bool common_cache = false,
                    int timeout = -1);
 
-    // NetconfSession(
-    //     const std::string& address,
-    //     const std::string& username,
-    //     Repository& repo = "",
-    //     const std::string& private_key_path = "",
-    //     const std::string& public_key_path = "",
-    //     int port = 830,
-    //     bool on_demand = true,
-    //     bool common_cache = false,
-    //     int timeout = -1);
+    ~NetconfSession();
 
-    virtual ~NetconfSession();
-
-    virtual RootSchemaNode& get_root_schema() const;
-    virtual std::shared_ptr<DataNode> invoke(Rpc& rpc) const;
+    RootSchemaNode& get_root_schema() const;
+    std::shared_ptr<DataNode> invoke(Rpc& rpc) const;
     std::vector<std::string> get_capabilities() const;
 
 private:
@@ -1082,15 +1071,17 @@ private:
     void initialize_repo(Repository& repo, bool on_demand);
     std::string execute_payload(const std::string & payload) const;
 private:
-    std::unique_ptr<NetconfClient> client;
-    std::unique_ptr<ModelProvider> model_provider;
+    std::shared_ptr<NetconfClient> client;
+    std::shared_ptr<ModelProvider> model_provider;
     std::shared_ptr<RootSchemaNode> root_schema;
     std::vector<std::string> server_capabilities;
+    bool is_ned_device = false;
 };
 
 
 class RestconfSession : public Session {
 public:
+    RestconfSession();
     RestconfSession(Repository & repo,
                     const std::string & address,
                     const std::string & username,
@@ -1107,10 +1098,10 @@ public:
                     const std::string & config_url_root,
                     const std::string & state_url_root);
 
-    virtual ~RestconfSession();
+    ~RestconfSession();
 
-    virtual RootSchemaNode& get_root_schema() const;
-    virtual std::shared_ptr<DataNode> invoke(Rpc& rpc) const;
+    RootSchemaNode& get_root_schema() const;
+    std::shared_ptr<DataNode> invoke(Rpc& rpc) const;
 
 private:
     void initialize(Repository & repo);

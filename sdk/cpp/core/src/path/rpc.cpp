@@ -74,32 +74,9 @@ ydk::path::RpcImpl::get_schema_node() const
     return schema_node;
 }
 
-static bool is_output(const std::string & str)
+static bool is_output(lys_node* node)
 {
-    return str == "output";
-}
-
-static bool is_part_of_output(lys_node* node_result)
-{
-    lys_node* parent = node_result->parent;
-    if(parent == NULL)
-    {
-        return is_output(node_result->name);
-    }
-    if(parent->parent == NULL)
-    {
-        return is_output(parent->name);
-    }
-    else
-    {
-        while(parent->parent)
-        {
-            if(is_output(parent->name))
-                return true;
-            parent = parent->parent;
-        }
-    }
-    return false;
+    return std::string(node->name) == "output" && node->nodetype == LYS_OUTPUT ;
 }
 
 bool ydk::path::RpcImpl::has_output_node() const
@@ -117,7 +94,8 @@ bool ydk::path::RpcImpl::has_output_node() const
         for(size_t i=0; i < result_set->number; i++)
         {
             lys_node* node_result = result_set->set.s[i];
-            if (is_part_of_output(node_result)) {
+            if (is_output(node_result) && node_result->child != NULL)
+            {
             	result = true;
             	break;
             }

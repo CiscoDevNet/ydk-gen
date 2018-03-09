@@ -94,7 +94,6 @@ NetconfSSHClient::NetconfSSHClient(
     nc_session_transport(NC_TRANSPORT_SSH);
 
     nc_set_keypair_path(private_key_path.c_str(), public_key_path.c_str());
-    // password_lookup.insert(make_pair(make_pair(username, hostname), password));
     session=NULL;
 }
 

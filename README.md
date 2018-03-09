@@ -84,8 +84,7 @@ Centos (Fedora-based):
 **To build from source:**
 ```
 $ sudo yum install epel-release
-$ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake3 clang libcurl-devel
-$ sudo ln –fs $(which cmake3) /usr/bin/cmake && export PATH=/usr/bin:$PATH
+$ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake3 clang libcurl-devel rpm-build redhat-lsb
 ```
 
 ## macOS
@@ -229,10 +228,14 @@ There usually would have been changes on the master branch since the last [relea
 
 First, generate the core and install it:
 
-For C++, Go or Python, the below step is required:
+First generate and install ``libydk`` (**required for C++, Go or Python**):
 ```
 $ ./generate.py --cpp --core
-$ cd gen-api/cpp/ydk/build && make && sudo make install
+$ cd gen-api/cpp/ydk/build
+$ make && sudo make install
+
+# To create the ``libydk`` binary package to use for later installation, run the below command after the above
+$ make package
 ```
 
 For python:

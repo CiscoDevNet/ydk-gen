@@ -50,12 +50,12 @@ ExecutorService::~ExecutorService()
 shared_ptr<Entity> ExecutorService::execute_rpc(ServiceProvider& provider,
     Entity & rpc_entity, std::shared_ptr<Entity> top_entity)
 {
-    // Get the yfilter - RPC Name
-    auto const & yfilter = rpc_entity.get_segment_path();
+    // Get the operation - RPC Name
+    auto const & operation = rpc_entity.get_segment_path();
 
     // Create RPC instance
     path::RootSchemaNode & root_schema = provider.get_session().get_root_schema();
-    shared_ptr<path::Rpc> rpc = root_schema.create_rpc(yfilter);
+    shared_ptr<path::Rpc> rpc = root_schema.create_rpc(operation);
     path::DataNode & rpc_input = rpc->get_input_node();
 
     // Handle input

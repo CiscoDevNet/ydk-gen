@@ -26,6 +26,7 @@
 
 #include "entity_util.hpp"
 #include "logger.hpp"
+#include "xml_util.hpp"
 #include "xml_subtree_codec.hpp"
 
 using namespace std;
@@ -33,13 +34,10 @@ using namespace std;
 namespace ydk
 {
 static void decode_xml(xmlDocPtr doc, xmlNodePtr root, Entity & entity, Entity * parent, const string & leaf_name);
-static string to_string(const xmlChar * s);
-static const xmlChar * to_xmlchar(const string & s);
 
 static void walk_children(Entity & entity, const path::SchemaNode & parent_schema, xmlNodePtr root_node);
 static void populate_xml_node(Entity & entity, const path::SchemaNode & parent_schema, xmlNodePtr xml_node);
 static void populate_xml_node_contents(const path::SchemaNode & parent_schema, EntityPath & path, xmlNodePtr xml_node);
-static string to_string(xmlDocPtr doc, xmlNodePtr xml_node);
 
 XmlSubtreeCodec::XmlSubtreeCodec()
 {
@@ -54,7 +52,7 @@ std::string XmlSubtreeCodec::encode(Entity & entity, path::RootSchemaNode & root
     auto & root_data_node = root_schema.create_datanode(root_path.path);
     xmlDocPtr doc = xmlNewDoc(to_xmlchar("1.0"));
     xmlNodePtr root_node = xmlNewNode(NULL, to_xmlchar(entity.yang_name));
-    xmlNewProp(root_node, (const unsigned char *)"xmlns", to_xmlchar(root_data_node.get_schema_node().get_statement().name_space));
+    set_xml_namespace(root_data_node.get_schema_node().get_statement().name_space, root_node);
 
     populate_xml_node_contents(root_data_node.get_schema_node(), root_path, root_node);
     walk_children(entity, root_data_node.get_schema_node(), root_node);
@@ -94,11 +92,6 @@ static const path::SchemaNode* find_child_by_name(const path::SchemaNode & paren
 static bool has_same_namespace(const path::SchemaNode & left, const path::SchemaNode & right)
 {
     return left.get_statement().name_space == right.get_statement().name_space;
-}
-
-static void set_xml_namespace(const string & name_space, xmlNodePtr xml_node)
-{
-    xmlNewProp(xml_node, to_xmlchar("xmlns"), to_xmlchar(name_space));
 }
 
 static void set_operation_from_yfilter(YFilter yfilter, xmlNodePtr xml_node)
@@ -187,24 +180,6 @@ static void populate_xml_node_contents(const path::SchemaNode & parent_schema, E
     }
 }
 
-static string to_string(xmlDocPtr doc, xmlNodePtr root)
-{
-    string str;
-    xmlBufferPtr buf = xmlBufferCreate();
-    if (buf != NULL)
-    {
-        xmlNodeDump(buf, doc, root, 0, 1);
-        str = to_string(buf->content);
-        xmlBufferFree(buf);
-    }
-    else
-    {
-        YLOG_ERROR("Error creating the xml buffer");
-        throw YServiceProviderError{"Error creating the xml buffer"};
-    }
-    return str;
-}
-
 //////////////////////////////////////////////////////////////////
 // XmlSubtreeCodec::decode
 //////////////////////////////////////////////////////////////////
@@ -218,19 +193,6 @@ std::shared_ptr<Entity> XmlSubtreeCodec::decode(const std::string & payload, std
     }
     decode_xml(doc, root->children, *entity, nullptr, "");
     return entity;
-}
-
-static bool isonlywhitespace(xmlChar *	content)
-{
-    if(content == NULL)
-        return true;
-
-    for(auto g:to_string(content))
-    {
-        if (!isspace(g))
-            return false;
-    }
-    return true;
 }
 
 static void check_and_set_leaf(Entity & entity, Entity * parent, xmlNodePtr xml_node, xmlDocPtr doc)
@@ -340,17 +302,4 @@ static void decode_xml(xmlDocPtr doc, xmlNodePtr root, Entity & entity, Entity *
     }
 }
 
-static string to_string(const xmlChar * s)
-{
-    if(s == NULL) return "";
-
-    const char* buffer = reinterpret_cast<const char*>(s);
-    return buffer;
-}
-
-static const xmlChar * to_xmlchar(const string & s)
-{
-    const xmlChar* buffer = reinterpret_cast<const xmlChar*>(s.c_str());
-    return buffer;
-}
 }

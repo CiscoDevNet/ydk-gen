@@ -25,6 +25,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <string.h>
 
 #include <fstream>
 #include <unordered_set>
@@ -192,13 +193,14 @@ namespace ydk {
                 yang_file_path += '/';
                 yang_file_path += (submod_name?submod_name:module_name);
                 yang_file_path_no_revision += yang_file_path;
-                if(module_rev){
-                    yang_file_path += "@";
-                    yang_file_path += module_rev;
-                }
-                else if(sub_rev){
+
+                if(submod_name && sub_rev){
                     yang_file_path += "@";
                     yang_file_path += sub_rev;
+                }
+                else if(module_name && module_rev){
+                    yang_file_path += "@";
+                    yang_file_path += module_rev;
                 }
                 yang_file_path += ".yang";
                 YLOG_DEBUG("Opening file {}", yang_file_path);

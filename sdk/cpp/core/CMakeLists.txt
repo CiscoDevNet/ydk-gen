@@ -163,6 +163,7 @@ set(libydk_src
     src/value.cpp
     src/value_list.cpp
     src/xml_subtree_codec.cpp
+    src/xml_util.cpp
     src/ydk_operation.cpp
     src/ydk.cpp
     src/ydk_yang.cpp
@@ -216,6 +217,7 @@ set(libydk_install_headers
     src/service_provider.hpp
     src/types.hpp
     src/xml_subtree_codec.hpp
+    src/xml_util.hpp
     src/validation_service.hpp
     src/ydk.h)
 

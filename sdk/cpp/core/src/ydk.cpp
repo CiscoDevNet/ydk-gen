@@ -93,11 +93,6 @@ static ydk::path::DataNode* unwrap(DataNodeWrapper* datanode_wrapper)
     return datanode_wrapper->priv.get();
 }
 
-static RootSchemaNodeWrapper* wrap(ydk::path::RootSchemaNode* node)
-{
-    return (new RootSchemaNodeWrapper(shared_ptr<ydk::path::RootSchemaNode>(node)));
-}
-
 static RootSchemaNodeWrapper* wrap(shared_ptr<ydk::path::RootSchemaNode> node)
 {
     return (new RootSchemaNodeWrapper(node));
@@ -536,6 +531,7 @@ const char* OpenDaylightServiceProviderGetNodeIDByIndex(
     OpenDaylightServiceProvider provider,
     int idx)
 {
+    (void)state;//avoid compiler warning
     ydk::OpenDaylightServiceProvider * real_provider = static_cast<ydk::OpenDaylightServiceProvider*>(provider);
     if ((size_t)idx < real_provider->get_node_ids().size())
     {
