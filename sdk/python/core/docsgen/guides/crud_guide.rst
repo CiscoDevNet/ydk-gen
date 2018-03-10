@@ -150,7 +150,7 @@ For example, to read a :py:class:`YLeaf<ydk.types.YLeaf>` called ``running`` in 
     ins.instance_name = 'default'
 
     # Set the yfilter attribute of the leaf called 'running' to YFilter.read
-    ins.running.yfilter = YFilter.read
+    ins.running = YFilter.read
 
     # Append the instance to the parent
     isis.instances.instance.append(ins)
@@ -213,8 +213,7 @@ For example, to delete a :py:class:`YLeaf<ydk.types.YLeaf>` called ``running`` i
     ins.instance_name = 'default'
 
     # Set the yfilter attribute of the leaf called 'running' to YFilter.delete
-    ins.running = Empty()
-    ins.running.yfilter = YFilter.delete
+    ins.running = YFilter.delete
 
     # Append the instance to the parent
     isis.instances.instance.append(ins)

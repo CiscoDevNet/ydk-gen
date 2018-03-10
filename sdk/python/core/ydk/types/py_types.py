@@ -21,6 +21,8 @@
         - YLeafList
         - Entity
 """
+from collections import OrderedDict
+
 from ydk_ import is_set
 from ydk.ext.types import Bits
 from ydk.ext.types import ChildrenMap
@@ -119,11 +121,11 @@ class Entity(_Entity):
     def __init__(self):
         super(Entity, self).__init__()
         self._local_refs = {}
-        self._children_name_map = {}
+        self._children_name_map = OrderedDict()
         self._children_yang_names = set()
-        self._child_container_classes = {}
-        self._child_list_classes = {}
-        self._leafs = {}
+        self._child_container_classes = OrderedDict()
+        self._child_list_classes = OrderedDict()
+        self._leafs = OrderedDict()
         self._segment_path = lambda : ''
         self._absolute_path = lambda : ''
 
@@ -288,7 +290,9 @@ class Entity(_Entity):
                     leaf_name_data.extend(leaf.get_name_leafdata())
             elif (type(value) not in (list, type(None), Bits)
                 or (isinstance(value, Bits) and len(value.get_bitmap()) > 0)):
-
+                '''if isinstance(value, _YLeaf):
+                    leaf.set(str(value))
+                else:'''
                 leaf.set(value)
                 leaf_name_data.append(leaf.get_name_leafdata())
             elif isinstance(value, list) and len(value) > 0:
@@ -319,7 +323,7 @@ class Entity(_Entity):
 
     def _check_monkey_patching_error(self, name, value):
         obj = self.__dict__.get(name)
-        if obj is None or isinstance(obj, (_YLeaf, YLeafList, YList)):
+        if obj is None or isinstance(obj, (_YLeaf, YLeafList, YList, OrderedDict)):
             return
         if type(value) is _YFilter:
             return
@@ -346,7 +350,7 @@ class Entity(_Entity):
                     if isinstance(leaf, _YLeaf):
                         leaf.set(value)
                     elif isinstance(leaf, _YLeafList):
-                        leaf.clear()
+                        # leaf.clear()
                         for item in value:
                             leaf.append(item)
 

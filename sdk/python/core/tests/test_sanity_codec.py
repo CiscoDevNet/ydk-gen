@@ -312,14 +312,14 @@ class SanityYang(unittest.TestCase):
         <community-set>
           <community-set-name>COMMUNITY-SET1</community-set-name>
           <config>
+            <community-set-name>COMMUNITY-SET1</community-set-name>
             <community-member>ios-regex '^65172:17...$'</community-member>
             <community-member>65172:16001</community-member>
-            <community-set-name>COMMUNITY-SET1</community-set-name>
           </config>
           <state>
+            <community-set-name>COMMUNITY-SET1</community-set-name>
             <community-member>ios-regex '^65172:17...$'</community-member>
             <community-member>65172:16001</community-member>
-            <community-set-name>COMMUNITY-SET1</community-set-name>
           </state>
         </community-set>
       </community-sets>

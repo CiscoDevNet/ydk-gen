@@ -55,6 +55,7 @@ function install_dependencies {
                             python3-dev \
                             python-lxml \
                             python3-lxml \
+                            python3-pip \
                             python-virtualenv \
                             software-properties-common \
                             unzip \

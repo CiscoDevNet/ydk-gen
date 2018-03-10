@@ -44,7 +44,7 @@ test_int16_invalid_pattern =  """set\(\): incompatible function arguments. The f
     8. \(self: ydk_.types.YLeaf, value: ydk_.types.Empty\) -> None
     9. \(self: ydk_.types.YLeaf, value: ydk_.types.Identity\) -> None
     10. \(self: ydk_.types.YLeaf, value: ydk_.types.Bits\) -> None
-    11. \(self: ydk_.types.YLeaf, value: unicode\) -> None
+    .*
     12. \(self: ydk_.types.YLeaf, value: ydk_.types.Enum.YLeaf\) -> None
     13. \(self: ydk_.types.YLeaf, value: ydk_.types.Decimal64\) -> None
 
@@ -53,18 +53,7 @@ test_int32_invalid_patern = """set\(\): incompatible function arguments. The fol
     1. \(self: ydk_.types.YLeaf, value: int\) -> None
     2. \(self: ydk_.types.YLeaf, value: int\) -> None
     3. \(self: ydk_.types.YLeaf, value: int\) -> None
-    4. \(self: ydk_.types.YLeaf, value: int\) -> None
-    5. \(self: ydk_.types.YLeaf, value: int\) -> None
-    6. \(self: ydk_.types.YLeaf, value: int\) -> None
-    7. \(self: ydk_.types.YLeaf, value: float\) -> None
-    8. \(self: ydk_.types.YLeaf, value: ydk_.types.Empty\) -> None
-    9. \(self: ydk_.types.YLeaf, value: ydk_.types.Identity\) -> None
-    10. \(self: ydk_.types.YLeaf, value: ydk_.types.Bits\) -> None
-    11. \(self: ydk_.types.YLeaf, value: unicode\) -> None
-    12. \(self: ydk_.types.YLeaf, value: ydk_.types.Enum.YLeaf\) -> None
-    13. \(self: ydk_.types.YLeaf, value: ydk_.types.Decimal64\) -> None
-
-Invoked with: , \[\]"""
+    .*"""
 test_int64_invalid_pattern = """Invalid value "9223372036854775808" in "number64" element. Path: /ydktest-sanity:runner/ytypes/built-in-t/number64"""
 test_uint8_invalid_pattern = """Invalid value "-1" in "u_number8" element. Path: /ydktest-sanity:runner/ytypes/built-in-t/u_number8"""
 test_uint16_invalid_pattern = """Invalid value "not an uint" in "u_number16" element. Path: /ydktest-sanity:runner/ytypes/built-in-t/u_number16"""
@@ -81,7 +70,7 @@ test_string_invalid_pattern = """set\(\): incompatible function arguments. The f
     8. \(self: ydk_.types.YLeaf, value: ydk_.types.Empty\) -> None
     9. \(self: ydk_.types.YLeaf, value: ydk_.types.Identity\) -> None
     10. \(self: ydk_.types.YLeaf, value: ydk_.types.Bits\) -> None
-    11. \(self: ydk_.types.YLeaf, value: unicode\) -> None
+    .*
     12. \(self: ydk_.types.YLeaf, value: ydk_.types.Enum.YLeaf\) -> None
     13. \(self: ydk_.types.YLeaf, value: ydk_.types.Decimal64\) -> None
 

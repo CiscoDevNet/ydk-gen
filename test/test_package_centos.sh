@@ -43,6 +43,26 @@ function init_confd {
 }
 
 ########################## EXECUTION STARTS HERE #############################
+######################################
+# Parse args
+######################################
+PYTHON_VERSION=""
+
+args=$(getopt p:d $*)
+set -- $args
+PYTHON_VERSION=${2}
+
+PYTHON_BIN=python${PYTHON_VERSION}
+
+if [[ ${PYTHON_VERSION} = *"2"* ]]; then
+    PIP_BIN=pip
+elif [[ ${PYTHON_VERSION} = *"3.5"* ]]; then
+    PIP_BIN=pip3
+else
+    PIP_BIN=pip${PYTHON_VERSION}
+fi
+
+print_msg "Using ${PYTHON_BIN} & ${PIP_BIN}"
 
 ######################################
 # Set up env
@@ -61,13 +81,13 @@ print_msg "Installing ydk-py"
 cd sdk/python/core
 export YDK_COVERAGE=
 python setup.py sdist
-pip install dist/ydk*.tar.gz
+${PIP_BIN} install -v dist/ydk*.tar.gz
 
 ######################################
 # Test
 ######################################
 print_msg "Running basic python test"
-python -c 'import os;from ydk.path import Repository; from ydk.providers import NetconfServiceProvider; repo=Repository(os.getcwd()); p=NetconfServiceProvider(repo, "127.0.0.1", "admin","admin",12022)'
+${PYTHON_BIN} -c 'import os;from ydk.path import Repository; from ydk.providers import NetconfServiceProvider; repo=Repository(os.getcwd()); p=NetconfServiceProvider(repo, "127.0.0.1", "admin","admin",12022)'
 status=$?
 if [ $status -ne 0 ]; then
     exit $status

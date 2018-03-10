@@ -29,7 +29,7 @@ function print_msg {
 function install_confd {
     print_msg "Installing confd"
 
-    wget https://github.com/CiscoDevNet/ydk-gen/files/562538/confd-basic-6.2.linux.x86_64.zip
+    wget https://github.com/CiscoDevNet/ydk-gen/files/562538/confd-basic-6.2.linux.x86_64.zip &> /dev/null
     unzip confd-basic-6.2.linux.x86_64.zip
     ./confd-basic-6.2.linux.x86_64.installer.bin ../confd
 }

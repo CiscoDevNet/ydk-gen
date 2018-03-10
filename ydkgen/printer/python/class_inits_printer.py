@@ -55,9 +55,9 @@ def get_child_container_classes(clazz, one_class_per_module):
     for prop in clazz.properties():
         if prop.stmt.keyword == 'container':
             if one_class_per_module:
-                m.append('"%s" : ("%s", %s.%s)'%(get_qualified_yang_name(prop.property_type), prop.name, clazz.name, prop.property_type.name))
+                m.append('("%s", ("%s", %s.%s))'%(get_qualified_yang_name(prop.property_type), prop.name, clazz.name, prop.property_type.name))
             else:
-                m.append('"%s" : ("%s", %s)'%(get_qualified_yang_name(prop.property_type), prop.name, prop.property_type.qn()))
+                m.append('("%s", ("%s", %s))'%(get_qualified_yang_name(prop.property_type), prop.name, prop.property_type.qn()))
     return '%s' % (', '.join(m))
 
 
@@ -66,9 +66,9 @@ def get_child_list_classes(clazz, one_class_per_module):
     for prop in clazz.properties():
         if prop.stmt.keyword == 'list':
             if one_class_per_module:
-                m.append('"%s" : ("%s", %s.%s)' % (get_qualified_yang_name(prop.property_type), prop.name, clazz.name, prop.property_type.name))
+                m.append('("%s", ("%s", %s.%s))' % (get_qualified_yang_name(prop.property_type), prop.name, clazz.name, prop.property_type.name))
             else:
-                m.append('"%s" : ("%s", %s)' % (get_qualified_yang_name(prop.property_type), prop.name, prop.property_type.qn()))
+                m.append('("%s", ("%s", %s))' % (get_qualified_yang_name(prop.property_type), prop.name, prop.property_type.qn()))
     return '%s' % (', '.join(m))
 
 
@@ -110,8 +110,8 @@ class ClassInitsPrinter(object):
             self.ctx.writeln('self.has_list_ancestor = %s' % ('True' if has_list_ancestor(clazz) else 'False'))
             self.ctx.writeln(
                 'self.ylist_key_names = [%s]' % (','.join(["'%s'" % key.name for key in clazz.get_key_props()])))
-            self.ctx.writeln('self._child_container_classes = {%s}' % (get_child_container_classes(clazz, self.one_class_per_module)))
-            self.ctx.writeln('self._child_list_classes = {%s}' % (get_child_list_classes(clazz, self.one_class_per_module)))
+            self.ctx.writeln('self._child_container_classes = OrderedDict([%s])' % (get_child_container_classes(clazz, self.one_class_per_module)))
+            self.ctx.writeln('self._child_list_classes = OrderedDict([%s])' % (get_child_list_classes(clazz, self.one_class_per_module)))
             if clazz.stmt.search_one('presence') is not None:
                 self.ctx.writeln('self.is_presence_container = True')
             self._print_init_leafs_and_leaflists(clazz, leafs)
@@ -122,10 +122,10 @@ class ClassInitsPrinter(object):
 
     def _print_init_leafs_and_leaflists(self, clazz, leafs):
         if len(leafs) == 0:
-            self.ctx.writeln('self._leafs = {}')
+            self.ctx.writeln('self._leafs = OrderedDict()')
             return
 
-        self.ctx.writeln('self._leafs = {')
+        self.ctx.writeln('self._leafs = OrderedDict([')
         self.ctx.lvl_inc()
         declarations = []
 
@@ -147,11 +147,11 @@ class ClassInitsPrinter(object):
                     clazz.stmt.top in prop.stmt.top.i_aug_targets)):
                 yname = ':'.join([prop.stmt.top.arg, prop.stmt.arg])
 
-            self.ctx.writeln("'%s' : %s(YType.%s, '%s')," % (leaf_name, leaf_type, ytype, yname))
+            self.ctx.writeln("('%s', %s(YType.%s, '%s'))," % (leaf_name, leaf_type, ytype, yname))
             declarations.append(declaration_stmt)
 
         self.ctx.lvl_dec()
-        self.ctx.writeln('}')
+        self.ctx.writeln('])')
 
         for line in declarations:
             self.ctx.writeln(line)

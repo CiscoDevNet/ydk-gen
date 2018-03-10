@@ -12,8 +12,10 @@ matrix:
       osx_image: xcode7.3
       language: generic
       go: 1.8
-    - env: DOCKER=true OS_TYPE=centos OS_VERSION=centos7
-    - env: DOCKER=true OS_TYPE=ubuntu OS_VERSION=xenial
+    - env: DOCKER=true OS_TYPE=centos OS_VERSION=centos7 PYTHON_VERSION=2.7
+    - env: DOCKER=true OS_TYPE=centos OS_VERSION=centos7 PYTHON_VERSION=3.6
+    - env: DOCKER=true OS_TYPE=ubuntu OS_VERSION=xenial PYTHON_VERSION=2.7
+    - env: DOCKER=true OS_TYPE=ubuntu OS_VERSION=xenial PYTHON_VERSION=3.5
     #- env: DOCKER=true OS_TYPE=centos OS_VERSION=centos6.9 #TODO needs more work
   allow_failures:
     - os: osx
@@ -29,10 +31,10 @@ before_install:
 
 script:
     - if [[ "$DOCKER" != "true" ]]; then ./test/tests.sh ;fi
-    - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "centos" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_centos.sh && ./test/tests.sh" ; fi
-    - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "centos" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_centos.sh && ./test/test_package_centos.sh" ; fi
-    - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "ubuntu" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_ubuntu.sh && ./test/tests.sh" ; fi
-    - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "ubuntu" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_ubuntu.sh && ./test/test_package_ubuntu.sh" ; fi
+    - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "centos" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_centos.sh && ./test/tests.sh -p ${PYTHON_VERSION}" ; fi
+    - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "centos" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_centos.sh && ./test/test_package_centos.sh -p ${PYTHON_VERSION}" ; fi
+    - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "ubuntu" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_ubuntu.sh && ./test/tests.sh -p ${PYTHON_VERSION}" ; fi
+    - if [[ "$DOCKER" == "true" ]] && [[ "$OS_TYPE" == "ubuntu" ]]; then docker run -v `pwd`:/ydk-gen ${OS_TYPE}:${OS_VERSION} bash -c "cd /ydk-gen && ./test/dependencies_ubuntu.sh && ./test/test_package_ubuntu.sh -p ${PYTHON_VERSION}" ; fi
 
 after_success:
     - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports" # Upload python report to CodeCov

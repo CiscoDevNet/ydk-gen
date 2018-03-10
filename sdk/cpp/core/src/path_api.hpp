@@ -1075,7 +1075,6 @@ private:
     std::shared_ptr<ModelProvider> model_provider;
     std::shared_ptr<RootSchemaNode> root_schema;
     std::vector<std::string> server_capabilities;
-    bool is_ned_device = false;
 };
 
 
