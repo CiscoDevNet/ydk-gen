@@ -290,9 +290,6 @@ class Entity(_Entity):
                     leaf_name_data.extend(leaf.get_name_leafdata())
             elif (type(value) not in (list, type(None), Bits)
                 or (isinstance(value, Bits) and len(value.get_bitmap()) > 0)):
-                '''if isinstance(value, _YLeaf):
-                    leaf.set(str(value))
-                else:'''
                 leaf.set(value)
                 leaf_name_data.append(leaf.get_name_leafdata())
             elif isinstance(value, list) and len(value) > 0:
@@ -350,7 +347,6 @@ class Entity(_Entity):
                     if isinstance(leaf, _YLeaf):
                         leaf.set(value)
                     elif isinstance(leaf, _YLeafList):
-                        # leaf.clear()
                         for item in value:
                             leaf.append(item)
 
