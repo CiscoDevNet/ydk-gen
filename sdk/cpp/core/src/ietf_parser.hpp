@@ -36,6 +36,7 @@ class IetfCapabilitiesXmlParser : public CapabilitiesXmlParser
         ~IetfCapabilitiesXmlParser();
 
         std::vector<std::string> parse(const std::string & buffer);
+        std::vector<std::string> parse_yang_1_1(const std::string & buffer);
 
     private:
         xmlDocPtr doc;

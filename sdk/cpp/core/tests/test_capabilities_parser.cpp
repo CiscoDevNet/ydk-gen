@@ -27,6 +27,7 @@
 
 #include <iostream>
 #include "../src/ietf_parser.hpp"
+#include "../src/path_api.hpp"
 #include "../src/opendaylight_parser.hpp"
 #include "catch.hpp"
 
@@ -100,6 +101,7 @@ TEST_CASE("test_error")
 {
     IetfCapabilitiesXmlParser parser{};
     vector<string> caps = parser.parse("");
+    caps = parser.parse_yang_1_1("");
 
     REQUIRE(caps.size() == 0);
 }
@@ -108,6 +110,7 @@ TEST_CASE("test_error_1")
 {
     IetfCapabilitiesXmlParser parser{};
     vector<string> caps = parser.parse("<test></test>");
+    caps = parser.parse_yang_1_1("<test></test>");
 
     REQUIRE(caps.size() == 0);
 }
@@ -116,6 +119,7 @@ TEST_CASE("test_error_2")
 {
     IetfCapabilitiesXmlParser parser{};
     vector<string> caps = parser.parse("<capabilities></capabilities>");
+    caps = parser.parse_yang_1_1("<capabilities></capabilities>");
 
     REQUIRE(caps.size() == 0);
 }
@@ -124,6 +128,7 @@ TEST_CASE("test_error_3")
 {
     IetfCapabilitiesXmlParser parser{};
     vector<string> caps = parser.parse("<capabilities><test></test></capabilities>");
+    caps = parser.parse_yang_1_1("<capabilities><test></test></capabilities>");
 
     REQUIRE(caps.size() == 0);
 }
@@ -141,4 +146,436 @@ TEST_CASE("test_odl")
     {
         INFO(n.first + ", " + n.second->host.get());
     }
+}
+
+TEST_CASE("yang_1_1_xml_caps")
+{
+    string c = R"(<?xml version="1.0" encoding="UTF-8"?>
+<rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
+  <data>
+    <modules-state xmlns="urn:ietf:params:xml:ns:yang:ietf-yang-library">
+      <module>
+        <name>iana-crypt-hash</name>
+        <revision>2014-08-06</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:iana-crypt-hash</namespace>
+        <feature>crypt-hash-sha-512</feature>
+        <feature>crypt-hash-sha-256</feature>
+        <feature>crypt-hash-md5</feature>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>iana-if-type</name>
+        <revision>2014-05-08</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:iana-if-type</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>ietf-aug-base-1</name>
+        <revision>2016-07-01</revision>
+        <namespace>http://cisco.com/ns/yang/ietf-aug-base-1</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-aug-base-2</name>
+        <revision>2016-07-01</revision>
+        <namespace>http://cisco.com/ns/yang/ietf-aug-base-2</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-inet-types</name>
+        <revision>2013-07-15</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-inet-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>ietf-interfaces</name>
+        <revision>2014-05-08</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-interfaces</namespace>
+        <feature>pre-provisioning</feature>
+        <feature>if-mib</feature>
+        <feature>arbitrary-names</feature>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-netconf</name>
+        <revision>2011-06-01</revision>
+        <namespace>urn:ietf:params:xml:ns:netconf:base:1.0</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-netconf-acm</name>
+        <revision>2012-02-22</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-netconf-acm</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-netconf-monitoring</name>
+        <revision>2010-10-04</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-netconf-notifications</name>
+        <revision>2012-02-06</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-netconf-notifications</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-netconf-with-defaults</name>
+        <revision>2011-06-01</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-netconf-with-defaults</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-restconf-monitoring</name>
+        <revision>2016-08-15</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-restconf-monitoring</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-yang-library</name>
+        <revision>2016-06-21</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-yang-library</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ietf-yang-types</name>
+        <revision>2013-07-15</revision>
+        <namespace>urn:ietf:params:xml:ns:yang:ietf-yang-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>main</name>
+        <revision>2015-11-17</revision>
+        <namespace>http://cisco.com/ns/yang/main</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>main-aug1</name>
+        <revision>2015-11-17</revision>
+        <namespace>http://cisco.com/ns/yang/main-aug1</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>oc-pattern</name>
+        <revision>2015-11-17</revision>
+        <namespace>http://cisco.com/ns/yang/oc-pattern</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-bgp</name>
+        <revision>2016-06-21</revision>
+        <namespace>http://openconfig.net/yang/bgp</namespace>
+        <conformance-type>implement</conformance-type>
+        <submodule>
+          <name>openconfig-bgp-common</name>
+          <revision>2016-06-21</revision>
+        </submodule>
+        <submodule>
+          <name>openconfig-bgp-common-structure</name>
+          <revision>2016-06-21</revision>
+        </submodule>
+        <submodule>
+          <name>openconfig-bgp-global</name>
+          <revision>2016-06-21</revision>
+        </submodule>
+        <submodule>
+          <name>openconfig-bgp-neighbor</name>
+          <revision>2016-06-21</revision>
+        </submodule>
+        <submodule>
+          <name>openconfig-bgp-peer-group</name>
+          <revision>2016-06-21</revision>
+        </submodule>
+        <submodule>
+          <name>openconfig-bgp-common-multiprotocol</name>
+          <revision>2016-06-21</revision>
+        </submodule>
+      </module>
+      <module>
+        <name>openconfig-bgp-policy</name>
+        <revision>2016-06-21</revision>
+        <namespace>http://openconfig.net/yang/bgp-policy</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-bgp-types</name>
+        <revision>2016-06-21</revision>
+        <namespace>http://openconfig.net/yang/bgp-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-extensions</name>
+        <revision>2015-10-09</revision>
+        <namespace>http://openconfig.net/yang/openconfig-ext</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-if-ethernet</name>
+        <revision>2016-05-26</revision>
+        <namespace>http://openconfig.net/yang/interfaces/ethernet</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-interfaces</name>
+        <revision>2016-05-26</revision>
+        <namespace>http://openconfig.net/yang/interfaces</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-platform</name>
+        <revision>2016-06-06</revision>
+        <namespace>http://openconfig.net/yang/platform</namespace>
+        <deviation>
+          <name>cisco-xr-openconfig-platform-deviations</name>
+          <revision>2016-10-16</revision>
+        </deviation>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-platform-transceiver</name>
+        <revision>2016-05-24</revision>
+        <namespace>http://openconfig.net/yang/platform/transceiver</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-platform-types</name>
+        <revision>2016-06-06</revision>
+        <namespace>http://openconfig.net/yang/platform-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-policy-types</name>
+        <revision>2016-05-12</revision>
+        <namespace>http://openconfig.net/yang/policy-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-routing-policy</name>
+        <revision>2016-05-12</revision>
+        <namespace>http://openconfig.net/yang/routing-policy</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-terminal-device</name>
+        <revision>2016-06-17</revision>
+        <namespace>http://openconfig.net/yang/terminal-device</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-transport-types</name>
+        <revision>2016-06-17</revision>
+        <namespace>http://openconfig.net/yang/transport-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>openconfig-types</name>
+        <revision>2016-05-31</revision>
+        <namespace>http://openconfig.net/yang/openconfig-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>tailf-aaa</name>
+        <revision>2015-06-16</revision>
+        <namespace>http://tail-f.com/ns/aaa/1.1</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>tailf-acm</name>
+        <revision>2013-03-07</revision>
+        <namespace>http://tail-f.com/yang/acm</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>tailf-common-monitoring</name>
+        <revision>2013-06-14</revision>
+        <namespace>http://tail-f.com/yang/common-monitoring</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>tailf-confd-monitoring</name>
+        <revision>2013-06-14</revision>
+        <namespace>http://tail-f.com/yang/confd-monitoring</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>tailf-kicker</name>
+        <revision>2016-11-24</revision>
+        <namespace>http://tail-f.com/ns/kicker</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>tailf-netconf-monitoring</name>
+        <revision>2016-11-24</revision>
+        <namespace>http://tail-f.com/yang/netconf-monitoring</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>tailf-webui</name>
+        <revision>2013-03-07</revision>
+        <namespace>http://tail-f.com/ns/webui</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ydktest-aug-ietf-1</name>
+        <revision>2016-06-17</revision>
+        <namespace>http://cisco.com/ns/yang/yaug-one</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ydktest-aug-ietf-2</name>
+        <revision>2016-06-22</revision>
+        <namespace>http://cisco.com/ns/yang/yaug-two</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ydktest-aug-ietf-4</name>
+        <revision>2016-06-27</revision>
+        <namespace>http://cisco.com/ns/yang/yaug-four</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ydktest-aug-ietf-5</name>
+        <revision>2017-07-26</revision>
+        <namespace>http://cisco.com/ns/yang/yaug-five</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ydktest-filterread</name>
+        <revision>2015-11-17</revision>
+        <namespace>http://cisco.com/ns/yang/ydk-filter</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ydktest-sanity</name>
+        <revision>2015-11-17</revision>
+        <namespace>http://cisco.com/ns/yang/ydktest-sanity</namespace>
+        <feature>ipv6-privacy-autoconf</feature>
+        <feature>ipv4-non-contiguous-netmasks</feature>
+        <conformance-type>implement</conformance-type>
+        <submodule>
+          <name>ydktest-sanity-submodule</name>
+          <revision>2016-04-25</revision>
+        </submodule>
+      </module>
+      <module>
+        <name>ydktest-sanity-augm</name>
+        <revision>2015-11-17</revision>
+        <namespace>http://cisco.com/ns/yang/ydktest-sanity-augm</namespace>
+        <conformance-type>implement</conformance-type>
+      </module>
+      <module>
+        <name>ydktest-sanity-types</name>
+        <revision>2016-04-11</revision>
+        <namespace>http://cisco.com/ns/yang/ydktest-sanity-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+      <module>
+        <name>ydktest-types</name>
+        <revision>2016-05-23</revision>
+        <namespace>http://cisco.com/ns/yang/ydktest-types</namespace>
+        <conformance-type>import</conformance-type>
+      </module>
+    </modules-state>
+  </data>
+</rpc-reply>
+)";
+
+    string hello=R"(<?xml version="1.0" encoding="UTF-8"?>
+<hello xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<capabilities>
+<capability>urn:ietf:params:netconf:base:1.0</capability>
+<capability>urn:ietf:params:netconf:base:1.1</capability>
+<capability>urn:ietf:params:netconf:capability:writable-running:1.0</capability>
+<capability>urn:ietf:params:netconf:capability:candidate:1.0</capability>
+<capability>urn:ietf:params:netconf:capability:confirmed-commit:1.0</capability>
+<capability>urn:ietf:params:netconf:capability:confirmed-commit:1.1</capability>
+<capability>urn:ietf:params:netconf:capability:xpath:1.0</capability>
+<capability>urn:ietf:params:netconf:capability:validate:1.0</capability>
+<capability>urn:ietf:params:netconf:capability:validate:1.1</capability>
+<capability>urn:ietf:params:netconf:capability:rollback-on-error:1.0</capability>
+<capability>urn:ietf:params:netconf:capability:with-defaults:1.0?basic-mode=explicit&amp;also-supported=report-all-tagged</capability>
+<capability>urn:ietf:params:netconf:capability:yang-library:1.0?revision=2016-06-21&amp;module-set-id=fba28be41dbd9b62782518ee42d32f29</capability>
+<capability>http://tail-f.com/ns/netconf/actions/1.0</capability>
+<capability>http://tail-f.com/ns/netconf/extensions</capability>
+<capability>http://cisco.com/ns/yang/ietf-aug-base-1?module=ietf-aug-base-1&amp;revision=2016-07-01</capability>
+<capability>http://cisco.com/ns/yang/ietf-aug-base-2?module=ietf-aug-base-2&amp;revision=2016-07-01</capability>
+<capability>http://cisco.com/ns/yang/main?module=main&amp;revision=2015-11-17</capability>
+<capability>http://cisco.com/ns/yang/main-aug1?module=main-aug1&amp;revision=2015-11-17</capability>
+<capability>http://cisco.com/ns/yang/oc-pattern?module=oc-pattern&amp;revision=2015-11-17</capability>
+<capability>http://cisco.com/ns/yang/yaug-five?module=ydktest-aug-ietf-5&amp;revision=2017-07-26</capability>
+<capability>http://cisco.com/ns/yang/yaug-four?module=ydktest-aug-ietf-4&amp;revision=2016-06-27</capability>
+<capability>http://cisco.com/ns/yang/yaug-one?module=ydktest-aug-ietf-1&amp;revision=2016-06-17</capability>
+<capability>http://cisco.com/ns/yang/yaug-two?module=ydktest-aug-ietf-2&amp;revision=2016-06-22</capability>
+<capability>http://cisco.com/ns/yang/ydk-filter?module=ydktest-filterread&amp;revision=2015-11-17</capability>
+<capability>http://cisco.com/ns/yang/ydktest-sanity?module=ydktest-sanity&amp;revision=2015-11-17&amp;features=ipv6-privacy-autoconf,ipv4-non-contiguous-netmasks</capability>
+<capability>http://cisco.com/ns/yang/ydktest-sanity-augm?module=ydktest-sanity-augm&amp;revision=2015-11-17</capability>
+<capability>http://cisco.com/ns/yang/ydktest-sanity-types?module=ydktest-sanity-types&amp;revision=2016-04-11</capability>
+<capability>http://cisco.com/ns/yang/ydktest-types?module=ydktest-types&amp;revision=2016-05-23</capability>
+<capability>http://openconfig.net/yang/bgp?module=openconfig-bgp&amp;revision=2016-06-21</capability>
+<capability>http://openconfig.net/yang/bgp-policy?module=openconfig-bgp-policy&amp;revision=2016-06-21</capability>
+<capability>http://openconfig.net/yang/bgp-types?module=openconfig-bgp-types&amp;revision=2016-06-21</capability>
+<capability>http://openconfig.net/yang/interfaces?module=openconfig-interfaces&amp;revision=2016-05-26</capability>
+<capability>http://openconfig.net/yang/interfaces/ethernet?module=openconfig-if-ethernet&amp;revision=2016-05-26</capability>
+<capability>http://openconfig.net/yang/openconfig-ext?module=openconfig-extensions&amp;revision=2015-10-09</capability>
+<capability>http://openconfig.net/yang/openconfig-types?module=openconfig-types&amp;revision=2016-05-31</capability>
+<capability>http://openconfig.net/yang/platform?module=openconfig-platform&amp;revision=2016-06-06&amp;deviations=cisco-xr-openconfig-platform-deviations</capability>
+<capability>http://openconfig.net/yang/platform-types?module=openconfig-platform-types&amp;revision=2016-06-06</capability>
+<capability>http://openconfig.net/yang/platform/transceiver?module=openconfig-platform-transceiver&amp;revision=2016-05-24</capability>
+<capability>http://openconfig.net/yang/policy-types?module=openconfig-policy-types&amp;revision=2016-05-12</capability>
+<capability>http://openconfig.net/yang/routing-policy?module=openconfig-routing-policy&amp;revision=2016-05-12</capability>
+<capability>http://openconfig.net/yang/terminal-device?module=openconfig-terminal-device&amp;revision=2016-06-17</capability>
+<capability>http://openconfig.net/yang/transport-types?module=openconfig-transport-types&amp;revision=2016-06-17</capability>
+<capability>http://tail-f.com/ns/aaa/1.1?module=tailf-aaa&amp;revision=2015-06-16</capability>
+<capability>http://tail-f.com/ns/kicker?module=tailf-kicker&amp;revision=2016-11-24</capability>
+<capability>http://tail-f.com/ns/webui?module=tailf-webui&amp;revision=2013-03-07</capability>
+<capability>http://tail-f.com/yang/acm?module=tailf-acm&amp;revision=2013-03-07</capability>
+<capability>http://tail-f.com/yang/common-monitoring?module=tailf-common-monitoring&amp;revision=2013-06-14</capability>
+<capability>http://tail-f.com/yang/confd-monitoring?module=tailf-confd-monitoring&amp;revision=2013-06-14</capability>
+<capability>http://tail-f.com/yang/netconf-monitoring?module=tailf-netconf-monitoring&amp;revision=2016-11-24</capability>
+<capability>urn:ietf:params:xml:ns:yang:iana-crypt-hash?module=iana-crypt-hash&amp;revision=2014-08-06&amp;features=crypt-hash-sha-512,crypt-hash-sha-256,crypt-hash-md5</capability>
+<capability>urn:ietf:params:xml:ns:yang:iana-if-type?module=iana-if-type&amp;revision=2014-05-08</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-inet-types?module=ietf-inet-types&amp;revision=2013-07-15</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-interfaces?module=ietf-interfaces&amp;revision=2014-05-08&amp;features=pre-provisioning,if-mib,arbitrary-names</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-netconf-acm?module=ietf-netconf-acm&amp;revision=2012-02-22</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring?module=ietf-netconf-monitoring&amp;revision=2010-10-04</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-netconf-notifications?module=ietf-netconf-notifications&amp;revision=2012-02-06</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-restconf-monitoring?module=ietf-restconf-monitoring&amp;revision=2016-08-15</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-yang-library?module=ietf-yang-library&amp;revision=2016-06-21</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-yang-types?module=ietf-yang-types&amp;revision=2013-07-15</capability>
+<capability>urn:ietf:params:xml:ns:netconf:base:1.0?module=ietf-netconf&amp;revision=2011-06-01</capability>
+<capability>urn:ietf:params:xml:ns:yang:ietf-netconf-with-defaults?module=ietf-netconf-with-defaults&amp;revision=2011-06-01</capability>
+</capabilities>
+<session-id>1466</session-id></hello>)";
+
+    IetfCapabilitiesXmlParser p;
+    auto v1 = p.parse_yang_1_1(c);
+    REQUIRE(v1.size()!=0);
+
+    auto v2 = p.parse(hello);
+    REQUIRE(v2.size()!=0);
+
+    IetfCapabilitiesParser capabilities_parser{};
+    map<string, path::Capability*> m;
+    auto a1 = capabilities_parser.parse(v1);
+    REQUIRE(a1.size()!=0);
+    for(auto &s:a1)
+    {
+        cout<<s<<endl;
+        m.insert(make_pair(s.module, &s));
+    }
+    cout<<endl;
+
+    auto a2 = capabilities_parser.parse(v2);
+    REQUIRE(a2.size()!=0);
+    for(auto&s:a2)
+    {
+        cout<<s<<endl;
+        auto i = m.find(s.module);
+        REQUIRE(i!=m.end());
+        bool same = s==*(i->second);
+        REQUIRE(same == true);
+    }
+
+    REQUIRE(a1.size()==a2.size());
 }

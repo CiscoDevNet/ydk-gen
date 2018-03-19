@@ -24,8 +24,6 @@
 #ifndef YDK_UTILITIES
 #define YDK_UTILITIES
 
-#include <cstdlib>
-#include <cstring>
 #include <string>
 #include <vector>
 
@@ -45,6 +43,8 @@ namespace ydk
     std::shared_ptr<Entity> read_datanode(Entity & filter, std::shared_ptr<path::DataNode> read_data_node);
     std::string get_data_payload(Entity & entity, const ServiceProvider & provider);
     std::string get_xml_subtree_filter_payload(Entity & entity, const ServiceProvider & provider);
+
+    std::vector<std::string> get_union(std::vector<std::string> & v1, std::vector<std::string> & v2);
 }
 
 #endif /* YDK_UTILITIES */

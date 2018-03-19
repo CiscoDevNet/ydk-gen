@@ -9,7 +9,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 set(bundle_tests_src
         main.cpp
         test_c_api.cpp
-        test_core_netconf.cpp
         test_crud.cpp
         test_errors.cpp
         test_executor_service.cpp
@@ -20,6 +19,7 @@ set(bundle_tests_src
         test_netconf_tcp_client.cpp
         test_on_demand_loading.cpp
         test_opendaylight.cpp
+        test_path_api.cpp
         test_restconf_client.cpp
         test_restconf_provider.cpp
         test_sanity_codec.cpp

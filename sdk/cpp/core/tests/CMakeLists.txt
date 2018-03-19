@@ -13,7 +13,12 @@ set(core_tests_src bgptest.cpp
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0 -fprofile-arcs -ftest-coverage")
+if(COVERAGE STREQUAL True)
+    set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0 -fprofile-arcs -ftest-coverage")
+    set(CMAKE_BUILD_TYPE debug)
+else()
+    set(CMAKE_CXX_FLAGS_DEBUG   "-g3 -O0")
+endif()
 
 foreach(test_name IN LISTS core_tests)
     add_executable(${test_name} ${test_name}.cpp)

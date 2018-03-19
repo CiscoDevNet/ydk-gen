@@ -44,7 +44,7 @@ namespace path
 {
 static const std::string default_capabilities_url = "/ietf-restconf-monitoring:restconf-state/capabilities";
 
-static std::shared_ptr<path::DataNode> handle_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding);
+static std::shared_ptr<path::DataNode> handle_crud_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding);
 static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_schema, const string & operation);
 static string get_encoding_string(EncodingFormat encoding);
 
@@ -118,6 +118,13 @@ path::RootSchemaNode& RestconfSession::get_root_schema() const
 }
 
 std::shared_ptr<path::DataNode> RestconfSession::invoke(
+    path::DataNode& rpc) const
+{
+    throw(YOperationNotSupportedError{"action datanode is not supported!"});
+    return nullptr;
+}
+
+std::shared_ptr<path::DataNode> RestconfSession::invoke(
     path::Rpc& rpc) const
 {
     path::SchemaNode* create_schema = get_schema_for_operation(*root_schema, "ydk:create");
@@ -130,15 +137,15 @@ std::shared_ptr<path::DataNode> RestconfSession::invoke(
 
     if(rpc_schema == create_schema || rpc_schema == update_schema)
     {
-        return handle_edit(rpc, edit_method);
+        return handle_crud_edit(rpc, edit_method);
     }
     else if(rpc_schema == read_schema)
     {
-        return handle_read(rpc);
+        return handle_crud_read(rpc);
     }
     else if(rpc_schema == delete_schema)
     {
-       return handle_edit(rpc, "DELETE");
+       return handle_crud_edit(rpc, "DELETE");
     }
     else
     {
@@ -149,7 +156,7 @@ std::shared_ptr<path::DataNode> RestconfSession::invoke(
     return datanode;
 }
 
-std::shared_ptr<path::DataNode> RestconfSession::handle_read(path::Rpc& rpc) const
+std::shared_ptr<path::DataNode> RestconfSession::handle_crud_read(path::Rpc& rpc) const
 {
     path::Codec codec_service{};
 
@@ -175,10 +182,10 @@ std::shared_ptr<path::DataNode> RestconfSession::handle_read(path::Rpc& rpc) con
     }
 
     YLOG_INFO("Performing GET on URL {}", url);
-    return handle_read_reply( client->execute("GET", url, ""), *root_schema, encoding);
+    return handle_crud_read_reply( client->execute("GET", url, ""), *root_schema, encoding);
 }
 
-std::shared_ptr<path::DataNode> RestconfSession::handle_edit(path::Rpc& rpc, const string & operation) const
+std::shared_ptr<path::DataNode> RestconfSession::handle_crud_edit(path::Rpc& rpc, const string & operation) const
 {
     path::Codec codec_service{};
     auto entity = rpc.get_input_node().find("entity");
@@ -199,7 +206,7 @@ std::shared_ptr<path::DataNode> RestconfSession::handle_edit(path::Rpc& rpc, con
     return nullptr;
 }
 
-static std::shared_ptr<path::DataNode> handle_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding)
+static std::shared_ptr<path::DataNode> handle_crud_read_reply(const string & reply, path::RootSchemaNode & root_schema, EncodingFormat encoding)
 {
     path::Codec codec_service{};
 

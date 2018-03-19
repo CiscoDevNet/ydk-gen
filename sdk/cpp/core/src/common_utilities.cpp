@@ -21,6 +21,8 @@
 //
 //////////////////////////////////////////////////////////////////
 
+#include <set>
+
 #include "common_utilities.hpp"
 #include "entity_data_node_walker.hpp"
 #include "xml_subtree_codec.hpp"
@@ -141,5 +143,27 @@ string get_xml_subtree_filter_payload(Entity & entity, const ServiceProvider & p
     XmlSubtreeCodec xml_subtree_codec{};
     YLOG_DEBUG("Encoding the subtree filter request using XML subtree codec");
     return xml_subtree_codec.encode(entity, provider.get_session().get_root_schema());
+}
+
+vector<string> get_union(vector<string> & v1, vector<string> & v2)
+{
+    set<string> all;
+    YLOG_DEBUG("Performing union of vectors with {} & {} elements", v1.size(), v2.size());
+    for(auto& s: v1)
+    {
+        all.insert(s);
+    }
+    for(auto& s: v2)
+    {
+        all.insert(s);
+    }
+    YLOG_DEBUG("Union contains {} elements", all.size());
+    vector<string> v;
+    for(auto& s: all)
+    {
+        YLOG_DEBUG("Adding unioned element: {}", s);
+        v.push_back(s);
+    }
+    return v;
 }
 }

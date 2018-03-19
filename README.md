@@ -78,13 +78,26 @@ Centos (Fedora-based):
 
 **Install prebuilt libydk binary:**
 ```
-   $ sudo yum install epel-release libssh-devel gcc-c++
+   $ sudo yum install epel-release
+   $ sudo yum install libssh-devel gcc-c++
    $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.0/libydk-0.7.0-1.x86_64.rpm
+
+   # Upgrade compiler to gcc 5.*
+   $ yum install centos-release-scl -y > /dev/null
+   $ yum install devtoolset-4-gcc* -y > /dev/null
+   $ ln -sf /opt/rh/devtoolset-4/root/usr/bin/gcc /usr/bin/cc
+   $ ln -sf /opt/rh/devtoolset-4/root/usr/bin/g++ /usr/bin/c++
 ```
 **To build from source:**
 ```
-$ sudo yum install epel-release
-$ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake3 clang libcurl-devel rpm-build redhat-lsb
+   $ sudo yum install epel-release
+   $ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake3 clang libcurl-devel rpm-build redhat-lsb
+
+   # Upgrade compiler to gcc 5.*
+   $ yum install centos-release-scl -y > /dev/null
+   $ yum install devtoolset-4-gcc* -y > /dev/null
+   $ ln -sf /opt/rh/devtoolset-4/root/usr/bin/gcc /usr/bin/cc
+   $ ln -sf /opt/rh/devtoolset-4/root/usr/bin/g++ /usr/bin/c++
 ```
 
 ## macOS
@@ -149,6 +162,7 @@ Options:
   --version           show program's version number and exit
   -h, --help          show this help message and exit
   -p, --python        Select Python language. This is currently the default option
+  -l, --libydk        Generate the libydk core package (required for using YDK Python, Go, C++)
   -c, --cpp           Select C++ language
   -g, --go            Select Go language
   --core              Generate the core for the selected language
@@ -230,12 +244,15 @@ First, generate the core and install it:
 
 First generate and install ``libydk`` (**required for C++, Go or Python**):
 ```
-$ ./generate.py --cpp --core
+$ ./generate.py --libydk
 $ cd gen-api/cpp/ydk/build
-$ make && sudo make install
+$ make
 
-# To create the ``libydk`` binary package to use for later installation, run the below command after the above
+# To create the libydk binary package to use for later installation, run the below command
 $ make package
+
+# To install the compiled libydk code, run the below command after the above
+$ [sudo] make install
 ```
 
 For python:

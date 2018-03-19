@@ -109,6 +109,18 @@ ydk::path::DataNodeImpl::populate_new_schemas_from_path(const std::string& path)
     snode->populate_new_schemas_from_path(path);
 }
 
+std::shared_ptr<ydk::path::DataNode>
+ydk::path::DataNodeImpl::operator()(const ydk::path::Session& session)
+{
+    return session.invoke(*this);
+}
+
+ydk::path::DataNode&
+ydk::path::DataNodeImpl::create_action(const std::string& path)
+{
+    return create_datanode(path, "");
+}
+
 ydk::path::DataNode&
 ydk::path::DataNodeImpl::create_datanode(const std::string& path, const std::string& value)
 {
@@ -526,4 +538,43 @@ ydk::path::DataNodeImpl::annotations()
     }
 
     return ann;
+}
+
+static bool statement_is_action(const ydk::path::Statement & s)
+{
+    return (s.keyword == "action");
+}
+
+std::string ydk::path::DataNodeImpl::get_action_node_path() const
+{
+    if(statement_is_action(get_schema_node().get_statement()))
+    {
+        return get_path();
+    }
+
+    for(auto & child_data_node : get_children())
+    {
+        auto p = child_data_node->get_action_node_path();
+        if(p.size() > 0)
+        {
+            return p;
+        }
+    }
+    return "";
+}
+
+bool ydk::path::DataNodeImpl::has_action_node() const
+{
+    if(statement_is_action(get_schema_node().get_statement()))
+    {
+        return true;
+    }
+    for(auto & child_data_node : get_children())
+    {
+        if(child_data_node->has_action_node())
+        {
+            return true;
+        }
+    }
+    return false;
 }

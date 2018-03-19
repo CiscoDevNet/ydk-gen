@@ -233,7 +233,7 @@ def generate_adhoc_bundle(adhoc_bundle_name, adhoc_bundle_files):
     return adhoc_bundle_file.name
 
 
-def preconfigure_generated_cpp_code(output_directory):
+def preconfigure_generated_cpp_code(output_directory, generate_libydk):
     cpp_sdk_root = os.path.join(output_directory)
     cmake_build_dir = os.path.join(output_directory, 'build')
     if os.path.exists(cmake_build_dir):
@@ -250,7 +250,10 @@ def preconfigure_generated_cpp_code(output_directory):
     except subprocess.CalledProcessError as e:
         print('\nERROR: Failed to configure build!\n')
         sys.exit(e.returncode)
-    print('\nSuccessfully generated code at {0}.\nTo build and install, run "make && [sudo] make install" from {1}'.format(output_directory, cmake_build_dir))
+    make_command = 'To build and install, run "make && [sudo] make install" from {0}'.format(cmake_build_dir)
+    if generate_libydk:
+        make_command = make_command+'\n\nTo build the libydk package, run "make && make package" from {0}'.format(cmake_build_dir)
+    print('\nSuccessfully generated code at {0}.\n\n{1}'.format(output_directory, make_command))
     print('\n=================================================')
     print('Successfully generated C++ YDK at %s' % (cpp_sdk_root,))
     print('Please refer to the README for information on how to use YDK\n')
@@ -317,6 +320,12 @@ if __name__ == '__main__':
         help="Generate Go SDK")
 
     parser.add_argument(
+        "-l", "--libydk",
+        action="store_true",
+        default=False,
+        help="Generate libydk core package")
+
+    parser.add_argument(
         "-v", "--verbose",
         action="store_true",
         default=False,
@@ -366,7 +375,11 @@ if __name__ == '__main__':
         output_directory = options.output_directory
 
     language = ''
-    if options.cpp:
+    if options.libydk:
+        options.cpp = True
+        options.core = True
+        language = 'cpp'
+    elif options.cpp:
         language = 'cpp'
     elif options.go:
         language = 'go'
@@ -426,7 +439,7 @@ if __name__ == '__main__':
     print('\nCreating {0} package...\n'.format(language))
 
     if options.cpp:
-        preconfigure_generated_cpp_code(output_directory)
+        preconfigure_generated_cpp_code(output_directory, options.libydk)
     elif options.go:
         # todo: implement go packaging with the output_directory
         pass

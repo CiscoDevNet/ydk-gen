@@ -118,6 +118,7 @@ string NetconfModelProvider::get_model(const string& name, const string& version
     data_end -= 1;
     model = reply.substr(data_start, data_end-data_start+1);
 
+    YLOG_DEBUG("Removing CDATA tags");
     auto cdata_start = model.find("<![CDATA[");
     if(cdata_start != string::npos)
     {

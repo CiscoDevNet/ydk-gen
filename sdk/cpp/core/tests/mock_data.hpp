@@ -43,7 +43,8 @@ static std::unordered_map<std::string, ydk::path::Capability> test_openconfig_lo
     {"urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring", {"ietf-netconf-monitoring", ""}},
     {"urn:ietf:params:xml:ns:yang:ietf-interfaces", {"ietf-interfaces", ""}},
     {"http://cisco.com/ns/yang/ydk", {"ydk", ""}},
-    {"http://cisco.com/ns/yang/ydktest-sanity", {"ydktest-sanity", ""}}
+    {"http://cisco.com/ns/yang/ydktest-sanity", {"ydktest-sanity", ""}},
+    {"http://cisco.com/ns/yang/ydktest-action", {"ydktest-sanity-action", ""}}
 
 };
 
@@ -84,6 +85,15 @@ public:
 
         return nullptr;
     }
+
+    std::shared_ptr<ydk::path::DataNode> invoke(ydk::path::DataNode& rpc) const
+    {
+        ydk::path::Codec s{};
+
+        std::cout << s.encode(rpc, ydk::EncodingFormat::XML, true) << std::endl;
+
+        return nullptr;
+    }
 private:
     std::string m_searchdir;
     std::vector<ydk::path::Capability> m_capabilities;
@@ -104,7 +114,8 @@ static std::vector<ydk::path::Capability> test_openconfig {
     {"ietf-netconf-monitoring", ""},
     {"ietf-interfaces", ""},
     {"ydk", ""},
-    {"ydktest-sanity", ""}
+    {"ydktest-sanity", ""},
+    {"ydktest-sanity-action", ""}
 
 };
 

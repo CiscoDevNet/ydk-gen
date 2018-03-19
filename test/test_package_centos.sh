@@ -79,7 +79,6 @@ yum install -y libydk*.rpm
 
 print_msg "Installing ydk-py"
 cd sdk/python/core
-export YDK_COVERAGE=
 python setup.py sdist
 ${PIP_BIN} install -v dist/ydk*.tar.gz
 

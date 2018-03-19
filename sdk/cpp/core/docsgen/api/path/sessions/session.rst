@@ -12,7 +12,7 @@ Session
 
         :return: Reference to the :cpp:class:`RootSchemaNode<RootSchemaNode>` or ``nullptr`` if one could not be created.
 
-    .. cpp:function:: virtual std::shared_ptr<path::DataNode> invoke(Rpc& rpc) const
+    .. cpp:function:: virtual std::shared_ptr<path::DataNode> invoke(path::Rpc& rpc) const
 
         Invokes or executes the given rpc and returns a :cpp:class:`DataNode<DataNode>` pointer if the Rpc has an output modeled in YANG.
 

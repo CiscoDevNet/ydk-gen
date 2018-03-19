@@ -117,3 +117,15 @@ ydk::path::Capability::operator==(const ydk::path::Capability& cap)
 
     return true;
 }
+
+namespace ydk
+{
+namespace path
+{
+std::ostream& operator<< (std::ostream& stream, const Capability& cap)
+{
+    stream<<cap.module<<"@"<<cap.revision;
+    return stream;
+}
+}
+}

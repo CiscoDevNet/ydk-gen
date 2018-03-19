@@ -168,6 +168,10 @@ ydk::path::ValidationService::validate(const ydk::path::DataNode & dn, ydk::Vali
 
 }
 
+//////////////////////////////////////////////////////////////////////////
+// Utility functions
+//////////////////////////////////////////////////////////////////////////
+
 static LYD_FORMAT get_ly_format(ydk::EncodingFormat format)
 {
     LYD_FORMAT scheme = LYD_XML;
@@ -205,7 +209,7 @@ static std::shared_ptr<ydk::path::DataNode> perform_decode(ydk::path::RootSchema
     return std::shared_ptr<ydk::path::DataNode>(rd);
 }
 
-static const struct lyd_node* create_ly_rpc_node(ydk::path::RootSchemaNodeImpl & rs_impl, const std::string & rpc_path)
+static const struct lyd_node* create_lyd_node_for_rpc(ydk::path::RootSchemaNodeImpl & rs_impl, const std::string & rpc_path)
 {
     const struct lyd_node* rpc = lyd_new_path(NULL, rs_impl.m_ctx, rpc_path.c_str(), NULL, LYD_ANYDATA_SXML, 0);
     if( rpc == nullptr || ly_errno )
@@ -230,7 +234,7 @@ ydk::path::Codec::~Codec()
 std::string
 ydk::path::Codec::encode(const ydk::path::DataNode& dn, ydk::EncodingFormat format, bool pretty)
 {
-    YLOG_DEBUG("Encoding data node {} to {} formated string", dn.get_path(), format==ydk::EncodingFormat::JSON ? "JSON" : "XML");
+    YLOG_DEBUG("Encoding data node '{}' to {} formated string", dn.get_path(), format==ydk::EncodingFormat::JSON ? "JSON" : "XML");
     std::string ret{};
     if (typeid(dn) == typeid(RootDataImpl)) {
         std::vector<std::shared_ptr<ydk::path::DataNode>> data_nodes = dn.get_children();
@@ -284,9 +288,11 @@ std::shared_ptr<ydk::path::DataNode>
 ydk::path::Codec::decode_rpc_output(RootSchemaNode & root_schema, const std::string& buffer,
             const std::string & rpc_path, EncodingFormat format)
 {
+    YLOG_DEBUG( "Decoding output for RPC '{}'. Output is: {}", rpc_path, buffer);
+
     RootSchemaNodeImpl & rs_impl = get_root_schema_impl(root_schema);
     rs_impl.populate_new_schemas_from_payload(buffer, format);
-    const struct lyd_node* rpc = create_ly_rpc_node(rs_impl, rpc_path);
+    const struct lyd_node* rpc = create_lyd_node_for_rpc(rs_impl, rpc_path);
 
     struct lyd_node* root = lyd_parse_mem(rs_impl.m_ctx, buffer.c_str(),
                 get_ly_format(format), LYD_OPT_TRUSTED |  LYD_OPT_RPCREPLY, rpc, NULL);

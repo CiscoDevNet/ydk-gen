@@ -292,7 +292,8 @@ PYBIND11_MODULE(ydk_, ydk)
 
     class_<ydk::path::Session>(path, "Session")
         .def("get_root_schema", &ydk::path::Session::get_root_schema, return_value_policy::reference)
-        .def("invoke", &ydk::path::Session::invoke, return_value_policy::reference);
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Session::*)(ydk::path::Rpc& rpc) const) &ydk::path::Session::invoke, return_value_policy::reference)
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Session::*)(ydk::path::DataNode& rpc) const) &ydk::path::Session::invoke, return_value_policy::reference);
 
     class_<ydk::path::NetconfSession, ydk::path::Session>(path, "NetconfSession")
         .def("__init__",
@@ -430,7 +431,8 @@ PYBIND11_MODULE(ydk_, ydk)
             arg("timeout")=-1)
 
         .def("get_root_schema", &ydk::path::NetconfSession::get_root_schema, return_value_policy::reference)
-        .def("invoke", &ydk::path::NetconfSession::invoke, return_value_policy::reference)
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::NetconfSession::*)(ydk::path::Rpc& rpc) const) &ydk::path::NetconfSession::invoke, return_value_policy::reference)
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::NetconfSession::*)(ydk::path::DataNode& rpc) const) &ydk::path::NetconfSession::invoke, return_value_policy::reference)
         .def("get_capabilities", &ydk::path::NetconfSession::get_capabilities, return_value_policy::reference);
 
     class_<ydk::path::RestconfSession, ydk::path::Session>(path, "RestconfSession")
@@ -454,7 +456,8 @@ PYBIND11_MODULE(ydk_, ydk)
              arg("config_url_root"),
              arg("state_url_root"))
         .def("get_root_schema", &ydk::path::RestconfSession::get_root_schema, return_value_policy::reference)
-        .def("invoke", &ydk::path::RestconfSession::invoke, return_value_policy::reference);
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::RestconfSession::*)(ydk::path::Rpc& rpc) const) &ydk::path::RestconfSession::invoke, return_value_policy::reference)
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::RestconfSession::*)(ydk::path::DataNode& rpc) const) &ydk::path::RestconfSession::invoke, return_value_policy::reference);
 
     class_<ydk::path::Statement>(path, "Statement")
         .def(init<const string &, const string &>(), arg("keyword"), arg("arg"))
@@ -475,6 +478,7 @@ PYBIND11_MODULE(ydk_, ydk)
     class_<ydk::path::DataNode, shared_ptr<ydk::path::DataNode>>(path, "DataNode")
         .def("get_schema_node", &ydk::path::DataNode::get_schema_node, return_value_policy::reference)
         .def("get_path", &ydk::path::DataNode::get_path, return_value_policy::reference)
+        .def("create_action", &ydk::path::DataNode::create_action, return_value_policy::reference)
         .def("create_datanode", (ydk::path::DataNode& (ydk::path::DataNode::*)(const string&)) &ydk::path::DataNode::create_datanode, return_value_policy::reference, arg("path"))
         .def("create_datanode", (ydk::path::DataNode& (ydk::path::DataNode::*)(const string&, const string&)) &ydk::path::DataNode::create_datanode, return_value_policy::reference, arg("path"), arg("value"))
         .def("get_value", &ydk::path::DataNode::get_value, return_value_policy::reference)
@@ -484,7 +488,8 @@ PYBIND11_MODULE(ydk_, ydk)
         .def("find", &ydk::path::DataNode::find, return_value_policy::reference, arg("path"))
         .def("add_annotation", &ydk::path::DataNode::add_annotation, return_value_policy::reference, arg("annotation"))
         .def("remove_annotation", &ydk::path::DataNode::remove_annotation, return_value_policy::reference, arg("annotation"))
-        .def("annotations", &ydk::path::DataNode::annotations, return_value_policy::reference);
+        .def("annotations", &ydk::path::DataNode::annotations, return_value_policy::reference)
+        .def("__call__", &ydk::path::DataNode::operator(), arg("service_provider"));
 
     class_<ydk::path::RootSchemaNode, shared_ptr<ydk::path::RootSchemaNode>>(path, "RootSchemaNode")
         .def("get_path", &ydk::path::RootSchemaNode::get_path, return_value_policy::reference)

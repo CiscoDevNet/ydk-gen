@@ -20,6 +20,7 @@ import sys
 import unittest
 import logging
 
+from ydk.errors import YPYError
 from ydk.path.sessions import NetconfSession
 from ydk.path import Codec
 from ydk.types import EncodingFormat
@@ -50,7 +51,7 @@ class SanityTest(unittest.TestCase):
         create_rpc = self.root_schema.create_rpc("ydk:delete")
         create_rpc.get_input_node().create_datanode("entity", xml)
         # RuntimeError: YCoreError: YCodecError:Schema node not found.. Path: input/config if invoked
-        # create_rpc(self.nc_session)
+        create_rpc(self.nc_session)
 
     def tearDown(self):
         # RuntimeError: YCoreError: YCodecError:Schema node not found.. Path: input/config if invoked
@@ -174,6 +175,25 @@ class SanityTest(unittest.TestCase):
         
         crud_service = CRUDService();
         crud_service.create(provider, native)
+
+    def test_anyxml(self):
+        expected='''<data xmlns="http://cisco.com/ns/yang/ydktest-action">
+  <action-node>
+    <test>xyz</test>
+  </action-node>
+</data>
+'''
+        native = self.root_schema.create_datanode("ydktest-sanity-action:data", "")
+        a = native.create_action("action-node")
+        a.create_datanode("test", "xyz")
+
+        xml = self.codec.encode(native, EncodingFormat.XML, True)
+        self.assertEqual(xml, expected)
+
+        try:
+            native(self.nc_session)
+        except Exception as e:
+            self.assertEqual(isinstance(e, RuntimeError), True)
 
 def enable_logging(level):
     log = logging.getLogger('ydk')

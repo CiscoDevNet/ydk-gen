@@ -18,9 +18,10 @@
 #include <sstream>
 
 #include "ietf_parser.hpp"
-#include "path_api.hpp"
-#include "ydk_yang.hpp"
 #include "logger.hpp"
+#include "path_api.hpp"
+#include "xml_util.hpp"
+#include "ydk_yang.hpp"
 
 
 using namespace std;
@@ -33,11 +34,41 @@ static xmlNodePtr drop_hello_tag(xmlNodePtr root)
     auto cur = root->xmlChildrenNode;
     while (cur != NULL)
     {
-        if ((!xmlStrcmp(cur->name, (const xmlChar *) "capabilities")))
+        if ((!xmlStrcmp(cur->name, to_xmlchar("capabilities"))))
             return cur;
         cur = cur->next;
     }
     return root;
+}
+
+static xmlNodePtr check_and_return_root(xmlDocPtr doc)
+{
+    if (doc == NULL)
+    {
+        YLOG_INFO("Empty capabilities");
+        return NULL;
+    }
+    xmlNodePtr cur = xmlDocGetRootElement(doc);
+    if (cur == NULL)
+    {
+        YLOG_INFO("Empty capabilities");
+        return NULL;
+    }
+    return cur;
+}
+
+static string get_xml_node_content(xmlNodePtr n)
+{
+    string c;
+    xmlChar * buffer = xmlNodeGetContent(n);
+    if(buffer != NULL)
+    {
+        ostringstream os;
+        os << buffer;
+        xmlFree(buffer);
+        c = os.str();
+    }
+    return c;
 }
 //////////////////////////////////////////
 //// IetfCapabilitiesXmlParser
@@ -55,27 +86,18 @@ IetfCapabilitiesXmlParser::~IetfCapabilitiesXmlParser()
     }
 }
 
-vector<string> IetfCapabilitiesXmlParser::parse(const string & capabilities_buffer)
+vector<string> IetfCapabilitiesXmlParser::parse_yang_1_1(const std::string & buffer)
 {
-    doc = xmlReadMemory(capabilities_buffer.c_str(), capabilities_buffer.size(), "noname.xml", NULL, 0);
-
     vector<string> capabilities{};
-    if (doc == NULL)
+
+    doc = xmlReadMemory(buffer.c_str(), buffer.size(), "noname.xml", NULL, 0);
+    xmlNodePtr cur = check_and_return_root(doc);
+    if(cur == NULL)
     {
-        YLOG_INFO("Empty capabilities");
-        return {};
-    }
-    xmlNodePtr cur = xmlDocGetRootElement(doc);
-    if (cur == NULL)
-    {
-        YLOG_INFO("Empty capabilities");
         return {};
     }
 
-    // drop hello
-    cur = drop_hello_tag(cur);
-
-    if (xmlStrcmp(cur->name, (const xmlChar *) "capabilities") != 0)
+    if (xmlStrcmp(cur->name, to_xmlchar("rpc-reply")) != 0)
     {
         YLOG_INFO("Unexpected XML");
         return {};
@@ -83,7 +105,113 @@ vector<string> IetfCapabilitiesXmlParser::parse(const string & capabilities_buff
     cur = cur->xmlChildrenNode;
     while(cur != NULL)
     {
-        if (xmlStrcmp(cur->name, (const xmlChar *) "capability") == 0)
+        if (xmlStrcmp(cur->name, to_xmlchar("data")) == 0)
+        {
+            xmlNodePtr c = cur->xmlChildrenNode;
+            while(c != NULL)
+            {
+                if (xmlStrcmp(c->name, to_xmlchar("modules-state")) == 0)
+                {
+                    xmlNodePtr c1 = c->xmlChildrenNode;
+                    while(c1 != NULL)
+                    {
+                        if (xmlStrcmp(c1->name, to_xmlchar("module")) == 0)
+                        {
+                            string module_name, revision, name_space;
+                            vector<string> features;
+                            vector<string> deviations;
+
+                            xmlNodePtr c2 = c1->xmlChildrenNode;
+                            while(c2 != NULL)
+                            {
+                                if (xmlStrcmp(c2->name, to_xmlchar("name")) == 0)
+                                {
+                                    module_name = get_xml_node_content(c2);
+                                }
+                                else if (xmlStrcmp(c2->name, to_xmlchar("revision")) == 0)
+                                {
+                                    revision = get_xml_node_content(c2);
+                                }
+                                else if (xmlStrcmp(c2->name, to_xmlchar("namespace")) == 0)
+                                {
+                                    name_space = get_xml_node_content(c2);
+                                }
+                                else if (xmlStrcmp(c2->name, to_xmlchar("feature")) == 0)
+                                {
+                                    features.push_back(get_xml_node_content(c2));
+                                }
+                                else if (xmlStrcmp(c2->name, to_xmlchar("deviation")) == 0)
+                                {
+                                    xmlNodePtr c3 = c2->xmlChildrenNode;
+                                    while(c3 != NULL)
+                                    {
+                                        if (xmlStrcmp(c3->name, to_xmlchar("name")) == 0)
+                                        {
+                                            deviations.push_back(get_xml_node_content(c3));
+                                        }
+                                        c3 = c3->next;
+                                    }
+                                }
+                                c2 = c2->next;
+                            }
+                            ostringstream capability;
+                            capability<<name_space<<"?module="<<module_name;
+                            if(revision.size())
+                                capability <<"&revision="<<revision;
+                            if(features.size())
+                            {
+                                capability <<"&features=";
+                                for(size_t i=0;i<features.size()-1;i++)
+                                {
+                                    capability << features[i] << ",";
+                                }
+                                capability << features[features.size()-1];
+                            }
+                            if(deviations.size())
+                            {
+                                capability <<"&deviations=";
+                                for(size_t i=0;i<deviations.size()-1;i++)
+                                {
+                                    capability << deviations[i] << ",";
+                                }
+                                capability << deviations[deviations.size()-1];
+                            }
+                            capabilities.push_back(capability.str());
+                        }
+                        c1 = c1->next;
+                    }
+                }
+                c = c->next;
+            }
+        }
+        cur = cur->next;
+    }
+    return capabilities;
+}
+
+vector<string> IetfCapabilitiesXmlParser::parse(const string & capabilities_buffer)
+{
+    vector<string> capabilities{};
+
+    doc = xmlReadMemory(capabilities_buffer.c_str(), capabilities_buffer.size(), "noname.xml", NULL, 0);
+    xmlNodePtr cur = check_and_return_root(doc);
+    if(cur == NULL)
+    {
+        return {};
+    }
+
+    // drop hello
+    cur = drop_hello_tag(cur);
+
+    if (xmlStrcmp(cur->name, to_xmlchar("capabilities")) != 0)
+    {
+        YLOG_INFO("Unexpected XML");
+        return {};
+    }
+    cur = cur->xmlChildrenNode;
+    while(cur != NULL)
+    {
+        if (xmlStrcmp(cur->name, to_xmlchar("capability")) == 0)
         {
             xmlChar * capability_buffer = xmlNodeGetContent(cur);
             if(capability_buffer != NULL)

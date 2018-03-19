@@ -146,7 +146,7 @@ TEST_CASE( "rpc_escape" )
 
     // convert result DataNode to XML and print
     auto yang = s.encode( *result, ydk::EncodingFormat::XML, true);
-    std::cout<<yang<<std::endl;
+    //std::cout<<yang<<std::endl;
 }
 
 TEST_CASE( "bgp_netconf_create" )
@@ -539,6 +539,49 @@ TEST_CASE("multiple_delete_create_read_rpc")
     REQUIRE(read_result != nullptr);
 }
 
+TEST_CASE("action_create")
+{
+    ydk::path::Repository repo{TEST_HOME};
+
+    ydk::path::NetconfSession session{repo,"127.0.0.1", "admin", "admin",  12022};
+    ydk::path::RootSchemaNode& schema = session.get_root_schema();
+    ydk::path::Codec s{};
+
+    auto & native = schema.create_datanode("ydktest-sanity-action:data", "");
+    auto& a = native.create_action("action-node");
+    a.create_datanode("test", "xyz");
+
+    auto expected=R"(<data xmlns="http://cisco.com/ns/yang/ydktest-action">
+  <action-node>
+    <test>xyz</test>
+  </action-node>
+</data>
+)";
+    auto x = s.encode(native, ydk::EncodingFormat::XML, true);
+    REQUIRE(x==expected);
+
+    // run test knowing confd will reject action because it is not implemented on device
+    REQUIRE_THROWS_AS((native)(session), ydk::YServiceProviderError);
+
+    auto & runner = schema.create_datanode("ydktest-sanity:runner");
+    // run test knowing session will reject datanode without action
+    REQUIRE_THROWS_AS((runner)(session), ydk::YServiceProviderError);
+}
+
+TEST_CASE("get_schema_decode")
+{
+    ydk::path::NetconfSession session{"127.0.0.1", "admin", "admin",  12022};
+    ydk::path::RootSchemaNode& schema = session.get_root_schema();
+    ydk::path::Codec s{};
+
+    auto rpc = schema.create_rpc("ietf-netconf-monitoring:get-schema");
+    rpc->get_input_node().create_datanode("identifier", "ydktest-sanity-action");
+
+    auto o = (*rpc)(session);
+
+    auto xml = s.encode(*o, ydk::EncodingFormat::XML, true);
+    cout<<xml<<endl;
+}
 /* TODO
 TEST_CASE("oc_optic")
 {

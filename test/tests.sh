@@ -157,6 +157,7 @@ function install_test_cpp_core {
     print_msg "Installing / testing cpp core"
     install_cpp_core
     run_cpp_core_test
+    generate_libydk
 }
 
 function install_cpp_core {
@@ -168,8 +169,16 @@ function install_cpp_core {
 
     print_msg "Compiling with coverage"
     ${CMAKE_BIN} -DCOVERAGE=True .. && sudo make install
+}
+
+function generate_libydk {
+    print_msg "Generating libydk package for later testing"
+    cd $YDKGEN_HOME
+    run_test generate.py --libydk
+    cd gen-api/cpp/ydk/build
     sudo make package || true
     cp libydk*rpm libydk*deb /ydk-gen &> /dev/null
+    cd -
 }
 
 function run_cpp_core_test {
@@ -224,8 +233,8 @@ function generate_install_specified_cpp_bundle {
    bundle_profile=$1
    bundle_name=$2
 
-   run_test generate.py --bundle $bundle_profile --cpp --generate-doc &> /dev/null
-   cd gen-api/cpp/$2/build
+   run_test generate.py --bundle ${bundle_profile} --cpp --generate-doc &> /dev/null
+   cd gen-api/cpp/${bundle_name}/build
    run_exec_test sudo make install
    cd -
 }
@@ -370,9 +379,10 @@ function py_sanity_ydktest {
 
 function py_sanity_doc_gen {
    print_msg "Generating docs"
-   run_test generate.py --core --cpp --generate-doc &> /dev/null
-   run_test generate.py --core --go --generate-doc &> /dev/null
-   run_test generate.py --core --python --generate-doc &> /dev/null
+   sudo rm -rf gen-api/cpp/ydk
+   run_test generate.py --core --cpp --generate-doc > /dev/null
+   run_test generate.py --core --go --generate-doc > /dev/null
+   run_test generate.py --core --python --generate-doc > /dev/null
 }
 
 function py_sanity_ydktest_gen {

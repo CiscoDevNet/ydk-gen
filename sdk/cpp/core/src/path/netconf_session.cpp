@@ -21,21 +21,19 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include <memory>
-
 #include <libyang/libyang.h>
 
+#include "../common_utilities.hpp"
 #include "../entity_data_node_walker.hpp"
 #include "../errors.hpp"
 #include "../ietf_parser.hpp"
+#include "../logger.hpp"
 #include "../netconf_ssh_client.hpp"
 #include "../netconf_tcp_client.hpp"
-#include "../netconf_provider.hpp"
 #include "../types.hpp"
 #include "../ydk_yang.hpp"
-#include "../logger.hpp"
+
 #include "netconf_model_provider.hpp"
-#include "../common_utilities.hpp"
 
 using namespace std;
 
@@ -50,19 +48,24 @@ static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode& root_sch
 static shared_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name);
 static path::DataNode& create_rpc_input(path::Rpc & netconf_rpc);
 
+static bool supports_yang_1_1(vector<string> & caps);
+
 static bool is_candidate_supported(vector<string> capbilities);
 static void create_input_target(path::DataNode & input, bool candidate_supported);
 static void create_input_source(path::DataNode & input, bool config);
 static void create_input_error_option(path::DataNode & input);
 static string get_annotated_config_payload(path::RootSchemaNode & root_schema, path::Rpc & rpc, path::Annotation & annotation);
 static string get_commit_rpc_payload();
-static shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported);
+static string get_caps_rpc_payload();
+static shared_ptr<path::DataNode> handle_crud_edit_reply(string reply, NetconfClient & client, bool candidate_supported);
 
 static string get_read_rpc_name(bool config);
 static bool is_config(path::Rpc & rpc);
 static string get_filter_payload(path::Rpc & ydk_rpc);
 static string get_netconf_payload(path::DataNode & input, const string& data_tag, const string& data_value);
-static shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::RootSchemaNode & root_schema, path::Rpc & rpc);
+static shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::RootSchemaNode & root_schema, const string& rpc_path);
+static void check_rpc_reply_for_error(const string& reply);
+static void log_rpc_request(const string& payload);
 
 const char* CANDIDATE = "urn:ietf:params:netconf:capability:candidate:1.0";
 const string PROTOCOL_SSH = "ssh";
@@ -71,7 +74,6 @@ const string PROTOCOL_TCP = "tcp";
 static bool is_netconf_get_rpc(path::Rpc & rpc);
 static shared_ptr<path::DataNode> handle_netconf_get_output(const string & reply, path::RootSchemaNode & root_schema);
 
-// static shared_ptr<path::DataNode> handle_read_reply(string reply, path::RootSchemaNode & root_schema);
 
 NetconfSession::NetconfSession(path::Repository & repo,
                                const string& address,
@@ -189,11 +191,18 @@ void NetconfSession::initialize_repo(path::Repository & repo, bool on_demand)
         }
     }
 
-    auto lookup_table = capabilities_parser.get_lookup_table(server_capabilities);
+    vector<path::Capability> yang_caps;
+    vector<string> empty_caps;
+    vector<path::Capability> all_caps;
 
-    std::vector<path::Capability> yang_caps;
-    std::vector<std::string> empty_caps;
-    std::vector<path::Capability> all_caps = capabilities_parser.parse(server_capabilities);
+    if(supports_yang_1_1(server_capabilities))
+    {
+        auto caps_1_1 = get_yang_1_1_capabilities();
+        server_capabilities = get_union(server_capabilities, caps_1_1);
+    }
+
+    all_caps = capabilities_parser.parse(server_capabilities);
+    auto lookup_table = capabilities_parser.get_lookup_table(server_capabilities);
 
     if (on_demand)
         yang_caps = capabilities_parser.parse(empty_caps);
@@ -224,7 +233,7 @@ path::RootSchemaNode& NetconfSession::get_root_schema() const
     return *root_schema;
 }
 
-shared_ptr<path::DataNode> NetconfSession::handle_read(path::Rpc& ydk_rpc) const
+shared_ptr<path::DataNode> NetconfSession::handle_crud_read(path::Rpc& ydk_rpc) const
 {
     //for now we only support crud rpc's
     bool config = is_config(ydk_rpc);
@@ -234,10 +243,11 @@ shared_ptr<path::DataNode> NetconfSession::handle_read(path::Rpc& ydk_rpc) const
     string filter_value = get_filter_payload(ydk_rpc);
 
     string netconf_payload = get_netconf_payload(input, "filter", filter_value);
-    return handle_rpc_output(execute_payload(netconf_payload), *root_schema, *netconf_rpc );
+
+    return handle_netconf_get_output(execute_payload(netconf_payload), *root_schema);
 }
 
-shared_ptr<path::DataNode> NetconfSession::handle_edit(path::Rpc& ydk_rpc, path::Annotation annotation) const
+shared_ptr<path::DataNode> NetconfSession::handle_crud_edit(path::Rpc& ydk_rpc, path::Annotation annotation) const
 {
     //for now we only support crud rpc's
     bool candidate_supported = is_candidate_supported(server_capabilities);
@@ -252,7 +262,7 @@ shared_ptr<path::DataNode> NetconfSession::handle_edit(path::Rpc& ydk_rpc, path:
     string netconf_payload = get_netconf_payload(input, "config", config_payload);
     ly_verb(LY_LLVRB); // enable libyang logging after payload has been created
 
-    return handle_edit_reply(execute_payload(netconf_payload), *client, candidate_supported);
+    return handle_crud_edit_reply(execute_payload(netconf_payload), *client, candidate_supported);
 }
 
 shared_ptr<path::DataNode> NetconfSession::handle_netconf_operation(path::Rpc& ydk_rpc) const
@@ -262,21 +272,38 @@ shared_ptr<path::DataNode> NetconfSession::handle_netconf_operation(path::Rpc& y
     string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"};
     netconf_payload = payload + netconf_payload + "</rpc>";
 
-    YLOG_INFO("=============Generating payload to send to device=============");
-    YLOG_INFO("\n{}", netconf_payload);
-    YLOG_INFO("\n");
+    log_rpc_request(netconf_payload);
 
     string reply = execute_payload(netconf_payload);
-    if (ydk_rpc.has_output_node())
+    check_rpc_reply_for_error(reply);
+
+    if (is_netconf_get_rpc(ydk_rpc))
     {
-        return handle_rpc_output(reply, *root_schema, ydk_rpc);
+        return handle_netconf_get_output(reply, *root_schema);
     }
-    if(reply.find("<ok/>") == string::npos)
+    else if (ydk_rpc.has_output_node())
     {
-        YLOG_ERROR("Did not receive OK reply from the device");
-        throw(YServiceProviderError{reply});
+        return handle_rpc_output(reply, *root_schema, ydk_rpc.get_input_node().get_path());
     }
     return nullptr;
+}
+
+shared_ptr<path::DataNode> NetconfSession::invoke(path::DataNode& datanode) const
+{
+    if(!datanode.has_action_node())
+    {
+        YLOG_ERROR("Datanode {} does not contain any action nodes", datanode.get_path());
+        throw(YServiceProviderError{"Datanode does not contain any action nodes: " + datanode.get_path()});
+    }
+    path::Codec codec_service{};
+    auto netconf_payload = codec_service.encode(datanode, EncodingFormat::XML, true);
+
+    netconf_payload = "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\"><action xmlns=\"urn:ietf:params:xml:ns:yang:1\">\n" + netconf_payload + "</action></rpc>";
+    log_rpc_request(netconf_payload);
+    string reply = execute_payload(netconf_payload);
+    check_rpc_reply_for_error(reply);
+
+    return handle_rpc_output(reply, *root_schema, datanode.get_action_node_path());
 }
 
 shared_ptr<path::DataNode> NetconfSession::invoke(path::Rpc& rpc) const
@@ -294,11 +321,11 @@ shared_ptr<path::DataNode> NetconfSession::invoke(path::Rpc& rpc) const
     {
         //for each child node in datanode add the nc:operation attribute
         path::Annotation an{IETF_NETCONF_MODULE_NAME, "operation", rpc_schema == delete_schema ? "delete" : "merge"};
-        return handle_edit(rpc, an);
+        return handle_crud_edit(rpc, an);
     }
     else if(rpc_schema == read_schema)
     {
-        return handle_read(rpc);
+        return handle_crud_read(rpc);
     }
     else
     {
@@ -310,11 +337,34 @@ shared_ptr<path::DataNode> NetconfSession::invoke(path::Rpc& rpc) const
 
 string NetconfSession::execute_payload(const string & payload) const
 {
-    std::string reply = client->execute_payload(payload);
+    string reply = client->execute_payload(payload);
     YLOG_INFO("=============Reply payload received from device=============");
     YLOG_INFO("\n{}", reply);
     YLOG_INFO("\n");
     return reply;
+}
+
+vector<string> NetconfSession::get_yang_1_1_capabilities() const
+{
+    IetfCapabilitiesXmlParser parser{};
+    IetfCapabilitiesParser capabilities_parser{};
+    string payload = get_caps_rpc_payload();
+
+    YLOG_INFO("=============Requesting YANG 1.1 capabilities=============");
+    string reply = execute_payload(payload);
+    return parser.parse_yang_1_1(reply);
+}
+
+static bool supports_yang_1_1(vector<string> & caps)
+{
+  for(string &c : caps )
+    {
+        if(c.find("urn:ietf:params:netconf:capability:yang-library:1.0") != string::npos)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 static shared_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name)
@@ -330,6 +380,19 @@ static shared_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_sch
 static path::DataNode& create_rpc_input(path::Rpc & netconf_rpc)
 {
     return netconf_rpc.get_input_node();
+}
+
+static string get_caps_rpc_payload()
+{
+    return R"(<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <get>
+      <filter type="subtree">
+        <modules-state xmlns="urn:ietf:params:xml:ns:yang:ietf-yang-library">
+          <module/>
+        </modules-state>
+      </filter>
+    </get>
+    </rpc>)";
 }
 
 static string get_commit_rpc_payload()
@@ -427,13 +490,11 @@ static string get_netconf_payload(path::DataNode & input, const string &  data_t
     string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">\n"};
     payload+=codec_service.encode(input, EncodingFormat::XML, true);
     payload+="</rpc>";
-    YLOG_INFO("=============Generating payload to send to device=============");
-    YLOG_INFO("\n{}", payload.c_str());
-    YLOG_INFO("\n");
+    log_rpc_request(payload);
     return payload;
 }
 
-static shared_ptr<path::DataNode> handle_edit_reply(string reply, NetconfClient & client, bool candidate_supported)
+static shared_ptr<path::DataNode> handle_crud_edit_reply(string reply, NetconfClient & client, bool candidate_supported)
 {
     if(reply.find("<ok/>") == string::npos)
     {
@@ -505,14 +566,9 @@ static shared_ptr<path::DataNode> handle_netconf_get_output(const string & reply
     return datanode;
 }
 
-static shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::RootSchemaNode & root_schema, path::Rpc & rpc)
+static shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::RootSchemaNode & root_schema, const string& rpc_path)
 {
-    if (is_netconf_get_rpc(rpc))
-    {
-        return handle_netconf_get_output(reply, root_schema);
-    }
-
-    path::Codec codec_service{};
+   path::Codec codec_service{};
 
     auto data_start = reply.find("<rpc-reply ");
     auto data_end = reply.find("</rpc-reply>", data_start);
@@ -521,11 +577,13 @@ static shared_ptr<path::DataNode> handle_rpc_output(const string & reply, path::
     data_start = data_start_end + 1;
 
     string data = reply.substr(data_start, data_end - data_start);
+    if(data.find("<ok/>") != string::npos)
+        return nullptr;
 
     shared_ptr<path::DataNode> datanode = codec_service.decode_rpc_output(
                                                     root_schema,
                                                     data,
-                                                    rpc.get_schema_node().get_path(),
+                                                    rpc_path,
                                                     EncodingFormat::XML);
     return datanode;
 }
@@ -557,6 +615,22 @@ static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_sc
         throw(YIllegalStateError{"CRUD create rpc schema not found!"});
     }
     return c[0];
+}
+
+static void check_rpc_reply_for_error(const string& reply)
+{
+    if(reply.find("<rpc-error") != string::npos)
+    {
+        YLOG_ERROR("RPC error occurred: {}", reply);
+        throw(YServiceProviderError{reply});
+    }
+}
+
+static void log_rpc_request(const string& payload)
+{
+    YLOG_INFO("=============Generating payload to send to device=============");
+    YLOG_INFO("\n{}", payload);
+    YLOG_INFO("\n");
 }
 
 } //namespace path

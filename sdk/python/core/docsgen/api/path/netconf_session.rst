@@ -32,6 +32,14 @@ NetconfSession
 
         :returns: :py:class:`DataNode<DataNode>`.
 
+    .. py:method:: invoke(datanode)
+
+        :param datanode: (:py:class:`Rpc<ydk.path.DataNode>`) Given DataNode containing YANG 1.1 action to be executed.
+
+        Invokes or executes the given DataNode and returns a :py:class:`DataNode<DataNode>` pointer if the action has an output modelled in YANG.
+
+        :returns: :py:class:`DataNode<DataNode>`.
+
     .. py:method:: get_capabilities()
 
         Returns a list of capabilities of the client

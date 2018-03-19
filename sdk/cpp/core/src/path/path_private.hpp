@@ -188,6 +188,14 @@ namespace ydk {
 
             virtual DataNode& create_datanode(const std::string& path, const std::string& value);
 
+            DataNode& create_action(const std::string& path);
+
+            std::shared_ptr<DataNode> operator()(const Session& session);
+
+            bool has_action_node() const;
+
+            std::string get_action_node_path() const;
+
             void set_value(const std::string& value);
 
             virtual std::string get_value() const;

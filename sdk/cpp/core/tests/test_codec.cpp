@@ -50,3 +50,49 @@ TEST_CASE( "test_codec_rpc" )
     auto x2 = s.encode(*d2, EncodingFormat::XML, false);
     REQUIRE(x2=="<get-schema xmlns=\"urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring\"><data>module xyz { } </data></get-schema>");
 }
+
+TEST_CASE( "test_codec_action" )
+{
+    ydk::path::Codec s{};
+    std::string searchdir{TEST_HOME};
+    mock::MockSession sp{searchdir, test_openconfig};
+
+    auto & schema = sp.get_root_schema();
+
+    string pl2 = "<t xmlns=\"http://cisco.com/ns/yang/ydktest-action\">xyz</t>";
+    auto d2 = s.decode_rpc_output(schema, pl2, "/ydktest-sanity-action:data/action-node", EncodingFormat::XML);
+    REQUIRE(d2!=nullptr);
+    auto x2 = s.encode(*d2, EncodingFormat::XML, false);
+    REQUIRE(x2=="<data xmlns=\"http://cisco.com/ns/yang/ydktest-action\"><action-node><t>xyz</t></action-node></data>");
+}
+
+TEST_CASE( "test_codec_action_datanode" )
+{
+    ydk::path::Codec s{};
+    std::string searchdir{TEST_HOME};
+    mock::MockSession sp{searchdir, test_openconfig};
+
+    auto & schema = sp.get_root_schema();
+
+    auto & data = schema.create_datanode("ydktest-sanity-action:data");
+    auto & a = data.create_action("action-node");
+    a.create_datanode("test", "xyz");
+    REQUIRE_NOTHROW((data)(sp));
+
+    REQUIRE(data.get_action_node_path() == "/ydktest-sanity-action:data/action-node");
+}
+/*
+TEST_CASE( "test_codec_ok" )
+{
+    ydk::path::Codec s{};
+    std::string searchdir{TEST_HOME};
+    mock::MockSession sp{searchdir, test_openconfig};
+
+    auto & schema = sp.get_root_schema();
+
+    string pl2 = "<ok/>";
+    auto d2 = s.decode_rpc_output(schema, pl2, "/ietf-netconf:edit-config", EncodingFormat::XML);
+    REQUIRE(d2!=nullptr);
+    auto x2 = s.encode(*d2, EncodingFormat::XML, false);
+    REQUIRE(x2=="<ok/>");
+}*/

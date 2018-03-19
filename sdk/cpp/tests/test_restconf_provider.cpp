@@ -74,3 +74,16 @@ TEST_CASE("CreateDelRead")
 
 
 }
+
+TEST_CASE("ActionRest")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    ydk::RestconfServiceProvider provider{repo, "localhost", "admin", "admin", 12306, EncodingFormat::JSON};
+
+    ydk::path::RootSchemaNode& schema = provider.get_session().get_root_schema();
+
+    ydk::path::Codec s{};
+
+    auto & runner = schema.create_datanode("ydktest-sanity-action:data");
+    REQUIRE_THROWS_AS((runner)(provider.get_session()), ydk::YOperationNotSupportedError);
+}

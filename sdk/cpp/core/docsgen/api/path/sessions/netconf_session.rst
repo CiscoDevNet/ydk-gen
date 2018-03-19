@@ -103,6 +103,13 @@ NetconfSession
         :param rpc: Reference to the :cpp:class:`Rpc<Rpc>` node.
         :return: Shared pointer to the :cpp:class:`DataNode<DataNode>` representing the output.
 
+   .. cpp:function:: virtual std::shared_ptr<path::DataNode> invoke(path::DataNode& datanode) const
+
+        Invokes or executes the given DataNode containing a YANG 1.1 action and returns a :cpp:class:`DataNode<DataNode>` pointer if the action has an output modeled in YANG.
+
+        :param datanode: Reference to the :cpp:class:`DataNode<DataNode>` node.
+        :return: Pointer to the :cpp:class:`DataNode<DataNode>` representing the output.
+
     .. cpp:function:: std::vector<std::string> get_capabilities() const
 
         Returns a vector of the client's capabilities

@@ -67,6 +67,20 @@ DataNode
         :raises: :cpp:class:`YInvalidArgumentError<YInvalidArgumentError>` In case the argument is invalid.
         :raises: :cpp:class:`YPathError<YPathError>` In case the path is invalid.
 
+    .. cpp:function:: virtual DataNode& create_action(const std::string& path)
+
+        Creates a :cpp:class:`DataNode<DataNode>` representing a YANG 1.1 action corresponding to the path and set its value.
+
+        This methods creates a :cpp:class:`DataNode<DataNode>` tree based on the path passed in. The path expression must identify a single node.
+
+        The returned :cpp:class:`DataNode<DataNode>` is the last node created (the terminal part of the path).
+
+        :param path: The XPath expression identifying the node.
+        :param value: The string representation of the value to set.
+        :return: Pointer to :cpp:class:`DataNode<DataNode>` created.
+        :raises: :cpp:class:`YInvalidArgumentError<YInvalidArgumentError>` In case the argument is invalid.
+        :raises: :cpp:class:`YPathError<YPathError>` In case the path is invalid.
+
     .. cpp:function:: virtual void set_value(const std::string& value)
 
         Set the value of this :cpp:class:`DataNode<DataNode>`.
@@ -104,6 +118,16 @@ DataNode
 
         :return: Pointer to the root :cpp:class:`DataNode<DataNode>` of this tree.
 
+    .. cpp:function:: virtual std::shared_ptr<DataNode> operator()(const Session& session)
+
+        Execute/Invoke the action contained in the DataNode through the given Session and return the output of the action as a DataNode.
+
+        :param session: The Session.
+        :return: Pointer to the :cpp:class:`DataNode<DataNode>` or ``nullptr`` if none exists.
+
+    .. cpp:function:: virtual bool has_action() const
+
+        :return: `true` if the DataNode contains any action node created by invoking ``create_action``.
 
     .. cpp:function:: virtual void add_annotation(const Annotation& an)
 

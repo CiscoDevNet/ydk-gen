@@ -212,7 +212,7 @@ ydk::path::RootDataImpl::find(const std::string& path)
     }
 
     auto s = get_schema_node().get_statement();
-    if(s.keyword == "rpc")
+    if(s.keyword == "rpc" || s.keyword == "action")
     {
         schema_path+="input/";
     }
