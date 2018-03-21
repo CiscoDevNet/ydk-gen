@@ -101,8 +101,9 @@ TEST_CASE("test_error")
 {
     IetfCapabilitiesXmlParser parser{};
     vector<string> caps = parser.parse("");
-    caps = parser.parse_yang_1_1("");
+    REQUIRE(caps.size() == 0);
 
+    caps = parser.parse_yang_1_1("");
     REQUIRE(caps.size() == 0);
 }
 
@@ -110,8 +111,9 @@ TEST_CASE("test_error_1")
 {
     IetfCapabilitiesXmlParser parser{};
     vector<string> caps = parser.parse("<test></test>");
-    caps = parser.parse_yang_1_1("<test></test>");
+    REQUIRE(caps.size() == 0);
 
+    caps = parser.parse_yang_1_1("<test></test>");
     REQUIRE(caps.size() == 0);
 }
 
@@ -119,8 +121,9 @@ TEST_CASE("test_error_2")
 {
     IetfCapabilitiesXmlParser parser{};
     vector<string> caps = parser.parse("<capabilities></capabilities>");
-    caps = parser.parse_yang_1_1("<capabilities></capabilities>");
+    REQUIRE(caps.size() == 0);
 
+    caps = parser.parse_yang_1_1("<capabilities></capabilities>");
     REQUIRE(caps.size() == 0);
 }
 
@@ -128,8 +131,9 @@ TEST_CASE("test_error_3")
 {
     IetfCapabilitiesXmlParser parser{};
     vector<string> caps = parser.parse("<capabilities><test></test></capabilities>");
-    caps = parser.parse_yang_1_1("<capabilities><test></test></capabilities>");
+    REQUIRE(caps.size() == 0);
 
+    caps = parser.parse_yang_1_1("<capabilities><test></test></capabilities>");
     REQUIRE(caps.size() == 0);
 }
 

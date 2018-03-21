@@ -20,7 +20,6 @@ import sys
 import unittest
 import logging
 
-from ydk.errors import YPYError
 from ydk.path.sessions import NetconfSession
 from ydk.path import Codec
 from ydk.types import EncodingFormat
@@ -176,7 +175,7 @@ class SanityTest(unittest.TestCase):
         crud_service = CRUDService();
         crud_service.create(provider, native)
 
-    def test_anyxml(self):
+    def test_anyxml_action(self):
         expected='''<data xmlns="http://cisco.com/ns/yang/ydktest-action">
   <action-node>
     <test>xyz</test>
