@@ -155,6 +155,7 @@ std::string StaticModelProvider::get_hostname_port()
 
 string StaticModelProvider::get_model(const string& name, const string& version, Format format)
 {
+    (void)format;
     return get_static_model(name, version);
 }
 

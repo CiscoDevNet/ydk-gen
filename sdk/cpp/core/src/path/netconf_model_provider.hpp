@@ -46,7 +46,7 @@ private:
 class StaticModelProvider : public path::ModelProvider
 {
 public:
-        StaticModelProvider(NetconfClient & client);
+        explicit StaticModelProvider(NetconfClient & client);
 
         ~StaticModelProvider();
 

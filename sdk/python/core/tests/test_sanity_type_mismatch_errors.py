@@ -36,8 +36,8 @@ from test_utils import get_device_info
 
 test_invalid_class_assignment_int_pattern = "Invalid value '1' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
 test_invalid_class_assignment_str_pattern = "Invalid value 'haha' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
-test_invalid_class_assignment_identity_pattern = "Invalid value '<ydk.models.ydktest.ydktest_sanity_types.AnotherOne object at [0-9a-z]+>' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
-test_invalid_class_assignment_enum_pattern = "Invalid value 'ydk.types.Enum.YLeaf\(none\)' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
+test_invalid_class_assignment_identity_pattern = "Invalid value 'ydktest-sanity-types:another-one' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
+test_invalid_class_assignment_enum_pattern = "Invalid value 'none' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
 test_invalid_class_assignment_ylist_pattern = "Invalid value '\[<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*Ldata object at [0-9a-z]+>\]' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
 test_invalid_class_assignment_yleaflist_pattern = "Invalid value '\['0', '1', '2', '3', '4'\]' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
 # test_invalid_class_assignment_yleaflist_pattern = "Invalid value 'YLeafList\('llstring', \[0, 1, 2, 3, 4\]\)' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>'"
