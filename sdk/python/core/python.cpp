@@ -638,7 +638,11 @@ PYBIND11_MODULE(ydk_, ydk)
 
     class_<ydk::Identity>(types, "Identity")
         .def(init<const std::string &, const std::string &, const std::string &>())
-        .def("to_string", &ydk::Identity::to_string, return_value_policy::reference);
+        .def("to_string", &ydk::Identity::to_string, return_value_policy::reference)
+        .def("__str__", [](ydk::Identity &id)
+                          {
+                               return id.to_string();
+                          });
 
     class_<ydk::Enum> enum_(types, "Enum");
 
@@ -648,7 +652,7 @@ PYBIND11_MODULE(ydk_, ydk)
         .def(init<int, string>())
         .def("__str__", [](const ydk::Enum::YLeaf &eyl)
                         {
-                            return "ydk.types.Enum.YLeaf(" + eyl.name + ")";
+                            return eyl.name;
                         })
         .def_readwrite("value", &ydk::Enum::YLeaf::value)
         .def_readwrite("name", &ydk::Enum::YLeaf::name);

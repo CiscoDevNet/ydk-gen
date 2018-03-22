@@ -157,7 +157,7 @@ def get_enum_class_docstring(enumz):
     if enumz.comment is not None:
         enumz_description = enumz.comment
 
-    enumz_description = "%s\n\n\n" % (enumz.name) + enumz_description
+    enumz_description = "%s (Enum Class)\n\n\n" % (enumz.name) + enumz_description
 
     literals_description = []
     for enum_literal in enumz.literals:

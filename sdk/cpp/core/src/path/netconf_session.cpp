@@ -48,9 +48,10 @@ static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode& root_sch
 static shared_ptr<path::Rpc> create_rpc_instance(path::RootSchemaNode & root_schema, string rpc_name);
 static path::DataNode& create_rpc_input(path::Rpc & netconf_rpc);
 
-static bool supports_yang_1_1(vector<string> & caps);
-
+static bool is_yang_1_1_supported(vector<string> & caps);
 static bool is_candidate_supported(vector<string> capbilities);
+static bool is_get_schema_supported(vector<string> capbilities);
+
 static void create_input_target(path::DataNode & input, bool candidate_supported);
 static void create_input_source(path::DataNode & input, bool config);
 static void create_input_error_option(path::DataNode & input);
@@ -151,7 +152,6 @@ void NetconfSession::initialize_client_with_key(const string& address,
 {
     client = make_shared<NetconfSSHClient>(
         username, private_key_path, public_key_path, address, port, timeout);
-    model_provider = make_shared<NetconfModelProvider>(*client);
 }
 
 void NetconfSession::initialize_client(const string& address,
@@ -174,7 +174,7 @@ void NetconfSession::initialize_client(const string& address,
         YLOG_ERROR("Protocol {} not supported.", protocol);
         throw(YOperationNotSupportedError{"Protocol is not supported!"});
     }
-    model_provider = make_shared<NetconfModelProvider>(*client);
+
 }
 
 void NetconfSession::initialize_repo(path::Repository & repo, bool on_demand)
@@ -183,19 +183,22 @@ void NetconfSession::initialize_repo(path::Repository & repo, bool on_demand)
     client->connect();
     server_capabilities = client->get_capabilities();
 
-    for(string &c : server_capabilities )
+    if(is_get_schema_supported(server_capabilities))
     {
-        if(c.find("ietf-netconf-monitoring") != string::npos)
-        {
-            repo.add_model_provider(model_provider.get());
-        }
+        model_provider = make_shared<NetconfModelProvider>(*client);
     }
+    else
+    {
+        model_provider = make_shared<StaticModelProvider>(*client);
+    }
+
+    repo.add_model_provider(model_provider.get());
 
     vector<path::Capability> yang_caps;
     vector<string> empty_caps;
     vector<path::Capability> all_caps;
 
-    if(supports_yang_1_1(server_capabilities))
+    if(is_yang_1_1_supported(server_capabilities))
     {
         auto caps_1_1 = get_yang_1_1_capabilities();
         server_capabilities = get_union(server_capabilities, caps_1_1);
@@ -355,7 +358,7 @@ vector<string> NetconfSession::get_yang_1_1_capabilities() const
     return parser.parse_yang_1_1(reply);
 }
 
-static bool supports_yang_1_1(vector<string> & caps)
+static bool is_yang_1_1_supported(vector<string> & caps)
 {
   for(string &c : caps )
     {
@@ -363,6 +366,28 @@ static bool supports_yang_1_1(vector<string> & caps)
         {
             return true;
         }
+    }
+    return false;
+}
+
+static bool is_get_schema_supported(vector<string> capbilities)
+{
+  for(string &c : capbilities )
+    {
+        if(c.find("ietf-netconf-monitoring") != string::npos)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+static bool is_candidate_supported(vector<string> capabilities)
+{
+    if(find(capabilities.begin(), capabilities.end(), CANDIDATE) != capabilities.end())
+    {
+        //candidate is supported
+        return true;
     }
     return false;
 }
@@ -400,16 +425,6 @@ static string get_commit_rpc_payload()
     return "<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
            "\n  <commit/>"
            "\n</rpc>\n";
-}
-
-static bool is_candidate_supported(vector<string> capabilities)
-{
-    if(find(capabilities.begin(), capabilities.end(), CANDIDATE) != capabilities.end())
-    {
-        //candidate is supported
-        return true;
-    }
-    return false;
 }
 
 

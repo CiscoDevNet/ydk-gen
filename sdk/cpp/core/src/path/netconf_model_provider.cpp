@@ -40,6 +40,11 @@ namespace ydk
 
 namespace path
 {
+static string get_static_model(const std::string& name, const std::string& version);
+
+//////////////////////////////////////////////////////////////////////////////////
+// NetconfModelProvider
+//////////////////////////////////////////////////////////////////////////////////
 
 NetconfModelProvider::NetconfModelProvider(NetconfClient & client) : client(client)
 {
@@ -56,17 +61,10 @@ std::string NetconfModelProvider::get_hostname_port()
 
 string NetconfModelProvider::get_model(const string& name, const string& version, Format format)
 {
-    string model{};
+    string model = get_static_model(name, version);
 
-    if(name == ydk::path::YDK_MODULE_NAME && version == ydk::path::YDK_MODULE_REVISION)
-    {
-       return ydk::path::YDK_MODULE;
-    }
-
-    if(name == ydk::IETF_NETCONF_MODULE_NAME && version == ydk::IETF_NETCONF_MODULE_REVISION)
-    {
-       return ydk::IETF_NETCONF_MODULE;
-    }
+    if(model.size()>0)
+        return model;
 
     //have to craft and send the raw payload since the schema might
     //not be available
@@ -138,6 +136,41 @@ string NetconfModelProvider::get_model(const string& name, const string& version
     return model;
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+// StaticModelProvider
+//////////////////////////////////////////////////////////////////////////////////
+
+StaticModelProvider::StaticModelProvider(NetconfClient & client) : client(client)
+{
+}
+
+StaticModelProvider::~StaticModelProvider()
+{
+}
+
+std::string StaticModelProvider::get_hostname_port()
+{
+    return client.get_hostname_port();
+}
+
+string StaticModelProvider::get_model(const string& name, const string& version, Format format)
+{
+    return get_static_model(name, version);
+}
+
+static string get_static_model(const std::string& name, const std::string& version)
+{
+    if(name == ydk::path::YDK_MODULE_NAME && version == ydk::path::YDK_MODULE_REVISION)
+    {
+       return ydk::path::YDK_MODULE;
+    }
+
+    if(name == ydk::IETF_NETCONF_MODULE_NAME && version == ydk::IETF_NETCONF_MODULE_REVISION)
+    {
+       return ydk::IETF_NETCONF_MODULE;
+    }
+    return {};
+}
 } //namespace path
 
 } //namespace ydk

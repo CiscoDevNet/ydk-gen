@@ -22,6 +22,7 @@
 //////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include "../src/path/netconf_model_provider.hpp"
 #include "../src/path_api.hpp"
 #include "../src/path/path_private.hpp"
 #include "config.hpp"
@@ -59,3 +60,38 @@ TEST_CASE( "test_replace_xml_escape_sequences"  )
     REQUIRE(converted == expected);
 }
 
+class TestClient: public ydk::NetconfClient
+{
+public:
+    TestClient()
+    {
+    }
+    ~TestClient()
+    {
+    }
+
+    int connect()
+    {
+        return 0;
+    }
+    std::string execute_payload(const std::string & payload)
+    {
+        return payload;
+    }
+    std::vector<std::string> get_capabilities()
+    {
+        return {};
+    }
+    std::string get_hostname_port()
+    {
+        return "";
+    }
+};
+
+TEST_CASE("static_model_provider")
+{
+    TestClient t{};
+    ydk::path::StaticModelProvider s{t};
+    REQUIRE_NOTHROW(s.get_model("","",ydk::path::ModelProvider::Format::YANG));
+    REQUIRE_NOTHROW(s.get_hostname_port());
+}

@@ -656,6 +656,26 @@ module ydktest-sanity {
     }
   }
 
+  grouping identity-list {
+    list identity-list {
+        key "name";
+        leaf name {
+            type identityref {
+                base base-identity;
+           }
+        }
+    }
+  }
+
+  grouping enum-list {
+    list enum-list {
+        key "name";
+        leaf name {
+            type Ydk-Enum-test;
+        }
+    }
+  }
+
   grouping one-read-only {
     description "testing for couple of leaves";
     container one-read-only {
@@ -694,6 +714,10 @@ module ydktest-sanity {
     uses three-level-w-list;
 
     uses three-level-w-list-at-two;
+
+    uses identity-list;
+
+    uses enum-list;
 
     uses leaf-ref-g;
 

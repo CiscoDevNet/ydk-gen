@@ -36,20 +36,6 @@ class EnumPrinter(object):
         self._print_enum_body(enum_class, no_meta_assign)
         self._print_enum_trailer(enum_class)
 
-    def print_enum_meta(self, enum_class):
-        self.ctx.writeln("'%s' : _MetaInfoEnum('%s', '%s'," % (
-                         enum_class.qn(),
-                         enum_class.name,
-                         enum_class.get_py_mod_name()))
-        self.ctx.lvl_inc()
-        self.ctx.writeln("{")
-        self.ctx.lvl_inc()
-        for literal in enum_class.literals:
-            self.ctx.writeln("'%s':'%s'," % (literal.stmt.arg, literal.name))
-        self.ctx.lvl_dec()
-        self.ctx.writeln("}, '%s', _yang_ns._namespaces['%s'])," % (get_module_name(enum_class.stmt), get_module_name(enum_class.stmt)))
-        self.ctx.lvl_dec()
-
     def _print_enum_header(self, enum_class):
         self.ctx.writeln('class %s(Enum):' % enum_class.name)
         self.ctx.lvl_inc()

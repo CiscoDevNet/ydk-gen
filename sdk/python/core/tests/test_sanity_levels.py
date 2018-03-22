@@ -24,9 +24,9 @@ import unittest
 
 from ydk.types import Empty
 try:
-    from ydk.models.ydktest.ydktest_sanity import Runner
+    from ydk.models.ydktest.ydktest_sanity import Runner, ChildIdentity, YdkEnumTest
 except:
-    from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner
+    from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner, ChildIdentity, YdkEnumTest
 
 from ydk.providers import NetconfServiceProvider
 from ydk.services import CRUDService
@@ -508,7 +508,6 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(r_2, None)
 
-    @unittest.skip('Libyang Error')
     def test_leafref_pos(self):
         # CREATE
         r_1, r_2 = Runner(), Runner()
@@ -541,12 +540,12 @@ class SanityYang(unittest.TestCase):
         e_2.subc.subc_subl1.extend([e_21, e_22])
         r_1.inbtw_list.ldata.extend([e_1, e_2])
 
-        r_1.leaf_ref.ref_one_name = r_1.ydktest_sanity_one.name.get()
-        r_1.leaf_ref.ref_two_sub1_number = r_1.two.sub1.number.get()
-        r_1.leaf_ref.ref_three_sub1_sub2_number = r_1.three.sub1.sub2.number.get()
-        r_1.leaf_ref.ref_inbtw = e_21.name.get()
-        r_1.leaf_ref.ydktest_sanity_one.name = 'runner:leaf-ref:one:name'
-        r_1.leaf_ref.ydktest_sanity_one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name.get()
+        r_1.leaf_ref.ref_one_name = r_1.ydktest_sanity_one.name
+        r_1.leaf_ref.ref_two_sub1_number = r_1.two.sub1.number
+        r_1.leaf_ref.ref_three_sub1_sub2_number = r_1.three.sub1.sub2.number
+        r_1.leaf_ref.ref_inbtw = e_21.name
+        r_1.leaf_ref.one.name = 'runner:leaf-ref:one:name'
+        r_1.leaf_ref.one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name
         self.crud.create(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
 
@@ -583,12 +582,12 @@ class SanityYang(unittest.TestCase):
         e_2.subc.subc_subl1.extend([e_21, e_22])
         r_1.inbtw_list.ldata.extend([e_1, e_2])
 
-        r_1.leaf_ref.ref_one_name = r_1.ydktest_sanity_one.name.get()
-        r_1.leaf_ref.ref_two_sub1_number = r_1.two.sub1.number.get()
-        r_1.leaf_ref.ref_three_sub1_sub2_number = r_1.three.sub1.sub2.number.get()
-        r_1.leaf_ref.ref_inbtw = e_21.name.get()
-        r_1.leaf_ref.ydktest_sanity_one.name = 'runner/leaf-ref/one/name'
-        r_1.leaf_ref.ydktest_sanity_one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name.get()
+        r_1.leaf_ref.ref_one_name = r_1.ydktest_sanity_one.name
+        r_1.leaf_ref.ref_two_sub1_number = r_1.two.sub1.number
+        r_1.leaf_ref.ref_three_sub1_sub2_number = r_1.three.sub1.sub2.number
+        r_1.leaf_ref.ref_inbtw = e_21.name
+        r_1.leaf_ref.one.name = 'runner/leaf-ref/one/name'
+        r_1.leaf_ref.one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name
         self.crud.update(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
 
@@ -676,6 +675,21 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(runner, runner_read)
 
+    def test_iden_list(self):
+        runner = Runner()
+        e_1 = Runner.IdentityList()
+        e_1.name = ChildIdentity()
+        runner.identity_list.append(e_1)
+
+        e_1 = Runner.EnumList()
+        e_1.name = YdkEnumTest.none
+        runner.identity_list.append(e_1)
+
+        self.crud.create(self.ncc, runner)
+
+        runner_read = self.crud.read(self.ncc, Runner())
+
+        self.assertEqual(runner, runner_read)
 
 if __name__ == '__main__':
     device, non_demand, common_cache, timeout = get_device_info()

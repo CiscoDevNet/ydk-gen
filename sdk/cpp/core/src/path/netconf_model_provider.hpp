@@ -43,6 +43,20 @@ private:
         NetconfClient & client;
 };
 
+class StaticModelProvider : public path::ModelProvider
+{
+public:
+        StaticModelProvider(NetconfClient & client);
+
+        ~StaticModelProvider();
+
+        std::string get_model(const std::string& name, const std::string& version, Format format);
+        std::string get_hostname_port();
+
+private:
+        NetconfClient & client;
+};
+
 } //namespace path
 
 } //namespace ydk
