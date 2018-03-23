@@ -22,7 +22,7 @@ Print rst documents for the generated Python api
 """
 from operator import attrgetter
 
-from ydkgen.api_model import Bits, Class, Enum, Package
+from ydkgen.api_model import Bits, Class, Enum, Package, Property, get_properties
 from ydkgen.common import get_rst_file_name, is_config_stmt
 from ydkgen.printer.meta_data_util import (
     get_bits_class_docstring,
@@ -67,7 +67,7 @@ class DocPrinter(object):
             self.bundle_name, self.bundle_version)
         self._print_title(title)
         self._append(description)
-        self._print_toctree(sorted(packages, key=attrgetter('name')), is_package=True)
+        self._print_toctree(sorted(packages, key=attrgetter('name')), None, is_package=True)
 
         self.ctx.writelns(self.lines)
         del self.lines
@@ -176,7 +176,11 @@ class DocPrinter(object):
 
         # TOC Tree
         if not isinstance(named_element, Enum):
-            self._print_toctree(named_element.owned_elements)
+            if self.lang == 'py':
+                if hasattr(named_element, 'properties'):
+                    self._print_attributes(named_element.properties())
+                    self._append('\n')
+            self._print_toctree(named_element.owned_elements, named_element)
 
         # Tagging
         if not isinstance(named_element, Package):
@@ -202,7 +206,40 @@ class DocPrinter(object):
         self._append('')
         self.ctx.lvl_dec()
 
-    def _print_toctree(self, elements, is_package=False):
+    def _print_attribute_list(self, props):
+        for prop in props:
+            self._append('* :py:attr:`%s<%s.%s.%s>`' % (
+                prop.name, prop.owner.get_py_mod_name(), prop.owner.qn(), prop.name))
+
+    def _print_attributes(self, props):
+        if len(props) > 0:
+            keys = []
+            leafs = []
+            children = []
+            for prop in props:
+                if prop.stmt.keyword in ('leaf', 'anyxml'):
+                    if prop.is_key():
+                        keys.append(prop)
+                    else:
+                        leafs.append(prop)
+                else:
+                    children.append(prop)
+
+            keys = sorted(keys, key=attrgetter('name'))
+            leafs = sorted(leafs, key=attrgetter('name'))
+            children = sorted(children, key=attrgetter('name'))
+
+            if len(keys)>0:
+                self._append('**{}**\n'.format('Keys'))
+                self._print_attribute_list(keys)
+            if len(leafs)>0:
+                self._append('**{}**\n'.format('Leafs'))
+                self._print_attribute_list(leafs)
+            if len(children)>0:
+                self._append('**{}**\n'.format('Children'))
+                self._print_attribute_list(children)
+
+    def _print_toctree(self, elements, owner, is_package=False):
         if not is_package:
             # Data Classes
             elements = sorted(elements, key=attrgetter('name'))
@@ -228,7 +265,8 @@ class DocPrinter(object):
                     else:
                         data_classes.append(elem)
 
-            self._print_toctree_section(data_classes, 'Data Classes')
+            if self.lang != 'py' or isinstance(owner, Package):
+                self._print_toctree_section(data_classes, 'Data Classes')
             self._print_toctree_section(rpc_classes, 'RPC Classes')
             self._print_toctree_section(bits_classes, 'Bits Classes')
             self._print_toctree_section(enum_classes, 'Enum Classes')
@@ -239,7 +277,7 @@ class DocPrinter(object):
 
     def _print_namespace(self, clazz):
         if self.lang == 'cpp':
-            self._append('\n.. cpp:namespace:: ydk::{0}\n'.format(clazz.get_package().name))
+            self._append('\n.. cpp:namespace:: {0}\n'.format(clazz.get_package().name))
 
     def _print_bases(self, clazz):
         bases = get_class_bases(clazz, self.lang)

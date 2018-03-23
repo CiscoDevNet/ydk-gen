@@ -690,12 +690,7 @@ class Property(NamedElement):
         self.featuring_classifiers = []
         self.read_only = False
         self.is_many = False
-        # self.property_type = None
-        self.default_value = None
-        self.visibility = '+'
         self.id = False
-        self.ordered = False
-        self.unique = False
         self._property_type = None
         self.max_elements = None
         self.min_elements = None

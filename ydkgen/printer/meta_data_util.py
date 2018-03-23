@@ -92,7 +92,7 @@ def get_class_docstring(clazz, language, identity_subclasses=None):
         if language == 'go':
             attribute_title = prop.go_name()
         if prop in keys:
-            attribute_title = '%s  <key>' % attribute_title
+            attribute_title = '%s  (key)' % attribute_title
         properties_description.append('.. attribute:: %s\n\n' % (attribute_title))
 
         properties_description.append('\t%s\n' % (
