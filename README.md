@@ -48,6 +48,9 @@ Other tools and libraries are used to deliver `ydk-gen`'s functionality. In part
 
 * YANG model analysis and code generation is implemented using APIs from the [pyang](https://github.com/mbj4668/pyang) library
 * Documentation is generated using [Sphinx](http://www.sphinx-doc.org/en/stable/)
+* Run time yang model analysis is done using [libyang](https://github.com/CESNET/libyang)
+* C++ to python bindings are created using [pybind11](https://github.com/pybind/pybind11)
+* C++ uses [catch](https://github.com/catchorg/Catch2) and [spdlog](https://github.com/gabime/spdlog) for tests and logging respectively
 
 Of course, many other libraries are used as an integral part of ydk-gen and it's dependencies, too many to mention!
 
