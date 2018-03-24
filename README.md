@@ -1,6 +1,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6e111527081b48e1b2252c3562e08a3b)](https://www.codacy.com/app/ydk/ydk-gen?utm_source=github.com&utm_medium=referral&utm_content=CiscoDevNet/ydk-gen&utm_campaign=badger)
 [![License](https://cloud.githubusercontent.com/assets/17089095/19458582/dd626d2c-9481-11e6-8019-8227c5c66a06.png)](https://github.com/CiscoDevNet/ydk-gen/blob/master/LICENSE) [![Build Status](https://travis-ci.org/CiscoDevNet/ydk-gen.svg?branch=master)](https://travis-ci.org/CiscoDevNet/ydk-gen)
 [![codecov](https://codecov.io/gh/CiscoDevNet/ydk-gen/branch/master/graph/badge.svg)](https://codecov.io/gh/CiscoDevNet/ydk-gen)
+[![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/ydkdev/ydk-gen/)
 
 ![ydk-logo-128](https://cloud.githubusercontent.com/assets/16885441/24175899/2010f51e-0e56-11e7-8fb7-30a9f70fbb86.png)
 
@@ -16,6 +17,7 @@ YANG Development Kit (Generator)
   - [Linux](#linux)
   - [macOS](#macos)
   - [Windows](#windows)
+- [Docker](#Docker)
 - [Installation](#installation)
   - [Setting up your environment](#setting-up-your-environment)
   - [Clone ydk-gen and install the requirements](#clone-ydk-gen-and-install-the-requirements)
@@ -60,6 +62,15 @@ The output of ydk-gen is either a core package, that defines services and provid
 # Backward compatibility
  Please see [this page](http://ydk.cisco.com/py/docs/backward_compatibility.html) for details on some backward incompatible changes introduced as part of the 0.6.0 release
 
+# Docker
+
+A [docker image](https://docs.docker.com/engine/reference/run/) is automatically built with the latest ydk-gen installed. This be used to run ydk-gen without installing anything natively on your machine.
+
+To use the docker image, [install docker](https://docs.docker.com/install/) on your system and run the below command. See the [docker documentation](https://docs.docker.com/engine/reference/run/) for more details.
+
+```
+docker run -it ydkdev/ydk-gen
+```
 
 # System requirements
 Please follow the below instructions to install the system requirements before installing YDK-Py/YDK-Cpp. **Please note** that if you are using the latest ydk-gen master branch code, you may not be able to use the below prebuilt `libydk` binaries. You need to [build libydk from source](#second-step-generate--install-the-core) after installing the below requirements:

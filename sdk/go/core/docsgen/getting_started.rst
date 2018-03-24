@@ -8,6 +8,16 @@ Overview
 
 The YANG Development Kit (YDK) is a Software Development Kit that provides API's that are modeled in YANG. The main goal of YDK is to reduce the learning curve of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles that are based on YANG models.
 
+Docker
+======
+
+A `docker image <https://docs.docker.com/engine/reference/run/>`_ is automatically built with the latest ydk-go installed. This be used to run ydk-go without installing anything natively on your machine.
+
+To use the docker image, `install docker <https://docs.docker.com/install/>`_ on your system and run the below command. See the `docker documentation <https://docs.docker.com/engine/reference/run/>`_ for more details::
+
+  docker run -it ydkdev/ydk-go
+
+
 System Requirements
 ===================
 
