@@ -33,6 +33,7 @@ import (
 	oc_bgp "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/openconfig_bgp"
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
+	"github.com/CiscoDevNet/ydk-go/ydk/types"
 )
 
 func main() {
@@ -99,8 +100,8 @@ func main() {
 	crud := services.CrudService{}
 
 	bgp := oc_bgp.Bgp{}
-	bgp.Global.SetParent(&bgp)
-	bgp.Global.Config.SetParent(&bgp.Global)
+	types.SetParent(&bgp.Global, &bgp)
+	types.SetParent(&bgp.Global.Config, &bgp.Global)
 
 	result := crud.Delete(&provider, &bgp.Global.Config)
 

@@ -180,85 +180,6 @@ These are how YANG types are represented in Go.
     :return: If the name of the :go:struct:`NameLeafData` at index i is less than the one at index j
     :rtype: ``bool``
 
-.. go:struct:: YLeaf
-
-    Represents a YANG ``leaf`` to which data can be assigned.
-
-    .. attribute:: name
-
-        A Go ``string`` representing the name of the leaf
-
-    .. attribute:: leafType
-
-        :ref:`YTypes <y-type>` represents the YANG data type assigned to the leaf
-
-    .. attribute:: bitsValue
-
-        The :ref:`Bits <type-bits>` value assigned to the leaf
-
-    .. attribute:: Value
-
-        A Go ``string`` representing the value of the leaf
-
-    .. attribute:: IsSet
-
-        ``bool`` representing whether the leaf is set or not
-
-    .. attribute:: Filter
-
-        :ref:`YFilter <y-filter>`
-
-.. function:: (y *YLeaf) GetNameLeafdata()
-
-    Instantiates and returns name leaf data type for this leaf
-
-    :return: name leaf data
-    :rtype: :go:struct:`NameLeafData`
-
-Example usage for creating a ``YLeaf`` of YANG type ``int8``:
-
-.. code-block:: go
-
-    import "github.com/CiscoDevNet/ydk-go/ydk/types"
-
-    var yleaf YLeaf
-    yleaf.leafType = types.Int8
-    yleaf.name = "afi-safi-name"
-
-.. go:struct:: YLeafList
-
-    Represents a YANG ``leaf-list`` to which multiple instances of data can be appended to
-
-    .. attribute:: name
-
-        A Go ``string`` representing the name of the leaf-list
-
-    .. attribute:: values
-
-        A slice of :go:struct:`YLeaf` representing the multiple instances of data
-
-    .. attribute:: Filter
-
-        :ref:`YFilter <y-filter>`
-
-    .. attribute:: leafType
-
-        :ref:`YTypes <y-type>` represents the YANG data type assigned to the leaf
-
-.. function:: (y *YLeafList) GetYLeafs()
-
-    Getter function for :go:struct:`YLeafList` values
-
-    :return: A slice of the multiple instances of data
-    :rtype: [] :go:struct:`YLeaf`
-
-.. function:: (y *YLeafList) GetNameLeafdata()
-
-    Instantiates and returns name leaf data type for this leaf-list
-
-    :return: slice of name leaf data
-    :rtype: [] :go:struct:`NameLeafData`
-
 .. go:struct:: EntityPath
     
     .. attribute:: Path
@@ -269,6 +190,77 @@ Example usage for creating a ``YLeaf`` of YANG type ``int8``:
 
         A slice ([] :go:struct:`NameLeafData`) representing a list of YANG leafs
 
+.. go:struct:: YChild
+
+    YChild encapsulates the GoName of an entity as well as the entity itself
+
+    .. attribute:: GoName
+
+        A ``string`` representing the GoName of an entity
+
+    .. attribute:: Value
+
+        The :ref:`Entity <types-entity>` itself
+
+.. go:struct:: YLeaf
+
+    YLeaf encapsulates the GoName of a leaf as well as the leaf itself
+
+    .. attribute:: GoName
+
+        A ``string`` representing the GoName of an entity
+
+    .. attribute:: Value
+
+        The leaf (type ``interface{}``) itself
+
+.. go:struct:: CommonEntityData
+
+    CommonEntityData encapsulate common data within an :ref:`Entity <types-entity>`
+
+    .. attribute:: YangName
+
+        A ``string`` representing the yang name
+
+    .. attribute:: BundleName
+
+        A ``string`` representing the bundle name
+
+    .. attribute:: ParentYangName
+
+        A ``string`` representing the parent yang name
+
+    .. attribute:: YFilter
+
+        A :ref:`YFilter <y-filter>` representing the yfilter
+
+    .. attribute:: Children
+
+        A ``map`` of ``string`` representing yang name to :go:struct:`YChild`, representing the children
+
+    .. attribute:: Leafs
+
+        A ``map`` of ``string`` representing yang name to :go:struct:`YLeaf`, representing the leafs
+
+    .. attribute:: SegmentPath
+
+        A ``string`` representing the segment path
+
+    .. attribute:: CapabilitiesTable
+
+        A ``map[string]string`` representing the capabilities table
+
+    .. attribute:: NamespaceTable
+
+        A ``map[string]string`` representing the namespace table
+
+    .. attribute:: BundleYangModelsLocation
+
+        A ``string`` representing the models path
+
+    .. attribute:: Parent
+
+        An :ref:`Entity <types-entity>` representing the parent
 
 .. _types-entity:
 
@@ -276,57 +268,41 @@ Example usage for creating a ``YLeaf`` of YANG type ``int8``:
 
     An interface type that represents a basic container in YANG
 
-    .. function:: GetSegmentPath()
+    .. function:: GetEntityData()
 
-        :return: (``string``) A Go string.
+        :return: a reference to :go:struct:`CommonEntityData` representing the data of the entity
 
-    .. function:: GetChildByName(string, string)
+.. function:: GetSegmentPath(entity Entity)
 
-        :return: :ref:`Entity <types-entity>`
+    GetSegmentPath returns the segment path
 
-    .. function:: GetChildren()
+    :return: (``string``) A Go string.
 
-        :return: ``map[string]Entity``
+.. function:: GetParent(entity Entity)
 
-    .. function:: SetParent(Entity)
+    GetParent returns the given entity's parent
 
-    .. function:: GetParent()
+    :return: :ref:`Entity <types-entity>`
 
-        :return: :ref:`Entity <types-entity>`
+.. function:: SetParent(entity, parent Entity)
 
-    .. function:: GetCapabilitiesTable()
-
-        :return: ``map[string]string``
-
-    .. function:: GetNamespaceTable()
-
-        :return: ``map[string]string``
-
-    .. function:: GetBundleYangModelsLocation()
-
-        :return: (``string``) The bundle yang model's location
-
-    .. function:: GetBundleName()
-
-        :return: (``string``) The name of the bundle
-
-    .. function:: GetYangName()
-
-        :return: (``string``) The yang name
-
-    .. function:: GetParentYangName()
-
-        :return: (``string``) The parent's yang name
-
-    .. function:: GetFilter()
-
-        :return: :ref:`YFilter <y-filter>`
+    SetParent sets the given :ref:`Entity <types-entity>` parent field to the given parent :ref:`Entity <types-entity>`
 
 .. function:: HasDataOrFilter(entity Entity)
+
+    HasDataOrFilter returns a bool representing whether the :ref:`Entity <types-entity>` or any of its children have their data/filter set
 
     :return: (``bool``) A Go boolean.
 
 .. function:: GetEntityPath(entity Entity)
+
+    GetEntityPath returns an EntityPath struct for the given entity
+
+    :return: :go:struct:`EntityPath`
+
+.. function:: GetChildByName(entity Entity, childYangName, segmentPath string)
+
+    GetChildByName takes an :ref:`Entity <types-entity>` and returns the child :ref:`Entity <types-entity>` described by the given childYangName and segmentPath or nil if there is no match
 
     :return: :ref:`Entity <types-entity>`
 

@@ -39,7 +39,7 @@ class ClassConstructorPrinter(FunctionPrinter):
         self.ctx.lvl_inc()
 
     def print_function_body(self):
-        self.ctx.writeln('parent types.Entity')
+        self.ctx.writeln('EntityData types.CommonEntityData')
         self.ctx.writeln('YFilter yfilter.YFilter')
         self._print_inits()
 

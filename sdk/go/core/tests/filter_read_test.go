@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	filterread "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/filterread"
+	"github.com/CiscoDevNet/ydk-go/ydk"
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
@@ -195,5 +196,8 @@ func (suite *FilterReadTestSuite) BeforeTest(suiteName, testName string) {
 }
 
 func TestFilterReadTestSuite(t *testing.T) {
+	if testing.Verbose() {
+		ydk.EnableLogging(ydk.Debug)
+	}
 	suite.Run(t, new(FilterReadTestSuite))
 }
