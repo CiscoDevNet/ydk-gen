@@ -467,6 +467,27 @@ class SanityTest(unittest.TestCase):
         # Compare runners
         self.assertEqual(runner, runner1)
 
+    def test_boolean_update_read(self):
+        runner = Runner()
+        runner.ytypes.built_in_t.bool_value = True
+        self.crud.create(self.ncc, runner)
+
+        # Read into Runner1
+        runner1 = Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        self.assertEqual(runner, runner1)
+
+        # Update the leaf and run update
+        runner1.ytypes.built_in_t.bool_value = True
+        self.crud.create(self.ncc, runner1)
+
+        # Read into Runner2
+        runner2 = self.crud.read(self.ncc, Runner())
+        # Compare runners
+        self.assertEqual(runner2, runner1)
+
     # def test_binary(self):
     #     pass
 

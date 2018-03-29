@@ -127,6 +127,7 @@ class Entity(_Entity):
         self._child_container_classes = OrderedDict()
         self._child_list_classes = OrderedDict()
         self._leafs = OrderedDict()
+        self._child_list_container_order = []
         self._segment_path = lambda : ''
         self._absolute_path = lambda : ''
 
@@ -167,12 +168,14 @@ class Entity(_Entity):
 
     def get_order_of_children(self):
         order = []
-        for name in self.__dict__:
+        for name in self._child_list_container_order:
             value = self.__dict__[name]
             if isinstance(value, YList):
                 for v in value:
                     if isinstance(v, Entity):
                         order.append(v.get_segment_path())
+            elif isinstance(value, Entity):
+                order.append(name)
         return order
 
     def get_child_by_name(self, child_yang_name, segment_path):
@@ -325,19 +328,7 @@ class Entity(_Entity):
                     return self.__dict__[name]
         return None
 
-    def _check_monkey_patching_error(self, name, value):
-        obj = self.__dict__.get(name)
-        if obj is None or isinstance(obj, (_YLeaf, YLeafList, YList, OrderedDict)):
-            return
-        if type(value) is _YFilter:
-            return
-
-        if not isinstance(value, obj.__class__):
-            raise _YPYModelError("Invalid value '{!s}' in '{}'"
-                                 .format(value, obj))
-
     def _perform_setattr(self, clazz, leaf_names, name, value):
-        self._check_monkey_patching_error(name, value)
         with _handle_type_error():
             if name in self.__dict__ and isinstance(self.__dict__[name], YList):
                 raise _YPYModelError("Attempt to assign value of '{}' to YList ldata. "
@@ -370,6 +361,7 @@ class Entity(_Entity):
 
 def _name_matches_yang_name(name, yang_name):
     return name == yang_name or yang_name.endswith(':'+name)
+
 
 class EntityCollection():
     """ EntityCollection is a wrapper class around ordered dictionary collection of type OrderedDict.

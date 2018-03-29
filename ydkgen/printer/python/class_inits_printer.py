@@ -72,6 +72,14 @@ def get_child_list_classes(clazz, one_class_per_module):
     return '%s' % (', '.join(m))
 
 
+def get_child_list_container_order(clazz):
+    order = []
+    for prop in clazz.properties():
+        if prop.stmt.keyword in ('list', 'container'):
+            order.append("'%s'" % prop.name)
+    return '%s' % (', '.join(order))
+
+
 class ClassInitsPrinter(object):
 
     def __init__(self, ctx, module_namespace_lookup, one_class_per_module):
@@ -112,6 +120,7 @@ class ClassInitsPrinter(object):
                 'self.ylist_key_names = [%s]' % (','.join(["'%s'" % key.name for key in clazz.get_key_props()])))
             self.ctx.writeln('self._child_container_classes = OrderedDict([%s])' % (get_child_container_classes(clazz, self.one_class_per_module)))
             self.ctx.writeln('self._child_list_classes = OrderedDict([%s])' % (get_child_list_classes(clazz, self.one_class_per_module)))
+            self.ctx.writeln('self._child_list_container_order = [%s]' % (get_child_list_container_order(clazz)))
             if clazz.stmt.search_one('presence') is not None:
                 self.ctx.writeln('self.is_presence_container = True')
             self._print_init_leafs_and_leaflists(clazz, leafs)

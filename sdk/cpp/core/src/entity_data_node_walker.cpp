@@ -78,10 +78,13 @@ static void walk_children(Entity & entity, path::DataNode & data_node)
     {
         for(auto child_seg : order)
         {
-            YLOG_DEBUG("Inserting in order");
+            YLOG_DEBUG("Inserting in order for child segpath path: {}", child_seg);
             auto child = children[child_seg];
             if(child == nullptr)
+            {
+                YLOG_DEBUG("Child '{}' is null", child_seg);
                 continue;
+            }
             YLOG_DEBUG("==================");
             YLOG_DEBUG("Looking at child '{}': {}", child_seg, get_entity_path(*(child), child->parent).path);
             if(child->has_operation() || child->has_data() || child->is_presence_container)

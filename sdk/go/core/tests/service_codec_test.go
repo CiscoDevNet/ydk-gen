@@ -431,6 +431,42 @@ func (suite *CodecTestSuite) TestTypedefsXMLEncodeDecode() {
 	suite.Equal(types.EntityEqual(&systemEncode, systemDecode), true)
 }
 
+/*func (suite *CodecTestSuite) TestPassiveInterfaceCodec() {
+	runner := ysanity.Runner{}
+	o := ysanity.Runner_YdktestSanityOne_Ospf{}
+	o.Id = 22
+    o.PassiveInterface.Interface = "xyz"
+
+	t := ysanity.Runner_YdktestSanityOne_Ospf_Test{}
+    t.Name = "abc"
+
+    o.Test = append(o.Test, t)
+    runner.YdktestSanityOne.Ospf = append(runner.YdktestSanityOne.Ospf, o)
+
+    suite.Provider.Encoding = encoding.XML
+    payload := suite.Codec.Encode(&suite.Provider, &runner)
+    fmt.Println(payload)
+    suite.Equal(payload, `<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+  <one>
+    <ospf xmlns="http://cisco.com/ns/yang/ydktest-sanity-augm">
+      <id>22</id>
+      <passive-interface>
+        <interface>xyz</interface>
+      </passive-interface>
+      <test>
+        <name>abc</name>
+      </test>
+    </ospf>
+  </one>
+</runner>
+`)
+
+    entity := suite.Codec.Decode(&suite.Provider, payload)
+	runnerDecode := entity.(*ysanity.Runner)
+
+	suite.Equal(types.EntityEqual(&runner, runnerDecode), true)
+}*/ // TODO
+
 func TestCodecTestSuite(t *testing.T) {
 	if testing.Verbose() {
 		ydk.EnableLogging(ydk.Debug)
