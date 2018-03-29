@@ -102,9 +102,9 @@ To invoke the `get-schema RPC <https://github.com/YangModels/yang/blob/4b12d5017
 How do I work with YANG 1.1 actions?
 ------------------------------------
 
-Path API can be used to work with ``action``s defined in the YANG 1.1 standard in `RFC 7950 <https://tools.ietf.org/html/rfc7950>`_.
+Path API can be used to work with a ``action`` as defined in the YANG 1.1 standard in `RFC 7950 <https://tools.ietf.org/html/rfc7950>`_.
 
-Consider the below yang model.
+Consider the below snippet from an example ``action-config.yang`` model compliant with the YANG 1.1 standard.
 
 .. code-block:: yang
 
@@ -132,7 +132,7 @@ The below script can be used to work with the above model
     from ydk.path import Codec
     from ydk.types import EncodingFormat
 
-    # Create a NetconfSession instance to connect to the device
+    # Create a NetconfSession instance to connect to the device which supports the YANG 1.1 action-config model
     session = NetconfSession('10.0.0.1', 'admin', 'admin')
 
     # Get the root schema node

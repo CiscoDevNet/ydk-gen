@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	ysanity "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/sanity"
+	"github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/oc_pattern"
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
@@ -367,6 +368,40 @@ func (suite *SanityLevelsTestSuite) TestParentEmpty() {
 	runnerRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
 	suite.Equal(types.EntityEqual(&runner, runnerRead), true)
 }
+
+func (suite *SanityLevelsTestSuite) TestOcPattern() {
+	ocA := oc_pattern.OcA{}
+	ocA.A = "xyz"
+	ocA.B.B = "xyz"
+
+	suite.CRUD.Create(&suite.Provider, &ocA)
+
+	ocAFilter := oc_pattern.OcA{}
+	ocAFilter.A = "xyz"
+	ocARead := suite.CRUD.Read(&suite.Provider, &ocAFilter)
+	suite.Equal(types.EntityEqual(&ocA, ocARead), true)
+
+	ocADel := oc_pattern.OcA{}
+	ocADel.A = "xyz"
+	suite.CRUD.Delete(&suite.Provider, &ocADel)
+}
+
+/*func (suite *SanityLevelsTestSuite) TestPassive() { //TODO
+	runner := ysanity.Runner{}
+	o := ysanity.Runner_YdktestSanityOne_Ospf{}
+	o.Id = 22
+    o.PassiveInterface.Interface = "xyz"
+
+	t := ysanity.Runner_YdktestSanityOne_Ospf_Test{}
+    t.Name = "abc"
+
+    o.Test = append(o.Test, t)
+    runner.YdktestSanityOne.Ospf = append(runner.YdktestSanityOne.Ospf, o)
+
+	suite.CRUD.Create(&suite.Provider, &runner)
+	runnerRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
+	suite.Equal(types.EntityEqual(&runner, runnerRead), true)
+}*/
 
 func TestSanityLevelsTestSuite(t *testing.T) {
 	if testing.Verbose() {

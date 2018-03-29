@@ -60,12 +60,6 @@ class SanityYang(unittest.TestCase):
         runner = Runner()
         self.crud.delete(self.ncc, runner)
 
-    def _create_runner(self):
-        runner = Runner()
-        runner.ytypes = runner.Ytypes()
-        runner.ytypes.built_in_t = runner.ytypes.BuiltInT()
-        return runner
-
     def test_one_level_pos(self):
         # READ
         r_1, r_2 = Runner(), Runner()
@@ -142,7 +136,7 @@ class SanityYang(unittest.TestCase):
 
     def test_three_level_pos(self):
         # READ
-        r_1 = self._create_runner()
+        r_1 = Runner()
         r_1.three.number, r_1.three.name, \
             r_1.three.sub1.number, r_1.three.sub1.sub2.number = 3, 'runner:three:name', 31, 311
         self.crud.create(self.ncc, r_1)
@@ -692,23 +686,60 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(runner, runner_read)
 
-    '''def test_oc_pattern(self):
+    @unittest.skip("Failing on travis but seems to pass locally")
+    def test_oc_pattern(self):
         # Create OcA
         oc = OcA()
         oc.a = 'xyz'
         oc.b.b = 'xyz'
         self.crud.create(self.ncc, oc)
 
-        # Read into Runner1
+        # Read into oc1
         oc1 = self.crud.read(self.ncc, OcA())
 
-        # Compare runners
+        # Compare objects
         self.assertEqual(oc, oc1)
 
         # Delete
         oc = OcA()
         oc.a = 'xyz'
-        self.crud.delete(self.ncc, oc)'''
+        self.crud.delete(self.ncc, oc)
+
+    def test_passive_interface(self):
+        runner = Runner()
+        o = runner.YdktestSanityOne.Ospf()
+        o.id = 22
+        o.passive_interface.interface = 'xyz'
+        t = o.Test()
+        t.name = 'abc'
+        o.test.append(t)
+        runner.ydktest_sanity_one.ospf.append(o)
+
+        self.crud.create(self.ncc, runner)
+
+        runner_read = self.crud.read(self.ncc, Runner())
+        self.assertEqual(runner, runner_read)
+
+    def test_mtus(self):
+        runner = Runner()
+        mtu = runner.Mtus.Mtu()
+        mtu.owner = "xyz"
+        mtu.mtu = 2192
+        runner.mtus.mtu.append(mtu)
+        self.crud.create(self.ncc, runner)
+
+        runner_read = self.crud.read(self.ncc, Runner())
+        self.assertEqual(runner, runner_read)
+
+    # def test_presence_nodes(self):
+    #     runner = Runner()
+    #     runner.pres_node = runner.PresNode()
+    #     runner.pres_node.interm.inner_pres = runner.PresNode.Interm.InnerPres()
+    #     self.crud.create(self.ncc, runner)
+    #
+    #     runner_read = self.crud.read(self.ncc, Runner())
+    #     self.assertEqual(runner, runner_read)
+
 
 if __name__ == '__main__':
     device, non_demand, common_cache, timeout = get_device_info()

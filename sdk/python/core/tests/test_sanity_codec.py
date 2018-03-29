@@ -345,6 +345,7 @@ class SanityYang(unittest.TestCase):
         xml_provider = CodecServiceProvider(type='xml')
         payload = self.codec.encode(xml_provider, routing_policy)
 
+        self.assertEqual(xml, payload)
         routing_policy_decode = self.codec.decode(xml_provider, payload)
         self.assertEqual(routing_policy, routing_policy_decode)
 
@@ -422,6 +423,25 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(entity_list, [runner, native])
 
         self.provider.encoding = EncodingFormat.XML
+
+    # def test_passive_interface_codec(self): # TODO
+    #     expected = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one><ospf xmlns=\"http://cisco.com/ns/yang/ydktest-sanity-augm\"><id>22</id><passive-interface><interface>xyz</interface></passive-interface><test><name>abc</name></test></ospf></one></runner>"
+    #     runner = ysanity.Runner()
+    #     o = runner.YdktestSanityOne.Ospf()
+    #     o.id = 22
+    #     o.passive_interface.interface = 'xyz'
+    #     t = o.Test()
+    #     t.name = 'abc'
+    #     o.test.append(t)
+    #     runner.ydktest_sanity_one.ospf.append(o)
+    #
+    #     self.provider.encoding = EncodingFormat.XML
+    #     payload = self.codec.encode(self.provider, runner, False)
+    #     self.assertEqual(expected, payload)
+    #
+    #     runner_decode = self.codec.decode(self.provider, payload)
+    #     self.assertEqual(runner, runner_decode)
+
 
 if __name__ == '__main__':
     import sys

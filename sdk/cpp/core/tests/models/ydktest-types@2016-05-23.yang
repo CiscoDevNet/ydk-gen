@@ -65,5 +65,15 @@ module ydktest-types {
       }
       description "Identityref type";
   }
- 
+
+    grouping passive-interface-grouping {
+        container passive-interface {
+          description
+            "Suppress routing updates on an interface";
+            leaf interface {
+              type string;
+            }
+        }
+  }
+
 }

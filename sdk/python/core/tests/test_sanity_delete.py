@@ -60,8 +60,7 @@ class SanityYang(unittest.TestCase):
         self.crud.delete(self.ncc, runner)
 
     def read_from_empty_filter(self):
-        empty_runner = ysanity.Runner()
-        return self.crud.read(self.ncc, empty_runner)
+        return self.crud.read(self.ncc, ysanity.Runner())
 
     def get_nested_object(self):
         # return nested object with selected list elements
@@ -101,8 +100,8 @@ class SanityYang(unittest.TestCase):
         runner_create.two.name = 'two'
         self.crud.create(self.ncc, runner_create)
 
-        runner_read_filter = ysanity.Runner()
-        runner_read = self.crud.read(self.ncc, runner_read_filter)
+        runner_read = self.read_from_empty_filter()
+        self.assertEqual(runner_create, runner_read)
 
         # use DELETE object to remove leaf one
         runner_update = runner_read
@@ -110,7 +109,7 @@ class SanityYang(unittest.TestCase):
         self.crud.update(self.ncc, runner_update)
 
         # manually create remaining runner with leaf two
-        runner_read = self.crud.read(self.ncc, runner_read_filter)
+        runner_read = self.read_from_empty_filter()
         runner_compare = ysanity.Runner()
         runner_compare.two.name = 'two'
 
@@ -147,6 +146,9 @@ class SanityYang(unittest.TestCase):
         runner_create.ytypes.built_in_t.llstring.extend(['0', '1', '2', '3', '4'])
 
         self.crud.create(self.ncc, runner_create)
+
+        runner_read = self.read_from_empty_filter()
+        self.assertEqual(runner_read, runner_create)
 
         runner_update = ysanity.Runner()
         runner_update.ytypes.built_in_t.llstring.append('3')
