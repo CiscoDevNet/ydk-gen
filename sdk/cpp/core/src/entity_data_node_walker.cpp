@@ -172,7 +172,7 @@ static void add_annotation_to_datanode(const pair<string, LeafData> & name_value
 static path::Annotation get_annotation(YFilter yfilter)
 {
     if(yfilter == YFilter::not_set)
-        throw(YInvalidArgumentError{"Invalid yfilter"});
+        throw(YInvalidArgumentError{"Invalid operation"});
     return {IETF_NETCONF_MODULE_NAME, "operation", to_string(yfilter)};
 }
 

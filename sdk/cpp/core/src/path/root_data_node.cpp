@@ -122,11 +122,6 @@ ydk::path::RootDataImpl::create_datanode(const std::string& path, const std::str
     }
 
     DataNode* rdn = dn;
-    // created data node is the last child
-    while(!rdn->get_children().empty())
-    {
-        rdn = rdn->get_children()[0].get();
-    }
 
     //at this stage we have dn so for the remaining segments use dn as the parent
     if(segments.size() > 1)

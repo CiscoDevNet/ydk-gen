@@ -25,6 +25,7 @@ import unittest
 from ydk.types import Empty
 try:
     from ydk.models.ydktest.ydktest_sanity import Runner, ChildIdentity, YdkEnumTest
+    from ydk.models.ydktest.oc_pattern import OcA
 except:
     from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner, ChildIdentity, YdkEnumTest
 
@@ -690,6 +691,24 @@ class SanityYang(unittest.TestCase):
         runner_read = self.crud.read(self.ncc, Runner())
 
         self.assertEqual(runner, runner_read)
+
+    def test_oc_pattern(self):
+        # Create OcA
+        oc = OcA()
+        oc.a = 'xyz'
+        oc.b.b = 'xyz'
+        self.crud.create(self.ncc, oc)
+
+        # Read into Runner1
+        oc1 = self.crud.read(self.ncc, OcA())
+
+        # Compare runners
+        self.assertEqual(oc, oc1)
+
+        # Delete
+        oc = OcA()
+        oc.a = 'xyz'
+        self.crud.delete(self.ncc, oc)
 
 if __name__ == '__main__':
     device, non_demand, common_cache, timeout = get_device_info()

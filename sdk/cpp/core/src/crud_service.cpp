@@ -194,7 +194,31 @@ execute_rpc(ydk::ServiceProvider & provider, vector<Entity*> & filter_list,
     vector<shared_ptr<path::DataNode>> data_nodes = rnd->get_children();
     for (auto dn : data_nodes) {
         string internal_key = dn->get_path();
-        Entity* entity = path_to_entity[internal_key];
+        Entity* entity;
+        if(path_to_entity.find(internal_key) == path_to_entity.end())
+        {
+            YLOG_DEBUG("Searching for filter using yang name: {}", internal_key);
+            bool found = false;
+            for(auto e:path_to_entity)
+            {
+                if(internal_key.find(e.second->yang_name) != string::npos)
+                {
+                    YLOG_DEBUG("Found filter entity: {}", e.second->yang_name);
+                    entity = e.second;
+                    found = true;
+                    break;
+                }
+            }
+            if(!found)
+            {
+                YLOG_ERROR("Could not find filter entity: {}", internal_key);
+                throw(YServiceProviderError{"Could not find filter entity " + internal_key});
+            }
+        }
+        else
+        {
+            entity = path_to_entity[internal_key];
+        }
         result_list.push_back( read_datanode(*entity, dn));
     }
     return result_list;

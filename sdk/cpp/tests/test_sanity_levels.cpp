@@ -20,12 +20,14 @@
 #include "ydk/netconf_provider.hpp"
 #include "ydk/crud_service.hpp"
 #include "ydk_ydktest/ydktest_sanity.hpp"
+#include "ydk_ydktest/oc_pattern.hpp"
 #include "config.hpp"
 #include "catch.hpp"
 
 using namespace ydk;
 using namespace std;
 using namespace ydktest;
+using namespace oc_pattern;
 
 TEST_CASE("one_level_pos_set")
 {
@@ -706,4 +708,34 @@ TEST_CASE("aug_leaf")
     REQUIRE(r_read != nullptr);
     ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
     REQUIRE(r_2->ydktest_sanity_one->augmented_leaf==r_1->ydktest_sanity_one->augmented_leaf);
+}
+
+TEST_CASE("oc_pattern")
+{
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    ydk::path::RootSchemaNode& schema = provider.get_session().get_root_schema();
+    ydk::path::Codec s{};
+
+    auto & oc = schema.create_datanode("oc-pattern:oc-A[a='xyz']", "");
+    oc.create_datanode("B/b","xyz");
+    auto x = s.encode(oc, ydk::EncodingFormat::XML, false);
+    REQUIRE(x=="<oc-A xmlns=\"http://cisco.com/ns/yang/oc-pattern\"><a>xyz</a><B><b>xyz</b></B></oc-A>");
+
+    oc_pattern::OcA o{};
+    o.a = "xyz";
+    o.b->b = "xyz";
+
+    bool reply = crud.create(provider, o);
+    REQUIRE(reply);
+
+    oc_pattern::OcA o_f{};
+    auto d = crud.read(provider, o_f);
+    REQUIRE((*d)==o);
+
+    o_f.a = "xyz";
+    reply = crud.delete_(provider, o_f);
+    REQUIRE(reply);
 }
