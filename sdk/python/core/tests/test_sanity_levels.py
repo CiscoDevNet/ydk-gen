@@ -692,7 +692,7 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(runner, runner_read)
 
-    def test_oc_pattern(self):
+    '''def test_oc_pattern(self):
         # Create OcA
         oc = OcA()
         oc.a = 'xyz'
@@ -708,7 +708,7 @@ class SanityYang(unittest.TestCase):
         # Delete
         oc = OcA()
         oc.a = 'xyz'
-        self.crud.delete(self.ncc, oc)
+        self.crud.delete(self.ncc, oc)'''
 
 if __name__ == '__main__':
     device, non_demand, common_cache, timeout = get_device_info()
