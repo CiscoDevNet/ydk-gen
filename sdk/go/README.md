@@ -44,8 +44,8 @@ Ubuntu (Debian-based) - The following packages must be present in your system be
 ```
 $ sudo apt-get install libcurl4-openssl-dev libpcre3-dev libssh-dev libxml2-dev libxslt1-dev libtool-bin cmake
 
-$ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.0/libydk_0.7.0-1_amd64.deb
-$ sudo gdebi libydk_0.7.0-1_amd64.deb
+$ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.1/libydk_0.7.1-1_amd64.deb
+$ sudo gdebi libydk_0.7.1-1_amd64.deb
 ```
 
 Centos (Fedora-based) - The following packages must be present in your system before installing YDK-Go:
@@ -60,7 +60,7 @@ $ yum install devtoolset-4-gcc* -y > /dev/null
 $ ln -sf /opt/rh/devtoolset-4/root/usr/bin/gcc /usr/bin/gcc
 $ ln -sf /opt/rh/devtoolset-4/root/usr/bin/g++ /usr/bin/g++
 
-$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.0/libydk-0.7.0-1.x86_64.rpm
+$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.1/libydk-0.7.1-1.x86_64.rpm
 
 ```
 
@@ -71,8 +71,8 @@ $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/inst
 $ brew install pkg-config libssh libxml2 xml2 curl pcre cmake
 $ xcode-select --install
 
-$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.0/libydk-0.7.0-Darwin.pkg
-$ sudo installer -pkg libydk-0.7.0-Darwin.pkg -target /
+$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.1/libydk-0.7.1-Darwin.pkg
+$ sudo installer -pkg libydk-0.7.1-Darwin.pkg -target /
 ```
 
 ### Installing
@@ -90,4 +90,4 @@ $ go get github.com/CiscoDevNet/ydk-go/ydk
 - Additional YDK information can be found at [ydk.io](http://ydk.io)
 
 ## Release Notes
-The current YDK release version is 0.7.0 (alpha). YDK-Go is licensed under the Apache 2.0 License.
+The current YDK release version is 0.7.1 (alpha). YDK-Go is licensed under the Apache 2.0 License.
