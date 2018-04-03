@@ -739,3 +739,57 @@ TEST_CASE("oc_pattern")
     reply = crud.delete_(provider, o_f);
     REQUIRE(reply);
 }
+
+TEST_CASE("passive_int")
+{
+
+    ydk::path::Repository repo{TEST_HOME};
+    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    ydk::path::RootSchemaNode& schema = provider.get_session().get_root_schema();
+    ydk::path::Codec s{};
+
+    auto & r = schema.create_datanode("ydktest-sanity:runner", "");
+    r.create_datanode("one/ydktest-sanity-augm:ospf[id='22']/passive-interface/interface", "xyz");
+    r.create_datanode("one/ydktest-sanity-augm:ospf[id='22']/test[name='abc']");
+    auto x = s.encode(r, ydk::EncodingFormat::XML, true);
+    cout << x<<endl;
+    x = s.encode(r, ydk::EncodingFormat::XML, false);
+    REQUIRE(x=="<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one><ospf xmlns=\"http://cisco.com/ns/yang/ydktest-sanity-augm\"><id>22</id><passive-interface><interface>xyz</interface></passive-interface><test><name>abc</name></test></ospf></one></runner>");
+
+    //DELETE
+    ydktest_sanity::Runner r_1{};
+    bool reply = crud.delete_(provider, r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    r_1.ydktest_sanity_one->number = 1;
+    r_1.ydktest_sanity_one->name = "1.2.3.4";
+
+    auto o = make_shared<ydktest_sanity::Runner::YdktestSanityOne::Ospf>();
+    o->id = 22;
+    o->passive_interface->interface = "xyz";
+    o->parent = r_1.ydktest_sanity_one.get();
+
+    auto t = make_shared<ydktest_sanity::Runner::YdktestSanityOne::Ospf::Test>();
+    t->name = "abc";
+    t->parent = o.get();
+    o->test.push_back(t);
+
+    r_1.ydktest_sanity_one->ospf.push_back(o);
+
+    reply = crud.create(provider, r_1);
+    REQUIRE(reply);
+
+    //READ
+    auto r_filter = make_unique<ydktest_sanity::Runner>();
+    auto r_read = crud.read(provider, *r_filter);
+    REQUIRE(r_read != nullptr);
+    ydktest_sanity::Runner* r_2 = dynamic_cast<ydktest_sanity::Runner*>(r_read.get());
+    REQUIRE((*r_2==r_1) == true);
+
+    //DELETE
+    reply = crud.delete_(provider, r_1);
+    REQUIRE(reply);
+}

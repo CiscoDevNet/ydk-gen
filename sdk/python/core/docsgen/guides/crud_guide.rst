@@ -195,7 +195,28 @@ For example, to delete a :py:class:`YList<ydk.types.YList>` called :py:class:`In
 Deleting a leaf
 ---------------
 
-For example, to delete a :py:class:`YLeaf<ydk.types.YLeaf>` called ``running`` in the :py:class:`Instance<ydk.models.cisco_ios_xr.Cisco_IOS_XR_clns_isis_cfg.Isis>` class in the ``Cisco_IOS_XR_clns_isis_cfg`` module using YDK's :py:class:`CRUDService<ydk.services.CRUDService>`, the below approach can be used.
+For example, to delete a :py:class:`YLeaf<ydk.types.YLeaf>` called ``timer`` of type ``int`` in the :py:class:`Cdp<ydk.models.cisco_ios_xr.Cisco_IOS_XR_cdp_cfg.Cdp>` class in the ``Cisco_IOS_XR_cdp_cfg`` module using YDK's :py:class:`CRUDService<ydk.services.CRUDService>`, the below approach can be used.
+
+.. code-block:: python
+    :linenos:
+
+
+    from ydk.models.cisco_ios_xr import Cisco_IOS_XR_cdp_cfg
+    from ydk.filters import YFilter
+
+    # First create the top-level Cdp() object
+    cdp = Cisco_IOS_XR_cdp_cfg.Cdp()
+
+    # Set a dummy value to the leaf
+    cdp.timer = 5
+    # Assign YFilter.delete to the 'timer' leaf
+    cdp.timer = YFilter.delete
+
+    # Call the CRUD update on the top-level cdp object
+    # (assuming you have already instantiated the service and provider)
+    result = crud.update(provider, cdp)
+
+For example, to delete a :py:class:`YLeaf<ydk.types.YLeaf>` called ``running`` of type ``Empty`` in the :py:class:`Instance<ydk.models.cisco_ios_xr.Cisco_IOS_XR_clns_isis_cfg.Isis>` class in the ``Cisco_IOS_XR_clns_isis_cfg`` module using YDK's :py:class:`CRUDService<ydk.services.CRUDService>`, the below approach can be used.
 
 .. code-block:: python
     :linenos:
@@ -212,7 +233,7 @@ For example, to delete a :py:class:`YLeaf<ydk.types.YLeaf>` called ``running`` i
     ins = Cisco_IOS_XR_clns_isis_cfg.Isis.Instances.Instance()
     ins.instance_name = 'default'
 
-    # Set the yfilter attribute of the leaf called 'running' to YFilter.delete
+    # Assign YFilter.delete to the 'running' leaf
     ins.running = YFilter.delete
 
     # Append the instance to the parent

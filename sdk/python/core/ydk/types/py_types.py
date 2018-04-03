@@ -124,8 +124,7 @@ class Entity(_Entity):
         self._local_refs = {}
         self._children_name_map = OrderedDict()
         self._children_yang_names = set()
-        self._child_container_classes = OrderedDict()
-        self._child_list_classes = OrderedDict()
+        self._child_classes = OrderedDict()
         self._leafs = OrderedDict()
         self._segment_path = lambda : ''
         self._absolute_path = lambda : ''
@@ -167,12 +166,15 @@ class Entity(_Entity):
 
     def get_order_of_children(self):
         order = []
-        for name in self.__dict__:
+        for yang_name in self._child_classes:
+            name = self._child_classes[yang_name][0]
             value = self.__dict__[name]
             if isinstance(value, YList):
                 for v in value:
                     if isinstance(v, Entity):
                         order.append(v.get_segment_path())
+            elif isinstance(value, Entity):
+                order.append(name)
         return order
 
     def get_child_by_name(self, child_yang_name, segment_path):
@@ -181,26 +183,20 @@ class Entity(_Entity):
             return child
 
         found = False
-        is_container = True
-        if child_yang_name in self._child_container_classes:
+        if child_yang_name in self._child_classes:
             found = True
-        elif child_yang_name in self._child_list_classes:
-            found = True
-            is_container = False
         if found:
-            if is_container:
-                attr, clazz = self._child_container_classes[child_yang_name]
-            else:
-                attr, clazz = self._child_list_classes[child_yang_name]
+            attr, clazz = self._child_classes[child_yang_name]
+            is_list = isinstance(getattr(self, attr), YList)
             child = clazz()
             child.parent = self
-            if is_container:
-                self._children_name_map[attr] = child_yang_name
-                setattr(self, attr, child)
-            else:
+            if is_list:
                 local_reference_key = "ydk::seg::%s" % segment_path
                 self._local_refs[local_reference_key] = child
                 getattr(self, attr).append(child)
+            else:
+                self._children_name_map[attr] = child_yang_name
+                setattr(self, attr, child)
 
             return child
 
@@ -272,10 +268,7 @@ class Entity(_Entity):
             if name == leaf.name:
                 return True
 
-        if name in self._child_list_classes:
-            return True
-
-        if name in self._child_container_classes:
+        if name in self._child_classes:
             return True
 
         return False
@@ -325,19 +318,7 @@ class Entity(_Entity):
                     return self.__dict__[name]
         return None
 
-    def _check_monkey_patching_error(self, name, value):
-        obj = self.__dict__.get(name)
-        if obj is None or isinstance(obj, (_YLeaf, YLeafList, YList, OrderedDict)):
-            return
-        if type(value) is _YFilter:
-            return
-
-        if not isinstance(value, obj.__class__):
-            raise _YPYModelError("Invalid value '{!s}' in '{}'"
-                                 .format(value, obj))
-
     def _perform_setattr(self, clazz, leaf_names, name, value):
-        self._check_monkey_patching_error(name, value)
         with _handle_type_error():
             if name in self.__dict__ and isinstance(self.__dict__[name], YList):
                 raise _YPYModelError("Attempt to assign value of '{}' to YList ldata. "
@@ -361,7 +342,7 @@ class Entity(_Entity):
                 if hasattr(value, "parent") and name != "parent":
                     if hasattr(value, "is_presence_container") and value.is_presence_container:
                         value.parent = self
-                    elif value.parent is None and value.yang_name in self._children_yang_names:
+                    elif value.parent is None and value.yang_name in self._child_classes:
                         value.parent = self
                 super(Entity, self).__setattr__(name, value)
 
@@ -370,6 +351,7 @@ class Entity(_Entity):
 
 def _name_matches_yang_name(name, yang_name):
     return name == yang_name or yang_name.endswith(':'+name)
+
 
 class EntityCollection():
     """ EntityCollection is a wrapper class around ordered dictionary collection of type OrderedDict.

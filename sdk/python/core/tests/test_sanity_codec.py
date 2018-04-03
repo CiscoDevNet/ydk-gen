@@ -396,6 +396,25 @@ class SanityYang(unittest.TestCase):
         system_decode = self.codec.decode(self.provider, payload)
         self.assertEqual(system_encode, system_decode)
 
+    def test_passive_interface_codec(self):
+        expected = "<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><one><ospf xmlns=\"http://cisco.com/ns/yang/ydktest-sanity-augm\"><id>22</id><passive-interface><interface>xyz</interface></passive-interface><test><name>abc</name></test></ospf></one></runner>"
+        runner = ysanity.Runner()
+        o = runner.YdktestSanityOne.Ospf()
+        o.id = 22
+        o.passive_interface.interface = 'xyz'
+        t = o.Test()
+        t.name = 'abc'
+        o.test.append(t)
+        runner.ydktest_sanity_one.ospf.append(o)
+
+        self.provider.encoding = EncodingFormat.XML
+        payload = self.codec.encode(self.provider, runner, False)
+        self.assertEqual(expected, payload)
+
+        runner_decode = self.codec.decode(self.provider, payload)
+        self.assertEqual(runner, runner_decode)
+
+
 if __name__ == '__main__':
     import sys
     suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)

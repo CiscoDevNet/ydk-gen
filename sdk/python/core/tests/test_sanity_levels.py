@@ -692,23 +692,39 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(runner, runner_read)
 
-    '''def test_oc_pattern(self):
+    @unittest.skip("Failing on travis but seems to pass locally")
+    def test_oc_pattern(self):
         # Create OcA
         oc = OcA()
         oc.a = 'xyz'
         oc.b.b = 'xyz'
         self.crud.create(self.ncc, oc)
 
-        # Read into Runner1
+        # Read into oc1
         oc1 = self.crud.read(self.ncc, OcA())
 
-        # Compare runners
+        # Compare objects
         self.assertEqual(oc, oc1)
 
         # Delete
         oc = OcA()
         oc.a = 'xyz'
-        self.crud.delete(self.ncc, oc)'''
+        self.crud.delete(self.ncc, oc)
+
+    def test_passive_interface(self):
+        runner = Runner()
+        o = runner.YdktestSanityOne.Ospf()
+        o.id = 22
+        o.passive_interface.interface = 'xyz'
+        t = o.Test()
+        t.name = 'abc'
+        o.test.append(t)
+        runner.ydktest_sanity_one.ospf.append(o)
+
+        self.crud.create(self.ncc, runner)
+
+        runner_read = self.crud.read(self.ncc, Runner())
+        self.assertEqual(runner, runner_read)
 
 if __name__ == '__main__':
     device, non_demand, common_cache, timeout = get_device_info()
