@@ -65,6 +65,7 @@ To convert a YDK python object into a JSON string, the below approach can be use
 
     from ydk.providers import CodecServiceProvider
     from ydk.services import CodecService
+    from ydk.models.cisco_ios_xr import Cisco_IOS_XR_ifmgr_cfg
 
     # Instantiate the codec service
     codec = CodecService()
@@ -72,9 +73,7 @@ To convert a YDK python object into a JSON string, the below approach can be use
     # Instantiate the provider with json option
     json_provider = CodecServiceProvider(type='json')
 
-    # Import and instantiate the interface configuration class to configure the IPv4 loopback
-    from ydk.models.cisco_ios_xr import Cisco_IOS_XR_ifmgr_cfg
-
+    # Instantiate the interface configuration class to configure the IPv4 loopback
     interface_configurations =  Cisco_IOS_XR_ifmgr_cfg.InterfaceConfigurations()
 
     # Instantiate the InterfaceConfiguration list instance
