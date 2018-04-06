@@ -172,7 +172,7 @@ ydk::path::DataNodeImpl::create_helper(const std::string& path, const std::strin
     size_t start_index = 0;
     auto iter = segments.begin();
 
-    YLOG_DEBUG("Current path: {}", get_schema_node().get_path());
+    YLOG_DEBUG("Current path: {}", get_path());
     YLOG_DEBUG("Top container path: {}", top_container_path);
 
     while (iter != segments.end())
@@ -333,7 +333,7 @@ ydk::path::DataNodeImpl::find(const std::string& path)
         return results;
     }
 
-    YLOG_DEBUG("Getting child schema with path '{}' in {}", path, m_node->schema->name);
+    YLOG_DEBUG("Getting child schema with path '{}' in {}", path, get_path());
     const lys_node* found_snode =
         ly_ctx_get_node(m_node->schema->module->ctx, m_node->schema, path.c_str(), 0);
 
@@ -481,7 +481,7 @@ void ydk::path::DataNodeImpl::add_annotation(const ydk::path::Annotation& an)
     }
 
     std::string name { an.m_ns + ":" + an.m_name };
-    YLOG_DEBUG("Adding annotation '{}' = {} to {}", name, an.m_val, m_node->schema->name);
+    YLOG_DEBUG("Adding annotation '{}' = {} to {}", name, an.m_val, get_path());
 
     lyd_attr* attr = lyd_insert_attr(m_node, nullptr, name.c_str(), an.m_val.c_str());
 

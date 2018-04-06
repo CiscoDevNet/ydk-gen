@@ -725,6 +725,34 @@ module ydktest-sanity {
 
     uses one-read-only;
 
+    container mtus {
+        list mtu {
+            key "owner";
+
+            leaf owner {
+                type string;
+            }
+
+            leaf mtu {
+                type int32;
+                mandatory true;
+            }
+        }
+    }
+
+    container pres-node {
+        presence true;
+
+        container interm {
+
+            container inner-pres {
+                presence true;
+
+                description "nested presence containers";
+            }
+        }
+    }
+
     container runner-2 {
 
        presence "Runner-2 is presence controlled";

@@ -325,19 +325,7 @@ class Entity(_Entity):
                     return self.__dict__[name]
         return None
 
-    def _check_monkey_patching_error(self, name, value):
-        obj = self.__dict__.get(name)
-        if obj is None or isinstance(obj, (_YLeaf, YLeafList, YList, OrderedDict)):
-            return
-        if type(value) is _YFilter:
-            return
-
-        if not isinstance(value, obj.__class__):
-            raise _YPYModelError("Invalid value '{!s}' in '{}'"
-                                 .format(value, obj))
-
     def _perform_setattr(self, clazz, leaf_names, name, value):
-        self._check_monkey_patching_error(name, value)
         with _handle_type_error():
             if name in self.__dict__ and isinstance(self.__dict__[name], YList):
                 raise _YPYModelError("Attempt to assign value of '{}' to YList ldata. "
@@ -368,8 +356,10 @@ class Entity(_Entity):
     def __str__(self):
         return "{}.{}".format(self.__class__.__module__, self.__class__.__name__)
 
+
 def _name_matches_yang_name(name, yang_name):
     return name == yang_name or yang_name.endswith(':'+name)
+
 
 class EntityCollection():
     """ EntityCollection is a wrapper class around ordered dictionary collection of type OrderedDict.

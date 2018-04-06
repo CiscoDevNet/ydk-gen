@@ -84,9 +84,10 @@ class ClassConstructorPrinter(object):
     def _print_class_constructor_body(self, clazz, leafs, children):
         self._print_init_children(children)
         if not clazz.is_identity():
-            self.ctx.writeln('yang_name = "%s"; yang_parent_name = "%s"; is_top_level_class = %s; has_list_ancestor = %s;' \
+            self.ctx.writeln('yang_name = "%s"; yang_parent_name = "%s"; is_top_level_class = %s; has_list_ancestor = %s; is_presence_container = %s;' \
                              % (clazz.stmt.arg, clazz.owner.stmt.arg, ('true' if is_top_level_class(clazz) else 'false'),
-                                ('true' if has_list_ancestor(clazz) else 'false')))
+                                ('true' if has_list_ancestor(clazz) else 'false'),
+                                ('false' if clazz.stmt.search_one('presence') is None else 'true')))
 
     def _print_init_children(self, children):
         for child in children:

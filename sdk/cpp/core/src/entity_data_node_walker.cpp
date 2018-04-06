@@ -74,14 +74,18 @@ static void walk_children(Entity & entity, path::DataNode & data_node)
     map<string, shared_ptr<Entity>> children = entity.get_children();
     vector<string> order = entity.get_order_of_children();
     YLOG_DEBUG("Children count for: {} : {}",get_entity_path(entity, entity.parent).path, children.size());
+    YLOG_DEBUG("Children order count : {}",order.size());
     if(order.size()>0)
     {
         for(auto child_seg : order)
         {
-            YLOG_DEBUG("Inserting in order");
+            YLOG_DEBUG("Inserting in order for child segpath path: {}", child_seg);
             auto child = children[child_seg];
             if(child == nullptr)
+            {
+                YLOG_DEBUG("Child '{}' is null", child_seg);
                 continue;
+            }
             YLOG_DEBUG("==================");
             YLOG_DEBUG("Looking at child '{}': {}", child_seg, get_entity_path(*(child), child->parent).path);
             if(child->has_operation() || child->has_data() || child->is_presence_container)

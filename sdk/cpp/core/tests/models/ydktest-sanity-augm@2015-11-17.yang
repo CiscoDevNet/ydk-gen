@@ -13,6 +13,7 @@ module ydktest-sanity-augm {
 
   //import Cisco-IOS-XR-types { prefix "xr"; }
 
+  import ydktest-types { prefix "ydktest-types"; }
   import ydktest-sanity { prefix "ysanity"; }
 
 
@@ -159,6 +160,28 @@ module ydktest-sanity-augm {
     }
   }
 
+    grouping config-router-ospf-grouping {
+        list ospf {
+          description
+            "Open Shortest Path First (OSPF)";
+          key "id";
+          leaf id {
+            type uint16 {
+              range "1..65535";
+            }
+          }
+
+          uses ydktest-types:passive-interface-grouping;
+
+          list test {
+            key "name";
+            leaf name {
+                type string;
+            }
+          }
+       }
+    }
+
 
   /////////////////////////////////////////////////////////
   // augmentation
@@ -194,6 +217,10 @@ module ydktest-sanity-augm {
 
   augment "/ysanity:native/ysanity:interface/ysanity:Tunnel" {
     uses config-interface-tunnel-grouping;
+  }
+
+  augment "/ysanity:runner/ysanity:one" {
+    uses config-router-ospf-grouping;
   }
 
 }
