@@ -20,8 +20,21 @@ sanity test for CodecService
 from __future__ import absolute_import
 import unittest
 
-from ydk.models.ydktest import ydktest_sanity as ysanity
-from ydk.models.ydktest import oc_pattern
+try:
+    from ydk.models.ydktest.ydktest_sanity import Runner, Native, YdkEnumTest
+    from ydk.models.ydktest.openconfig_routing_policy import RoutingPolicy
+    from ydk.models.ydktest.oc_pattern import OcA
+    from ydk.models.ydktest.ydktest_sanity_typedefs import System, TopMode
+except:
+    from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner
+    from ydk.models.ydktest.ydktest_sanity.native.native import Native
+    from ydk.models.ydktest.ydktest_sanity.ydktest_sanity import YdkEnumTest
+    from ydk.models.ydktest import openconfig_routing_policy
+    from ydk.models.ydktest.openconfig_routing_policy.routing_policy.routing_policy import RoutingPolicy
+    from ydk.models.ydktest.oc_pattern.oc_a.oc_a import OcA
+    from ydk.models.ydktest.ydktest_sanity_typedefs.system.system import System
+    from ydk.models.ydktest.ydktest_sanity_typedefs.ydktest_sanity_typedefs import TopMode
+
 from ydk.providers import CodecServiceProvider
 from ydk.services import CodecService
 from ydk.errors import YPYServiceError
@@ -141,9 +154,9 @@ class SanityYang(unittest.TestCase):
 }"""
 
     def _get_runner_entity(self):
-        r_1 = ysanity.Runner()
-        e_1, e_2 = ysanity.Runner.TwoList.Ldata(), ysanity.Runner.TwoList.Ldata()
-        e_11, e_12 = ysanity.Runner.TwoList.Ldata.Subl1(), ysanity.Runner.TwoList.Ldata.Subl1()
+        r_1 = Runner()
+        e_1, e_2 = Runner.TwoList.Ldata(), Runner.TwoList.Ldata()
+        e_11, e_12 = Runner.TwoList.Ldata.Subl1(), Runner.TwoList.Ldata.Subl1()
         e_1.number = 21
         e_1.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:name'
         e_11.number = 211
@@ -151,7 +164,7 @@ class SanityYang(unittest.TestCase):
         e_12.number = 212
         e_12.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:subl1[' + str(e_12.number) + ']:name'
         e_1.subl1.extend([e_11, e_12])
-        e_21, e_22 = ysanity.Runner.TwoList.Ldata.Subl1(), ysanity.Runner.TwoList.Ldata.Subl1()
+        e_21, e_22 = Runner.TwoList.Ldata.Subl1(), Runner.TwoList.Ldata.Subl1()
         e_2.number = 22
         e_2.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:name'
         e_21.number = 221
@@ -170,8 +183,7 @@ class SanityYang(unittest.TestCase):
 
     def test_xml_encode_2(self):
         self.provider.encoding = EncodingFormat.XML
-        from ydk.models.ydktest.ydktest_sanity import YdkEnumTest
-        r_1 = ysanity.Runner.Ytypes.BuiltInT()
+        r_1 = Runner.Ytypes.BuiltInT()
         r_1.enum_value = YdkEnumTest.local
 
         payload = self.codec.encode(self.provider, r_1)
@@ -228,7 +240,7 @@ class SanityYang(unittest.TestCase):
 
     def test_xml_decode_oc_pattern(self):
         self.provider.encoding = EncodingFormat.XML
-        obj_A = oc_pattern.OcA()
+        obj_A = OcA()
         obj_A.a = 'Hello'
 
         entity = self.codec.decode(self.provider, self._xml_oc_pattern_payload)
@@ -245,8 +257,7 @@ class SanityYang(unittest.TestCase):
 
     def test_json_encode_2(self):
         self.provider.encoding = EncodingFormat.JSON
-        from ydk.models.ydktest.ydktest_sanity import YdkEnumTest
-        r_1 = ysanity.Runner.Ytypes.BuiltInT()
+        r_1 = Runner.Ytypes.BuiltInT()
         r_1.enum_value = YdkEnumTest.local
 
         payload = self.codec.encode(self.provider, r_1)
@@ -280,7 +291,7 @@ class SanityYang(unittest.TestCase):
     @unittest.skip('encodes to "oc-pattern:a": "(!error!)"')
     def test_json_encode_oc_pattern(self):
         self.provider.encoding = EncodingFormat.JSON
-        obj_A = oc_pattern.OcA()
+        obj_A = ocA()
         obj_A.a = 'Hello'
         obj_A.b.b = 'Hello'
 
@@ -327,11 +338,9 @@ class SanityYang(unittest.TestCase):
   </defined-sets>
 </routing-policy>
 '''
-        from ydk.models.ydktest import openconfig_routing_policy \
-            as oc_routing_policy
-        routing_policy = oc_routing_policy.RoutingPolicy()
+        routing_policy = RoutingPolicy()
 
-        com = oc_routing_policy.RoutingPolicy.DefinedSets.BgpDefinedSets.CommunitySets.CommunitySet()
+        com = RoutingPolicy.DefinedSets.BgpDefinedSets.CommunitySets.CommunitySet()
         com.community_set_name = "COMMUNITY-SET1"
         com.config.community_set_name = "COMMUNITY-SET1"
         com.config.community_member.append("ios-regex '^65172:17...$'")
@@ -381,12 +390,11 @@ class SanityYang(unittest.TestCase):
     @assert_with_error("Subtree option can only be used with XML encoding", YPYServiceError)
     def test_decode_invalid_subtree_2(self):
         self.provider.encoding = EncodingFormat.JSON
-        self.codec.encode(self.provider, ysanity.Runner(), subtree=True)
+        self.codec.encode(self.provider, Runner(), subtree=True)
 
     def test_encode_decode_typedefs(self):
-        from ydk.models.ydktest import ydktest_sanity_typedefs as ysanity_typedefs
-        system_encode = ysanity_typedefs.System()
-        system_encode.mode = ysanity_typedefs.TopMode.stand_alone
+        system_encode = System()
+        system_encode.mode = TopMode.stand_alone
         system_encode.id = 22;
 
         self.provider.encoding = EncodingFormat.XML
@@ -396,10 +404,10 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(system_encode, system_decode)
 
     def test_encode_decode_list(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.two.number = 2
 
-        native = ysanity.Native()
+        native = Native()
         native.version = '0.1.0'
 
         self.provider.encoding = EncodingFormat.XML
@@ -409,10 +417,10 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(entity_list, [runner, native])
 
     def test_codec_json(self):
-        runner = ysanity.Runner()
+        runner = Runner()
         runner.two.number = 2
 
-        native = ysanity.Native()
+        native = Native()
         native.version = '0.1.0'
 
         self.provider.encoding = EncodingFormat.JSON

@@ -76,6 +76,7 @@ def _datanode_to_entity(data_node):
 
     raise YPYModelError(_ENTITY_ERROR_MSG.format(node_path))
 
+
 def _payload_to_top_entity(payload, encoding):
     """Return top level entity from payload.
 
@@ -106,12 +107,15 @@ def _payload_to_top_entity(payload, encoding):
             yang_ns = importlib.import_module('ydk.models.{}._yang_ns'.format(name))
             entity_lookup = yang_ns.__dict__['ENTITY_LOOKUP']
             if ns_ename in entity_lookup:
-                mod, entity = entity_lookup[ns_ename].split('.', 1)
+                entity_mod = entity_lookup[ns_ename]
+                mod = '.'.join(entity_mod.split('.')[:-1])
+                entity = entity_mod.split('.')[-1]
                 mod = importlib.import_module('ydk.models.{}.{}'.format(name, mod))
                 entity = getattr(mod, entity)()
                 return entity.clone_ptr()
 
     raise YPYModelError(_ENTITY_ERROR_MSG.format(ns_ename[0]+':'+ns_ename[1]))
+
 
 def _get_ns_ename(payload, encoding):
     """Return namespace and entity name from incoming payload.
@@ -145,6 +149,7 @@ def _get_ns_ename(payload, encoding):
 
     return (ns, ename)
 
+
 def _to_utf8(string):
     """Convert unicode to str if running under Python 2 environment."""
     if sys.version_info < (3, 0):
@@ -161,6 +166,6 @@ def _get_bundle_name(entity):
     Returns:
         bundle name.
     """
-    m = entity.__module__.rsplit('.', 1)[0]
+    m = '.'.join(entity.__module__.rsplit('.')[0:3])
     m = importlib.import_module('.'.join([m, '_yang_ns']))
     return m.__dict__['BUNDLE_NAME']

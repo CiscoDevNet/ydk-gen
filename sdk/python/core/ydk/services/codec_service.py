@@ -194,6 +194,6 @@ def _get_yang_path(entity):
     Returns:
         Path for installed YANG models location (str).
     """
-    m = entity.__module__.rsplit('.', 1)[0]
+    m = '.'.join(entity.__module__.rsplit('.')[0:3])
     m = importlib.import_module(m)
     return os.path.join(m.__path__[0], '_yang')

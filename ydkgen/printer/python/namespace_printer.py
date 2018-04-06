@@ -19,13 +19,15 @@
 Print capabilities for bundle package.
 """
 from ydkgen.printer.file_printer import FilePrinter
+from ydkgen.api_model import get_property_name
 
 
 class NamespacePrinter(FilePrinter):
-    def __init__(self, ctx):
+    def __init__(self, ctx, one_class_per_module):
         super(NamespacePrinter, self).__init__(ctx)
         self.bundle_name = ''
         self.packages = None
+        self.one_class_per_module = one_class_per_module
 
     def print_output(self, packages, bundle_name):
         self.packages = packages = [p for p in packages if p.bundle_name == bundle_name]
@@ -66,10 +68,18 @@ class NamespacePrinter(FilePrinter):
             for e in p.owned_elements:
                 if all((hasattr(e, 'stmt'), e.stmt is not None,
                         e.stmt.keyword in ('container', 'list'))):
-                    self.ctx.writeln('("{}", "{}"): "{}",'
-                                     .format(ns.arg, e.stmt.arg, e.fqn()))
-                    self.ctx.writeln('("{}", "{}"): "{}",'
-                                     .format(p.stmt.arg, e.stmt.arg, e.fqn()))
+                    if self.one_class_per_module:
+                        pkg_name = e.get_package().name
+                        prop_name = get_property_name(e, e.iskeyword)
+                        self.ctx.writeln('("{}", "{}"): "{}.{}.{}.{}",'
+                                         .format(ns.arg, e.stmt.arg, pkg_name, prop_name, prop_name, e.name))
+                        self.ctx.writeln('("{}", "{}"): "{}.{}.{}.{}",'
+                                         .format(p.stmt.arg, e.stmt.arg, pkg_name, prop_name, prop_name, e.name))
+                    else:
+                        self.ctx.writeln('("{}", "{}"): "{}",'
+                                         .format(ns.arg, e.stmt.arg, e.fqn()))
+                        self.ctx.writeln('("{}", "{}"): "{}",'
+                                         .format(p.stmt.arg, e.stmt.arg, e.fqn()))
 
         self.ctx.lvl_dec()
         self.ctx.writeln('}')

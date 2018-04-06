@@ -165,7 +165,7 @@ class PythonBindingsPrinter(LanguageBindingsPrinter):
 
         self.print_file(get_yang_ns_file_name(self.models_dir),
                         emit_yang_ns,
-                        _EmitArgs(self.ypy_ctx, packages, self.bundle_name))
+                        _EmitArgs(self.ypy_ctx, packages, (self.bundle_name, self.one_class_per_module)))
 
     def _print_import_tests_file(self):
         self.print_file(get_import_test_file_name(self.test_dir),
@@ -236,8 +236,10 @@ def get_test_module_file_name(path, package):
     return '%s/test_%s.py' % (path, package.stmt.arg.replace('-', '_'))
 
 
-def emit_yang_ns(ctx, packages, bundle_name):
-    NamespacePrinter(ctx).print_output(packages, bundle_name)
+def emit_yang_ns(ctx, packages, extra_args):
+    bundle_name = extra_args[0]
+    one_class_per_module = extra_args[1]
+    NamespacePrinter(ctx, one_class_per_module).print_output(packages, bundle_name)
 
 
 def emit_importests(ctx, packages):

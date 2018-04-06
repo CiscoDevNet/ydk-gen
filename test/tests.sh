@@ -603,13 +603,14 @@ function py_sanity_one_class_per_module_test {
     pip_check_install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
     run_test sdk/python/core/tests/test_sanity_levels.py
     run_test sdk/python/core/tests/test_sanity_types.py
+    run_test sdk/python/core/tests/test_sanity_codec.py
 }
 
 function py_sanity_one_class_per_module {
     print_msg "Running one class per module tests"
     cd $YDKGEN_HOME
     run_test generate.py --bundle profiles/test/ydktest-cpp.json -o > /dev/null
-#py_sanity_one_class_per_module_test
+    py_sanity_one_class_per_module_test
 }
 
 #-------------------------------------
