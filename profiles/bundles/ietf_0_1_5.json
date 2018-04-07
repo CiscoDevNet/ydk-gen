@@ -1,0 +1,41 @@
+{
+   "name":"ietf",
+   "version":"0.1.5",
+   "core_version":"0.7.1",
+   "author":"Cisco",
+   "copyright":"Cisco",
+   "description":"YDK bundle for IETF models",
+   "long_description":"This YANG Development Kit (YDK) bundle provides APIs for IETF YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for IETF models uses the YDK core package.  You can find the SDK documentation at http://ydk.cisco.com/py/docs  You can find more details on YDK at http://ydk.io",
+   "models":{
+      "file":[
+        "profiles/bundles/yang/ietf/0.1.5/iana-crypt-hash.yang",
+        "profiles/bundles/yang/ietf/0.1.5/iana-if-type.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-diffserv-action.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-diffserv-classifier.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-diffserv-policy.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-diffserv-target.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-event-notifications.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-inet-types.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-interfaces-ext.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-interfaces.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-ipv4-unicast-routing.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-ipv6-unicast-routing.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-ip.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-key-chain.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-netconf-acm.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-netconf-monitoring.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-netconf-notifications.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-netconf-with-defaults.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-netconf.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-ospf.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-restconf-monitoring.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-routing.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-syslog-types.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-yang-library.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-yang-push.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-yang-smiv2.yang",
+        "profiles/bundles/yang/ietf/0.1.5/ietf-yang-types.yang",
+        "profiles/bundles/yang/ietf/0.1.3/policy-types.yang"
+      ]
+  }
+}

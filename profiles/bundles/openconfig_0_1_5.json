@@ -1,0 +1,94 @@
+{
+  "name": "openconfig",
+  "version": "0.1.5",
+  "core_version": "0.7.1",
+  "author": "Cisco",
+  "copyright": "Cisco",
+  "description": "YDK bundle for OpenConfig models",
+  "long_description": "This YANG Development Kit (YDK) bundle provides APIs for OpenConfig YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for OpenConfig models uses the YDK core package and additional model bundles.  You can find the SDK documentation at http://ydk.cisco.com/py/docs  You can find more details on YDK at http://ydk.io",
+  "models": {
+    "description": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
+    "git": [
+      {
+        "url": "https://github.com/YangModels/yang.git",
+        "commits": [
+          {
+            "commitid": "8768e01c405b209998e213bb9675a44bccd4893c",
+            "file": [
+              "vendor/cisco/xr/632/cisco-xr-openconfig-interfaces-types.yang",
+              "vendor/cisco/xr/632/openconfig-aft-network-instance.yang",
+              "vendor/cisco/xr/632/openconfig-aft-types.yang",
+              "vendor/cisco/xr/632/openconfig-aft.yang",
+              "vendor/cisco/xr/632/openconfig-bgp-common-multiprotocol.yang",
+              "vendor/cisco/xr/632/openconfig-bgp-common-structure.yang",
+              "vendor/cisco/xr/632/openconfig-bgp-common.yang",
+              "vendor/cisco/xr/632/openconfig-bgp-global.yang",
+              "vendor/cisco/xr/632/openconfig-bgp-neighbor.yang",
+              "vendor/cisco/xr/632/openconfig-bgp-peer-group.yang",
+              "vendor/cisco/xr/632/openconfig-bgp-policy.yang",
+              "vendor/cisco/xr/632/openconfig-bgp-types.yang",
+              "vendor/cisco/xr/632/openconfig-bgp.yang",
+              "vendor/cisco/xr/632/openconfig-channel-monitor.yang",
+              "vendor/cisco/xr/632/openconfig-extensions.yang",
+              "vendor/cisco/xr/632/openconfig-if-aggregate.yang",
+              "vendor/cisco/xr/632/openconfig-if-ethernet.yang",
+              "vendor/cisco/xr/632/openconfig-if-ip-ext.yang",
+              "vendor/cisco/xr/632/openconfig-if-ip.yang",
+              "vendor/cisco/xr/632/openconfig-inet-types.yang",
+              "vendor/cisco/xr/632/openconfig-interfaces.yang",
+              "vendor/cisco/xr/632/openconfig-isis-lsdb-types.yang",
+              "vendor/cisco/xr/632/openconfig-isis-lsp.yang",
+              "vendor/cisco/xr/632/openconfig-isis-policy.yang",
+              "vendor/cisco/xr/632/openconfig-isis-routing.yang",
+              "vendor/cisco/xr/632/openconfig-isis-types.yang",
+              "vendor/cisco/xr/632/openconfig-isis.yang",
+              "vendor/cisco/xr/632/openconfig-lacp.yang",
+              "vendor/cisco/xr/632/openconfig-lldp-types.yang",
+              "vendor/cisco/xr/632/openconfig-lldp.yang",
+              "vendor/cisco/xr/632/openconfig-local-routing.yang",
+              "vendor/cisco/xr/632/openconfig-mpls-igp.yang",
+              "vendor/cisco/xr/632/openconfig-mpls-ldp.yang",
+              "vendor/cisco/xr/632/openconfig-mpls-rsvp.yang",
+              "vendor/cisco/xr/632/openconfig-mpls-sr.yang",
+              "vendor/cisco/xr/632/openconfig-mpls-static.yang",
+              "vendor/cisco/xr/632/openconfig-mpls-te.yang",
+              "vendor/cisco/xr/632/openconfig-mpls-types.yang",
+              "vendor/cisco/xr/632/openconfig-mpls.yang",
+              "vendor/cisco/xr/632/openconfig-network-instance-l2.yang",
+              "vendor/cisco/xr/632/openconfig-network-instance-l3.yang",
+              "vendor/cisco/xr/632/openconfig-network-instance-types.yang",
+              "vendor/cisco/xr/632/openconfig-network-instance.yang",
+              "vendor/cisco/xr/632/openconfig-optical-amplifier.yang",
+              "vendor/cisco/xr/632/openconfig-packet-match-types.yang",
+              "vendor/cisco/xr/632/openconfig-platform-transceiver.yang",
+              "vendor/cisco/xr/632/openconfig-platform-types.yang",
+              "vendor/cisco/xr/632/openconfig-platform.yang",
+              "vendor/cisco/xr/632/openconfig-policy-types.yang",
+              "vendor/cisco/xr/632/openconfig-rib-bgp-types.yang",
+              "vendor/cisco/xr/632/openconfig-rib-bgp.yang",
+              "vendor/cisco/xr/632/openconfig-routing-policy.yang",
+              "vendor/cisco/xr/632/openconfig-segment-routing.yang",
+              "vendor/cisco/xr/632/openconfig-telemetry.yang",
+              "vendor/cisco/xr/632/openconfig-terminal-device.yang",
+              "vendor/cisco/xr/632/openconfig-transport-line-common.yang",
+              "vendor/cisco/xr/632/openconfig-transport-line-protection.yang",
+              "vendor/cisco/xr/632/openconfig-transport-types.yang",
+              "vendor/cisco/xr/632/openconfig-types.yang",
+              "vendor/cisco/xr/632/openconfig-vlan-types.yang",
+              "vendor/cisco/xr/632/openconfig-vlan.yang",
+              "vendor/cisco/xr/632/openconfig-yang-types.yang"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "dependency": [
+    {
+      "name": "ietf",
+      "version": "0.1.5",
+      "core_version": "0.7.1",
+      "uri": "file://profiles/bundles/ietf_0_1_5.json"
+    }
+  ]
+}
