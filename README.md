@@ -431,4 +431,4 @@ Join the [YDK community](https://communities.cisco.com/community/developer/ydk) 
 
 Release Notes
 ===============
-The current YDK release version is 0.7.1 (alpha). YDK-Gen is licensed under the Apache 2.0 License.
+The current YDK release version is 0.7.1 (alpha). The version of the latest YDK-Gen master branch is 0.7.2-dev. YDK-Gen is licensed under the Apache 2.0 License.
