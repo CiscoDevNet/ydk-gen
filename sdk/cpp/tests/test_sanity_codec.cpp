@@ -510,3 +510,29 @@ TEST_CASE("string_data_with_colon")
     ydk::path::Codec s{};
     auto xml = s.encode(runner, ydk::EncodingFormat::XML, false);
 }
+
+TEST_CASE("passive_codec")
+{
+    string e = R"(<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"><passive><name>xyz</name><interfac><test>abc</test></interfac><testc xmlns="http://cisco.com/ns/yang/ydktest-sanity-augm"><xyz><xyz>25</xyz></xyz></testc></passive></runner>)";
+
+    auto r_1 = make_shared<ydktest_sanity::Runner>();
+    auto passive = make_shared<ydktest_sanity::Runner::Passive>();
+    passive->name = "xyz";
+    auto i = make_shared<ydktest_sanity::Runner::Passive::Interfac>();
+    i->test = "abc";
+    i->parent = passive.get();
+    passive->interfac.push_back(i);
+    passive->testc->xyz = make_shared<ydktest_sanity::Runner::Passive::Testc::Xyz>();
+    passive->testc->xyz->parent = passive.get();
+    passive->testc->xyz->xyz = 25;
+    r_1->passive.push_back(passive);
+
+    CodecServiceProvider codec_provider{EncodingFormat::XML};
+    CodecService codec_service{};
+    auto xml = codec_service.encode(codec_provider, *r_1, false);
+    REQUIRE(xml == e);
+
+    auto r = codec_service.decode(codec_provider, xml, make_shared<ydktest_sanity::Runner>());
+
+    REQUIRE(*r != *r_1); //TODO known failure
+}

@@ -20,14 +20,14 @@
 # ------------------------------------------------------------------
 
 function usage {
-    printf "\n    Usage: Specify the language to create the SDK and the path to where the github SDK is cloned for: %s -l <(one of python|cpp|go)> -s <PATH-TO-SDK>\n\n" "$( basename "${BASH_SOURCE[0]}" )"
+    printf "\n    Usage: Specify the language to create the SDK and the path to where the github SDK is cloned for: %s -l <[one of python (default)|cpp|go]> -s <PATH-TO-SDK (default: ../ydk-py)>\n\n" "$( basename "${BASH_SOURCE[0]}" )"
 }
 
 function check_gen_api_directories {
 GEN_API_CONTENTS=$(ls ${1})
-if [[ ${GEN_API_CONTENTS} != *"cisco_ios_xe-bundle"* ]] && [[ ${GEN_API_CONTENTS} != *"cisco_ios_xr-bundle"* ]] \
-            && [[ ${GEN_API_CONTENTS} != *"openconfig-bundle"* ]] && [[ ${GEN_API_CONTENTS} != *"ietf-bundle"* ]] \
-             && [[ ${GEN_API_CONTENTS} != *"ydk"* ]]; then
+if [[ ${GEN_API_CONTENTS} != *"cisco_ios_xe-bundle"* ]] || [[ ${GEN_API_CONTENTS} != *"cisco_ios_xr-bundle"* ]] \
+            || [[ ${GEN_API_CONTENTS} != *"openconfig-bundle"* ]] || [[ ${GEN_API_CONTENTS} != *"ietf-bundle"* ]] \
+             || [[ ${GEN_API_CONTENTS} != *"ydk"* ]]; then
     usage
     printf "\n    All packages have not been generated.\n\
         Please run './generate.py --${LANGUAGE} --bundle profile/bundles/<profile>.json' for all desired bundles.\n\

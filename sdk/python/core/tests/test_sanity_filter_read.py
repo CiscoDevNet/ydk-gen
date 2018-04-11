@@ -205,14 +205,14 @@ class SanityYang(unittest.TestCase):
 
         a_read == preconfig_a
 
-    @unittest.skip("Libyang ERROR: Schema node not found. Path: 'B'")
+    # @unittest.skip("Libyang ERROR: Schema node not found. Path: 'B'")
     def test_read_oc_pattern(self):
         obj_A = oc_pattern.OcA()
         obj_A.a = 'hello'
         obj_A.b.b = obj_A.a # 'world' --> YServiceProviderError: illegal reference
         self.crud.create(self.ncc, obj_A)
 
-        obj_A_read = self.crud.read(self.ncc, oc_pattern.OcA(), True)
+        obj_A_read = self.crud.read(self.ncc, oc_pattern.OcA())
 
 
 if __name__ == '__main__':

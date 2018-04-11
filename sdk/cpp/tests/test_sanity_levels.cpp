@@ -739,3 +739,69 @@ TEST_CASE("oc_pattern")
     reply = crud.delete_(provider, o_f);
     REQUIRE(reply);
 }
+
+TEST_CASE("mtus")
+{
+    NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    auto mt = make_shared<ydktest_sanity::Runner::Mtus::Mtu>();
+    mt->owner = "test";
+    mt->mtu = 12;
+    mt->parent = r_1->mtus.get();
+    r_1->mtus->mtu.push_back(mt);
+    reply = crud.create(provider, *r_1);
+    REQUIRE(reply);
+
+    //READ
+    auto r_filter = make_unique<ydktest_sanity::Runner>();
+    auto r_read = crud.read(provider, *r_filter);
+    REQUIRE(r_read!=nullptr);
+
+    //DELETE
+    r_1 = make_unique<ydktest_sanity::Runner>();
+    reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+}
+
+TEST_CASE("passive")
+{
+    NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    auto passive = make_shared<ydktest_sanity::Runner::Passive>();
+    passive->name = "abc";
+    auto i = make_shared<ydktest_sanity::Runner::Passive::Interfac>();
+    i->test = "xyz";
+    i->parent = passive.get();
+    passive->interfac.push_back(i);
+    passive->testc->xyz = make_shared<ydktest_sanity::Runner::Passive::Testc::Xyz>();
+    passive->testc->xyz->parent = passive.get();
+    passive->testc->xyz->xyz = 25;
+    r_1->passive.push_back(passive);
+
+    reply = crud.create(provider, *r_1);
+    REQUIRE(reply);
+
+    //READ
+    auto r_filter = make_unique<ydktest_sanity::Runner>();
+    auto r_read = crud.read(provider, *r_filter);
+    REQUIRE(r_read!=nullptr);
+
+    //DELETE
+    r_1 = make_unique<ydktest_sanity::Runner>();
+    reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+}

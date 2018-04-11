@@ -25,9 +25,11 @@ import unittest
 from ydk.types import Empty
 try:
     from ydk.models.ydktest.ydktest_sanity import Runner, ChildIdentity, YdkEnumTest
+    from ydk.models.ydktest.oc_pattern import OcA
 except:
     from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner
     from ydk.models.ydktest.ydktest_sanity.ydktest_sanity import ChildIdentity, YdkEnumTest
+    from ydk.models.ydktest.oc_pattern.oc_a.oc_a import OcA
 
 from ydk.providers import NetconfServiceProvider
 from ydk.services import CRUDService
@@ -692,7 +694,8 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(runner, runner_read)
 
-    '''def test_oc_pattern(self):
+    @unittest.skip('Fails on travis. Passes locally')
+    def test_oc_pattern(self):
         # Create OcA
         oc = OcA()
         oc.a = 'xyz'
@@ -708,7 +711,37 @@ class SanityYang(unittest.TestCase):
         # Delete
         oc = OcA()
         oc.a = 'xyz'
-        self.crud.delete(self.ncc, oc)'''
+        self.crud.delete(self.ncc, oc)
+
+    def test_mtu(self):
+        runner = Runner()
+        mt = runner.Mtus.Mtu()
+        mt.owner = "test"
+        mt.mtu = 12
+        runner.mtus.mtu.append(mt)
+
+        self.crud.create(self.ncc, runner)
+
+        runner_read = self.crud.read(self.ncc, Runner())
+
+        self.assertEqual(runner, runner_read)
+
+    def test_passive(self):
+        runner = Runner()
+        p = runner.Passive()
+        p.name = "xyz"
+        i = runner.Passive.Interfac()
+        i.test = "abc"
+        p.interfac.append(i)
+        p.xyz = runner.Passive.Testc.Xyz()
+        p.xyz.parent = p
+        p.xyz.xyz = 25
+        runner.passive.append(p)
+
+        self.crud.create(self.ncc, runner)
+
+        runner_read = self.crud.read(self.ncc, Runner())
+        self.assertEqual(runner, runner_read)
 
 if __name__ == '__main__':
     device, non_demand, common_cache, timeout = get_device_info()

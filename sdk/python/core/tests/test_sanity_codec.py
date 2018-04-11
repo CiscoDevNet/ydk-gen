@@ -431,6 +431,23 @@ class SanityYang(unittest.TestCase):
 
         self.provider.encoding = EncodingFormat.XML
 
+    def test_passive_codec(self):
+        e='''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"><passive><name>xyz</name><interfac><test>abc</test></interfac><testc xmlns="http://cisco.com/ns/yang/ydktest-sanity-augm"><xyz><xyz>25</xyz></xyz></testc></passive></runner>'''
+        runner = Runner()
+        p = runner.Passive()
+        p.name = "xyz"
+        i = runner.Passive.Interfac()
+        i.test = "abc"
+        p.interfac.append(i)
+        p.testc.xyz = runner.Passive.Testc.Xyz()
+        p.testc.xyz.parent = p
+        p.testc.xyz.xyz = 25
+        runner.passive.append(p)
+
+        self.provider.encoding = EncodingFormat.XML
+        x = self.codec.encode(self.provider, runner, False)
+        self.assertEqual(x,e)
+
 if __name__ == '__main__':
     import sys
     suite = unittest.TestLoader().loadTestsFromTestCase(SanityYang)

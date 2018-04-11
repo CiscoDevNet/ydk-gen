@@ -696,6 +696,40 @@ module ydktest-sanity {
     }
   }
 
+  grouping mtus {
+      container mtus {
+        list mtu {
+            key "owner";
+
+            leaf owner {
+                type string;
+            }
+
+            leaf mtu {
+                type int32;
+                mandatory true;
+            }
+        }
+    }
+  }
+
+  grouping passive {
+    list passive {
+        key "name";
+        leaf name {
+            type string;
+        }
+        list interfac {
+            key "test";
+
+            leaf test {
+                type string;
+            }
+        }
+    }
+  }
+
+
   container runner {
 
     // uses nested-naming;
@@ -724,6 +758,10 @@ module ydktest-sanity {
     uses not-supported;
 
     uses one-read-only;
+
+    uses mtus;
+
+    uses passive;
 
     container runner-2 {
 
