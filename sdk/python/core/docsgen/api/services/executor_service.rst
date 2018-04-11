@@ -15,7 +15,7 @@ Executor Service
         :param top_entity: (:py:class:`Entity<ydk.types.Entity>` optional)  Provide an instance of :py:class:`Entity<ydk.types.Entity>` only when expecting data to be returned.
 
         :return: An instance of :py:class:`Entity<ydk.types.Entity>` when provided top_entity or None otherwise
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>` if an error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>` if an error has occurred.
 
         Possible Errors:
 

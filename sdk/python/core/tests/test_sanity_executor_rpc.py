@@ -22,7 +22,7 @@ from __future__ import absolute_import
 import sys
 import unittest
 
-from ydk.errors import YPYError, YPYServiceError
+from ydk.errors import YError, YServiceError
 from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.models.ydktest import ietf_netconf
 from ydk.providers import NetconfServiceProvider, CodecServiceProvider
@@ -64,7 +64,7 @@ class SanityTest(unittest.TestCase):
         try:
             rpc = ietf_netconf.CloseSession()
             self.es.execute_rpc(self.ncc, rpc)
-        except YPYError:
+        except YError:
             pass
         del self.ncc
 
@@ -169,7 +169,7 @@ class SanityTest(unittest.TestCase):
         try:
             reply = self.es.execute_rpc(self.ncc, unlock_rpc)
         except Exception as e:
-            self.assertIsInstance(e, YPYError)
+            self.assertIsInstance(e, YError)
 
     def test_validate_rpc_1(self):
         rpc = ietf_netconf.Validate()
@@ -194,8 +194,8 @@ class SanityTest(unittest.TestCase):
         try:
             self.es.execute_rpc(self.ncc, runner)
         except Exception as e:
-            self.assertIsInstance(e, YPYError)
-            # self.assertEqual(e.code, YPYErrorCode.INVALID_RPC)
+            self.assertIsInstance(e, YError)
+            # self.assertEqual(e.code, YErrorCode.INVALID_RPC)
 
     @unittest.skip('TODO: get-schema rpc is not yet supported on netsim')
     def test_execute_get_schema(self):

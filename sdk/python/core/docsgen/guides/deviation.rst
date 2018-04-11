@@ -57,4 +57,4 @@ The above app results in the below errors logged and exception being raised beca
     File "/Users/lib/python3.6/site-packages/ydk/errors/error_handler.py", line 54, in _raise
       exec("raise exc from None")
     File "<string>", line 1, in <module>
-  ydk.errors.YPYModelError:  Invalid path: subscription[subscription-id='123'] : Schema node not found.. Path: subscription
+  ydk.errors.YModelError:  Invalid path: subscription[subscription-id='123'] : Schema node not found.. Path: subscription

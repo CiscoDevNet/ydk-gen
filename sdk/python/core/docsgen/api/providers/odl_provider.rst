@@ -19,7 +19,7 @@ Opendaylight Service Provider
 
         :param node_id: (``str``) The name of the device being controlled by the OpenDaylight instance.
         :return: One of supported service provider instance.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYServiceProviderError>` if no such service provider could be found.
+        :raises: :py:exc:`YError<ydk.errors.YServiceProviderError>` if no such service provider could be found.
 
     .. py:method:: get_node_ids()
 

@@ -209,7 +209,7 @@ class SanityYang(unittest.TestCase):
     def test_read_oc_pattern(self):
         obj_A = oc_pattern.OcA()
         obj_A.a = 'hello'
-        obj_A.b.b = obj_A.a # 'world' --> YPYServiceProviderError: illegal reference
+        obj_A.b.b = obj_A.a # 'world' --> YServiceProviderError: illegal reference
         self.crud.create(self.ncc, obj_A)
 
         obj_A_read = self.crud.read(self.ncc, oc_pattern.OcA(), True)

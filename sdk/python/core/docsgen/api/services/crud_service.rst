@@ -17,7 +17,7 @@ All CRUD operations performed on entities, where :py:class:`Entity<ydk.types.Ent
 
                          For multiple entities encapsulate :py:class:`Entity<ydk.types.Entity>` instances in Python ``list`` or :py:class:`Config<ydk.types.Config>`.
         :return: ``True``, if configuration created successfully; ``False`` otherwise.
-        :raises: Exception :py:exc:`YPYError<ydk.errors.YPYError>`, if an error has occurred.
+        :raises: Exception :py:exc:`YError<ydk.errors.YError>`, if an error has occurred.
 
     .. py:method:: read(provider, filter)
 
@@ -30,7 +30,7 @@ All CRUD operations performed on entities, where :py:class:`Entity<ydk.types.Ent
         :return: For single entity filter - an instance of :py:class:`Entity<ydk.types.Entity>` as identified by the **filter** or ``None``, if operation fails.
 
                  For multiple filters - collection of :py:class:`Entity<ydk.types.Entity>` instances encapsulated into Python ``list`` or :py:class:`Config<ydk.types.Config>` accordingly to the type of **filter**.
-        :raises: Exception :py:exc:`YPYError<ydk.errors.YPYError>`, if an error has occurred.
+        :raises: Exception :py:exc:`YError<ydk.errors.YError>`, if an error has occurred.
 
     .. py:method:: read_config(provider, filter)
 
@@ -43,7 +43,7 @@ All CRUD operations performed on entities, where :py:class:`Entity<ydk.types.Ent
         :return: For single entity filter - an instance of :py:class:`Entity<ydk.types.Entity>` as identified by the **filter** or ``None``, if operation fails.
 
                  For multiple filters - collection of :py:class:`Entity<ydk.types.Entity>` instances encapsulated into Python ``list`` or :py:class:`Config<ydk.types.Config>` accordingly to the type of **filter**.
-        :raises: Exception :py:exc:`YPYError<ydk.errors.YPYError>`, if an error has occurred.
+        :raises: Exception :py:exc:`YError<ydk.errors.YError>`, if an error has occurred.
 
     .. py:method:: update(provider, entities)
 
@@ -54,7 +54,7 @@ All CRUD operations performed on entities, where :py:class:`Entity<ydk.types.Ent
 
                          For multiple containers encapsulate :py:class:`Entity<ydk.types.Entity>` instances in Python ``list`` or :py:class:`Config<ydk.types.Config>`.
         :return: ``True`` if successful, ``False`` - otherwise.
-        :raises: Exception :py:exc:`YPYError<ydk.errors.YPYError>`, if an error has occurred.
+        :raises: Exception :py:exc:`YError<ydk.errors.YError>`, if an error has occurred.
 
     .. py:method:: delete(provider, entities)
 
@@ -65,4 +65,4 @@ All CRUD operations performed on entities, where :py:class:`Entity<ydk.types.Ent
 
                          For multiple containers encapsulate :py:class:`Entity<ydk.types.Entity>` instances in Python ``list`` or :py:class:`Config<ydk.types.Config>`.
         :return: ``True`` if successful, ``False`` - otherwise.
-        :raises: Exception :py:exc:`YPYError<ydk.errors.YPYError>`, if an error has occurred.
+        :raises: Exception :py:exc:`YError<ydk.errors.YError>`, if an error has occurred.

@@ -23,7 +23,7 @@ import unittest
 
 from ydk.services import CRUDService
 from ydk.providers import NetconfServiceProvider
-from ydk.errors import YPYError
+from ydk.errors import YError
 from ydk.filters import YFilter
 from ydk.models.ydktest import ydktest_sanity as ysanity
 
