@@ -368,6 +368,20 @@ func (suite *SanityLevelsTestSuite) TestParentEmpty() {
 	suite.Equal(types.EntityEqual(&runner, runnerRead), true)
 }
 
+func (suite *SanityLevelsTestSuite) TestMtus() {
+    runner := ysanity.Runner{}
+	mtu := ysanity.Runner_Mtus_Mtu{}
+
+	mtu.Owner = "test"
+    mtu.Mtu = 12
+
+	runner.Mtus.Mtu = append(runner.Mtus.Mtu, mtu)
+
+	suite.CRUD.Create(&suite.Provider, &runner)
+	runnerRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
+	suite.Equal(types.EntityEqual(&runner, runnerRead), true)
+}
+
 func TestSanityLevelsTestSuite(t *testing.T) {
 	if testing.Verbose() {
 		ydk.EnableLogging(ydk.Debug)

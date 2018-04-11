@@ -739,3 +739,33 @@ TEST_CASE("oc_pattern")
     reply = crud.delete_(provider, o_f);
     REQUIRE(reply);
 }
+
+TEST_CASE("mtus")
+{
+    NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    //DELETE
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    auto mt = make_shared<ydktest_sanity::Runner::Mtus::Mtu>();
+    mt->owner = "test";
+    mt->mtu = 12;
+    mt->parent = r_1->mtus.get();
+    r_1->mtus->mtu.push_back(mt);
+    reply = crud.create(provider, *r_1);
+    REQUIRE(reply);
+
+    //READ
+    auto r_filter = make_unique<ydktest_sanity::Runner>();
+    auto r_read = crud.read(provider, *r_filter);
+    REQUIRE(r_read!=nullptr);
+
+    //DELETE
+    r_1 = make_unique<ydktest_sanity::Runner>();
+    reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+}
