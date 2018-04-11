@@ -37,7 +37,7 @@ except:
 
 from ydk.providers import CodecServiceProvider
 from ydk.services import CodecService
-from ydk.errors import YPYServiceError
+from ydk.errors import YServiceError
 from ydk.types import EncodingFormat
 
 from test_utils import assert_with_error
@@ -189,15 +189,15 @@ class SanityYang(unittest.TestCase):
         payload = self.codec.encode(self.provider, r_1)
         self.assertEqual(self._xml_enum_payload_1, payload)
 
-    @assert_with_error("'provider' and 'entity_holder' cannot be None", YPYServiceError)
+    @assert_with_error("'provider' and 'entity_holder' cannot be None", YServiceError)
     def test_encode_invalid_1(self):
         self.codec.encode(self.provider, None)
 
-    @assert_with_error("'provider' and 'entity_holder' cannot be None", YPYServiceError)
+    @assert_with_error("'provider' and 'entity_holder' cannot be None", YServiceError)
     def test_encode_invalid_2(self):
             self.codec.encode(None, self._get_runner_entity())
 
-    @assert_with_error("'provider' and 'entity_holder' cannot be None", YPYServiceError)
+    @assert_with_error("'provider' and 'entity_holder' cannot be None", YServiceError)
     def test_encode_invalid_3(self):
             self.codec.encode(None, None)
 
@@ -207,15 +207,15 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(
             self._xml_enum_payload_2, self.codec.encode(self.provider, entity))
 
-    @assert_with_error("'provider' and 'payload_holder' cannot be None", YPYServiceError)
+    @assert_with_error("'provider' and 'payload_holder' cannot be None", YServiceError)
     def test_decode_invalid_1(self):
             self.codec.decode(None, self._xml_enum_payload_2)
 
-    @assert_with_error("'provider' and 'payload_holder' cannot be None", YPYServiceError)
+    @assert_with_error("'provider' and 'payload_holder' cannot be None", YServiceError)
     def test_decode_invalid_2(self):
         self.codec.decode(self.provider, None)
 
-    @assert_with_error("'provider' and 'payload_holder' cannot be None", YPYServiceError)
+    @assert_with_error("'provider' and 'payload_holder' cannot be None", YServiceError)
     def test_decode_invalid_3(self):
         self.codec.decode(None, None)
 
@@ -382,12 +382,12 @@ class SanityYang(unittest.TestCase):
         result = self.codec.decode(provider, payload)
         self.assertIsNotNone(result)
 
-    @assert_with_error("Subtree option can only be used with XML encoding", YPYServiceError)
+    @assert_with_error("Subtree option can only be used with XML encoding", YServiceError)
     def test_decode_invalid_subtree_1(self):
         self.provider.encoding = EncodingFormat.JSON
         self.codec.decode(self.provider, '{"ydktest-sanity:runner": {}}', subtree=True)
 
-    @assert_with_error("Subtree option can only be used with XML encoding", YPYServiceError)
+    @assert_with_error("Subtree option can only be used with XML encoding", YServiceError)
     def test_decode_invalid_subtree_2(self):
         self.provider.encoding = EncodingFormat.JSON
         self.codec.encode(self.provider, Runner(), subtree=True)

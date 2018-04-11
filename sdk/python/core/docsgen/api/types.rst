@@ -129,14 +129,14 @@ YDK types
         Create **EntityCollection** instance:
 
         :param entities: If not present or ``None``, creates empty collection. Otherwise the instances of :py:class:`Entity<ydk.types.Entity>` class should be listed as parameters.
-        :raises: Exception :py:exc:`YPYInvalidArgumentError<ydk.error.YPYInvalidArgumentError>`, if type of **entities** is different.
+        :raises: Exception :py:exc:`YInvalidArgumentError<ydk.error.YInvalidArgumentError>`, if type of **entities** is different.
 
     .. py:method:: append(entities):
 
         Add entity or multiple entities to collection.
 
         :param entities: Instance of an :py:class:`Entity<ydk.types.Entity>` or Python ``list`` of :py:class:`Entity<ydk.types.Entity>` instances.
-        :raises: Exception :py:exc:`YPYInvalidArgumentError<ydk.error.YPYInvalidArgumentError>`, if type of **entities** is different.
+        :raises: Exception :py:exc:`YInvalidArgumentError<ydk.error.YInvalidArgumentError>`, if type of **entities** is different.
 
         Example usage for creating **EntityCollection**:
 
@@ -164,7 +164,7 @@ YDK types
                      
                      If **item** type is ``Entity``, the operator returns :py:class:`Entity<ydk.types.Entity>` instance, which has matching key (entity.path()==item.path()).
         :return: Instance of :py:class:`Entity<ydk.types.Entity>` or ``None``, if matching instance is not in the collection.
-        :raises: Exception :py:exc:`YPYInvalidArgumentError<ydk.error.YPYInvalidArgumentError>`, if type of **item** is other than ``int`` or ``str`` or ``Entity``.
+        :raises: Exception :py:exc:`YInvalidArgumentError<ydk.error.YInvalidArgumentError>`, if type of **item** is other than ``int`` or ``str`` or ``Entity``.
 
         Examples for accessing **EntityCollection** members:
 
@@ -215,7 +215,7 @@ YDK types
                      
                      If **item** type is ``Entity``, finds and deletes collection member, which has matching key.
         :return: :py:class:`Entity<ydk.types.Entity>` instance of deleted member of collection, or ``None``, if matching instance is not found in collection.
-        :raises: Exception :py:exc:`YPYInvalidArgumentError<ydk.error.YPYInvalidArgumentError>`, if type of **item** is other than ``int`` or ``str`` or ``Entity``.
+        :raises: Exception :py:exc:`YInvalidArgumentError<ydk.error.YInvalidArgumentError>`, if type of **item** is other than ``int`` or ``str`` or ``Entity``.
         
         Examples of deleting items in the collection:
 

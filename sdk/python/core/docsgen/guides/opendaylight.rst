@@ -44,7 +44,7 @@ In our example YDK application, first, let us import the necessary libraries
     from ydk.types import Empty
     from ydk.services import CRUDService
     from ydk.providers import OpenDaylightServiceProvider
-    from ydk.errors import YPYError
+    from ydk.errors import YError
     from ydk.types import EncodingFormat
     from ydk.path import Repository
     from ydk.models.cisco_ios_xr import Cisco_IOS_XR_ipv4_bgp_cfg as xr_bgp
@@ -118,7 +118,7 @@ Finally, we invoke the create method of the :py:class:`CRUDService<ydk.services.
     crud_service.create(provider, bgp)
 
 
-Note if there were any errors the above API will raise an exception with the base type :py:class:`YPYError<ydk.errors.YPYError>`
+Note if there were any errors the above API will raise an exception with the base type :py:class:`YError<ydk.errors.YError>`
 
 Logging
 -------

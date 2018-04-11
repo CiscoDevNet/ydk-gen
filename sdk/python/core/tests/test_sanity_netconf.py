@@ -24,7 +24,7 @@ import sys
 import unittest
 import logging
 
-from ydk.errors import YPYModelError, YPYError, YPYServiceError
+from ydk.errors import YModelError, YError, YServiceError
 from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.models.ydktest import openconfig_bgp as openconfig
 
@@ -103,7 +103,7 @@ class SanityNetconf(ParametrizedTestCase):
         try:
             op = self.netconf_service.unlock(self.ncc, Datastore.running)
         except Exception as e:
-            self.assertIsInstance(e, YPYError)
+            self.assertIsInstance(e, YError)
 
         op = self.netconf_service.unlock(self.ncc, Datastore.candidate)
 
@@ -240,18 +240,18 @@ class SanityNetconf(ParametrizedTestCase):
         # op = self.netconf_service.delete_config(self.ncc, Datastore.startup)
         # self.assertEqual(True, op)
 
-    # Error not thrown by TCP client, YPYError is populated instead
+    # Error not thrown by TCP client, YError is populated instead
     def test_delete_config_fail(self):
         found = False
         try:
             self.netconf_service.delete_config(self.ncc, Datastore.running)
-        except (YPYError, YPYModelError):
+        except (YError, YModelError):
             found = True
         self.assertEqual(found, True)
 
     # Failing - NetconfService glue code needed
     def test_copy_config_fail(self):
-        self.assertRaises(YPYServiceError,
+        self.assertRaises(YServiceError,
                           self.netconf_service.copy_config,
                           self.ncc,
                           target=123,
@@ -259,7 +259,7 @@ class SanityNetconf(ParametrizedTestCase):
 
     # Failing - NetconfService glue code needed
     def test_edit_config_fail(self):
-        self.assertRaises(YPYServiceError,
+        self.assertRaises(YServiceError,
                           self.netconf_service.edit_config,
                           self.ncc,
                           Datastore.startup,
@@ -268,7 +268,7 @@ class SanityNetconf(ParametrizedTestCase):
     # Failing - NetconfService glue code needed
     def test_get_config_fail(self):
         runner = ysanity.Runner()
-        self.assertRaises(YPYServiceError,
+        self.assertRaises(YServiceError,
                           self.netconf_service.get_config,
                           self.ncc,
                           "invalid-input",
@@ -276,14 +276,14 @@ class SanityNetconf(ParametrizedTestCase):
 
     # Failing - NetconfService glue code needed
     def test_lock_fail(self):
-        self.assertRaises(YPYServiceError,
+        self.assertRaises(YServiceError,
                           self.netconf_service.lock,
                           self.ncc,
                           "invalid-input")
 
     # Failing - NetconfService glue code needed
     def test_unlock_fail(self):
-        self.assertRaises(YPYServiceError,
+        self.assertRaises(YServiceError,
                           self.netconf_service.unlock,
                           self.ncc,
                           "invalid-input")
@@ -427,7 +427,7 @@ class SanityNetconf(ParametrizedTestCase):
             print("\n==== Retrieved entities:")
             for entity in config:
                 print(entity.path())
-        except YPYError as err:
+        except YError as err:
             self.logger.error("Failed to get device state due to error: {}".format(err.message))
 
 if __name__ == '__main__':

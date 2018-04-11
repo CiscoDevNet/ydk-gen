@@ -13,7 +13,7 @@ Filters
         containing this attribute is added to the configuration if
         and only if the configuration data does not already exist in
         the configuration datastore. If the configuration data
-        exists, an :class:`ydk.errors.YPYServiceProviderError` will be thrown
+        exists, an :class:`ydk.errors.YServiceProviderError` will be thrown
         with XML error message.
 
     .. attribute:: delete
@@ -22,7 +22,7 @@ Filters
         containing this attribute is deleted from the configuration
         if and only if the configuration data currently exists in
         the configuration datastore. If the configuration data does
-        not exist, an :class:`ydk.errors.YPYServiceProviderError` will be
+        not exist, an :class:`ydk.errors.YServiceProviderError` will be
         thrown with XML error message.
 
     .. attribute:: merge

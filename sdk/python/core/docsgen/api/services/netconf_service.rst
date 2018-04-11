@@ -24,7 +24,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :param provider: :py:class:`NetconfServiceProvider<ydk.providers.NetconfServiceProvider>` instance.
         :param persist_id: An ``int`` that cancels a persistent confirmed commit.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: close_session(provider)
 
@@ -32,7 +32,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
 
         :param provider: :py:class:`NetconfServiceProvider<ydk.providers.NetconfServiceProvider>` instance.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: commit(provider, confirmed=False, confirm_timeout=None, persist=None, persist_id=None)
 
@@ -44,7 +44,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :param persist: An ``int`` that makes the confirmed commit persistent.
         :param persist_id: An ``int`` that is given in order to commit a persistent confirmed commit.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: copy_config(provider, target, source=None, url='', source-config=None)
 
@@ -58,7 +58,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
 
                               For multiple containers the :py:class:`Entity<ydk.types.Entity>` instances must be encapsulate in Python ``list`` or :py:class:`Config<ydk.types.Config>`.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: delete_config(provider, target, url="")
 
@@ -68,7 +68,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :param target: An instance of :py:class:`Datastore<ydk.ext.services.Datastore>` representing configuration to be deleted.
         :param url: A ``str`` representing the configuration URL. Optional parameter required only when target is set to ``url``.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: discard_changes(provider)
 
@@ -76,7 +76,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
 
         :param provider: :py:class:`NetconfServiceProvider<ydk.providers.NetconfServiceProvider>` instance.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: edit_config(provider, target, config, default_operation='', error_option='', test_option='')
 
@@ -91,7 +91,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :param error_option: A ``str`` that can be set to ``test-then-set``, ``set``, or ``test-only`` if the device advertises the :validate:1.1 capability; this parameter is optional.
         :param test_option: A ``str`` that can be set to ``stop-on-error``, ``continue-on-error``, or ``rollback-on-error``; this parameter is optional.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: get_config(provider, source, filter)
 
@@ -105,7 +105,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :return: For single entity filter - an instance of :py:class:`Entity<ydk.types.Entity>` as identified by the **filter** or ``None``, if operation fails.
 
                  For multiple filters - collection of :py:class:`Entity<ydk.types.Entity>` instances encapsulated into Python ``list`` or :py:class:`Config<ydk.types.Config>` accordingly to the type of **filter**.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: get(provider, filter)
 
@@ -118,7 +118,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :return: For single entity filter - an instance of :py:class:`Entity<ydk.types.Entity>` as identified by the **filter** or ``None``, if operation fails.
 
                  For multiple filters - collection of :py:class:`Entity<ydk.types.Entity>` instances encapsulated into Python ``list`` or :py:class:`Config<ydk.types.Config>` accordingly to the type of **filter**.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: kill_session(provider, session_id)
 
@@ -127,7 +127,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :param provider: :py:class:`NetconfServiceProvider<ydk.providers.NetconfServiceProvider>` instance.
         :param session_id: An ``int`` - session identifier of the NETCONF session to be terminated.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: lock(provider, target)
 
@@ -136,7 +136,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :param provider: :py:class:`NetconfServiceProvider<ydk.providers.NetconfServiceProvider>` instance.
         :param target: An instance of :py:class:`Datastore<ydk.ext.services.Datastore>` representing the configuration to lock.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: unlock(provider, target)
 
@@ -145,7 +145,7 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :param provider: :py:class:`NetconfServiceProvider<ydk.providers.NetconfServiceProvider>` instance.
         :param target: An instance of :py:class:`Datastore<ydk.ext.services.Datastore>` representing the configuration to unlock.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.
 
     .. py:method:: validate(provider, source=None, url='', source_config=None)
 
@@ -156,4 +156,4 @@ All NetconfService operations performed on :py:class:`Datastore<ydk.ext.services
         :param url: A ``str`` representing the configuration **url**.
         :param source_config: :py:class:`Entity<ydk.types.Entity>` An instance of :py:class:`Entity<ydk.types.Entity>` representing the configuration to validate.
         :return: ``True`` if the operation succeeds, ``False`` - otherwise.
-        :raises: :py:exc:`YPYError<ydk.errors.YPYError>`, if error has occurred.
+        :raises: :py:exc:`YError<ydk.errors.YError>`, if error has occurred.

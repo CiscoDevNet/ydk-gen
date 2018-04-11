@@ -22,7 +22,7 @@ from __future__ import absolute_import
 import sys
 import unittest
 
-from ydk.errors import YPYServiceProviderError
+from ydk.errors import YServiceProviderError
 from ydk.models.ydktest import ydktest_sanity as ysanity
 from ydk.providers import NetconfServiceProvider
 from ydk.services import CRUDService
@@ -130,7 +130,7 @@ class SanityTest(unittest.TestCase):
         runner_read = self.crud.read(self.ncc, runner_empty)
         self.assertEqual(runner, runner_read)
 
-    @assert_with_error(test_create_pattern, YPYServiceProviderError)
+    @assert_with_error(test_create_pattern, YServiceProviderError)
     def test_create(self):
         runner = ysanity.Runner()
         e_1 = ysanity.Runner.OneList.Ldata()
@@ -147,7 +147,7 @@ class SanityTest(unittest.TestCase):
         # CREATE AGAIN WITH ERROR
         self.crud.update(self.ncc, runner)
 
-    @assert_with_error(test_delete_pattern, YPYServiceProviderError)
+    @assert_with_error(test_delete_pattern, YServiceProviderError)
     def test_delete(self):
         runner = ysanity.Runner()
         e_1 = ysanity.Runner.OneList.Ldata()
@@ -200,7 +200,7 @@ class SanityTest(unittest.TestCase):
         runner_read = self.crud.read(self.ncc, runner_empty)
         self.assertEqual(runner, runner_read)
 
-    @assert_with_error(test_delete_leaf_pattern, YPYServiceProviderError)
+    @assert_with_error(test_delete_leaf_pattern, YServiceProviderError)
     def test_delete_leaf(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.number8 = 10
@@ -213,7 +213,7 @@ class SanityTest(unittest.TestCase):
         # DELETE AGAIN WITH ERROR
         self.crud.update(self.ncc, runner)
 
-    @assert_with_error(test_delete_leaflist_pattern, YPYServiceProviderError)
+    @assert_with_error(test_delete_leaflist_pattern, YServiceProviderError)
     def test_delete_leaflist(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.enum_llist.append(ysanity.YdkEnumTest.local)

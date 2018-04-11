@@ -19,7 +19,7 @@ from __future__ import absolute_import
 import sys
 import unittest
 
-from ydk.errors import YPYInvalidArgumentError
+from ydk.errors import YInvalidArgumentError
 from ydk.types  import EntityCollection, Filter, Config
 
 from ydk.models.ydktest import ydktest_sanity as ysanity
@@ -107,7 +107,7 @@ class SanityTest(unittest.TestCase):
         self.assertEqual(len(config), 2)
         config.clear()
 
-    @assert_with_error(test_add_unsupported_pattern, YPYInvalidArgumentError)
+    @assert_with_error(test_add_unsupported_pattern, YInvalidArgumentError)
     def test_add_unsupported(self):
         anydata = EntityCollection()
         anydata.append('native')
