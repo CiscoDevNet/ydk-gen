@@ -726,6 +726,23 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(runner, runner_read)
 
+    def test_passive(self):
+        runner = Runner()
+        p = runner.Passive()
+        p.name = "xyz"
+        i = runner.Passive.Interfac()
+        i.test = "abc"
+        p.interfac.append(i)
+        p.xyz = runner.Passive.Testc.Xyz()
+        p.xyz.parent = p
+        p.xyz.xyz = 25
+        runner.passive.append(p)
+
+        self.crud.create(self.ncc, runner)
+
+        runner_read = self.crud.read(self.ncc, Runner())
+        self.assertEqual(runner, runner_read)
+
 if __name__ == '__main__':
     device, non_demand, common_cache, timeout = get_device_info()
 

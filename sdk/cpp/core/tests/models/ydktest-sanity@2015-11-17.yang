@@ -719,21 +719,11 @@ module ydktest-sanity {
         leaf name {
             type string;
         }
-
         list interfac {
             key "test";
 
             leaf test {
                 type string;
-            }
-
-            container testc {
-                presence true;
-                container xyz {
-                    leaf xyz {
-                        type uint32;
-                    }
-                }
             }
         }
     }

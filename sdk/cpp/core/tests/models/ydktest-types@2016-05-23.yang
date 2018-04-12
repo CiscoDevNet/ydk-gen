@@ -65,5 +65,14 @@ module ydktest-types {
       }
       description "Identityref type";
   }
+
+  grouping tt {
+      container xyz {
+        presence true;
+        leaf xyz {
+            type uint32;
+        }
+     }
+  }
  
 }
