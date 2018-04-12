@@ -50,21 +50,10 @@ def get_lists(clazz):
     return lists
 
 
-def get_child_container_classes(clazz, one_class_per_module):
+def get_child_classes(clazz, one_class_per_module):
     m = []
     for prop in clazz.properties():
-        if prop.stmt.keyword == 'container':
-            if one_class_per_module:
-                m.append('("%s", ("%s", %s.%s))'%(get_qualified_yang_name(prop.property_type), prop.name, clazz.name, prop.property_type.name))
-            else:
-                m.append('("%s", ("%s", %s))'%(get_qualified_yang_name(prop.property_type), prop.name, prop.property_type.qn()))
-    return '%s' % (', '.join(m))
-
-
-def get_child_list_classes(clazz, one_class_per_module):
-    m = []
-    for prop in clazz.properties():
-        if prop.stmt.keyword == 'list':
+        if prop.stmt.keyword in ('list', 'container'):
             if one_class_per_module:
                 m.append('("%s", ("%s", %s.%s))' % (get_qualified_yang_name(prop.property_type), prop.name, clazz.name, prop.property_type.name))
             else:
@@ -110,8 +99,7 @@ class ClassInitsPrinter(object):
             self.ctx.writeln('self.has_list_ancestor = %s' % ('True' if has_list_ancestor(clazz) else 'False'))
             self.ctx.writeln(
                 'self.ylist_key_names = [%s]' % (','.join(["'%s'" % key.name for key in clazz.get_key_props()])))
-            self.ctx.writeln('self._child_container_classes = OrderedDict([%s])' % (get_child_container_classes(clazz, self.one_class_per_module)))
-            self.ctx.writeln('self._child_list_classes = OrderedDict([%s])' % (get_child_list_classes(clazz, self.one_class_per_module)))
+            self.ctx.writeln('self._child_classes = OrderedDict([%s])' % (get_child_classes(clazz, self.one_class_per_module)))
             if clazz.stmt.search_one('presence') is not None:
                 self.ctx.writeln('self.is_presence_container = True')
             self._print_init_leafs_and_leaflists(clazz, leafs)
@@ -175,7 +163,6 @@ class ClassInitsPrinter(object):
                 else:
                     self.ctx.writeln('self.%s = None' % (child.name))
                 self.ctx.writeln('self._children_name_map["%s"] = "%s"' % (child.name, get_qualified_yang_name(child)))
-                self.ctx.writeln('self._children_yang_names.add("%s")' % (get_qualified_yang_name(child)))
 
     def _print_init_lists(self, clazz):
         if clazz.is_identity() and len(clazz.extends) == 0:
