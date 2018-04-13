@@ -124,11 +124,11 @@ class Entity(_Entity):
         self._local_refs = {}
         self._children_name_map = OrderedDict()
         self._children_yang_names = set()
-        self._child_container_classes = OrderedDict()
-        self._child_list_classes = OrderedDict()
+        self._child_classes = OrderedDict()
         self._leafs = OrderedDict()
         self._segment_path = lambda : ''
         self._absolute_path = lambda : ''
+        self.logger = logging.getLogger("ydk.types.Entity")
 
     def __eq__(self, other):
         if not isinstance(other, Entity):
@@ -167,12 +167,15 @@ class Entity(_Entity):
 
     def get_order_of_children(self):
         order = []
-        for name in self.__dict__:
+        for yang_name in self._child_classes:
+            name = self._child_classes[yang_name][0]
             value = self.__dict__[name]
             if isinstance(value, YList):
                 for v in value:
                     if isinstance(v, Entity):
                         order.append(v.get_segment_path())
+            elif isinstance(value, Entity):
+                order.append(name)
         return order
 
     def get_child_by_name(self, child_yang_name, segment_path):
@@ -181,20 +184,17 @@ class Entity(_Entity):
             return child
 
         found = False
-        is_container = True
-        if child_yang_name in self._child_container_classes:
+        self.logger.debug("Looking for '%s'" % (child_yang_name))
+        if child_yang_name in self._child_classes:
             found = True
-        elif child_yang_name in self._child_list_classes:
-            found = True
-            is_container = False
+        else:
+            self.logger.debug("Could not find child '%s' in '%s'" % (child_yang_name, self._child_classes))
         if found:
-            if is_container:
-                attr, clazz = self._child_container_classes[child_yang_name]
-            else:
-                attr, clazz = self._child_list_classes[child_yang_name]
+            attr, clazz = self._child_classes[child_yang_name]
+            is_list = isinstance(getattr(self, attr), YList)
             child = clazz()
             child.parent = self
-            if is_container:
+            if not is_list:
                 self._children_name_map[attr] = child_yang_name
                 setattr(self, attr, child)
             else:
@@ -272,10 +272,7 @@ class Entity(_Entity):
             if name == leaf.name:
                 return True
 
-        if name in self._child_list_classes:
-            return True
-
-        if name in self._child_container_classes:
+        if name in self._child_classes:
             return True
 
         return False
@@ -349,7 +346,7 @@ class Entity(_Entity):
                 if hasattr(value, "parent") and name != "parent":
                     if hasattr(value, "is_presence_container") and value.is_presence_container:
                         value.parent = self
-                    elif value.parent is None and value.yang_name in self._children_yang_names:
+                    elif value.parent is None and value.yang_name in self._child_classes:
                         value.parent = self
                 super(Entity, self).__setattr__(name, value)
 

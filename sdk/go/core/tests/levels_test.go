@@ -6,6 +6,7 @@ import (
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
+	"github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/oc_pattern"
 	"github.com/CiscoDevNet/ydk-go/ydk"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -366,6 +367,37 @@ func (suite *SanityLevelsTestSuite) TestParentEmpty() {
 	suite.CRUD.Create(&suite.Provider, &runner)
 	runnerRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
 	suite.Equal(types.EntityEqual(&runner, runnerRead), true)
+}
+
+func (suite *SanityLevelsTestSuite) TestMtus() {
+    runner := ysanity.Runner{}
+	mtu := ysanity.Runner_Mtus_Mtu{}
+
+	mtu.Owner = "test"
+    mtu.Mtu = 12
+
+	runner.Mtus.Mtu = append(runner.Mtus.Mtu, mtu)
+
+	suite.CRUD.Create(&suite.Provider, &runner)
+	runnerRead := suite.CRUD.Read(&suite.Provider, &ysanity.Runner{})
+	suite.Equal(types.EntityEqual(&runner, runnerRead), true)
+}
+
+func (suite *SanityLevelsTestSuite) TestOcPattern() {
+	ocA := oc_pattern.OcA{}
+	ocA.A = "xyz"
+	ocA.B.B = "xyz"
+
+	suite.CRUD.Create(&suite.Provider, &ocA)
+
+	ocAFilter := oc_pattern.OcA{}
+	ocAFilter.A = "xyz"
+	ocARead := suite.CRUD.Read(&suite.Provider, &ocAFilter)
+	suite.Equal(types.EntityEqual(&ocA, ocARead), true)
+
+	ocADel := oc_pattern.OcA{}
+	ocADel.A = "xyz"
+	suite.CRUD.Delete(&suite.Provider, &ocADel)
 }
 
 func TestSanityLevelsTestSuite(t *testing.T) {

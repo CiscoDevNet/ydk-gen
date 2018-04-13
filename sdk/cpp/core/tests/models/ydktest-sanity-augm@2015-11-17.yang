@@ -15,6 +15,8 @@ module ydktest-sanity-augm {
 
   import ydktest-sanity { prefix "ysanity"; }
 
+  import ydktest-types { prefix "yt"; }
+
 
   organization "Cisco Systems, Inc.";
 
@@ -159,6 +161,11 @@ module ydktest-sanity-augm {
     }
   }
 
+  grouping tec {
+    container testc {
+      uses yt:tt;
+    }
+  }
 
   /////////////////////////////////////////////////////////
   // augmentation
@@ -196,4 +203,7 @@ module ydktest-sanity-augm {
     uses config-interface-tunnel-grouping;
   }
 
+  augment "/ysanity:runner/ysanity:passive" {
+    uses tec;
+  }
 }
