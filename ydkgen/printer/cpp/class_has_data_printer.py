@@ -28,6 +28,7 @@ class ClassHasDataPrinter(object):
     def print_class_has_data(self, clazz, leafs, children):
         conditions = self._init_has_data_conditions(leafs, children)
         self._print_function_header(clazz, 'has_data')
+        self.ctx.writeln('if (is_presence_container) return true;')
         for child in children:
             if child.is_many:
                 self._print_class_has_many(child, 'for (std::size_t index=0; index<%s.size(); index++)', 'if(%s[index]->has_data())' % child.name)

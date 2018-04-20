@@ -805,3 +805,34 @@ TEST_CASE("passive")
     reply = crud.delete_(provider, *r_1);
     REQUIRE(reply);
 }
+
+
+TEST_CASE("inner_pres")
+{
+    NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
+    CrudService crud{};
+
+    ydk::path::RootSchemaNode& schema = provider.get_session().get_root_schema();
+    ydk::path::Codec s{};
+
+    auto & r = schema.create_datanode("ydktest-sanity:runner");
+    r.create_datanode("outer/inner");
+    auto x = s.encode(r, ydk::EncodingFormat::XML, false);
+    REQUIRE(x=="<runner xmlns=\"http://cisco.com/ns/yang/ydktest-sanity\"><outer><inner/></outer></runner>");
+
+    auto r_1 = make_shared<ydktest_sanity::Runner>();
+    bool reply = crud.delete_(provider, *r_1);
+    REQUIRE(reply);
+
+    //CREATE
+    r_1->outer->inner = make_shared<ydktest_sanity::Runner::Outer::Inner>();
+    r_1->outer->inner->parent = r_1->outer.get();
+    reply = crud.create(provider, *r_1);
+    REQUIRE(reply);
+
+    //READ
+    ydktest_sanity::Runner f{};
+    auto r_read = crud.read(provider, f);
+    REQUIRE(r_read != nullptr);
+    REQUIRE(*r_read == *r_1);
+}
