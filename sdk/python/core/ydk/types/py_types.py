@@ -208,24 +208,20 @@ class Entity(_Entity):
         return None
 
     def has_data(self):
-        if hasattr(self, 'is_presence_container') and self.is_presence_container:
-            return True
-
-        for name, value in vars(self).items():
+        for name, leaf in self._leafs.items():
+            value = self.__dict__[name]
             if isinstance(value, _YFilter):
                 return True
-            if name in self._leafs:
-                leaf = self._leafs[name]
-                if isinstance(leaf, _YLeaf):
-                    if value is not None:
-                        if not isinstance(value, Bits) or len(value.get_bitmap()) > 0:
-                            return True
-                elif isinstance(leaf, _YLeafList) and len(value) > 0:
-                    return True
-            if isinstance(value, Entity) and value.has_data():
+            if isinstance(leaf, _YLeaf):
+                if value is not None:
+                    if not isinstance(value, Bits) or len(value.get_bitmap()) > 0:
+                        return True
+            elif isinstance(leaf, _YLeafList) and len(value) > 0:
                 return True
-            elif isinstance(value, YList):
-                for l in value:
+            elif isinstance(leaf, Entity) and leaf.has_data():
+                return True
+            elif isinstance(leaf, YList):
+                for l in leaf:
                     if l.has_data():
                         return True
         return False
@@ -365,9 +361,10 @@ class Entity(_Entity):
 
             else:
                 if isinstance(value, Entity):
-                    if hasattr(value, "parent") and name != "parent":
-                        if not value.is_top_level_class:
-                            value.parent = self
+                    if hasattr(value, "parent") and name != "parent" and \
+                        hasattr(value, "is_presence_container") and value.is_presence_container:
+                        self.logger.debug("Assigning parent for '%s' as '%s'"%(value.yang_name, self.yang_name))
+                        value.parent = self
                 super(Entity, self).__setattr__(name, value)
 
     def __str__(self):

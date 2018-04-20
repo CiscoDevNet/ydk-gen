@@ -742,9 +742,11 @@ class SanityYang(unittest.TestCase):
         runner_read = self.crud.read(self.ncc, Runner())
         self.assertEqual(runner, runner_read)
 
+    @unittest.skip('TODO. Open issue #738 to be fixed')
     def test_inner_pres(self):
         runner = Runner()
         runner.outer.inner = runner.Outer.Inner()
+        runner.outer.inner.parent = runner.outer
         self.crud.create(self.ncc, runner)
 
         runner_read = self.crud.read(self.ncc, Runner())

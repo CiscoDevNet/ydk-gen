@@ -115,7 +115,6 @@ static void populate_data_node(Entity & entity, path::DataNode & parent_data_nod
 {
     EntityPath path = get_entity_path(entity, entity.parent);
     path::DataNode* data_node = &parent_data_node.create_datanode(path.path);
-    YLOG_DEBUG("Created child datanode '{}'", path.path);
 
     if(is_set(entity.yfilter))
     {
@@ -132,22 +131,18 @@ static void populate_name_values(path::DataNode & data_node, EntityPath & path)
     for(const pair<string, LeafData> & name_value : path.value_paths)
     {
         LeafData leaf_data = name_value.second;
-        YLOG_DEBUG("Creating leaf '{}' of '{}' with value: '{}', is_set: {}", name_value.first, data_node.get_path(),
+        YLOG_DEBUG("Creating leaf {} of {} with value: '{}', is_set: {}", name_value.first, data_node.get_path(),
                 leaf_data.value, leaf_data.is_set);
 
         if(leaf_data.is_set)
         {
-            YLOG_DEBUG("Creating leaf datanode '{}' with value '{}'", name_value.first, leaf_data.value);
+            YLOG_DEBUG("Creating datanode");
             auto & result = data_node.create_datanode(name_value.first, leaf_data.value);
-            YLOG_DEBUG("Created leaf datanode '{}' with value '{}'", name_value.first, leaf_data.value);
+            YLOG_DEBUG("Created datanode");
 
             if(is_set(leaf_data.yfilter))
             {
                 add_annotation_to_datanode(name_value, result);
-            }
-            else
-            {
-                YLOG_DEBUG("Leaf '{}' has no yfilter", name_value.first);
             }
         }
     }
@@ -205,14 +200,13 @@ void get_entity_from_data_node(path::DataNode * node, shared_ptr<Entity> entity)
         }
 
         YLOG_DEBUG("Looking at child {} '{}'", child_data_node->get_schema_node().get_statement().keyword, child_data_node->get_path());
-
+        
         if(data_node_is_leaf(*child_data_node))
         {
-            YLOG_DEBUG("Creating entity leaf '{}' of value '{}' in parent '{}'", child_name,
+            YLOG_DEBUG("Creating entity leaf {} of value '{}' in parent {}", child_name,
                     child_data_node->get_value(), node->get_path());
             entity->set_value(child_name, child_data_node->get_value());
-            YLOG_DEBUG("Created entity leaf '{}' of value '{}' in parent '{}'", child_name,
-                    child_data_node->get_value(), node->get_path());
+            YLOG_DEBUG("Created leaf");
         }
         else
         {
@@ -231,10 +225,6 @@ void get_entity_from_data_node(path::DataNode * node, shared_ptr<Entity> entity)
             {
                 YLOG_ERROR("Couldn't fetch child entity {} in parent {}!", child_name, node->get_path());
                 throw(path::YCoreError{"Couldn't fetch child entity '" + child_name + "' in parent " + node->get_path()});
-            }
-            else
-            {
-                YLOG_DEBUG("Created entity child '{}' in parent '{}'", child_name, node->get_path());
             }
             child_entity->parent = entity.get();
             get_entity_from_data_node(child_data_node.get(), child_entity);
