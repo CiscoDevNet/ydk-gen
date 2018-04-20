@@ -676,6 +676,14 @@ module ydktest-sanity {
     }
   }
 
+  grouping inner-pres {
+    container outer {
+        container inner {
+            presence true;
+        }
+    }
+  }
+
   grouping one-read-only {
     description "testing for couple of leaves";
     container one-read-only {
@@ -762,6 +770,8 @@ module ydktest-sanity {
     uses mtus;
 
     uses passive;
+
+    uses inner-pres;
 
     container runner-2 {
 

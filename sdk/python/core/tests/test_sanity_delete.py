@@ -101,16 +101,14 @@ class SanityYang(unittest.TestCase):
         runner_create.two.name = 'two'
         self.crud.create(self.ncc, runner_create)
 
-        runner_read_filter = ysanity.Runner()
-        runner_read = self.crud.read(self.ncc, runner_read_filter)
-
         # use DELETE object to remove leaf one
-        runner_update = runner_read
+        runner_update = ysanity.Runner()
+        runner_create.ydktest_sanity_one.name = ''
         runner_update.ydktest_sanity_one.name = YFilter.delete
         self.crud.update(self.ncc, runner_update)
 
         # manually create remaining runner with leaf two
-        runner_read = self.crud.read(self.ncc, runner_read_filter)
+        runner_read = self.crud.read(self.ncc, ysanity.Runner())
         runner_compare = ysanity.Runner()
         runner_compare.two.name = 'two'
 
@@ -140,6 +138,7 @@ class SanityYang(unittest.TestCase):
         runner_compare.ytypes.built_in_t.llstring.extend(['1', '2', '4'])
 
         self.assertEqual(runner_compare, runner_read)
+        self.assertEqual(runner_compare.ytypes.built_in_t.llstring, runner_read.ytypes.built_in_t.llstring)
 
     def test_delete_on_leaflist(self):
         runner_create = ysanity.Runner()
@@ -160,6 +159,7 @@ class SanityYang(unittest.TestCase):
         runner_compare.ytypes.built_in_t.llstring.extend(['0', '1', '2', '4'])
 
         self.assertEqual(runner_compare, runner_read)
+        self.assertEqual(runner_compare.ytypes.built_in_t.llstring, runner_read.ytypes.built_in_t.llstring)
 
     def test_delete_on_list_with_identitykey(self):
         runner = ysanity.Runner()
