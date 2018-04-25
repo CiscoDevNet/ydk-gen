@@ -103,7 +103,7 @@ class SanityYang(unittest.TestCase):
 
         # use DELETE object to remove leaf one
         runner_update = ysanity.Runner()
-        runner_create.ydktest_sanity_one.name = ''
+        runner_update.ydktest_sanity_one.name = ''
         runner_update.ydktest_sanity_one.name = YFilter.delete
         self.crud.update(self.ncc, runner_update)
 
