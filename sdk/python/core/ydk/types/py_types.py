@@ -38,6 +38,7 @@ from ydk.errors import YModelError as _YModelError
 from ydk.errors import YInvalidArgumentError
 from ydk.errors.error_handler import handle_type_error as _handle_type_error
 
+
 class YList(list):
     """ Represents a list with support for hanging a parent
 
