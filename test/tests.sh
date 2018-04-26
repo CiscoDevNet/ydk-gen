@@ -602,8 +602,11 @@ function py_sanity_common_cache {
 function py_sanity_one_class_per_module_test {
     ${PIP_BIN} uninstall ydk-models-ydktest -y
     pip_check_install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
+    print_msg "Running one class per module for : run_test sdk/python/core/tests/test_sanity_levels.py"
     run_test sdk/python/core/tests/test_sanity_levels.py
+    print_msg "Running one class per module for : sdk/python/core/tests/test_sanity_types.py"
     run_test sdk/python/core/tests/test_sanity_types.py
+    print_msg "Running one class per module for : sdk/python/core/tests/test_sanity_codec.py"
     run_test sdk/python/core/tests/test_sanity_codec.py
 }
 
