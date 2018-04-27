@@ -117,10 +117,11 @@ static ydk::EncodingFormat get_real_encoding(EncodingFormat encoding)
 {
     switch(encoding)
     {
-        case XML:
-            return ydk::EncodingFormat::XML;
         case JSON:
             return ydk::EncodingFormat::JSON;
+        case XML:
+        default:
+            return ydk::EncodingFormat::XML;
     }
 }
 
@@ -128,10 +129,11 @@ static ydk::Protocol get_real_protocol(Protocol protocol)
 {
     switch(protocol)
     {
-        case Netconf:
-            return ydk::Protocol::netconf;
         case Restconf:
             return ydk::Protocol::restconf;
+        case Netconf:
+        default:
+            return ydk::Protocol::netconf;
     }
 }
 
@@ -187,16 +189,16 @@ static void handle_error(YDKState* state)
         state->error_type = YDK_MODEL_ERROR;
         handle_error_message(state, e.what());
     }
-    catch (const ydk::YError & e) {
-        state->error_type = YDK_ERROR;
+    catch(const ydk::path::YCodecError & e) {
+        state->error_type = YDK_CODEC_ERROR;
         handle_error_message(state, e.what());
     }
     catch(const ydk::path::YCoreError & e) {
         state->error_type = YDK_CORE_ERROR;
         handle_error_message(state, e.what());
     }
-    catch(const ydk::path::YCodecError & e) {
-        state->error_type = YDK_CODEC_ERROR;
+    catch (const ydk::YError & e) {
+        state->error_type = YDK_ERROR;
         handle_error_message(state, e.what());
     }
 }
@@ -869,6 +871,7 @@ LogLevel GetLoggingLevel(void)
 
         case spdlog::level::critical:
         case spdlog::level::err:
+        default:
             return ERROR;
     }
 }

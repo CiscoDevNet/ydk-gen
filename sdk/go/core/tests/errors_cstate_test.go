@@ -166,6 +166,8 @@ func (suite *CStateErrorsTestSuite) TestCodecInvalidDecode2() {
 func TestCStateErrorsTestSuite(t *testing.T) {
 	if testing.Verbose() {
 		ydk.EnableLogging(ydk.Debug)
+	} else {
+		ydk.EnableLogging(ydk.Error)
 	}
 	suite.Run(t, new(CStateErrorsTestSuite))
 }

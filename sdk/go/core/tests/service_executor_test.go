@@ -380,8 +380,5 @@ func (suite *ExecutorServiceTestSuite) TestKillSession() {
 }
 
 func TestExecutorServiceTestSuite(t *testing.T) {
-	if testing.Verbose() {
-		ydk.EnableLogging(ydk.Debug)
-	}
 	suite.Run(t, new(ExecutorServiceTestSuite))
 }

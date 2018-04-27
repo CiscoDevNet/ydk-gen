@@ -3,7 +3,8 @@ package test
 import (
 	"fmt"
 	ysanity "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/sanity"
-	// "github.com/CiscoDevNet/ydk-go/ydk/models/ietf/interfaces"
+	"github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/ietf_netconf_acm"
+	"github.com/CiscoDevNet/ydk-go/ydk"
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
 	"github.com/CiscoDevNet/ydk-go/ydk/types"
@@ -286,6 +287,62 @@ func (suite *CrudTestSuite) TestDeleteOnListElements() {
 	runnerCmp.OneList.Ldata = runnerCmp.OneList.Ldata[:1]
 
 	suite.Equal(types.EntityEqual(entity, &runnerCmp), true)
+}
+
+func (suite *CrudTestSuite) TestSanityMultipleEntities() {
+	// Build configuration collection
+	runner := ysanity.Runner{}
+	runner.Two.Number = 2
+	runner.Two.Name = "runner-two-name"
+	
+	native := ysanity.Native{}
+	native.Version = "0.1.0"
+	native.Hostname = "MyHost"
+	
+	configEC := types.NewConfig(&runner, &native)
+
+    // Create configuration
+	result := suite.CRUD.Create(&suite.Provider, configEC)
+	suite.Equal(result, true)
+	
+    // Build filter
+	runnerFilter := ysanity.Runner{}
+	nativeFilter := ysanity.Native{}
+    filterEC := types.NewFilter(&runnerFilter, &nativeFilter)
+
+    // Read running config
+    readEntity := suite.CRUD.Read(&suite.Provider, filterEC);
+    suite.Equal( types.IsEntityCollection(readEntity), true)
+
+    // Get results
+    readEC := types.EntityToCollection(readEntity)
+    for _, entity := range readEC.Entities() {
+    	ydk.YLogDebug(fmt.Sprintf("Printing %s", GetEntityXMLString(entity)))
+    }
+
+    // Delete configuration
+    result = suite.CRUD.Delete(&suite.Provider, configEC);
+    suite.Equal(result, true)
+}
+
+func (suite *CrudTestSuite) TestSanityReadConfig() {
+
+	// Import ietf_netconf_acm package in order to register otherwise missing entity 
+	nacm := ietf_netconf_acm.Nacm{}
+	
+    // Build empty filter
+    filterEC := types.NewFilter(&nacm)
+    filterEC.Clear()
+
+    // Read running config
+    readEntity := suite.CRUD.ReadConfig(&suite.Provider, filterEC);
+    suite.Equal( types.IsEntityCollection(readEntity), true)
+
+    // Get results
+    readEC := types.EntityToCollection(readEntity)
+    for _, entity := range readEC.Entities() {
+    	ydk.YLogDebug(fmt.Sprintf("Printing %s", GetEntityXMLString(entity)))
+    }
 }
 
 // TODO: Delete list using YFilter

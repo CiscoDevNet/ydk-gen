@@ -94,8 +94,8 @@ type CommonEntityData struct {
 	BundleName 					string
 	ParentYangName				string
 	YFilter 					yfilter.YFilter
-	Children 					map[string]YChild
-	Leafs 						map[string]YLeaf
+	Children 					*OrderedMap
+	Leafs 						*OrderedMap
 	SegmentPath					string
 
 	CapabilitiesTable			map[string]string
@@ -103,12 +103,16 @@ type CommonEntityData struct {
 	BundleYangModelsLocation	string
 
 	// dynamic data (internals)
-	Parent 						Entity
+	Parent 					Entity
 }
 
 // Entity is a basic type that represents containers in YANG
 type Entity interface {
 	GetEntityData()		*CommonEntityData
+}
+
+func EntityToString (e Entity) string {
+    return fmt.Sprintf("Type: %s, Path: %v", reflect.TypeOf(e), GetSegmentPath(e))
 }
 
 // Bits is a basic type that represents the YANG bits type
@@ -119,9 +123,269 @@ type BitsList struct {
 	Value []map[string]bool
 }
 
+// Ordered Map
+//
+type OrderedMap struct {
+	keys   []string
+	values map[string]interface{}
+}
+
+func NewOrderedMap() *OrderedMap {
+	om := OrderedMap{}
+	om.keys = []string{}
+	om.values = map[string]interface{}{}
+	return &om
+}
+
+func (om *OrderedMap) Len() int {
+	return len(om.keys)
+}
+
+func (om *OrderedMap) Get(key string) (interface{}, bool) {
+	val, exists := om.values[key]
+	return val, exists
+}
+
+func (om *OrderedMap) Append(key string, value interface{}) {
+	_, exists := om.values[key]
+	if !exists {
+		om.keys = append(om.keys, key)
+	}
+	om.values[key] = value
+}
+
+func (om *OrderedMap) Pop(key string) (interface{}, bool) {
+	// check key is in use
+	value, ok := om.values[key]
+	if !ok {
+		return nil, ok
+	}
+	// remove from keys
+	for i, k := range om.keys {
+		if k == key {
+			om.keys = append(om.keys[:i], om.keys[i+1:]...)
+			break
+		}
+	}
+	// remove from values
+	delete(om.values, key)
+	return value, ok
+}
+
+func (om *OrderedMap) Keys() []string {
+	return om.keys
+}
+
+func (om *OrderedMap) Values() []interface{} {
+	values := make([]interface{}, len(om.keys))
+	for i:=0; i<len(om.keys); i++ {
+		values[i] = om.values[om.keys[i]]
+	}
+	return values
+}
+
+func (om *OrderedMap) Map() map[string]interface{} {
+	m := map[string]interface{}{}
+	for _, key := range om.keys {
+		m[key] = om.values[key]
+	}
+	return m
+}
+
+// EntityCollection definition and methods
+//
+type EntityCollection struct {
+	EcMap   *OrderedMap
+}
+
+// Implementing Entity interface
+func (ec EntityCollection) GetEntityData() *CommonEntityData {
+	if ec.Len() > 0 {
+		entity := ec.GetItem(0)
+		return entity.GetEntityData()
+	}
+	return nil
+}
+
+func EntityToCollection (e Entity) *EntityCollection {
+	if e == nil {
+		ec := NewEntityCollection()
+		return &ec
+	}
+	
+	ec, ok := e.(EntityCollection)
+	if ok {
+		return &ec
+	} else {
+		ecp, okp := e.(*EntityCollection)
+		if okp {
+			return ecp
+		}
+	}
+	ec = NewEntityCollection(e)
+	return &ec
+}
+
+func IsEntityCollection (e Entity) bool {
+	if e == nil {
+		return false
+	}
+	
+	_, ok := e.(EntityCollection)
+	if ok {
+		return true
+	} else {
+		_, ok = e.(*EntityCollection)
+		if ok {
+			return true
+		}
+	} 
+	return false
+}
+
+func NewEntityCollection(entities ... Entity) EntityCollection {
+	ec := EntityCollection{}
+	ec.EcMap = NewOrderedMap()
+	if len(entities) > 0 {
+		ec.Append(entities)
+	}
+	return ec
+}
+
+func (ec *EntityCollection) Add(entities ... Entity) {
+	ec.Append(entities)
+}
+
+func (ec *EntityCollection) Append(entities []Entity) {
+	for i:=0; i<len(entities); i++ {
+		entity := entities[i]
+		key := GetSegmentPath(entity)
+		ec.EcMap.Append(key, entity)
+	}
+}
+
+func (ec *EntityCollection) Len() int {
+    return ec.EcMap.Len()
+}
+
+func (ec *EntityCollection) Get(key string) (Entity, bool) {
+    elem, exists := ec.EcMap.Get(key)
+    if exists {
+        return elem.(Entity), exists
+    }
+    return nil, exists
+}
+
+func (ec *EntityCollection) GetItem(item int) Entity {
+	if item < ec.Len() {
+		key := ec.EcMap.keys[item]
+		return ec.EcMap.values[key].(Entity)
+	}
+	return nil
+}
+
+func (ec *EntityCollection) HasKey(key string) bool {
+    _, exists := ec.EcMap.Get(key)
+    return exists
+}
+
+func (ec *EntityCollection) Pop(key string) (Entity, bool) {
+    iEntity, exists := ec.EcMap.Pop(key)
+    if !exists {
+        return nil, exists
+    }
+    return iEntity.(Entity), exists
+}
+
+func (ec *EntityCollection) Clear() {
+	ec.EcMap = NewOrderedMap()
+}
+
+func (ec *EntityCollection) Keys() []string {
+    return ec.EcMap.Keys()
+}
+
+func (ec *EntityCollection) Entities() []Entity {
+	entities := make([]Entity, ec.Len())
+	iEntities := ec.EcMap.Values()
+	for i:=0; i<ec.Len(); i++ {
+		entities[i] = iEntities[i].(Entity)
+	}
+	return entities
+}
+
+func (ec *EntityCollection) String() string {
+    if ec.Len() == 0 {
+        return "EntityCollection is empty"
+    }
+    entities := ec.Entities()
+    entity_str := make([]string, ec.Len())
+    for i, entity := range entities {
+        entity_str[i] = EntityToString(entity)
+    }
+    return fmt.Sprintf("EntityCollection [%s]", strings.Join(entity_str, "; "))
+}
+
+type Config = EntityCollection
+
+func NewConfig(entities ... Entity) Config {
+	ec := Config{}
+	ec.EcMap = NewOrderedMap()
+	if len(entities) > 0 {
+		ec.Append(entities)
+	}
+	return ec
+}
+
+type Filter = EntityCollection
+
+func NewFilter(entities ... Entity) Filter {
+	ec := Filter{}
+	ec.EcMap = NewOrderedMap()
+	if len(entities) > 0 {
+		ec.Append(entities)
+	}
+	return ec
+}
+
 /////////////////////////////////////
 // Entity Utility Functions
 /////////////////////////////////////
+
+func GetYChild(entityData *CommonEntityData, name string) (YChild, bool) {
+	iChild, ok := entityData.Children.Get(name)
+	if !ok {
+		return YChild{}, ok
+	}
+	return iChild.(YChild), ok
+}
+
+func GetYChildren(entityData *CommonEntityData) []YChild {
+	iChildren := entityData.Children.Values()
+	children := make([]YChild, len(iChildren))
+	for i:=0; i<len(iChildren); i++ {
+		children[i] = iChildren[i].(YChild)
+	}
+	return children
+}
+
+func GetYChildrenMap(entity Entity) map[string]YChild {
+	children := entity.GetEntityData().Children
+	m := map[string]YChild{}
+	for _, key := range children.Keys() {
+		m[key] = children.values[key].(YChild)
+	}
+	return m
+}
+
+func GetYLeafs(entityData *CommonEntityData) []YLeaf {
+	iLeafs := entityData.Leafs.Values()
+	leafs := make([]YLeaf, len(iLeafs))
+	for i:=0; i<len(iLeafs); i++ {
+		leafs[i] = iLeafs[i].(YLeaf)
+	}
+	return leafs
+}
 
 // GetSegmentPath returns the given entity's segment path
 func GetSegmentPath(entity Entity) string {
@@ -141,14 +405,16 @@ func SetParent(entity, parent Entity) {
 // HasDataOrFilter returns a bool representing whether the entity
 // or any of its children have their data/filter set
 func HasDataOrFilter(entity Entity) bool {
-	if (entity.GetEntityData().YFilter != yfilter.NotSet) {
+	if entity == nil {
+		return false
+	}
+	entityData := entity.GetEntityData()
+	if (entityData.YFilter != yfilter.NotSet) {
 		return true
 	}
 
-	children := entity.GetEntityData().Children
-	leafs := entity.GetEntityData().Leafs
-
 	// children
+	children := GetYChildren(entityData)
 	for _, child := range children {
 		if child.Value != nil {
 			yf := child.Value.GetEntityData().YFilter
@@ -161,6 +427,7 @@ func HasDataOrFilter(entity Entity) bool {
 	v := reflect.ValueOf(entity).Elem()
 
 	// checking leafs
+	leafs := GetYLeafs(entityData)
 	for _, leaf := range leafs {
 		field := v.FieldByName(leaf.GoName)
 
@@ -178,13 +445,15 @@ func HasDataOrFilter(entity Entity) bool {
 
 // GetEntityPath returns an EntityPath struct for the given entity
 func GetEntityPath(entity Entity) EntityPath {
-	entityPath := EntityPath{Path: entity.GetEntityData().SegmentPath}
-	leafs := entity.GetEntityData().Leafs
+	entityData := entity.GetEntityData()
+	entityPath := EntityPath{Path: entityData.SegmentPath}
 	v := reflect.ValueOf(entity).Elem()
 
 	// leafs
 	var leafData LeafData
-	for name, leaf := range leafs {
+	leafs := entityData.Leafs.Map()
+	for name, ileaf := range leafs {
+		leaf := ileaf.(YLeaf)
 		field := v.FieldByName(leaf.GoName)
 
 		if leaf.Value != nil && field.Kind() != reflect.Slice {
@@ -206,7 +475,7 @@ func GetEntityPath(entity Entity) EntityPath {
 			default:
 				var v string
 				if reflect.TypeOf(leaf.Value) != reflect.TypeOf(Empty{}) {
-					v = fmt.Sprintf("%v", leafs[name].Value)
+					v = fmt.Sprintf("%v", leaf.Value)
 				}
 				leafData = LeafData{
 					IsSet: true, Value: v}
@@ -227,17 +496,21 @@ func GetChildByName(
 	childYangName string,
 	segmentPath string) Entity {
 
-	children := entity.GetEntityData().Children
-	goName := children[childYangName].GoName
+	entityData := entity.GetEntityData()
+	child, exists := GetYChild(entityData, childYangName)
+	if !exists {
+		return nil
+	}
 
+	goName := child.GoName
 	s := reflect.ValueOf(entity).Elem()
 	v := s.FieldByName(goName)
 
 	if v.IsValid() {
 		if v.Kind() == reflect.Slice {
-			_, ok := children[segmentPath]
+			yChild, ok := GetYChild(entityData, segmentPath)
 			if ok {
-				return children[segmentPath].Value
+				return yChild.Value
 			} else {
 				sliceType := v.Type().Elem()
 				childValue := reflect.New(sliceType).Elem()
@@ -245,13 +518,14 @@ func GetChildByName(
 				method := reflect.New(sliceType).MethodByName("GetEntityData")
 				in := make([]reflect.Value, method.Type().NumIn())
 				data := method.Call(in)[0].Elem().Interface().(CommonEntityData)
-
 				v.Set(reflect.Append(v, childValue))
-				children = entity.GetEntityData().Children
-				return children[data.SegmentPath].Value
+
+				entityData = entity.GetEntityData()
+				yChild, ok = GetYChild(entityData, data.SegmentPath)
+				return yChild.Value
 			}
 		} else {
-			return children[childYangName].Value
+			return child.Value
 		}
 	}
 	return nil
@@ -260,9 +534,12 @@ func GetChildByName(
 // SetValue sets the leaf value for given entity, valuePath, and value args
 func SetValue(entity Entity, valuePath string, value interface{}) {
 	leafs := entity.GetEntityData().Leafs
-	goName := leafs[valuePath].GoName
+	ileaf, ok := leafs.Get(valuePath)
+	if !ok { return }
+
+	leaf := ileaf.(YLeaf)
 	s := reflect.ValueOf(entity).Elem()
-	v := s.FieldByName(goName)
+	v := s.FieldByName(leaf.GoName)
 	if v.IsValid() {
 		if v.Type() == reflect.TypeOf(make(map[string]bool)) {
 			bits := v.Interface().(map[string]bool)
@@ -450,8 +727,8 @@ func deepValueEqual(e1, e2 Entity) bool {
 	if e1 == nil && e2 == nil {
 		return false
 	}
-	children1 := e1.GetEntityData().Children
-	children2 := e2.GetEntityData().Children
+	children1 := GetYChildrenMap(e1)
+	children2 := GetYChildrenMap(e2)
 
 	marker := make(map[string]bool)
 

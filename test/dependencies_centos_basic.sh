@@ -33,7 +33,7 @@ function install_dependencies {
     yum install epel-release -y > /dev/null
     yum install https://centos7.iuscommunity.org/ius-release.rpm -y > /dev/null
     yum install git which libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel \
-                cmake3 wget curl-devel unzip python-devel python-pip make go java sudo \
+                cmake3 wget curl-devel unzip python-devel python-pip make java sudo \
                 python36u-devel python36u-pip  rpm-build redhat-lsb lcov -y  \
                 > /dev/null
 
@@ -48,6 +48,10 @@ function install_dependencies {
      which gcc
      gcc --version
      print_msg "Done installing gcc5"
+
+    print_msg "Installing Golang version 1.9.2"
+    sudo wget https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz &> /dev/null
+    sudo tar -zxf  go1.9.2.linux-amd64.tar.gz -C /usr/local/
 }
 
 

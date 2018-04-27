@@ -106,30 +106,30 @@ class ClassPrinter(object):
 
     @staticmethod
     def _print_children(fp, children, data_alias):
-        fp.ctx.writeln('%s.Children = make(map[string]types.YChild)' % data_alias)
+        fp.ctx.writeln('%s.Children = types.NewOrderedMap()' % data_alias)
         for child in children:
             path = get_qualified_yang_name(child)
             if child.is_many:
-                fp.ctx.writeln('%s.Children["%s"] = types.YChild{"%s", nil}' % (
+                fp.ctx.writeln('%s.Children.Append("%s", types.YChild{"%s", nil})' % (
                     data_alias, path, child.go_name()))
 
                 child_stmt = '%s.%s' % (fp.class_alias, child.go_name())
                 fp.ctx.writeln('for i := range %s {' % (child_stmt))
                 fp.ctx.lvl_inc()
                 child_stmt = '%s[i]' % child_stmt
-                fp.ctx.writeln('%s.Children[types.GetSegmentPath(&%s)] = types.YChild{"%s", &%s}' %(
+                fp.ctx.writeln('%s.Children.Append(types.GetSegmentPath(&%s), types.YChild{"%s", &%s})' %(
                     data_alias, child_stmt, child.go_name(), child_stmt))
                 fp.ctx.lvl_dec()
                 fp.ctx.writeln('}')
             else:
-                fp.ctx.writeln('%s.Children["%s"] = types.YChild{"%s", &%s.%s}' % (
+                fp.ctx.writeln('%s.Children.Append("%s", types.YChild{"%s", &%s.%s})' % (
                     data_alias, path, child.go_name(), fp.class_alias, child.go_name()))
 
     @staticmethod
     def _print_leafs(fp, leafs, data_alias):
-        fp.ctx.writeln('%s.Leafs = make(map[string]types.YLeaf)' % data_alias)
+        fp.ctx.writeln('%s.Leafs = types.NewOrderedMap()' % data_alias)
         for leaf in leafs:
-            fp.ctx.writeln('%s.Leafs["%s"] = types.YLeaf{"%s", %s.%s}' % (
+            fp.ctx.writeln('%s.Leafs.Append("%s", types.YLeaf{"%s", %s.%s})' % (
                 data_alias, leaf.stmt.arg, leaf.go_name(), fp.class_alias, leaf.go_name()))
 
     def _print_child_classes(self, parent):

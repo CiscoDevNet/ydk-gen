@@ -204,7 +204,6 @@ For example, to read a ``YLeaf`` called ``Running`` in the :go:struct:`Instance 
         result := crud.Read(&provider, &isis)
     }
 
-
 Deleting a list
 ---------------
 
@@ -276,4 +275,70 @@ For example, to delete a ``YLeaf`` called ``Running`` in the :go:struct:`Instanc
         // Call the CRUD read on the top-level isis object
         // (assuming you have already instantiated the service and provider)
         result := crud.Read(&provider, &isis)
+    }
+
+Reading multiple configurations
+--------------------------------------
+
+In this example we read interfaces and BGP configuration as defined by openconfig Yang model.
+
+.. code-block:: c
+    :linenos:
+
+    package main
+
+    import (
+        "github.com/CiscoDevNet/ydk-go/ydk"
+        "github.com/CiscoDevNet/ydk-go/ydk/types"
+        ocBgp "github.com/CiscoDevNet/ydk-go/ydk/models/openconfig/openconfig_bgp"
+        ocInterfaces "github.com/CiscoDevNet/ydk-go/ydk/models/openconfig/openconfig_interfaces"
+    )
+
+    func main() {
+        // Build filter
+        interfacesFilter := ocInterfaces.Interfaces{};
+        bgpFilter := ocBgp.Bgp{};
+        filterList := types.NewFilter(&interfacesFilter, &bgpFilter)
+        
+        // Read running config
+        getConfigEntity := crud.Read(&provider, filterList)
+        
+        // Get results
+        getConfigEC := types.EntityToCollection(getConfigEntity)
+        for _, entity := range getConfigEC.Entities() {
+            ydk.YLogDebug(fmt.Sprintf("Printing %s", GetEntityXmlString(entity)))
+        }
+    }
+
+Reading entire device configuration
+--------------------------------------
+
+When filters are not specified, the YDK attempts to get configuration data based on IETF Yang model. It is user responsibility to import corresponding entities to the application. If retrieved entity was not included in the import statement, an error message is developed and logged (the logger must be enabled); example:
+        
+    `[ydk] [error] [Go] Entity 'ietf-netconf-acm:nacm' is not registered. Please import corresponding package to your application.`
+
+
+.. code-block:: c
+    :linenos:
+
+    package main
+
+    import (
+        "github.com/CiscoDevNet/ydk-go/ydk"
+        "github.com/CiscoDevNet/ydk-go/ydk/types"
+        // Import here all IETF model entities that you would like to see in Read response.
+    )
+
+    func main() {
+        // Build filter
+        filterList := types.NewFilter()
+        
+        // Read running config
+        getConfigEntity := crud.ReadConfig(&provider, filterList)
+        
+        // Get results
+        getConfigEC := types.EntityToCollection(getConfigEntity)
+        for _, entity := range getConfigEC.Entities() {
+            ydk.YLogDebug(fmt.Sprintf("Printing %s", GetEntityXmlString(entity)))
+        }
     }

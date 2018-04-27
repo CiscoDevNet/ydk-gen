@@ -344,8 +344,118 @@ func cascadingTypesHelper(suite *SanityTypesTestSuite, enum1 ysanity.CompInsttyp
 }
 
 func TestSanityTypesTestSuite(t *testing.T) {
-	if testing.Verbose() {
-		ydk.EnableLogging(ydk.Debug)
-	}
 	suite.Run(t, new(SanityTypesTestSuite))
 }
+
+func (suite *SanityTypesTestSuite) TestEntityCollection() {
+    // Create Data entities and access values
+    runner := ysanity.Runner{}
+    native := ysanity.Native{}
+    runnerPath := types.GetSegmentPath(&runner)
+    nativePath := types.GetSegmentPath(&native)
+    suite.Equal(types.EntityToString(&runner), "Type: *sanity.Runner, Path: ydktest-sanity:runner")
+    suite.Equal(types.EntityToString(&native), "Type: *sanity.Native, Path: ydktest-sanity:native")
+
+    // Initialization
+    config := types.NewEntityCollection()
+    suite.Equal(config.Len(), 0)
+    suite.Equal(config.String(), "EntityCollection is empty")
+
+    config = types.NewEntityCollection(&runner)
+    suite.Equal(config.Len(), 1)
+
+    config = types.NewEntityCollection(&runner, &native)
+    suite.Equal(config.Len(), 2)
+    suite.Equal(config.String(), "EntityCollection [Type: *sanity.Runner, Path: ydktest-sanity:runner; Type: *sanity.Native, Path: ydktest-sanity:native]")
+
+    // Add
+    config = types.NewEntityCollection()
+    config.Append([]types.Entity{&runner, &native})
+    suite.Equal(config.Len(), 2)
+
+    config.Add(&runner)
+    suite.Equal(config.Len(), 2)
+
+    // Get
+    e, _ := config.Get(runnerPath)
+    suite.NotNil(e)
+    suite.IsType(&runner, e)
+    
+    // HasKey
+    suite.Equal(config.HasKey(runnerPath), true)
+    suite.Equal(config.HasKey(nativePath), true)
+    suite.Equal(config.HasKey("oc_bgp"), false)
+
+    // Get all keys
+    suite.Equal(config.Keys(), []string{runnerPath, nativePath})
+
+    // Get all entities
+    ydk.YLogDebug("All entities:")
+    for _, entity := range config.Entities() {
+    	ydk.YLogDebug(types.EntityToString(entity))
+    }
+
+    // Delete entity
+    e, _ = config.Pop(runnerPath)
+    suite.NotNil(e)
+    suite.IsType(&runner, e)
+    suite.Equal(config.Keys(), []string{nativePath})
+
+    ydk.YLogDebug("All entities after Runner deleted:")
+    for _, key := range config.Keys() {
+        en, exist := config.Get(key)
+        if exist {
+	        ydk.YLogDebug(fmt.Sprintf("%s", types.EntityToString(en)))
+        }
+    }
+    
+    // Add back and test order
+    config.Add(&runner)
+    suite.Equal(config.Keys(), []string{nativePath, runnerPath})
+
+	// Getting enities by item number
+    ydk.YLogDebug("Getting enities by item number:")
+	for i:=0; i<3; i++ {
+		e = config.GetItem(i)
+		if e != nil {
+			ydk.YLogDebug(fmt.Sprintf("%d:  %s", i, types.EntityToString(e)))
+		} else {
+			ydk.YLogDebug(fmt.Sprintf("%d:  nil\n", i))
+		}
+	}
+    // Clear collection
+    config.Clear()
+    suite.Equal(config.Len(), 0)
+    
+    // Testing passing parameters and return values
+    ret1 := testParams("test1", config)
+    col1 := types.EntityToCollection(ret1)
+    suite.Equal(col1.Len(), 0)
+
+    ret2 := testParams("test2", &runner)
+    suite.Equal(types.EntityEqual(ret2, &runner), true)
+
+    config.Add(&runner, &native)
+    ret3 := testParams("test3", config)
+    col3 := types.EntityToCollection(ret3)
+    suite.Equal(col3.Len(), 2)
+    
+    // Testing Config and Filter aliases
+    cfg := types.NewConfig()
+	cfg.Add(&runner, &native)
+	suite.Equal(types.IsEntityCollection(cfg), true)
+	filter := types.NewFilter(&native)
+	suite.Equal(types.IsEntityCollection(filter), true)
+	suite.Equal(filter.Len(), 1)
+}
+
+func testParams(testName string, entity types.Entity) types.Entity {
+	ec := types.EntityToCollection(entity)
+	if ec == nil {
+		ydk.YLogDebug(fmt.Sprintf("%s: %s\n", testName, types.EntityToString(entity)))
+		return entity
+	}
+	ydk.YLogDebug(fmt.Sprintf("%s: %s\n", testName, ec.String()))
+	return ec
+}
+

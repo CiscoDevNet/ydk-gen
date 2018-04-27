@@ -5,6 +5,9 @@ import (
 	"strconv"
 	"strings"
 	ysanity "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/sanity"
+	ocInterfaces "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/openconfig_interfaces"
+	ocBgp        "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/openconfig_bgp"
+	encoding     "github.com/CiscoDevNet/ydk-go/ydk/types/encoding_format"
 	"github.com/CiscoDevNet/ydk-go/ydk"
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
@@ -246,9 +249,83 @@ func (suite *NetconfServiceTestSuite) TestKillSession() {
 	suite.Equal(op, true)
 }
 
+func (suite *NetconfServiceTestSuite) TestGetOCEntities() {
+
+    // Build filter
+    interfacesFilter := ocInterfaces.Interfaces{};
+    bgpFilter := ocBgp.Bgp{};
+    filterList := types.NewFilter(&interfacesFilter, &bgpFilter)
+
+    // Read running config
+    getConfigEntity := suite.NS.Get(&suite.Provider, filterList);
+    suite.Equal( types.IsEntityCollection(getConfigEntity), true)
+
+    // Get results
+    getConfigEC := types.EntityToCollection(getConfigEntity)
+    for _, entity := range getConfigEC.Entities() {
+    	ydk.YLogDebug(fmt.Sprintf("Printing %s", GetEntityXMLString(entity)))
+    }
+}
+
+func (suite *NetconfServiceTestSuite) TestGetEditCopyConfigSanity() {
+	// Build configuration
+	runner := ysanity.Runner{}
+	runner.Two.Number = 2
+	runner.Two.Name = "runner-two-name"
+	
+	native := ysanity.Native{}
+	native.Version = "0.1.0"
+	native.Hostname = "MyHost"
+	
+	configEC := types.NewConfig(&runner, &native)
+
+	result := suite.NS.EditConfig(&suite.Provider, datastore.Candidate, configEC, "", "", "")
+	suite.Equal(result, true)
+	
+    // Build filter
+	runnerFilter := ysanity.Runner{}
+	nativeFilter := ysanity.Native{}
+    filterEC := types.NewFilter(&runnerFilter, &nativeFilter)
+
+    // Read running config
+    getConfigEntity := suite.NS.GetConfig(&suite.Provider, datastore.Candidate, filterEC);
+    suite.Equal( types.IsEntityCollection(getConfigEntity), true)
+
+    // Get results
+    getConfigEC := types.EntityToCollection(getConfigEntity)
+    for _, entity := range getConfigEC.Entities() {
+    	ydk.YLogDebug(fmt.Sprintf("Printing %s", GetEntityXMLString(entity)))
+    }
+
+    // Discard changes
+    result = suite.NS.DiscardChanges(&suite.Provider);
+    suite.Equal(result, true)
+}
+
+func (suite *NetconfServiceTestSuite) TestSanityGetRunningConfig() {
+	// Create empty EntityCollection
+    filterEC := types.NewFilter()
+
+    // Read running-config
+    getEntity := suite.NS.GetConfig(&suite.Provider, datastore.Running, filterEC);
+    suite.Equal( true, types.IsEntityCollection(getEntity))
+
+    // Get results
+    getEC := types.EntityToCollection(getEntity)
+    for _, entity := range getEC.Entities() {
+    	ydk.YLogDebug(fmt.Sprintf("Printing %s", GetEntityXMLString(entity)))
+    }
+}
+
 func TestNetconfServiceTestSuite(t *testing.T) {
-	if testing.Verbose() {
-		ydk.EnableLogging(ydk.Debug)
-	}
 	suite.Run(t, new(NetconfServiceTestSuite))
+}
+
+func GetEntityXMLString(entity types.Entity) string {
+    codec := services.CodecService{}
+	provider := providers.CodecServiceProvider{}
+	provider.Encoding = encoding.XML
+	payload := codec.Encode(&provider, entity)
+	out := fmt.Sprintf("Entity{%s}\n%s", types.EntityToString(entity), payload)
+	return out
 }

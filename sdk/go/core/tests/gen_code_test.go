@@ -76,7 +76,7 @@ func (suite *GenCodeTestSuite) TestGenCodeXMLEncoding() {
 	payload := suite.Codec.Encode(&suite.Provider, &bgp)
 
 	ydk.YLogDebug(fmt.Sprintf(
-		"In TestGenCodeXMLEncoding, payload = %v", payload))
+		"In TestGenCodeXMLEncoding, payload:\n%v", payload))
 }
 
 func (suite *GenCodeTestSuite) TestGenCodeXMLDecoding() {
@@ -84,7 +84,7 @@ func (suite *GenCodeTestSuite) TestGenCodeXMLDecoding() {
 	bgpDecoded := entity.(*ysanity_bgp.Bgp)
 
 	p := suite.Codec.Encode(&suite.Provider, bgpDecoded)
-	ydk.YLogDebug(fmt.Sprintf("In TestGenCodeXMlDecoding, payload = %v", p))
+	ydk.YLogDebug(fmt.Sprintf("In TestGenCodeXMlDecoding, payload:\n%v", p))
 }
 
 func TestGenCodeTestSuite(t *testing.T) {

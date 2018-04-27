@@ -14,7 +14,7 @@
 - [Docker](#docker)
 - [How to Install](#how-to-install)
   - [System Requirements](#system-requirements)
-  - [Installing](#installing)
+  - [Installing YDK](#installing-ydk)
 - [Documentation and Support](#documentation-and-support)
 - [Release Notes](#release-notes)
 
@@ -75,7 +75,26 @@ $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.1/libydk-0.7.1-Darwin
 $ sudo installer -pkg libydk-0.7.1-Darwin.pkg -target /
 ```
 
-### Installing
+### Golang
+
+The YDK requires Go version 1.9 or higher. If this is not the case, follow below installation steps. Make sure that environment variables GOROOT and GOPATH are properly set.
+
+**Linux**
+```
+$ sudo wget https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz &> /dev/null
+$ sudo tar -zxf  go1.9.2.linux-amd64.tar.gz -C /usr/local/
+$ export GOROOT="/usr/local/go"
+$ export PATH=$GOROOT/bin:$PATH
+```
+
+**Mac**  
+```
+$ export CGO_ENABLED=0
+$ export GOROOT_BOOTSTRAP=$GOROOT
+$ gvm install go1.9.2
+```
+
+### Installing YDK
 
 You can install the latest `ydk` package using:
 ```

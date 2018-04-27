@@ -130,7 +130,7 @@ These are how YANG types are represented in Go.
 
     Represents a YANG built-in enum type, a base type for all YDK enums.
 
-    .. atribute:: EnumYLeaf
+    .. attribute:: EnumYLeaf
 
         (:go:struct:`EnumYLeaf`) A struct representation for enum value
 
@@ -220,27 +220,27 @@ These are how YANG types are represented in Go.
 
     .. attribute:: YangName
 
-        A ``string`` representing the yang name
+        A ``string`` representing Yang name of the entity
 
     .. attribute:: BundleName
 
-        A ``string`` representing the bundle name
+        A ``string`` representing the bundle name of the entity
 
     .. attribute:: ParentYangName
 
-        A ``string`` representing the parent yang name
+        A ``string`` representing the parent Yang name of the entity
 
     .. attribute:: YFilter
 
-        A :ref:`YFilter <y-filter>` representing the yfilter
+        A :ref:`YFilter <y-filter>` representing the a filter
 
     .. attribute:: Children
 
-        A ``map`` of ``string`` representing yang name to :go:struct:`YChild`, representing the children
+        A ``map`` of ``string`` representing Yang name to :go:struct:`YChild`, representing the children
 
     .. attribute:: Leafs
 
-        A ``map`` of ``string`` representing yang name to :go:struct:`YLeaf`, representing the leafs
+        A ``map`` of ``string`` representing Yang name to :go:struct:`YLeaf`, representing the leafs
 
     .. attribute:: SegmentPath
 
@@ -268,44 +268,172 @@ These are how YANG types are represented in Go.
 
     An interface type that represents a basic container in YANG
 
-    .. function:: GetEntityData()
+    .. function:: GetEntityData() *CommonEntityData
+    
+        The :ref:`Entity <types-entity>` interface function
 
-        :return: a reference to :go:struct:`CommonEntityData` representing the data of the entity
+        :return: a pointer to :go:struct:`CommonEntityData` representing entity data
 
-.. function:: GetSegmentPath(entity Entity)
+.. function:: GetSegmentPath(entity Entity) string
 
-    GetSegmentPath returns the segment path
+    :param entity: An instance of :ref:`Entity <types-entity>`
+    :return: The entity's `SegmentPath` value
 
-    :return: (``string``) A Go string.
+.. function:: GetParent(entity Entity) Entity
 
-.. function:: GetParent(entity Entity)
-
-    GetParent returns the given entity's parent
-
-    :return: :ref:`Entity <types-entity>`
+    :param entity: An instance of :ref:`Entity <types-entity>`
+    :return: :ref:`Entity <types-entity>`, which represents given entity's parent; if parent entity is not set, returns ``nil``
 
 .. function:: SetParent(entity, parent Entity)
 
     SetParent sets the given :ref:`Entity <types-entity>` parent field to the given parent :ref:`Entity <types-entity>`
 
-.. function:: HasDataOrFilter(entity Entity)
+    :param entity: An instance of :ref:`Entity <types-entity>`
 
-    HasDataOrFilter returns a bool representing whether the :ref:`Entity <types-entity>` or any of its children have their data/filter set
+.. function:: HasDataOrFilter(entity Entity) bool
 
-    :return: (``bool``) A Go boolean.
+    :param entity: An instance of :ref:`Entity <types-entity>`
+    :return: A Go boolean representing whether the :ref:`Entity <types-entity>` or any of its children have their data/filter set
 
 .. function:: GetEntityPath(entity Entity)
 
-    GetEntityPath returns an EntityPath struct for the given entity
+    :param entity: An instance of :ref:`Entity <types-entity>`
+    :return: :go:struct:`EntityPath` for the given entity
 
-    :return: :go:struct:`EntityPath`
+.. function:: GetChildByName(entity Entity, childYangName string, segmentPath string) Entity
 
-.. function:: GetChildByName(entity Entity, childYangName, segmentPath string)
+    Finds entity's child entity by name and segment path
 
-    GetChildByName takes an :ref:`Entity <types-entity>` and returns the child :ref:`Entity <types-entity>` described by the given childYangName and segmentPath or nil if there is no match
-
-    :return: :ref:`Entity <types-entity>`
+    :param entity: An instance of :ref:`Entity <types-entity>`
+    :param childYangName: The `YangName` of the child entity
+    :param segmentPath: The `SegmentPath` value of the child entity
+    :return: :ref:`Entity <types-entity>` described by the given `childYangName` and `segmentPath` or ``nil`` if there is no match
 
 .. function:: SetValue(entity Entity, valuePath string, value interface{})
 
-    Given an entity, SetValue sets the leaf specified by valuePath to the given value
+    Sets leaf value
+
+    :param entity: An instance of :ref:`Entity <types-entity>`
+    :param valuePath: The :go:struct:`YLeaf` `name` value
+    :param value: Instance of value interface
+
+.. function:: EntityToString(entity Entity) string
+
+    Utility function to get string representation of the entity.
+
+    :return:  Go ``string`` in format: "Type: `entity-instance-type`, Path: `entity-segment-path`".
+
+
+
+.. _entity-collection:
+
+.. go:struct:: EntityCollection
+
+    Type `EntityCollection` along with its methods implements ordered map collection of entities. The string value of entity `SegmentPath` serves as a map key for the entity. Ordered means, the collection retains order of entities, in which they were added to collection. 
+    
+    The `EntityCollection` type has two aliases - `Config` and `Filter`.
+
+    .. function:: GetEntityData() *CommonEntityData
+
+        Implements :ref:`Entity <types-entity>` interface.
+        
+        :return: a reference to :go:struct:`CommonEntityData` representing data for the first entity in the collection; ``nil`` - if collection is empty
+
+    .. function:: Add(entities ... Entity)
+        
+        Method of :ref:`EntityCollection <entity-collection>`. Adds new elements into collection.
+        
+        :param entities: Non-empty list of comma separated instances of :ref:`Entity <types-entity>`.
+          
+    .. function:: Append(entities []Entity)
+        
+        Method of :ref:`EntityCollection <entity-collection>`. Adds new elements into `EntityCollection`.
+       
+        :param entities: Non-empty slicen of 'Entity' type instances.
+            
+    .. function:: Len() int
+        
+        Method of :ref:`EntityCollection <entity-collection>`.
+        
+        :return: Number of elements in the collection.
+        
+    .. function:: Get(key string) Entity
+        
+        Method of :ref:`EntityCollection <entity-collection>`. Gets collection elements by key.
+        
+        :param key: Go ``string``, which represents `SegmentPath` of an entity.
+        :return: Instance of Entity if matching key is present in collection, ``nil`` - otherwise.
+    
+    .. function:: GetItem(item int) Entity
+    
+        Method of :ref:`EntityCollection <entity-collection>`. Gets collection elements by item/order number.
+    
+        :param item: Sequential number of an entity in the collection.
+        :return: Instance of `Entity`, which stands in the ordered map by the number `item`; ``nil`` - `item` value is not in the range of collection size.
+    
+    .. function:: HasKey(key string) bool
+    
+        Method of :ref:`EntityCollection <entity-collection>`. Checks if the collection contains an entity with given key value.
+    
+        :param key: Go ``string``, which represents `SegmentPath` of an entity.
+        :return: Go ``bool``: ``true`` - if collection contains corresponding entity; ``false`` - otherwise.
+        
+    .. function:: Pop(key string) Entity
+    
+        Method of :ref:`EntityCollection <entity-collection>`. Removes entity from collection. When element is removed from inside of the collection, all the following elements are shifted, meaning their indexes changed by -1. This way the order of elements is retained.
+    
+        :param key: Go ``string``, which represents `SegmentPath` of an entity.
+        :return: Instance of `Entity`, if corresponding `key` is found in the collection; ``nil`` - otherwise.
+    
+    .. function:: Clear()
+    
+        Method of :ref:`EntityCollection <entity-collection>`. Removes all elements from collection.
+    
+    .. function:: Keys() []string
+    
+        Method of :ref:`EntityCollection <entity-collection>`. 
+    
+        :return: Slice of ``string`` representing array of all the keys in the collection.
+        
+    .. function:: Entities() []Entity
+    
+        Method of :ref:`EntityCollection <entity-collection>`. 
+        
+        :return: Slice/array of all the `Entity` instances in the collection.
+        
+    .. function:: String() string
+    
+        Method of :ref:`EntityCollection <entity-collection>`. 
+        
+        :return: Go ``string``, which represents entity collection.
+
+.. function:: NewEntityCollection(entities ... Entity) EntityCollection
+
+    Function creates new `EntityCollection` instance and populates it with supplied entities.
+    
+    :param entities: list of comma separated instances of :ref:`Entity <types-entity>`, including empty list.
+    :return: Instance of `EntityCollection`, which includes specified in the parameters entities. If no entities is listed as parameters, the function returns empty collection.
+    
+.. function:: NewConfig(entities ... Entity) Config
+ 
+    Function creates new `Config` instance similar to function `NewEntityCollection`.
+
+.. function:: NewFilter(entities ... Entity) Filter
+ 
+    Function creates new `Filter` instance similar to function `NewEntityCollection`.
+
+.. function:: EntityToCollection (entity Entity) *EntityCollection
+
+    Function converts or casts :ref:`Entity <types-entity>` to :ref:`EntityCollection <entity-collection>`.
+    
+    :param entity: Instance of type `Entity` or `EntityCollection`.
+    :return: Pointer to instance of `EntityCollection`. If parameter is instance of `EntityCollection` the function returns the same. If `entity` is instance of `Entity`, the function creates new entity collection, which includes `entity` as its element.
+    
+.. function:: IsEntityCollection (entity Entity) bool
+
+    Function checks type of `entity`.
+    
+    :param entity: Instance of type `Entity` or `EntityCollection`.
+    :return: Go ``bool``: ``true`` - if `entity` is instance of :ref:`EntityCollection <entity-collection>`; ``false`` - otherwise.
+
+    

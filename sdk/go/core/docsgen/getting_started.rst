@@ -44,6 +44,17 @@ The following packages must be present in your system before installing YDK-Go:
 	$ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake
 	$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.1/libydk-0.7.1-1.x86_64.rpm
 
+**Golang**
+
+The YDK requires Go version 1.9 or higher. If this is not the case, follow these installation steps:
+
+.. code-block:: sh
+
+        $ sudo wget https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz &> /dev/null
+        $ sudo tar -zxf  go1.9.2.linux-amd64.tar.gz -C /usr/local/
+        $ export GOROOT="/usr/local/go"
+        $ export PATH=$GOROOT/bin:$PATH
+
 Mac
 ---
 
@@ -57,11 +68,19 @@ It is recommended to install `homebrew <http://brew.sh>`_ and Xcode command line
 
 	$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.1/libydk-0.7.1-Darwin.pkg
 	$ sudo installer -pkg libydk-0.7.1-Darwin.pkg -target /
+	
+The YDK requires Go version 1.9 or higher. If this is not the case, follow these installation steps:
+
+.. code-block:: sh
+
+	$ export CGO_ENABLED=0
+	$ export GOROOT_BOOTSTRAP=$GOROOT
+	$ gvm install go1.9.2
 
 .. _howto-install:
 
-How to install
-==============
+How to install YDK-Go
+=====================
 
 You can install YDK-Go on macOS or Linux.  It is not currently supported on Windows.
 

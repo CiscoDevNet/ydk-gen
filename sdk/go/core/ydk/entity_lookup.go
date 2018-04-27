@@ -14,10 +14,11 @@ func RegisterEntity(name string, entity_type reflect.Type) {
 }
 
 // GetTopEntity
-func GetTopEntity(name string) types.Entity {
+func GetTopEntity(name string) (types.Entity, bool) {
 	_, ok := topEntityRegistry[name]
 	if !ok {
-		panic(fmt.Sprintf("Top entity '%s' not registered!", name))
+                YLogError(fmt.Sprintf("Entity '%s' is not registered. Please import corresponding package to your application.", name))
+                return nil, ok
 	}
-	return reflect.New(topEntityRegistry[name]).Elem().Addr().Interface().(types.Entity)
+	return reflect.New(topEntityRegistry[name]).Elem().Addr().Interface().(types.Entity), ok
 }

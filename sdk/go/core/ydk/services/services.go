@@ -112,7 +112,11 @@ func (c *CodecService) Decode(
 
 	// 1. parse payload, get topEntity
 	nmsp := getEntityLookupKey(provider, payload)
-	topEntity := ydk.GetTopEntity(nmsp)
+	topEntity, _ := ydk.GetTopEntity(nmsp)
+	if topEntity == nil {
+		err := errors.YModelError{Msg: fmt.Sprintf("Failed to find top entity for lookup key '%s'", nmsp)}
+		panic(err.Error())
+	}
 	// 2. initialize repository, fetch rootSchema
 	provider.Initialize(topEntity)
 	rootSchema := provider.GetRootSchemaNode(topEntity)

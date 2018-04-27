@@ -489,8 +489,9 @@ static string get_filter_payload(path::Rpc & ydk_rpc)
 {
     auto entity = ydk_rpc.get_input_node().find("filter");
     if(entity.empty()){
-        YLOG_ERROR("Failed to get entity node.");
-        throw(YInvalidArgumentError{"Failed to get entity node"});
+        YLOG_WARN("Failed to get filter node for RPC; it then will be skipped.");
+        return string{};
+        //throw(YInvalidArgumentError{"Failed to get entity node"});
     }
 
     auto datanode = entity[0];
@@ -500,8 +501,9 @@ static string get_filter_payload(path::Rpc & ydk_rpc)
 static string get_netconf_payload(path::DataNode & input, const string &  data_tag, const string &  data_value)
 {
     path::Codec codec_service{};
-    input.create_datanode(data_tag, data_value);
-
+    if (data_tag != "filter" || data_value != "") {
+        input.create_datanode(data_tag, data_value);
+    }
     string payload{"<rpc xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">\n"};
     payload+=codec_service.encode(input, EncodingFormat::XML, true);
     payload+="</rpc>";

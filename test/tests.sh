@@ -131,11 +131,11 @@ function init_py_env {
 function init_go_env {
     print_msg "Initializing Go environment"
 
+    export GOROOT="/usr/local/go"
+    export PATH=$GOROOT/bin:$PATH
+
     print_msg "GOPATH is set to: ${GOPATH}"
     print_msg "GOROOT is set to: ${GOROOT}"
-
-    export PATH=$PATH:$GOPATH/bin
-    export PATH=$PATH:$GOROOT/bin
 
     cd $YDKGEN_HOME
     if [[ -z "${GOPATH// }" ]]; then
@@ -145,6 +145,7 @@ function init_go_env {
     fi
 
     print_msg "Changed GOPATH setting to: ${GOPATH}"
+    print_msg "Running $(go version)"
 
     go get github.com/stretchr/testify
 }
@@ -698,13 +699,15 @@ init_py_env
 init_confd_ydktest
 init_rest_server
 init_tcp_server
-init_go_env
 
 ######################################
 # Install/test core
 ######################################
 install_test_cpp_core
+
+init_go_env
 install_go_core
+
 install_py_core
 
 ######################################

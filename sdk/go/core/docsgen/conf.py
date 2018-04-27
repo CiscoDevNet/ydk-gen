@@ -15,11 +15,7 @@
 import os
 import sys
 
-
-if 'YDKGEN_HOME' not in os.environ:
-    ydk_root = os.getcwd()
-else:
-    ydk_root = os.environ['YDKGEN_HOME']
+ydk_root = os.getcwd()
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
