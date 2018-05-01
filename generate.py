@@ -20,6 +20,7 @@ from __future__ import print_function
 from distutils import dir_util, file_util
 from argparse import ArgumentParser
 
+import filecmp
 import fileinput
 import json
 import logging
@@ -144,7 +145,8 @@ def copy_docs_from_bundles(output_directory, destination_dir):
     os.remove(backup_index_file)
 
 
-def generate_documentations(output_directory, ydk_root, language, is_bundle, is_core):
+def generate_documentations(output_directory, ydk_root, language, is_bundle, is_core,
+                            output_directory_contains_cache, output_root_directory):
     print('\nBuilding docs using sphinx-build...\n')
     py_api_doc_gen = os.path.join(output_directory, 'docsgen')
     py_api_doc = os.path.join(output_directory, 'docs_expanded')
@@ -159,8 +161,33 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
 
     if is_core:
         copy_docs_from_bundles(output_directory, py_api_doc_gen)
+
+    if is_core and output_directory_contains_cache:
+        cache_dir = os.path.join(output_root_directory, 'cache', language, 'ydk', 'docsgen')
+        file_count = 0
+        logger.debug("Looking at cache dir '%s'" % (cache_dir))
+        for f in os.listdir(py_api_doc_gen):
+            if f.endswith('.rst'):
+                basename = os.path.basename(f)
+                cache_file = os.path.join(cache_dir, basename)
+                fp = os.path.join(py_api_doc_gen, f)
+                logger.debug("Comparing files '%s', '%s'" % (fp, cache_file))
+                if filecmp.cmp(fp, cache_file) == False:
+                    shutil.copy2(fp, cache_file)
+                    logger.debug("Copying file %s to %s" % (fp, cache_file))
+                    file_count += 1
+
+        logger.debug("\n%s files copied\n" % file_count)
+        py_api_doc_gen = cache_dir
+        py_api_doc = os.path.join(output_root_directory, 'cache', language, 'ydk', 'docs_expanded')
+
     # build docs
     if is_core:
+        logger.debug("Invoking '%s'"%(' '.join(['sphinx-build',
+                              '-D', release,
+                              '-D', version,
+                              '-vvv',
+                              py_api_doc_gen, py_api_doc])))
         p = subprocess.Popen(['sphinx-build',
                               '-D', release,
                               '-D', version,
@@ -168,15 +195,17 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     else:
+        logger.debug("Invoking '%s'" % (['sphinx-build',
+                              '-vvv',
+                              py_api_doc_gen, py_api_doc]))
         p = subprocess.Popen(['sphinx-build',
+                              '-vvv',
                               py_api_doc_gen, py_api_doc],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
-    logger.debug(stdout)
-    logger.error(stderr)
-    print(stderr, file=sys.stderr)
-    print(stdout)
+    msg = '%s\nDOCUMENTATION ERRORS/WARNINGS\n%s\n%s' % ('*' * 28, '*' * 28, stdout.decode('utf-8'))
+    logger.debug(msg)
     msg = '%s\nDOCUMENTATION ERRORS/WARNINGS\n%s\n%s' % ('*' * 28, '*' * 28, stderr.decode('utf-8'))
     print(msg)
 
@@ -296,6 +325,12 @@ if __name__ == '__main__':
         help="The output directory where the sdk will get created.")
 
     parser.add_argument(
+        "--cached-output-dir",
+        action='store_true',
+        help="The output directory specified with --output-directory includes a cache of previously generated \
+        gen-api/<language> files under a directory called 'cache'. To be used to generate docs for --core")
+
+    parser.add_argument(
         "-p", "--python",
         action="store_true",
         default=True,
@@ -364,6 +399,10 @@ if __name__ == '__main__':
     else:
         ydk_root = os.environ['YDKGEN_HOME']
 
+    if options.cached_output_dir:
+        if options.output_directory is None or not options.core:
+            raise YdkGenException('--output-directory needs to be specified with --cached-output-dir and --core options')
+
     if options.output_directory is None:
         output_directory = '%s/gen-api' % ydk_root
     else:
@@ -430,7 +469,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     if options.gendoc:
-        generate_documentations(output_directory, ydk_root, language, options.bundle, options.core)
+        generate_documentations(output_directory, ydk_root, language, options.bundle, options.core,
+                                options.cached_output_dir, options.output_directory)
 
     minutes_str, seconds_str = _get_time_taken(start_time)
     print('\nTime taken for code/doc generation: {0} {1}\n'.format(minutes_str, seconds_str))

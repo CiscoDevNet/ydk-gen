@@ -376,15 +376,6 @@ function py_sanity_ydktest {
     py_sanity_ydktest_gen
     py_sanity_ydktest_test
     py_sanity_ydktest_install
-    py_sanity_doc_gen
-}
-
-function py_sanity_doc_gen {
-   print_msg "Generating docs"
-   sudo rm -rf gen-api/cpp/ydk
-   run_test generate.py --core --cpp --generate-doc &> /dev/null
-   run_test generate.py --core --go --generate-doc &> /dev/null
-   run_test generate.py --core --python --generate-doc &> /dev/null
 }
 
 function py_sanity_ydktest_gen {
@@ -655,6 +646,31 @@ function py_test_gen {
     # py_test_gen_test
 }
 
+#-------------------------------------
+# Documentation tests
+#-------------------------------------
+
+function sanity_doc_gen {
+   print_msg "Generating docs"
+   print_msg "Removing previously generated code with sudo to avoid permission issues"
+   sudo rm -rf gen-api/cpp/ydk
+   run_test generate.py --core --cpp --generate-doc &> /dev/null
+   run_test generate.py --core --go --generate-doc &> /dev/null
+   run_test generate.py --core --python --generate-doc &> /dev/null
+}
+
+function sanity_doc_gen_cache {
+   print_msg "Creating cache and moving previous docs to cache"
+   mkdir -p gen-api/cache
+   mv gen-api/python gen-api/cache
+
+   print_msg "Generating bundle"
+   run_test generate.py --bundle profiles/test/ydktest-cpp.json
+
+   print_msg "Generating core docs with cache option"
+   run_test generate.py --core --python --generate-doc --cached-output-dir --output-directory gen-api -v
+}
+
 ########################## EXECUTION STARTS HERE #############################
 ######################################
 # Parse args
@@ -717,6 +733,12 @@ run_cpp_bundle_tests
 run_go_bundle_tests
 run_python_bundle_tests
 # test_gen_tests
+
+######################################
+# Documentation tests
+######################################
+sanity_doc_gen
+sanity_doc_gen_cache
 
 cd $YDKGEN_HOME
 find . -name '*gcda*'|xargs rm -f

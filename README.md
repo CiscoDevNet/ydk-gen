@@ -329,6 +329,19 @@ Note that the below process could take a few hours due to the size of the `cisco
 ./generate.py --python --bundle profiles/bundles/cisco_ios_xr_6_1_1.json
 ./generate.py --python --core --generate-doc
 ```
+
+If you have previously generated documentation, using the `--cached-output-dir --output-directory <dir>` option can be used to reduce document generation time. Taking python as an example:
+
+```
+mkdir gen-api/cache
+mv gen-api/python gen-api/cache
+
+./generate.py --python --bundle profiles/bundles/ietf_0_1_5.json
+./generate.py --python --bundle profiles/bundles/openconfig_0_1_5.json
+./generate.py --python --bundle profiles/bundles/cisco_ios_xr_6_3_2.json
+./generate.py --python --core --generate-doc --output-directory gen-api --cached-output-dir -v
+```
+
 Pre-generated documentation for [ydk-py](http://ydk.cisco.com/py/docs/) and [ydk-cpp](http://ydk.cisco.com/cpp/docs/) are available.
 
 # Generating an "Adhoc" YDK-Py Bundle
