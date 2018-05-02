@@ -54,6 +54,14 @@ Path
 
     :param: provider: (:go:struct:`CServiceProvider<ydk/types/CServiceProvider>`) A service provider instance.
 
+.. function:: GetCapabilitesFromNetconfProvider(provider CServiceProvider)
+
+    Gets the of capabilities supported by the given provider.
+
+    :param: provider: (:go:struct:`CServiceProvider<ydk/types/CServiceProvider>`) A service provider instance.
+    :return: The list of capabilities.
+    :rtype: ``[]string``
+
 .. function:: CleanUpErrorState(state *State)
     
     CleanUpErrorState cleans up memory for CState

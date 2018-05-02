@@ -374,6 +374,19 @@ func DisconnectFromNetconfProvider(provider types.CServiceProvider) {
 	C.NetconfServiceProviderFree(realProvider)
 }
 
+// GetCapabilitesFromNetconfProvider gets the capabilities supported by the provider.
+// Returns the list of capabilities.
+func GetCapabilitesFromNetconfProvider(provider types.CServiceProvider) []string {
+	realProvider := provider.Private.(C.ServiceProvider)
+	size := C.NetconfServiceProviderGetNumCapabilities(realProvider)
+	capabilities := make([]string, size)
+	for i := range capabilities {
+		ccapability := C.NetconfServiceProviderGetCapabilityByIndex(realProvider, C.int(i))
+		capabilities[i] = C.GoString(ccapability)
+	}
+	return capabilities
+}
+
 // CleanUpErrorState cleans up memory for CState.
 func CleanUpErrorState(state *errors.State) {
 	realState := getCState(state)

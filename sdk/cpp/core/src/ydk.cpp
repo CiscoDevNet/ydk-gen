@@ -438,6 +438,27 @@ void NetconfServiceProviderFree(ServiceProvider provider)
     }
 }
 
+int NetconfServiceProviderGetNumCapabilities(ServiceProvider provider)
+{
+    ydk::NetconfServiceProvider * real_provider = static_cast<ydk::NetconfServiceProvider*>(provider);
+    if(real_provider != NULL)
+    {
+        return real_provider->get_capabilities().size();
+    }
+    return 0;
+}
+
+const char* NetconfServiceProviderGetCapabilityByIndex(ServiceProvider provider, int index)
+{
+    ydk::NetconfServiceProvider * real_provider = static_cast<ydk::NetconfServiceProvider*>(provider);
+    if(real_provider != NULL)
+    {
+        std::vector<std::string> capabilites = real_provider->get_capabilities();
+        return string_to_array(capabilites[index]);
+    }
+    return "";
+}
+
 ServiceProvider RestconfServiceProviderInitWithRepo(
     YDKStatePtr state,
     Repository repo,

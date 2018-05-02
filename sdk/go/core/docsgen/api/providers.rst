@@ -105,6 +105,13 @@ Netconf
 
 	Disconnect from NetconfServiceProvider
 
+.. function:: (provider *NetconfServiceProvider) GetCapabilities()
+
+	Gets the capabilities supported by NetconfServiceProvider
+
+	:return: The list of capabilities.
+    :rtype: ``[]string``
+
 
 Restconf
 --------

@@ -114,6 +114,8 @@ ServiceProvider NetconfServiceProviderInitWithOnDemandRepo(YDKStatePtr state, Re
 RootSchemaNode ServiceProviderGetRootSchema(YDKStatePtr, ServiceProvider);
 EncodingFormat ServiceProviderGetEncoding(ServiceProvider);
 void NetconfServiceProviderFree(ServiceProvider);
+int NetconfServiceProviderGetNumCapabilities(ServiceProvider);
+const char* NetconfServiceProviderGetCapabilityByIndex(ServiceProvider, int);
 
 ServiceProvider RestconfServiceProviderInitWithRepo(YDKStatePtr state, Repository repo, const char * address, const char * username, const char * password, int port, EncodingFormat encoding, const char* config_url_root, const char* state_url_root);
 void RestconfServiceProviderFree(ServiceProvider);
