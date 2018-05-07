@@ -172,9 +172,13 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
                 cache_file = os.path.join(cache_dir, basename)
                 fp = os.path.join(py_api_doc_gen, f)
                 logger.debug("Comparing files '%s', '%s'" % (fp, cache_file))
-                if filecmp.cmp(fp, cache_file) == False:
+                if os.path.isfile(fp) == False:
+                    if os.path.isfile(cache_file):
+                        os.remove(cache_file)
+                        logger.debug("Deleting orphan %s from cache" % (cache_file))
+                elif os.path.isfile(cache_file) == False or filecmp.cmp(fp, cache_file) == False:
                     shutil.copy2(fp, cache_file)
-                    logger.debug("Copying file %s to %s" % (fp, cache_file))
+                    logger.debug("Copying non-existent or different file %s to %s" % (fp, cache_file))
                     file_count += 1
 
         logger.debug("\n%s files copied\n" % file_count)
@@ -190,7 +194,7 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
                               py_api_doc_gen, py_api_doc])))
         p = subprocess.Popen(['sphinx-build',
                               '-D', release,
-                              '-D', version,
+                              '-D', version, '-vvv',
                               py_api_doc_gen, py_api_doc],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
@@ -204,10 +208,12 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
-    msg = '%s\nDOCUMENTATION ERRORS/WARNINGS\n%s\n%s' % ('*' * 28, '*' * 28, stdout.decode('utf-8'))
-    logger.debug(msg)
-    msg = '%s\nDOCUMENTATION ERRORS/WARNINGS\n%s\n%s' % ('*' * 28, '*' * 28, stderr.decode('utf-8'))
-    print(msg)
+    if stdout:
+        msg = '%s\nDOCUMENTATION ERRORS/WARNINGS\n%s\n%s' % ('*' * 28, '*' * 28, stdout.decode('utf-8'))
+        logger.debug(msg)
+    if stderr:
+        msg = '%s\nDOCUMENTATION ERRORS/WARNINGS\n%s\n%s' % ('*' * 28, '*' * 28, stderr.decode('utf-8'))
+        print(msg)
 
 
 def create_pip_packages(output_directory):
