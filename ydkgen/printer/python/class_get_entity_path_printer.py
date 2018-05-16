@@ -60,26 +60,26 @@ class GetSegmentPathPrinter(object):
         key_props = clazz.get_key_props()
         for key_prop in key_props:
             predicates += insert_token
-            
+
             predicates += '"['
             if key_prop.stmt.i_module.arg != clazz.stmt.i_module.arg:
                 predicates += key_prop.stmt.i_module.arg
                 predicates += ':'
-            
+
             predicates += key_prop.stmt.arg + '='
-            
-            predicates += "'"
-                
+
+            predicates += "\\\""
+
             predicates +='"'
 
             predicates += insert_token
-            
+
             predicates += ('str(self.%s)') % key_prop.name + insert_token
 
             predicates += '"'
-                
-            predicates += "'"
-                
+
+            predicates += "\\\""
+
             predicates += ']"'
 
         path = '%s%s' % (path, predicates)
