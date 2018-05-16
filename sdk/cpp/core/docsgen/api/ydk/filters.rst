@@ -81,7 +81,7 @@ An example of setting the filter for an :cpp:class:`entity<Entity>` (address fam
   afi_safi->filter = YFilter::delete_;
 
   //Append the list instance to afi-safis's afi-safi field
-  bgp.global->afi_safis->afi_safi.push_back(afi_safi);
+  bgp.global->afi_safis->afi_safi.append(afi_safi);
 
   // Instantiate the CRUD service and Netconf provider to connect to a device with address 10.0.0.1
   CrudService crud_service{};

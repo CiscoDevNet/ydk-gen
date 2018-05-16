@@ -171,7 +171,7 @@ def _get_class_inits_unique(prop):
 
 def _get_class_inits_many(prop):
     if prop.is_many and isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
-        return 'std::vector<std::shared_ptr<%s> > %s;' % (prop.property_type.fully_qualified_cpp_name(), prop.name)
+        return 'ydk::YList %s;' % (prop.name)
 
 
 def _get_children(clazz):

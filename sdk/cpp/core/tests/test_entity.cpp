@@ -423,3 +423,57 @@ TEST_CASE("test_multi_read")
     auto m = test.child->get_child_by_name("multi-child", "multi-child[multi-key='abc']");
     REQUIRE(m != nullptr);
 }
+
+static string vector_to_string(vector<string> & string_vector)
+{
+    ostringstream buf;
+    for (auto item : string_vector) {
+        if (buf.str().length() > 0)
+            buf << ", ";
+        buf << "\"" << item << "\"";
+    }
+    return buf.str();
+}
+
+TEST_CASE("test_ylist")
+{
+    YList ylist_0 = YList{};
+    YList ylist_1 = YList{"name"};
+    YList ylist_2 = YList{"first", "second"};
+
+    auto test1 = std::make_shared<TestEntity>();
+    test1->name = "test1";
+    test1->enabled = true;
+    test1->bits_field["bit1"] = false;
+    test1->bits_field["bit2"] = true;
+    test1->child->child_val = 23;
+
+    auto test2 = std::make_shared<TestEntity>();
+    test2->name = "test2";
+    test2->enabled = true;
+    test2->bits_field["bit1"] = false;
+    test2->bits_field["bit2"] = true;
+    test2->child->child_val = 23;
+
+    ylist_0.extend({test1, test2});
+    REQUIRE(ylist_0.len() == 2);
+
+    auto keys = ylist_0.keys();
+    REQUIRE(vector_to_string(keys) == R"("0", "1")");
+
+    ylist_1.extend({test1, test2});
+    REQUIRE(ylist_1.len() == 2);
+
+    keys = ylist_1.keys();
+    REQUIRE(vector_to_string(keys) == R"("test1", "test2")");
+
+    auto ep = ylist_1[0];
+    REQUIRE(ep != nullptr);
+    auto test_entity = dynamic_cast<TestEntity*> (ep.get());
+    REQUIRE(test_entity->name == test1->name);
+
+    ep = ylist_1["test2"];
+    REQUIRE(ep != nullptr);
+    test_entity = dynamic_cast<TestEntity*> (ep.get());
+    REQUIRE(test_entity->name == test2->name);
+}

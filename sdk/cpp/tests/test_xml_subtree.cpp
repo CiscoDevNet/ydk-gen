@@ -98,7 +98,7 @@ REQUIRE(result);
 auto ld = make_shared<ydktest_sanity::Runner::OneList::Ldata>();
 ld->name="xyz";
 ld->number.yfilter = YFilter::delete_;
-r_1->one_list->ldata.push_back(ld);
+r_1->one_list->ldata.append(ld);
 
 auto s = codec.encode(*r_1, session.get_root_schema());
 REQUIRE(s == R"(<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
@@ -150,9 +150,9 @@ stmt->actions->bgp_actions->config->set_local_pref = 1233;
 stmt->parent = pd->statements.get();
 
 auto rp = make_shared<openconfig_routing_policy::RoutingPolicy>();
-pd->statements->statement.push_back(stmt);
+pd->statements->statement.append(stmt);
 
-rp->policy_definitions->policy_definition.push_back(pd);
+rp->policy_definitions->policy_definition.append(pd);
 
 auto s = codec.encode(*rp, session.get_root_schema());
 REQUIRE(s==R"(<routing-policy xmlns="http://openconfig.net/yang/routing-policy">
@@ -198,7 +198,7 @@ afi_safi->afi_safi_name = openconfig_bgp_types::L3VPNIPV4UNICAST();
 afi_safi->config->afi_safi_name = openconfig_bgp_types::L3VPNIPV4UNICAST();
 afi_safi->config->enabled = true;
 afi_safi->parent = bgp->global->afi_safis.get();
-bgp->global->afi_safis->afi_safi.push_back(move(afi_safi));
+bgp->global->afi_safis->afi_safi.append(move(afi_safi));
 
 auto s = codec.encode(*bgp, session.get_root_schema());
 REQUIRE(s==R"(<bgp xmlns="http://openconfig.net/yang/bgp">

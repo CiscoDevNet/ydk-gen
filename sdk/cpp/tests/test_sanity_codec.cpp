@@ -217,13 +217,13 @@ config_runner_2(ydktest_sanity::Runner *runner)
     s_22->name = "s222name";
     s_22->parent = l_2.get();
 
-    l_1->subl1.push_back(std::move(s_11));
-    l_1->subl1.push_back(std::move(s_12));
-    l_2->subl1.push_back(std::move(s_21));
-    l_2->subl1.push_back(std::move(s_22));
+    l_1->subl1.append(std::move(s_11));
+    l_1->subl1.append(std::move(s_12));
+    l_2->subl1.append(std::move(s_21));
+    l_2->subl1.append(std::move(s_22));
 
-    runner->two_list->ldata.push_back(std::move(l_1));
-    runner->two_list->ldata.push_back(std::move(l_2));
+    runner->two_list->ldata.append(std::move(l_1));
+    runner->two_list->ldata.append(std::move(l_2));
 }
 
 void
@@ -255,13 +255,13 @@ config_runner_1(ydktest_sanity::Runner *runner)
     s_22->name = "s122name";
     s_22->parent = l_2.get();
 
-    l_1->subl1.push_back(std::move(s_11));
-    l_1->subl1.push_back(std::move(s_12));
-    l_2->subl1.push_back(std::move(s_21));
-    l_2->subl1.push_back(std::move(s_22));
+    l_1->subl1.append(std::move(s_11));
+    l_1->subl1.append(std::move(s_12));
+    l_2->subl1.append(std::move(s_21));
+    l_2->subl1.append(std::move(s_22));
 
-    runner->two_list->ldata.push_back(std::move(l_1));
-    runner->two_list->ldata.push_back(std::move(l_2));
+    runner->two_list->ldata.append(std::move(l_1));
+    runner->two_list->ldata.append(std::move(l_2));
 }
 
 TEST_CASE("typedef_encode")
@@ -307,7 +307,8 @@ TEST_CASE("multiple_encode")
     config_runner_1(runner1.get());
     config_runner_2(runner2.get());
 
-    runner2->two_list->ldata[0]->name = "modified";
+    auto ldata = dynamic_cast<ydktest_sanity::Runner::TwoList::Ldata*> (runner2->two_list->ldata[0].get());
+	ldata->name = "modified";
 
     std::map<std::string, std::unique_ptr<Entity>> entity_map;
     entity_map["runner1"] = std::move(runner1);
@@ -363,18 +364,24 @@ TEST_CASE("single_decode")
 
     ydktest_sanity::Runner * entity_ptr = dynamic_cast<ydktest_sanity::Runner*>(entity.get());
 
-    CHECK(entity_ptr->two_list->ldata[0]->number.get() == "11");
-    CHECK(entity_ptr->two_list->ldata[0]->name.get() == "l11name");
-    CHECK(entity_ptr->two_list->ldata[0]->subl1[0]->number.get() == "111");
-    CHECK(entity_ptr->two_list->ldata[0]->subl1[0]->name.get() == "s111name");
-    CHECK(entity_ptr->two_list->ldata[0]->subl1[1]->number.get() == "112");
-    CHECK(entity_ptr->two_list->ldata[0]->subl1[1]->name.get() == "s112name");
-    CHECK(entity_ptr->two_list->ldata[1]->number.get() == "12");
-    CHECK(entity_ptr->two_list->ldata[1]->name.get() == "l12name");
-    CHECK(entity_ptr->two_list->ldata[1]->subl1[0]->number.get() == "121");
-    CHECK(entity_ptr->two_list->ldata[1]->subl1[0]->name.get() == "s121name");
-    CHECK(entity_ptr->two_list->ldata[1]->subl1[1]->number.get() == "122");
-    CHECK(entity_ptr->two_list->ldata[1]->subl1[1]->name.get() == "s122name");
+    auto ldata0 = dynamic_cast<ydktest_sanity::Runner::TwoList::Ldata*> (entity_ptr->two_list->ldata[0].get());
+    auto ldata1 = dynamic_cast<ydktest_sanity::Runner::TwoList::Ldata*> (entity_ptr->two_list->ldata[1].get());
+    auto subl00 = dynamic_cast<ydktest_sanity::Runner::TwoList::Ldata::Subl1*> (ldata0->subl1[0].get());
+    auto subl01 = dynamic_cast<ydktest_sanity::Runner::TwoList::Ldata::Subl1*> (ldata0->subl1[1].get());
+    auto subl10 = dynamic_cast<ydktest_sanity::Runner::TwoList::Ldata::Subl1*> (ldata1->subl1[0].get());
+    auto subl11 = dynamic_cast<ydktest_sanity::Runner::TwoList::Ldata::Subl1*> (ldata1->subl1[1].get());
+    CHECK(ldata0->number.get() == "11");
+    CHECK(ldata0->name.get() == "l11name");
+    CHECK(subl00->number.get() == "111");
+    CHECK(subl00->name.get() == "s111name");
+    CHECK(subl01->number.get() == "112");
+    CHECK(subl01->name.get() == "s112name");
+    CHECK(ldata1->number.get() == "12");
+    CHECK(ldata1->name.get() == "l12name");
+    CHECK(subl10->number.get() == "121");
+    CHECK(subl10->name.get() == "s121name");
+    CHECK(subl11->number.get() == "122");
+    CHECK(subl11->name.get() == "s122name");
 }
 
 TEST_CASE("encode_decode")
@@ -484,16 +491,13 @@ TEST_CASE("TestSessionPathAnyxml")
     ydk::path::NetconfSession session{"127.0.0.1", "admin", "admin",  12022};
     ydk::path::RootSchemaNode& root_schema = session.get_root_schema();
 
-    auto & schema = session.get_root_schema();
-
     std::string xml = R"(<?xml version="1.0"?><runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"><ytypes><built-in-t><bits-value>disable-nagle auto-sense-speed</bits-value></built-in-t></ytypes></runner>)";
-    auto a = s.decode(schema, xml, EncodingFormat::XML);
+    auto a = s.decode(root_schema, xml, EncodingFormat::XML);
     REQUIRE(a!=nullptr);
 
-    schema = session.get_root_schema();
     xml = R"(<?xml version="1.0"?>
     <runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"><ytypes><built-in-t><bits-value>disable-nagle auto-sense-speed</bits-value></built-in-t></ytypes></runner>)";
-    a = s.decode(schema, xml, EncodingFormat::XML);
+    a = s.decode(root_schema, xml, EncodingFormat::XML);
     REQUIRE(a!=nullptr);
 }
 
@@ -521,11 +525,11 @@ TEST_CASE("passive_codec")
     auto i = make_shared<ydktest_sanity::Runner::Passive::Interfac>();
     i->test = "abc";
     i->parent = passive.get();
-    passive->interfac.push_back(i);
+    passive->interfac.append(i);
     passive->testc->xyz = make_shared<ydktest_sanity::Runner::Passive::Testc::Xyz>();
     passive->testc->xyz->parent = passive.get();
     passive->testc->xyz->xyz = 25;
-    r_1->passive.push_back(passive);
+    r_1->passive.append(passive);
 
     CodecServiceProvider codec_provider{EncodingFormat::XML};
     CodecService codec_service{};

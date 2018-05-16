@@ -34,6 +34,8 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <initializer_list>
+
 
 #include "filters.hpp"
 
@@ -66,6 +68,7 @@ typedef struct Empty {
 class Entity;
 class YLeaf;
 class YLeafList;
+class YList;
 
 class LeafData
 {
@@ -346,6 +349,27 @@ class YLeafList {
     std::vector<YLeaf> values;
     YType type;
     std::string name;
+};
+
+class YList
+{
+  public:
+    YList(std::initializer_list<std::string> key_names);
+    virtual ~YList();
+
+    std::shared_ptr<Entity> operator [] (const std::string& key) const;
+    std::shared_ptr<Entity> operator [] (const std::size_t item) const;
+    std::vector<std::shared_ptr<Entity>> entities() const;
+    std::vector<std::string> keys() const;
+    std::size_t len() const;
+    void append(std::shared_ptr<Entity> ep);
+    void extend(std::initializer_list<std::shared_ptr<Entity>> ep_list);
+    std::string build_key(std::shared_ptr<Entity> ep);
+
+  private:
+    std::vector<std::string> ylist_key_names;
+    std::map<std::string,std::shared_ptr<Entity>> entity_map;
+    std::vector<std::string> key_vector;
 };
 
 std::ostream& operator<< (std::ostream& stream, const YLeaf& value);

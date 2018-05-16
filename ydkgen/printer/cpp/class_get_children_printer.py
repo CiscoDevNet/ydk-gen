@@ -47,7 +47,7 @@ class ClassGetChildrenPrinter(object):
 
     def _print_class_get_child_many(self, child):
         self.ctx.writeln('count = 0;')
-        self.ctx.writeln('for (auto const & c : %s)' % child.name)
+        self.ctx.writeln('for (auto c : %s.entities())' % child.name)
         self.ctx.writeln('{')
         self.ctx.lvl_inc()
         self.ctx.writeln('if(children.find(c->get_segment_path()) == children.end())')

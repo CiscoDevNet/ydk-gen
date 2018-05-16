@@ -10,14 +10,14 @@ Let us consider a class named ``Conditions``, with two members ``match_prefix_se
 
     Conditions::Conditions()
       :     match_prefix_set(nullptr),
-            match_neighbor_set(std::make_unique<openconfig_bgp::Bgp::Conditions::MatchNeighborSet>())
+            match_neighbor_set(std::make_shared<openconfig_bgp::Bgp::Conditions::MatchNeighborSet>())
 
 When instantiating the ``Conditions`` class, the child ``match_prefix_set`` will be initially assigned to a null pointer. So, in order to configure the match prefix set, the user has to initialize the  ``match_prefix_set`` as shown below:
 
 
 .. code-block:: cpp
 
-    auto conditions = std::make_unique<openconfig_bgp::Bgp::Conditions>();
-    conditions->match_prefix_set = std::make_unique<openconfig_bgp::Bgp::Conditions::MatchPrefixSet>(); // instantiate the presence node
+    auto conditions = std::make_shared<openconfig_bgp::Bgp::Conditions>();
+    conditions->match_prefix_set = std::make_shared<openconfig_bgp::Bgp::Conditions::MatchPrefixSet>(); // instantiate the presence node
     conditions->match_prefix_set = conditions.get(); //set the parent
 

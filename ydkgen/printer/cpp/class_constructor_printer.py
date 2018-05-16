@@ -118,7 +118,16 @@ class ClassConstructorPrinter(object):
 
         init_stmts = []
         for child in children:
-            if not child.is_many:
+            if child.is_many:
+                if isinstance(child.property_type, Class) and child.property_type is not None:
+                    key_props = child.property_type.get_key_props()
+                    key_str = ''
+                    for key in key_props:
+                        if key_str.__len__() > 0:
+                            key_str += ', '
+                        key_str += '"%s"' % key.name
+                    init_stmts.append('%s{%s}' % (child.name,  key_str))
+            else:
                 if (child.stmt.search_one('presence') is None):
                     init_stmts.append('%s(std::make_shared<%s>())' % (child.name, child.property_type.qualified_cpp_name()))
                 else:
@@ -127,6 +136,5 @@ class ClassConstructorPrinter(object):
             if len(leafs) == 0:
                 self.ctx.writeln(':')
             else:
-                self.ctx.writeln('\t,')
-            self.ctx.writeln('\n\t,'.join(init_stmts))
-
+                self.ctx.writeln('    ,')
+            self.ctx.writeln('\n    , '.join(init_stmts))

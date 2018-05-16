@@ -57,7 +57,7 @@ class ClassGetChildPrinter(object):
     def _print_class_get_child_many(self, child):
         self.ctx.writeln('auto c = std::make_shared<%s>();' % (child.property_type.qualified_cpp_name()))
         self.ctx.writeln('c->parent = this;')
-        self.ctx.writeln('%s.push_back(c);' % child.name)
+        self.ctx.writeln('%s.append(c);' % child.name)
         self.ctx.writeln('return c;')
 
     def _print_class_get_child_unique(self, child):

@@ -29,6 +29,7 @@
 #include <sstream>
 
 #include "errors.hpp"
+#include "logger.hpp"
 #include "types.hpp"
 
 using namespace std;
@@ -266,6 +267,110 @@ std::vector<std::pair<std::string, LeafData> > YLeafList::get_name_leafdata() co
                             );
     }
     return name_values;
+}
+
+using namespace std;
+
+YList::YList(initializer_list<string> key_names)
+{
+    ylist_key_names = vector<string>{};
+    entity_map = map<string,shared_ptr<Entity>>{};
+    key_vector = vector<string>{};
+
+    for (auto key : key_names) {
+        ylist_key_names.push_back(key);
+    }
+}
+
+YList::~YList()
+{
+}
+
+string
+YList::build_key(shared_ptr<Entity> ep)
+{
+    ostringstream value_buffer;
+    string key;
+    vector< pair<string, LeafData> > name_leaf_data_vector = ep->get_name_leaf_data();
+    for (auto key : ylist_key_names) {
+        for (auto name_leaf_data : name_leaf_data_vector) {
+            if (key == name_leaf_data.first) {
+                key = value_buffer.str();
+                if (key.length() > 0) {
+                    value_buffer << ",";
+                }
+                value_buffer << name_leaf_data.second.value;
+                break;
+            }
+        }
+    }
+    key = value_buffer.str();
+    if (key.length() == 0) {
+        // No key list or no matching key
+        value_buffer << key_vector.size();
+        key = value_buffer.str();
+    }
+    return key;
+}
+
+void
+YList::append(shared_ptr<Entity> ep)
+{
+	string key = build_key(ep);
+    if (!entity_map[key]) {
+        key_vector.push_back(key);
+    }
+    entity_map[key] = ep;
+}
+
+void
+YList::extend(initializer_list<shared_ptr<Entity>> ep_list)
+{
+    for (auto ep : ep_list) {
+        append(ep);
+    }
+}
+
+shared_ptr<Entity>
+YList::operator [] (const string& key) const
+{
+	return entity_map.at(key);
+}
+
+shared_ptr<Entity>
+YList::operator [] (const std::size_t item) const
+{
+    if (item < key_vector.size()) {
+        auto key =  key_vector[item];
+        return entity_map.at(key);
+    }
+    else {
+        YLOG_ERROR("Index value {} is out of range [0,{}]", item, key_vector.size());
+        throw(YInvalidArgumentError{"Index value is out of range"});
+    }
+    return nullptr;
+}
+
+vector<shared_ptr<Entity>>
+YList::entities() const
+{
+    vector<shared_ptr<Entity>> ev{};
+    for (auto key : key_vector) {
+        ev.push_back(entity_map.at(key));
+    }
+    return ev;
+}
+
+vector<string>
+YList::keys() const
+{
+	return key_vector;
+}
+
+size_t
+YList::len() const
+{
+    return key_vector.size();
 }
 
 }

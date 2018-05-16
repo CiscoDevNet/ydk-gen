@@ -72,31 +72,31 @@ After establishing the connection, we instantiate the entities and set some data
  :linenos:
 
  // Create BGP object
- auto bgp = make_unique<Bgp>();
+ auto bgp = make_shared<Bgp>();
 
  // BGP instance
- auto instance = make_unique<Bgp::Instance>();
+ auto instance = make_shared<Bgp::Instance>();
  instance->instance_name = "test";
- auto instance_as = make_unique<Bgp::Instance::InstanceAs>();
+ auto instance_as = make_shared<Bgp::Instance::InstanceAs>();
  instance_as->as = 65001;
- auto four_byte_as = make_unique<Bgp::Instance::InstanceAs::FourByteAs>();
+ auto four_byte_as = make_shared<Bgp::Instance::InstanceAs::FourByteAs>();
  four_byte_as->as = 65001;
  four_byte_as->bgp_running = Empty();
 
  // global address family
- auto global_af = make_unique<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::Global::GlobalAfs::GlobalAf>();
+ auto global_af = make_shared<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::Global::GlobalAfs::GlobalAf>();
  global_af->af_name = BgpAddressFamilyEnum::ipv4_unicast;
  global_af->enable = Empty();
  global_af->parent = four_byte_as->default_vrf->global->global_afs.get();
- four_byte_as->default_vrf->global->global_afs->global_af.push_back(move(global_af));
+ four_byte_as->default_vrf->global->global_afs->global_af.append(global_af);
 
  // add the instance to the parent BGP object
  four_byte_as->parent = instance_as.get();
  instance_as->parent = instance.get();
  instance->parent = bgp.get();
- instance_as->four_byte_as.push_back(move(four_byte_as));
- instance->instance_as.push_back(move(instance_as));
- bgp->instance.push_back(move(instance));
+ instance_as->four_byte_as.append(four_byte_as);
+ instance->instance_as.append(instance_as);
+ bgp->instance.append(instance);
 
 
 Invoking the CRUD Service

@@ -55,7 +55,7 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
     afi_safi->config->afi_safi_name = openconfig_bgp_types::L3VPNIPV4UNICAST();
     afi_safi->config->enabled = true;
     afi_safi->parent = bgp->global->afi_safis.get();
-    bgp->global->afi_safis->afi_safi.push_back(move(afi_safi));
+    bgp->global->afi_safis->afi_safi.append(move(afi_safi));
 
     auto neighbor = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
     neighbor->neighbor_address = "6.7.8.9";
@@ -66,7 +66,7 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
     neighbor->config->peer_group = "IBGP";
     neighbor->config->peer_type = "INTERNAL";
     neighbor->parent = bgp->neighbors.get();
-    bgp->neighbors->neighbor.push_back(move(neighbor));
+    bgp->neighbors->neighbor.append(move(neighbor));
 
     auto peer_group = make_unique<openconfig_bgp::Bgp::PeerGroups::PeerGroup>();
     peer_group->peer_group_name = "IBGP";
@@ -77,7 +77,7 @@ void config_bgp(openconfig_bgp::Bgp* bgp)
     peer_group->config->local_as = 65001;
     peer_group->config->peer_type = "INTERNAL";
     peer_group->parent = bgp->peer_groups.get();
-    bgp->peer_groups->peer_group.push_back(move(peer_group));
+    bgp->peer_groups->peer_group.append(move(peer_group));
 }
 
 TEST_CASE("bgp_create_delete")
@@ -117,12 +117,17 @@ TEST_CASE("bgp_read_delete")
     REQUIRE(*(bgp_read_ptr) == *(bgp_set));
 
     CHECK(bgp_set->global->config->as == bgp_read_ptr->global->config->as);
-    CHECK(bgp_set->neighbors->neighbor[0]->neighbor_address == bgp_read_ptr->neighbors->neighbor[0]->neighbor_address);
-    CHECK(bgp_set->neighbors->neighbor[0]->config->local_as == bgp_read_ptr->neighbors->neighbor[0]->config->local_as);
-    CHECK(bgp_set->global->afi_safis->afi_safi[0]->afi_safi_name == bgp_read_ptr->global->afi_safis->afi_safi[0]->afi_safi_name);
-    CHECK(bgp_set->global->afi_safis->afi_safi[0]->config->afi_safi_name == bgp_read_ptr->global->afi_safis->afi_safi[0]->config->afi_safi_name);
+    auto set_neighbor  = dynamic_cast<openconfig_bgp::Bgp::Neighbors::Neighbor*> (bgp_set->neighbors->neighbor[0].get());
+    auto read_neighbor = dynamic_cast<openconfig_bgp::Bgp::Neighbors::Neighbor*> (bgp_read_ptr->neighbors->neighbor[0].get());
+    CHECK(set_neighbor->neighbor_address == read_neighbor->neighbor_address);
+    CHECK(set_neighbor->config->local_as == read_neighbor->config->local_as);
 
-    reply = reply && (bgp_set->global->afi_safis->afi_safi[0]->config->enabled  == bgp_read_ptr->global->afi_safis->afi_safi[0]->config->enabled);
+    auto set_afi_safi  = dynamic_cast<openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi*> (bgp_set->global->afi_safis->afi_safi[0].get());
+    auto read_afi_safi = dynamic_cast<openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi*> (bgp_read_ptr->global->afi_safis->afi_safi[0].get());
+    CHECK(set_afi_safi->afi_safi_name == read_afi_safi->afi_safi_name);
+    CHECK(set_afi_safi->config->afi_safi_name == read_afi_safi->config->afi_safi_name);
+
+    reply = reply && (set_afi_safi->config->enabled  == read_afi_safi->config->enabled);
     REQUIRE(reply);
 
     cout<<*bgp_set<<endl<<endl;
@@ -258,14 +263,14 @@ TEST_CASE("bgp_read_non_top")
     d->neighbor_address = "1.2.3.4";
     d->config->neighbor_address = "1.2.3.4";
     d->parent = bgp_set->neighbors.get();
-    bgp_set->neighbors->neighbor.push_back(move(d));
+    bgp_set->neighbors->neighbor.append(move(d));
     auto q = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
     q->neighbor_address = "1.2.3.5";
     q->config->neighbor_address = "1.2.3.5";
     // need to set parent pointer explicitly, otherwise the equal operator
     // uses absolute path for entity without parent, and fails.
     q->parent = bgp_set->neighbors.get();
-    bgp_set->neighbors->neighbor.push_back(move(q));
+    bgp_set->neighbors->neighbor.append(move(q));
     reply = crud.create(provider, *bgp_set);
     REQUIRE(reply);
 
@@ -295,7 +300,7 @@ TEST_CASE("oc_platform")
     comp->name = "test";
     comp->config->name = "test";
     comp->transceiver->config->enabled = true;
-    comps.component.push_back(comp);
+    comps.component.append(comp);
     reply = crud.update(provider, comps);
     REQUIRE(reply);
 
@@ -304,8 +309,10 @@ TEST_CASE("oc_platform")
     REQUIRE(data != nullptr);
     openconfig_platform::Components * comp_r = dynamic_cast<openconfig_platform::Components*>(data.get());
     REQUIRE(comp_r != nullptr);
-    REQUIRE(comp_r->component[0]->name == comp->name);
-    REQUIRE(comp_r->component[0]->config->name == comp->config->name);
+
+    auto read_comp = dynamic_cast<openconfig_platform::Components::Component*> (comp_r->component[0].get());
+    REQUIRE(read_comp->name == comp->name);
+    REQUIRE(read_comp->config->name == comp->config->name);
 
     reply = crud.delete_(provider, fil);
     REQUIRE(reply);

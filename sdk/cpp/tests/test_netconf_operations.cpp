@@ -112,11 +112,11 @@ TEST_CASE("test_create")
 
     e_1->parent = r_1->one_list.get();
     e_1->yfilter = YFilter::create;
-    r_1->one_list->ldata.push_back(move(e_1));
+    r_1->one_list->ldata.append(move(e_1));
 
     e_2->parent = r_1->one_list.get();
     e_2->yfilter = YFilter::create;
-    r_1->one_list->ldata.push_back(move(e_2));
+    r_1->one_list->ldata.append(move(e_2));
 
     reply = crud.update(provider, *r_1);
     REQUIRE(reply);
@@ -146,11 +146,11 @@ TEST_CASE("test_delete")
 
     e_1->parent = r_1->one_list.get();
     e_1->yfilter = YFilter::create;
-    r_1->one_list->ldata.push_back(move(e_1));
+    r_1->one_list->ldata.append(move(e_1));
 
     e_2->parent = r_1->one_list.get();
     e_2->yfilter = YFilter::create;
-    r_1->one_list->ldata.push_back(move(e_2));
+    r_1->one_list->ldata.append(move(e_2));
 
     reply = crud.update(provider, *r_1);
     REQUIRE(reply);
@@ -162,7 +162,7 @@ TEST_CASE("test_delete")
     e_1->parent = r_1->one_list.get();
     e_1->number = 1;
     e_1->yfilter = YFilter::delete_;
-    r_1->one_list->ldata.push_back(move(e_1));
+    r_1->one_list->ldata.append(move(e_1));
 
     reply = crud.update(provider, *r_1);
     REQUIRE(reply);
@@ -174,7 +174,7 @@ TEST_CASE("test_delete")
     e_1->parent = r_1->one_list.get();
     e_1->number = 1;
     e_1->yfilter = YFilter::delete_;
-    r_1->one_list->ldata.push_back(move(e_1));
+    r_1->one_list->ldata.append(move(e_1));
     CHECK_THROWS_AS(crud.update(provider, *r_1), YServiceProviderError);
 }
 

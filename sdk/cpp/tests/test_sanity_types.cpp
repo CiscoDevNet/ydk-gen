@@ -14,8 +14,9 @@
  limitations under the License.
  ------------------------------------------------------------------*/
 
-#include <string.h>
 #include <iostream>
+#include <sstream>
+#include <string.h>
 
 #include "ydk/netconf_provider.hpp"
 #include "ydk/crud_service.hpp"
@@ -718,7 +719,7 @@ TEST_CASE("test_capital_letters")
     gigabit_eth->parent = native->interface.get();
     gigabit_eth->name = "test";
 
-    native->interface->gigabitethernet.push_back(gigabit_eth);
+    native->interface->gigabitethernet.append(gigabit_eth);
     reply = crud.create(provider, *native);
     REQUIRE(reply);
 
@@ -728,4 +729,58 @@ TEST_CASE("test_capital_letters")
     REQUIRE(read_entity_wrapper != nullptr);
     ydktest_sanity::Native *read_entity = dynamic_cast<ydktest_sanity::Native*>(read_entity_wrapper.get());
     REQUIRE(*native == *read_entity);
+}
+
+static string vector_to_string(vector<string> & string_vector)
+{
+    ostringstream buf;
+    for (auto item : string_vector) {
+        if (buf.str().length() > 0)
+            buf << ", ";
+        buf << "\"" << item << "\"";
+    }
+    return buf.str();
+}
+
+TEST_CASE("test_ylist_two_keys") {
+	auto runner = make_shared<ydktest_sanity::Runner>();
+	auto l1 = make_shared<ydktest_sanity::Runner::TwoKeyList> (); l1->first = "f1"; l1->second = 11;
+	auto l2 = make_shared<ydktest_sanity::Runner::TwoKeyList> (); l2->first = "f2"; l2->second = 22;
+	runner->two_key_list.extend({l1, l2});
+
+	auto ldataKeys = runner->two_key_list.keys();
+	REQUIRE(vector_to_string(ldataKeys) == R"("f1,11", "f2,22")");
+
+	string count{};
+	for (auto lkey : ldataKeys) {
+		auto ent = runner->two_key_list[lkey];
+		REQUIRE(ent != nullptr);
+		auto ldata = dynamic_cast<ydktest_sanity::Runner::TwoKeyList*> (ent.get());
+		count += ldata->first;
+	}
+	REQUIRE(count == "f1f2");
+
+	auto ent = runner->two_key_list["f2,22"];
+	REQUIRE(ent != nullptr);
+	auto ldata = dynamic_cast<ydktest_sanity::Runner::TwoKeyList*> (ent.get());
+    count = ldata->first;
+	REQUIRE("f2" == count);
+}
+
+TEST_CASE("test_ylist_no_keys") {
+	auto runner = make_shared<ydktest_sanity::Runner>();
+	auto t1 = make_shared<ydktest_sanity::Runner::NoKeyList> (); t1->test = "t1";
+	auto t2 = make_shared<ydktest_sanity::Runner::NoKeyList> (); t2->test = "t2";
+	auto t3 = make_shared<ydktest_sanity::Runner::NoKeyList> (); t3->test = "t3";
+	runner->no_key_list.extend({t1, t2, t3});
+
+	auto testKeys = runner->no_key_list.keys();
+	REQUIRE(vector_to_string(testKeys) == R"("0", "1", "2")");
+
+	string count{};
+	for (auto ent : runner->no_key_list.entities()) {
+		auto elem = dynamic_cast<ydktest_sanity::Runner::NoKeyList*> (ent.get());
+		count += elem->test;
+	}
+	REQUIRE(count == "t1t2t3");
 }

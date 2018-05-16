@@ -76,7 +76,7 @@ TEST_CASE("CreateODL")
     //  afi_safi->config->afi_safi_name = openconfig_bgp_types::L3VPNIPV4UNICAST();
     //  afi_safi->config->enabled = false;
     //  afi_safi->parent = bgp->global->afi_safis.get();
-    //  bgp->global->afi_safis->afi_safi.push_back(move(afi_safi));
+    //  bgp->global->afi_safis->afi_safi.append(move(afi_safi));
 
     auto neighbor = make_unique<openconfig_bgp::Bgp::Neighbors::Neighbor>();
     neighbor->neighbor_address = "6.7.8.9";
@@ -87,7 +87,7 @@ TEST_CASE("CreateODL")
     //neighbor->config->peer_type = "INTERNAL";
     //neighbor->config->remove_private_as = openconfig_bgp_types::PRIVATEASREMOVEALL();
     neighbor->parent = bgp->neighbors.get();
-    bgp->neighbors->neighbor.push_back(move(neighbor));
+    bgp->neighbors->neighbor.append(move(neighbor));
 
     auto peer_group = make_unique<openconfig_bgp::Bgp::PeerGroups::PeerGroup>();
     peer_group->peer_group_name = "IBGP";
@@ -99,7 +99,7 @@ TEST_CASE("CreateODL")
     //peer_group->config->peer_type = "INTERNAL";
     //peer_group->config->remove_private_as = openconfig_bgp_types::PRIVATEASREMOVEALL();
     peer_group->parent = bgp->peer_groups.get();
-    bgp->peer_groups->peer_group.push_back(move(peer_group));
+    bgp->peer_groups->peer_group.append(move(peer_group));
 
     auto & prov = provider.get_node_provider("xr");
     bool result = crud.create(prov, *bgp);

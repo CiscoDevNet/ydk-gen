@@ -37,7 +37,7 @@ The C++ types present in ydk namespace corresponding to YANG types. See below fo
 
 
 YANG container and list
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. cpp:class:: ydk::Entity
 
@@ -47,20 +47,73 @@ YANG container and list
 
         Optional attribute of the Entity class which can be set to perform various :cpp:class:`filtering<YFilter>`
 
-YANG leaf and leaf-list
-~~~~~~~~~~~~~~~~~~~~~~~~
+YANG leaf, list and leaf-list
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. cpp:class:: ydk::YLeaf
 
-    Concrete class that represents a YANG leaf to which data can be assigned.
+    Concrete class that represents a YANG leaf, to which data can be assigned.
 
     .. cpp:member:: YFilter filter
 
         Optional attribute of the YLeaf class which can be set to perform various :cpp:class:`filtering<YFilter>`
 
+.. cpp:class:: ydk::YList
+
+    Concrete class that represents a YANG list. The class implements ordered dictionary, which can be accessed by item number or key value. The key value is calculated internally based on YLeaf key values for the entity.
+
+    .. cpp:function:: YList(std::initializer_list<std::string> key_names)
+
+        Constructs an instance of the `YList`.
+
+        :param key_names: list of strings, which represent names of keys for the list entities, including empty list.
+        
+    .. cpp:function:: std::shared_ptr<Entity> operator [] (const std::string& key) const
+
+        Gets `YList` entity, which has matching `key` value.
+
+        :param key: ``strings``, which represent list entity key(s).
+        :return: ``std::shared_ptr<Entity>`` for the found entity, nullptr - otherwise.
+        
+    .. cpp:function:: std::shared_ptr<Entity> operator [] (const std::size_t item) const
+
+        Gets `YList` element, which has sequence number `item`. The sequence is defined by the order in which the entity was added to the list.
+
+        :param key: ``std::size_t``, which represents entity sequential number in the list (starts from 0).
+        :return: ``std::shared_ptr<Entity>`` for the found entity.
+        :raises: `YInvalidArgumentError` exception if `item` value is out of bounds.
+        
+    .. cpp:function:: void append(std::shared_ptr<Entity> ep)
+
+        Adds entity to the list.
+
+        :param ep: ``std::shared_ptr<Entity>``, which represents list entity.
+        
+    .. cpp:function:: void extend(std::initializer_list<std::shared_ptr<Entity>> ep_list)
+
+        Adds multiple entities to the list.
+
+        :param ep: ``std::initializer_list<std::shared_ptr<Entity>>``, which represents list of entities to be appended to the YList.
+        
+    .. cpp:function:: std::vector<std::string> keys() const
+
+        Gets key values for all entities in the list.
+
+        :return: ``std::vector<std::string>``.
+        
+    .. cpp:function:: std::vector<std::shared_ptr<Entity>> entities() const
+
+        Gets vector of all entities in the list in order, in which they were added.
+
+        :return: ``std::vector<std::shared_ptr<Entity>>``.
+        
+    .. cpp:function:: std::size_t len() const
+
+        Returns size of the list.
+
 .. cpp:class:: YLeafList
 
-    Concrete class that represents a YANG leaf-list to which multiple instances of data can be appended to.
+    Concrete class that represents a YANG leaf-list, to which multiple instances of data can be appended to.
 
     .. cpp:member:: YFilter filter
 
@@ -98,14 +151,14 @@ Examples of instantiating and using objects of :cpp:class:`Entity<Entity>` type 
   :linenos:
 
   // Instantiate a bgp smart pointer object representing the bgp container from the openconfig-bgp YANG model
-  auto bgp = std::make_unique<ydk::openconfig_bgp::Bgp>();
+  auto bgp = std::make_shared<ydk::openconfig_bgp::Bgp>();
 
-  // Instantiate an af-safi object representing the af-safi list from the openconfig-bgp YANG model
-  auto afi_safi = make_unique<ydk::openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi>();
-  // Set afi-safis as the parent of the list instance
+  // Instantiate an af-safi object representing the afi-safi list from the openconfig-bgp YANG model
+  auto afi_safi = make_shared<ydk::openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi>();
   afi_safi->parent = bgp->global->afi_safis.get();
-  //Append the list instance to afi-safis's afi-safi field
-  bgp->global->afi_safis->afi_safi.push_back(std::move(afi_safi));
+  
+  // Append the afi-safi to the YList instance
+  bgp->global->afi_safis->afi_safi.append(afi_safi);
 
 Examples of assigning values to leafs are shown below
 
@@ -113,15 +166,19 @@ Examples of assigning values to leafs are shown below
   :linenos:
 
   // Assign values to leafs of various types
-
   bgp->global->config->as = 65172; // uint32
   bgp->global->config->router_id = "1.2.3.4"; //ip-address
+  
   afi_safi->afi_safi_name = L3VpnIpv4Unicast(); //identityref
   afi_safi->config->enabled = false; //boolean
+  
   neighbor->config->peer_type = PeerType::INTERNAL // enum
+  
   Decimal64 deci{"1.2"};
   node->decimal_value = deci; //decimal64
+  
   node->empty_value = Empty(); // empty
+  
   node->bits_value["first-position"] = true // bits
   node->bits_value["second-position"] = false // bits
 
@@ -131,7 +188,6 @@ Examples of appending values to leaf-lists are shown below
   :linenos:
 
   // Append values to leaf-lists of various types
-
   config->as_list.append(65172); // uint32
   config->router_id.append("1.2.3.4"); //ip-address
   L3VpnIpv4Unicast id{}; //identityref
@@ -145,3 +201,23 @@ Examples of appending values to leaf-lists are shown below
   bits_value["first-position"] = true; // bits
   bits_value["first-position"] = false; // bits
   node->bits_values.append(bits_value); // bits
+  
+
+Example of accessing YList entities
+
+.. code-block:: c++
+  :linenos:
+
+  // Access by entity order
+  for (auto ent : bgp->global->afi_safis->afi_safi.entities()) {
+      auto afi_safi = dynamic_cast<ydk::openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi*> (ent.get());
+      //Access afi_safi members
+  }
+  
+  // Access by entity key value
+  for (auto key : bgp->global->afi_safis->afi_safi.keys()) {
+      auto ent = bgp->global->afi_safis->afi_safi[key];
+      auto afi_safi = dynamic_cast<ydk::openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi*> (ent.get());
+      //Access afi_safi members
+  }
+  
