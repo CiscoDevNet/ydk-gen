@@ -474,16 +474,22 @@ ydk::path::RepositoryPtr::load_module(ly_ctx* ctx, const std::string& module, co
 
     auto p = ly_ctx_get_module(ctx, module.c_str(), revision.empty() ? NULL : revision.c_str(), 1);
 
-    if(!p)
-    {
-        p = ly_ctx_load_module(ctx, module.c_str(), revision.empty() ? NULL : revision.c_str());
-    } else {
-        YLOG_DEBUG("Cache hit Module '{}' Revision '{}'", module, revision);
-        new_module = false;
-    }
-
     if (!p) {
-        YLOG_WARN("Unable to parse module: '{}'. This model cannot be used with YDK", module);
+        p = ly_ctx_load_module(ctx, module.c_str(), revision.empty() ? NULL : revision.c_str());
+        if (!p) {
+            YLOG_WARN("Unable to parse module '{}'. This model cannot be used with YDK", module);
+        }
+    }
+    else {
+        const struct lys_node *last = nullptr;
+        auto q = lys_getnext(last, nullptr, p, 0);
+        if (q && q->priv) {
+            YLOG_DEBUG("The module '{}' schema has already been populated in YDK repository", module);
+            new_module = false;
+        }
+        else {
+            YLOG_DEBUG("The module '{}' schema present in Libyang repository, but not in YDK; consider populate", module);
+        }
     }
 
     for (auto f : features) {

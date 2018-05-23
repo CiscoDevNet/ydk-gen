@@ -150,10 +150,10 @@ Examples of instantiating and using objects of :cpp:class:`Entity<Entity>` type 
 .. code-block:: c++
   :linenos:
 
-  // Instantiate a bgp smart pointer object representing the bgp container from the openconfig-bgp YANG model
+  // Instantiate a shared pointer object representing the BGP container from the openconfig-bgp YANG model
   auto bgp = std::make_shared<ydk::openconfig_bgp::Bgp>();
 
-  // Instantiate an af-safi object representing the afi-safi list from the openconfig-bgp YANG model
+  // Instantiate a shared pointer object representing the afi-safi list member from the openconfig-bgp YANG model
   auto afi_safi = make_shared<ydk::openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi>();
   afi_safi->parent = bgp->global->afi_safis.get();
   

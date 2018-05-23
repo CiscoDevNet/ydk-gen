@@ -62,7 +62,7 @@ function install_fpm {
 
 install_dependencies
 install_confd
-install_fpm
+#install_fpm
 
 sudo easy_install pip
 sudo pip install virtualenv

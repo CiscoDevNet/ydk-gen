@@ -328,3 +328,50 @@ TEST_CASE("ietf_get_rpc")
         cout << "Exception while executing RPC: " << ex.what() << endl;
     }
 }
+
+TEST_CASE("get_openconfig_interfaces_and_bgp")
+{
+    NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
+    ydk::path::RootSchemaNode& schema = provider.get_session().get_root_schema();
+
+    // Add BGP and interface configuration
+    auto & bgp = schema.create_datanode("openconfig-bgp:bgp");
+    bgp.create_datanode("global/config/as", "65172");
+    bgp.create_datanode("global/config/router-id", "1.2.3.4");
+
+    auto & interfaces = schema.create_datanode("openconfig-interfaces:interfaces");
+    interfaces.create_datanode("interface[name='GigabitEthernet0/0/0/2']/config/name", "GigabitEthernet0/0/0/2");
+    interfaces.create_datanode("interface[name='GigabitEthernet0/0/0/2']/config/type", "iana-if-type:ethernetCsmacd");
+
+    ydk::path::Codec s {};
+    auto xml = s.encode(bgp, ydk::EncodingFormat::XML, true);
+    xml += s.encode(interfaces, ydk::EncodingFormat::XML, true);
+
+    std::shared_ptr<ydk::path::Rpc> edit_rpc { schema.create_rpc("ietf-netconf:edit-config") };
+    edit_rpc->get_input_node().create_datanode("target/running");
+    edit_rpc->get_input_node().create_datanode("config", xml);
+
+    auto edit_result = (*edit_rpc)(provider.get_session());
+    REQUIRE(edit_result == nullptr);
+
+    std::shared_ptr<ydk::path::Rpc> read_rpc { schema.create_rpc("ietf-netconf:get-config") };
+    read_rpc->get_input_node().create_datanode("source/running");
+
+    // Build filter and read configuration
+    openconfig_interfaces::Interfaces interfaces_filter{};
+    openconfig_bgp::Bgp bgp_filter{};
+
+    std::string filter_string = get_xml_subtree_filter_payload(bgp_filter, provider);
+    filter_string += "\n" + get_xml_subtree_filter_payload(interfaces_filter, provider);
+
+    read_rpc->get_input_node().create_datanode("filter", filter_string);
+
+    auto read_result = (*read_rpc)(provider.get_session());
+    REQUIRE(read_result != nullptr);
+
+    // Print configuration
+    auto data_nodes = read_result->get_children();
+    for (auto dn : data_nodes) {
+        print_data_node(dn);
+    }
+}

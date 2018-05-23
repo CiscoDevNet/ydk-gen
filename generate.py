@@ -79,7 +79,7 @@ def update_setup_file_version(language, ydk_root):
             fd.writelines(lines)
 
 
-def print_about_page(ydk_root, py_api_doc_gen, release):
+def print_about_page(ydk_root, docs_rst_directory, release):
     repo = Repo(ydk_root)
     url = repo.remote().url.split('://')[-1].split('.git')[0]
     commit_id = str(repo.head.commit)
@@ -107,7 +107,7 @@ def print_about_page(ydk_root, py_api_doc_gen, release):
         lines = lines.replace('language-version', lang)
     if 'code-block-language' in lines:
         lines = lines.replace('code-block-language', code_block_language)
-    with open(os.path.join(py_api_doc_gen, 'about_ydk.rst'), 'w+') as fd:
+    with open(os.path.join(docs_rst_directory, 'about_ydk.rst'), 'w+') as fd:
         fd.write(lines)
 
 
@@ -145,45 +145,54 @@ def copy_docs_from_bundles(output_directory, destination_dir):
     os.remove(backup_index_file)
 
 
+def copy_files_to_cache(output_root_directory, language, docs_rst_directory):
+    original_cache_dir = os.path.join(output_root_directory, 'cache', language, 'ydk', 'docsgen')
+    cache_dir = os.path.join(output_root_directory, 'cache-gen')
+    shutil.rmtree(cache_dir, ignore_errors=True)
+    logger.debug("Copying cache dir '%s' to '%s'" % (original_cache_dir, cache_dir))
+    shutil.copytree(original_cache_dir, cache_dir)
+    file_count = 0
+    logger.debug("Looking at cache dir '%s'" % (cache_dir))
+    for f in os.listdir(docs_rst_directory):
+        if f.endswith('.rst'):
+            basename = os.path.basename(f)
+            cache_file = os.path.join(cache_dir, basename)
+            fp = os.path.join(docs_rst_directory, f)
+            logger.debug("Comparing files '%s', '%s'" % (fp, cache_file))
+            if os.path.isfile(fp) == False:
+                if os.path.isfile(cache_file):
+                    os.remove(cache_file)
+                    logger.debug("Deleting orphan %s from cache" % (cache_file))
+            elif os.path.isfile(cache_file) == False or filecmp.cmp(fp, cache_file) == False:
+                shutil.copy2(fp, cache_file)
+                logger.debug("Copying non-existent or different file %s to %s" % (fp, cache_file))
+                file_count += 1
+
+    logger.debug("\n%s files copied\n" % file_count)
+    docs_rst_directory = cache_dir
+    docs_expanded_directory = os.path.join(output_root_directory, 'cache', language, 'ydk', 'docs_expanded')
+    return (docs_rst_directory, docs_expanded_directory)
+
+
 def generate_documentations(output_directory, ydk_root, language, is_bundle, is_core,
                             output_directory_contains_cache, output_root_directory):
     print('\nBuilding docs using sphinx-build...\n')
-    py_api_doc_gen = os.path.join(output_directory, 'docsgen')
-    py_api_doc = os.path.join(output_directory, 'docs_expanded')
+    docs_rst_directory = os.path.join(output_directory, 'docsgen')
+    docs_expanded_directory = os.path.join(output_directory, 'docs_expanded')
     # if it is package type
     rv, _ = get_release(ydk_root)
     release = 'release=%s' % rv
     version = 'version=%s' % rv
-    os.mkdir(py_api_doc)
+    os.mkdir(docs_expanded_directory)
 
     if not is_bundle:
-        print_about_page(ydk_root, py_api_doc_gen, rv)
+        print_about_page(ydk_root, docs_rst_directory, rv)
 
     if is_core:
-        copy_docs_from_bundles(output_directory, py_api_doc_gen)
+        copy_docs_from_bundles(output_directory, docs_rst_directory)
 
     if is_core and output_directory_contains_cache:
-        cache_dir = os.path.join(output_root_directory, 'cache', language, 'ydk', 'docsgen')
-        file_count = 0
-        logger.debug("Looking at cache dir '%s'" % (cache_dir))
-        for f in os.listdir(py_api_doc_gen):
-            if f.endswith('.rst'):
-                basename = os.path.basename(f)
-                cache_file = os.path.join(cache_dir, basename)
-                fp = os.path.join(py_api_doc_gen, f)
-                logger.debug("Comparing files '%s', '%s'" % (fp, cache_file))
-                if os.path.isfile(fp) == False:
-                    if os.path.isfile(cache_file):
-                        os.remove(cache_file)
-                        logger.debug("Deleting orphan %s from cache" % (cache_file))
-                elif os.path.isfile(cache_file) == False or filecmp.cmp(fp, cache_file) == False:
-                    shutil.copy2(fp, cache_file)
-                    logger.debug("Copying non-existent or different file %s to %s" % (fp, cache_file))
-                    file_count += 1
-
-        logger.debug("\n%s files copied\n" % file_count)
-        py_api_doc_gen = cache_dir
-        py_api_doc = os.path.join(output_root_directory, 'cache', language, 'ydk', 'docs_expanded')
+        docs_rst_directory, docs_expanded_directory = copy_files_to_cache(output_root_directory, language, docs_rst_directory)
 
     # build docs
     if is_core:
@@ -191,20 +200,20 @@ def generate_documentations(output_directory, ydk_root, language, is_bundle, is_
                               '-D', release,
                               '-D', version,
                               '-vvv',
-                              py_api_doc_gen, py_api_doc])))
+                              docs_rst_directory, docs_expanded_directory])))
         p = subprocess.Popen(['sphinx-build',
                               '-D', release,
                               '-D', version, '-vvv',
-                              py_api_doc_gen, py_api_doc],
+                              docs_rst_directory, docs_expanded_directory],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     else:
         logger.debug("Invoking '%s'" % (['sphinx-build',
                               '-vvv',
-                              py_api_doc_gen, py_api_doc]))
+                              docs_rst_directory, docs_expanded_directory]))
         p = subprocess.Popen(['sphinx-build',
                               '-vvv',
-                              py_api_doc_gen, py_api_doc],
+                              docs_rst_directory, docs_expanded_directory],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()

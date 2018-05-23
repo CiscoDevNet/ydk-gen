@@ -59,4 +59,4 @@ function install_fpm {
 ./test/dependencies_centos_basic.sh
 install_confd
 install_openssl
-install_fpm
+#install_fpm
