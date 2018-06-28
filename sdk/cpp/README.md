@@ -66,39 +66,39 @@ $ xcode-select --install
 ##### Ubuntu (Debian-based)
 You can install the latest `libydk` `core` package using prebuilt binaries:
 ```
-$ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.1/libydk_0.7.1-1_amd64.deb
-$ sudo gdebi libydk_0.7.1-1_amd64.deb
+$ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.2/libydk_0.7.2-1_amd64.deb
+$ sudo gdebi libydk_0.7.2-1_amd64.deb
 ```
 To install the `ietf` package using prebuilt binaries:
 ```
-$ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.1/libydk-ietf_0.1.3-1_amd64.deb
+$ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.2/libydk-ietf_0.1.3-1_amd64.deb
 $ sudo gdebi libydk-ietf_0.1.3-1_amd64.deb
 ```
-Similarly other model bundle packages listed [here](http://devhub.cisco.com/artifactory/webapp/#/artifacts/browse/tree/General/debian-ydk/0.7.1) can be installed.
+Similarly other model bundle packages listed [here](http://devhub.cisco.com/artifactory/webapp/#/artifacts/browse/tree/General/debian-ydk/0.7.2) can be installed.
 
 ##### Centos (Fedora-based)
 You can install the latest `libydk` `core` package using prebuilt binaries:
 ```
-$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.1/libydk-0.7.1-1.x86_64.rpm
+$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.2/libydk-0.7.2-1.x86_64.rpm
 ```
 To install the `ietf` package using prebuilt binaries:
 ```
-$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.1/libydk-ietf-0.1.3-1.x86_64.rpm
+$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.2/libydk-ietf-0.1.3-1.x86_64.rpm
 ```
-Similarly other model bundle packages listed [here](http://devhub.cisco.com/artifactory/webapp/#/artifacts/browse/tree/General/rpm-ydk/0.7.1) can be installed.
+Similarly other model bundle packages listed [here](http://devhub.cisco.com/artifactory/webapp/#/artifacts/browse/tree/General/rpm-ydk/0.7.2) can be installed.
 
 #### macOS  
 You can install the latest `libydk` `core` package using prebuilt binaries:
 ```
-$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.1/libydk-0.7.1-Darwin.pkg
-$ sudo installer -pkg libydk-0.7.1-Darwin.pkg -target /
+$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.2/libydk-0.7.2-Darwin.pkg
+$ sudo installer -pkg libydk-0.7.2-Darwin.pkg -target /
 ```
 To install the `ietf` package using prebuilt binaries:
 ```
-$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.1/libydk-ietf-0.1.3-Darwin.pkg
+$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.2/libydk-ietf-0.1.3-Darwin.pkg
 $ sudo installer -pkg libydk-ietf-0.1.3-Darwin.pkg -target /
 ```
-Similarly other model bundle packages listed [here](http://devhub.cisco.com/artifactory/webapp/#/artifacts/browse/tree/General/osx-ydk/0.7.1) can be installed.
+Similarly other model bundle packages listed [here](http://devhub.cisco.com/artifactory/webapp/#/artifacts/browse/tree/General/osx-ydk/0.7.2) can be installed.
 
 ####Installing from source
 #### Building YDK
@@ -152,4 +152,4 @@ $ build$ cd ../..
 - Additional YDK information can be found at [ydk.io](http://ydk.io)
 
 ## Release Notes
-The current YDK release version is 0.7.1 (alpha). YDK-Cpp is licensed under the Apache 2.0 License.
+The current YDK release version is 0.7.2 (alpha). YDK-Cpp is licensed under the Apache 2.0 License.

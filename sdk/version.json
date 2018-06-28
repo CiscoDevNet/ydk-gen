@@ -1,7 +1,7 @@
 {
-    "core": "0.7.2-dev",
-    "ietf": "0.1.5",
-    "openconfig": "0.1.5",
-    "cisco_ios_xr": "6.3.2",
-    "cisco_ios_xe": "16.8.1"
+    "core": "0.7.2",
+    "ietf": "0.1.5-post",
+    "openconfig": "0.1.6",
+    "cisco_ios_xr": "6.4.1",
+    "cisco_ios_xe": "16.8.1-post"
 }
