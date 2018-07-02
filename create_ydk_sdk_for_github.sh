@@ -20,7 +20,7 @@
 # ------------------------------------------------------------------
 
 function usage {
-    printf "\n    Usage: Use this script to create YDK repositories (ydk-py, ydk-go etc) hosted on github, generated using ydk-gen. Specify the language to create the SDK and the path to where the github SDK is cloned for\n\n      ./%s -l <[one of python (default)|cpp|go]> -s <PATH-TO-SDK (default: ../ydk-py)>\n\n" "$( basename "${BASH_SOURCE[0]}" )"
+    printf "\n    Usage: Use this script to create YDK repositories (ydk-py, ydk-go etc) hosted on github, generated using ydk-gen. Specify the language to create the SDK and the path to where the github SDK is cloned \n\n      ./%s -l <[one of python (default)|cpp|go]> -s <PATH-TO-SDK (default: ../ydk-py)>\n\n" "$( basename "${BASH_SOURCE[0]}" )"
 }
 
 function check_gen_api_directories {
@@ -28,7 +28,6 @@ GEN_API_CONTENTS=$(ls ${1})
 if [[ ${GEN_API_CONTENTS} != *"cisco_ios_xe-bundle"* ]] || [[ ${GEN_API_CONTENTS} != *"cisco_ios_xr-bundle"* ]] \
             || [[ ${GEN_API_CONTENTS} != *"openconfig-bundle"* ]] || [[ ${GEN_API_CONTENTS} != *"ietf-bundle"* ]] \
              || [[ ${GEN_API_CONTENTS} != *"ydk"* ]]; then
-    usage
     printf "\n    All packages have not been generated.\n\
         Please run './generate.py --${LANGUAGE} --bundle profile/bundles/<profile>.json' for all desired bundles.\n\
         Run './generate.py --${LANGUAGE} --core' for core\n\n"
@@ -48,6 +47,9 @@ function copy_bundle_packages {
 
     echo "Copying cisco-ios-xe from ${GEN_API_PATH}/cisco_ios_xe-bundle/ to ${SDK_PATH}"
     cp -r ${GEN_API_PATH}/cisco_ios_xe-bundle/* ${SDK_PATH}/cisco-ios-xe
+
+    echo "Copying cisco-ios-nx from ${GEN_API_PATH}/cisco_ios_nx-bundle/ to ${SDK_PATH}"
+    cp -r ${GEN_API_PATH}/cisco_ios_nx-bundle/* ${SDK_PATH}/cisco-ios-nx
 }
 
 function copy_readme {
@@ -63,7 +65,7 @@ function copy_gen_api_to_go_sdk {
 
 function clear_sdk_directories {
     echo "Clearing ${SDK_PATH} of existing files"
-    rm -rf ${SDK_PATH}/ietf/* ${SDK_PATH}/openconfig/* ${SDK_PATH}/cisco-ios-xr/* ${SDK_PATH}/cisco-ios-xe/*
+    rm -rf ${SDK_PATH}/ietf/* ${SDK_PATH}/openconfig/* ${SDK_PATH}/cisco-ios-xr/* ${SDK_PATH}/cisco-ios-xe/* ${SDK_PATH}/cisco-ios-nx/*
 }
 
 ########################## EXECUTION STARTS HERE #############################
@@ -110,13 +112,23 @@ SDK_STUB_PATH=$(pwd)/sdk/${LANGUAGE}
 
 check_gen_api_directories ${GEN_API_PATH}
 
-echo "Deleting docs directories"
-rm -rf ${GEN_API_PATH}/*/docsgen ${GEN_API_PATH}/*/docs_expanded
-
 if [[ ! -d ${SDK_PATH} ]]; then
     echo "SDK path '${SDK_PATH}' is invalid! Please provide a valid path to a cloned of the YDK github SDK repository\n"
     exit 1
 fi
+
+while true; do
+    printf "\n"
+    read -p "    About to delete docs directories. Do you wish to continue? " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) printf "\nExiting...\n\n";exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+printf "\nDeleting docs directories..\n\n"
+rm -rf ${GEN_API_PATH}/*/docsgen ${GEN_API_PATH}/*/docs_expanded
 
 echo "${LANGUAGE} being copied to ${SDK_PATH}"
 
@@ -131,8 +143,6 @@ if [[ ${LANGUAGE} == "cpp" ]]; then
 
     copy_readme md
 
-    echo "Please check ${SDK_PATH} and perform the git commit and push"
-
 elif [[ ${LANGUAGE} == "python" ]]; then
     clear_sdk_directories
     rm -rf ${SDK_PATH}/core/ydk/*
@@ -146,8 +156,6 @@ elif [[ ${LANGUAGE} == "python" ]]; then
     copy_bundle_packages
 
     copy_readme rst
-
-    echo "Please check ${SDK_PATH} and perform the git commit and push"
 
 elif [[ ${LANGUAGE} == "go" ]]; then
     echo "Clearing ${SDK_PATH} of existing files"
@@ -164,7 +172,9 @@ elif [[ ${LANGUAGE} == "go" ]]; then
     copy_gen_api_to_go_sdk openconfig-bundle
     copy_gen_api_to_go_sdk cisco_ios_xr-bundle
     copy_gen_api_to_go_sdk cisco_ios_xe-bundle
+    copy_gen_api_to_go_sdk cisco_ios_nx-bundle
     copy_readme md
 
-    echo "Please check ${SDK_PATH} and perform the git commit and push"
 fi
+
+printf "\n\n    Please check ${SDK_PATH} and perform the git commit and push\n\n"
