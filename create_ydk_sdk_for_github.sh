@@ -20,14 +20,14 @@
 # ------------------------------------------------------------------
 
 function usage {
-    printf "\n    Usage: Use this script to create YDK repositories (ydk-py, ydk-go etc) hosted on github, generated using ydk-gen. Specify the language to create the SDK and the path to where the github SDK is cloned \n\n      ./%s -l <[one of python (default)|cpp|go]> -s <PATH-TO-SDK (default: ../ydk-py)>\n\n" "$( basename "${BASH_SOURCE[0]}" )"
+    printf "\n    Usage: Use this script to create YDK repositories (ydk-py, ydk-go etc) hosted on github, generated using ydk-gen. Specify the language to create the SDK and the path to where the github SDK is cloned \n\n      ./%s -l <[one of python|cpp|go]> -s <PATH-TO-SDK>\n\n" "$( basename "${BASH_SOURCE[0]}" )"
 }
 
 function check_gen_api_directories {
-GEN_API_CONTENTS=$(ls ${1})
+GEN_API_CONTENTS=$(ls ${1} &> /dev/null)
 if [[ ${GEN_API_CONTENTS} != *"cisco_ios_xe-bundle"* ]] || [[ ${GEN_API_CONTENTS} != *"cisco_ios_xr-bundle"* ]] \
             || [[ ${GEN_API_CONTENTS} != *"openconfig-bundle"* ]] || [[ ${GEN_API_CONTENTS} != *"ietf-bundle"* ]] \
-             || [[ ${GEN_API_CONTENTS} != *"ydk"* ]]; then
+             || [[ ${GEN_API_CONTENTS} != *"cisco_nx_os-bundle"* ]] || [[ ${GEN_API_CONTENTS} != *"ydk"* ]]; then
     printf "\n    All packages have not been generated.\n\
         Please run './generate.py --${LANGUAGE} --bundle profile/bundles/<profile>.json' for all desired bundles.\n\
         Run './generate.py --${LANGUAGE} --core' for core\n\n"
@@ -72,34 +72,39 @@ function clear_sdk_directories {
 ######################################
 # Parse args
 ######################################
-LANGUAGE="python"
-SDK_PATH="../ydk-py"
-
-args=$(getopt hl:s: $*)
-eval set -- "${args}"
+LANGUAGE=0
+SDK_PATH=0
 
 # extract options and their arguments into variables.
-while true ; do
-     case "$1" in
-        -h)
-            usage
-            exit 0; shift ;;
-        -l)
-            case "$2" in
-                "") shift 2 ;;
-                *) LANGUAGE=$2; shift 2 ;;
-            esac ;;
-        -s)
-            case "$2" in
-                "") shift 2 ;;
-                *) SDK_PATH=$2 ;  shift 2 ;;
-            esac ;;
-        --) shift ; break ;;
-        *)
-            usage
-            exit 1; shift ;;
-     esac
+while getopts ":l:s:h" opt; do
+  case ${opt} in
+    l )
+      LANGUAGE=$OPTARG
+      ;;
+    s )
+      SDK_PATH=$OPTARG
+      ;;
+    h )
+      usage
+      exit 1
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      usage
+      exit 1
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      usage
+      exit 1
+      ;;
+  esac
 done
+
+if [[ ${LANGUAGE} == 0 ]] || [[ ${SDK_PATH} == 0 ]] ; then
+    usage
+    exit 1
+fi
 
 if [[ ${LANGUAGE} != "cpp" ]] && [[ ${LANGUAGE} != "python" ]] && [[ ${LANGUAGE} != "go" ]]; then
     echo "    Invalid language"
@@ -110,12 +115,12 @@ fi
 GEN_API_PATH=$(pwd)/gen-api/${LANGUAGE}
 SDK_STUB_PATH=$(pwd)/sdk/${LANGUAGE}
 
-check_gen_api_directories ${GEN_API_PATH}
-
 if [[ ! -d ${SDK_PATH} ]]; then
     echo "SDK path '${SDK_PATH}' is invalid! Please provide a valid path to a cloned of the YDK github SDK repository\n"
     exit 1
 fi
+
+check_gen_api_directories ${GEN_API_PATH}
 
 while true; do
     printf "\n"
