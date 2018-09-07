@@ -305,6 +305,7 @@ public:
     ///
     std::shared_ptr<DataNode> decode(RootSchemaNode & root_schema, const std::string& buffer, EncodingFormat format);
     std::shared_ptr<DataNode> decode_rpc_output(RootSchemaNode & root_schema, const std::string& buffer, const std:: string & rpc_path, EncodingFormat format);
+    std::shared_ptr<ydk::path::DataNode> decode_json_output(RootSchemaNode & root_schema, const std::vector<std::string> & buffer_list);
 };
 
 ///

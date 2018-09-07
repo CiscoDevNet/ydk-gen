@@ -190,14 +190,14 @@ These are how YANG types are represented in Go.
     according to the YANG model the list may have one or more keys, which uniquely identify list element, or may have no keys. The slices can be created and list elements can be accessed using standard Go functions and methods. \
     The YDK provides package `ylist` containing functions, which allow user access list elements by key or keys.
     
-    .. function:: Get(slice interface{}, keys ... interface{}) Entity
+    .. function:: Get(slice interface{}, keys ... interface{}) (int, Entity)
     
        Get list element (entity) by key or keys, if list element has more than one key
        
        :param slice: Slice variable, which is defined in the list holding entity
        :param keys:  Comma separated list of key values
-       :return: Element of the list, which has matching key(s) value(s).
-       :rtype: :ref:`Entity <types-entity>`
+       :return: Tuple of found element index and the element itself, which has matching key(s) value(s). If element is not found - (-1, nil).
+       :rtype: Tuple( `int`, :ref:`Entity <types-entity>`)
     
     .. function:: Keys(slice interface{}) []interface{} Entity
     

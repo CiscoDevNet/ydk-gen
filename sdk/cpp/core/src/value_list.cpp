@@ -376,4 +376,36 @@ YList::len() const
     return key_vector.size();
 }
 
+shared_ptr<Entity>
+YList::pop(const string& key)
+{
+    for (vector<string>::iterator it = key_vector.begin() ; it != key_vector.end(); ++it) {
+        if (*it == key) {
+            shared_ptr<Entity> found = entity_map[key];
+            entity_map.erase(key);
+            key_vector.erase(it);
+            return found;
+        }
+    }
+    return nullptr;
+}
+
+shared_ptr<Entity>
+YList::pop(const std::size_t item)
+{
+    if (item < key_vector.size()) {
+        vector<string>::iterator it = key_vector.begin();
+        for (size_t i = 0; i < item; i++) ++it;
+        shared_ptr<Entity> found = entity_map[*it];
+        entity_map.erase(*it);
+        key_vector.erase(it);
+        return found;
+    }
+    else {
+        YLOG_ERROR("Index value {} is out of range [0,{}]", item, key_vector.size());
+        throw(YInvalidArgumentError{"Index value is out of range"});
+    }
+    return nullptr;
+}
+
 }

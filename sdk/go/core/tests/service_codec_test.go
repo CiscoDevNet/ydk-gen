@@ -493,17 +493,17 @@ func (suite *CodecTestSuite) TestOneKeyList() {
 	configRunner(&runner)
 
 	// Get first level list element
-	ldata := ylist.Get(runner.TwoList.Ldata, 22)
+	_, ldata := ylist.Get(runner.TwoList.Ldata, 22)
 	suite.NotNil(ldata)
 	suite.Equal(types.EntityToString(ldata), "Type: *sanity.Runner_TwoList_Ldata, Path: ldata[number='22']")
 
 	// Try non-existant key
-	ldataNE := ylist.Get(runner.TwoList.Ldata, 222)
+	_, ldataNE := ylist.Get(runner.TwoList.Ldata, 222)
 	suite.Nil(ldataNE)
 
 	// Get second level list element
 	sublist := ldata.(*ysanity.Runner_TwoList_Ldata).Subl1
-	sublData:= ylist.Get(sublist, 221)
+	_, sublData:= ylist.Get(sublist, 221)
 	suite.NotNil(sublData)
 	suite.Equal(types.EntityToString(sublData), "Type: *sanity.Runner_TwoList_Ldata_Subl1, Path: subl1[number='221']")
 
@@ -512,9 +512,20 @@ func (suite *CodecTestSuite) TestOneKeyList() {
 	suite.Equal(len(sublistKeys), 2)
 	suite.Equal(fmt.Sprintf("%v", sublistKeys), "[221 222]")
 	for _, key := range sublistKeys {
-		entity := ylist.Get(sublist, key)
+		_, entity := ylist.Get(sublist, key)
 		suite.NotNil(entity)
 		ydk.YLogDebug(fmt.Sprintf("For key: %v, Found Entity: %v", key, types.EntityToString(entity)))
+	}
+	
+	// Remove element from the ylist
+	i, rdata := ylist.Get(runner.TwoList.Ldata, 22)
+	suite.Equal(i, 1)
+	suite.NotNil(rdata)
+	if rdata != nil {
+		runner.TwoList.Ldata = append(runner.TwoList.Ldata[:i], runner.TwoList.Ldata[i+1:]...)
+		suite.Equal(len(runner.TwoList.Ldata), 1)
+		i, rdata = ylist.Get(runner.TwoList.Ldata, 22)
+		suite.Nil(rdata)
 	}
 }
 

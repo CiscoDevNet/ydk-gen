@@ -367,6 +367,9 @@ class YList
     void extend(std::initializer_list<std::shared_ptr<Entity>> ep_list);
     std::string build_key(std::shared_ptr<Entity> ep);
 
+    std::shared_ptr<Entity> pop(const std::string& key);
+    std::shared_ptr<Entity> pop(const std::size_t item);
+
   private:
     std::vector<std::string> ylist_key_names;
     std::map<std::string,std::shared_ptr<Entity>> entity_map;

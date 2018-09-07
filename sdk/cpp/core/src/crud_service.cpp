@@ -183,44 +183,37 @@ execute_rpc(ydk::ServiceProvider & provider, vector<Entity*> & filter_list,
     if (rnd == nullptr)
         return result_list;
 
-    // Build mapping of entity path to entity; needed to calculate top_entity
-    map<string,Entity*> path_to_entity{};
-    for (Entity* entity : filter_list) {
-        string internal_key = "/" + entity->get_segment_path();
-        path_to_entity[internal_key] = entity;
+    // Build mapping of DataNode path to DataNode pointer.
+    // Use this mapping to retain order of filter list in results.
+    map<string,shared_ptr<path::DataNode>> path_to_datanode{};
+    for (auto dn : rnd->get_children()) {
+        string internal_key = dn->get_path().substr(1);
+        path_to_datanode[internal_key] = dn;
     }
 
-    // Return all children of the root node
-    vector<shared_ptr<path::DataNode>> data_nodes = rnd->get_children();
-    for (auto dn : data_nodes) {
-        string internal_key = dn->get_path();
-        Entity* entity;
-        if(path_to_entity.find(internal_key) == path_to_entity.end())
-        {
-            YLOG_DEBUG("Searching for filter using yang name: {}", internal_key);
-            bool found = false;
-            for(auto e:path_to_entity)
-            {
-                if(internal_key.find(e.second->yang_name) != string::npos)
-                {
-                    YLOG_DEBUG("Found filter entity: {}", e.second->yang_name);
-                    entity = e.second;
-                    found = true;
+    // Build resulting list of entities
+    for (Entity* entity : filter_list) {
+        string internal_key = entity->get_segment_path();
+        shared_ptr<path::DataNode> datanode = path_to_datanode[internal_key];
+        if (!datanode) {
+            YLOG_DEBUG("Searching for datanode using entity yang name '{}'", entity->yang_name);
+            path_to_datanode.erase(internal_key);
+            for (auto dn_entry : path_to_datanode) {
+                if (dn_entry.first.find(entity->yang_name) != string::npos && dn_entry.second) {
+                    datanode = dn_entry.second;
                     break;
                 }
             }
-            if(!found)
-            {
-                YLOG_ERROR("Could not find filter entity: {}", internal_key);
-                throw(YServiceProviderError{"Could not find filter entity " + internal_key});
-            }
         }
-        else
-        {
-            entity = path_to_entity[internal_key];
+        if (datanode) {
+            result_list.push_back( read_datanode(*entity, datanode));
         }
-        result_list.push_back( read_datanode(*entity, dn));
+        else { 
+            YLOG_DEBUG("CRUD read operation did not return data node on entity '{}'; returning nullptr.", internal_key);
+            result_list.push_back(nullptr);
+        }
     }
+
     return result_list;
 }
 

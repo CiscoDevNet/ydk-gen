@@ -190,13 +190,19 @@ Lets continue previous example to demonstrate, how user can access `rib.Vrfs.Vrf
         
         // Iterate over the VRF names
         for _, name := range allVrfNames {
-                iVrf := ylist.Get(rib.Vrfs.Vrf, name)
+                _, iVrf := ylist.Get(rib.Vrfs.Vrf, name)
                 if iVrf != nil {
                         eVrf := iVrf.(*ip_rib_ipv4_oper.Rib_Vrfs_Vrf)
                         fmt.Printf("VRF name: %v\n", eVrf.VrfName)
                 }
         }
         
+        // Remove specific VRF from the configuration
+        i, rVrf = ylist.Get(rib.Vrfs.Vrf, "vrf-to-remove")
+        if rVrf != nil {
+                rib.Vrfs.Vrf = append(rib.Vrfs.Vrf[:i], rib.Vrfs.Vrf[i+1:] ...)
+                crud.Update(&provider, &rib)
+        }
 
 Reading a leaf
 --------------

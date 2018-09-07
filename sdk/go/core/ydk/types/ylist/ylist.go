@@ -82,10 +82,10 @@ func toEntitySlice(slice interface{}) []types.Entity {
 	return ret
 }
 
-func Get(iSlice interface{}, keys ... interface{}) types.Entity {
+func Get(iSlice interface{}, keys ... interface{}) (int, types.Entity) {
 	eSlice := toEntitySlice(iSlice)
 	if len(keys) == 0 {
-		return nil
+		return -1, nil
 	}
 	var keyToCmp string
 	if reflect.ValueOf(keys[0]).Kind() == reflect.Slice {
@@ -93,16 +93,16 @@ func Get(iSlice interface{}, keys ... interface{}) types.Entity {
 	} else {
 		keyToCmp = keysToStr(keys)
 	}
-	for _, elem := range eSlice {
+	for i, elem := range eSlice {
 		keyList := buildKeyList(elem)
 		if len(keyList) > 0 {
 			key := keysToStr(keyList)
 			if key == keyToCmp {
-				return elem
+				return i, elem
 			}
 		}
 	}
-	return nil
+	return -1, nil
 }
 
 func Keys(iSlice interface{}) []interface{} {
@@ -121,3 +121,4 @@ func Keys(iSlice interface{}) []interface{} {
 	}
 	return keyList
 }
+

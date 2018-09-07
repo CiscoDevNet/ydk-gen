@@ -135,8 +135,10 @@ TEST_CASE("get_edit_copy_config")
 
     vector<Entity*> copy_config_list{};
     for (auto ent : get_config_list) {
-    	//print_entity(ent, provider.get_session().get_root_schema());
-        copy_config_list.push_back(ent.get());
+        if (ent) {
+            //print_entity(ent, provider.get_session().get_root_schema());
+            copy_config_list.push_back(ent.get());
+        }
     }
 
     // Copy config to candidate

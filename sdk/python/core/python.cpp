@@ -534,7 +534,9 @@ PYBIND11_MODULE(ydk_, ydk)
         .def("encode", (std::string (ydk::path::Codec::*)(std::vector<ydk::path::DataNode*>&, ydk::EncodingFormat, bool))
                 &ydk::path::Codec::encode, arg("data_node"), arg("encoding"), arg("pretty"))
         .def("decode", &ydk::path::Codec::decode, arg("root_schema_node"), arg("payload"), arg("encoding"))
-        .def("decode_rpc_output", &ydk::path::Codec::decode_rpc_output, arg("root_schema_node"), arg("payload"), arg("rpc_path"), arg("encoding"));
+        .def("decode_rpc_output", &ydk::path::Codec::decode_rpc_output, arg("root_schema_node"), arg("payload"), arg("rpc_path"), arg("encoding"))
+        .def("decode_json_output", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Codec::*)(ydk::path::RootSchemaNode&, const std::vector<std::string>&))
+        		&ydk::path::Codec::decode_json_output, arg("root_schema_node"), arg("buffer_list"));
 
     enum_<ydk::DataStore>(services, "Datastore")
         .value("candidate", ydk::DataStore::candidate)

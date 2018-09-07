@@ -463,21 +463,42 @@ TEST_CASE("test_ylist")
     auto keys = ylist_0.keys();
     REQUIRE(vector_to_string(keys) == R"("1000000", "1000001")");
 
+    auto ep = ylist_0.pop(1);
+    REQUIRE(ep != nullptr);
+    auto test_entity = dynamic_cast<TestEntity*> (ep.get());
+    REQUIRE(test_entity->name == test2->name);
+    REQUIRE(ylist_0.len() == 1);
+
+    ep = ylist_0.pop(0);
+    REQUIRE(ep != nullptr);
+    test_entity = dynamic_cast<TestEntity*> (ep.get());
+    REQUIRE(test_entity->name == test1->name);
+    REQUIRE(ylist_0.len() == 0);
+
     ylist_1.extend({test1, test2});
     REQUIRE(ylist_1.len() == 2);
 
     keys = ylist_1.keys();
     REQUIRE(vector_to_string(keys) == R"("test1", "test2")");
 
-    auto ep = ylist_1[0];
+    ep = ylist_1[0];
     REQUIRE(ep != nullptr);
-    auto test_entity = dynamic_cast<TestEntity*> (ep.get());
+    test_entity = dynamic_cast<TestEntity*> (ep.get());
     REQUIRE(test_entity->name == test1->name);
 
     ep = ylist_1["test2"];
     REQUIRE(ep != nullptr);
     test_entity = dynamic_cast<TestEntity*> (ep.get());
     REQUIRE(test_entity->name == test2->name);
+
+    ep = ylist_1.pop("test1");
+    REQUIRE(ep != nullptr);
+    REQUIRE(ylist_1.len() == 1);
+    test_entity = dynamic_cast<TestEntity*> (ep.get());
+    REQUIRE(test_entity->name == test1->name);
+
+    ep = ylist_1.pop("test1");
+    REQUIRE(ep == nullptr);
 }
 
 //TODO Test for issue #800 to be resolved

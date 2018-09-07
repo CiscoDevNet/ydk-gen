@@ -111,6 +111,21 @@ YANG leaf, list and leaf-list
 
         Returns size of the list.
 
+    .. cpp:function:: std::shared_ptr<Entity> pop(const std::string& key)
+
+        Removes from `YList` an entity, which has matching `key` value.
+
+        :param key: ``strings``, which represent list entity key(s).
+        :return: ``std::shared_ptr<Entity>`` for the removed entity, or nullptr matching `key` value is not found.
+        
+    .. cpp:function:: std::shared_ptr<Entity> pop(const std::size_t item)
+
+        Removes from `YList` an entity, which has sequence number `item`. The sequence number is defined by the order in which the entity was added to the list.
+
+        :param key: ``std::size_t``, which represents entity sequential number in the list (starts from 0).
+        :return: ``std::shared_ptr<Entity>`` for the found entity.
+        :raises: `YInvalidArgumentError` exception if `item` value is out of bounds.
+        
 .. cpp:class:: YLeafList
 
     Concrete class that represents a YANG leaf-list, to which multiple instances of data can be appended to.
@@ -145,7 +160,7 @@ YANG type
 Example usage
 ~~~~~~~~~~~~~~~
 
-Examples of instantiating and using objects of :cpp:class:`Entity<Entity>` type are shown below
+Examples of how to instantiate and use objects of :cpp:class:`Entity<Entity>` type:
 
 .. code-block:: c++
   :linenos:
@@ -160,7 +175,7 @@ Examples of instantiating and using objects of :cpp:class:`Entity<Entity>` type 
   // Append the afi-safi to the YList instance
   bgp->global->afi_safis->afi_safi.append(afi_safi);
 
-Examples of assigning values to leafs are shown below
+Examples of how to assign values to leafs:
 
 .. code-block:: c++
   :linenos:
@@ -182,7 +197,7 @@ Examples of assigning values to leafs are shown below
   node->bits_value["first-position"] = true // bits
   node->bits_value["second-position"] = false // bits
 
-Examples of appending values to leaf-lists are shown below
+Examples of how to append values to leaf-lists:
 
 .. code-block:: c++
   :linenos:
@@ -202,8 +217,7 @@ Examples of appending values to leaf-lists are shown below
   bits_value["first-position"] = false; // bits
   node->bits_values.append(bits_value); // bits
   
-
-Example of accessing YList entities
+Examples of how to access YList entities
 
 .. code-block:: c++
   :linenos:

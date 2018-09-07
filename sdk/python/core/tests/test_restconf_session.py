@@ -76,6 +76,39 @@ class SanityTest(unittest.TestCase):
         update_rpc(self.restconf_session)
 
 
+    def test_json_payload_list(self):
+        codec = Codec()
+        schema = self.restconf_session.get_root_schema()
+
+        json_int_payload = '''{
+  "openconfig-interfaces:interfaces": {
+    "interface": [
+      {
+        "name": "Loopback10",
+        "config": {
+          "name": "Loopback10"
+        }
+      }
+    ]
+  }
+}
+'''
+        json_bgp_payload = '''{
+  "openconfig-bgp:bgp": {
+    "global": {
+      "config": {
+        "as": 65172
+      }
+    }
+  }
+}
+'''
+        payload_list = [json_int_payload, json_bgp_payload]
+        rdn = codec.decode_json_output(schema, payload_list)
+
+        json_str = codec.encode(rdn, EncodingFormat.JSON, True)
+        self.assertEquals(json_str, json_int_payload + json_bgp_payload)
+
 if __name__ == '__main__':
     import sys
     suite = unittest.TestLoader().loadTestsFromTestCase(SanityTest)

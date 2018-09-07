@@ -312,4 +312,44 @@ ydk::path::Codec::decode_rpc_output(RootSchemaNode & root_schema, const std::str
     return perform_decode(rs_impl, root);
 }
 
+std::shared_ptr<ydk::path::DataNode>
+ydk::path::Codec::decode_json_output(RootSchemaNode & root_schema, const std::vector<std::string> & buffer_list)
+{
+    YLOG_DEBUG("ydk::path::Codec: Decoding JSON formatted list of payloads");
+
+    RootSchemaNodeImpl & rs_impl = get_root_schema_impl(root_schema);
+
+    ydk::path::RootDataImpl* rd = new ydk::path::RootDataImpl{rs_impl, rs_impl.m_ctx, "/"};
+    lyd_node* prev_sibling = nullptr;
+    lyd_node* first_sibling = nullptr;
+
+    for (auto buffer : buffer_list) {
+        rs_impl.populate_new_schemas_from_payload(buffer, ydk::EncodingFormat::JSON);
+
+        struct lyd_node *dnode = lyd_parse_mem(rs_impl.m_ctx, buffer.c_str(), LYD_JSON, LYD_OPT_TRUSTED | LYD_OPT_GET);
+        if (dnode == nullptr || ly_errno) {
+            YLOG_ERROR( "Parsing failed with message {}", ly_errmsg());
+            throw(YCodecError{YCodecError::Error::XML_INVAL});
+        }
+
+        // Attach first node to the root
+        if (!rd->m_node) {
+            rd->m_node = dnode;
+            first_sibling = dnode;
+        }
+
+        // Populate children map and connect siblings
+        rd->child_map.insert(std::make_pair(dnode, std::make_shared<ydk::path::DataNodeImpl>(rd, dnode, nullptr)));
+
+        if (prev_sibling) {
+            prev_sibling->next = dnode;
+            dnode->prev = prev_sibling;
+        }
+        prev_sibling = dnode;
+        first_sibling->prev = dnode;
+    }
+
+    return std::shared_ptr<ydk::path::DataNode>(rd);
+}
+
 #undef SLASH_CHAR

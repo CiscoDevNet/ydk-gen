@@ -29,7 +29,6 @@
 #include "catch.hpp"
 #include "entity_data_node_walker.hpp"
 
-#include "ydk/crud_service.hpp"
 #include "ydk/netconf_provider.hpp"
 #include "ydk_ydktest/ydktest_sanity.hpp"
 

@@ -497,11 +497,65 @@ func (suite *SanityTypesTestSuite) TestListTwoKeys() {
 	suite.Equal(fmt.Sprintf("%v", ldataKeys), "[[f1 11] [f2 22]]")
 
 	for _, lkey := range ldataKeys {
-		ldata := ylist.Get(runner.TwoKeyList, lkey);
+		_, ldata := ylist.Get(runner.TwoKeyList, lkey);
 		suite.NotNil(ldata)
 	}
-	suite.Equal(types.EntityEqual(ylist.Get(runner.TwoKeyList, "f1", 11), &l1), true)
-	suite.Equal(types.EntityEqual(ylist.Get(runner.TwoKeyList, "f2", 22), &l2), true)
+	_, ldata := ylist.Get(runner.TwoKeyList, "f1", 11)
+	suite.Equal(types.EntityEqual(ldata, &l1), true)
+	_, ldata = ylist.Get(runner.TwoKeyList, "f2", 22)
+	suite.Equal(types.EntityEqual(ldata, &l2), true)
+
+	i, ldata := ylist.Get(runner.TwoKeyList, "f1", 11)
+	suite.Equal(i, 0)
+	suite.NotNil(ldata)
+	suite.Equal(types.EntityEqual(ldata, &l1), true)
+	if ldata != nil {
+		runner.TwoKeyList = append(runner.TwoKeyList[:i], runner.TwoKeyList[i+1:]...)
+		i, ldata = ylist.Get(runner.TwoKeyList, "f1", 11)
+		suite.Nil(ldata)
+	}
+}
+
+func (suite *SanityTypesTestSuite) TestIdentityList() {
+	runner := ysanity.Runner{}
+	i1 := ysanity.Runner_IdentityList{Name: "first"}
+	i2 := ysanity.Runner_IdentityList{Name: "second"}
+	i3 := ysanity.Runner_IdentityList{Name: "third"}
+	runner.IdentityList = []*ysanity.Runner_IdentityList {&i1, &i2, &i3}
+
+	ldataKeys := ylist.Keys(runner.IdentityList)
+	suite.Equal(fmt.Sprintf("%v", ldataKeys), "[first second third]")
+
+	var ldata types.Entity
+	for _, lkey := range ldataKeys {
+		_, ldata = ylist.Get(runner.IdentityList, lkey);
+		suite.NotNil(ldata)
+	}
+	_, ldata = ylist.Get(runner.IdentityList, "first")
+	suite.Equal(types.EntityEqual(ldata, &i1), true)
+	_, ldata = ylist.Get(runner.IdentityList, "third")
+	suite.Equal(types.EntityEqual(ldata, &i3), true)
+}
+
+func (suite *SanityTypesTestSuite) TestEnumList() {
+	runner := ysanity.Runner{}
+	i1 := ysanity.Runner_EnumList{Name: ysanity.YdkEnumTest_none}
+	i2 := ysanity.Runner_EnumList{Name: ysanity.YdkEnumTest_local}
+	i3 := ysanity.Runner_EnumList{Name: ysanity.YdkEnumTest_remote}
+	runner.EnumList = []*ysanity.Runner_EnumList{&i1, &i2, &i3}
+
+	ldataKeys := ylist.Keys(runner.EnumList)
+	suite.Equal(fmt.Sprintf("%v", ldataKeys), "[none local remote]")
+
+	var ldata types.Entity
+	for _, lkey := range ldataKeys {
+		_, ldata = ylist.Get(runner.EnumList, lkey);
+		suite.NotNil(ldata)
+	}
+	_, ldata = ylist.Get(runner.EnumList, "none")
+	suite.Equal(types.EntityEqual(ldata, &i1), true)
+	_, ldata = ylist.Get(runner.EnumList, "remote")
+	suite.Equal(types.EntityEqual(ldata, &i3), true)
 }
 
 func (suite *SanityTypesTestSuite) TestListNoKeys() {
