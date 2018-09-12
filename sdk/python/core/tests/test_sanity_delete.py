@@ -131,10 +131,9 @@ class SanityYang(unittest.TestCase):
         self.crud.update(self.ncc, runner_update)
         runner_read = self.read_from_empty_filter()
 
-        runner_compare = runner_create
+        runner_compare = ysanity.Runner()
         runner_compare.ydktest_sanity_one.name = 'one'
 
-        runner_compare.ytypes.built_in_t.llstring = []
         runner_compare.ytypes.built_in_t.llstring.extend(['1', '2', '4'])
 
         self.assertEqual(runner_compare, runner_read)
@@ -165,7 +164,7 @@ class SanityYang(unittest.TestCase):
         runner = ysanity.Runner()
         a1 = ysanity.Runner.OneList.IdentityList()
         a1.config.id = ysanity.ChildIdentity()
-        a1.id_ref =  a1.config.id.to_string()
+        a1.id_ref =  a1.config.id
         runner.one_list.identity_list.append(a1)
         self.crud.create(self.ncc, runner)
 
@@ -174,7 +173,7 @@ class SanityYang(unittest.TestCase):
         runner_update = ysanity.Runner()
         k = ysanity.Runner.OneList.IdentityList()
         k.config.id = ysanity.ChildIdentity()
-        k.id_ref = k.config.id.to_string()
+        k.id_ref = k.config.id
         k.yfilter = YFilter.delete
         runner_update.one_list.identity_list.append(k)
 

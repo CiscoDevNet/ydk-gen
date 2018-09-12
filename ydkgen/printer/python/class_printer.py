@@ -32,10 +32,11 @@ from .enum_printer import EnumPrinter
 
 class ClassPrinter(FilePrinter):
 
-    def __init__(self, ctx, module_namespace_lookup, one_class_per_module):
+    def __init__(self, ctx, module_namespace_lookup, one_class_per_module, identity_subclasses):
         super(ClassPrinter, self).__init__(ctx)
         self.module_namespace_lookup = module_namespace_lookup
         self.one_class_per_module = one_class_per_module
+        self.identity_subclasses = identity_subclasses
 
     def print_body(self, unsorted_classes):
         ''' This arranges the classes at the same level
@@ -92,9 +93,10 @@ class ClassPrinter(FilePrinter):
 
         parents = 'Entity'
         if clazz.is_identity():
-            parents = 'Identity'
-        elif len(clazz.extends) > 0:
-            parents = ' ,'.join([sup.qn() for sup in clazz.extends])
+            if len(clazz.extends) > 0:
+                parents = ' ,'.join([sup.qn() for sup in clazz.extends])
+            else:
+                parents = 'Identity'
 
         self.ctx.writeln("class %s(%s):" % (clazz.name, parents))
 
@@ -121,7 +123,8 @@ class ClassPrinter(FilePrinter):
                 leafs.append(prop)
 
     def _print_class_inits(self, clazz, leafs, children):
-        ClassInitsPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module).print_output(clazz, leafs, children)
+        ClassInitsPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module,
+                          self.identity_subclasses).print_output(clazz, leafs, children)
 
     def _print_class_setattr(self, clazz, leafs):
         ClassSetAttrPrinter(self.ctx, self.one_class_per_module).print_setattr(clazz, leafs)

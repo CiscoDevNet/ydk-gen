@@ -154,7 +154,7 @@ class SanityYang(unittest.TestCase):
         r_2 = ysanity.Runner()
         r_2.ytypes.built_in_t.identity_ref_value = YFilter.read
         runner_read = self.crud.read(self.ncc, r_2)
-        self.assertEqual(r_1.identity_ref_value.to_string(), runner_read.ytypes.built_in_t.identity_ref_value)
+        self.assertEqual(r_1.identity_ref_value, runner_read.ytypes.built_in_t.identity_ref_value)
 
     def test_read_only_config(self):
         r_1 = ysanity.Runner()

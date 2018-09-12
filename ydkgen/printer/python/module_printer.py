@@ -39,22 +39,16 @@ class ModulePrinter(FilePrinter):
 
     def print_header(self, package):
         self._print_module_description(package)
-
-        self.ctx.writeln("from collections import OrderedDict")
-        self.ctx.bline()
-        self.ctx.writeln("from ydk.types import Entity, EntityPath, Identity, Enum, YType, YLeaf, YLeafList, YList, LeafDataList, Bits, Empty, Decimal64")
-        self.ctx.writeln("from ydk.filters import YFilter")
-        self.ctx.writeln("from ydk.errors import YError, YModelError")
-        self.ctx.writeln("from ydk.errors.error_handler import handle_type_error as _handle_type_error")
-        self.ctx.bline()
-        self.ctx.bline()
+        self._print_imports(package)
 
     def print_body(self, package):
         if self.one_class_per_module:
             if isinstance(package, Package):
                 self._print_module_enums(package)
-                identities = [child for child in package.owned_elements if isinstance(child, Class) and child.is_identity()]
-                ClassPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module).print_output(identities)
+                identities = [child for child in package.owned_elements if
+                              isinstance(child, Class) and child.is_identity()]
+                ClassPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module,
+                             self.identity_subclasses).print_output(identities)
             else:
                 self._print_module_classes(package)
         else:
@@ -74,6 +68,16 @@ class ModulePrinter(FilePrinter):
         self.ctx.bline()
         self.ctx.writeln('"""')
 
+    def _print_static_imports(self):
+        self.ctx.writeln("from collections import OrderedDict")
+        self.ctx.bline()
+        self.ctx.writeln(
+            "from ydk.types import Entity, EntityPath, Identity, Enum, YType, YLeaf, YLeafList, YList, LeafDataList, Bits, Empty, Decimal64")
+        self.ctx.writeln("from ydk.filters import YFilter")
+        self.ctx.writeln("from ydk.errors import YError, YModelError")
+        self.ctx.writeln("from ydk.errors.error_handler import handle_type_error as _handle_type_error")
+        self.ctx.bline()
+
     def _print_imports(self, package):
         self._print_static_imports()
         imports_to_print = set()
@@ -81,14 +85,19 @@ class ModulePrinter(FilePrinter):
         for imported_type in package.imported_types():
             if all((id(imported_type) in self.identity_subclasses,
                     self.is_derived_identity(package, imported_type))):
-                imported_stmt = 'from %s import %s' % (
-                    imported_type.get_py_mod_name(),
-                    imported_type.qn().split('.')[0])
+                if self.one_class_per_module:
+                    imported_stmt = 'from %s.%s import %s' % (
+                        imported_type.get_py_mod_name(), imported_type.get_py_mod_name().split('.')[-1],
+                        imported_type.qn().split('.')[0])
+                else:
+                    imported_stmt = 'from %s import %s' % (
+                        imported_type.get_py_mod_name(), imported_type.qn().split('.')[0])
                 imports_to_print.add(imported_stmt)
 
         for imported_stmt in sorted(imports_to_print):
             self.ctx.writeln(imported_stmt)
 
+        self.ctx.bline()
         self.ctx.bline()
 
     def _print_module_enums(self, package):
@@ -100,10 +109,12 @@ class ModulePrinter(FilePrinter):
 
     def _print_module_classes(self, package):
         if self.one_class_per_module:
-            ClassPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module).print_output([package])
+            ClassPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module,
+                         self.identity_subclasses).print_output([package])
         else:
-            ClassPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module).print_output(
-                [clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
+            ClassPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module,
+                         self.identity_subclasses).print_output(
+                        [clazz for clazz in package.owned_elements if isinstance(clazz, Class)])
 
     def _print_enum(self, enum_class):
         EnumPrinter(self.ctx).print_enum(enum_class, False)

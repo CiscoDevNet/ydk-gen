@@ -32,7 +32,7 @@ from ydk.providers import NetconfServiceProvider
 from ydk.services import CRUDService
 from ydk.services import CodecService
 
-from ydk.models.augmentation import ietf_aug_base_1
+from ydk.models.augmentation import ietf_aug_base_1, ydktest_aug_ietf_5
 
 from test_utils import ParametrizedTestCase
 from test_utils import get_device_info
@@ -174,7 +174,7 @@ class SanityYang(unittest.TestCase):
     def test_on_demand_loading_json(self):
         self.codec_provider.encoding = EncodingFormat.JSON
         entity1 = self.codec.decode(self.codec_provider, AUGMENTED_JSON_PAYLOAD)
-        self.assertEqual(entity1.doc.aug_5_identityref, "ydktest-aug-ietf-5:derived-aug-identity")
+        self.assertEqual(entity1.doc.aug_5_identityref, ydktest_aug_ietf_5.DerivedAugIdentity())
 
 
 

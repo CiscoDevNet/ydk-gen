@@ -34,18 +34,18 @@ from test_utils import ParametrizedTestCase
 from test_utils import get_device_info
 
 
-test_invalid_class_assignment_int_pattern = "Invalid value '1' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
-test_invalid_class_assignment_str_pattern = "Invalid value 'haha' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
-test_invalid_class_assignment_identity_pattern = "Invalid value 'ydktest-sanity-types:another-one' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
-test_invalid_class_assignment_enum_pattern = "Invalid value 'none' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
-test_invalid_class_assignment_ylist_pattern = "Invalid value '\[<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*Ldata object at [0-9a-z]+>\]' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
-test_invalid_class_assignment_yleaflist_pattern = "Invalid value '\['0', '1', '2', '3', '4'\]' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
-# test_invalid_class_assignment_yleaflist_pattern = "Invalid value 'YLeafList\('llstring', \[0, 1, 2, 3, 4\]\)' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>'"
+test_invalid_class_assignment_int_pattern = "Invalid value 1' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
+test_invalid_class_assignment_str_pattern = "Invalid value haha' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
+test_invalid_class_assignment_identity_pattern = "Invalid value ydktest-sanity-types:another-one' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
+test_invalid_class_assignment_enum_pattern = "Invalid value none' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
+test_invalid_class_assignment_ylist_pattern = "Invalid value \[<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*Ldata object at [0-9a-z]+>\]' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
+test_invalid_class_assignment_yleaflist_pattern = "Invalid value \['0', '1', '2', '3', '4'\]' in 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*'"
+# test_invalid_class_assignment_yleaflist_pattern = "Invalid value YLeafList\('llstring', \[0, 1, 2, 3, 4\]\)' in '<ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*One object at [0-9a-z]+>'"
 test_invalid_list_assignment_int_pattern = "Attempt to assign value of '1' to YList ldata. Please use list append or extend method."
 test_invalid_list_assignment_entity_pattern = "Attempt to assign value of 'ydk.models.ydktest.ydktest_sanity.[a-zA-Z\.]*' to YList ldata. Please use list append or extend method."
 test_invalid_list_assignment_llist_pattern = "Attempt to assign value of '\['0', '1', '2', '3', '4'\]' to YList ldata. Please use list append or extend method."
-test_invalid_llist_assignment_int_pattern = "Invalid value '1' in '\[\]'"
-test_invalid_llist_assignment_list_pattern = "append\(\): incompatible function arguments\. The following argument types are supported:"
+test_invalid_llist_assignment_int_pattern = "Invalid value 1' in '\[\]'"
+test_invalid_llist_assignment_list_pattern = "Invalid value Entities in YList:"
 
 
 class SanityYang(unittest.TestCase):
@@ -128,6 +128,43 @@ class SanityYang(unittest.TestCase):
         runner.one_list.ldata.append(elem)
         runner.ytypes.built_in_t.llstring = runner.one_list.ldata
         self.crud.create(self.ncc, runner)
+
+    @assert_with_error("Attempt to assign unknown attribute 'invalid_attribute' to 'Runner'", YModelError)
+    def test_invalid_attribute(self):
+        runner = ysanity.Runner()
+        runner.invalid_attribute = 'xyz'
+
+    @assert_with_error(
+        "Invalid value not connected for 'enum_int_value'. Expected types: 'ydk.models.ydktest.ydktest_sanity.YdkEnumIntTest' or 'int'",
+        YModelError)
+    def test_union_enum(self):
+        runner = ysanity.Runner()
+        runner.ytypes.built_in_t.enum_int_value = runner.ytypes.built_in_t.Status.not_connected
+
+    @assert_with_error("Invalid value 1 for 'number8'. Expected types: 'int'", YModelError)
+    def test_int(self):
+        runner = ysanity.Runner()
+        runner.ytypes.built_in_t.number8 = "1"
+
+    @assert_with_error("Invalid value -1 for 'name'. Expected types: 'str'", YModelError)
+    def test_str(self):
+        runner = ysanity.Runner()
+        runner.ytypes.built_in_t.name = -1
+
+    @assert_with_error("Invalid value not connected for 'enum_value'. Expected types: 'ydk.models.ydktest.ydktest_sanity.YdkEnumTest'", YModelError)
+    def test_str_2(self):
+        runner = ysanity.Runner()
+        runner.ytypes.built_in_t.enum_value = runner.ytypes.built_in_t.Status.not_connected
+
+    @assert_with_error("Invalid value -1 for 'deci64'. Expected types: 'Decimal64'", YModelError)
+    def test_deci64(self):
+        runner = ysanity.Runner()
+        runner.ytypes.built_in_t.deci64 = -1
+
+    @assert_with_error("Invalid value 1 for 'bool_value'. Expected types: 'bool'", YModelError)
+    def test_bool(self):
+        runner = ysanity.Runner()
+        runner.ytypes.built_in_t.bool_value = 1
 
 
 if __name__ == '__main__':

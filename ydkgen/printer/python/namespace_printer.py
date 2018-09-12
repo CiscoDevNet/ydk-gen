@@ -19,7 +19,8 @@
 Print capabilities for bundle package.
 """
 from ydkgen.printer.file_printer import FilePrinter
-from ydkgen.api_model import get_property_name
+from ydkgen.api_model import get_property_name, Class
+from ydkgen.common import get_module_name
 
 
 class NamespacePrinter(FilePrinter):
@@ -35,6 +36,7 @@ class NamespacePrinter(FilePrinter):
         self._print_capabilities(packages)
         self._print_entity_lookup(packages)
         self._print_namespace_lookup(packages)
+        self._print_identity_lookup(packages)
 
     def _get_imports(self, packages):
         imports = set()
@@ -95,6 +97,29 @@ class NamespacePrinter(FilePrinter):
                 continue
             name = p.stmt.arg
             self.ctx.writeln('"{}": "{}",'.format(name, ns.arg))
+        self.ctx.lvl_dec()
+        self.ctx.writeln('}')
+        self.ctx.bline()
+
+    def _print_identity_lookup(self, packages):
+        packages = sorted(packages, key=lambda p:p.name)
+
+        self.ctx.writeln('IDENTITY_LOOKUP = {')
+        self.ctx.lvl_inc()
+        for package in packages:
+            identities = [idx for idx in package.owned_elements if isinstance(
+                idx, Class) and idx.is_identity()]
+            identities = sorted(identities, key=lambda c: c.name)
+            for identity_clazz in identities:
+                if self.one_class_per_module:
+                    pkg_name = identity_clazz.get_package().name
+                    self.ctx.writeln(
+                        "'%s:%s':('%s.%s', '%s')," % (get_module_name(identity_clazz.stmt), identity_clazz.stmt.arg,
+                                                   identity_clazz.get_py_mod_name(), pkg_name, identity_clazz.qn()))
+                else:
+                    self.ctx.writeln(
+                        "'%s:%s':('%s', '%s')," % (get_module_name(identity_clazz.stmt), identity_clazz.stmt.arg,
+                                                   identity_clazz.get_py_mod_name(), identity_clazz.qn()))
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
         self.ctx.bline()

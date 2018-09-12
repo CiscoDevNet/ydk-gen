@@ -581,7 +581,15 @@ PYBIND11_MODULE(ydk_, ydk)
 
     class_<ydk::Empty>(types, "Empty")
         .def(init<>())
-        .def_readwrite("set", &ydk::Empty::set);
+        .def_readwrite("set", &ydk::Empty::set)
+        .def("__eq__", [](ydk::Empty& left, ydk::Empty& right)
+                         {
+                            return true;
+                         })
+        .def("__ne__", [](ydk::Empty& left, ydk::Empty& right)
+                         {
+                            return false;
+                         });
 
     class_<ydk::LeafData>(types, "LeafData")
         .def(init<const string &, ydk::YFilter, bool, const string &, const string &>())
@@ -636,11 +644,27 @@ PYBIND11_MODULE(ydk_, ydk)
                               {
                                   b[key] = value;
                               })
-        .def("get_bitmap", &ydk::Bits::get_bitmap, return_value_policy::reference);
+        .def("get_bitmap", &ydk::Bits::get_bitmap, return_value_policy::reference)
+        .def("__eq__", [](ydk::Bits& left, ydk::Bits& right)
+                         {
+                            return left.get_bitmap()==right.get_bitmap();
+                         })
+        .def("__ne__", [](ydk::Bits& left, ydk::Bits& right)
+                         {
+                            return left.get_bitmap()!=right.get_bitmap();
+                         });
 
     class_<ydk::Decimal64>(types, "Decimal64")
         .def(init<string>())
-        .def_readwrite("value", &ydk::Decimal64::value);
+        .def_readwrite("value", &ydk::Decimal64::value)
+        .def("__eq__", [](ydk::Decimal64& left, ydk::Decimal64& right)
+                         {
+                            return left.value==right.value;
+                         })
+        .def("__ne__", [](ydk::Decimal64& left, ydk::Decimal64& right)
+                         {
+                            return left.value!=right.value;
+                         });
 
     class_<ydk::Identity>(types, "Identity")
         .def(init<const std::string &, const std::string &, const std::string &>())
@@ -648,7 +672,15 @@ PYBIND11_MODULE(ydk_, ydk)
         .def("__str__", [](ydk::Identity &id)
                           {
                                return id.to_string();
-                          });
+                          })
+        .def("__eq__", [](ydk::Identity& left, ydk::Identity& right)
+                         {
+                            return left.to_string()==right.to_string();
+                         })
+        .def("__ne__", [](ydk::Identity& left, ydk::Identity& right)
+                         {
+                            return left.to_string()!=right.to_string();
+                         });
 
     class_<ydk::Enum> enum_(types, "Enum");
 

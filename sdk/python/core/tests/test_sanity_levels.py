@@ -547,7 +547,6 @@ class SanityYang(unittest.TestCase):
         r_1.leaf_ref.ref_two_sub1_number = r_1.two.sub1.number
         r_1.leaf_ref.ref_three_sub1_sub2_number = r_1.three.sub1.sub2.number
         r_1.leaf_ref.ref_inbtw = e_21.name
-        r_1.leaf_ref.one.name = 'runner:leaf-ref:one:name'
         r_1.leaf_ref.one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name
         self.crud.create(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
@@ -589,7 +588,6 @@ class SanityYang(unittest.TestCase):
         r_1.leaf_ref.ref_two_sub1_number = r_1.two.sub1.number
         r_1.leaf_ref.ref_three_sub1_sub2_number = r_1.three.sub1.sub2.number
         r_1.leaf_ref.ref_inbtw = e_21.name
-        r_1.leaf_ref.one.name = 'runner/leaf-ref/one/name'
         r_1.leaf_ref.one.two.self_ref_one_name = r_1.leaf_ref.ref_one_name
         self.crud.update(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
@@ -694,7 +692,6 @@ class SanityYang(unittest.TestCase):
 
         self.assertEqual(runner, runner_read)
 
-    @unittest.skip('Fails on travis. Passes locally')
     def test_oc_pattern(self):
         # Create OcA
         oc = OcA()
