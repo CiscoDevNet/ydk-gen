@@ -30,6 +30,7 @@ import logging
 import sys
 if sys.version_info > (3,):
     long = int
+    unicode = str
 
 from ydk_ import is_set
 from ydk.ext.types import Bits
@@ -333,7 +334,7 @@ class Entity(_Entity):
                                     "Please use list append or extend method."
                                     .format(value))
             if name in leaf_names and name in self.__dict__:
-                _validate_value(self._leafs[name], name, value)
+                _validate_value(self._leafs[name], name, value, self.logger)
                 leaf = _get_leaf_object(self._leafs[name])
                 prev_value = self.__dict__[name]
                 self.__dict__[name] = value
@@ -677,7 +678,7 @@ def _get_decoded_value_object(leaf_tuple, entity, value):
             return value_object
 
 
-def _validate_value(leaf_tuple, name, value):
+def _validate_value(leaf_tuple, name, value, logger):
     if not isinstance(leaf_tuple, tuple):
         return
     if isinstance(value, _YFilter):
@@ -693,7 +694,11 @@ def _validate_value(leaf_tuple, name, value):
         else:
             if _validate_other_type_value_object(typ, value):
                 return
-    raise _YModelError("Invalid value {0} for '{1}'. Expected types: {2}".format(value, name, _get_types_string(typs)))
+    err_msg = "Invalid value {0} for '{1}'. Got type: '{2}'. Expected types: {3}".format(value, name,
+                                                                                         type(value).__name__,
+                                                                                         _get_types_string(typs))
+    logger.error(err_msg)
+    raise _YModelError(err_msg)
 
 
 def _get_types_string(typs):
@@ -772,7 +777,7 @@ def _decode_enum_value_object(typ, value):
 def _validate_other_type_value_object(typ, value):
     if typ == 'Empty':
         return isinstance(value, Empty)
-    if typ == 'str' and isinstance(value, bytes):
+    if typ == 'str' and (isinstance(value, bytes) or isinstance(value, unicode)):
         return True
     if typ == 'int' and (isinstance(value, int) or isinstance(value, long)):
         return True

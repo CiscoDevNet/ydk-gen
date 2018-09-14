@@ -135,33 +135,33 @@ class SanityYang(unittest.TestCase):
         runner.invalid_attribute = 'xyz'
 
     @assert_with_error(
-        "Invalid value not connected for 'enum_int_value'. Expected types: 'ydk.models.ydktest.ydktest_sanity.YdkEnumIntTest' or 'int'",
+        "Invalid value not connected for 'enum_int_value'..*Expected types: 'ydk.models.ydktest.ydktest_sanity.YdkEnumIntTest' or 'int'",
         YModelError)
     def test_union_enum(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.enum_int_value = runner.ytypes.built_in_t.Status.not_connected
 
-    @assert_with_error("Invalid value 1 for 'number8'. Expected types: 'int'", YModelError)
+    @assert_with_error("Invalid value 1 for 'number8'..*Expected types: 'int'", YModelError)
     def test_int(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.number8 = "1"
 
-    @assert_with_error("Invalid value -1 for 'name'. Expected types: 'str'", YModelError)
+    @assert_with_error("Invalid value -1 for 'name'..*Expected types: 'str'", YModelError)
     def test_str(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.name = -1
 
-    @assert_with_error("Invalid value not connected for 'enum_value'. Expected types: 'ydk.models.ydktest.ydktest_sanity.YdkEnumTest'", YModelError)
+    @assert_with_error("Invalid value not connected for 'enum_value'..*Expected types: 'ydk.models.ydktest.ydktest_sanity.YdkEnumTest'", YModelError)
     def test_str_2(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.enum_value = runner.ytypes.built_in_t.Status.not_connected
 
-    @assert_with_error("Invalid value -1 for 'deci64'. Expected types: 'Decimal64'", YModelError)
+    @assert_with_error("Invalid value -1 for 'deci64'..*Expected types: 'Decimal64'", YModelError)
     def test_deci64(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.deci64 = -1
 
-    @assert_with_error("Invalid value 1 for 'bool_value'. Expected types: 'bool'", YModelError)
+    @assert_with_error("Invalid value 1 for 'bool_value'..*Expected types: 'bool'", YModelError)
     def test_bool(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.bool_value = 1

@@ -269,7 +269,7 @@ class ClassSetAttrPrinter(object):
 
 def get_ptypes(prop, property_type, type_stmt, one_class_per_module, identity_subclasses):
     if prop.stmt.keyword == 'anyxml':
-        return ['str']
+        return ["'str'"]
 
     ptypes = []
     type_spec = type_stmt.i_type_spec

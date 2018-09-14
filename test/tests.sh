@@ -364,6 +364,7 @@ function run_python_bundle_tests {
     py_sanity_augmentation
     py_sanity_common_cache
     py_sanity_one_class_per_module
+    py_sanity_backward_compatibility
 }
 
 #--------------------------
@@ -591,22 +592,34 @@ function py_sanity_common_cache {
     run_test sdk/python/core/tests/test_sanity_types.py --common-cache
 }
 
-function py_sanity_one_class_per_module_test {
+function py_sanity_run_limited_tests {
     ${PIP_BIN} uninstall ydk-models-ydktest -y
     pip_check_install gen-api/python/ydktest-bundle/dist/ydk*.tar.gz
-    print_msg "Running one class per module for : run_test sdk/python/core/tests/test_sanity_levels.py"
+    print_msg "Running limited test : run_test sdk/python/core/tests/test_sanity_levels.py"
     run_test sdk/python/core/tests/test_sanity_levels.py
-    print_msg "Running one class per module for : sdk/python/core/tests/test_sanity_types.py"
+    print_msg "Running limited test : sdk/python/core/tests/test_sanity_types.py"
     run_test sdk/python/core/tests/test_sanity_types.py
-    print_msg "Running one class per module for : sdk/python/core/tests/test_sanity_codec.py"
+    print_msg "Running limited test : sdk/python/core/tests/test_sanity_codec.py"
     run_test sdk/python/core/tests/test_sanity_codec.py
 }
 
 function py_sanity_one_class_per_module {
-    print_msg "Running one class per module tests"
+    print_msg "**********************************"
+    print_msg "Running ONE CLASS PER MODULE TESTS"
     cd $YDKGEN_HOME
     run_test generate.py --bundle profiles/test/ydktest-cpp.json -o > /dev/null
-    py_sanity_one_class_per_module_test
+    py_sanity_run_limited_tests
+}
+
+function py_sanity_backward_compatibility {
+    print_msg "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    print_msg "Running YDK BUNDLE BACKWARD COMPATIBILITY TESTS"
+    cd $YDKGEN_HOME
+    CURRENT_GIT_REV=$(git rev-parse HEAD)
+    git checkout 8d278d7d51765a310afe43ed88951f2fe5d8783e
+    run_test generate.py --bundle profiles/test/ydktest-cpp.json > /dev/null
+    py_sanity_run_limited_tests
+    git checkout ${CURRENT_GIT_REV}
 }
 
 #-------------------------------------

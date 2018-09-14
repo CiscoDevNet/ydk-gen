@@ -70,13 +70,13 @@ class SanityTest(unittest.TestCase):
         runner = ysanity.Runner()
         self.crud.delete(self.ncc, runner)
 
-    @assert_with_error("Invalid value 8.5 for 'number8'. Expected types: 'int'", YModelError)
+    @assert_with_error("Invalid value 8.5 for 'number8'..*Expected types: 'int'", YModelError)
     def test_int8_invalid(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.number8 = 8.5
         self.crud.create(self.ncc, runner)
 
-    @assert_with_error("Invalid value {} for 'number16'. Expected types: 'int'", YModelError)
+    @assert_with_error("Invalid value {} for 'number16'..*Expected types: 'int'", YModelError)
     def test_int16_invalid(self):
         runner = ysanity.Runner()
         runner.ytypes.built_in_t.number16 = {}
@@ -100,7 +100,7 @@ class SanityTest(unittest.TestCase):
         runner.ytypes.built_in_t.u_number8 = -1
         self.crud.create(self.ncc, runner)
 
-    @assert_with_error("Invalid value not an uint for 'u_number16'. Expected types: 'int'", YModelError)
+    @assert_with_error("Invalid value not an uint for 'u_number16'..*Expected types: 'int'", YModelError)
     def test_uint16_invalid(self):
             runner = ysanity.Runner()
             runner.ytypes.built_in_t.u_number16 = 'not an uint'
@@ -124,20 +124,20 @@ class SanityTest(unittest.TestCase):
         runner.ytypes.built_in_t.name = ['name_str']
         self.crud.create(self.ncc, runner)
 
-    @assert_with_error("Invalid value 0 for 'emptee'. Expected types: 'Empty'", YModelError)
+    @assert_with_error("Invalid value 0 for 'emptee'..*Expected types: 'Empty'", YModelError)
     def test_empty_invalid(self):
             runner = ysanity.Runner()
             runner.ytypes.built_in_t.emptee = '0'
             self.crud.create(self.ncc, runner)
 
-    @assert_with_error("Invalid value  for 'bool_value'. Expected types: 'bool'", YModelError)
+    @assert_with_error("Invalid value  for 'bool_value'..*Expected types: 'bool'", YModelError)
     def test_boolean_invalid(self):
             runner = ysanity.Runner()
             runner.ytypes.built_in_t.bool_value = ''
             self.crud.create(self.ncc, runner)
 
     @assert_with_error(
-        "Invalid value not an enum for 'enum_value'. Expected types: 'ydk.models.ydktest.ydktest_sanity.YdkEnumTest'",
+        "Invalid value not an enum for 'enum_value'..*Expected types: 'ydk.models.ydktest.ydktest_sanity.YdkEnumTest'",
         YModelError)
     def test_enum_invalid(self):
         runner = ysanity.Runner()

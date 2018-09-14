@@ -52,17 +52,10 @@ function install_confd {
     ./confd-basic-6.2.darwin.x86_64.installer.bin ../confd
 }
 
-function install_fpm {
-    print_msg "Installing fpm"
-    brew install gnu-tar > /dev/null
-    gem install --no-ri --no-rdoc fpm
-}
-
 ########################## EXECUTION STARTS HERE #############################
 
 install_dependencies
 install_confd
-#install_fpm
 
-sudo easy_install pip
+#sudo easy_install pip
 sudo pip install virtualenv
