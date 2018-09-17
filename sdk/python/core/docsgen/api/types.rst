@@ -12,7 +12,7 @@ This module contains YDK Python types. It provides built-in types specified in
 
 .. _types-yang:
 
-YANG Built-In types
+YANG built-in types
 -------------------
 
 For `YANG Built-In types <https://tools.ietf.org/html/rfc6020#section-4.2.4>`_,
@@ -449,7 +449,7 @@ Examples of appending values to leaf-lists:
 
 .. _read-filter:
 
-An example of setting the read filter for an :cpp:class:`leaf<YLeaf>` (specifically, the `as number` leaf) under :cpp:class:`openconfig BGP<ydk::openconfig_bgp::Bgp>` is shown below
+An example of setting the read filter for an :cpp:class:`leaf<YLeaf>` (specifically, the `as number` leaf) under :py:class:`openconfig BGP<ydk.openconfig_bgp.Bgp>` is shown below
 
 .. code-block:: python
   :linenos:
@@ -469,3 +469,41 @@ An example of setting the read filter for an :cpp:class:`leaf<YLeaf>` (specifica
 
   # Invoke the CRUD Read method
   crud_service.read(provider, bgp);
+
+
+Validation
+----------
+
+YDK performs local validation of leafs based on the model type definition. A few examples of validation are given below (assuming you have ``openconfig`` bundle installed, see :ref:`howto-install`).  Assigning an invalid type results in a local validation error.
+
+The :py:class:`openconfig BGP <ydk.models.openconfig.openconfig_bgp.Bgp.Global.Config>` model defines the field `as_` as a `int` (specifically, unsigned 32 bit integer).
+
+.. code-block:: python
+    :linenos:
+
+    # Instantiate a bgp object representing the bgp container from the openconfig-bgp YANG model
+    bgp = ydk.models.openconfig_bgp.Bgp()
+    bgp.global_.config.as_ = "Hello" #invalid type
+
+Assigning invalid type results in a :py:class:`YModelError <ydk.errors.YModelError>` being thrown.
+
+.. code-block:: ssh
+
+    YModelError: Invalid value Hello for 'as_'. Got type: 'str'. Expected types: 'int'
+
+
+The :py:class:`openconfig BGP <ydk.models.openconfig.openconfig_bgp.Bgp.Global.Config>` model defines the field `router_id` as a `str` (specifically, with IP address pattern).
+
+.. code-block:: python
+    :linenos:
+
+    # Instantiate a bgp object representing the bgp container from the openconfig-bgp YANG model
+    bgp = ydk.models.openconfig_bgp.Bgp()
+    bgp.global_.config.router_id = "Hello" #invalid value
+
+Assigning invalid value results in a :py:class:`YModelError <ydk.errors.YModelError>` being thrown.
+
+.. code-block:: ssh
+
+    YModelError:  Value "Hello" does not satisfy the constraint "(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" (range, length, or pattern). Path: /openconfig-bgp:bgp/global/config/router-id
+

@@ -20,6 +20,7 @@ To use the docker image, `install docker <https://docs.docker.com/install/>`_ on
 
 System Requirements
 ===================
+**Note:** libssh 0.8.0 and later `does not support <http://api.libssh.org/master/libssh_tutor_threads.html>`_ separate threading library which is required for YDK. Please use libssh versions older than 0.8.0.
 
 Linux
 -----

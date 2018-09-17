@@ -106,6 +106,7 @@ class Entity(_Entity):
         self._leafs = OrderedDict()
         self._segment_path = lambda : ''
         self._absolute_path = lambda : ''
+        self._python_type_validation_enabled = True
         self.logger = logging.getLogger("ydk.types.Entity")
 
     def __eq__(self, other):
@@ -334,7 +335,8 @@ class Entity(_Entity):
                                     "Please use list append or extend method."
                                     .format(value))
             if name in leaf_names and name in self.__dict__:
-                _validate_value(self._leafs[name], name, value, self.logger)
+                if self._python_type_validation_enabled:
+                    _validate_value(self._leafs[name], name, value, self.logger)
                 leaf = _get_leaf_object(self._leafs[name])
                 prev_value = self.__dict__[name]
                 self.__dict__[name] = value
