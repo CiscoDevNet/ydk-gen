@@ -9,13 +9,13 @@
 
 #### Python, C++ & Go
 
-##### CRUD / Codec API improvements
+##### CRUD/ NETCONF / Codec API improvements
   * Introduced Codec feature to decode multiple JSON payload. ([#812](https://github.com/CiscoDevNet/ydk-gen/issues/812))
   * Improved support for `YList` ([#811](https://github.com/CiscoDevNet/ydk-gen/pull/811))
 
 #### Python
 
-##### CRUD / Codec API improvements
+##### CRUD/ NETCONF / Codec API improvements
   * Improve handling of python native types in model API. ([#733](https://github.com/CiscoDevNet/ydk-gen/issues/733))
   * Validate leaf values based on python type of model API. ([#739](https://github.com/CiscoDevNet/ydk-gen/issues/739))
   * Improve checking of invalid attributes for model API objects. ([#815](https://github.com/CiscoDevNet/ydk-gen/issues/815))

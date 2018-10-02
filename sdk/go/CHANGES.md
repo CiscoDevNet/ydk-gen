@@ -9,7 +9,7 @@
 
 #### Python, C++ & Go
 
-##### CRUD / Codec API improvements
+##### CRUD/ NETCONF / Codec API improvements
   * Introduced Codec feature to decode multiple JSON payload. ([#812](https://github.com/CiscoDevNet/ydk-gen/issues/812))
   * Improved support for `YList` ([#811](https://github.com/CiscoDevNet/ydk-gen/pull/811))
 
