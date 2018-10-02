@@ -32,8 +32,8 @@ The following packages must be present in your system before installing YDK-Go:
 .. code-block:: sh
 
 	$ sudo apt-get install libcurl4-openssl-dev libpcre3-dev libssh-dev libxml2-dev libxslt1-dev libtool-bin cmake
-	$ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.2/libydk_0.7.2-1_amd64.deb
-	$ sudo gdebi libydk_0.7.2-1_amd64.deb
+	$ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.3/libydk_0.7.3-1_amd64.deb
+	$ sudo gdebi libydk_0.7.3-1_amd64.deb
 
 **Centos (Fedora-based)**
 
@@ -43,7 +43,7 @@ The following packages must be present in your system before installing YDK-Go:
 	
 	$ sudo yum install epel-release
 	$ sudo yum install libxml2-devel libxslt-devel libssh-devel libtool gcc-c++ pcre-devel cmake
-	$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.2/libydk-0.7.2-1.x86_64.rpm
+	$ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.3/libydk-0.7.3-1.x86_64.rpm
 
 **Golang**
 
@@ -67,8 +67,8 @@ It is recommended to install `homebrew <http://brew.sh>`_ and Xcode command line
 	$ brew install pkg-config libssh libxml2 xml2 curl pcre cmake
 	$ xcode-select --install
 
-	$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.2/libydk-0.7.2-Darwin.pkg
-	$ sudo installer -pkg libydk-0.7.2-Darwin.pkg -target /
+	$ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.3/libydk-0.7.3-Darwin.pkg
+	$ sudo installer -pkg libydk-0.7.3-Darwin.pkg -target /
 	
 The YDK requires Go version 1.9 or higher. If this is not the case, follow these installation steps:
 
@@ -104,4 +104,4 @@ Documentation and Support
 Release Notes
 =============
 
-The current YDK release version is 0.7.2 (alpha). YDK-Go is licensed under the Apache 2.0 License.
+The current YDK release version is 0.7.3 (alpha). YDK-Go is licensed under the Apache 2.0 License.

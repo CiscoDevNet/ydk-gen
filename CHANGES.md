@@ -1,3 +1,43 @@
+### 2018-10-02 version 0.7.3
+
+#### Bundle improvements
+  * Updated [`cisco-ios-xr`](http://ydk.cisco.com/py/docs/ydk.models.cisco_ios_xr.html) bundle to support Cisco IOS XR 6.5.1 release.
+  * Updated [`cisco-ios-xe`](http://ydk.cisco.com/py/docs/ydk.models.cisco_ios_xe.html) bundle to support Cisco IOS XE 16.9.1 release.
+  * Released [`cisco-nx-os`](http://ydk.cisco.com/py/docs/ydk.models.cisco_nx_os.html) bundle to support Cisco NX OS 9.2.1 release.
+  * Updated [`openconfig`](http://ydk.cisco.com/py/docs/ydk.models.openconfig.html) to  to make it compatible with `ydk core` version 0.7.3.
+  * Also updated [`ietf`](http://ydk.cisco.com/py/docs/ydk.models.ietf.html) bundle to make it compatible with `ydk core` version 0.7.3.
+
+#### Python, C++ & Go
+
+##### CRUD / Codec API improvements
+  * Introduced Codec feature to decode multiple JSON payload. ([#812](https://github.com/CiscoDevNet/ydk-gen/issues/812))
+  * Improved support for `YList` ([#811](https://github.com/CiscoDevNet/ydk-gen/pull/811))
+
+##### Note about `cisco-ios-xr` 6.5.1 bundle
+  * Bundle excludes the following files due to duplicate namespaces:
+```
+    Cisco-IOS-XR-sysadmin-clear-ncs5500.yang
+    Cisco-IOS-XR-sysadmin-clear-ncs5502.yang
+    Cisco-IOS-XR-sysadmin-clear-ncs55A1.yang
+    Cisco-IOS-XR-sysadmin-controllers-ncs5500.yang
+    Cisco-IOS-XR-sysadmin-controllers-ncs5501.yang
+    Cisco-IOS-XR-sysadmin-controllers-ncs5502.yang
+    Cisco-IOS-XR-sysadmin-controllers-ncs55A1.yang
+    Cisco-IOS-XR-sysadmin-fabric-mgr-fsdb-aggregator-ncs5500.yang
+    Cisco-IOS-XR-sysadmin-fabric-mgr-fsdb-aggregator-ncs5502.yang
+    Cisco-IOS-XR-sysadmin-fabric-mgr-fsdb-server-ncs5500.yang
+    Cisco-IOS-XR-sysadmin-fabric-mgr-fsdb-server-ncs5502.yang
+    Cisco-IOS-XR-sysadmin-fabric-ncs5500.yang
+    Cisco-IOS-XR-sysadmin-fabric-ncs5501.yang
+    Cisco-IOS-XR-sysadmin-fabric-ncs5502.yang
+```
+#### Python
+
+##### CRUD / Codec API improvements
+  * Improve handling of python native types in model API. ([#733](https://github.com/CiscoDevNet/ydk-gen/issues/733))
+  * Validate leaf values based on python type of model API. ([#739](https://github.com/CiscoDevNet/ydk-gen/issues/739))
+  * Improve checking of invalid attributes for model API objects. ([#815](https://github.com/CiscoDevNet/ydk-gen/issues/815))
+
 ### 2018-07-02 version 0.7.2
  
 #### Python, C++ & Go

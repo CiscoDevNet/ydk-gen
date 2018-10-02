@@ -31,10 +31,10 @@ Ubuntu (Debian-based)
 .. code-block:: sh
 
    $ sudo apt-get install gdebi-core
-   $ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.2/libydk_0.7.2-1_amd64.deb
+   $ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.3/libydk_0.7.3-1_amd64.deb
    # Use the below for Ubuntu Artful
-   $ wget http://devhub.cisco.com/artifactory/debian-ydk/0.7.2/artful/libydk_0.7.2-1_amd64.deb
-   $ sudo gdebi libydk_0.7.2-1_amd64.deb
+   $ wget http://devhub.cisco.com/artifactory/debian-ydk/0.7.3/artful/libydk_0.7.3-1_amd64.deb
+   $ sudo gdebi libydk_0.7.3-1_amd64.deb
 
 Centos (Fedora-based)
 
@@ -44,7 +44,7 @@ Centos (Fedora-based)
 
    $ sudo yum install epel-release
    $ sudo yum install libssh-devel gcc-c++ python-devel
-   $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.2/libydk-0.7.2-1.x86_64.rpm
+   $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.3/libydk-0.7.3-1.x86_64.rpm
 
    # Upgrade compiler to gcc 5.*
    $ yum install centos-release-scl -y > /dev/null
@@ -91,8 +91,8 @@ It is required to install Xcode command line tools, `homebrew <http://brew.sh>`_
    $ xcode-select --install
    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
    $ brew install pkg-config libssh xml2 libxml2 curl pcre cmake
-   $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.2/libydk-0.7.2-Darwin.pkg
-   $ sudo installer -pkg libydk-0.7.2-Darwin.pkg -target /
+   $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.3/libydk-0.7.3-Darwin.pkg
+   $ sudo installer -pkg libydk-0.7.3-Darwin.pkg -target /
 
 Windows
 -------

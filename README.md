@@ -82,8 +82,8 @@ Ubuntu (Debian-based):
 **Install prebuilt libydk binary:**
 ```
    $ sudo apt-get install gdebi-core python3-dev python-dev libtool-bin
-   $ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.2/libydk_0.7.2-1_amd64.deb
-   $ sudo gdebi libydk_0.7.2-1_amd64.deb
+   $ wget https://devhub.cisco.com/artifactory/debian-ydk/0.7.3/libydk_0.7.3-1_amd64.deb
+   $ sudo gdebi libydk_0.7.3-1_amd64.deb
 ```
 **To build from source:**
 ```
@@ -95,7 +95,7 @@ Centos (Fedora-based):
 ```
    $ sudo yum install epel-release
    $ sudo yum install libssh-devel gcc-c++
-   $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.2/libydk-0.7.2-1.x86_64.rpm
+   $ sudo yum install https://devhub.cisco.com/artifactory/rpm-ydk/0.7.3/libydk-0.7.3-1.x86_64.rpm
 
    # Upgrade compiler to gcc 5.*
    $ yum install centos-release-scl -y > /dev/null
@@ -125,8 +125,8 @@ You can download the latest python package from [here](https://www.python.org/do
    $ xcode-select --install
    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
    $ brew install pkg-config libssh xml2 curl pcre cmake libxml2 pybind11
-   $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.2/libydk-0.7.2-Darwin.pkg
-   $ sudo installer -pkg libydk-0.7.2-Darwin.pkg -target /
+   $ curl -O https://devhub.cisco.com/artifactory/osx-ydk/0.7.3/libydk-0.7.3-Darwin.pkg
+   $ sudo installer -pkg libydk-0.7.3-Darwin.pkg -target /
 ```
 **To build from source:**
 ```
@@ -446,4 +446,4 @@ Join the [YDK community](https://communities.cisco.com/community/developer/ydk) 
 
 Release Notes
 ===============
-The current YDK release version is 0.7.2 (alpha). The version of the latest YDK-Gen master branch is 0.7.3-dev. YDK-Gen is licensed under the Apache 2.0 License.
+The current YDK release version is 0.7.3 (alpha). The version of the latest YDK-Gen master branch is 0.7.3-dev. YDK-Gen is licensed under the Apache 2.0 License.
