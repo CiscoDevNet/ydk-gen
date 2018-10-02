@@ -13,7 +13,7 @@
   * Introduced Codec feature to decode multiple JSON payload. ([#812](https://github.com/CiscoDevNet/ydk-gen/issues/812))
   * Improved support for `YList` ([#811](https://github.com/CiscoDevNet/ydk-gen/pull/811))
 
-##### Note about `cisco-ios-xr` 6.5.1 bundle
+#### Note about `cisco-ios-xr` 6.5.1 bundle
   * Bundle excludes the following files due to duplicate namespaces:
 ```
     Cisco-IOS-XR-sysadmin-clear-ncs5500.yang
@@ -31,7 +31,6 @@
     Cisco-IOS-XR-sysadmin-fabric-ncs5501.yang
     Cisco-IOS-XR-sysadmin-fabric-ncs5502.yang
 ```
-#### Python
 
 ### 2018-01-31 version 0.7.0
 

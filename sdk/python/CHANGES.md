@@ -13,7 +13,14 @@
   * Introduced Codec feature to decode multiple JSON payload. ([#812](https://github.com/CiscoDevNet/ydk-gen/issues/812))
   * Improved support for `YList` ([#811](https://github.com/CiscoDevNet/ydk-gen/pull/811))
 
-##### Note about `cisco-ios-xr` 6.5.1 bundle
+#### Python
+
+##### CRUD / Codec API improvements
+  * Improve handling of python native types in model API. ([#733](https://github.com/CiscoDevNet/ydk-gen/issues/733))
+  * Validate leaf values based on python type of model API. ([#739](https://github.com/CiscoDevNet/ydk-gen/issues/739))
+  * Improve checking of invalid attributes for model API objects. ([#815](https://github.com/CiscoDevNet/ydk-gen/issues/815))
+
+#### Note about `cisco-ios-xr` 6.5.1 bundle
   * Bundle excludes the following files due to duplicate namespaces:
 ```
     Cisco-IOS-XR-sysadmin-clear-ncs5500.yang
@@ -32,12 +39,6 @@
     Cisco-IOS-XR-sysadmin-fabric-ncs5502.yang
 ```
 
-#### Python
-
-##### CRUD / Codec API improvements
-  * Improve handling of python native types in model API. ([#733](https://github.com/CiscoDevNet/ydk-gen/issues/733))
-  * Validate leaf values based on python type of model API. ([#739](https://github.com/CiscoDevNet/ydk-gen/issues/739))
-  * Improve checking of invalid attributes for model API objects. ([#815](https://github.com/CiscoDevNet/ydk-gen/issues/815))
 ### 2018-07-02 version 0.7.2
 
 #### Python, C++ & Go
