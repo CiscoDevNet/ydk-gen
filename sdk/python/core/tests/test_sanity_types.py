@@ -17,6 +17,7 @@
 from __future__ import absolute_import
 import ydk.types as ytypes
 import unittest
+import copy
 
 from ydk.services import CRUDService
 try:
@@ -416,6 +417,22 @@ class SanityTest(unittest.TestCase):
 
         # Compare runners
         result = is_equal(runner, runner1)
+        self.assertEqual(result, True)
+
+        #DEEPCOPY
+        runner_copy = copy.deepcopy(runner)
+        result = is_equal(runner, runner_copy)
+        self.assertEqual(result, True)
+
+        self.crud.delete(self.ncc, Runner())
+        self.crud.create(self.ncc, runner_copy)
+
+        # Read into Runner2
+        runner1 = Runner()
+        runner1 = self.crud.read(self.ncc, runner1)
+
+        # Compare runners
+        result = is_equal(runner_copy, runner1)
         self.assertEqual(result, True)
 
     def test_union_complex_list(self):
