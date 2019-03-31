@@ -20,6 +20,7 @@ sanity test for ydktest-sanity.yang
 from __future__ import absolute_import
 
 import unittest
+import copy
 from compare import is_equal
 
 from ydk.types import Empty, DELETE
@@ -293,6 +294,14 @@ class SanityYang(unittest.TestCase):
         self.crud.create(self.ncc, r_1)
         r_2 = self.crud.read(self.ncc, r_2)
         self.assertEqual(is_equal(r_1, r_2), True)
+
+        # DEEPCOPY
+        r_1_copy = copy.deepcopy(r_1)
+        self.assertEqual(is_equal(r_1_copy, r_1), True)
+        self.crud.create(self.ncc, r_1_copy)
+        r_2_copy = self.crud.read(self.ncc, Runner())
+        self.assertEqual(is_equal(r_2_copy, r_2), True)
+
         # UPDATE
         r_1, r_2 = Runner(), Runner()
         e_1 = Runner.ThreeList.Ldata()

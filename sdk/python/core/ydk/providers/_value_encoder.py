@@ -42,8 +42,17 @@ class ValueEncoder(object):
         if member.mtype == REFERENCE_IDENTITY_CLASS or member.ptype.endswith('Identity'):
             module = importlib.import_module(member.pmodule_name)
             clazz = reduce(getattr, member.clazz_name.split('.'), module)
-
-            if issubclass(type(value), clazz):
+            value_is_subclass = False
+            try:
+                val_str = str(value)
+                val_class = None
+                if 'ydk.models' in val_str:
+                    module = importlib.import_module('ydk')
+                    val_class = getattr(module, val_str.split(' ')[0].lstrip('<ydk.'))
+                    value_is_subclass = issubclass(val_class, clazz)
+            except:
+                pass
+            if issubclass(type(value), clazz) or value_is_subclass:
                 identity_inst = value
                 if _yang_ns._namespaces[member.module_name] == _yang_ns._namespaces[identity_inst._meta_info().module_name]:
                     # no need for prefix in this case

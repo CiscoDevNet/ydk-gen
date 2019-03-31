@@ -83,7 +83,8 @@
               "vendor/cisco/xr/641/openconfig-types.yang",
               "vendor/cisco/xr/641/openconfig-vlan-types.yang",
               "vendor/cisco/xr/641/openconfig-vlan.yang",
-              "vendor/cisco/xr/641/openconfig-yang-types.yang"
+              "vendor/cisco/xr/641/openconfig-yang-types.yang",
+              "vendor/cisco/xr/641/cisco-xr-openconfig-network-instance-deviations.yang"
             ]
           }
         ]

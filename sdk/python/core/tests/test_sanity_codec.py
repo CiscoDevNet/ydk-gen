@@ -20,6 +20,7 @@ sanity test for CodecService
 from __future__ import absolute_import
 import unittest
 from compare import is_equal
+import copy
 
 try:
     from ydk.models.ydktest.ydktest_sanity import Runner
@@ -123,6 +124,13 @@ class SanityYang(unittest.TestCase):
         r_1 = self._get_runner_entity()
         payload = self.codec.encode(self.provider, r_1)
         self.assertEqual(self._runner_payload, payload)
+
+        # DEEPCOPY
+        r_1_copy = copy.deepcopy(r_1)
+        self.assertEqual(is_equal(r_1_copy, r_1), True)
+        payload_copy = self.codec.encode(self.provider, r_1)
+        self.assertEqual(self._runner_payload, payload_copy)
+
 
     def test_encode_2(self):
         try:
