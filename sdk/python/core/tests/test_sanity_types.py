@@ -432,7 +432,7 @@ class SanityTest(unittest.TestCase):
         runner1 = self.crud.read(self.ncc, runner1)
 
         # Compare runners
-        result = is_equal(runner_copy, runner1)
+        result = is_equal(runner, runner1)
         self.assertEqual(result, True)
 
     def test_union_complex_list(self):
