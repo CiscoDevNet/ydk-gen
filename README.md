@@ -135,6 +135,7 @@ sudo gdebi libydk-0.8.4-1.amd64.deb
 ```
 sudo yum install epel-release
 sudo yum install libssh-devel gcc-c++ python3-devel
+sudo yum install libtool libxml2-devel curl-devel pcre-devel libxslt-devel libssh-devel
 ```
 
 if your gcc compiler version is below 4.8.1, install gcc-5 and g++-5
@@ -144,6 +145,12 @@ sudo yum install centos-release-scl -y > /dev/null
 sudo yum install devtoolset-4-gcc* -y > /dev/null
 sudo ln -sf /opt/rh/devtoolset-4/root/usr/bin/gcc /usr/bin/gcc
 sudo ln -sf /opt/rh/devtoolset-4/root/usr/bin/g++ /usr/bin/g++
+```
+
+if your cmake is below version 3.0.0, uninstall it and install a newer version:
+```
+sudo yum remove cmake
+sudo yum install cmake3
 ```
 
 #### Install libydk library
