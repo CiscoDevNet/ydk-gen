@@ -28,6 +28,7 @@ from shutil import rmtree, copy
 from collections import namedtuple, defaultdict
 from .bundle_translator import translate
 from ..common import YdkGenException
+from packaging.version import Version
 
 
 logger = logging.getLogger('ydkgen')
@@ -38,7 +39,6 @@ Local = namedtuple('Local', ['url'])
 Remote = namedtuple('Remote', ['url', 'commitid', 'path'])
 RepoDir = namedtuple('RepoDir', ['repo', 'dir'])
 Bundles = namedtuple('Bundles', ['curr_bundle', 'bundles'])
-Version = namedtuple('Version', ['major', 'minor', 'patch'])
 
 
 def nested_defaultdict():
@@ -81,8 +81,8 @@ class BundleDefinition(object):
 
     def __init__(self, data):
         self._name = data['name'].replace('-', '_')
-        self._version = Version(*tuple(data['version'].split('.')))
-        self._core_version = Version(*tuple(data['core-version'].split('.')))
+        self._version = Version(data['version'])
+        self._core_version = Version(data['core-version'])
         self._description = data['description'] if 'description' in data else str()
         self._long_description = data['long-description'] if 'long-description' in data else str()
 
@@ -108,12 +108,12 @@ class BundleDefinition(object):
     @property
     def str_version(self):
         """ Return string representation of version."""
-        return "%s.%s.%s" % self.version
+        return str(self.version)
 
     @property
     def str_core_version(self):
         """ Return string representation of ydk version."""
-        return "%s.%s.%s" % self.core_version
+        return str(self.core_version)
 
     @property
     def description(self):
