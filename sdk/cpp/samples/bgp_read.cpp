@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 
     auto bgp_filter = make_unique<openconfig_bgp::Bgp>();
     auto bgp_read = crud.read_config(provider, *bgp_filter);
-    if (bgp_read == nullptr)
+    if(bgp_read == nullptr)
     {
         cout << "=================================================="<<endl;
         cout << "No entries found"<<endl<<endl;
@@ -60,38 +60,31 @@ int main(int argc, char* argv[])
     cout << "AS: " << bgp_read_ptr->global->config->as << endl;
     cout << "Router ID: " << bgp_read_ptr->global->config->router_id << endl<<endl;
 
-	auto neighbor_keys = bgp_read_ptr->neighbors->neighbor.keys();
-	for (auto nkey : neighbor_keys)
+    for(size_t index=0; index < bgp_read_ptr->neighbors->neighbor.size(); index++)
     {
-        auto entity = bgp_read_ptr->neighbors->neighbor[nkey];
-        auto neighbor = dynamic_cast<openconfig_bgp::Bgp::Neighbors::Neighbor*>(entity.get());
+        openconfig_bgp::Bgp::Neighbors::Neighbor & neighbor = *(bgp_read_ptr->neighbors->neighbor[index]);
 
-        cout << "Neighbor address: " << neighbor->neighbor_address <<endl;
-        cout << "Neighbor local AS: " <<  neighbor->config->local_as << endl;
-        cout << "Neighbor peer group: " <<  neighbor->config->peer_group << endl;
-        cout << "Neighbor peer type: " <<  neighbor->config->peer_type << endl << endl;
+        cout << "Neighbor address: " << neighbor.neighbor_address <<endl;
+        cout << "Neighbor local AS: " <<  neighbor.config->local_as << endl;
+        cout << "Neighbor peer group: " <<  neighbor.config->peer_group << endl;
+        cout << "Neighbor peer type: " <<  neighbor.config->peer_type << endl<<endl;
     }
 
-	auto afi_safi_keys = bgp_read_ptr->global->afi_safis->afi_safi.keys();
-	for (auto afi_safi_key : afi_safi_keys)
+    for(size_t index=0; index < bgp_read_ptr->global->afi_safis->afi_safi.size(); index++)
     {
-        auto entity = bgp_read_ptr->global->afi_safis->afi_safi[afi_safi_key];
-        auto afi_safi = dynamic_cast<openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi*>(entity.get());
+        openconfig_bgp::Bgp::Global::AfiSafis::AfiSafi & afi_safi = *(bgp_read_ptr->global->afi_safis->afi_safi[index]);
 
-        cout << "AFI-SAFI name: " << afi_safi->afi_safi_name <<endl;
-        cout << "AFI-SAFI config name: " <<  afi_safi->config->afi_safi_name << endl;
-        cout << "AFI-SAFI enabled: " <<  afi_safi->config->enabled << endl << endl;
+        cout << "AFI-SAFI name: " << afi_safi.afi_safi_name <<endl;
+        cout << "AFI-SAFI config name: " <<  afi_safi.config->afi_safi_name <<endl;
+        cout << "AFI-SAFI enabled: " <<  afi_safi.config->enabled <<endl<<endl;
     }
 
-	auto peer_keys = bgp_read_ptr->peer_groups->peer_group.keys();
-	for (auto peer_key : peer_keys)
+    for(size_t index=0; index < bgp_read_ptr->peer_groups->peer_group.size(); index++)
     {
-        auto entity = bgp_read_ptr->peer_groups->peer_group[peer_key];
-        auto peer_group = dynamic_cast<openconfig_bgp::Bgp::PeerGroups::PeerGroup*>(entity.get());
+        openconfig_bgp::Bgp::PeerGroups::PeerGroup & peer_group = *(bgp_read_ptr->peer_groups->peer_group[index]);
 
-        cout << "Peer group name: " << peer_group->peer_group_name << endl;
-        cout << "Peer group type: " << peer_group->config->peer_type << endl << endl;
+        cout << "Peer group name: " << peer_group.peer_group_name << endl;
+        cout << "Peer group type: " << peer_group.config->peer_type << endl<<endl;
     }
 
-    cout << "==================================================" << endl << endl;
-}
+    cout << "=================================================="<<endl<<endl;}

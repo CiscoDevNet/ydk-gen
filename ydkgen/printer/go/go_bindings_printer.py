@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,20 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
-"""
+'''
    YDK GO converter
-"""
+
+'''
 
 from __future__ import print_function
 
 import os
-
+import sys
 from distutils.file_util import copy_file
 from distutils.dir_util import mkpath
 
@@ -42,7 +38,10 @@ from ..doc import DocPrinter
 class GoBindingsPrinter(LanguageBindingsPrinter):
 
     def __init__(self, ydk_root_dir, bundle, generate_tests, one_class_per_module):
-        super().__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
+        if sys.version_info > (3,):
+            super().__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
+        else:
+            super(GoBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
 
     def print_files(self):
         only_modules = [package.stmt for package in self.packages]
@@ -126,24 +125,19 @@ class GoBindingsPrinter(LanguageBindingsPrinter):
         mkpath(yang_files_dir)
         copy_tree(self.bundle.resolved_models_dir, yang_files_dir)
 
-
 def get_table_of_contents_file_name(path):
     return '%s/ydk.models.rst' % path
 
-
 def get_go_doc_file_name(path, named_element):
     return '%s/%s.rst' % (path, get_rst_file_name(named_element))
-
 
 def emit_table_of_contents(ctx, packages, extra_args):
     bundle_name, bundle_version = extra_args
     DocPrinter(ctx, 'go', bundle_name, bundle_version).print_table_of_contents(packages)
 
-
 def emit_go_doc(ctx, named_element, extra_args):
     identity_subclasses, bundle_name = extra_args
     DocPrinter(ctx, 'go', bundle_name).print_module_documentation(named_element, identity_subclasses)
-
 
 def copy_tree(src, dst):
     names = os.listdir(src)

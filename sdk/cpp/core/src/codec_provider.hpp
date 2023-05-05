@@ -1,6 +1,6 @@
 /*  ----------------------------------------------------------------
  YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems. All rights reserved.
+ Copyright 2016 Cisco Systems. All rights reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -42,17 +42,16 @@ class CodecServiceProvider
 
     void initialize(const std::string & bundle_name, const std::string & models_path, augment_capabilities_function get_caps_func);
     path::RootSchemaNode& get_root_schema_for_bundle(const std::string & bundle_name);
-    bool has_root_schema_for_bundle(const std::string & bundle_name);
 
   private:
     void initialize_root_schema(const std::string & bundle_name, path::Repository & repo);
 
   public:
     EncodingFormat m_encoding;
-    bool user_provided_repo;
 
   private:
     std::map<std::string, std::shared_ptr<path::RootSchemaNode>> m_root_schema_table;
+    bool user_provided_repo;
     bool capabilities_augmented;
     path::Repository m_repo;
 };

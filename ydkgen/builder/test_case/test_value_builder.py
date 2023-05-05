@@ -19,7 +19,7 @@ test_value_builder.py
 
 Generate and return property value.
 """
-
+import sys
 import base64
 import rstr
 
@@ -114,7 +114,10 @@ class ValueBuilder(object):
     def _handle_binary(self):
         """Return binary value."""
         random_string = self._get_string(0)
-        bin_string = base64.b64encode(str.encode(random_string)).decode()
+        if sys.version_info >= (3, 0):
+            bin_string = base64.b64encode(str.encode(random_string)).decode()
+        else:
+            bin_string = base64.b64encode(random_string)
         return self._render_string(bin_string)
 
     def _handle_boolean(self, prop):

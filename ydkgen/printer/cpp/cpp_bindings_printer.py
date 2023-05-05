@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,19 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
-"""
+'''
    YDK PY converter
-"""
 
+'''
 from __future__ import print_function
 
 import os
+import sys
 
 from ydkgen.api_model import Class, Enum
 from ydkgen.builder import MultiFileBuilder, MultiFileHeader, MultiFileSource
@@ -43,7 +39,10 @@ from ..tests import TestPrinter
 class CppBindingsPrinter(LanguageBindingsPrinter):
 
     def __init__(self, ydk_root_dir, bundle, generate_tests, one_class_per_module):
-        super().__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
+        if sys.version_info > (3,):
+            super().__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
+        else:
+            super(CppBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
         self.source_files = []
         self.header_files = []
 

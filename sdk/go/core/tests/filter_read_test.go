@@ -61,8 +61,7 @@ func (suite *FilterReadTestSuite) SetupSuite() {
 		Address:  "127.0.0.1",
 		Username: "admin",
 		Password: "admin",
-		Port:     12022,
-		OnDemand: true}
+		Port:     12022}
 	suite.Provider.Connect()
 
 	suite.CRUD.Delete(&suite.Provider, &filterread.A{})

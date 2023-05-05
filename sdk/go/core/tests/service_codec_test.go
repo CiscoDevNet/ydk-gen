@@ -590,34 +590,6 @@ func (suite *CodecTestSuite) TestNative() {
 	suite.Equal(types.EntityEqual(&native, runnerDecode), true)
 }
 
-func (suite *CodecTestSuite) TestBoolLists() {
-	r := ysanity.Runner{}
-	r.Ytypes.BuiltInT.BoolLeafList = append(r.Ytypes.BuiltInT.BoolLeafList, true)
-        r.Ytypes.BuiltInT.BoolLeafList = append(r.Ytypes.BuiltInT.BoolLeafList, false)
-
-        boolListElem := ysanity.Runner_Ytypes_BuiltInT_BoolList{}
-        boolListElem.BoolLeaf = true
-        r.Ytypes.BuiltInT.BoolList = append(r.Ytypes.BuiltInT.BoolList, &boolListElem)
-
-        xml := suite.Codec.Encode(&suite.Provider, &r)
-        expected := `<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
-  <ytypes>
-    <built-in-t>
-      <bool-leaf-list>true</bool-leaf-list>
-      <bool-leaf-list>false</bool-leaf-list>
-      <bool-list>
-        <bool-leaf>true</bool-leaf>
-      </bool-list>
-    </built-in-t>
-  </ytypes>
-</runner>
-`
-        suite.Equal(expected, xml)
-
-        entity := suite.Codec.Decode(&suite.Provider, xml)
-        suite.True(types.EntityEqual(entity, &r))
-}
-
 func TestCodecTestSuite(t *testing.T) {
 	if testing.Verbose() {
 		ydk.EnableLogging(ydk.Debug)

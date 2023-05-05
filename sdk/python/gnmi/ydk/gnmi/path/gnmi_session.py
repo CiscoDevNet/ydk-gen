@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2018-2019 Cisco Systems
+# Copyright 2018 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,23 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
-"""
-gnmi_session.py
+"""gnmi_session.py
 gNMISession Python wrapper.
 """
 
 from ydk_gnmi_.path import gNMISession as _gNMISession
+import sys
 
 
-class gNMISession(object):
-    """
-     Python wrapper for gNMISession
+class gNMISession(_gNMISession):
+    """ Python wrapper for gNMISession
     """
 
     def __init__(self,
@@ -43,17 +37,18 @@ class gNMISession(object):
         if private_key is None:
             private_key = ""
 
-        self.gs = _gNMISession(repo, address, port, username, password,
-                               server_certificate, private_key)
+        if sys.version_info > (3,):
+            self._super = super()
+        else:
+            self._super = super(gNMISession, self)
+        self._super.__init__(repo, address, port, username, password,
+                             server_certificate, private_key)
 
     def get_root_schema(self):
-        return self.gs.get_root_schema()
+        return self._super.get_root_schema()
 
     def invoke(self, rpc):
-        return self.gs.invoke(rpc)
+        return self._super.invoke(rpc)
 
     def subscribe(self, rpc, out_func=None, poll_func=None):
-        return self.gs.subscribe(rpc, out_func, poll_func)
-
-    def get_capabilities(self):
-        return self.gs.get_capabilities()
+        return self._super.subscribe(rpc, out_func, poll_func)

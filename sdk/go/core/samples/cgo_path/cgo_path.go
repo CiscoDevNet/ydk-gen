@@ -75,25 +75,11 @@ func main() {
 	defer C.CodecFree(codec)
 	repo := C.RepositoryInit()
 	defer C.RepositoryFree(repo)
-
-	var cOnDemand C.boolean = 1
-	var cCommonCache C.boolean = 0
-	var ctimeout C.int = C.int(-1)
-
-	var cserver *C.char = C.CString("")
-	defer C.free(unsafe.Pointer(cserver))
-	var cclient *C.char = C.CString("")
-	defer C.free(unsafe.Pointer(cclient))
-
-	provider := C.NetconfServiceProviderInit(cstate, repo, address, username, password, 12022, protocol,
-		cOnDemand, cCommonCache, ctimeout, cserver, cclient)
+	provider := C.NetconfServiceProviderInitWithRepo(cstate, repo, address, username, password, 12022, protocol)
 	defer C.NetconfServiceProviderFree(provider)
 	root_schema := C.ServiceProviderGetRootSchema(cstate, provider)
 
-	var cvalue *C.char = C.CString("")
-	defer C.free(unsafe.Pointer(cvalue))
-
-	runner := C.RootSchemaNodeCreate(cstate, root_schema, runner_path, cvalue)
+	runner := C.RootSchemaNodeCreate(cstate, root_schema, runner_path)
 
 	C.DataNodeCreate(cstate, runner, number_path, number_value)
 	var create_xml *C.char = C.CodecEncode(cstate, codec, runner, C.XML, 0)
@@ -106,7 +92,7 @@ func main() {
 
 	read_rpc := C.RootSchemaNodeRpc(cstate, root_schema, read_path)
 	input = C.RpcInput(cstate, read_rpc)
-	runner_filter := C.RootSchemaNodeCreate(cstate, root_schema, runner_path, cvalue)
+	runner_filter := C.RootSchemaNodeCreate(cstate, root_schema, runner_path)
 	var read_xml *C.char = C.CodecEncode(cstate, codec, runner_filter, C.XML, 0)
 	defer C.free(unsafe.Pointer(read_xml))
 

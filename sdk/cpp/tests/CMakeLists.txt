@@ -31,7 +31,7 @@ set(bundle_tests_src
         testsanitynctest.cpp
         testsanityvalidationtest.cpp
         test_utils.cpp
-#        test_oc_nis.cpp
+        test_oc_nis.cpp
         )
 
 find_library(xml2_location xml2)
@@ -44,7 +44,7 @@ find_library(pthread_location pthread)
 find_library(dl_location dl)
 find_library(ydk_location ydk)
 find_library(ydk_ydktest_location ydk_ydktest)
-#find_library(ydktest_oc_nis_location ydk_ydktest_oc_nis)
+find_library(ydktest_oc_nis_location ydk_ydktest_oc_nis)
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
@@ -71,7 +71,7 @@ set_property(TARGET ${YDK_UNITTEST_TARGET_NAME} PROPERTY CXX_STANDARD_REQUIRED O
 target_link_libraries(${YDK_UNITTEST_TARGET_NAME}
     ${ydk_location}
     ${ydk_ydktest_location}
-#    ${ydktest_oc_nis_location}
+    ${ydktest_oc_nis_location}
     ${xml2_location}
     ${curl_location}
     ${ssh_location}

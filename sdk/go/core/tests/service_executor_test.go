@@ -1,25 +1,3 @@
-/*  ----------------------------------------------------------------
- YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems. All rights reserved.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- -------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
- ------------------------------------------------------------------*/
-
 package test
 
 import (
@@ -28,7 +6,6 @@ import (
 	"strconv"
 	ysanity "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/sanity"
 	ietfNetconf "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/ietf_netconf"
-	ietfNetconfMonitoring "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/ietf_netconf_monitoring"
 	"github.com/CiscoDevNet/ydk-go/ydk"
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
@@ -53,8 +30,7 @@ func (suite *ExecutorServiceTestSuite) SetupSuite() {
 		Address:  "127.0.0.1",
 		Username: "admin",
 		Password: "admin",
-		Port:     12022,
-		OnDemand: true}
+		Port:     12022}
 	suite.NetconfProvider.Connect()
 	suite.CrudService		= services.CrudService{}
 	suite.CodecService 		= services.CodecService{}
@@ -359,39 +335,6 @@ func (suite *ExecutorServiceTestSuite) TestDeleteConfig() {
 	suite.Equal(readEntity, nil)
 }
 
-// RpcOutput entity to get output from RPC
-type RpcOutput struct {
-    EntityData types.CommonEntityData
-
-    // Contains the schema content. The type is string.
-    Data interface{}
-}
-
-func (output *RpcOutput) GetEntityData() *types.CommonEntityData {
-    output.EntityData.SegmentPath = "ietf-netconf-monitoring:get-schema"
-    output.EntityData.AbsolutePath = "ietf-netconf-monitoring:get-schema"
-
-    output.EntityData.Children = types.NewOrderedMap()
-    output.EntityData.Leafs = types.NewOrderedMap()
-    output.EntityData.Leafs.Append("data", types.YLeaf{"Data", output.Data})
-
-    output.EntityData.YListKeys = []string {}
-
-    return &(output.EntityData)
-}
-
-func (suite *ExecutorServiceTestSuite) TestGetSchemaRpc() {
-    rpcEntity := ietfNetconfMonitoring.GetSchema{}
-    rpcEntity.Input.Identifier = "main"
-    returnTopEntity := RpcOutput{}
-    replyEntity := suite.ExecutorService.ExecuteRpc(&suite.NetconfProvider, &rpcEntity, &returnTopEntity)
-    suite.NotNil(replyEntity)
-
-    replyOutput := replyEntity.(*RpcOutput)
-    module := types.GetLeafValue(replyOutput.Data).Value
-    suite.Equal(0, strings.Index(module, "module main {"))
-}
-
 func (suite *ExecutorServiceTestSuite) TestCloseSession() {
 	closeRpc := ietfNetconf.CloseSession{}
 	readEntity := suite.ExecutorService.ExecuteRpc(&suite.NetconfProvider, &closeRpc, nil)
@@ -437,8 +380,5 @@ func (suite *ExecutorServiceTestSuite) TestKillSession() {
 }
 
 func TestExecutorServiceTestSuite(t *testing.T) {
-	if testing.Verbose() {
-		ydk.EnableLogging(ydk.Debug)
-	}
 	suite.Run(t, new(ExecutorServiceTestSuite))
 }

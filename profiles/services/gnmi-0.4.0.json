@@ -1,10 +1,10 @@
 {
   "name": "gnmi",
-  "version": "0.4.0.5",
+  "version": "0.4.0-post5",
   "author": "Cisco",
   "copyright": "Cisco",
   "description": "YDK gNMI service profile",
-  "long_description": "This YANG Development Kit (YDK) service package provides APIs for gNMI protocol.",
+  "long_description": "This YANG Development Kit (YDK) bundle provides APIs for OpenConfig YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for OpenConfig models uses the YDK core package and additional model bundles.  You can find the SDK documentation at http://ydk.cisco.com/py/docs  You can find more details on YDK at http://ydk.io",
   "dependency": [
     {
       "name": "ydk",

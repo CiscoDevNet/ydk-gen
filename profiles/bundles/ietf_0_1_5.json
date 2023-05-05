@@ -35,7 +35,7 @@
         "profiles/bundles/yang/ietf/0.1.5/ietf-yang-push.yang",
         "profiles/bundles/yang/ietf/0.1.5/ietf-yang-smiv2.yang",
         "profiles/bundles/yang/ietf/0.1.5/ietf-yang-types.yang",
-        "profiles/bundles/yang/ietf/0.1.5/policy-types.yang"
+        "profiles/bundles/yang/ietf/0.1.3/policy-types.yang"
       ]
   }
 }

@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
  import_test_printer.py
 
  YANG model driven API, python emitter.
+
 """
 
 from ydkgen.api_model import Class, Enum, Package
@@ -32,9 +33,9 @@ class ImportTestPrinter(object):
         self.ctx.bline()
         self.ctx.writeln('import unittest')
         self.ctx.bline()
-        self.ctx.bline()
         self.ctx.writeln('class ImportTest(unittest.TestCase):')
         self.ctx.lvl_inc()
+        self.ctx.bline()
 
         def collect_types(element, typelist):
             sorted(types, key=lambda x: x.name)
@@ -57,10 +58,10 @@ class ImportTestPrinter(object):
             else:
                 self.ctx.writeln('pass')
             self.ctx.lvl_dec()
-
+            self.ctx.bline()
         self.ctx.lvl_dec()
         self.ctx.bline()
-        self.ctx.bline()
+
         self.ctx.writeln("if __name__ == '__main__':")
         self.ctx.lvl_inc()
         self.ctx.writeln('unittest.main()')

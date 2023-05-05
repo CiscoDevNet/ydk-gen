@@ -151,7 +151,7 @@ YANG leaf, leaf-list, and list
 
     .. cpp:function:: std::vector<YLeaf> getYLeafs() const
 
-        Access function to get all elements in the YLeafList.
+        Access function to get all elements in the YLeafList
 
 .. cpp:class:: ydk::YList
 
@@ -163,13 +163,6 @@ YANG leaf, leaf-list, and list
 
         :param key_names: list of strings, which represent names of keys for the list entities, including empty list.
         
-    .. cpp:function:: bool has_key(const std::string& key) const
-
-       Checks if list element with given key is present in the `YList`.
-
-        :param key: ``strings``, which represent list entity key(s).
-        :return: ``true``, if element with matching key is in the list, ``false`` - otherwise.
-
     .. cpp:function:: std::shared_ptr<Entity> operator [] (const std::string& key) const
 
         Gets `YList` entity, which has matching `key` value.

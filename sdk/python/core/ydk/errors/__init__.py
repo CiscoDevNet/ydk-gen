@@ -13,15 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
 """ errors
    Contains types representing the Exception hierarchy in YDK
 """
+import sys
 
 
 class YError(Exception):
@@ -43,7 +39,10 @@ class YCoreError(YError):
     Exception for core error
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YCoreError, self).__init__(error_msg)
 
 
 class YCodecError(YError):
@@ -51,7 +50,10 @@ class YCodecError(YError):
     Exception for Codec Error
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YCodecError, self).__init__(error_msg)
 
 
 class YClientError(YError):
@@ -59,7 +61,10 @@ class YClientError(YError):
     Exception for Client Side Validation
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YClientError, self).__init__(error_msg)
 
 
 class YServiceProviderError(YError):
@@ -67,7 +72,10 @@ class YServiceProviderError(YError):
     Exception for Provider Side Validation
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YServiceProviderError, self).__init__(error_msg)
 
 
 class YServiceError(YError):
@@ -75,7 +83,10 @@ class YServiceError(YError):
     Exception for Service Side Validation
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YServiceError, self).__init__(error_msg)
 
 
 class YIllegalStateError(YError):
@@ -84,7 +95,10 @@ class YIllegalStateError(YError):
     in the right state. Use the error_msg for the error.
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YIllegalStateError, self).__init__(error_msg)
 
 
 class YInvalidArgumentError(YError):
@@ -92,7 +106,10 @@ class YInvalidArgumentError(YError):
     Use the error_msg for the error.
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YInvalidArgumentError, self).__init__(error_msg)
 
 
 class YOperationNotSupportedError(YError):
@@ -100,7 +117,10 @@ class YOperationNotSupportedError(YError):
     Thrown when an yfilter is not supported.
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YOperationNotSupportedError, self).__init__(error_msg)
 
 
 class YModelError(YError):
@@ -108,4 +128,7 @@ class YModelError(YError):
     Thrown when a model constraint is violated.
     """
     def __init__(self, error_msg):
-        super().__init__(error_msg)
+        if sys.version_info > (3,):
+            super().__init__(error_msg)
+        else:
+            super(YModelError, self).__init__(error_msg)

@@ -40,8 +40,8 @@ int main(int argc, char* argv[])
     bool verbose=(args[4]=="--verbose");
     if(verbose)
     {
-        auto logger = spdlog::stdout_color_mt("ydk");
-        logger->set_level(spdlog::level::info);
+            auto logger = spdlog::stdout_color_mt("ydk");
+            logger->set_level(spdlog::level::info);
     }
 
     try
@@ -51,10 +51,7 @@ int main(int argc, char* argv[])
 
         auto isis = make_unique<Isis>();
         bool reply = crud.delete_(provider, *isis);
-        if (reply)
-            cout << "Delete yfilter success" << endl << endl;
-        else
-            cout << "Operation failed" << endl << endl;
+        if(reply) cout << "Delete yfilter success" << endl << endl; else cout << "Operation failed" << endl << endl;
     }
     catch(YError & e)
     {

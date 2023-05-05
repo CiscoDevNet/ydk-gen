@@ -1,24 +1,3 @@
-/*  ----------------------------------------------------------------
- YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems. All rights reserved.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- -------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
- ------------------------------------------------------------------*/
 
 #include "../src/types.hpp"
 #include "../src/errors.hpp"
@@ -202,30 +181,4 @@ TEST_CASE("test_value_list_deci64")
 
     test_value.append("1.2");
     REQUIRE(test_value[1].get()=="1.2");
-}
-
-TEST_CASE("test_value_list_duplicate")
-{
-    YLeafList test_value{YType::str, "value"};
-    test_value.append("abc");
-    test_value.append("abc");
-    test_value.append("abc");
-    auto leafs = test_value.getYLeafs();
-    CHECK(leafs.size() == 3);
-    CHECK(test_value[0].get() == test_value[2].get());
-}
-
-TEST_CASE("test_value_list_boolean")
-{
-    YLeafList test_value{YType::boolean, "value"};
-    test_value.append(true);
-    test_value.append(false);
-    auto leafs = test_value.getYLeafs();
-    CHECK(leafs.size() == 2);
-    CHECK(test_value[0].get() == "true");
-    CHECK(test_value[1].get() == "false");
-
-    auto leaf_data = test_value.get_name_leafdata();
-    CHECK(leaf_data[0].first == "value[.=\"true\"]");
-    CHECK(leaf_data[1].first == "value[.=\"false\"]");
 }

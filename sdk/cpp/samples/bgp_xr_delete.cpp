@@ -42,8 +42,8 @@ int main(int argc, char* argv[])
     bool verbose=(args[4]=="--verbose");
     if(verbose)
     {
-        auto logger = spdlog::stdout_color_mt("ydk");
-        logger->set_level(spdlog::level::info);
+            auto logger = spdlog::stdout_color_mt("ydk");
+            logger->set_level(spdlog::level::info);
     }
 
     NetconfServiceProvider provider{host, username, password, port};
@@ -51,8 +51,5 @@ int main(int argc, char* argv[])
 
     auto bgp = make_unique<Bgp>();
     bool reply = crud.delete_(provider, *bgp);
-    if (reply)
-        cout << "Update yfilter success" << endl << endl;
-    else
-        cout << "Operation failed" << endl << endl;
+    if(reply) cout << "Delete yfilter success" << endl; else cout << "Operation failed" << endl;
 }

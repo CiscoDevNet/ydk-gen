@@ -1,5 +1,5 @@
 /*  ----------------------------------------------------------------
- Copyright 2018-2019 Cisco Systems
+ Copyright 2016 Cisco Systems
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -12,13 +12,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- -------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
  ------------------------------------------------------------------*/
-
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
@@ -57,7 +51,14 @@ static bool enabled_logging = false;
 
 static void add_null_handler(object logger)
 {
-    if (!added_nullhandler)
+    if (added_nullhandler) { return; }
+    object version = module::import("sys").attr("version_info");
+    object ge = version.attr("__ge__");
+    // NullHandler is introduced after Python 2.7
+    // Add Nullhandler to avoid `handler not found for logger` error for Python > 2.7
+    object version_27 = pybind11::make_tuple(2,7);
+    bool result = ge(version_27).cast<bool>();
+    if (result)
     {
         object null_handler = module::import("logging").attr("NullHandler");
         null_handler = null_handler();
@@ -107,8 +108,7 @@ PYBIND11_MODULE(ydk_gnmi_, ydk_gnmi)
     class_<ydk::path::Session>(path, "Session", module_local())
         .def("get_root_schema", &ydk::path::Session::get_root_schema, return_value_policy::reference)
         .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Session::*)(ydk::path::Rpc& rpc) const) &ydk::path::Session::invoke, return_value_policy::reference)
-        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Session::*)(ydk::path::DataNode& rpc) const) &ydk::path::Session::invoke, return_value_policy::reference)
-        .def("get_capabilities", (std::vector<std::string> (ydk::path::Session::*)() const) &ydk::path::Session::get_capabilities, return_value_policy::reference);
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Session::*)(ydk::path::DataNode& rpc) const) &ydk::path::Session::invoke, return_value_policy::reference);
 
     class_<ydk::path::gNMISession, ydk::path::Session>(path, "gNMISession")
         .def(init<ydk::path::Repository&, const std::string&, int, const std::string&, const std::string&, const std::string&, const std::string&>(),
@@ -129,8 +129,7 @@ PYBIND11_MODULE(ydk_gnmi_, ydk_gnmi)
              &ydk::path::gNMISession::invoke_subscribe,
                                   arg("rpc"),
                                   arg("output_callback_function")=nullptr,
-                                  arg("poll_callback_function")=nullptr)
-        .def("get_capabilities", &ydk::path::gNMISession::get_capabilities, return_value_policy::reference);
+                                  arg("poll_callback_function")=nullptr);
 
     class_<ydk::ServiceProvider>(providers, "ServiceProvider", module_local())
         .def("get_encoding", &ydk::ServiceProvider::get_encoding, return_value_policy::reference)

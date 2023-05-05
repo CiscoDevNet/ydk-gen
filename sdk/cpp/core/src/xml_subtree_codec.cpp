@@ -1,6 +1,6 @@
 /*  ----------------------------------------------------------------
  YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems. All rights reserved.
+ Copyright 2016 Cisco Systems. All rights reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -136,20 +136,11 @@ static void populate_xml_node(Entity & entity, const path::SchemaNode & parent_s
     walk_children(entity, *schema, child);
 }
 
-static const xmlChar* get_content_from_leafdata(string leaf_name, LeafData & leaf_data)
+static const xmlChar* get_content_from_leafdata(LeafData & leaf_data)
 {
     const xmlChar* content = NULL;
     if(leaf_data.is_set)
     {
-        string leaf_type = "leaf";
-        auto pos = leaf_name.find("[.=\"");
-        if (pos != string::npos) {
-            leaf_data.value = leaf_name.substr(pos+4, leaf_name.length()-pos-6);
-            leaf_name = leaf_name.substr(0, pos);
-            leaf_type = "leaf-list";
-        }
-        YLOG_DEBUG("XmlCodec: Creating {} node '{}' with value: '{}'",
-                   leaf_type, leaf_name, leaf_data.value);
         content = to_xmlchar(leaf_data.value);
     }
     else if(is_set(leaf_data.yfilter))
@@ -184,7 +175,7 @@ static void populate_xml_node_contents(const path::SchemaNode & parent_schema, E
         YLOG_DEBUG("XMLCodec: Creating child {} of {} with value: '{}', is_set: {}", name_value.first, parent_schema.get_path(),
                 leaf_data.value, leaf_data.is_set);
 
-        const xmlChar* content = get_content_from_leafdata(name_value.first, leaf_data);
+        const xmlChar* content = get_content_from_leafdata(leaf_data);
         if(leaf_to_be_created(leaf_data))
         {
             xmlNodePtr child = create_and_populate_xml_node(parent_schema, *schema, leaf_data.yfilter, xml_node, content);
@@ -217,7 +208,7 @@ std::shared_ptr<Entity> XmlSubtreeCodec::decode(const std::string & payload, std
 static void check_and_set_leaf(Entity & entity, Entity * parent, xmlNodePtr xml_node, xmlDocPtr doc)
 {
     string current_node_name{to_string(xml_node->name)};
-    if (xml_node->children == NULL)
+    if(xml_node->children == NULL)
     {
         YLOG_DEBUG("XMLCodec: Creating leaf '{}' with no value", current_node_name);
         entity.set_filter(current_node_name, YFilter::read);
@@ -321,9 +312,6 @@ static void check_and_set_node(Entity & entity, Entity * parent, xmlNodePtr xml_
             child->parent = parent;
         }
         decode_xml(doc, xml_node->children, *child, &entity, "");
-        if (child->ylist && child->ylist->ylist_key_names.size() > 0) {
-            child->ylist->review(child);
-        }
     }
     else {
         check_and_set_leaf(entity, parent, xml_node, doc);

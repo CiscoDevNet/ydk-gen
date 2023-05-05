@@ -1,3 +1,7 @@
+//
+// @file types.hpp
+// @brief Header for ydk entity
+//
 // YANG Development Kit
 // Copyright 2016 Cisco Systems. All rights reserved
 //
@@ -18,11 +22,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// -------------------------------------------------------------------
-// This file has been modified by Yan Gorelik, YDK Solutions.
-// All modifications in original under CiscoDevNet domain
-// introduced since October 2019 are copyrighted.
-// All rights reserved under Apache License, Version 2.0.
+//
 //////////////////////////////////////////////////////////////////
 
 #include <iostream>
@@ -41,7 +41,7 @@ TEST_CASE( "test_codec_rpc" )
 {
     ydk::path::Codec s{};
     std::string searchdir{TEST_HOME};
-    mock::MockSession sp{searchdir, test_openconfig, EncodingFormat::XML};
+    mock::MockSession sp{searchdir, test_openconfig};
 
     auto & schema = sp.get_root_schema();
 
@@ -59,7 +59,7 @@ TEST_CASE( "test_codec_action" )
 {
     ydk::path::Codec s{};
     std::string searchdir{TEST_HOME};
-    mock::MockSession sp{searchdir, test_openconfig, EncodingFormat::XML};
+    mock::MockSession sp{searchdir, test_openconfig};
 
     auto & schema = sp.get_root_schema();
 
@@ -74,7 +74,7 @@ TEST_CASE( "test_codec_action_datanode" )
 {
     ydk::path::Codec s{};
     std::string searchdir{TEST_HOME};
-    mock::MockSession sp{searchdir, test_openconfig, EncodingFormat::XML};
+    mock::MockSession sp{searchdir, test_openconfig};
 
     auto & schema = sp.get_root_schema();
 
@@ -99,7 +99,7 @@ TEST_CASE( "test_submodule_feature" )
         }
         test_capabilities.push_back(cap);
     }
-    mock::MockSession sp{searchdir, test_capabilities, EncodingFormat::XML};
+    mock::MockSession sp{searchdir, test_capabilities};
 
     auto & schema = sp.get_root_schema();
 
@@ -127,7 +127,7 @@ TEST_CASE( "test_submodule_feature" )
 TEST_CASE( "decode_multiple_json" )
 {
     std::string searchdir{TEST_HOME};
-    mock::MockSession sp{searchdir, test_openconfig, EncodingFormat::JSON};
+    mock::MockSession sp{searchdir, test_openconfig};
     auto & schema = sp.get_root_schema();
 
     std::string json_int_payload = R"({
@@ -167,7 +167,7 @@ TEST_CASE( "decode_multiple_json" )
 
 TEST_CASE("test_no_key_list_path") {
     std::string searchdir{TEST_HOME};
-    mock::MockSession sp{searchdir, test_openconfig, EncodingFormat::XML};
+    mock::MockSession sp{searchdir, test_openconfig};
     auto & schema = sp.get_root_schema();
     ydk::path::Codec codec{};
 
@@ -214,7 +214,7 @@ TEST_CASE("value_error")
 {
     ydk::path::Codec s{};
     std::string searchdir{TEST_HOME};
-    mock::MockSession sp{searchdir, test_openconfig, EncodingFormat::JSON};
+    mock::MockSession sp{searchdir, test_openconfig};
     auto & schema = sp.get_root_schema();
 
     CHECK_NOTHROW(s.decode(schema, value_error_json, EncodingFormat::JSON));
@@ -256,90 +256,4 @@ TEST_CASE( "decode_rpc_with_nc_prefix" )
   </interface>
 </interfaces>)";
     REQUIRE(reply_xml == rpc_reply_extracted);
-}
-
-TEST_CASE( "decode_rpc_with_attribute" )
-{
-    auto rpc_reply = R"(
-<rpc-reply xmlns:junos="http://xml.juniper.net/junos/15.1X49/junos" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
-<data attr=123>
-<interfaces xmlns="http://openconfig.net/yang/interfaces">
-  <interface>
-    <name>GigabitEthernet0/0/0/2</name>
-    <config>
-      <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">ianaift:ethernetCsmacd</type>
-      <name>GigabitEthernet0/0/0/2</name>
-    </config>
-  </interface>
-</interfaces>
-</data>
-</rpc-reply>
-)";
-    auto reply_xml = ydk::path::get_netconf_output(rpc_reply);
-    REQUIRE(!reply_xml.empty());
-
-    auto rpc_reply_extracted = R"(<interfaces xmlns="http://openconfig.net/yang/interfaces">
-  <interface>
-    <name>GigabitEthernet0/0/0/2</name>
-    <config>
-      <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">ianaift:ethernetCsmacd</type>
-      <name>GigabitEthernet0/0/0/2</name>
-    </config>
-  </interface>
-</interfaces>)";
-    REQUIRE(reply_xml == rpc_reply_extracted);
-}
-
-TEST_CASE("test_url_path_value") {
-    std::string searchdir{TEST_HOME};
-    mock::MockSession sp{searchdir, test_openconfig, EncodingFormat::XML};
-    auto & schema = sp.get_root_schema();
-    ydk::path::Codec codec{};
-
-    auto & runner = schema.create_datanode("ydktest-sanity:runner", "");
-    runner.create_datanode("no-key-list[1]/test",
-        "sftp://root@5.12.17.1:/auto/cafy-ott/cafy_log/cafy3/22-1/cafy3-run-1213418/67/7_5_2_13I_NCS5500");
-    runner.create_datanode("no-key-list[2]/test", "tftp://10.105.227.199/ops/exec");
-
-    auto xml = codec.encode(runner, ydk::EncodingFormat::XML, true);
-    auto expected = R"(<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
-  <no-key-list>
-    <test>sftp://root@5.12.17.1:/auto/cafy-ott/cafy_log/cafy3/22-1/cafy3-run-1213418/67/7_5_2_13I_NCS5500</test>
-  </no-key-list>
-  <no-key-list>
-    <test>tftp://10.105.227.199/ops/exec</test>
-  </no-key-list>
-</runner>
-)";
-    REQUIRE(xml== expected);
-
-    auto dn = codec.decode(schema, xml, ydk::EncodingFormat::XML);
-    REQUIRE(dn != nullptr);
-    auto real_dn = dn->get_children()[0];
-    REQUIRE(real_dn != nullptr);
-
-    auto xml_rt = codec.encode(*real_dn, ydk::EncodingFormat::XML, true);
-    REQUIRE(xml == xml_rt);
-}
-
-TEST_CASE("test_empty_string_value_json") {
-    std::string searchdir{TEST_HOME};
-    mock::MockSession sp{searchdir, test_openconfig, EncodingFormat::JSON};
-    auto & schema = sp.get_root_schema();
-    ydk::path::Codec codec{};
-
-    auto & runner = schema.create_datanode("ydktest-sanity:runner", "");
-    runner.create_datanode("ytypes/built-in-t/name", "");
-
-    auto payload = codec.encode(runner, ydk::EncodingFormat::JSON, false);
-    auto expected = R"({"ydktest-sanity:runner":{"ytypes":{"built-in-t":{"name":""}}}})";
-    CHECK(payload == expected);
-
-    auto dn = codec.decode(schema, payload, ydk::EncodingFormat::JSON);
-    REQUIRE(dn != nullptr);
-    auto real_dn = dn->get_children()[0];
-    REQUIRE(real_dn != nullptr);
-
-    auto xml_rt = codec.encode(*real_dn, ydk::EncodingFormat::JSON, false);
-    REQUIRE(payload == xml_rt);
 }

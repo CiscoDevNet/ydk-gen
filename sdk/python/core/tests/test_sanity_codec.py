@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,17 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
+"""test_sanity_codec.py
+sanity test for CodecService
 """
-test_sanity_codec.py
-sanity test for CodecService and CodecServiceProvider
-"""
-
+from __future__ import absolute_import
 import unittest
 
 try:
@@ -31,7 +25,7 @@ try:
     from ydk.models.ydktest.openconfig_routing_policy import RoutingPolicy
     from ydk.models.ydktest.oc_pattern import OcA
     from ydk.models.ydktest.ydktest_sanity_typedefs import System, TopMode
-except ImportError:
+except:
     from ydk.models.ydktest.ydktest_sanity.runner.runner import Runner
     from ydk.models.ydktest.ydktest_sanity.native.native import Native
     from ydk.models.ydktest.ydktest_sanity.ydktest_sanity import YdkEnumTest
@@ -48,19 +42,27 @@ from ydk.types import EncodingFormat
 
 from test_utils import assert_with_error
 
-_xml_enum_payload_1 = '''<built-in-t xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+
+class SanityYang(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        self.maxDiff = None
+        self.codec = CodecService()
+        self.provider = CodecServiceProvider(type='xml')
+
+        self._xml_enum_payload_1 = '''<built-in-t xmlns="http://cisco.com/ns/yang/ydktest-sanity">
   <enum-value>local</enum-value>
 </built-in-t>
 '''
-
-_json_enum_payload_1 = """{
+        self._json_enum_payload_1 = """{
   "ydktest-sanity:built-in-t": {
     "enum-value": "local"
   }
 }
 """
 
-_xml_enum_payload_2 = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+        self._xml_enum_payload_2 = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
   <ytypes>
     <built-in-t>
       <enum-value>local</enum-value>
@@ -69,7 +71,7 @@ _xml_enum_payload_2 = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"
 </runner>
 '''
 
-_xml_runner_payload = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
+        self._xml_runner_payload = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
   <two-list>
     <ldata>
       <number>21</number>
@@ -99,7 +101,7 @@ _xml_runner_payload = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"
 </runner>
 '''
 
-_json_runner_payload = """{
+        self._json_runner_payload = """{
   "ydktest-sanity:runner": {
     "two-list": {
       "ldata": [
@@ -136,13 +138,11 @@ _json_runner_payload = """{
   }
 }
 """
-
-_xml_oc_pattern_payload = '''<oc-A xmlns="http://cisco.com/ns/yang/oc-pattern">
+        self._xml_oc_pattern_payload = '''<oc-A xmlns="http://cisco.com/ns/yang/oc-pattern">
   <a>Hello</a>
 </oc-A>
 '''
-
-_json_oc_pattern_payload = """{
+        self._json_oc_pattern_payload = """{
   "oc-pattern:oc-A": [
     {
       "a": "Hello",
@@ -153,43 +153,33 @@ _json_oc_pattern_payload = """{
   ]
 }"""
 
-
-def _get_runner_entity():
-    r_1 = Runner()
-    e_1, e_2 = Runner.TwoList.Ldata(), Runner.TwoList.Ldata()
-    e_11, e_12 = Runner.TwoList.Ldata.Subl1(), Runner.TwoList.Ldata.Subl1()
-    e_1.number = 21
-    e_1.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:name'
-    e_11.number = 211
-    e_11.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:subl1[' + str(e_11.number) + ']:name'
-    e_12.number = 212
-    e_12.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:subl1[' + str(e_12.number) + ']:name'
-    e_1.subl1.extend([e_11, e_12])
-    e_21, e_22 = Runner.TwoList.Ldata.Subl1(), Runner.TwoList.Ldata.Subl1()
-    e_2.number = 22
-    e_2.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:name'
-    e_21.number = 221
-    e_21.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:subl1[' + str(e_21.number) + ']:name'
-    e_22.number = 222
-    e_22.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:subl1[' + str(e_22.number) + ']:name'
-    e_2.subl1.extend([e_21, e_22])
-    r_1.two_list.ldata.extend([e_1, e_2])
-    return r_1
-
-
-class SanityYang(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(self):
-        self.maxDiff = None
-        self.codec = CodecService()
-        self.provider = CodecServiceProvider(type='xml')
-        self.json_provider = CodecServiceProvider(type='json')
+    def _get_runner_entity(self):
+        r_1 = Runner()
+        e_1, e_2 = Runner.TwoList.Ldata(), Runner.TwoList.Ldata()
+        e_11, e_12 = Runner.TwoList.Ldata.Subl1(), Runner.TwoList.Ldata.Subl1()
+        e_1.number = 21
+        e_1.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:name'
+        e_11.number = 211
+        e_11.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:subl1[' + str(e_11.number) + ']:name'
+        e_12.number = 212
+        e_12.name = 'runner:twolist:ldata[' + str(e_1.number) + ']:subl1[' + str(e_12.number) + ']:name'
+        e_1.subl1.extend([e_11, e_12])
+        e_21, e_22 = Runner.TwoList.Ldata.Subl1(), Runner.TwoList.Ldata.Subl1()
+        e_2.number = 22
+        e_2.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:name'
+        e_21.number = 221
+        e_21.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:subl1[' + str(e_21.number) + ']:name'
+        e_22.number = 222
+        e_22.name = 'runner:twolist:ldata[' + str(e_2.number) + ']:subl1[' + str(e_22.number) + ']:name'
+        e_2.subl1.extend([e_21, e_22])
+        r_1.two_list.ldata.extend([e_1, e_2])
+        return r_1
 
     def test_xml_encode_1(self):
-        r_1 = _get_runner_entity()
+        self.provider.encoding = EncodingFormat.XML
+        r_1 = self._get_runner_entity()
         payload = self.codec.encode(self.provider, r_1)
-        self.assertEqual(_xml_runner_payload, payload)
+        self.assertEqual(self._xml_runner_payload, payload)
 
         ldata_list = r_1.two_list.ldata
         ldata_keys = ldata_list.keys()
@@ -210,11 +200,12 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(subl_21_212.name, 'runner:twolist:ldata[21]:subl1[212]:name')
 
     def test_xml_encode_2(self):
+        self.provider.encoding = EncodingFormat.XML
         r_1 = Runner.Ytypes.BuiltInT()
         r_1.enum_value = YdkEnumTest.local
 
         payload = self.codec.encode(self.provider, r_1)
-        self.assertEqual(_xml_enum_payload_1, payload)
+        self.assertEqual(self._xml_enum_payload_1, payload)
 
     @assert_with_error("'provider' and 'entity_holder' cannot be None", YServiceError)
     def test_encode_invalid_1(self):
@@ -222,20 +213,21 @@ class SanityYang(unittest.TestCase):
 
     @assert_with_error("'provider' and 'entity_holder' cannot be None", YServiceError)
     def test_encode_invalid_2(self):
-        self.codec.encode(None, _get_runner_entity())
+            self.codec.encode(None, self._get_runner_entity())
 
     @assert_with_error("'provider' and 'entity_holder' cannot be None", YServiceError)
     def test_encode_invalid_3(self):
-        self.codec.encode(None, None)
+            self.codec.encode(None, None)
 
     def test_xml_decode_1(self):
-        entity = self.codec.decode(self.provider, _xml_enum_payload_2)
+        self.provider.encoding = EncodingFormat.XML
+        entity = self.codec.decode(self.provider, self._xml_enum_payload_2)
         self.assertEqual(
-            _xml_enum_payload_2, self.codec.encode(self.provider, entity))
+            self._xml_enum_payload_2, self.codec.encode(self.provider, entity))
 
     @assert_with_error("'provider' and 'payload_holder' cannot be None", YServiceError)
     def test_decode_invalid_1(self):
-        self.codec.decode(None, _xml_enum_payload_2)
+            self.codec.decode(None, self._xml_enum_payload_2)
 
     @assert_with_error("'provider' and 'payload_holder' cannot be None", YServiceError)
     def test_decode_invalid_2(self):
@@ -246,7 +238,8 @@ class SanityYang(unittest.TestCase):
         self.codec.decode(None, None)
 
     def test_xml_encode_decode(self):
-        r_1 = _get_runner_entity()
+        self.provider.encoding = EncodingFormat.XML
+        r_1 = self._get_runner_entity()
         payload = self.codec.encode(self.provider, r_1)
         entity = self.codec.decode(self.provider, payload)
 
@@ -254,8 +247,9 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(payload, self.codec.encode(self.provider, entity))
 
     def test_xml_encode_decode_dict(self):
-        r_1 = _get_runner_entity()
-        r_entity = {'ydktest-sanity': r_1}
+        self.provider.encoding = EncodingFormat.XML
+        r_1 = self._get_runner_entity()
+        r_entity = {'ydktest-sanity':r_1}
         payload = self.codec.encode(self.provider, r_entity)
         entity = self.codec.decode(self.provider, payload)
         for module in entity:
@@ -263,75 +257,84 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(payload, self.codec.encode(self.provider, entity))
 
     def test_xml_decode_oc_pattern(self):
-        obj_a = OcA()
-        obj_a.a = 'Hello'
+        self.provider.encoding = EncodingFormat.XML
+        obj_A = OcA()
+        obj_A.a = 'Hello'
 
-        entity = self.codec.decode(self.provider, _xml_oc_pattern_payload)
+        entity = self.codec.decode(self.provider, self._xml_oc_pattern_payload)
 
-        self.assertEqual(obj_a.a, entity.a)
+        self.assertEqual(obj_A.a, entity.a)
 
     # JSON
 
     def test_json_encode_1(self):
-        json_provider = CodecServiceProvider(type='json')
-        entity = _get_runner_entity()
-        payload = self.codec.encode(json_provider, entity)
-        self.assertEqual(_json_runner_payload, payload)
+        self.provider.encoding = EncodingFormat.JSON
+        entity = self._get_runner_entity()
+        payload = self.codec.encode(self.provider, entity)
+        self.assertEqual(self._json_runner_payload, payload)
 
     def test_json_encode_2(self):
+        self.provider.encoding = EncodingFormat.JSON
         r_1 = Runner.Ytypes.BuiltInT()
         r_1.enum_value = YdkEnumTest.local
 
-        payload = self.codec.encode(self.json_provider, r_1)
-        self.assertEqual(_json_enum_payload_1, payload)
+        payload = self.codec.encode(self.provider, r_1)
+        self.assertEqual(self._json_enum_payload_1, payload)
 
     def test_json_decode_1(self):
-        entity = self.codec.decode(self.json_provider, _json_runner_payload)
-        payload = self.codec.encode(self.json_provider, entity)
-        self.assertEqual(_json_runner_payload, payload)
+        self.provider.encoding = EncodingFormat.JSON
+        entity = self.codec.decode(self.provider, self._json_runner_payload)
+        payload = self.codec.encode(self.provider, entity)
+        self.assertEqual(self._json_runner_payload, payload)
 
     def test_json_encode_decode(self):
-        runner = _get_runner_entity()
-        payload = self.codec.encode(self.json_provider, runner)
-        entity = self.codec.decode(self.json_provider, payload)
+        self.provider.encoding = EncodingFormat.JSON
+        runner = self._get_runner_entity()
+        payload = self.codec.encode(self.provider, runner)
+        entity = self.codec.decode(self.provider, payload)
         self.assertEqual(runner, entity)
-        self.assertEqual(payload, self.codec.encode(self.json_provider, entity))
+        self.assertEqual(payload, self.codec.encode(self.provider, entity))
 
     def test_json_encode_decode_dict(self):
-        entity = _get_runner_entity()
+        self.provider.encoding = EncodingFormat.JSON
+        entity = self._get_runner_entity()
         entity_holder = {'ydktest-sanity': entity}
-        payload_holder = self.codec.encode(self.json_provider, entity_holder)
-        entities = self.codec.decode(self.json_provider, payload_holder)
+        payload_holder = self.codec.encode(self.provider, entity_holder)
+        entities = self.codec.decode(self.provider, payload_holder)
         for module in entities:
             self.assertEqual(entities[module], entities[module])
             self.assertEqual(payload_holder[module],
-                             self.codec.encode(self.json_provider, entities[module]))
+                             self.codec.encode(self.provider, entities[module]))
 
     @unittest.skip('encodes to "oc-pattern:a": "(!error!)"')
     def test_json_encode_oc_pattern(self):
-        obj_a = OcA()
-        obj_a.a = 'Hello'
-        obj_a.b.b = 'Hello'
-        self.assertEqual(self.codec.encode(self.json_provider, obj_a),
-                         _json_oc_pattern_payload)
+        self.provider.encoding = EncodingFormat.JSON
+        obj_A = ocA()
+        obj_A.a = 'Hello'
+        obj_A.b.b = 'Hello'
+
+        self.assertEqual(self.codec.encode(self.provider, obj_A),
+                         self._json_oc_pattern_payload)
 
     @unittest.skip('YCoreError: YCodecError:Unknown element "oc-A".. Path:')
     def test_json_decode_oc_pattern(self):
-        entity = self.codec.decode(self.json_provider, _json_oc_pattern_payload)
+        self.provider.encoding = EncodingFormat.JSON
+        entity = self.codec.decode(self.provider, self._json_oc_pattern_payload)
 
         self.assertEqual(entity.a.get(), 'Hello')
         self.assertEqual(entity.b.b.get(), 'Hello')
 
     def test_xml_subtree(self):
-        r_1 = _get_runner_entity()
+        self.provider.encoding = EncodingFormat.XML
+        r_1 = self._get_runner_entity()
         payload = self.codec.encode(self.provider, r_1, subtree=True)
-        self.assertEqual(_xml_runner_payload[:-1], payload)
+        self.assertEqual(self._xml_runner_payload[:-1], payload)
 
         r_2 = self.codec.decode(self.provider, payload, subtree=True)
         self.assertEqual(r_1, r_2)
 
     def test_embedded_quote_leaflist_value(self):
-        """<routing-policy xmlns="http://openconfig.net/yang/routing-policy">
+        xml = '''<routing-policy xmlns="http://openconfig.net/yang/routing-policy">
   <defined-sets>
     <bgp-defined-sets xmlns="http://openconfig.net/yang/bgp-policy">
       <community-sets>
@@ -352,7 +355,7 @@ class SanityYang(unittest.TestCase):
     </bgp-defined-sets>
   </defined-sets>
 </routing-policy>
-"""
+'''
         routing_policy = RoutingPolicy()
 
         com = RoutingPolicy.DefinedSets.BgpDefinedSets.CommunitySets.CommunitySet()
@@ -370,7 +373,7 @@ class SanityYang(unittest.TestCase):
         payload = self.codec.encode(xml_provider, routing_policy)
 
         routing_policy_decode = self.codec.decode(xml_provider, payload)
-        if routing_policy == routing_policy_decode:  # TODO failing on travis for --one-module-per-class option
+        if routing_policy == routing_policy_decode: # TODO failing on travis for --one-module-per-class option
             self.assertEqual(routing_policy, routing_policy_decode)
 
     def test_list_no_keys(self):
@@ -388,29 +391,32 @@ class SanityYang(unittest.TestCase):
         self.assertEqual(payload, no_key_payload)
 
     def test_anyxml(self):
+        provider = CodecServiceProvider(type='xml')
         payload = '<?xml version="1.0"?><runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"/>'
-        result = self.codec.decode(self.provider, payload)
+        result = self.codec.decode(provider, payload)
         self.assertIsNotNone(result)
 
         payload = '''<?xml version="1.0"?>
         <runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"/>'''
-        result = self.codec.decode(self.provider, payload)
+        result = self.codec.decode(provider, payload)
         self.assertIsNotNone(result)
 
-    def test_decode_json_subtree(self):
-        entity = self.codec.decode(self.json_provider, '{"ydktest-sanity:runner": null}', subtree=True)
-        self.assertEqual(Runner(), entity)
+    @assert_with_error("Subtree option can only be used with XML encoding", YServiceError)
+    def test_decode_invalid_subtree_1(self):
+        self.provider.encoding = EncodingFormat.JSON
+        self.codec.decode(self.provider, '{"ydktest-sanity:runner": {}}', subtree=True)
 
-    def test_encode_json_subtree_(self):
-        json = self.codec.encode(self.json_provider, Runner(), pretty=False, subtree=True)
-        expected = '''{"ydktest-sanity:runner":null}'''
-        self.assertEqual(expected, json)
+    @assert_with_error("Subtree option can only be used with XML encoding", YServiceError)
+    def test_decode_invalid_subtree_2(self):
+        self.provider.encoding = EncodingFormat.JSON
+        self.codec.encode(self.provider, Runner(), subtree=True)
 
     def test_encode_decode_typedefs(self):
         system_encode = System()
         system_encode.mode = TopMode.stand_alone
-        system_encode.id = 22
+        system_encode.id = 22;
 
+        self.provider.encoding = EncodingFormat.XML
         payload = self.codec.encode(self.provider, system_encode)
 
         system_decode = self.codec.decode(self.provider, payload)
@@ -423,6 +429,7 @@ class SanityYang(unittest.TestCase):
         native = Native()
         native.version = '0.1.0'
 
+        self.provider.encoding = EncodingFormat.XML
         xml_encode = self.codec.encode(self.provider, [runner, native])
 
         entity_list = self.codec.decode(self.provider, xml_encode)
@@ -435,10 +442,13 @@ class SanityYang(unittest.TestCase):
         native = Native()
         native.version = '0.1.0'
 
-        json_encode = self.codec.encode(self.json_provider, [runner, native])
+        self.provider.encoding = EncodingFormat.JSON
+        json_encode = self.codec.encode(self.provider, [runner, native])
 
-        entity_list = self.codec.decode(self.json_provider, json_encode)
+        entity_list = self.codec.decode(self.provider, json_encode)
         self.assertEqual(entity_list, [runner, native])
+
+        self.provider.encoding = EncodingFormat.XML
 
     def test_passive_codec(self):
         e='''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity"><passive><name>xyz</name><interfac><test>abc</test></interfac><testc xmlns="http://cisco.com/ns/yang/ydktest-sanity-augm"><xyz><xyz>25</xyz></xyz></testc></passive></runner>'''
@@ -452,106 +462,9 @@ class SanityYang(unittest.TestCase):
         p.testc.xyz.xyz = 25
         runner.passive.append(p)
 
+        self.provider.encoding = EncodingFormat.XML
         x = self.codec.encode(self.provider, runner, False)
-        self.assertEqual(x, e)
-
-    def test_augment_subtree(self):
-        passive = Runner.Passive()
-        passive.name = "xyz"
-
-        ifc = Runner.Passive.Interfac()
-        ifc.test = "abc"
-        passive.interfac.append(ifc)
-
-        passive.testc.xyz = Runner.Passive.Testc.Xyz()
-        passive.testc.xyz.parent = passive;
-        passive.testc.xyz.xyz = 25
-
-        xml = self.codec.encode(self.provider, passive, subtree=True);
-        expected = '''<passive xmlns="http://cisco.com/ns/yang/ydktest-sanity">
-  <name>xyz</name>
-  <interfac>
-    <test>abc</test>
-  </interfac>
-  <testc xmlns="http://cisco.com/ns/yang/ydktest-sanity-augm">
-    <xyz>
-      <xyz>25</xyz>
-    </xyz>
-  </testc>
-</passive>'''
-        self.assertEqual(expected, xml)
-
-    def test_bool_lists(self):
-        r = Runner()
-        r.ytypes.built_in_t.bool_leaf_list.append(True)
-        r.ytypes.built_in_t.bool_leaf_list.append(False)
-
-        bool_list_elem = Runner.Ytypes.BuiltInT.BoolList()
-        bool_list_elem.bool_leaf = True
-        r.ytypes.built_in_t.bool_list.append(bool_list_elem)
-
-        xml = self.codec.encode(self.provider, r)
-        expected = '''<runner xmlns="http://cisco.com/ns/yang/ydktest-sanity">
-  <ytypes>
-    <built-in-t>
-      <bool-leaf-list>true</bool-leaf-list>
-      <bool-leaf-list>false</bool-leaf-list>
-      <bool-list>
-        <bool-leaf>true</bool-leaf>
-      </bool-list>
-    </built-in-t>
-  </ytypes>
-</runner>
-'''
-        self.assertEqual(expected, xml)
-
-        entity = self.codec.decode(self.provider, xml)
-        self.assertEqual(entity, r)
-
-    def test_bool_lists_json(self):
-        r = Runner()
-        r.ytypes.built_in_t.bool_leaf_list.append(True)
-        r.ytypes.built_in_t.bool_leaf_list.append(False)
-
-        bool_list_elem = Runner.Ytypes.BuiltInT.BoolList()
-        bool_list_elem.bool_leaf = True
-        r.ytypes.built_in_t.bool_list.append(bool_list_elem)
-
-        json = self.codec.encode(self.json_provider, r)
-        expected = '''{
-  "ydktest-sanity:runner": {
-    "ytypes": {
-      "built-in-t": {
-        "bool-leaf-list": [
-          true,
-          false
-        ],
-        "bool-list": [
-          {
-            "bool-leaf": true
-          }
-        ]
-      }
-    }
-  }
-}
-'''
-        self.assertEqual(expected, json)
-
-        entity = self.codec.decode(self.json_provider, json)
-        self.assertEqual(entity, r)
-
-    def test_json_string_empty_value(self):
-        r = Runner()
-        r.ytypes.built_in_t.name = ""
-
-        json = self.codec.encode(self.json_provider, r, pretty=False)
-        expected = '''{"ydktest-sanity:runner":{"ytypes":{"built-in-t":{"name":""}}}}'''
-        self.assertEqual(expected, json)
-
-        entity = self.codec.decode(self.json_provider, json)
-        self.assertEqual(entity, r)
-
+        self.assertEqual(x,e)
 
 if __name__ == '__main__':
     import sys

@@ -1,7 +1,7 @@
 {
     "name": "opendaylight",
     "version": "0.0.1",
-    "core_version": "0.5.3",
+    "ydk_version":"0.5.3",
     "author": "Cisco",
     "copyright": "Cisco",
     "description": "YDK Test Profile",

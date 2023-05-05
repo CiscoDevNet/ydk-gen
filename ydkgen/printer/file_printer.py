@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,18 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
 """
  import_test_printer.py 
  
  YANG model driven API, python emitter.
-"""
 
+"""
 import abc
 from ydkgen.api_model import Class
 
@@ -63,7 +58,7 @@ class FilePrinter(object):
         if self._start_tab.pop() != end_tab:
             raise Exception('Tab leak !!!')
 
-    def print_output(self, packages):
+    def print_output(self,packages):
         self._start_tab_leak_check()
         self.print_header(packages)
         self.print_body(packages)

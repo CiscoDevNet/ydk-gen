@@ -1,6 +1,6 @@
 #!/bin/bash
 #  ----------------------------------------------------------------
-# Copyright 2018-2019 Cisco Systems
+# Copyright 2018 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,11 +26,10 @@
 # ------------------------------------------------------------------
 
 function print_msg {
-    echo -e "${MSG_COLOR}*** $(date) *** dependencies_osx_gnmi.sh | $* ${NOCOLOR}"
+    echo -e "${MSG_COLOR}*** $(date) *** dependencies_osx_gnmi.sh | $@ ${NOCOLOR}"
 }
 
 function install_protobuf {
-  cd $HOME
   if [[ ! -d protobuf-3.5.0 ]]; then
     print_msg "Downloading protobuf and protoc"
     wget https://github.com/google/protobuf/releases/download/v3.5.0/protobuf-cpp-3.5.0.zip > /dev/null
@@ -45,12 +44,11 @@ function install_protobuf {
     make > /dev/null
     print_msg "Installing protobuf and protoc"
     sudo make install
+    cd $curr_dir
   fi
-  cd $curr_dir
 }
 
 function install_grpc {
-  cd $HOME
   if [[ ! -d grpc ]]; then
     print_msg "Installing grpc"
     #LIBTOOL=glibtool LIBTOOLIZE=glibtoolize make
@@ -63,8 +61,8 @@ function install_grpc {
     cd grpc
     make > /dev/null
     sudo make install
+    cd $curr_dir
   fi
-  cd $curr_dir
 }
 
 ########################## EXECUTION STARTS HERE #############################

@@ -1073,18 +1073,18 @@ module openconfig-terminal-device {
 
   // augment statements
 
-//  augment "/oc-platform:components/oc-platform:component" {
-//    when "/oc-platform:components/oc-platform:component/" +
-//      "oc-platform:state/oc-platform:type = 'OPTICAL_CHANNEL'" {
-//      description
-//        "Augment is active when component is of type
-//        OPTICAL_CHANNEL";
-//    }
-//    description
-//      "Adding optical channel data to physical inventory";
-//
-//    uses terminal-optical-channel-top {
-//    }
-//  }
+  augment "/oc-platform:components/oc-platform:component" {
+    when "/oc-platform:components/oc-platform:component/" +
+      "oc-platform:state/oc-platform:type = 'OPTICAL_CHANNEL'" {
+      description
+        "Augment is active when component is of type
+        OPTICAL_CHANNEL";
+    }
+    description
+      "Adding optical channel data to physical inventory";
+
+    uses terminal-optical-channel-top {
+    }
+  }
 
 }

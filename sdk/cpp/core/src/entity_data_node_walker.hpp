@@ -1,9 +1,9 @@
 //
-// @file entity_data_node_walker.hpp
-// @brief Header for YDK entity
+// @file entity.hpp
+// @brief Header for ydk entity
 //
 // YANG Development Kit
-// Copyright 2016-2022 Cisco Systems. All rights reserved
+// Copyright 2016 Cisco Systems. All rights reserved
 //
 ////////////////////////////////////////////////////////////////
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -22,6 +22,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+//
 //////////////////////////////////////////////////////////////////
 
 #ifndef _WALKER_HPP_
@@ -41,8 +42,5 @@ path::DataNode& get_data_node_from_entity(Entity & entity, path::RootSchemaNode 
 void get_entity_from_data_node(path::DataNode * node, std::shared_ptr<Entity> entity);
 
 YFilter get_data_node_yfilter(path::DataNode * node);
-
-void populate_name_values(path::DataNode & data_node, EntityPath & path);
-void walk_children(Entity & entity, path::DataNode & data_node);
 }
 #endif /* _WALKER_HPP_ */

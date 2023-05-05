@@ -19,6 +19,7 @@
 # All rights reserved under Apache License, Version 2.0.
 # ------------------------------------------------------------------
 
+import sys
 import json
 import pkgutil
 import importlib
@@ -27,7 +28,9 @@ import xml.etree.ElementTree as _ET
 
 from ydk.ext.entity_utils import get_entity_from_data_node, get_data_node_from_entity
 from ydk.ext.services import Datastore
+
 from ydk.types import Config, EncodingFormat, YList, Entity
+
 from ydk.errors import YModelError, YServiceError
 
 _ENTITY_ERROR_MSG = "No YDK bundle installed for node path '{}'"
@@ -157,10 +160,20 @@ def _get_ns_ename(payload, encoding):
             log.error("xml.etree.ElementTree.ParseError: {}\n{}".format(err, payload))
     else:
         keys = json.loads(payload).keys()
+        # for Python 3
         keys = list(keys)
         ns, ename = keys[0].split(':')
+        ns = _to_utf8(ns)
+        ename = _to_utf8(ename)
 
     return ns, ename
+
+
+def _to_utf8(string):
+    """Convert unicode to str if running under Python 2 environment."""
+    if sys.version_info < (3, 0):
+        return string.encode('utf-8')
+    return string
 
 
 def _get_bundle_name(entity):

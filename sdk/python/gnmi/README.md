@@ -50,5 +50,6 @@ There is an open issue with gRPC on Centos/Fedora, which requires an extra step 
 for details. As a workaround, the YDK based application runtime environment must include setting of `LD_LIBRARY_PATH` variable:
 
 ```
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64
+    PROTO="/Your-Protobuf-and-Grpc-installation-directory"
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PROTO/grpc/libs/opt:$PROTO/protobuf-3.5.0/src/.libs:/usr/local/lib64
 ```

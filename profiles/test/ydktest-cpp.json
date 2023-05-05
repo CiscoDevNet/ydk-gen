@@ -1,14 +1,13 @@
 {
     "name": "ydktest",
-    "version":"0.1.1",
+    "version":"0.1.0",
     "core_version":"0.8.1",
     "author": "Cisco",
     "copyright": "Cisco",
     "description": "YDK Test Profile",
     "models": {
-        "file": [
+    "file": [
             "sdk/cpp/core/tests/models/ietf-interfaces@2014-05-08.yang",
-            "sdk/cpp/core/tests/models/ietf-netconf-monitoring@2010-10-04.yang",
             "sdk/cpp/core/tests/models/main@2015-11-17.yang",
             "sdk/cpp/core/tests/models/main-aug1@2015-11-17.yang",
             "sdk/cpp/core/tests/models/openconfig-bgp-common-multiprotocol.yang",
@@ -40,7 +39,6 @@
             "sdk/cpp/core/tests/models/ydktest-types@2016-05-23.yang",
             "sdk/cpp/core/tests/models/oc-pattern@2015-11-17.yang",
             "sdk/cpp/core/tests/models/iana-crypt-hash@2014-08-06.yang",
-
             "yang/ietf/ietf-inet-types@2013-07-15.yang",
             "yang/ietf/ietf-yang-types@2013-07-15.yang",
             "yang/ietf/iana-if-type.yang",
@@ -50,8 +48,8 @@
             "yang/ietf/ietf-system.yang"
         ],
 
-        "dir": [
-            "yang/ydktest-augmentation"
-        ]
+    "dir": [
+        "yang/ydktest-augmentation"
+    ]
     }
 }

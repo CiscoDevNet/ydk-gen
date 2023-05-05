@@ -191,7 +191,7 @@ elem {
 TEST_CASE( "test_gnmi_datanode_to_path" )
 {
     ydk::path::Repository repo{TEST_HOME};
-    mock::MockSession sp{TEST_HOME, test_openconfig, ydk::EncodingFormat::JSON};
+    mock::MockSession sp{TEST_HOME, test_openconfig};
     auto & schema = sp.get_root_schema();
 
     auto & bgp = schema.create_datanode("openconfig-bgp:bgp");
@@ -232,7 +232,7 @@ elem {
 TEST_CASE( "test_gnmi_datanode_to_path_2" )
 {
     ydk::path::Repository repo{TEST_HOME};
-    mock::MockSession sp{TEST_HOME, test_openconfig, ydk::EncodingFormat::JSON};
+    mock::MockSession sp{TEST_HOME, test_openconfig};
     auto & schema = sp.get_root_schema();
 
     auto & runner = schema.create_datanode("ydktest-sanity:runner");

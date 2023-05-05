@@ -31,12 +31,12 @@ def execute_path(session):
     payload = codec.encode(runner, EncodingFormat.JSON, True)
 
     create_rpc = schema.create_rpc("ydk:create")
-    create_rpc.get_input_node().create_datanode("entity", payload)
+    create_rpc.get_input_node().create_datanode("entity", xml)
     create_rpc(session)
 
 
 if __name__ == "__main__":
     init_logging()
-    repo = Repository("/usr/local/share/ydktest@0.1.1")
+    repo = Repository("/usr/local/share/ydktest@0.1.0")
     session = RestconfSession(repo, '127.0.0.1', 'admin', 'admin', 12306, EncodingFormat.JSON)
     execute_path(session)

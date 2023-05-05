@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
  enum_printer.py
 
  YANG model driven API, python emitter.
+
 """
+
 
 from ydkgen.api_model import Enum
 from ydkgen.common import get_module_name
 from ydkgen.printer.meta_data_util import get_enum_class_docstring
-
 
 class EnumPrinter(object):
 
@@ -36,25 +37,25 @@ class EnumPrinter(object):
         self._print_enum_trailer(enum_class)
 
     def print_enum_meta(self, enum_class):
-        self.ctx.writeln("'%s': _MetaInfoEnum(" % enum_class.qn())
+        self.ctx.writeln("'%s' : _MetaInfoEnum('%s'," % (
+                         enum_class.qn(),
+                         enum_class.name))
         self.ctx.lvl_inc()
-        self.ctx.writeln("'%s'," % enum_class.name)
         self.ctx.writeln("'%s', '%s'," % (
                          enum_class.get_py_mod_name(),
                          enum_class.qn()))
-        # description = " "
-        # for st in enum_class.stmt.parent.substmts:
-        #     if st.keyword == 'description':
-        #         description = st.arg
-        #         break
-        self.ctx.writeln('"""%s""",' % enum_class.comment)
+        description = " "
+        for st in enum_class.stmt.parent.substmts:
+            if st.keyword == 'description':
+                description = st.arg
+                break
+        self.ctx.writeln("'''%s'''," % description)
         self.ctx.writeln("{")
         self.ctx.lvl_inc()
         for literal in enum_class.literals:
-            self.ctx.writeln("'%s': '%s'," % (literal.stmt.arg, literal.name))
+            self.ctx.writeln("'%s':'%s'," % (literal.stmt.arg, literal.name))
         self.ctx.lvl_dec()
-        self.ctx.writeln("}, '%s', _yang_ns.NAMESPACE_LOOKUP['%s'])," %
-                         (get_module_name(enum_class.stmt), get_module_name(enum_class.stmt)))
+        self.ctx.writeln("}, '%s', _yang_ns.NAMESPACE_LOOKUP['%s'])," % (get_module_name(enum_class.stmt), get_module_name(enum_class.stmt)))
         self.ctx.lvl_dec()
 
     def _print_enum_header(self, enum_class):

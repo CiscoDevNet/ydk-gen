@@ -25,8 +25,7 @@ func (suite *SanityTypesTestSuite) SetupSuite() {
 		Address:  "127.0.0.1",
 		Username: "admin",
 		Password: "admin",
-		Port:     12022,
-		OnDemand: true}
+		Port:     12022}
 	suite.Provider.Connect()
 }
 
@@ -324,13 +323,13 @@ func (suite *SanityTypesTestSuite) TestIdentityFromOtherModule() {
 }
 
 func (suite *SanityTypesTestSuite) TestCascadingTypes() {
-	cascadingTypesHelper(suite, ysanity.CompInstType_unknown, ysanity.CompNicInstType_unknown)
-	cascadingTypesHelper(suite, ysanity.CompInstType_phys, ysanity.CompNicInstType_phys)
-	cascadingTypesHelper(suite, ysanity.CompInstType_virt, ysanity.CompNicInstType_virt)
-	cascadingTypesHelper(suite, ysanity.CompInstType_hv, ysanity.CompNicInstType_hv)
+	cascadingTypesHelper(suite, ysanity.CompInstType_unknown, ysanity.CompInstType__unknown)
+	cascadingTypesHelper(suite, ysanity.CompInstType_phys, ysanity.CompInstType__phys)
+	cascadingTypesHelper(suite, ysanity.CompInstType_virt, ysanity.CompInstType__virt)
+	cascadingTypesHelper(suite, ysanity.CompInstType_hv, ysanity.CompInstType__hv)
 }
 
-func cascadingTypesHelper(suite *SanityTypesTestSuite, enum1 ysanity.CompInstType, enum2 ysanity.CompNicInstType){
+func cascadingTypesHelper(suite *SanityTypesTestSuite, enum1 ysanity.CompInstType, enum2 ysanity.CompInstType_){
 	ctypes := ysanity.CascadingTypes{}
 	ctypes.CompInstType = enum1
 	ctypes.CompNicInstType = enum2

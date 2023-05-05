@@ -19,6 +19,7 @@
 import sys
 import os
 
+PY3 = sys.version_info[0] == 3
 
 class ExtensionImporter(object):
     """This importer redirects imports from this submodule to other locations.

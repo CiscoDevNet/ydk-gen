@@ -1,6 +1,6 @@
 /*  ----------------------------------------------------------------
  YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems. All rights reserved.
+ Copyright 2016 Cisco Systems. All rights reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -104,7 +104,8 @@ func GetDataPayload(
 
 	codec := C.CodecInit()
 	defer C.CodecFree(codec)
-	cprovider := provider.GetPrivate().(types.CServiceProvider).Private.(C.ServiceProvider)
+	cprovider := provider.GetPrivate().(
+		types.CServiceProvider).Private.(C.ServiceProvider)
 	cencoding := C.ServiceProviderGetEncoding(cprovider)
 
 	retString := ""
@@ -156,7 +157,7 @@ func ExecuteRPCEntity(
 	PanicOnCStateError(cstate)
 
 	if rootSchema == nil {
-		ydk.YLogError("root schema is nil!")
+        ydk.YLogError("root schema is nil!")
 		panic(1)
 	}
 
@@ -166,7 +167,7 @@ func ExecuteRPCEntity(
 	ydk.YLogDebug(fmt.Sprintf("Calling GetChildByName for Entity: %s: childYangName: %s, segmentPath: %s", types.EntityToString(rpcEntity), "input", ""))
 
 	child := types.GetChildByName(rpcEntity, "input", "")
-	if child != nil && types.HasDataOrFilter(child) {
+	if (child != nil && types.HasDataOrFilter(child)) {
 		ydk.YLogDebug("Calling walkRPCChildren")
 		walkRPCChildren(state, child, rpcInput, "")
 	}
@@ -176,7 +177,7 @@ func ExecuteRPCEntity(
 
 	output := types.GetChildByName(rpcEntity, "output", "")
 
-	if output == nil || readDataNode.Private == nil {
+	if (output == nil || readDataNode.Private == nil) {
 		return nil
 	}
 	return ReadDatanode(topEntity, readDataNode)
@@ -186,7 +187,7 @@ func walkRPCChildren(
 	state *errors.State, rpcEntity types.Entity, rpcInput C.DataNode, path string) {
 
 	ydk.YLogDebug("Walking Rpc Children...")
-	if rpcEntity != nil {
+	if(rpcEntity != nil) {
 		children := types.GetYChildrenMap(rpcEntity)
 		entityPath := types.GetEntityPath(rpcEntity)
 		ydk.YLogDebug(fmt.Sprintf(
@@ -194,21 +195,21 @@ func walkRPCChildren(
 		ydk.YLogDebug(fmt.Sprintf(
 			"Got %d leafs in '%s'", len(entityPath.ValuePaths), entityPath.Path))
 
-		if path != "" {
+		if (path != "") {
 			path = fmt.Sprintf("%s/", path)
 		}
 
-		if entityPath.Path != "input" {
+		if (entityPath.Path != "input") {
 			path = fmt.Sprintf("%s%s", path, entityPath.Path)
 		}
 
-		if path != "" {
+		if (path != "") {
 			ydk.YLogDebug(fmt.Sprintf("Path: %s", path))
 		}
 
 		for _, child := range children {
-			if child.Value != nil &&
-				types.HasDataOrFilter(child.Value) {
+			if (child.Value != nil &&
+				types.HasDataOrFilter(child.Value)) {
 
 				segmentPath := child.Value.GetEntityData().SegmentPath
 				ydk.YLogDebug(fmt.Sprintf("Looking at entity child '%s'", segmentPath))
@@ -217,7 +218,7 @@ func walkRPCChildren(
 		}
 
 		// if there are leafs, create from entity path
-		if len(entityPath.ValuePaths) != 0 {
+		if (len(entityPath.ValuePaths) != 0) {
 			createFromEntityPath(state, rpcEntity, rpcInput, path)
 		}
 
@@ -234,7 +235,7 @@ func createFromEntityPath(
 			nameValue.Name, nameValue.Data.Value, entityPath.Path))
 
 		tempPath := ""
-		if path != "" {
+		if (path != "") {
 			tempPath = fmt.Sprintf("%s/", path)
 		}
 		tempPath = fmt.Sprintf("%s%s", tempPath, nameValue.Name)
@@ -264,13 +265,13 @@ func GetTopEntity(entity types.Entity) types.Entity {
 	if types.IsEntityCollection(entity) {
 		entCollection := types.EntityToCollection(entity)
 		topEntityCollection := types.NewEntityCollection()
-		for _, ent := range entCollection.Entities() {
-			topEntity := GetTopEntity(ent)
-			if topEntity != nil {
-				topEntityCollection.Add(topEntity)
-			}
-		}
-		return topEntityCollection
+	        for _, ent := range entCollection.Entities() {
+	        	topEntity := GetTopEntity(ent)
+	        	if topEntity != nil {
+		        	topEntityCollection.Add(topEntity)
+	        	}
+	        }
+	        return topEntityCollection
 	} else {
 		parent := types.GetParent(entity)
 		if parent == nil {
@@ -289,7 +290,7 @@ func GetTopEntity(entity types.Entity) types.Entity {
 
 func findEntityInChildren(parentEntity types.Entity, filterAbsPath string) types.Entity {
 	parentAbsPath := types.GetAbsolutePath(parentEntity)
-	if filterAbsPath == parentAbsPath {
+	if (filterAbsPath == parentAbsPath) {
 		ydk.YLogDebug("path.findEntityInChildren: Filter matches with parent entity, returning")
 		return parentEntity
 	}
@@ -297,31 +298,31 @@ func findEntityInChildren(parentEntity types.Entity, filterAbsPath string) types
 	// Traverse parentEntity tree for search of matching filter entity
 	ydk.YLogDebug(fmt.Sprintf("path.findEntityInChildren: Searching for filter entity '%s' under parent entity '%s'", filterAbsPath, parentAbsPath))
 	ychildren := types.GetYChildren(parentEntity.GetEntityData())
-	for _, ychild := range ychildren {
+	for _, ychild := range(ychildren) {
 		child := ychild.Value
 		if child == nil {
 			continue
-		}
-		childAbsPath := types.GetAbsolutePath(child)
-		if childAbsPath == filterAbsPath {
-			return child
-		}
-		if strings.Index(filterAbsPath, childAbsPath) == 0 {
-			ch := findEntityInChildren(child, filterAbsPath)
-			if ch != nil {
+	    	}
+	    	childAbsPath := types.GetAbsolutePath(child)
+	        if childAbsPath == filterAbsPath {
+	            return child
+	        }
+	        if strings.Index(filterAbsPath, childAbsPath) == 0 {
+	        	ch := findEntityInChildren(child, filterAbsPath)
+	        	if ch != nil {
 				return ch
 			}
-		}
+	        }
 	}
-	return nil
+        return nil
 }
 
 func findChildEntity(topEntity types.Entity, filterAbsPath string) types.Entity {
 
-	ydk.YLogDebug(fmt.Sprintf("path.findChildEntity: Searching for child entity matching non-top level filter '%s'", filterAbsPath))
-	childEntity := findEntityInChildren(topEntity, filterAbsPath)
-	if childEntity != nil {
-		ydk.YLogDebug("Found matching child entity!!")
+        ydk.YLogDebug(fmt.Sprintf("path.findChildEntity: Searching for child entity matching non-top level filter '%s'", filterAbsPath))
+        childEntity := findEntityInChildren(topEntity, filterAbsPath)
+        if childEntity != nil {
+        	ydk.YLogDebug("Found matching child entity!!")
 
 		// Set paren of found entity to nil
 		s := reflect.ValueOf(childEntity).Elem()
@@ -329,9 +330,9 @@ func findChildEntity(topEntity types.Entity, filterAbsPath string) types.Entity 
 		if v.IsValid() {
 			v.Set(reflect.ValueOf(nil))
 		}
-	} else {
-		ydk.YLogDebug("Matching child entity was not found")
-	}
+        } else {
+        	ydk.YLogDebug("Matching child entity was not found")
+        }
 	return childEntity
 }
 
@@ -423,9 +424,7 @@ func ConnectToNetconfProvider(
 	address, username, password string,
 	port int,
 	protocol string,
-	onDemand, commonCache bool,
-	timeout int,
-	serverCertPath, privateKeyPath string) types.CServiceProvider {
+	onDemand, commonCache bool) types.CServiceProvider {
 
 	var caddress *C.char = C.CString(address)
 	defer C.free(unsafe.Pointer(caddress))
@@ -439,33 +438,27 @@ func ConnectToNetconfProvider(
 	defer C.free(unsafe.Pointer(cprotocol))
 
 	var cOnDemand C.boolean = 1
-	if ! onDemand { cOnDemand = 0 }
+	if onDemand { cOnDemand = 0 }
 	var cCommonCache C.boolean = 0
 	if commonCache { cCommonCache = 1 }
-
-	var ctimeout C.int = C.int(timeout)
-
-	var cserver *C.char = C.CString(serverCertPath)
-	defer C.free(unsafe.Pointer(cserver))
-	var cclient *C.char = C.CString(privateKeyPath)
-	defer C.free(unsafe.Pointer(cclient))
 
 	AddCState(state)
 	cstate := GetCState(state)
 
 	var p C.ServiceProvider
 
-	var crepo C.Repository
 	if len(repo.Path) > 0 {
 		var path *C.char = C.CString(repo.Path)
-		crepo = C.RepositoryInitWithPath(*cstate, path)
+		repo := C.RepositoryInitWithPath(*cstate, path)
+		PanicOnCStateError(cstate)
+		p = C.NetconfServiceProviderInitWithOnDemandRepo(
+			*cstate, repo, caddress, cusername, cpassword, cport, cprotocol, cOnDemand)
+		PanicOnCStateError(cstate)
+	} else {
+		p = C.NetconfServiceProviderInitWithOnDemand(
+			*cstate, caddress, cusername, cpassword, cport, cprotocol, cOnDemand, cCommonCache)
 		PanicOnCStateError(cstate)
 	}
-	p = C.NetconfServiceProviderInit(
-		*cstate, crepo, caddress, cusername, cpassword, cport,
-		cprotocol, cOnDemand, cCommonCache,
-		ctimeout, cserver, cclient)
-	PanicOnCStateError(cstate)
 
 	cprovider := types.CServiceProvider{Private: p}
 	return cprovider
@@ -476,6 +469,19 @@ func ConnectToNetconfProvider(
 func DisconnectFromNetconfProvider(provider types.CServiceProvider) {
 	realProvider := provider.Private.(C.ServiceProvider)
 	C.NetconfServiceProviderFree(realProvider)
+}
+
+// GetCapabilitesFromNetconfProvider gets the capabilities supported by the provider.
+// Returns the list of capabilities.
+func GetCapabilitesFromNetconfProvider(provider types.CServiceProvider) []string {
+	realProvider := provider.Private.(C.ServiceProvider)
+	size := C.NetconfServiceProviderGetNumCapabilities(realProvider)
+	capabilities := make([]string, size)
+	for i := range capabilities {
+		ccapability := C.NetconfServiceProviderGetCapabilityByIndex(realProvider, C.int(i))
+		capabilities[i] = C.GoString(ccapability)
+	}
+	return capabilities
 }
 
 // CleanUpErrorState cleans up memory for CState.
@@ -610,7 +616,7 @@ func CodecEncode( datanode types.DataNode, encoding encodingFormat.EncodingForma
 	cstate := GetCState(&state)
 
 	var cPretty C.boolean = 0
-	if pretty {
+	if  pretty {
 		cPretty = 1
 	}
 
@@ -757,15 +763,15 @@ func CodecServiceDecode(
 func DatanodeToEntity(node C.DataNode) types.Entity {
 
 	nodeName := C.GoString(C.DataNodeGetArgument(node))
-	moduleName := C.GoString(C.DataNodeGetModuleName(node))
-	path := fmt.Sprintf("%s:%s", moduleName, nodeName)
-	ydk.YLogDebug(fmt.Sprintf("path.DatanodeToEntity: Got datanode with path: '%s'", path))
+    moduleName := C.GoString(C.DataNodeGetModuleName(node))
+    path := fmt.Sprintf("%s:%s", moduleName, nodeName)
+    ydk.YLogDebug(fmt.Sprintf("path.DatanodeToEntity: Got datanode with path: '%s'", path))
 
-	topEntity, ok := ydk.GetTopEntity(path)
-	if ok {
-		getEntityFromDataNode(node, topEntity)
-	}
-	return topEntity
+    topEntity, ok := ydk.GetTopEntity(path)
+    if ok {
+	    getEntityFromDataNode(node, topEntity)
+    }
+    return topEntity
 }
 
 // ConnectToOpenDaylightProvider connects to OpenDaylight device.
@@ -879,14 +885,10 @@ func getDataNodeFromEntity(
 
 	entPath := types.GetEntityPath(entity)
 	entAbsPath := types.GetAbsolutePath(entity)
-
 	path := C.CString(entAbsPath)
 	defer C.free(unsafe.Pointer(path))
 
-	var cvalue *C.char = C.CString("")
-	defer C.free(unsafe.Pointer(cvalue))
-
-	cdn := C.RootSchemaNodeCreate(*GetCState(state), rootSchema, path, cvalue)
+	cdn := C.RootSchemaNodeCreate(*GetCState(state), rootSchema, path)
 	PanicOnCStateError(GetCState(state))
 	dnPath := C.GoString(C.DataNodeGetPath(cdn))[1:]
 	ydk.YLogDebug(fmt.Sprintf("path.getDataNodeFromEntity: Created datanode with path '%s'", dnPath))
@@ -931,7 +933,7 @@ func populateDataNode(
 	PanicOnCStateError(GetCState(state))
 
 	if dataNode == nil {
-		ydk.YLogError(fmt.Sprintf("Datanode could not be created for: %v", path.Path))
+        ydk.YLogError(fmt.Sprintf("Datanode could not be created for: %v", path.Path))
 		panic("Datanode could not be created for: " + path.Path)
 	}
 
@@ -985,11 +987,11 @@ func getEntityFromDataNode(node C.DataNode, entity types.Entity) {
 
 	for _, childDataNode := range children {
 		childName := C.GoString(C.DataNodeGetArgument(childDataNode))
-		childModuleName := C.GoString(C.DataNodeGetModuleName(childDataNode))
+	        childModuleName := C.GoString(C.DataNodeGetModuleName(childDataNode))
 		ydk.YLogDebug(fmt.Sprintf("Looking at child datanode: '%s'", childName))
-		if moduleName != childModuleName {
-			childName = childModuleName + ":" + childName
-		}
+	        if(moduleName != childModuleName) {
+	            childName = childModuleName + ":" + childName
+	        }
 
 		if dataNodeIsLeaf(childDataNode) {
 
@@ -1020,9 +1022,8 @@ func getEntityFromDataNode(node C.DataNode, entity types.Entity) {
 }
 
 func dataNodeIsLeaf(dataNode C.DataNode) bool {
-	keyword := C.GoString(C.DataNodeGetKeyword(dataNode))
-	return keyword == "leaf" || keyword == "leaf-list" ||
-	       keyword == "anyxml" || keyword == "anydata"
+	return C.GoString(C.DataNodeGetKeyword(dataNode)) == "leaf" ||
+		C.GoString(C.DataNodeGetKeyword(dataNode)) == "leaf-list"
 }
 
 func dataNodeIsList(dataNode C.DataNode) bool {
@@ -1150,13 +1151,10 @@ func CreateRootDataNode(rsn types.RootSchemaNode, path string) types.DataNode {
 	var cpath *C.char = C.CString(path)
 	defer C.free(unsafe.Pointer(cpath))
 
-	var cvalue *C.char = C.CString("")
-	defer C.free(unsafe.Pointer(cvalue))
-
 	rootSchemaWrapper := rsn.Private.(C.RootSchemaWrapper)
 	realRootSchema := C.RootSchemaWrapperUnwrap(rootSchemaWrapper)
 
-	cdatanode := C.RootSchemaNodeCreate(*cstate, realRootSchema, cpath, cvalue)
+	cdatanode := C.RootSchemaNodeCreate(*cstate, realRootSchema, cpath)
 	PanicOnCStateError(cstate)
 
 	datanode := types.DataNode{Private: cdatanode}
@@ -1194,12 +1192,12 @@ func GetRootSchemaNode(provider types.CServiceProvider) types.RootSchemaNode {
 	rootSchema := C.ServiceProviderGetRootSchemaNode(*cstate, realProvider)
 	PanicOnCStateError(cstate)
 	if rootSchema == nil {
-		ydk.YLogError("Root schema is nil!")
+	        ydk.YLogError("Root schema is nil!")
 		panic(1)
 	}
 
 	rsn := types.RootSchemaNode{Private: rootSchema}
-	return rsn
+    return rsn
 }
 
 func ServiceProviderGetSession(provider types.CServiceProvider) types.Session {
@@ -1209,5 +1207,5 @@ func ServiceProviderGetSession(provider types.CServiceProvider) types.Session {
 	realSession := C.ServiceProviderGetSession(realProvider)
 
 	session := types.Session{Private: realSession}
-	return session
+    return session
 }

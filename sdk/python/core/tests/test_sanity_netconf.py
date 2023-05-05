@@ -14,8 +14,7 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-"""
-test_sanity_netconf.py
+"""test_sanity_netconf.py
 sanity tests for netconf
 """
 from __future__ import absolute_import
@@ -34,12 +33,12 @@ from ydk.services  import NetconfService, Datastore
 from ydk.services  import CRUDService
 from ydk.services  import CodecService
 from ydk.providers import CodecServiceProvider
-from ydk.types import EncodingFormat
-from ydk.types import Filter, Config
+from ydk.ext.types import EncodingFormat
 
 from test_utils import ParametrizedTestCase
 from test_utils import get_device_info
 
+from ydk.types  import Filter, Config
 
 class SanityNetconf(ParametrizedTestCase):
 
@@ -291,7 +290,7 @@ class SanityNetconf(ParametrizedTestCase):
                           "invalid-input")
 
     def test_sanity_crud_read_interface(self):
-        address = ysanity.Native.Interface.Loopback.Ipv4.Address()
+        address = ysanity.Native.Interface.Loopback.Ipv4.Address();
         address.ip = "2.2.2.2"
         address.netmask = "255.255.255.255"
 
@@ -333,7 +332,7 @@ class SanityNetconf(ParametrizedTestCase):
         bgp.global_.config.as_ = 65001
         bgp.global_.config.router_id = "1.2.3.4"
 
-        create_list = [native, bgp]
+        create_list = [native, bgp];
 
         # Configure device
         result = crud.create(self.ncc, create_list)
@@ -342,7 +341,7 @@ class SanityNetconf(ParametrizedTestCase):
         # Read configuration
         native_filter = ysanity.Native()
         bgp_filter = openconfig.Bgp()
-        filter_list = [native_filter, bgp_filter]
+        filter_list = [native_filter, bgp_filter];
 
         read_list = crud.read(self.ncc, filter_list)
         self.assertEqual(isinstance(read_list, list), True)
@@ -356,7 +355,7 @@ class SanityNetconf(ParametrizedTestCase):
         crud = CRUDService()
 
         # Build configuration of multiple objects
-        create_list = Config()
+        create_list = Config();
 
         native = ysanity.Native()
         native.hostname = 'NativeHost'
@@ -375,7 +374,7 @@ class SanityNetconf(ParametrizedTestCase):
         self.assertEqual(result, True)
 
         # Read configuration
-        read_filter = Filter([ysanity.Native(), openconfig.Bgp()])
+        read_filter = Filter([ysanity.Native(), openconfig.Bgp()]);
         read_config = crud.read(self.ncc, read_filter)
         self.assertEqual(isinstance(read_config, Config), True)
         self.assertEqual(len(read_config), 2)
@@ -451,7 +450,6 @@ class SanityNetconf(ParametrizedTestCase):
 
         op = self.netconf_service.discard_changes(self.ncc)
         self.assertEqual(True, op)
-
 
 if __name__ == '__main__':
     device, non_demand, common_cache, timeout = get_device_info()

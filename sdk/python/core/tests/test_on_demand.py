@@ -114,7 +114,6 @@ AUGMENTED_JSON_PAYLOAD = """{
   }
 }"""
 
-
 class SanityYang(unittest.TestCase):
 
     @classmethod
@@ -171,10 +170,12 @@ class SanityYang(unittest.TestCase):
         entity1 = self.codec.decode(self.codec_provider, AUGMENTED_XML_PAYLOAD)
         self.assertEqual(entity1.lib.ydktest_aug_4.ydktest_aug_nested_4.aug_four, "aug four")
 
+
     def test_on_demand_loading_json(self):
         self.codec_provider.encoding = EncodingFormat.JSON
         entity1 = self.codec.decode(self.codec_provider, AUGMENTED_JSON_PAYLOAD)
         self.assertEqual(entity1.doc.aug_5_identityref, ydktest_aug_ietf_5.DerivedAugIdentity())
+
 
 
 if __name__ == '__main__':

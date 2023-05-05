@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,15 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
-"""
-test_restconf_session.py
-RestconfSession tests
+"""test_restconf_session.py
+RestconfSession test
 """
 from __future__ import absolute_import
 
@@ -114,10 +108,6 @@ class SanityTest(unittest.TestCase):
 
         json_str = codec.encode(rdn, EncodingFormat.JSON, True)
         self.assertEqual(json_str, json_int_payload + json_bgp_payload)
-
-    def test_get_capabilities(self):
-        capabilities = self.restconf_session.get_capabilities()
-        self.assertTrue(len(capabilities) > 0)
 
 
 if __name__ == '__main__':

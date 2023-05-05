@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@
 """
 class_printer.py
 
-YANG model driven API, class emitter.
-"""
+ YANG model driven API, class emitter.
 
+"""
 from ydkgen.api_model import Class, Package, Enum
 from ydkgen.common import sort_classes_at_same_level
 from ydkgen.printer.file_printer import FilePrinter
@@ -32,6 +32,7 @@ from ydkgen.printer.file_printer import FilePrinter
 from .class_docstring_printer import ClassDocstringPrinter
 from .class_inits_printer import ClassInitsPrinter, ClassSetAttrPrinter
 from .enum_printer import EnumPrinter
+
 
 
 class ClassPrinter(FilePrinter):
@@ -44,10 +45,9 @@ class ClassPrinter(FilePrinter):
         self.generate_meta = generate_meta
 
     def print_body(self, unsorted_classes):
-        """ This arranges the classes at the same level
+        ''' This arranges the classes at the same level
             so that super references are printed before
-            the subclassess
-        """
+            the subclassess'''
         sorted_classes = sort_classes_at_same_level(unsorted_classes)
 
         for clazz in sorted_classes:
@@ -66,7 +66,7 @@ class ClassPrinter(FilePrinter):
     def _print_class_body(self, clazz):
         leafs = []
         children = []
-        _get_class_members(clazz, leafs, children)
+        self._get_class_members(clazz, leafs, children)
         self._print_class_inits(clazz, leafs, children)
         self._print_class_setattr(clazz, leafs)
         self._print_child_enums(clazz)
@@ -105,14 +105,16 @@ class ClassPrinter(FilePrinter):
         self.ctx.lvl_dec()
 
     def _print_class_declaration(self, clazz):
+        self.ctx.bline()
+
         parents = '_Entity_'
         if clazz.is_identity():
             if len(clazz.extends) > 0:
-                parents = ', '.join([sup.qn() for sup in clazz.extends])
+                parents = ' ,'.join([sup.qn() for sup in clazz.extends])
             else:
                 parents = 'Identity'
 
-        self.ctx.writeln('class %s(%s):' % (clazz.name, parents))
+        self.ctx.writeln("class %s(%s):" % (clazz.name, parents))
 
     def _print_class_docstring(self, clazz):
         ClassDocstringPrinter(self.ctx).print_output(clazz)
@@ -127,6 +129,14 @@ class ClassPrinter(FilePrinter):
         if revision_stmt is not None:
             self.ctx.writeln("_revision = '%s'" % revision_stmt.arg)
         self.ctx.bline()
+
+    def _get_class_members(self, clazz, leafs, children):
+        for prop in clazz.properties():
+            ptype = prop.property_type
+            if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
+                children.append(prop)
+            elif ptype is not None:
+                leafs.append(prop)
 
     def _print_class_inits(self, clazz, leafs, children):
         ClassInitsPrinter(self.ctx, self.module_namespace_lookup, self.one_class_per_module,
@@ -144,17 +154,8 @@ class ClassPrinter(FilePrinter):
             self.ctx.bline()
             self.ctx.lvl_dec()
 
-    # def _print_bits(self, bits):
-    #     BitsPrinter(self.ctx).print_bits(bits)
+    def _print_bits(self, bits):
+        BitsPrinter(self.ctx).print_bits(bits)
 
     def _print_enum(self, enum_class):
         EnumPrinter(self.ctx).print_enum(enum_class, self.generate_meta)
-
-
-def _get_class_members(clazz, leafs, children):
-    for prop in clazz.properties():
-        ptype = prop.property_type
-        if isinstance(prop.property_type, Class) and not prop.property_type.is_identity():
-            children.append(prop)
-        elif ptype is not None:
-            leafs.append(prop)

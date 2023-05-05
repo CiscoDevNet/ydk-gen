@@ -234,7 +234,7 @@ def generate_adhoc_bundle(adhoc_bundle_name, adhoc_bundle_files):
     adhoc_bundle = {
         "name": adhoc_bundle_name,
         "version": "0.1.0",
-        "core_version": "0.8.5",
+        "core_version": "0.5.5",
         "author": "Cisco",
         "copyright": "Cisco",
         "description": "Adhoc YDK bundle",
@@ -246,9 +246,9 @@ def generate_adhoc_bundle(adhoc_bundle_name, adhoc_bundle_files):
         "dependency": [
             {
                 "name": "ietf",
-                "version": "0.1.5",
-                "core_version": "0.8.5",
-                "uri": "file://profiles/bundles/ietf_0_1_5.json"
+                "version": "0.1.2",
+                "core_version": "0.5.5",
+                "uri": "file://profiles/bundles/ietf_0_1_2.json"
             }
         ]
     }
@@ -409,6 +409,12 @@ if __name__ == '__main__':
         dest="sudo",
         default=False,
         help="Install with sudo access")
+
+    # try:
+    #     arg = sys.argv[1]
+    # except IndexError:
+    #     parser.print_help()
+    #     sys.exit(1)
 
     options = parser.parse_args()
 

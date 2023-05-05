@@ -18,7 +18,7 @@ from ydk.errors import YServiceError as _YServiceError
 from ydk.errors.error_handler import handle_runtime_error as _handle_error
 
 
-class ExecutorService(object):
+class ExecutorService(_ExecutorService):
     """ Python wrapper for ExecutorService
     """
     def __init__(self):

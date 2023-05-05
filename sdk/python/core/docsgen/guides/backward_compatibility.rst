@@ -10,9 +10,7 @@ When installing and using the ``0.6.0`` and newer releases of ``YDK-Py``, please
 Installation
 ------------
 
-When installing ``YDK-Py``, there is a new system requirement which needs to be installed.
-This is the ``libydk`` library, which is available on the DevHub website for various OS platforms.
-Please refer to the `system requirements <https://github.com/CiscoDevNet/ydk-gen#system-requirements>`_ for details.
+When installing ``YDK-Py``, there is a new system requirement which needs to be installed. This is the ``libydk`` library, which is available on the DevHub website for various OS platforms. Please refer to the `system requirements <http://ydk.cisco.com/py/docs/getting_started.html#system-requirements>`_ for details.
 
 Windows Support
 ---------------

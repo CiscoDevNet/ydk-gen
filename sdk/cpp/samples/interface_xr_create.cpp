@@ -40,8 +40,8 @@ int main(int argc, char* argv[])
     bool verbose=(args[4]=="--verbose");
     if(verbose)
     {
-        auto logger = spdlog::stdout_color_mt("ydk");
-        logger->set_level(spdlog::level::debug);
+            auto logger = spdlog::stdout_color_mt("ydk");
+            logger->set_level(spdlog::level::debug);
     }
 
     NetconfServiceProvider provider{host, username, password, port};
@@ -65,9 +65,6 @@ int main(int argc, char* argv[])
 
     bool reply = crud.create(provider, interface);
 
-    if (reply)
-        cout << "Create operation success" << endl << endl;
-    else
-        cout << "Operation failed" << endl << endl;
+    if(reply) cout << "Create operation success" << endl << endl; else cout << "Operation failed" << endl << endl;
 
 }

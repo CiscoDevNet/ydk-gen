@@ -14,12 +14,11 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-"""
- test_utils.py
+"""test_utils.py
 
- Utility function for test cases.
+Utility function for test cases.
 """
-
+import sys
 import re
 import logging
 

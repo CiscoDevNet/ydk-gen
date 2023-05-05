@@ -141,7 +141,6 @@ string NetconfSSHClient::execute_payload(const string & payload)
     YLOG_DEBUG("Netconf SSH Client: sending RPC");
     const nc_msgid msgid = nc_session_send_rpc(session, rpc);
     if (msgid == NULL) {
-        nc_rpc_free(rpc);
         YLOG_ERROR("Failed to send RPC\n{}", payload );
         throw(YClientError{"Failed to send RPC"});
     }

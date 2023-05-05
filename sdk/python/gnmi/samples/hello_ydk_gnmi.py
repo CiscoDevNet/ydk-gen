@@ -31,7 +31,11 @@ Example:
 import logging
 from datetime import timedelta
 from argparse import ArgumentParser
-from urllib.parse import urlparse
+import sys
+if sys.version_info > (3,):
+    from urllib.parse import urlparse
+else:
+    from urlparse import urlparse
 
 from test_utils import enable_logging
 

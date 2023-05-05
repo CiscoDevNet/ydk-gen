@@ -1,0 +1,57 @@
+{
+   "name":"ietf",
+   "version":"0.1.1",
+   "core_version":"0.5.1",
+   "author":"Cisco",
+   "copyright":"Cisco",
+   "description":"YDK bundle for IETF models",
+   "long_description":"This YANG Development Kit (YDK) bundle provides APIs for IETF YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for IETF models uses the YDK core package.",
+   "models":{
+     "description": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
+       "file" : [
+           "profiles/bundles/yang/ietf/ietf-interfaces-ext.yang"
+       ],
+      "git": [
+          {
+          "url": "https://github.com/YangModels/yang.git",
+          "commits": [
+                      {
+                          "commitid": "89a389eed81e85d5c283aaa24c06f16e260d8cbe",
+                          "file": [
+                                  "standard/ietf/DRAFT/ietf-syslog-types.yang"
+                                  ]
+                      },
+                      {
+
+                          "commitid": "a5e3d7f27e0e846cac6b6357ff460b8facc810a8",
+                          "file": [
+                                  "standard/ietf/RFC/ietf-inet-types.yang",
+                                  "standard/ietf/RFC/ietf-interfaces.yang",
+                                  "standard/ietf/RFC/ietf-netconf-acm.yang",
+                                  "standard/ietf/RFC/ietf-yang-smiv2.yang",
+                                  "standard/ietf/RFC/ietf-yang-types.yang",
+                                  "standard/ietf/RFC/iana-if-type.yang",
+                                  "standard/ietf/RFC/ietf-netconf.yang",
+                                  "standard/ietf/RFC/ietf-netconf-with-defaults.yang"
+                                  ]
+                      },
+
+                      {
+                          "commitid": "be8ff2197e1179c2193433c38ba766a65aca5828",
+                          "file": [
+                                  "standard/ietf/RFC/iana-crypt-hash.yang"
+                                  ]
+                      },
+
+                      {
+                          "commitid": "ead44523cefc2d0f029056f61253c3b36ab38da8",
+                          "file": [
+                                  "standard/ietf/RFC/ietf-system@2014-08-06.yang",
+                                  "standard/ietf/RFC/ietf-netconf-monitoring@2010-10-04.yang"
+                                  ]
+                      }
+                      ]
+          }
+       ]
+  }
+}

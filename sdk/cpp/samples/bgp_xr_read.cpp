@@ -61,28 +61,27 @@ int main(int argc, char* argv[])
 
     cout << "=================================================="<<endl;
     cout << "BGP configuration: " << endl<<endl;
-
-    for(size_t i=0; i < bgp_read_ptr->instance.len(); i++)
+    for(size_t i=0; i < bgp_read_ptr->instance.size(); i++)
     {
         auto instance = dynamic_cast<Bgp::Instance*>(bgp_read_ptr->instance[i].get());
         cout << "Instance: " << instance->instance_name << endl;
-        for(size_t j=0; j < instance->instance_as.len(); j++)
+        for(size_t j=0; j < instance->instance_as.size(); j++)
         {
             auto instance_as = dynamic_cast<Bgp::Instance::InstanceAs*>(instance->instance_as[j].get());
             cout << "AS: " << instance_as->as << endl;
-            for(size_t k=0; k < instance_as->four_byte_as.len(); k++)
+            for(size_t k=0; k < instance_as->four_byte_as.size(); k++)
             {
                 auto four_byte_as = dynamic_cast<Bgp::Instance::InstanceAs::FourByteAs*>(instance_as->four_byte_as[k].get());
                 cout << "Four Byte AS: " << four_byte_as->as << endl;
                 cout << "BGP running: " << ((four_byte_as->bgp_running.is_set)?"Yes":"No") << endl;
-                for(size_t l=0; l < four_byte_as->default_vrf->global->global_afs->global_af.len(); l++)
+                for(size_t l=0; l < four_byte_as->default_vrf->global->global_afs->global_af.size(); l++)
                 {
                     auto global_af = dynamic_cast<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::Global::GlobalAfs::GlobalAf*>
                                         (four_byte_as->default_vrf->global->global_afs->global_af[l].get());
                     cout << "Global AF name: " << global_af->af_name << endl;
                     cout << "Global AF enabled: " << (global_af->enable.is_set?"Yes":"No") << endl;
                 }
-                for(size_t l=0; l < four_byte_as->default_vrf->bgp_entity->neighbor_groups->neighbor_group.len(); l++)
+                for(size_t l=0; l < four_byte_as->default_vrf->bgp_entity->neighbor_groups->neighbor_group.size(); l++)
                 {
                     auto neighbor_group = dynamic_cast<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::NeighborGroups::NeighborGroup*>
                                             (four_byte_as->default_vrf->bgp_entity->neighbor_groups->neighbor_group[l].get());
@@ -92,7 +91,7 @@ int main(int argc, char* argv[])
                     cout << "Neighbor Group remote AS YY: " << neighbor_group->remote_as->as_yy << endl;
                     cout << "Neighbor Group update source interface: " << neighbor_group->update_source_interface << endl;
 
-                    for(size_t m=0; m < neighbor_group->neighbor_group_afs->neighbor_group_af.len(); m++)
+                    for(size_t m=0; m < neighbor_group->neighbor_group_afs->neighbor_group_af.size(); m++)
                     {
                         auto neighbor_group_af = dynamic_cast<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::NeighborGroups::NeighborGroup::NeighborGroupAfs::NeighborGroupAf*>
                                                                     (neighbor_group->neighbor_group_afs->neighbor_group_af[m].get());

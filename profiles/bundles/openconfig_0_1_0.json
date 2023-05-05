@@ -1,0 +1,52 @@
+{
+   "name":"openconfig",
+   "description":"YDK bundle for OpenConfig models",
+   "version":"0.1.0",
+   "core_version":"0.5.0",
+   "author":"Cisco",
+   "copyright":"Cisco",
+   "models":{
+      "file":[
+         "profiles/bundles/yang/openconfig/bgp@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/bgp-policy@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/bgp-multiprotocol@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/bgp-operational@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/bgp-types@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/oc-xr-mapping@2015-02-10.yang",
+         "profiles/bundles/yang/openconfig/policy-types@2015-05-15.yang",
+         "profiles/bundles/yang/openconfig/routing-policy@2015-05-15.yang"
+      ],
+      "_descr_git":"Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
+      "git":[
+         {
+            "url":"https://github.com/openconfig/public.git",
+            "commits":[
+               {
+                  "commitid":"4ab22755c2484e893b2c2b6d88f800b8dd41bb09",
+                  "dir":[
+                     "release/models/interfaces",
+                     "release/models/inventory",
+                     "release/models/mpls",
+                     "release/models/optical-transport",
+                     "release/models/rpc",
+                     "release/models/telemetry",
+                     "release/models/vlan"
+                  ],
+                  "file":[
+                     "release/models/openconfig-extensions.yang",
+                     "release/models/openconfig-types.yang"
+                  ]
+               }
+            ]
+         }
+      ]
+   },
+   "dependency":[
+      {
+         "name":"ietf",
+         "version":"0.1.0",
+         "core_version":"0.5.0",
+         "uri":"file://profiles/bundles/ietf_0_1_0.json"
+      }
+   ]
+}

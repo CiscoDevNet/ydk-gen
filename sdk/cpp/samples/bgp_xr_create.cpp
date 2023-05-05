@@ -35,23 +35,23 @@ void config_bgp(Bgp* bgp)
 {
     // Add config data to bgp object.
     // global configuration
-    auto instance = make_shared<Bgp::Instance>();
+    auto instance = make_unique<Bgp::Instance>();
     instance->instance_name = "test";
-    auto instance_as = make_shared<Bgp::Instance::InstanceAs>();
+    auto instance_as = make_unique<Bgp::Instance::InstanceAs>();
     instance_as->as = 65001;
-    auto four_byte_as = make_shared<Bgp::Instance::InstanceAs::FourByteAs>();
+    auto four_byte_as = make_unique<Bgp::Instance::InstanceAs::FourByteAs>();
     four_byte_as->as = 65001;
     four_byte_as->bgp_running = Empty();
 
     // global address family
-    auto global_af = make_shared<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::Global::GlobalAfs::GlobalAf>();
+    auto global_af = make_unique<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::Global::GlobalAfs::GlobalAf>();
     global_af->af_name = BgpAddressFamily::ipv4_unicast;
     global_af->enable = Empty();
     global_af->parent = four_byte_as->default_vrf->global->global_afs.get();
-    four_byte_as->default_vrf->global->global_afs->global_af.append(global_af);
+    four_byte_as->default_vrf->global->global_afs->global_af.push_back(move(global_af));
 
     // configure IBGP neighbor group
-    auto neighbor_group = make_shared<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::NeighborGroups::NeighborGroup>();
+    auto neighbor_group = make_unique<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::NeighborGroups::NeighborGroup>();
     neighbor_group->neighbor_group_name = "IBGP";
     neighbor_group->create = Empty();
     // remote AS
@@ -59,21 +59,27 @@ void config_bgp(Bgp* bgp)
     neighbor_group->remote_as->as_yy = 65001;
     neighbor_group->update_source_interface = "Loopback0";
     // ipv4 unicast
-    auto neighbor_group_af = make_shared<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::NeighborGroups::NeighborGroup::NeighborGroupAfs::NeighborGroupAf>();
+    auto neighbor_group_af = make_unique<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::NeighborGroups::NeighborGroup::NeighborGroupAfs::NeighborGroupAf>();
     neighbor_group_af->af_name = BgpAddressFamily::ipv4_unicast;
     neighbor_group_af->activate = Empty();
-    neighbor_group->neighbor_group_afs->neighbor_group_af.append(neighbor_group_af);
-    four_byte_as->default_vrf->bgp_entity->neighbor_groups->neighbor_group.append(neighbor_group);
+    neighbor_group_af->parent = neighbor_group->neighbor_group_afs.get();
+    neighbor_group->parent = four_byte_as->default_vrf->bgp_entity->neighbor_groups.get();
+    neighbor_group->neighbor_group_afs->neighbor_group_af.push_back(move(neighbor_group_af));
+    four_byte_as->default_vrf->bgp_entity->neighbor_groups->neighbor_group.push_back(move(neighbor_group));
 
     // configure IBGP neighbor
-    auto neighbor = make_shared<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::Neighbors::Neighbor>();
+    auto neighbor = make_unique<Bgp::Instance::InstanceAs::FourByteAs::DefaultVrf::BgpEntity::Neighbors::Neighbor>();
     neighbor->neighbor_address = "172.16.255.2";
     neighbor->neighbor_group_add_member = "IBGP";
-    four_byte_as->default_vrf->bgp_entity->neighbors->neighbor.append(neighbor);
+    neighbor->parent = four_byte_as->default_vrf->bgp_entity->neighbors.get();
+    four_byte_as->default_vrf->bgp_entity->neighbors->neighbor.push_back(move(neighbor));
 
-    instance_as->four_byte_as.append(four_byte_as);
-    instance->instance_as.append(instance_as);
-    bgp->instance.append(instance);
+    four_byte_as->parent = instance_as.get();
+    instance_as->parent = instance.get();
+    instance->parent = bgp;
+    instance_as->four_byte_as.push_back(move(four_byte_as));
+    instance->instance_as.push_back(move(instance_as));
+    bgp->instance.push_back(move(instance));
 }
 
 int main(int argc, char* argv[])
@@ -88,8 +94,8 @@ int main(int argc, char* argv[])
     bool verbose=(args[4]=="--verbose");
     if(verbose)
     {
-        auto logger = spdlog::stdout_color_mt("ydk");
-        logger->set_level(spdlog::level::info);
+            auto logger = spdlog::stdout_color_mt("ydk");
+            logger->set_level(spdlog::level::info);
     }
 
     NetconfServiceProvider provider{host, username, password, port};
@@ -99,8 +105,6 @@ int main(int argc, char* argv[])
     config_bgp(bgp.get());
     bool reply = crud.create(provider, *bgp);
 
-    if (reply)
-        cout << "Update yfilter success" << endl << endl;
-    else
-        cout << "Operation failed" << endl << endl;
+    if(reply) cout << "Create yfilter success" << endl << endl; else cout << "Operation failed" << endl << endl;
+
 }

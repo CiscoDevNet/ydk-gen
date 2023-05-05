@@ -1,24 +1,25 @@
-/*  ----------------------------------------------------------------
- YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems. All rights reserved.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- -------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
- ------------------------------------------------------------------*/
+/// YANG Development Kit
+// Copyright 2016 Cisco Systems. All rights reserved
+//
+////////////////////////////////////////////////////////////////
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+//
+//////////////////////////////////////////////////////////////////
 
 #include <iostream>
 
@@ -29,7 +30,6 @@
 #include "types.hpp"
 #include "logger.hpp"
 #include "xml_subtree_codec.hpp"
-#include "json_subtree_codec.hpp"
 
 namespace ydk
 {
@@ -54,18 +54,15 @@ std::string
 CodecService::encode(CodecServiceProvider & provider, Entity & entity, bool pretty, bool subtree)
 {
     path::RootSchemaNode& root_schema = get_root_schema(provider, entity);
-    if(subtree || !entity.is_top_level_class)
+    if(subtree)
     {
-        if (provider.m_encoding == EncodingFormat::XML)
+        if(provider.m_encoding != EncodingFormat::XML)
         {
-            XmlSubtreeCodec codec{};
-            return codec.encode(entity, root_schema);
+            YLOG_ERROR("Subtree option can only be used with XML encoding");
+            throw(YServiceProviderError("Subtree option can only be used with XML encoding"));
         }
-        else
-        {
-            JsonSubtreeCodec codec{};
-            return codec.encode(entity, root_schema, pretty);
-        }
+        XmlSubtreeCodec codec{};
+        return codec.encode(entity, root_schema);
     }
 
     path::DataNode& datanode = get_data_node_from_entity(entity, root_schema);
@@ -95,16 +92,13 @@ CodecService::decode(CodecServiceProvider & provider, const std::string & payloa
 {
     if(subtree)
     {
-        if (provider.m_encoding == EncodingFormat::XML)
+        if(provider.m_encoding != EncodingFormat::XML)
         {
-            XmlSubtreeCodec codec{};
-            return codec.decode(payload, entity);
+            YLOG_ERROR("Subtree option can only be used with XML encoding");
+            throw(YServiceProviderError("Subtree option can only be used with XML encoding"));
         }
-        else
-        {
-            JsonSubtreeCodec codec{};
-            return codec.decode(payload, entity);
-        }
+        XmlSubtreeCodec codec{};
+        return codec.decode(payload, entity);
     }
 
     path::RootSchemaNode& root_schema = get_root_schema(provider, *entity);
@@ -170,17 +164,6 @@ static std::string get_bundle_name(Entity & entity)
 static path::RootSchemaNode & get_root_schema(CodecServiceProvider & provider, Entity & entity)
 {
     auto const & bundle_name = get_bundle_name(entity);
-    if (bundle_name.empty() && !provider.user_provided_repo)
-    {
-        YLOG_ERROR("Failed to get bundle name from entity '{}'", entity.yang_name);
-        throw(YServiceProviderError("Failed to get bundle name from entity"));
-    }
-
-    if (provider.has_root_schema_for_bundle(bundle_name))
-    {
-        return provider.get_root_schema_for_bundle(bundle_name);
-    }
-
     provider.initialize(bundle_name, get_bundle_yang_models_location(entity), get_augment_capabilities_function(entity));
 
     path::RootSchemaNode& root_schema = provider.get_root_schema_for_bundle(bundle_name);

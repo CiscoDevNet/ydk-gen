@@ -290,9 +290,6 @@ func (suite *GnmiServiceTestSuite) TestCrudSingle() {
     // Read all
     ifcFilter := ysanity_int.Interfaces_Interface{}
     ifcFilter.Name = "Loopback10"
-    ifcs := ysanity_int.Interfaces{}
-    ifcs.Interface = append(ifcs.Interface, &ifcFilter)
-    types.SetAllParents(&ifcs)
 
     readIfc := crud.Read(&suite.Provider, &ifcFilter)
     suite.NotNil(readIfc)

@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2017-2019 Cisco Systems
+# Copyright 2017 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,39 +13,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
-"""
-restconf_session.py
+"""restconf_session.py
 RestconfSession Python wrapper.
 """
 
-from ydk.types import EncodingFormat as _EncodingFormat
-from ydk_.path import RestconfSession as _RestconfSession
+from ydk.ext.types import EncodingFormat as _EncodingFormat
+from ydk.ext.path import RestconfSession as _RestconfSession
+import sys
 
 
 class RestconfSession(_RestconfSession):
-    """
-     Python wrapper for RestconfSession.
+    """ Python wrapper for RestconfSession.
     """
 
     def __init__(self, repo, address, username, password,
                  port=80, encoding=_EncodingFormat.JSON,
                  config_url_root="/data", state_url_root="/data"):
-
-        self.rs = super()
-        self.rs.__init__(repo, address, username, password,
-                         port, encoding, config_url_root, state_url_root)
+        if sys.version_info > (3,):
+            self._super = super()
+        else:
+            self._super = super(RestconfSession, self)
+        self._super.__init__(repo, address, username, password,
+                             port, encoding, config_url_root, state_url_root)
 
     def get_root_schema(self):
-        return self.rs.get_root_schema()
+        return self._super.get_root_schema()
 
     def invoke(self, rpc):
-        return self.rs.invoke(rpc)
-
-    def get_capabilities(self):
-        return self.rs.get_capabilities()
+        return self._super.invoke(rpc)

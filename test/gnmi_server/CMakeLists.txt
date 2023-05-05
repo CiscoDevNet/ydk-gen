@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
-project(ydk_gnmi_server)
+project(ydk_gnmi)
 
 include(ExternalProject)
 
@@ -47,7 +47,7 @@ add_custom_command(OUTPUT ${libgnmi_sources}
   VERBATIM
 )
 
-# add_custom_target(ydk_gnmi ALL DEPENDS ${libgnmi_sources})
+add_custom_target(ydk_gnmi ALL DEPENDS ${libgnmi_sources})
 
 include_directories(
     ${Protobuf_INCLUDE_DIR}
@@ -56,7 +56,10 @@ include_directories(
 
 add_executable(gnmi_server "gnmi_server.cpp" ${libgnmi_sources})
 
-target_link_libraries(gnmi_server
-            ${GRPC_GRPC++_LIBRARY}
-            ${PROTOBUF_LIBRARY}
-            )
+set(IS_SECURE True)
+if(${IS_SECURE})
+#    target_link_directories(gnmi_server PUBLIC /usr/local/lib)
+    target_link_libraries(gnmi_server ${PROTOBUF_LIBRARY} grpc++)
+else(NOT ${IS_SECURE})
+    target_link_libraries(gnmi_server ${PROTOBUF_LIBRARY} grpc++_unsecure)
+endif()

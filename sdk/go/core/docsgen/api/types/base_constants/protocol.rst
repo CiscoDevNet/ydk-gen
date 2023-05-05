@@ -10,9 +10,9 @@ Protocol
 
    import "github.com/CiscoDevNet/ydk-go/ydk/types/protocol"
 
-.. :noindex:attribute:: Protocol
+.. attribute:: Protocol
 
-    Represents communication protocol to be used
+    Represents the protocol to use using underlying type ``int``
 
     .. attribute:: Restconf
 

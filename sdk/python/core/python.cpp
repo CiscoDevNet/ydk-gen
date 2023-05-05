@@ -1,5 +1,5 @@
 /*  ----------------------------------------------------------------
- Copyright 2016-2019 Cisco Systems
+ Copyright 2016 Cisco Systems
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -12,13 +12,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- ------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
  ------------------------------------------------------------------*/
-
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
@@ -67,7 +61,14 @@ static bool enabled_logging = false;
 
 void add_null_handler(object logger)
 {
-    if (!added_nullhandler)
+    if (added_nullhandler) { return; }
+    object version = module::import("sys").attr("version_info");
+    object ge = version.attr("__ge__");
+    // NullHandler is introduced after Python 2.7
+    // Add Nullhandler to avoid `handler not found for logger` error for Python > 2.7
+    object version_27 = pybind11::make_tuple(2,7);
+    bool result = ge(version_27).cast<bool>();
+    if (result)
     {
         object null_handler = module::import("logging").attr("NullHandler");
         null_handler = null_handler();
@@ -294,8 +295,7 @@ PYBIND11_MODULE(ydk_, ydk)
     class_<ydk::path::Session>(path, "Session", module_local())
         .def("get_root_schema", &ydk::path::Session::get_root_schema, return_value_policy::reference)
         .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Session::*)(ydk::path::Rpc& rpc) const) &ydk::path::Session::invoke, return_value_policy::reference)
-        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Session::*)(ydk::path::DataNode& rpc) const) &ydk::path::Session::invoke, return_value_policy::reference)
-        .def("get_capabilities", (std::vector<std::string> (ydk::path::Session::*)() const) &ydk::path::Session::get_capabilities, return_value_policy::reference);
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Session::*)(ydk::path::DataNode& rpc) const) &ydk::path::Session::invoke, return_value_policy::reference);
 
     class_<ydk::path::NetconfSession, ydk::path::Session>(path, "NetconfSession")
         .def(init([](ydk::path::Repository & repo,
@@ -386,7 +386,7 @@ PYBIND11_MODULE(ydk_, ydk)
         .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::NetconfSession::*)(ydk::path::Rpc& rpc) const) &ydk::path::NetconfSession::invoke, return_value_policy::reference)
         .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::NetconfSession::*)(ydk::path::DataNode& rpc) const) &ydk::path::NetconfSession::invoke, return_value_policy::reference)
         .def("execute_netconf_operation", (std::string (ydk::path::NetconfSession::*)(ydk::path::Rpc& rpc) const) &ydk::path::NetconfSession::execute_netconf_operation)
-        .def("get_capabilities", (std::vector<std::string> (ydk::path::NetconfSession::*)() const) &ydk::path::NetconfSession::get_capabilities, return_value_policy::reference);
+        .def("get_capabilities", &ydk::path::NetconfSession::get_capabilities, return_value_policy::reference);
 
     class_<ydk::path::RestconfSession, ydk::path::Session>(path, "RestconfSession")
         .def(init([](ydk::path::Repository& repo,
@@ -411,8 +411,7 @@ PYBIND11_MODULE(ydk_, ydk)
              arg("state_url_root"))
         .def("get_root_schema", &ydk::path::RestconfSession::get_root_schema, return_value_policy::reference)
         .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::RestconfSession::*)(ydk::path::Rpc& rpc) const) &ydk::path::RestconfSession::invoke, return_value_policy::reference)
-        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::RestconfSession::*)(ydk::path::DataNode& rpc) const) &ydk::path::RestconfSession::invoke, return_value_policy::reference)
-        .def("get_capabilities", (std::vector<std::string> (ydk::path::RestconfSession::*)() const) &ydk::path::RestconfSession::get_capabilities, return_value_policy::reference);
+        .def("invoke", (std::shared_ptr<ydk::path::DataNode> (ydk::path::RestconfSession::*)(ydk::path::DataNode& rpc) const) &ydk::path::RestconfSession::invoke, return_value_policy::reference);
 
     class_<ydk::path::Statement>(path, "Statement")
         .def(init<const string &, const string &>(), arg("keyword"), arg("arg"))
@@ -486,9 +485,9 @@ PYBIND11_MODULE(ydk_, ydk)
     codec
         .def(init<>())
         .def("encode", (std::string (ydk::path::Codec::*)(const ydk::path::DataNode&, ydk::EncodingFormat, bool))
-                &ydk::path::Codec::encode, arg("data_node"), arg("encoding"), arg("pretty")=true)
+                &ydk::path::Codec::encode, arg("data_node"), arg("encoding"), arg("pretty"))
         .def("encode", (std::string (ydk::path::Codec::*)(std::vector<ydk::path::DataNode*>&, ydk::EncodingFormat, bool))
-                &ydk::path::Codec::encode, arg("data_node"), arg("encoding"), arg("pretty")=true)
+                &ydk::path::Codec::encode, arg("data_node"), arg("encoding"), arg("pretty"))
         .def("decode", &ydk::path::Codec::decode, arg("root_schema_node"), arg("payload"), arg("encoding"))
         .def("decode_rpc_output", &ydk::path::Codec::decode_rpc_output, arg("root_schema_node"), arg("payload"), arg("rpc_path"), arg("encoding"))
         .def("decode_json_output", (std::shared_ptr<ydk::path::DataNode> (ydk::path::Codec::*)(ydk::path::RootSchemaNode&, const std::vector<std::string>&))

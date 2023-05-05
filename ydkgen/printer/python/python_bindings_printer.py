@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@
 # ------------------------------------------------------------------
 
 """
- YDK PY converter
+   YDK PY converter
 """
 
 import os
+import sys
 import shutil
 from distutils import dir_util
 
@@ -47,7 +48,10 @@ logger = logging.getLogger('ydkgen')
 class PythonBindingsPrinter(LanguageBindingsPrinter):
 
     def __init__(self, ydk_root_dir, bundle, generate_tests, one_class_per_module):
-        super().__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
+        if sys.version_info > (3,):
+            super().__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
+        else:
+            super(PythonBindingsPrinter, self).__init__(ydk_root_dir, bundle, generate_tests, one_class_per_module)
         self.bundle = bundle
         self.bundle_name = bundle.name
         self.bundle_version = bundle.str_version

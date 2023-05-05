@@ -144,8 +144,8 @@ def get_file_attrs(files, root, remote=None):
 
 def get_dir_attrs(dirs, root, remote=None):
     for d in dirs:
-        for (dd, _, files) in walk(os.path.join(root, d.lstrip('/'))):
-            for res in get_file_attrs((os.path.join(dd, f) for f in files),
+        for (d, _, files) in walk(os.path.join(root, d.lstrip('/'))):
+            for res in get_file_attrs((os.path.join(d, f) for f in files),
                                       root,
                                       remote):
                 yield res
@@ -204,18 +204,17 @@ def translate(in_file, out_file, root_dir):
     for source in accepted_resources:
         if source in data['models']:
             get_fun = 'get_%s_attrs' % source
-            modules.extend(globals()[get_fun](data['models'][source], ydk_root))
+            modules.extend(globals()[get_fun](data['models'][source],ydk_root))
 
     try:
-        name = data['name']
         version = data['version']
-        core_version = data['core_version']
         description = data['description']
     except KeyError:
-        raise YdkGenException('Bundle profile requires to specify name, version, core_version and description.')
+        raise YdkGenException('Bundle file requires version and description.')
 
+    core_version = data['core_version'] if 'core_version' in data else version
     long_description = data['long_description'] if 'long_description' in data else str()
-    definition = Bundle(name, version, core_version, description, long_description)
+    definition = Bundle(load_profile_attr(in_file, 'name'), version, core_version, description, long_description)
     dependency = load_profile_attr(in_file, 'dependency')
 
     output = Environment().from_string(TEMPLATE).render(

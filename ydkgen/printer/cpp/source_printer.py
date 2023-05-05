@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,18 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
 """
- source_printer.py
+source_printer.py
 
- Prints C++ classes
+ prints C++ classes
+
 """
-
+import sys
 from ydkgen.builder import MultiFileSource
 from ydkgen.printer import MultiFilePrinter
 
@@ -34,7 +30,10 @@ from .class_enum_printer import EnumPrinter
 
 class SourcePrinter(MultiFilePrinter):
     def __init__(self, ctx, bundle_name, module_namespace_lookup):
-        super().__init__(ctx)
+        if sys.version_info > (3,):
+            super().__init__(ctx)
+        else:
+            super(SourcePrinter, self).__init__(ctx)
         self.enum_printer = EnumPrinter(self.ctx)
         self.bundle_name = bundle_name
         self.module_namespace_lookup = module_namespace_lookup

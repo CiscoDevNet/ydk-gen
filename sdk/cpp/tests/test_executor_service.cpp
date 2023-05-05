@@ -1,7 +1,6 @@
 /*  ----------------------------------------------------------------
- YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems, All rights reserved.
- -------------------------------------------------------------------
+ Copyright 2016 Cisco Systems
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -13,11 +12,6 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- -------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
  ------------------------------------------------------------------*/
 
 #include <string.h>
@@ -28,12 +22,10 @@
 #include <ydk/codec_service.hpp>
 #include <ydk/netconf_provider.hpp>
 #include <ydk/executor_service.hpp>
-#include <ydk/types.hpp>
-
 #include <ydk_ydktest/ydktest_sanity.hpp>
 #include <ydk_ydktest/ietf_netconf.hpp>
-#include <ydk_ydktest/ietf_netconf_monitoring.hpp>
 #include <ydk_ydktest/openconfig_bgp.hpp>
+#include <ydk/types.hpp>
 
 #include "config.hpp"
 #include "catch.hpp"
@@ -56,9 +48,16 @@ TEST_CASE("es_close_session_rpc")
     REQUIRE(result);
 
     ietf_netconf::CloseSession rpc{};
+    ietf_netconf::CloseSession rpc2{};
 
     std::shared_ptr<Entity> reply = es.execute_rpc(provider, rpc);
-    REQUIRE(reply == nullptr);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    CHECK_THROWS_AS(
+        es.execute_rpc(provider, rpc2),
+        YClientError
+    );
 }
 
 // persist-id is broken?
@@ -125,7 +124,6 @@ TEST_CASE("es_copy_config_rpc")
 }
 
 // issues in netsim
-// If-feature 'url' is not enabled in confd-7.3, hence expected failure execute RPC
 TEST_CASE("es_delete_config_rpc")
 {
     // provider
@@ -202,7 +200,7 @@ TEST_CASE("es_edit_config_rpc")
     // runner and filter
     auto runner = make_shared<ydktest_sanity::Runner>();
     runner->one->number = 1;
-    runner->one->name = "runner-one-name";
+    runner->one->name = "runner:one:name";
     std::string runner_xml = codec_service.encode(codec_provider, *runner, true);
 
     auto filter = make_unique<ydktest_sanity::Runner>();
@@ -213,36 +211,38 @@ TEST_CASE("es_edit_config_rpc")
     edit_config_rpc.input->target->candidate = Empty();
     edit_config_rpc.input->config = runner_xml;
 
-    std::shared_ptr<Entity> reply = es.execute_rpc(provider, edit_config_rpc);
-    CHECK(reply == nullptr);
+    std::shared_ptr<Entity> reply = es.execute_rpc(
+        provider, edit_config_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
 
     // Get Config Rpc
     ietf_netconf::GetConfig get_config_rpc{};
     get_config_rpc.input->source->candidate = Empty();
     get_config_rpc.input->filter = filter_xml;
 
-    auto get_runner = make_shared<ydktest_sanity::Runner>();
-    reply = es.execute_rpc(provider, get_config_rpc, get_runner);
+    reply = es.execute_rpc(provider, get_config_rpc, runner);
     REQUIRE(reply);
-    auto runner_entity = dynamic_cast<ydktest_sanity::Runner*>(reply.get());
-    CHECK(*runner == *runner_entity);
 
     // Commit Rpc
     ietf_netconf::Commit commit_rpc{};
-    reply = es.execute_rpc(provider, commit_rpc);
-    CHECK(reply == nullptr);
 
-    // Get Rpc
+    reply = es.execute_rpc(provider, commit_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    // // Get Rpc
     ietf_netconf::Get get_rpc{};
     get_rpc.input->filter = filter_xml;
 
     reply = es.execute_rpc(provider, get_rpc, runner);
-    CHECK(reply);
+    REQUIRE(reply);
 
     // Discard Changes
     ietf_netconf::DiscardChanges discard_rpc{};
     reply = es.execute_rpc(provider, discard_rpc);
-    CHECK(reply == nullptr);
+    result = reply == nullptr;
+    REQUIRE(result);
 }
 
 // kill_session
@@ -284,17 +284,32 @@ TEST_CASE("es_lock_rpc")
     NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
     ExecutorService es{};
 
-    ietf_netconf::Lock lock_rpc{};
-    lock_rpc.input->target->running = Empty();
+    // clean up
+    CrudService crud{};
+    auto r_1 = make_unique<ydktest_sanity::Runner>();
+    bool result = crud.delete_(provider, *r_1);
+    REQUIRE(result);
 
-    std::shared_ptr<Entity> reply = es.execute_rpc(provider, lock_rpc);
-    CHECK(reply == nullptr);
+    ietf_netconf::Lock lock_rpc{};
+    lock_rpc.input->target->candidate = Empty();
+
+    std::shared_ptr<Entity> reply = es.execute_rpc(
+        provider, lock_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
 
     ietf_netconf::Unlock unlock_rpc{};
-    unlock_rpc.input->target->running = Empty();
+    unlock_rpc.input->target->candidate = Empty();
 
     reply = es.execute_rpc(provider, unlock_rpc);
-    CHECK(reply == nullptr);
+    result = reply == nullptr;
+    REQUIRE(result);
+
+    // Discard Changes
+    ietf_netconf::DiscardChanges discard_rpc{};
+    reply = es.execute_rpc(provider, discard_rpc);
+    result = reply == nullptr;
+    REQUIRE(result);
 }
 
 TEST_CASE("es_validate_rpc_1")
@@ -348,20 +363,4 @@ TEST_CASE("es_validate_rpc_2")
     reply = es.execute_rpc(provider, discard_rpc);
     result = reply == nullptr;
     REQUIRE(result);
-}
-
-TEST_CASE("es_get_schema_rpc")
-{
-    NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
-    ExecutorService es{};
-
-    auto rpc_entity = ietf_netconf_monitoring::GetSchema{};
-    rpc_entity.input->identifier = "main";
-    auto return_output_entity = make_shared<ietf_netconf_monitoring::GetSchema::Output>();
-    auto reply = es.execute_rpc(provider, rpc_entity, return_output_entity);
-    REQUIRE(reply);
-
-    auto get_schema_rpc_output = dynamic_cast<ietf_netconf_monitoring::GetSchema::Output*>(return_output_entity.get());
-    string module = get_schema_rpc_output->data.get();
-    REQUIRE(module.compare(0, 13, "module main {") == 0);
 }
