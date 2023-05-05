@@ -442,21 +442,11 @@ module ydktest-sanity {
         // identityref
         // instance-indentifier
         //
-
-        leaf-list bool-leaf-list {
-          type boolean;
-        }
-
-        list bool-list {
-          key "bool-leaf";
-          leaf bool-leaf {
-            type boolean;
-          }
-        }
       }
 
       container derived-t {
         description "config for one_level derived data types";
+
       }
     }
   }
@@ -894,22 +884,20 @@ module ydktest-sanity {
             enum atm;
             enum ds0;
         }
-        default ethernet;
     }
     leaf ifMTU {
-      type uint32;
-      default 1500;
+        type uint32;
     }
-    must "ifType != 'ethernet' or " +
+    must "(ifType != 'ethernet' and ifType != 'atm') or " +
          "(ifType = 'ethernet' and ifMTU = 1500)" {
-      error-message "An ethernet MTU must be 1500";
+        error-message "An ethernet MTU must be 1500";
     }
-    must "ifType != 'atm' or " +
+    must "(ifType != 'atm' and ifType != 'ethernet') or " +
          "(ifType = 'atm' and ifMTU <= 17966 and ifMTU >= 64)" {
-      error-message "An atm MTU must be  64 .. 17966";
+        error-message "An atm MTU must be  64 .. 17966";
     }
 
-    when "/conditional-interface/ifType = 'ds0'";
+    when "/conditional-interface/ifType='ds0'";
     leaf ds0ChannelNumber {
       type uint16;
     }

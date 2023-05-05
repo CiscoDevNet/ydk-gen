@@ -1,6 +1,5 @@
 #  ----------------------------------------------------------------
-# YDK - YANG Development Kit
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,11 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
 # ------------------------------------------------------------------
 
 """
@@ -87,17 +81,16 @@ class ClassMetaPrinter(object):
             mtype = 'REFERENCE_LEAFLIST'
         elif clazz.stmt.keyword == 'identity':
             mtype = 'REFERENCE_IDENTITY_CLASS'
-        self.ctx.writeln('\'%s\': {' % (clazz.qn()))
+        self.ctx.writeln('\'%s\' : {' % (clazz.qn()))
         self.ctx.lvl_inc()
-        self.ctx.writeln("'meta_info': _MetaInfoClass(")
+        self.ctx.writeln("'meta_info' : _MetaInfoClass('%s', %s," % (clazz.qn(), mtype))
         self.ctx.lvl_inc()
-        self.ctx.writeln("'%s', %s," % (clazz.qn(), mtype))
         description = " "
         for st in clazz.stmt.substmts:
             if st.keyword == 'description':
                 description = st.arg
                 break
-        self.ctx.writeln('"""%s""",' % description)
+        self.ctx.writeln("'''%s'''," % description)
         if clazz.is_grouping():
             self.ctx.writeln('True, ')
         else:
@@ -158,16 +151,15 @@ class ClassMetaPrinter(object):
         min_elements = meta_info_data.min_elements
         default_value_object = meta_info_data.default_value_object
 
-        ctx.writeln("  _MetaInfoClassMember(")
+        ctx.writeln("_MetaInfoClassMember('%s', %s, '%s', '%s'," % (name, mtype, ptype, ytype))
         ctx.lvl_inc()
-        ctx.writeln("'%s', %s, '%s', '%s'," % (name, mtype, ptype, ytype))
         ctx.writeln("%s, %s," % (pmodule_name, clazz_name))
         ctx.writeln("%s, %s," % (str(prange), str(pattern)))
-        ctx.writeln('"""')
+        ctx.write("'''")
         if meta_info_data.comment is not None:
             for line in meta_info_data.comment.split('\n'):
                 ctx.writeln('%s' % line)
-        ctx.writeln('""",')
+        ctx.writeln("''',")
         ctx.writeln("'%s'," % presentation_name)
 
         if len(meta_info_data.children) > 0:

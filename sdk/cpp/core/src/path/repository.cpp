@@ -138,8 +138,7 @@ namespace ydk {
                 throw(YIllegalStateError{"Could not download model: " + model_name});
             }
             memcpy(enlarged_data, data, len);
-            enlarged_data[len] = '\0';
-            enlarged_data[len + 1] = '\0';
+            enlarged_data[len] = enlarged_data[len + 1] = '\0';
             return enlarged_data;
         }
 

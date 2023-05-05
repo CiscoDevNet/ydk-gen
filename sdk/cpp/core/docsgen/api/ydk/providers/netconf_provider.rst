@@ -25,7 +25,7 @@ NetconfServiceProvider
         :param protocol: ``ssh`` or ``tcp``.
         :param on_demand: On demand downloading by default.
         :param common_cache: Use common caching directory if enabled.
-        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking.
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
 
     .. cpp:function:: NetconfServiceProvider(\
         const path::Repository& repo, \
@@ -65,7 +65,7 @@ NetconfServiceProvider
         :param public_key_path: Either relative or absolute path to public key file.
         :param port: Device port used to access the netconf interface. Default value is 830.
         :param on_demand: On demand downloading by default.
-        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking.
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
 
     .. cpp:function:: NetconfServiceProvider(\
         std::string address, \
@@ -86,7 +86,7 @@ NetconfServiceProvider
         :param port: Device port used to access the netconf interface. Default value is 830
         :param on_demand: On demand downloading by default.
         :param common_cache: Use common caching directory if enabled.
-        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking.
+        :param timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking
 
     .. cpp:function:: EncodingFormat get_encoding() const
 

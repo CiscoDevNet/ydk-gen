@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2017-2019 Cisco Systems
+# Copyright 2017 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,23 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
-"""
-netconf_session.py
+"""netconf_session.py
 NetconfSession Python wrapper.
 """
 
-from ydk_.path import NetconfSession as _NetconfSession
+from ydk.ext.path import NetconfSession as _NetconfSession
+import sys
 
 
 class NetconfSession(_NetconfSession):
-    """
-     Python wrapper for NetconfSession
+    """ Python wrapper for NetconfSession
     """
 
     def __init__(self,
@@ -46,36 +40,39 @@ class NetconfSession(_NetconfSession):
         if public_key_path is None:
             public_key_path = ""
 
-        self.ns = super()
+        if sys.version_info > (3,):
+            self._super = super()
+        else:
+            self._super = super(NetconfSession, self)
         if repo is None:
             if len(public_key_path) == 0:
-                self.ns.__init__(address, username, password,
-                                 port, protocol, on_demand,
-                                 common_cache, timeout)
+                self._super.__init__(address, username, password,
+                                     port, protocol, on_demand,
+                                     common_cache, timeout)
             else:
-                self.ns.__init__(address, username,
-                                 private_key_path, public_key_path,
-                                 port, protocol, on_demand,
-                                 common_cache, timeout)
+                self._super.__init__(address, username,
+                                     private_key_path, public_key_path,
+                                     port, protocol, on_demand,
+                                     common_cache, timeout)
         else:
             if len(public_key_path) == 0:
-                self.ns.__init__(repo, address, username, password,
-                                 port, protocol,
-                                 on_demand, timeout)
+                self._super.__init__(repo, address, username, password,
+                                     port, protocol,
+                                     on_demand, timeout)
             else:
-                self.ns.__init__(repo, address, username,
-                                 private_key_path, public_key_path,
-                                 port, protocol, on_demand,
-                                 common_cache, timeout)
+                self._super.__init__(repo, address, username,
+                                     private_key_path, public_key_path,
+                                     port, protocol, on_demand,
+                                     common_cache, timeout)
 
     def get_root_schema(self):
-        return self.ns.get_root_schema()
+        return self._super.get_root_schema()
 
     def invoke(self, rpc):
-        return self.ns.invoke(rpc)
+        return self._super.invoke(rpc)
 
     def execute_netconf_operation(self, rpc):
-        return self.ns.execute_netconf_operation(rpc)
+        return self._super.execute_netconf_operation(rpc)
 
     def get_capabilities(self):
-        return self.ns.get_capabilities()
+        return self._super.get_capabilities()

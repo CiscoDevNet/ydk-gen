@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,12 +22,11 @@ from ydk.entity_utils import _get_top_level_entity, _get_child_entity_from_top
 from ydk.entity_utils import _set_nontop_entity_filter
 
 from ydk_gnmi_.services import gNMIService as _gNMIService
-# from ydk_gnmi_.services import gNMISubscription
+from ydk_gnmi_.services import gNMISubscription
 
 
-class gNMIService(object):
-    """
-     Python wrapper for gNMIService
+class gNMIService(_gNMIService):
+    """ Python wrapper for gNMIService
     """
     def __init__(self):
         self._gs = _gNMIService()
@@ -82,3 +81,4 @@ class gNMIService(object):
 #             raise _YServiceError("Subscription is not properly defined")
 
         self._gs.subscribe(provider, subscription, qos, mode, encoding, gnmi_subscribe_callback)
+        

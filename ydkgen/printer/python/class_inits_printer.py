@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,16 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
 """
 class_inits_printer.py
 
  __init__ printer
+
 """
 
 from pyang.types import UnionTypeSpec
@@ -96,9 +92,19 @@ class ClassInitsPrinter(object):
 
     def _print_class_inits_body(self, clazz, leafs, children):
         if clazz.is_identity():
-            self.ctx.writeln('super().__init__(ns, pref, tag)')
+            self.ctx.writeln('if sys.version_info > (3,):')
+            self.ctx.writeln('    super().__init__(ns, pref, tag)')
+            self.ctx.writeln('else:')
+            line = '    super(%s, self).__init__(ns, pref, tag)' % clazz.name
+            self.ctx.writeln(line)
         else:
-            self.ctx.writeln('super().__init__()')
+            self.ctx.writeln('if sys.version_info > (3,):')
+            self.ctx.writeln('    super().__init__()')
+            self.ctx.writeln('else:')
+            if self.one_class_per_module:
+                self.ctx.writeln('    super(%s, self).__init__()' % clazz.name)
+            else:
+                self.ctx.writeln('    super(%s, self).__init__()' % clazz.qn())
             if clazz.owner is not None and isinstance(clazz.owner, Package):
                 self.ctx.writeln('self._top_entity = None')
             self.ctx.bline()

@@ -34,19 +34,17 @@ This part must include:
 - `"name"` of the bundle; the name also used to form part of the installation path of the bundle
 - `"version"` of the bundle
 - `"core_version"`, which refers to the [version](https://github.com/CiscoDevNet/ydk-gen/releases) of the YDK core package.
-- `"description"`, short description of the bundle
 
-Other components of description part are optional, they will not affect the bundle generation. 
-Here is simple example of description part:
+Other components of description part are optional. Here is simple example of description part:
 
 ```
 {
     "name":"cisco-ios-xr",
     "version": "6.5.3",
     "core_version": "0.8.4",
-    "author": "Cisco",
-    "copyright": "Cisco",
-    "description": "Cisco IOS-XR Native Models From Git",
+    "Author": "Cisco",
+    "Copyright": "Cisco",
+    "Description": "Cisco IOS-XR Native Models From Git",
 ```
 
 ### Bundle Components

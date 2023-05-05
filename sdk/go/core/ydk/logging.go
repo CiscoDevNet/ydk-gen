@@ -11,8 +11,7 @@ import "fmt"
 type LogLevel int
 
 const (
-	Off LogLevel = iota
-	Debug
+	Debug LogLevel = iota
 	Info
 	Warning
 	Error
@@ -21,9 +20,6 @@ const (
 // EnableLogging enables logging on the code that runs in C++
 func EnableLogging(level LogLevel) {
 	switch level {
-	case Off:
-		C.EnableLogging(C.OFF)
-
 	case Debug:
 		C.EnableLogging(C.DEBUG)
 
@@ -40,20 +36,20 @@ func EnableLogging(level LogLevel) {
 
 func YLogInfo(msg string){
 	msg = fmt.Sprintf("[Go] %s", msg)
-	C.YLogInfo(C.CString(msg));
+    C.YLogInfo(C.CString(msg));
 }
 
 func YLogDebug(msg string){
 	msg = fmt.Sprintf("[Go] %s", msg)
-	C.YLogDebug(C.CString(msg));
+    C.YLogDebug(C.CString(msg));
 }
 
 func YLogWarn(msg string){
 	msg = fmt.Sprintf("[Go] %s", msg)
-	C.YLogWarn(C.CString(msg));
+    C.YLogWarn(C.CString(msg));
 }
 
 func YLogError(msg string){
 	msg = fmt.Sprintf("[Go] %s", msg)
-	C.YLogError(C.CString(msg));
+    C.YLogError(C.CString(msg));
 }

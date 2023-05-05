@@ -1,5 +1,9 @@
+//
+// @file types.hpp
+// @brief Header for ydk entity
+//
 // YANG Development Kit
-// Copyright 2016-2022 Cisco Systems. All rights reserved
+// Copyright 2016 Cisco Systems. All rights reserved
 //
 ////////////////////////////////////////////////////////////////
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -18,11 +22,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// -------------------------------------------------------------
-// This file has been modified by Yan Gorelik, YDK Solutions.
-// All modifications in original under CiscoDevNet domain
-// introduced since October 2019 are copyrighted.
-// All rights reserved under Apache License, Version 2.0.
+//
 //////////////////////////////////////////////////////////////////
 
 #include <assert.h>
@@ -41,6 +41,8 @@ using namespace std;
 namespace ydk
 {
 static void populate_data_node(Entity & entity, path::DataNode & data_node);
+static void walk_children(Entity & entity, path::DataNode & data_node);
+static void populate_name_values(path::DataNode & parent_data_node, EntityPath & path);
 static bool data_node_is_leaf(path::DataNode & data_node);
 static bool data_node_is_list(path::DataNode & data_node);
 static string get_segment_path(const string & path);
@@ -67,12 +69,12 @@ path::DataNode& get_data_node_from_entity(Entity & entity, path::RootSchemaNode 
     return root_data_node;
 }
 
-void walk_children(Entity & entity, path::DataNode & data_node)
+static void walk_children(Entity & entity, path::DataNode & data_node)
 {
     map<string, shared_ptr<Entity>> children = entity.get_children();
     vector<string> order = entity.get_order_of_children();
-    YLOG_DEBUG("Children count for path: '{}': {}", get_entity_path(entity, entity.parent).path, children.size());
-    YLOG_DEBUG("Children order count: {}", order.size());
+    YLOG_DEBUG("Children count for: {} : {}",get_entity_path(entity, entity.parent).path, children.size());
+    YLOG_DEBUG("Children order count : {}",order.size());
     if(order.size()>0)
     {
         for(auto child_seg : order)
@@ -124,7 +126,7 @@ static void populate_data_node(Entity & entity, path::DataNode & parent_data_nod
     walk_children(entity, *data_node);
 }
 
-void populate_name_values(path::DataNode & data_node, EntityPath & path)
+static void populate_name_values(path::DataNode & data_node, EntityPath & path)
 {
     YLOG_DEBUG("Leaf count: {}", path.value_paths.size());
     for(const pair<string, LeafData> & name_value : path.value_paths)
@@ -266,9 +268,8 @@ void get_entity_from_data_node(path::DataNode * node, shared_ptr<Entity> entity)
 
 static bool data_node_is_leaf(path::DataNode & data_node)
 {
-    auto keyword = data_node.get_schema_node().get_statement().keyword;
-	return (keyword == "leaf" || keyword == "leaf-list"
-            || keyword == "anyxml" || keyword == "anydata");
+    return (data_node.get_schema_node().get_statement().keyword == "leaf"
+            || data_node.get_schema_node().get_statement().keyword == "leaf-list");
 }
 
 static bool data_node_is_list(path::DataNode & data_node)

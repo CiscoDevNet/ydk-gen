@@ -38,7 +38,7 @@ class RestconfClient
 {
     public:
         RestconfClient(const std::string & address, const std::string & username, const std::string & password,
-                    int port, const std::string & encoding, unsigned ssl_options=0);
+                    int port, const std::string & encoding, uint ssl_options=0);
         ~RestconfClient();
 
         std::string execute(const std::string & yfilter, const std::string & url, const std::string & payload) const;
@@ -55,7 +55,7 @@ class RestconfClient
         std::string base_url;
         std::string encoding;
         std::string protocol;
-        unsigned ssl_options;
+        uint ssl_options;
 };
 }
 

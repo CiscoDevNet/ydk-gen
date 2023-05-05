@@ -23,7 +23,7 @@ from ydk.entity_utils import _read_entities, _get_top_level_entity, _get_child_e
 from ydk.entity_utils import _set_nontop_entity_filter
 
 
-class NetconfService(object):
+class NetconfService(_NetconfService):
     """ Python wrapper for NetconfService
     """
     def __init__(self):

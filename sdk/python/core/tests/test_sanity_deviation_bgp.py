@@ -52,7 +52,7 @@ class SanityTest(unittest.TestCase):
         ipv4_afsf.apply_policy.config.default_export_policy = DefaultPolicyType.ACCEPT_ROUTE
         bgp_cfg.global_.afi_safis.afi_safi.append(ipv4_afsf)
 
-        self.assertRaises(YError, self.crud.create, self.ncc, bgp_cfg)
+        self.assertRaises(YModelError, self.crud.create, self.ncc, bgp_cfg)
 
 
 if __name__ == '__main__':

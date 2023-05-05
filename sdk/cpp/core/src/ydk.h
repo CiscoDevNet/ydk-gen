@@ -1,26 +1,28 @@
-/*  ----------------------------------------------------------------
- @file ydk.h
-
- YDK - YANG Development Kit
- Copyright 2017-2019 Cisco Systems. All rights reserved.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- -------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
- ------------------------------------------------------------------*/
+//////////////////////////////////////////////////////////////////
+// @file ydk.h
+//
+// YANG Development Kit
+// Copyright 2017 Cisco Systems. All rights reserved
+//
+////////////////////////////////////////////////////////////////
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+//
+//////////////////////////////////////////////////////////////////
 
 #ifndef _YDK_H_
 #define _YDK_H_
@@ -40,6 +42,7 @@ typedef void* OpenDaylightServiceProvider;
 typedef void* Capability;
 typedef void* Repository;
 typedef void* YDKStatePtr;
+
 typedef void* Session;
 
 typedef struct DataNodeChildren
@@ -109,37 +112,18 @@ Repository RepositoryInit(void);
 RootSchemaWrapper RepositoryCreateRootSchemaWrapper(YDKStatePtr state, Repository, const char* keys[], const Capability values[], int size);
 void RepositoryFree(Repository);
 
+ServiceProvider NetconfServiceProviderInit(YDKStatePtr state, const char * address, const char * username, const char * password, int port, const char * protocol);
+ServiceProvider NetconfServiceProviderInitWithOnDemand(YDKStatePtr state, const char * address, const char * username, const char * password, int port, const char * protocol, boolean on_demand, boolean common_cache);
+ServiceProvider NetconfServiceProviderInitWithRepo(YDKStatePtr state, Repository repo, const char * address, const char * username, const char * password, int port, const char * protocol);
+ServiceProvider NetconfServiceProviderInitWithOnDemandRepo(YDKStatePtr state, Repository repo, const char * address, const char * username, const char * password, int port, const char * protocol, boolean on_demand);
 RootSchemaNode ServiceProviderGetRootSchema(YDKStatePtr, ServiceProvider);
 RootSchemaWrapper ServiceProviderGetRootSchemaNode(YDKStatePtr, ServiceProvider);
 EncodingFormat ServiceProviderGetEncoding(ServiceProvider);
 Session ServiceProviderGetSession(ServiceProvider);
-RootSchemaWrapper SessionGetRootSchemaNode(YDKStatePtr, Session);
-
-// Netconf Service Provider API
-ServiceProvider NetconfServiceProviderInit(YDKStatePtr state, Repository repo,
-                                           const char * address, const char * username, const char * password, int port,
-                                           const char * protocol, boolean on_demand, boolean common_cache, int timeout,
-                                           const char * server_certificate_path, const char * private_key_path);
+RootSchemaNode SessionGetRootSchema(YDKStatePtr, Session);
 void NetconfServiceProviderFree(ServiceProvider);
-
-// Netconf Session API
-Session NetconfSessionInit(YDKStatePtr state, Repository repo,
-                           const char * address, const char * username, const char * password, int port,
-                           const char * protocol, boolean on_demand, boolean common_cache, int timeout,
-                           const char * server_certificate_path, const char * private_key_path);
-void NetconfSessionFree(Session);
-char** SessionGetCapabilities(YDKStatePtr state, Session session, int* len);
-
-// Restconf Session API
-Session RestconfSessionInit(YDKStatePtr state, Repository repo,
-                            const char * address, const char * username, const char * password, int port,
-                            EncodingFormat encoding,
-                            const char * config_url_root, const char * state_url_root);
-void RestconfSessionFree(Session);
-
-DataNode SessionExecuteRpc(YDKStatePtr state, Session session, Rpc rpc);
-
-void CapabilitiesArrayFree(char** caps, int len);
+int NetconfServiceProviderGetNumCapabilities(ServiceProvider);
+const char* NetconfServiceProviderGetCapabilityByIndex(ServiceProvider, int);
 
 ServiceProvider RestconfServiceProviderInitWithRepo(YDKStatePtr state, Repository repo, const char * address, const char * username, const char * password, int port, EncodingFormat encoding, const char* config_url_root, const char* state_url_root);
 void RestconfServiceProviderFree(ServiceProvider);
@@ -156,7 +140,7 @@ void CodecFree(Codec);
 const char* CodecEncode(YDKStatePtr state, Codec, DataNode, EncodingFormat, boolean);
 DataNode CodecDecode(YDKStatePtr state, Codec, RootSchemaNode, const char*, EncodingFormat);
 
-DataNode RootSchemaNodeCreate(YDKStatePtr, RootSchemaNode, const char*, const char*);
+DataNode RootSchemaNodeCreate(YDKStatePtr, RootSchemaNode, const char*);
 Rpc RootSchemaNodeRpc(YDKStatePtr state, RootSchemaNode, const char*);
 RootSchemaNode RootSchemaWrapperUnwrap(RootSchemaWrapper);
 

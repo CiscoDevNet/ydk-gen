@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,16 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
 """
  multi_file_builder.py
 """
-
+import sys
 from ydkgen.api_model import Class, Package
 from ydkgen.common import sort_classes_at_same_level, get_include_guard_name
 
@@ -37,14 +32,20 @@ class MultiFile(object):
 
 class MultiFileHeader(MultiFile):
     def __init__(self, package, file_index, fragmented):
-        super().__init__(fragmented)
+        if sys.version_info > (3,):
+            super().__init__(fragmented)
+        else:
+            super(MultiFileHeader, self).__init__(fragmented)
         self.file_name = _get_header_name(package, file_index)
         self.include_guard = get_include_guard_name(package.name, file_index)
 
 
 class MultiFileSource(MultiFile):
     def __init__(self, package, file_index, fragmented):
-        super().__init__(fragmented)
+        if sys.version_info > (3,):
+            super().__init__(fragmented)
+        else:
+            super(MultiFileSource, self).__init__(fragmented)
         self.file_name = _get_source_name(package, file_index)
 
 

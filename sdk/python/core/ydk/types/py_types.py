@@ -1,6 +1,5 @@
 #  ----------------------------------------------------------------
-# YDK - YANG Development Kit
-# Copyright 2016-2022 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,6 +32,11 @@ from functools import reduce
 
 import importlib
 import logging
+import sys
+
+if sys.version_info > (3,):
+    long = int
+    unicode = str
 
 from ydk_ import is_set
 from ydk.ext.types import Bits
@@ -53,18 +57,24 @@ from ydk.errors.error_handler import handle_type_error as _handle_type_error
 
 
 class YLeafList(_YLeafList):
-    """
-     Wrapper class for YLeafList, add __repr__ and get list slice functionalities.
+    """ Wrapper class for YLeafList, add __repr__ and get list slice
+    functionalities.
     """
     def __init__(self, ytype, leaf_name):
-        super().__init__(ytype, leaf_name)
+        if sys.version_info > (3,):
+            super().__init__(ytype, leaf_name)
+        else:
+            super(YLeafList, self).__init__(ytype, leaf_name)
         self.ytype = ytype
         self.leaf_name = leaf_name
 
     def append(self, item):
         if isinstance(item, _YLeaf):
             item = item.get()
-        super().append(item)
+        if sys.version_info > (3,):
+            super().append(item)
+        else:
+            super(YLeafList, self).append(item)
 
     def extend(self, items):
         for item in items:
@@ -74,7 +84,10 @@ class YLeafList(_YLeafList):
         if not isinstance(other, YLeafList):
             raise YModelError("Invalid value '{}' assigned to YLeafList '{}'".format(other, self.leaf_name))
         else:
-            super().clear()
+            if sys.version_info > (3,):
+                super().clear()
+            else:
+                super(YLeafList, self).clear()
             for item in other:
                 self.append(item)
 
@@ -86,7 +99,10 @@ class YLeafList(_YLeafList):
             ret.extend(values)
         else:
             arg = len(self) + arg if arg < 0 else arg
-            ret = super().__getitem__(arg)
+            if sys.version_info > (3,):
+                ret = super().__getitem__(arg)
+            else:
+                ret = super(YLeafList, self).__getitem__(arg)
         return ret
 
     def __str__(self):
@@ -98,7 +114,10 @@ class Entity(_Entity):
     """ Entity wrapper class overrides some of the ydk::Entity methods.
     """
     def __init__(self):
-        super().__init__()
+        if sys.version_info > (3,):
+            super().__init__()
+        else:
+            super(Entity, self).__init__()
         self._is_frozen = False
         self.parent = None
         self.ylist_key = None
@@ -115,12 +134,20 @@ class Entity(_Entity):
     def __eq__(self, other):
         if not isinstance(other, Entity):
             return False
-        return super().__eq__(other)
+        if sys.version_info > (3,):
+            ret = super().__eq__(other)
+        else:
+            ret = super(Entity, self).__eq__(other)
+        return ret
 
     def __ne__(self, other):
         if not isinstance(other, Entity):
             return True
-        return super().__ne__(other)
+        if sys.version_info > (3,):
+            ret = super().__ne__(other)
+        else:
+            ret = super(Entity, self).__ne__(other)
+        return ret
 
     def children(self):
         return self.get_children()
@@ -277,10 +304,14 @@ class Entity(_Entity):
                 leaf_name_data.append(leaf.get_name_leafdata())
             elif isinstance(value, list) and len(value) > 0:
                 leaf_list = _YLeafList(YType.str, leaf.name)
+                # leaf_list = self._leafs[name]
+                # Above results in YModelError:
+                #     Duplicate leaf-list item detected:
+                #     /ydktest-sanity:runner/ytypes/built-in-t/enum-llist[.='local'] :
+                #     No resolvents found for leafref "../config/id"..
+                #     Path: /ydktest-sanity:runner/one-list/identity-list/id-ref
                 for item in value:
                     _validate_value(self._leafs[name], name, item, self._logger)
-                    if isinstance(item, bool):
-                        item = 'true' if item is True else 'false'
                     leaf_list.append(item)
                 leaf_name_data.extend(leaf_list.get_name_leafdata())
         self._logger.debug('Get name leaf data for "%s". Count: %s' % (self.yang_name, len(leaf_name_data)))
@@ -292,19 +323,6 @@ class Entity(_Entity):
                                (leaf[0], leaf_value, leaf[1].yfilter, leaf[1].is_set))
         return leaf_name_data
 
-    def check_leaf_type(self, leaf_name, leaf_type):
-        for name in self._leafs:
-            leaf_tuple = self._leafs[name]
-            leaf = leaf_tuple[0]
-            if leaf.name == leaf_name:
-                break
-        if leaf.type == leaf_type:
-            return True
-        elif leaf.type == YType.union:
-            if str(leaf_type).split('.')[1].capitalize() in leaf_tuple[1]:
-                return True
-        return False
-
     def get_segment_path(self):
         path = self._segment_path()
         if ("[" in path) and hasattr(self, 'ylist_key_names') and len(self.ylist_key_names) > 0:
@@ -312,10 +330,7 @@ class Entity(_Entity):
             for attr_name in self.ylist_key_names:
                 leaf = _get_leaf_object(self._leafs[attr_name])
                 if leaf is not None:
-                    key = self.__dict__[attr_name]
-                    attr_str = '' if isinstance(key, Empty) else format(key)
-                    if isinstance(self.__dict__[attr_name], bool):
-                        attr_str = 'true' if attr_str == 'True' else 'false'
+                    attr_str = format(self.__dict__[attr_name])
                     if "'" in attr_str:
                         path += '[{}="{}"]'.format(leaf.name, attr_str)
                     else:
@@ -399,7 +414,10 @@ class Entity(_Entity):
                     if hasattr(value, "parent") and name != "parent":
                         if not value.is_top_level_class:
                             value.parent = self
-                super().__setattr__(name, value)
+                if sys.version_info > (3,):
+                    super().__setattr__(name, value)
+                else:
+                    super(Entity, self).__setattr__(name, value)
 
     def _assign_yleaf(self, name, value, v):
         if isinstance(self.__dict__[name], Bits):
@@ -714,7 +732,10 @@ class YList(EntityCollection):
         The keys then could be used to get entities from the YList.
     """
     def __init__(self, parent):
-        super().__init__()
+        if sys.version_info > (3,):
+            super().__init__()
+        else:
+            super(YList, self).__init__()
         self.parent = parent
         self.counter = 1000000
         self._cache_dict = OrderedDict()
@@ -723,7 +744,10 @@ class YList(EntityCollection):
         if name == 'yfilter' and isinstance(value, YFilter):
             for e in self:
                 e.yfilter = value
-        super().__setattr__(name, value)
+        if sys.version_info > (3,):
+            super().__setattr__(name, value)
+        else:
+            super(YList, self).__setattr__(name, value)
 
     def _key(self, entity):
         key_list = []
@@ -734,16 +758,14 @@ class YList(EntityCollection):
                     if attr is None:
                         key_list = []
                         break
-                    if isinstance(attr, Empty) or not str(attr):
-                        continue  # Skip empty key
-                    if not isinstance(attr, str):
-                        attr = format(attr)
                     key_list.append(attr)
         if len(key_list) == 0:
             self.counter += 1
             key = format(self.counter)
         elif len(key_list) == 1:
             key = key_list[0]
+            if not isinstance(key, str):
+                key = format(key)
         else:
             key = tuple(key_list)
         return key
@@ -751,9 +773,7 @@ class YList(EntityCollection):
     def _flush_cache(self):
         for _ in range(len(self._cache_dict)):
             _, entity = self._cache_dict.popitem(False)
-            key = self._key(entity)
-            self._entity_map[key] = entity
-            entity.ylist_key = key
+            self._entity_map[self._key(entity)] = entity
 
     def append(self, entities):
         entities.parent = self.parent
@@ -786,7 +806,11 @@ class YList(EntityCollection):
 
     def pop(self, item=None):
         self._flush_cache()
-        return super().pop(item)
+        if sys.version_info > (3,):
+            ret = super().pop(item)
+        else:
+            ret = super(YList, self).pop(item)
+        return ret
 
     def __getitem__(self, item):
         entity = None
@@ -840,8 +864,6 @@ def _get_decoded_value_object(leaf_tuple, entity, value):
             value_object = _decode_identity_value_object(entity, value)
         elif _is_enum(typ):
             value_object = _decode_enum_value_object(typ, value)
-        elif _is_bits(typ, value):
-            value_object = _decode_bits_value_object(typ, value)
         else:
             value_object = _decode_other_type_value_object(typ, value)
         if value_object is not None:
@@ -862,8 +884,6 @@ def _validate_value(leaf_tuple, name, value, logger):
         elif _is_enum(typ):
             if _validate_enum_value_object(typ, value):
                 return
-        elif _is_bits(typ, value):
-            return
         else:
             if _validate_other_type_value_object(typ, value):
                 return
@@ -893,12 +913,6 @@ def _is_identity(typ):
 
 def _is_enum(typ):
     return isinstance(typ, tuple) and len(typ) == 3
-
-
-def _is_bits(typ, value):
-    return typ == 'Bits'\
-           and ((isinstance(value, Bits) and len(value.get_bitmap()) > 0)
-                or isinstance(value, str))
 
 
 def _validate_identity_value_object(typ, value):
@@ -953,23 +967,12 @@ def _decode_enum_value_object(typ, value):
     return None
 
 
-def _decode_bits_value_object(typ, value):
-    if not _is_bits(typ, value):
-        return None
-    if isinstance(value, Bits):
-        v = value
-    else:
-        v = Bits()
-        v[value] = True
-    return v
-
-
 def _validate_other_type_value_object(typ, value):
     if typ == 'Empty':
         return isinstance(value, Empty)
-    if typ == 'str' and (isinstance(value, bytes) or isinstance(value, str)):
+    if typ == 'str' and (isinstance(value, bytes) or isinstance(value, unicode)):
         return True
-    if typ == 'int' and isinstance(value, int):
+    if typ == 'int' and (isinstance(value, int) or isinstance(value, long)):
         return True
     typ = eval(typ)
     return isinstance(value, typ)

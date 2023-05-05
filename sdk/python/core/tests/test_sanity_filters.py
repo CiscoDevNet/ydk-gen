@@ -120,24 +120,14 @@ class SanityYang(unittest.TestCase):
         r_1 = ysanity.Runner()
         l_1, l_2 = ysanity.Runner.OneList.Ldata(), ysanity.Runner.OneList.Ldata()
         l_1.number, l_2.number = 1, 2
-        l_1.name, l_2.name = 'a', 'b'
         r_1.one_list.ldata.extend([l_1, l_2])
         self.crud.create(self.ncc, r_1)
 
-        # Read container
         r_2 = ysanity.Runner()
-        r_2.one_list.yfilter = YFilter.read
+        r_2.one_list.ldata.yfilter = YFilter.read
         runner_read = self.crud.read(self.ncc, r_2)
-        self.assertEqual(runner_read, r_1)
 
-        # Read just the list ldata
-        r_3 = ysanity.Runner()
-        data = ysanity.Runner.OneList.Ldata()
-        data.number = YFilter.read
-        r_3.one_list.ldata.append(data)
-        runner_read = self.crud.read(self.ncc, r_3)
-        self.assertEqual(len(runner_read.one_list.ldata), 2)
-        self.assertIsNone(runner_read.one_list.ldata['1'].name)
+        self.assertEqual(runner_read, r_1)
 
     def test_read_on_list_with_key(self):
         r_1 = ysanity.Runner.OneList()
@@ -256,17 +246,6 @@ class SanityYang(unittest.TestCase):
         bgp_read = self.crud.read_config(self.ncc, bgp_filter)
         self.assertIsNotNone(bgp_read)
         self.assertTrue(len(bgp_read.neighbors.neighbor) == 2)
-        self.assertFalse(bgp_read.global_.has_data())
-
-        # Read only 'neighbor' list
-        bgp_filter = openconfig_bgp.Bgp()
-        nr = openconfig_bgp.Bgp.Neighbors.Neighbor()
-        nr.neighbor_address = YFilter.read
-        bgp_filter.neighbors.neighbor.append(nr)
-        bgp_read = self.crud.read_config(self.ncc, bgp_filter)
-        self.assertIsNotNone(bgp_read)
-        self.assertTrue(len(bgp_read.neighbors.neighbor) == 2)
-        self.assertFalse(bgp_read.neighbors.neighbor["1.2.3.5"].config.has_data())
         self.assertFalse(bgp_read.global_.has_data())
 
         # Delete BGP config

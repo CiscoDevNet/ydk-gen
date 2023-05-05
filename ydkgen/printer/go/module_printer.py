@@ -1,6 +1,5 @@
 #  ----------------------------------------------------------------
-# YDK - YANG Development Kit
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +20,7 @@ module_printer.py
  prints Go classes
 
 """
-
+import sys
 from ydkgen.api_model import Class, Enum, Bits
 from .class_printer import ClassPrinter
 from .class_identity_printer import IdentityPrinter
@@ -33,7 +32,10 @@ from ydkgen.printer.file_printer import FilePrinter
 class ModulePrinter(FilePrinter):
 
     def __init__(self, ctx, bundle_name, identity_subclasses):
-        super().__init__(ctx)
+        if sys.version_info > (3,):
+            super().__init__(ctx)
+        else:
+            super(ModulePrinter, self).__init__(ctx)
         self.bundle_name = bundle_name
         self.identity_subclasses = identity_subclasses
         self.class_printer = ClassPrinter(ctx, bundle_name, identity_subclasses)
@@ -88,15 +90,12 @@ class ModulePrinter(FilePrinter):
     def _print_init(self, package):
         self.ctx.writeln('func init() {')
         self.ctx.lvl_inc()
-        self.ctx.writeln('ydk.YLogDebug(fmt.Sprintf("Registering top level entities for package {}"))'.
-                         format(package.name))
+        self.ctx.writeln('ydk.YLogDebug(fmt.Sprintf("Registering top level entities for package {}"))'.format(package.name))
         for e in package.owned_elements:
             ns = package.stmt.search_one('namespace')
             if ns is not None and isinstance(e, Class) and not e.is_identity():
-                self.ctx.writeln('ydk.RegisterEntity("{{{} {}}}", reflect.TypeOf({}{{}}))'.
-                                 format(ns.arg, e.stmt.arg, e.go_name()))
-                self.ctx.writeln('ydk.RegisterEntity("{}:{}", reflect.TypeOf({}{{}}))'.
-                                 format(package.stmt.arg, e.stmt.arg, e.go_name()))
+                self.ctx.writeln('ydk.RegisterEntity("{{{} {}}}", reflect.TypeOf({}{{}}))'.format(ns.arg, e.stmt.arg, e.go_name()))
+                self.ctx.writeln('ydk.RegisterEntity("{}:{}", reflect.TypeOf({}{{}}))'.format(package.stmt.arg, e.stmt.arg, e.go_name()))
         self.ctx.lvl_dec()
         self.ctx.writeln('}')
         self.ctx.bline()

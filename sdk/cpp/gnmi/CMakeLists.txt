@@ -6,11 +6,9 @@ set(YDK_DESCRIPTION "YANG Development Kit Library. The gNMI library for YDK API.
 
 # CPack Dynamic Settings
 set (CPACK_PACKAGE_NAME "libydk_gnmi")
+set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set (CPACK_PACKAGE_RELEASE "5")
-set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION}.${CPACK_PACKAGE_RELEASE}")
-set (CPACK_LIBRARY_NAME "ydk_gnmi-${CPACK_PACKAGE_VERSION}")
-set (CPACK_LIBRARY_TARGET "lib${CPACK_LIBRARY_NAME}.a")
-set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "YDK gNMI service Library")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "YDK gNMI Library")
 
 # CPack Static Settings
 set (CPACK_PACKAGE_DESCRIPTION "YDK library to support gNMI services.
@@ -58,7 +56,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         # <foo>_<VersionNumber>-<DebianRevisionNumber>_<DebianArchitecture>.deb
         # libydk_0.6.0-0.1.alpha_amd64.deb   // Debian
         set (CPACK_PACKAGE_FILE_NAME
-            "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}.${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
+            "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
 
     # Linux Fedora
     elseif(${LSB_RELEASE_ID_SHORT} MATCHES "CentOS")
@@ -82,7 +80,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         # <name>-<version>-<release>.<architecture>.(src).rpm
         # libydk-0.6.0-0.1.alpha.x86_64.rpm  // RPM
         set (CPACK_PACKAGE_FILE_NAME
-            "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}.${CPACK_RPM_PACKAGE_ARCHITECTURE}")
+            "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CPACK_RPM_PACKAGE_ARCHITECTURE}")
     endif()
 endif()
 
@@ -201,30 +199,20 @@ include_directories(
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-add_library(${CPACK_LIBRARY_NAME} STATIC ${libydk_gnmi_src} ${pb_grpc_sources})
+add_library(ydk_gnmi STATIC ${libydk_gnmi_src} ${pb_grpc_sources})
 
-target_link_libraries(
-    ${CPACK_LIBRARY_NAME}
+target_link_libraries(ydk_gnmi
+#    ydk
     ${GRPC_GRPC++_LIBRARY}
     ${PROTOBUF_LIBRARY}
 )
 
-set_property(TARGET ${CPACK_LIBRARY_NAME} PROPERTY CXX_STANDARD 11)
-set_property(TARGET ${CPACK_LIBRARY_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET ydk_gnmi PROPERTY CXX_STANDARD 11)
+set_property(TARGET ydk_gnmi PROPERTY CXX_STANDARD_REQUIRED ON)
 
-install(TARGETS ${CPACK_LIBRARY_NAME} DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS ydk_gnmi DESTINATION ${LIB_INSTALL_DIR})
 install(FILES ${libydk_gnmi_install_headers} DESTINATION ${INCLUDE_INSTALL_DIR})
 install(FILES ${pb_grpc_headers} DESTINATION ${INCLUDE_INSTALL_DIR})
-
-SET( legacy_link   ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/libydk_gnmi.a)
-SET( legacy_target ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/${CPACK_LIBRARY_TARGET})
-ADD_CUSTOM_COMMAND( TARGET ${CPACK_LIBRARY_NAME}
-                    COMMAND echo "Creating symbolic link ${legacy_link}"
-                    COMMAND rm -f ${legacy_link}
-                    COMMAND ln -s ${CPACK_LIBRARY_TARGET} ${legacy_link}
-                    DEPENDS install ${CPACK_LIBRARY_NAME}
-                  )
-ADD_CUSTOM_TARGET( install_legacy DEPENDS ${legacy_target} )
 
 # generate doxygen documentation for ydk_gnmi API
 find_package(Doxygen)

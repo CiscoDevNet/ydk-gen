@@ -33,9 +33,7 @@ import (
 	oc_bgp "github.com/CiscoDevNet/ydk-go/ydk/models/ydktest/openconfig_bgp"
 	"github.com/CiscoDevNet/ydk-go/ydk/providers"
 	"github.com/CiscoDevNet/ydk-go/ydk/services"
-	"github.com/CiscoDevNet/ydk-go/ydk/types"
-	"runtime"
-	"path/filepath"
+	//"github.com/CiscoDevNet/ydk-go/ydk/types"
 )
 
 func main() {
@@ -88,18 +86,12 @@ func main() {
 	}
 
 	// create NETCONF provider
-	_, callerFile, _, _ := runtime.Caller(0)
-	executablePath := filepath.Dir(callerFile)
-	repo_path := executablePath + "/../../../../cpp/core/tests/models"
-	repo := types.Repository{Path: repo_path}
 	provider := providers.NetconfServiceProvider{
-		Repo: repo,
 		Address: device["address"],
 		Username: device["username"],
 		Password: device["password"],
 		Port: port,
-		Protocol: device["protocol"],
-		OnDemand: true}
+		Protocol: device["protocol"]}
 	provider.Connect()
 
 	crud := services.CrudService{}

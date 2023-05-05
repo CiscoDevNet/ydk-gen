@@ -143,14 +143,14 @@ class SanityTest(unittest.TestCase):
 
         ldata_list = runner.two_key_list
         ldata_keys = ldata_list.keys()
-        self.assertEqual(ldata_keys, [('f1', '11'), ('f2', '22')])
+        self.assertEqual(ldata_keys, [('f1', 11), ('f2', 22)])
 
         for lkey in ldata_keys:
             ldata = ldata_list[lkey]
             self.assertNotEqual(ldata, None)
 
-        self.assertEqual(ldata_list[('f1', '11')], l_1)
-        self.assertEqual(ldata_list[('f2', '22')], l_2)
+        self.assertEqual(ldata_list[('f1', 11)], l_1)
+        self.assertEqual(ldata_list[('f2', 22)], l_2)
 
     def test_ylist_runner_one_key_list(self):
         one_list = ysanity.Runner.OneList()

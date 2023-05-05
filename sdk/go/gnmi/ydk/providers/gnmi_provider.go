@@ -99,7 +99,7 @@ func (provider *GnmiServiceProvider) ExecuteRpc(operation string, entity types.E
 			options["mode"] = "update"
 		}
 	} else {
-		ydk.YLogError(fmt.Sprintf("GnmiServiceProvider.ExecuteRpc: Invalid operation '%s' requested", operation))
+		ydk.YLogError(fmt.Sprintf("GnmiServiceProvider.ExecuteRpc: Invalid operation '{}' requested", operation))
 		panic(1)
 	}
 	return path.ExecuteGnmiRPC(provider, rpcTag, entity, options)

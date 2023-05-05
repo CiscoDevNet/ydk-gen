@@ -28,8 +28,7 @@ START_FLAGS ?=
 all: openconfig-bgp.deviation ydktest-sanity.deviation \
 	openconfig-bgp.fxs openconfig-routing-policy.fxs openconfig-policy-types.fxs openconfig-bgp-types.fxs \
 	openconfig-types.fxs openconfig-bgp-operational.fxs openconfig-bgp-multiprotocol.fxs \
-	ydktest-types.fxs openconfig-extensions.fxs \
-	ydktest-sanity-deviations-types.fxs ydktest-sanity-deviations-another.fxs \
+	ydktest-types.fxs \
 		$(CDB_DIR) ssh-keydir
 	@echo "Build complete"
 

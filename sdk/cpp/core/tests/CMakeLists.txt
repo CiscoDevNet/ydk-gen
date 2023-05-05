@@ -24,7 +24,7 @@ foreach(test_name IN LISTS core_tests)
     add_executable(${test_name} ${test_name}.cpp)
     set_property(TARGET ${test_name} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${test_name} PROPERTY CXX_STANDARD_REQUIRED ON)
-    target_link_libraries(${test_name} ${CPACK_LIBRARY_NAME}
+    target_link_libraries(${test_name} ydk
         curl
         xslt
         pcre
@@ -39,7 +39,7 @@ endforeach(test_name)
 add_executable(${YDK_UNITTEST_TARGET_NAME} ${core_tests_src})
 set_property(TARGET ${YDK_UNITTEST_TARGET_NAME} PROPERTY CXX_STANDARD 11)
 set_property(TARGET ${YDK_UNITTEST_TARGET_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
-target_link_libraries(${YDK_UNITTEST_TARGET_NAME} ${CPACK_LIBRARY_NAME})
+target_link_libraries(${YDK_UNITTEST_TARGET_NAME} ydk)
 add_test(NAME ${YDK_UNITTEST_TARGET_NAME} COMMAND $<TARGET_FILE:${YDK_UNITTEST_TARGET_NAME}>)
 
 configure_file("${PROJECT_SOURCE_DIR}/tests/main.cpp.in" "${PROJECT_SOURCE_DIR}/tests/main.cpp" ESCAPE_QUOTES @ONLY)

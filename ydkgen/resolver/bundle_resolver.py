@@ -25,6 +25,7 @@
 """
 import re
 import os
+import sys
 import json
 import logging
 import tempfile
@@ -33,7 +34,6 @@ from shutil import rmtree, copy
 from collections import namedtuple, defaultdict
 from .bundle_translator import translate
 from ..common import YdkGenException
-from packaging.version import Version, InvalidVersion
 
 
 logger = logging.getLogger('ydkgen')
@@ -44,6 +44,7 @@ Local = namedtuple('Local', ['url'])
 Remote = namedtuple('Remote', ['url', 'commitid', 'path'])
 RepoDir = namedtuple('RepoDir', ['repo', 'dir'])
 Bundles = namedtuple('Bundles', ['curr_bundle', 'bundles'])
+Version = namedtuple('Version', ['major', 'minor', 'patch'])
 
 
 def nested_defaultdict():
@@ -86,16 +87,8 @@ class BundleDefinition(object):
 
     def __init__(self, data):
         self._name = data['name'].replace('-', '_')
-        try:
-            self._version = Version(data['version'])
-        except InvalidVersion:
-            raise YdkGenException("Bundle version '%s' is not valid."
-                                  "Version format must be 'N(.N)*[{a|b|rc}N][.postN][.devN]'." % data['version'])
-        try:
-            self._core_version = Version(data['core-version'])
-        except InvalidVersion:
-            raise YdkGenException("YDK core version '%s' is not valid."
-                                  "Version format must be 'N(.N)*[{a|b|rc}N][.postN][.devN]'." % data['core_version'])
+        self._version = Version(*tuple(data['version'].split('.')))
+        self._core_version = Version(*tuple(data['core-version'].split('.')))
         self._description = data['description'] if 'description' in data else str()
         self._long_description = data['long-description'] if 'long-description' in data else str()
 
@@ -121,12 +114,12 @@ class BundleDefinition(object):
     @property
     def str_version(self):
         """ Return string representation of version."""
-        return str(self.version)
+        return "%s.%s.%s" % self.version
 
     @property
     def str_core_version(self):
         """ Return string representation of ydk version."""
-        return str(self.core_version)
+        return "%s.%s.%s" % self.core_version
 
     @property
     def description(self):
@@ -151,7 +144,10 @@ class BundleDependency(BundleDefinition):
     """
 
     def __init__(self, data):
-        super().__init__(data)
+        if sys.version_info > (3,):
+            super().__init__(data)
+        else:
+            super(BundleDependency, self).__init__(data)
         self.uri = parse_uri(data['uri'])
 
 
@@ -239,7 +235,10 @@ class Bundle(BundleDefinition):
 
         try:
             data['bundle']['name'] = data['bundle']['name'].replace('.', '_')
-            super().__init__(data['bundle'])
+            if sys.version_info > (3,):
+                super().__init__(data['bundle'])
+            else:
+                super(Bundle, self).__init__(data['bundle'])
             if 'modules' in data:
                 for m in data['modules']:
                     self.models.append(Model(m, self.iskeyword))
@@ -326,14 +325,37 @@ class Resolver(object):
                 elif isinstance(entry, list):
                     entry.append(root)
             elif isinstance(uri, Local):
-                _resolve_file(uri.url, root.resolved_models_dir)
+                self._resolve_file(uri.url, root.resolved_models_dir)
         for d in root.dependencies:
             if d.fqn not in self.bundles:
                 node = Bundle(self._resolve_bundle_file(d.uri),
                               self.cached_models_dir, self.iskeyword)
                 self.bundles[d.fqn] = node
-                _add_symlink(root, node)
+                self._add_symlink(root, node)
                 self._resolve_bundles(node)
+
+    def _add_symlink(self, bundle, dependency):
+        source = dependency.resolved_models_dir
+        link_name = os.path.basename(source)
+        link_name = os.path.join(bundle.resolved_models_dir, link_name)
+        os.symlink(source, link_name)
+
+    def _clone_repo(self, url, suffix=''):
+        tmp_dir = tempfile.mkdtemp(suffix)
+        repo = Repo.clone_from(url, tmp_dir)
+        return RepoDir(repo, tmp_dir)
+
+    def _resolve_file(self, src, dst_dir, rename=''):
+        """ Resolve file from src to dst directory.
+        """
+        fname = os.path.basename(src)
+        logger.debug('Resolving file {} --> {}'.format(fname, dst_dir))
+        if rename == '':
+            dst = os.path.join(dst_dir, fname)
+        else:
+            dst = os.path.join(dst_dir, rename)
+        copy(src, dst)
+        return dst
 
     def _translate(self, description_file):
         """ Try to translate description file to bundle description file syntax.
@@ -353,49 +375,23 @@ class Resolver(object):
         if isinstance(uri, Local):
             src = uri.url
         else:
-            repo, tmp_dir = _clone_repo(uri.url, suffix='.bundle')
+            repo, tmp_dir = self._clone_repo(uri.url, suffix='.bundle')
             repo.git.checkout(uri.commitid)
             src = os.path.join(tmp_dir, uri.path)
 
-        resolved_file = _resolve_file(src, self.cached_bundles_dir)
+        resolved_file = self._resolve_file(src, self.cached_bundles_dir)
         return self._translate(resolved_file)
 
     def _resolve_models(self):
         """ Resolve module files."""
         for url in self.repos:
-            repo, tmp_dir = _clone_repo(url, suffix='.yang')
+            repo, tmp_dir = self._clone_repo(url, suffix='.yang')
             for commitid in self.repos[url]:
                 repo.git.checkout(commitid)
                 for path in self.repos[url][commitid]:
                     src = os.path.join(tmp_dir, path)
                     bundles = self.repos[url][commitid][path]
                     for bundle in bundles:
-                        _resolve_file(src, bundle.resolved_models_dir)
+                        self._resolve_file(src, bundle.resolved_models_dir)
 
             rmtree(tmp_dir)
-
-
-def _add_symlink(bundle, dependency):
-    source = dependency.resolved_models_dir
-    link_name = os.path.basename(source)
-    link_name = os.path.join(bundle.resolved_models_dir, link_name)
-    os.symlink(source, link_name)
-
-
-def _clone_repo(url, suffix=''):
-    tmp_dir = tempfile.mkdtemp(suffix)
-    repo = Repo.clone_from(url, tmp_dir)
-    return RepoDir(repo, tmp_dir)
-
-
-def _resolve_file(src, dst_dir, rename=''):
-    """ Resolve file from src to dst directory.
-    """
-    fname = os.path.basename(src)
-    logger.debug('Resolving file {} --> {}'.format(fname, dst_dir))
-    if rename == '':
-        dst = os.path.join(dst_dir, fname)
-    else:
-        dst = os.path.join(dst_dir, rename)
-    copy(src, dst)
-    return dst

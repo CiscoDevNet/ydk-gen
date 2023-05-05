@@ -369,9 +369,6 @@ static void check_and_set_node(Entity & entity, Entity * parent, const string & 
             child->parent = parent;
         }
         decode_json(node_jvalue, *child, &entity);
-        if (child->ylist && child->ylist->ylist_key_names.size() > 0) {
-            child->ylist->review(child);
-        }
     }
     else {
         check_and_set_leaf(entity, parent, node_name, node_jvalue);

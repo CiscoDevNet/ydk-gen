@@ -1,24 +1,26 @@
-/*  ----------------------------------------------------------------
- YDK - YANG Development Kit
- Copyright 2017-2019 Cisco Systems. All rights reserved.
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- -------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
- ------------------------------------------------------------------*/
+/// YANG Development Kit
+// Copyright 2016 Cisco Systems. All rights reserved
+//
+////////////////////////////////////////////////////////////////
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+//
+//////////////////////////////////////////////////////////////////
 
 #include <iostream>
 #include "../src/path_api.hpp"
@@ -34,7 +36,7 @@ static std::unordered_map<std::string, ydk::path::Capability> test_openconfig_lo
     {"http://openconfig.net/yang/policy-types", {"openconfig-policy-types", ""}},
     {"http://openconfig.net/yang/routing-policy", {"openconfig-routing-policy", ""}},
     {"http://openconfig.net/yang/openconfig-types", {"openconfig-types", ""}},
-    {"urn:ietf:params:xml:ns:netconf:base:1.0", {"ietf-netconf", "", {"validate", "candidate"}, {}}},
+    {"urn:ietf:params:xml:ns:netconf:base:1.0", {"ietf-netconf", ""}},
     {"urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring", {"ietf-netconf-monitoring", ""}},
     {"urn:ietf:params:xml:ns:yang:ietf-interfaces", {"ietf-interfaces", ""}},
     {"http://cisco.com/ns/yang/ydk", {"ydk", ""}},
@@ -43,24 +45,24 @@ static std::unordered_map<std::string, ydk::path::Capability> test_openconfig_lo
     {"http://cisco.com/ns/yang/ydktest-types", {"ydktest-types", ""}}
 };
 
+
 namespace mock {
 class MockSession : public ydk::path::Session 
 {
-  public:
-    MockSession(const std::string & searchdir, const std::vector<ydk::path::Capability> capabilities, ydk::EncodingFormat encoding)
-     : m_searchdir{searchdir}, m_capabilities{capabilities}, m_encoding{encoding}
+public:
+    MockSession(const std::string & searchdir, const std::vector<ydk::path::Capability> capabilities) : m_searchdir{searchdir}, m_capabilities{capabilities}
     {
         ydk::path::Repository repo{m_searchdir};
         ydk::IetfCapabilitiesParser capabilities_parser{};
         auto lookup_table = capabilities_parser.get_lookup_table(m_capabilities);
         lookup_table.insert(test_openconfig_lookup.begin(), test_openconfig_lookup.end());
         root_schema = repo.create_root_schema(lookup_table, m_capabilities);
-        repo.set_server_capabilities(m_capabilities);
     }
 
-    ~MockSession()
+    virtual ~MockSession()
     {
     }
+
 
     ydk::path::RootSchemaNode& get_root_schema() const
     {
@@ -69,14 +71,14 @@ class MockSession : public ydk::path::Session
 
     ydk::EncodingFormat get_encoding() const
     {
-        return m_encoding;
+        return ydk::EncodingFormat::XML;
     }
 
     std::shared_ptr<ydk::path::DataNode> invoke(ydk::path::Rpc& rpc) const
     {
         ydk::path::Codec s{};
 
-        std::cout << s.encode(rpc.get_input_node(), m_encoding, true) << std::endl;
+        std::cout << s.encode(rpc.get_input_node(), ydk::EncodingFormat::XML, true) << std::endl;
 
         return nullptr;
     }
@@ -85,28 +87,15 @@ class MockSession : public ydk::path::Session
     {
         ydk::path::Codec s{};
 
-        std::cout << s.encode(rpc, m_encoding, true) << std::endl;
+        std::cout << s.encode(rpc, ydk::EncodingFormat::XML, true) << std::endl;
 
         return nullptr;
     }
-
-    std::vector<std::string> get_capabilities() const
-    {
-        std::vector<std::string> caps{};
-        for (auto cap : m_capabilities)
-        {
-            std::ostringstream buffer;
-            buffer << cap;
-            caps.push_back(buffer.str());
-        }
-        return caps;
-    }
-
-  private:
+private:
     std::string m_searchdir;
     std::vector<ydk::path::Capability> m_capabilities;
     std::shared_ptr<ydk::path::RootSchemaNode> root_schema;
-    ydk::EncodingFormat m_encoding;
+
 };
 }
 
@@ -118,7 +107,7 @@ static std::vector<ydk::path::Capability> test_openconfig {
     {"openconfig-policy-types", ""},
     {"openconfig-routing-policy", ""},
     {"openconfig-types", ""},
-    {"ietf-netconf", "", {"validate", "candidate"}, {}},
+    {"ietf-netconf", ""},
     {"ietf-netconf-monitoring", ""},
     {"ietf-interfaces", ""},
     {"ydk", ""},
@@ -126,3 +115,4 @@ static std::vector<ydk::path::Capability> test_openconfig {
     {"ydktest-sanity-action", ""},
     {"ydktest-types", ""}
 };
+

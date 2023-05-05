@@ -165,8 +165,7 @@ TEST_CASE("get_edit_copy_config")
 
 TEST_CASE("iana_if_type_filter")
 {
-    path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
     NetconfService ns{};
 
     // Buils some configuration
@@ -442,8 +441,7 @@ TEST_CASE("create_get_non_top")
 
 TEST_CASE("get_openconfig_interfaces_and_bgp")
 {
-    ydk::path::Repository repo{TEST_HOME};
-    NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
     ydk::path::RootSchemaNode& schema = provider.get_session().get_root_schema();
 
     // Add BGP and interface configuration

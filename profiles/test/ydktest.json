@@ -1,21 +1,13 @@
 {
     "name": "ydktest",
-    "version": "0.5.1.dev1",
-    "core_version":"0.5.5",
+    "version": "0.5.1",
+    "ydk_version":"0.5.5",
     "author": "Cisco",
     "copyright": "Cisco",
     "description": "YDK Test Profile",
     "models": {
-    "file": [
-          "sdk/cpp/core/tests/models/ydktest-filterread@2015-11-17.yang",
-          "sdk/cpp/core/tests/models/ydktest-sanity-augm@2015-11-17.yang",
-          "sdk/cpp/core/tests/models/ydktest-sanity-submodule@2016-04-25.yang",
-          "sdk/cpp/core/tests/models/ydktest-sanity-typedefs@2018-01-30.yang",
-          "sdk/cpp/core/tests/models/ydktest-sanity-types@2016-04-11.yang",
-          "sdk/cpp/core/tests/models/ydktest-sanity@2015-11-17.yang",
-          "sdk/cpp/core/tests/models/ydktest-types@2016-05-23.yang",
-          "sdk/cpp/core/tests/models/oc-pattern@2015-11-17.yang",
-          "yang/ietf/ietf-yang-types@2013-07-15.yang"
-      ]
+    "dir": [
+        "/sdk/cpp/core/tests/models"
+        ]
     }
 }

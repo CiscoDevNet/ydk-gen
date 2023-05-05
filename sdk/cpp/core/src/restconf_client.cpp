@@ -42,7 +42,7 @@ static bool token_not_found(size_t token);
 
 
 RestconfClient::RestconfClient(const string & address, const string & username, const string & password,
-                        int port, const string & encoding, unsigned ssl_options)
+                        int port, const string & encoding, uint ssl_options)
     : curl(NULL), header_options_list(NULL), encoding(encoding), ssl_options(ssl_options)
 {
     protocol = (address.find("https://") == 0) ? "HTTPS" : "HTTP";

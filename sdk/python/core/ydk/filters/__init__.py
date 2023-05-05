@@ -14,7 +14,7 @@
 # limitations under the License.
 # ------------------------------------------------------------------
 
-from ydk_.filters import YFilter
+from ydk.ext.filters import YFilter
 
 merge = YFilter.merge
 create = YFilter.create
@@ -24,11 +24,11 @@ replace = YFilter.replace
 read = YFilter.read
 not_set = YFilter.not_set
 
-__all__ = ["merge",
-           "create",
-           "remove",
-           "delete",
-           "replace",
-           "read",
-           "not_set"]
+__all__ = [ "merge",
+            "create",
+            "remove",
+            "delete",
+            "replace",
+            "read",
+            "not_set" ]
 

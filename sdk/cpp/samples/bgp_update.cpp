@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     if(verbose)
     {
         auto logger = spdlog::stdout_color_mt("ydk");
-        logger->set_level(spdlog::level::info);
+            logger->set_level(spdlog::level::info);
     }
 
     NetconfServiceProvider provider{host, username, password, port};
@@ -52,8 +52,5 @@ int main(int argc, char* argv[])
 
     bool reply = crud.update(provider, *bgp);
 
-    if (reply)
-        cout << "Update yfilter success" << endl << endl;
-    else
-        cout << "Operation failed" << endl << endl;
+    if(reply) cout << "Update yfilter success" << endl << endl; else cout << "Operation failed" << endl << endl;
 }

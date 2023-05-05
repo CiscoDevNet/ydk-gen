@@ -1,0 +1,58 @@
+{
+   "name":"ietf",
+   "version":"0.1.2",
+   "core_version":"0.5.5",
+   "author":"Cisco",
+   "copyright":"Cisco",
+   "description":"YDK bundle for IETF models",
+   "long_description":"This YANG Development Kit (YDK) bundle provides APIs for IETF YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for IETF models uses the YDK core package.",
+   "models":{
+      "file":[
+           "profiles/bundles/yang/ietf/0.1.2/ietf-diffserv-classifier.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-diffserv-policy.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-diffserv-target.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-inet-types.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-interfaces-ext.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-interfaces.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-ipv4-unicast-routing.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-ipv6-unicast-routing.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-ip.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-key-chain.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-netconf-acm.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-netconf-monitoring.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-netconf-notifications.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-netconf-with-defaults.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-ospf.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-restconf-monitoring.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-routing.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-syslog-types.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-yang-library.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-yang-smiv2.yang",
+           "profiles/bundles/yang/ietf/0.1.2/ietf-yang-types.yang",
+           "profiles/bundles/yang/ietf/0.1.2/iana-crypt-hash.yang",
+           "profiles/bundles/yang/ietf/0.1.2/iana-if-type.yang"
+
+      ],
+      "git": [
+          {
+          "url": "https://github.com/YangModels/yang.git",
+          "commits": [
+                      {
+
+                          "commitid": "a5e3d7f27e0e846cac6b6357ff460b8facc810a8",
+                          "file": [
+                                  "standard/ietf/RFC/ietf-netconf.yang"
+                                  ]
+                      },
+                      {
+                          "commitid": "ead44523cefc2d0f029056f61253c3b36ab38da8",
+                          "file": [
+                                  "standard/ietf/RFC/ietf-system@2014-08-06.yang"
+                                  ]
+                      }
+                      ]
+          }
+       ]
+
+  }
+}

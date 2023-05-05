@@ -391,6 +391,11 @@ module openconfig-platform-transceiver {
   // augment statements
 
   augment "/oc-platform:components/oc-platform:component" {
+    when "/oc-platform:components/oc-platform:component/" +
+      "oc-platform:state/oc-platform:type = 'TRANSCEIVER'" {
+      description
+        "Augment is active when component is of type TRANSCEIVER";
+    }
     description
       "Adding transceiver data to physical inventory";
 

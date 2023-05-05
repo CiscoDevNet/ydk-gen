@@ -23,7 +23,7 @@ from ydk.entity_utils import _set_nontop_entity_filter
 from ydk.filters import YFilter
 
 
-class CRUDService(object):
+class CRUDService(_CrudService):
     """
     Python wrapper for CrudService
 

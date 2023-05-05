@@ -1,33 +1,3 @@
-### 2023-01-30 version 0.8.6.4
-
-#### New features and enhancements
-  * install_ydk.sh: Installation of Python and Go YDK packages should not require root access ([#1069](https://github.com/CiscoDevNet/ydk-gen/issues/1069))
-
-
-### 2021-09-30 version 0.8.6
-
-#### New features and enhancements
-  * Create go wrapper for NetconfSession and other path APIs ([#779](https://github.com/CiscoDevNet/ydk-gen/issues/779))
-  * Added SSL support for NetconfServiceProvider in Go
-
-#### Resolved GitHub issues
-  * Go function EntityEqual result depends on parameters order ([#1053](https://github.com/CiscoDevNet/ydk-gen/issues/1053))
-
-
-### 2021-04-30 version 0.8.5.2
-
-#### Resolved GitHub issues
-  * Version numbers in bundle resolver to comply with PEP 440 ([#1007](https://github.com/CiscoDevNet/ydk-gen/issues/1007))
-  * The Executor Service fails to return module content to user ([#1035](https://github.com/CiscoDevNet/ydk-gen/issues/1035))
-  * Docker base image python error ([#1036](https://github.com/CiscoDevNet/ydk-gen/issues/1036))
-
-#### Other resolved issues and enhancements
-  * Fixed few minor bugs in C++ code
-  * Added installation of flex and bison for CentOS platform
-  * Added scripts for local unit testing of YDK release
-  * Tested YDK on Windows 10 using Windows Subsystem for Linux and Ubuntu Bionic (18.04 LTS) and Focal (20.04 LTS) virtual machines.
-
-
 ### 2020-06-30 version 0.8.5
 
 #### New features and enhancements

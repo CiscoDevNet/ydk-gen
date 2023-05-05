@@ -73,7 +73,7 @@ Netconf Service
 
         :param provider: An instance of :cpp:class:`NetconfServiceProvider<NetconfServiceProvider>`.
         :param confirmed: An optional argument.
-        :param confirm_timeout: The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking.
+        :param confirm_timeout: An optional argument.
         :param persist: An optional argument.
         :param persist_id: An optional argument.
         :return: **true**, if the operation succeeds, **false** - otherwise.

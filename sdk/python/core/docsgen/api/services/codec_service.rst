@@ -1,6 +1,6 @@
 ..
   #  YDK-YANG Development Kit
-  #  Copyright 2016-2019 Cisco Systems. All rights reserved
+  #  Copyright 2016 Cisco Systems. All rights reserved
   # *************************************************************
   # Licensed to the Apache Software Foundation (ASF) under one
   # or more contributor license agreements.  See the NOTICE file
@@ -44,9 +44,7 @@ which represent containers in the device supported YANG models.
         :param entity: :py:class:`Entity<ydk.types.Entity>` instance or collection of :py:class:`Entity<ydk.types.Entity>` instances of type ``list`` or ``dict``
                        or :py:class:`EntityCollection<ydk.types.EntityCollection>`.
         :param pretty: ``bool`` flag, which specifies if resulting string must be in human readable way with indentation.
-        :param subtree: ``bool`` flag, which directs to encode entity to XML or JSON subtree. When set to `true`,
-                        the :py:class:`XmlSubtreeCodec<ydk.entity_utils.XmlSubtreeCodec>`
-                        or :py:class:`JsonSubtreeCodec<ydk.entity_utils.JsonSubtreeCodec>` is called accordingly.
+        :param subtree: ``bool`` flag, which directs to encode entity to XML subtree.
         :return: Type of returned object corresponds to the type of **entity**: single payload ``str``, or ``list`` of ``str``, or a ``dictionary`` of ``str``.
         :raises: :py:exc:`YServiceError<ydk.errors.YServiceError>`, if error has occurred.
 
@@ -56,9 +54,7 @@ which represent containers in the device supported YANG models.
 
         :param provider: :py:class:`CodecServiceProvider<ydk.providers.CodecServiceProvider>` - Codec Provider instance.
         :param payload: ``str`` or collection of ``str`` Either a single encoded payload or a collection of payloads encapsulated to ``list`` or ``dict``.
-        :param subtree: ``bool`` flag, which directs to encode entity to XML or JSON subtree. When set to `true`,
-                        the :py:class:`XmlSubtreeCodec<ydk.entity_utils.XmlSubtreeCodec>`
-                        or :py:class:`JsonSubtreeCodec<ydk.entity_utils.JsonSubtreeCodec>` is called accordingly.
+        :param subtree: ``bool`` flag, which directs to encode entity to XML subtree.
         :return: Type of returned object corresponds to the type of **payload**. It is either an instance of :py:class:`Entity<ydk.types.Entity>`,
                  or a collection of :py:class:`Entity<ydk.types.Entity>` instances of type ``list`` or ``dict``.
         :raises: :py:exc:`YServiceError<ydk.errors.YServiceError>`, if error has occurred.
@@ -70,7 +66,6 @@ XmlSubtreeCodec
 
     XmlSubtreeCodec class designed to provide encoding and decoding Python model API objects of type :py:class:`Entity<ydk.types.Entity>` to/from XML encoded string.
     Compared to :py:class:`CodecService<ydk.services.CodecService>` the class does not validate encoded data for their types and values.
-    It is also can be used to encode/decode non-top level entities.
 
     .. py:method:: XmlSubtreeCodec()
 
@@ -101,7 +96,6 @@ JsonSubtreeCodec
 
     JsonSubtreeCodec class designed to provide encoding and decoding Python model API objects of type :py:class:`Entity<ydk.types.Entity>` to/from JSON encoded string.
     Compared to :py:class:`CodecService<ydk.services.CodecService>` the class does not validate encoded data for their types and values.
-    It is also can be used to encode/decode non-top level entities.
 
     .. py:method:: JsonSubtreeCodec()
 

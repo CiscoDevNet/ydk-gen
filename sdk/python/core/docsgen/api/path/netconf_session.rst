@@ -5,22 +5,21 @@ NetconfSession
     :synopsis: NetconfSession
 
 
-.. py:class:: NetconfSession(repo, address, username, password, port=830, protocol="ssh", on_demand=True, common_cache=False, int timeout=None, repo=None, private_key_path="", public_key_path="")
+.. py:class:: NetconfSession(address, username, password, port=830, protocol="ssh", on_demand=True, common_cache=False, int timeout=None, repo=None, private_key_path="", public_key_path="")
 
     Constructs an instance of the `NetconfSession` class and connects to Netconf server, which **must** support model download. 
 
     :param address: (``str``) IP address or DNS name of device, which supports Netconf server; required parameter.
     :param username: (``str``) Username to log in to the device; required parameter.
-    :param password: (``str``) Password to log in to the device; not required, if `public_key_path` specified.
-    :param port: (``int``) Device port number, which is used to access the Netconf interface; default value is 830.
-    :param protocol: (``str``) Currently supported "ssh" for secure connection and "tcp" for insecure connection; default - "ssh".
+    :param password: (``str``) Password to log in to the device.
+    :param port: (``int``) Device port used to access the Netconf interface. Default value is 830.
+    :param protocol: (``str``) Currently supported `ssh` for secure connection and `tcp` for insecure connection; default - `ssh`.
     :param on_demand: (``bool``) On demand model downloading by default.
     :param common_cache: (``bool``) Use common cache directory, if enabled.
-    :param timeout: (``int``) The timeout in microseconds: None or -1 for infinite timeout, 0 - for non-blocking.
-    :param repo: (:py:class:`Repository<Repository>`) User provided repository - directory, which stores cached YANG models.
-        If not specified, the temporary repository at "~/.ydk/<address>" is created.
-    :param private_key_path: (``str``) Path to private key file. This is optional parameter, which requires `public_key_path` field.
-    :param public_key_path: (``str``) Path to public key file. This is optional parameter.
+    :param timeout: (``int``) The timeout in microseconds: None or -1 for infinite timeout, 0 - for non-blocking
+    :param repo: (:py:class:`Repository<Repository>`) User provided repository - directory, which stores cached Yang models.
+    :param private_key_path: (``str``) Path to private key file. Requires public_key_path field.
+    :param public_key_path: (``str``) Path to public key file. Does not allow `password` field, if specified.
 
     .. py:method:: get_root_schema()
 
@@ -54,6 +53,6 @@ NetconfSession
 
     .. py:method:: get_capabilities()
 
-        Returns a list of capabilities for the Netconf server.
+        Returns a list of capabilities of the client
 
-        :returns: A list of ``str`` representing the Netconf server capabilities.
+        :returns: A list of ``str`` representing the client's/server's capabilities

@@ -1,26 +1,28 @@
-/*  ----------------------------------------------------------------
- @file ydk.cpp
-
- YDK - YANG Development Kit
- Copyright 2017-2019 Cisco Systems. All rights reserved.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- -------------------------------------------------------------------
- This file has been modified by Yan Gorelik, YDK Solutions.
- All modifications in original under CiscoDevNet domain
- introduced since October 2019 are copyrighted.
- All rights reserved under Apache License, Version 2.0.
- ------------------------------------------------------------------*/
+//////////////////////////////////////////////////////////////////
+// @file ydk.cpp
+//
+// YANG Development Kit
+// Copyright 2017 Cisco Systems. All rights reserved
+//
+////////////////////////////////////////////////////////////////
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+//
+//////////////////////////////////////////////////////////////////
 
 #include "crud_service.hpp"
 #include "errors.hpp"
@@ -344,55 +346,89 @@ const char * ServiceProviderType(ServiceProvider provider) {
 
 ServiceProvider NetconfServiceProviderInit(
     YDKStatePtr state,
-    Repository repo,
+    const char * address,
+    const char * username,
+    const char * password,
+    int port,
+    const char * protocol)
+{
+    try
+    {
+        ydk::NetconfServiceProvider * real_provider = new ydk::NetconfServiceProvider(
+            address, username, password, port, protocol);
+        return static_cast<void*>(real_provider);
+    }
+    catch(...)
+    {
+        YDKState* real_state = static_cast<YDKState*>(state);
+        handle_error(real_state);
+        return NULL;
+    }
+}
+
+ServiceProvider NetconfServiceProviderInitWithOnDemand(
+    YDKStatePtr state,
     const char * address,
     const char * username,
     const char * password,
     int port,
     const char * protocol,
     boolean on_demand,
-    boolean common_cache,
-    int timeout,
-    const char * server_certificate_path, const char * private_key_path)
+    boolean common_cache)
 {
     try
     {
-        ydk::NetconfServiceProvider * real_provider;
-        if (repo)
-        {
-            ydk::path::Repository* real_repo = static_cast<ydk::path::Repository*>(repo);
-            if (server_certificate_path && *server_certificate_path)
-            {
-                real_provider = new ydk::NetconfServiceProvider(
-                    *real_repo,
-                    address, username,
-                    private_key_path, server_certificate_path,
-                    port, on_demand, timeout);
-            }
-            else
-            {
-                real_provider = new ydk::NetconfServiceProvider(
-                    *real_repo,
-                    address, username, password, port,
-                    protocol, on_demand, timeout);
-            }
-        }
-        else
-        {
-            if (server_certificate_path && *server_certificate_path)
-            {
-                real_provider = new ydk::NetconfServiceProvider(
-                    address, username,
-                    private_key_path, server_certificate_path,
-                    port, on_demand, common_cache, timeout);
-            }
-            else
-            {
-                real_provider = new ydk::NetconfServiceProvider(
-                    address, username, password, port,
-                    protocol, on_demand, common_cache, timeout);
-            }
-        }
+        ydk::NetconfServiceProvider * real_provider = new ydk::NetconfServiceProvider(
+            address, username, password, port, protocol, on_demand, common_cache);
+        return static_cast<void*>(real_provider);
+    }
+    catch(...)
+    {
+        YDKState* real_state = static_cast<YDKState*>(state);
+        handle_error(real_state);
+        return NULL;
+    }
+}
+
+ServiceProvider NetconfServiceProviderInitWithRepo(
+    YDKStatePtr state,
+    Repository repo,
+    const char * address,
+    const char * username,
+    const char * password,
+    int port,
+    const char * protocol)
+{
+    try
+    {
+        ydk::path::Repository* real_repo = static_cast<ydk::path::Repository*>(repo);
+        ydk::NetconfServiceProvider * real_provider = new ydk::NetconfServiceProvider(
+            *real_repo, address, username, password, port, protocol);
+        return static_cast<void*>(real_provider);
+    }
+    catch(...)
+    {
+        YDKState* real_state = static_cast<YDKState*>(state);
+        handle_error(real_state);
+        return NULL;
+    }
+}
+
+ServiceProvider NetconfServiceProviderInitWithOnDemandRepo(
+    YDKStatePtr state,
+    Repository repo,
+    const char * address,
+    const char * username,
+    const char * password,
+    int port,
+    const char * protocol,
+    boolean on_demand)
+{
+    try
+    {
+        ydk::path::Repository* real_repo = static_cast<ydk::path::Repository*>(repo);
+        ydk::NetconfServiceProvider * real_provider = new ydk::NetconfServiceProvider(
+            *real_repo, address, username, password, port, protocol, on_demand);
         return static_cast<void*>(real_provider);
     }
     catch(...)
@@ -410,6 +446,27 @@ void NetconfServiceProviderFree(ServiceProvider provider)
     {
         delete real_provider;
     }
+}
+
+int NetconfServiceProviderGetNumCapabilities(ServiceProvider provider)
+{
+    ydk::NetconfServiceProvider * real_provider = static_cast<ydk::NetconfServiceProvider*>(provider);
+    if(real_provider != NULL)
+    {
+        return real_provider->get_capabilities().size();
+    }
+    return 0;
+}
+
+const char* NetconfServiceProviderGetCapabilityByIndex(ServiceProvider provider, int index)
+{
+    ydk::NetconfServiceProvider * real_provider = static_cast<ydk::NetconfServiceProvider*>(provider);
+    if(real_provider != NULL)
+    {
+        std::vector<std::string> capabilites = real_provider->get_capabilities();
+        return string_to_array(capabilites[index]);
+    }
+    return "";
 }
 
 ServiceProvider RestconfServiceProviderInitWithRepo(
@@ -568,7 +625,7 @@ Session ServiceProviderGetSession(ServiceProvider provider)
     return static_cast<void*>(&s);
 }
 
-RootSchemaWrapper SessionGetRootSchemaNode(YDKStatePtr state, Session session)
+RootSchemaNode SessionGetRootSchema(YDKStatePtr state, Session session)
 {
     try {
     	ydk::path::Session * real_session = static_cast<ydk::path::Session*>(session);
@@ -644,12 +701,12 @@ DataNode CodecDecode(
     }
 }
 
-DataNode RootSchemaNodeCreate(YDKStatePtr state, RootSchemaNode root_schema, const char* path, const char* value)
+DataNode RootSchemaNodeCreate(YDKStatePtr state, RootSchemaNode root_schema, const char* path)
 {
     try
     {
         ydk::path::RootSchemaNode * real_root_schema = (ydk::path::RootSchemaNode*)root_schema;
-        ydk::path::DataNode * datanode = &real_root_schema->create_datanode(path, value);
+        ydk::path::DataNode * datanode = &real_root_schema->create_datanode(path);
 
         return static_cast<void*>(wrap(datanode));
     }
@@ -842,11 +899,7 @@ const char* DataNodeGetSegmentPath(DataNode datanode)
 
 void EnableLogging(LogLevel level)
 {
-    auto console = spdlog::get("ydk");
-    if (console == nullptr)
-    {
-        console = spdlog::stdout_color_mt("ydk");
-    }
+    auto console = spdlog::stdout_color_mt("ydk");
     switch(level)
     {
         case DEBUG:
@@ -921,156 +974,3 @@ void YLogError(const char* msg)
     ydk::YLOG_ERROR(msg);
 }
 
-Session NetconfSessionInit(YDKStatePtr state, Repository repo,
-                           const char * address, const char * username, const char * password, int port,
-                           const char * protocol, boolean on_demand, boolean common_cache, int timeout,
-                           const char * server_certificate, const char * private_key)
-{
-    try
-    {
-        ydk::path::NetconfSession * real_session;
-        if (repo)
-        {
-            ydk::path::Repository* real_repo = static_cast<ydk::path::Repository*>(repo);
-            if (server_certificate && *server_certificate)
-            {
-                real_session = new ydk::path::NetconfSession(
-                    *real_repo,
-                    address, username,
-                    private_key, server_certificate,
-                    port, on_demand, timeout);
-            }
-            else
-            {
-                real_session = new ydk::path::NetconfSession(
-                    *real_repo,
-                    address, username, password, port,
-                    protocol, on_demand, timeout);
-            }
-        }
-        else
-        {
-            if (server_certificate && *server_certificate)
-            {
-                real_session = new ydk::path::NetconfSession(
-                    address, username,
-                    private_key, server_certificate,
-                    port, on_demand, common_cache, timeout);
-            }
-            else
-            {
-                real_session = new ydk::path::NetconfSession(
-                    address, username, password, port,
-                    protocol, on_demand, common_cache, timeout);
-            }
-        }
-        return static_cast<void*>(real_session);
-    }
-    catch(...)
-    {
-        YDKState* real_state = static_cast<YDKState*>(state);
-        handle_error(real_state);
-        return NULL;
-    }
-}
-
-void NetconfSessionFree(Session session)
-{
-    ydk::path::NetconfSession * real_session = static_cast<ydk::path::NetconfSession*>(session);
-    if (real_session)
-    {
-        delete real_session;
-    }
-}
-
-DataNode SessionExecuteRpc(YDKStatePtr state, Session session, Rpc rpc)
-{
-    try
-    {
-        RpcWrapper* rpc_wrapper = (RpcWrapper*)rpc;
-        ydk::path::Rpc* real_rpc = unwrap(rpc_wrapper);
-
-        ydk::path::Session * real_session = (ydk::path::Session *) session;
-        std::shared_ptr<ydk::path::DataNode> result = real_session->invoke(*real_rpc);
-
-        if (result)
-            return static_cast<void*>(wrap(result));
-        else
-            return nullptr;
-    }
-    catch(...)
-    {
-        YDKState* real_state = static_cast<YDKState*>(state);
-        handle_error(real_state);
-        return NULL;
-    }
-}
-
-char** SessionGetCapabilities(YDKStatePtr state, Session session, int* len)
-{
-    try {
-        ydk::path::Session * real_session = static_cast<ydk::path::Session *>(session);
-        if (real_session)
-        {
-            std::vector<std::string> capabilites = real_session->get_capabilities();
-            char** cap_array = (char **)calloc(capabilites.size(), sizeof(char*));
-            for (unsigned long i=0; i<capabilites.size(); i++)
-            {
-                char * cstr = (char*) calloc(capabilites[i].length()+1, sizeof(char));
-                std::strcpy(cstr, capabilites[i].c_str());
-                cap_array[i] = cstr;
-            }
-            *len = capabilites.size();
-            return cap_array;
-        }
-        return NULL;
-    }
-    catch(...)
-    {
-        YDKState* real_state = static_cast<YDKState*>(state);
-        handle_error(real_state);
-        return NULL;
-    }
-}
-
-void CapabilitiesArrayFree(char** caps, int len)
-{
-    for (int i=0; i<len; i++)
-    {
-        free((void*)caps[i]);
-    }
-    free((void*)caps);
-}
-
-Session RestconfSessionInit(YDKStatePtr state, Repository repo,
-                            const char * address, const char * username, const char * password, int port,
-                            EncodingFormat encoding,
-                            const char * config_url_root, const char * state_url_root)
-{
-    try
-    {
-        ydk::path::RestconfSession * real_session;
-        ydk::path::Repository* real_repo = static_cast<ydk::path::Repository*>(repo);
-        real_session = new ydk::path::RestconfSession(
-            *real_repo,
-            address, username, password, port,
-            get_real_encoding(encoding),
-            config_url_root, state_url_root);
-        return static_cast<void*>(real_session);
-    }
-    catch(...)
-    {
-        YDKState* real_state = static_cast<YDKState*>(state);
-        handle_error(real_state);
-        return NULL;
-    }
-}
-
-void RestconfSessionFree(Session session)
-{
-    ydk::path::RestconfSession * real_session = static_cast<ydk::path::RestconfSession*>(session);
-    if (real_session)
-    {
-        delete real_session;
-    }
-}

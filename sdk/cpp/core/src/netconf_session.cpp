@@ -1,6 +1,7 @@
-// YANG Development Kit
+/// YANG Development Kit
 // Copyright 2016 Cisco Systems. All rights reserved
-// -------------------------------------------------------------
+//
+////////////////////////////////////////////////////////////////
 // Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,15 +18,10 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// -------------------------------------------------------------
-// This file has been modified by Yan Gorelik, YDK Solutions.
-// All modifications in original under CiscoDevNet domain
-// introduced since October 2019 are copyrighted.
-// All rights reserved under Apache License, Version 2.0.
-// -------------------------------------------------------------
+//
+//////////////////////////////////////////////////////////////////
 
 #include <libyang/libyang.h>
-#include <stdexcept>
 
 #include "common_utilities.hpp"
 #include "entity_data_node_walker.hpp"
@@ -121,7 +117,7 @@ NetconfSession::NetconfSession(const string& address,
     YLOG_INFO("Connected to {} on port {} using {} with timeout of {}", address, port, protocol, timeout);
 }
 
-// todo: decide whether or not to add TWO more signatures for
+// todo: decide whether or not to add TWO more signatures for 
 //       constructor to match above or just ONE more signature (go style)
 
 NetconfSession::NetconfSession(path::Repository& repo,
@@ -227,21 +223,7 @@ void NetconfSession::initialize_repo(path::Repository & repo, bool on_demand)
     auto lookup_table = capabilities_parser.get_lookup_table(server_capabilities);
 
     if (on_demand)
-    {
-        // Load ietf-netconf module features from server capabilities
-    	auto empty_caps_copy = capabilities_parser.parse(empty_caps);
-        for (auto cap : empty_caps_copy)
-        {
-            try {
-                auto server_cap = lookup_table.at(cap.module);
-                yang_caps.push_back(server_cap);
-                continue;
-            }
-            catch (const std::exception& e) {
-            	yang_caps.push_back(cap);
-            }
-        }
-    }
+        yang_caps = capabilities_parser.parse(empty_caps);
     else
         yang_caps = all_caps;
 
@@ -627,9 +609,9 @@ std::string get_netconf_output(const string & reply)
         return {};
     }
 
-    string rpc_output = extract_rpc_data(reply, "<data", "</data>");
+    string rpc_output = extract_rpc_data(reply, "<data>", "</data>");
     if (rpc_output.length() == reply.length()) {
-        rpc_output = extract_rpc_data(reply, "<nc:data", "</nc:data>");
+        rpc_output = extract_rpc_data(reply, "<nc:data>", "</nc:data>");
     }
 
     if (rpc_output.length() == reply.length())
@@ -678,7 +660,7 @@ extract_rpc_output(const string & reply)
 	string rpc_output = extract_rpc_data(reply, "<rpc-reply ", "</rpc-reply>");
     if (rpc_output.length() == reply.length()) {
         // Try with Netconf namespace prefix
-        rpc_output = extract_rpc_data(reply, "<nc:rpc-reply ", "</nc:rpc-reply>");
+    	rpc_output = extract_rpc_data(reply, "<nc:rpc-reply ", "</nc:rpc-reply>");
     }
 
     string reply_data = rpc_output;
@@ -723,9 +705,9 @@ handle_action_output(const string & reply, path::RootSchemaNode & root_schema, c
         return nullptr;
     }
 
-    string data = extract_rpc_data(reply, "<data", "</data>");
+    string data = extract_rpc_data(reply, "<data>", "</data>");
     if (data.length() == reply.length()) {
-        data = extract_rpc_data(reply, "<nc:data", "</nc:data>");
+        data = extract_rpc_data(reply, "<nc:data>", "</nc:data>");
         if (data.length() == reply.length()) {
             YLOG_INFO( "Could not locate start and/or end 'data' tag in the RPC reply");
             return nullptr;
@@ -771,7 +753,7 @@ static path::SchemaNode* get_schema_for_operation(path::RootSchemaNode & root_sc
 
 static void check_rpc_reply_for_error(const string& reply)
 {
-    if (reply.find("</rpc-error>") != string::npos)
+    if(reply.find("<rpc-error") != string::npos)
     {
         YLOG_ERROR("RPC error occurred:\n{}", reply);
         auto msg = extract_rpc_error(reply);

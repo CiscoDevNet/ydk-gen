@@ -19,7 +19,7 @@ test_printer.py
 
 Test printer.
 """
-
+import sys
 from ydkgen.common import iscppkeyword
 
 from ydkgen.builder import TestBuilder
@@ -36,7 +36,10 @@ class TestPrinter(FixturePrinter):
     """Test printer."""
 
     def __init__(self, ctx, lang):
-        super().__init__(ctx, lang)
+        if sys.version_info > (3,):
+            super().__init__(ctx, lang)
+        else:
+            super(TestPrinter, self).__init__(ctx, lang)
 
     def print_tests(self, package, identity_subclasses):
         """Print all test case."""

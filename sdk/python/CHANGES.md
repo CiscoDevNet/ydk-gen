@@ -1,40 +1,4 @@
-### 2023-01-31 version 0.8.6.4
-
-#### New features and enhancements
-  * install_ydk.sh: Installation of Python and Go YDK packages should not require root access ([#1069](https://github.com/CiscoDevNet/ydk-gen/issues/1069))
-  * Expanded unit test cases to retrieve list elements
-
-#### Resolved GitHub issues
-  * CodecService fails to decode XML in python when referencing namespace prefix ([#1071](https://github.com/CiscoDevNet/ydk-gen/issues/1071))
-
-
-### 2022-03-31 version 0.8.6.2
-
-#### New features and enhancements
-  * Upgraded pyang version to 2.5.0
-  * Dropped Python2 support in the code
-
-#### Resolved GitHub issues
-  * vrf route-target leaf stitching(bool) fails as invalid ([#1059](https://github.com/CiscoDevNet/ydk-gen/issues/1059))
-
-
-### 2021-05-30 version 0.8.5.2
-
-#### Resolved GitHub issues
-  * Version numbers in bundle resolver to comply with PEP 440 ([#1007](https://github.com/CiscoDevNet/ydk-gen/issues/1007))
-  * The Executor Service fails to return module content to user ([#1035](https://github.com/CiscoDevNet/ydk-gen/issues/1035))
-  * Docker base image python error ([#1036](https://github.com/CiscoDevNet/ydk-gen/issues/1036))
-  * XmlSubtreeCodec fails encode leaf-list data ([#1045](https://github.com/CiscoDevNet/ydk-gen/issues/1045))
-  * C++ CodecService fails to encode non-top level entity to XML subtree ([#1049](https://github.com/CiscoDevNet/ydk-gen/issues/1049))
-
-#### Other resolved issues and enhancements
-  * Fixed few minor bugs in C++ code
-  * Added installation of flex and bison for CentOS platform
-  * Added scripts for local unit testing of YDK release
-  * Tested YDK on Windows 10 using Windows Subsystem for Linux and Ubuntu Bionic (18.04 LTS) and Focal (20.04 LTS) virtual machines.
-
-
-### 2020-09-30 version 0.8.5
+### 2020-07-30 version 0.8.5
 
 #### New features and enhancements
   * Added Entity class member function to clone entity object
@@ -42,7 +6,6 @@
 #### Resolved GitHub issues
   * python bundle generator must escape 'async' as variable name ([#980](https://github.com/CiscoDevNet/ydk-gen/issues/980))
   * YDK fails instantiate some of the generated bundle classes ([#983](https://github.com/CiscoDevNet/ydk-gen/issues/983))
-  * Python 3 TypeError while initializing CRUDService class ([#1032](https://github.com/CiscoDevNet/ydk-gen/issues/1032))
 
 #### Bundle improvements
   * Updated cisco-ios-xe bundle to support Cisco IOS XE 16.9.3 due to bug in Python generated code
@@ -379,7 +342,7 @@ tconf / Codec / Path API improvements
 #### Note on backward compatibility
 The [backward incompatible](http://ydk.cisco.com/py/docs/backward_compatibility.html) changes introduced with `0.6.0` release include:
 
-* **Installation:** When installing `YDK-Py`, there is a new system requirement which needs to be installed. This is the `libydk` library, which is available on the DevHub website for various OS platforms. Please refer to the [system requirements](https://github.com/CiscoDevNet/ydk-py/blob/master/README.rst#system-requirements) for details.
+ * **Installation:** When installing `YDK-Py`, there is a new system requirement which needs to be installed. This is the `libydk` library, which is available on the DevHub website for various OS platforms. Please refer to the [system requirements](https://github.com/CiscoDevNet/ydk-py/blob/master/README.rst#system-requirements) for details.
 * **Windows support:** From release ``0.6.0`` onwards, YDK is no longer supported on the Windows platform. We plan to add back support for this platform in the future.
 * **API changes:** Please refer to the [developer guide](http://ydk.cisco.com/py/docs/developer_guide.html) and [API guide](http://ydk.cisco.com/py/docs/api_guide.html) for details about APIs and how to use them.
    * `NetconfServiceProvider` no longer has the `close()` method. There is no need to explicitly close the provider as it will be automatically cleaned up when the object goes out of scope.

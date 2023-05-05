@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-
+import sys
 import inspect
 import contextlib
 
@@ -29,18 +29,31 @@ from ydk.errors import YServiceError as _YServiceError
 from ydk.errors import YServiceProviderError as _YServiceProviderError
 
 
-_ERRORS = {
-    "YError": _YError,
-    "YCoreError": _YCoreError,
-    "YCodecError": _YCodecError,
-    "YClientError": _YClientError,
-    "YIllegalStateError": _YIllegalStateError,
-    "YInvalidArgumentError": _YInvalidArgumentError,
-    "YModelError": _YModelError,
-    "YOperationNotSupportedError": _YOperationNotSupportedError,
-    "YServiceError": _YServiceError,
-    "YServiceProviderError": _YServiceProviderError,
+if sys.version_info > (3, 0):
+    inspect.getargspec = inspect.getfullargspec
+
+
+_ERRORS = {"YError": _YError,
+           "YCoreError": _YCoreError,
+           "YCodecError": _YCodecError,
+           "YClientError": _YClientError,
+           "YIllegalStateError": _YIllegalStateError,
+           "YInvalidArgumentError": _YInvalidArgumentError,
+           "YModelError": _YModelError,
+           "YOperationNotSupportedError": _YOperationNotSupportedError,
+           "YServiceError": _YServiceError,
+           "YServiceProviderError": _YServiceProviderError,
 }
+
+
+def _raise(exc):
+    """Suppress old exception context for Python > 3.3,
+    Use exec to avoid SyntaxError under Python 2 environment.
+    """
+    if sys.version_info >= (3,3):
+        exec("raise exc from None")
+    else:
+        raise exc
 
 
 @contextlib.contextmanager
@@ -66,7 +79,7 @@ def handle_runtime_error():
             _exc = _YError(msg)
     finally:
         if _exc:
-            raise _exc
+            _raise(_exc)
 
 
 @contextlib.contextmanager
@@ -79,7 +92,7 @@ def handle_type_error():
         _exc = _YModelError(str(err))
     finally:
         if _exc:
-            raise _exc
+            _raise(_exc)
 
 
 @contextlib.contextmanager
@@ -92,7 +105,7 @@ def handle_import_error(logger, level):
 
 def check_argument(func):
     def helper(self, provider, entity, *args, **kwargs):
-        _, pname, ename = inspect.getfullargspec(func).args[:3]
+        _, pname, ename = inspect.getargspec(func).args[:3]
         if provider is None or entity is None:
             err_msg = "'{0}' and '{1}' cannot be None".format(pname, ename)
             raise _YServiceError(error_msg=err_msg)

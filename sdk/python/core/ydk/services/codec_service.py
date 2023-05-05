@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import importlib
 
 from ydk.entity_utils import get_data_node_from_entity as _get_data_node_from_entity
 from ydk.entity_utils import get_entity_from_data_node as _get_entity_from_data_node
-from ydk.entity_utils import XmlSubtreeCodec, JsonSubtreeCodec
+from ydk.entity_utils import XmlSubtreeCodec
 from ydk.entity_utils import _payload_to_top_entity, _get_bundle_name
 
 from ydk.path import Codec as _Codec
@@ -113,10 +113,10 @@ class CodecService(object):
         root_schema = provider.get_root_schema(bundle_name)
 
         if subtree:
-            if provider.encoding == EncodingFormat.XML:
-                return XmlSubtreeCodec().encode(entity, root_schema)
-            else:
-                return JsonSubtreeCodec().encode(entity, root_schema, pretty)
+            if provider.encoding != EncodingFormat.XML:
+                raise YServiceError('Subtree option can only be used with XML encoding')
+            xml_codec = XmlSubtreeCodec()
+            return xml_codec.encode(entity, root_schema)
 
         with _handle_error():
             data_node = _get_data_node_from_entity(entity, root_schema)
@@ -172,11 +172,10 @@ class CodecService(object):
         entity = _payload_to_top_entity(payload, provider.encoding)
 
         if subtree:
-            if provider.encoding == EncodingFormat.XML:
-                codec = XmlSubtreeCodec()
-            else:
-                codec = JsonSubtreeCodec()
-            return codec.decode(payload, entity)
+            if provider.encoding != EncodingFormat.XML:
+                raise YServiceError('Subtree option can only be used with XML encoding')
+            xml_codec = XmlSubtreeCodec()
+            return xml_codec.decode(payload, entity)
 
         bundle_name = _get_bundle_name(entity)
         provider.initialize(bundle_name, _get_yang_path(entity))

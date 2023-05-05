@@ -147,7 +147,7 @@ Netconf
 
 	:param provider: An instance of :go:struct:`NetconfServiceProvider<ydk/providers/NetconfServiceProvider>`
 	:param confirmed: A ``bool`` that signals a confirmed commit operation
-	:param comfirmTimeOut: The timeout in microseconds: None or -1 for infinite timeout, 0 - for non-blocking
+	:param comfirmTimeOut: An ``int`` representing the timeout interval for a confirmed commit
 	:param persist: An ``int`` that makes the confirmed commit persistent
 	:param persistID: An ``int`` that is given in order to commit a persistent confirmed commit
 	:return: ``true`` if the operation was successful, ``false`` - otherwise

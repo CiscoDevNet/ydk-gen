@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,18 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
 """
- entity_lookup_printer.py
+entity_lookup_printer.py
 
  Prints top entity lookup map
-"""
 
+"""
+import sys
 from ydkgen.api_model import snake_case, Class
 from ydkgen.common import get_include_guard_name, get_module_name
 from ydkgen.printer.file_printer import FilePrinter
@@ -32,7 +28,10 @@ from ydkgen.printer.file_printer import FilePrinter
 
 class EntityLookUpPrinter(FilePrinter):
     def __init__(self, ctx, module_namespace_lookup):
-        super().__init__(ctx)
+        if sys.version_info > (3,):
+            super().__init__(ctx)
+        else:
+            super(EntityLookUpPrinter, self).__init__(ctx)
         self.headers = None
         self.entity_lookup = None
         self.capability_lookup = None
@@ -113,7 +112,8 @@ class EntityLookUpPrinter(FilePrinter):
         self.ctx.writeln('namespace %s' % self.bundle_name)
         self.ctx.writeln('{')
         self.ctx.bline()
-        self.ctx.writelns(["void {}_augment_lookup_tables()".format(snake_case(self.bundle_name)), "{"])
+        self.ctx.writelns(["void {}_augment_lookup_tables()".format(snake_case(self.bundle_name)),
+                           "{"])
 
         self.ctx.bline()
         self.ctx.lvl_inc()

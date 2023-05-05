@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------
  YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems, All rights reserved.
- -------------------------------------------------------------------
+ Copyright 2016 Cisco Systems, All rights reserved.
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -21,7 +21,6 @@
  ------------------------------------------------------------------*/
 
 #include <iostream>
-#include <fstream>
 #include <spdlog/spdlog.h>
 
 #include "config.hpp"
@@ -292,6 +291,7 @@ TEST_CASE( "get_config"  )
 TEST_CASE( "bgp_xr_openconfig"  )
 {
     ydk::path::Repository repo{TEST_HOME};
+
     ydk::path::NetconfSession session{repo,"127.0.0.1", "admin", "admin",  12022};
     ydk::path::RootSchemaNode& schema = session.get_root_schema();
 
@@ -389,8 +389,7 @@ TEST_CASE( "bgp_xr_openconfig"  )
 
 TEST_CASE("oc_interface")
 {
-    ydk::path::Repository repo{TEST_HOME};
-    ydk::path::NetconfSession session{repo, "127.0.0.1", "admin", "admin", 12022};
+    ydk::path::NetconfSession session{"127.0.0.1", "admin", "admin", 12022};
     ydk::path::RootSchemaNode& schema = session.get_root_schema();
 
     auto & runner = schema.create_datanode("openconfig-interfaces:interfaces", "");
@@ -411,8 +410,7 @@ TEST_CASE("oc_interface")
 
 TEST_CASE("oc_routing")
 {
-    ydk::path::Repository repo{TEST_HOME};
-    ydk::path::NetconfSession session{repo, "127.0.0.1", "admin", "admin", 12022};
+    ydk::path::NetconfSession session{"127.0.0.1", "admin", "admin", 12022};
     ydk::path::RootSchemaNode& schema = session.get_root_schema();
 
     auto & runner = schema.create_datanode("openconfig-routing-policy:routing-policy", "");
@@ -434,6 +432,7 @@ TEST_CASE("oc_routing")
 TEST_CASE("multiple_delete_create_read_rpc")
 {
     ydk::path::Repository repo{TEST_HOME};
+
     ydk::path::NetconfSession session{repo,"127.0.0.1", "admin", "admin",  12022};
     ydk::path::RootSchemaNode& schema = session.get_root_schema();
     ydk::path::Codec s{};
@@ -533,13 +532,12 @@ TEST_CASE("get_schema_decode")
     ydk::path::Codec s{};
 
     auto rpc = schema.create_rpc("ietf-netconf-monitoring:get-schema");
-    rpc->get_input_node().create_datanode("identifier", "main");
+    rpc->get_input_node().create_datanode("identifier", "ydktest-sanity-action");
 
-    auto reply = (*rpc)(session);
-    REQUIRE(reply);
+    auto o = (*rpc)(session);
 
-    auto xml = s.encode(*reply, ydk::EncodingFormat::XML, true);
-    // cout<<xml<<endl;
+    auto xml = s.encode(*o, ydk::EncodingFormat::XML, true);
+    cout<<xml<<endl;
 }
 /* TODO
 TEST_CASE("oc_optic")
@@ -620,8 +618,7 @@ TEST_CASE("test_embedded_ampersand_path") {
 
 TEST_CASE( "decode_encode_interfaces_with_filters" )
 {
-    ydk::path::Repository repo{TEST_HOME};
-    ydk::path::NetconfSession session{repo, "127.0.0.1", "admin", "admin", 12022};
+    ydk::path::NetconfSession session{"127.0.0.1", "admin", "admin", 12022};
     ydk::path::RootSchemaNode& root = session.get_root_schema();
 
     auto ifcs = ydktest::openconfig_interfaces::Interfaces();
@@ -655,14 +652,6 @@ const std::string ifc_payload = R"(<interfaces xmlns="http://openconfig.net/yang
 </interfaces>
 )";
 
-static bool copyFile(const char *SRC, const char* DEST)
-{
-    std::ifstream src(SRC, std::ios::binary);
-    std::ofstream dest(DEST, std::ios::binary);
-    dest << src.rdbuf();
-    return src && dest;
-}
-
 TEST_CASE("iana_if_type_decode")
 {
     // Remove iana-if-type.yang file from repository to assure correct test flow
@@ -671,13 +660,6 @@ TEST_CASE("iana_if_type_decode")
         path += "/.ydk/127.0.0.1/iana-if-type.yang";
         cout << "Deleting file " << path << endl;
         remove(path.c_str());
-
-        // Copy ietf-interfaces.yang to repository to correct issue with confd 7.3
-        path = env_p;
-        string dst = path + "/.ydk/127.0.0.1/ietf-interfaces.yang";
-        string src = TEST_HOME;
-        src += "/ietf-interfaces.yang";
-        copyFile(src.c_str(), dst.c_str());
     }
 
     ydk::path::NetconfSession session{"127.0.0.1", "admin", "admin", 12022};
@@ -763,7 +745,7 @@ TEST_CASE( "rpc_get_schema_no_decode" )
     ydk::path::RootSchemaNode& schema = session.get_root_schema();
 
     auto rpc = schema.create_rpc("ietf-netconf-monitoring:get-schema");
-    rpc->get_input_node().create_datanode("identifier", "main");
+    rpc->get_input_node().create_datanode("identifier", "ydktest-sanity-action");
 
     auto reply = session.execute_netconf_operation(*rpc);
     REQUIRE(!reply.empty());

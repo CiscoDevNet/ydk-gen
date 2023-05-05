@@ -128,9 +128,6 @@ TEST_CASE("on_demand_loading_xml")
 
     auto cpython = codec.decode(root_schema, AUGMENTED_XML_PAYLOAD, ydk::EncodingFormat::XML);
     REQUIRE(cpython);
-
-    auto xml = codec.encode(*cpython, ydk::EncodingFormat::XML, true);
-    std::cout << xml << std::endl;
 }
 
 TEST_CASE("on_demand_provider_loading_xml")

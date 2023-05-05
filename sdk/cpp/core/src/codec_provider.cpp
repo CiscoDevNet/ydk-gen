@@ -1,6 +1,6 @@
 /*  ----------------------------------------------------------------
  YDK - YANG Development Kit
- Copyright 2016-2019 Cisco Systems. All rights reserved.
+ Copyright 2016 Cisco Systems. All rights reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -97,16 +97,6 @@ path::RootSchemaNode& CodecServiceProvider::get_root_schema_for_bundle(const std
 
     auto const & val = m_root_schema_table[bundle_name];
     return *(val);
-}
-
-bool CodecServiceProvider::has_root_schema_for_bundle(const std::string & bundle_name)
-{
-    if (user_provided_repo ||
-        m_root_schema_table.find(bundle_name) != m_root_schema_table.end())
-    {
-        return true;
-    }
-    return false;
 }
 
 void CodecServiceProvider::initialize_root_schema(const std::string & bundle_name, path::Repository & repo)

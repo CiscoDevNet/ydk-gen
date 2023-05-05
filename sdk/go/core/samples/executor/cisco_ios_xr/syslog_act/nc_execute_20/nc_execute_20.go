@@ -98,8 +98,7 @@ func main() {
 		Username: device["username"],
 		Password: device["password"],
 		Port: port,
-		Protocol: device["protocol"],
-		OnDemand: true}
+		Protocol: device["protocol"]}
 	provider.Connect()
 
 	// create CRUD service

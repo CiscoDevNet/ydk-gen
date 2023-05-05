@@ -373,9 +373,9 @@
   "dependency": [
     {
       "name": "ietf",
-      "version": "0.1.5",
-      "core_version": "0.8.5",
-      "uri": "file://profiles/bundles/ietf_0_1_5.json"
+      "version": "0.1.3",
+      "core_version": "0.6.0",
+      "uri": "file://profiles/bundles/ietf_0_1_3.json"
     }
   ]
 }

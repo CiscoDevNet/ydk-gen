@@ -1,109 +1,14 @@
-### 2023-01-31 version 0.8.6.4
-
-#### New features and enhancements
-  * install_ydk.sh: Installation of Python and Go YDK packages should not require root access ([#1069](https://github.com/CiscoDevNet/ydk-gen/issues/1069))
-  * Expanded unit test cases to retrieve list elements
-
-#### Resolved GitHub issues
-  * CodecService fails to decode XML in python when referencing namespace prefix ([#1071](https://github.com/CiscoDevNet/ydk-gen/issues/1071))
-  * CiscoDevNet YDK C++ README needs Documentation & Support links updated ([#1077](https://github.com/CiscoDevNet/ydk-gen/issues/1077))
-  * Error in ydk-gen-master/test/dependencies_centos.sh version check ([#1078](https://github.com/CiscoDevNet/ydk-gen/issues/1078))
-  * not_eq is a c++ keyword ([#1080](https://github.com/CiscoDevNet/ydk-gen/issues/1080))
-  * libyang issue with arguments that are swapped ([#1081](https://github.com/CiscoDevNet/ydk-gen/issues/1081))
-
-### Resolved non-GitHub issues
-  * Fixed and tested C++ sample apps
-
-
-### 2022-07-31 version 0.8.6.3
-
-#### New features and enhancements
-  * Added automatic build of environment setup file .env by the installation script
-
-#### Resolved GitHub issues
-  * IndexError on decoding empty string value in JSON payload ([#1061](https://github.com/CiscoDevNet/ydk-gen/issues/1061))
-  * gNMI service installation on Centos 8.2 fails due to C++ compiler error
-([#1062](https://github.com/CiscoDevNet/ydk-gen/issues/1062))
-  * The installation script fails on fresh new CentOS 7 docker container ([#1064](https://github.com/CiscoDevNet/ydk-gen/issues/1064))
-  * ExecutorService fails on non-ietf RPC with Libyang error ([#1067](https://github.com/CiscoDevNet/ydk-gen/issues/1067))
-
-### Resolved non-GitHub issues
-  * Upgraded third party packages Sphinx (1.5.6) and wheel (0.37.1) due to documentation
-generation issues on Mac Big Sur
-  * Fixed installation script for the case, when virtual environment is not used
-
-#### Documentation improvements
-  * Fixed documentation issue [#1066](https://github.com/CiscoDevNet/ydk-gen/issues/1066)
-
-### 2022-03-31 version 0.8.6.2
-
-#### New features and enhancements
-  * Improved installation script to allow use of Python system installation
-  * Corrected few Codacy issues
-  * Added support for MacOS Big Sur
-
-#### Resolved GitHub issues
-  * Fixed Python 3.5 code compatibility issue for Ubuntu:xenial
-  * install_ydk.sh tries to create a new venv ([#1034](https://github.com/CiscoDevNet/ydk-gen/issues/1034))
-  * getting YCodecError when leaf value has string 'sftp://' ([#1056](https://github.com/CiscoDevNet/ydk-gen/issues/1056))
-  * vrf route-target leaf stitching(bool) fails as invalid ([#1059](https://github.com/CiscoDevNet/ydk-gen/issues/1059))
-  
-### Resolved non-GitHub issues
-  * Addressed segmentation fault error when required modules are not loaded.
-  * Patched catch.hpp for Linux distributions that do not define SIGSTKSZ
-
-#### Bundle improvements
-  * Cleaned up older profiles
-
-
-### 2021-09-30 version 0.8.6
-
-#### New features and enhancements
-  * Upgraded pyang version to 2.5.0
-  * Create go wrapper for NetconfSession and other path APIs ([#779](https://github.com/CiscoDevNet/ydk-gen/issues/779))
-  * Added SSL support for NetconfServiceProvider in Go
-  * Dropped Python2 support in the code
-
-#### Resolved GitHub issues
-  * Go function EntityEqual result depends on parameters order ([#1053](https://github.com/CiscoDevNet/ydk-gen/issues/1053))
-  * Failed to get "ietf-netconf" module with Executor Service and get-schema RPC ([#1047](https://github.com/CiscoDevNet/ydk-gen/issues/1047))
-  * The Executor Service fails to return module content back to user ([#1048](https://github.com/CiscoDevNet/ydk-gen/issues/1048))
-
-#### Bundle improvements
-  * Updated cisco-ios-xr bundle (profile cisco-ios-xr_6_7_3.json) to support Cisco IOS XR 6.7.3
-  * Updated openconfig bundle (profile openconfig_0_1_9.json) to support YANG models of revision "2020-05-06"
-  * Updated ietf bundle (profile ietf_0_1_6.json) to support YANG models of revision "2018-02-14"
-  * Added bundle profiles to support Cisco IOS XR 7.0.1 and 7.0.2
-
-
-### 2021-05-30 version 0.8.5.2
-
-#### Resolved GitHub issues
-  * Version numbers in bundle resolver to comply with PEP 440 ([#1007](https://github.com/CiscoDevNet/ydk-gen/issues/1007))
-  * The Executor Service fails to return module content to user ([#1035](https://github.com/CiscoDevNet/ydk-gen/issues/1035))
-  * Docker base image python error ([#1036](https://github.com/CiscoDevNet/ydk-gen/issues/1036))
-  * XmlSubtreeCodec fails encode leaf-list data ([#1045](https://github.com/CiscoDevNet/ydk-gen/issues/1045))
-  * C++ CodecService fails to encode non-top level entity to XML subtree ([#1049](https://github.com/CiscoDevNet/ydk-gen/issues/1049))
-
-#### Other resolved issues and enhancements
-  * Fixed few minor bugs in C++ code
-  * Added installation of flex and bison for CentOS platform
-  * Added scripts for local unit testing of YDK release
-  * Tested YDK on Windows 10 using Windows Subsystem for Linux and Ubuntu Bionic (18.04 LTS) and Focal (20.04 LTS) virtual machines.
-  
-
-### 2020-09-30 version 0.8.5
+### 2020-07-30 version 0.8.5
 
 #### New features and enhancements
   * Develop utility function to clone Entity instance ([#967](https://github.com/CiscoDevNet/ydk-gen/issues/967))
   * Go CodecService fails to encode leaf-list data ([#968](https://github.com/CiscoDevNet/ydk-gen/issues/968))
   * Developed script install_ydk, which allows to install YDK from source in one CLI command
-  * Added support for CentOS/RHEL-8 and Ubuntu-20.04 (focal) ([#1019](https://github.com/CiscoDevNet/ydk-gen/issues/1019))
 
 #### Resolved GitHub issues
   * gNMI set RPC fails when JSON payload is formatted string
   * Enhance generator to indicate how a YANG modules was processed ([#894](https://github.com/CiscoDevNet/ydk-gen/issues/894))
-  * Restconf in YDK should support HTTPS (partially resolved) ([#917](https://github.com/CiscoDevNet/ydk-gen/issues/917))
+  * Restconf in YDK should support HTTPS (partialy resolved) ([#917](https://github.com/CiscoDevNet/ydk-gen/issues/917))
   * Go fails to process filters on enum and identity leaves and leaf-lists ([#969](https://github.com/CiscoDevNet/ydk-gen/issues/969))
   * YDK fails create bundle package when package name contains '.' ([#978](https://github.com/CiscoDevNet/ydk-gen/issues/978))
   * python bundle generator must escape 'async' as variable name ([#980](https://github.com/CiscoDevNet/ydk-gen/issues/980))
@@ -113,10 +18,6 @@ generation issues on Mac Big Sur
   * create_datanode in Path API returns incorrect object and sets incorrect value ([#1003](https://github.com/CiscoDevNet/ydk-gen/issues/1003))
   * create_datanode rejects absolute paths with a leading "/" as defined in RFC 7950 ([#1005](https://github.com/CiscoDevNet/ydk-gen/issues/1005))
   * Path API create_datanode rejects valid value ([#1006](https://github.com/CiscoDevNet/ydk-gen/issues/1006))
-  * data tag not recognized when attribute present ([#1021](https://github.com/CiscoDevNet/ydk-gen/issues/1021))
-  * c++ generated bundle class fails to compile in gcc when model contains leaf 'minor' ([#1024](https://github.com/CiscoDevNet/ydk-gen/issues/1024))
-  * ydk.path.codec.decode validates incorrect XML payload ([#1026](https://github.com/CiscoDevNet/ydk-gen/issues/1026))
-  * Python 3 TypeError while initializing CRUDService class ([#1032](https://github.com/CiscoDevNet/ydk-gen/issues/1032))
 
 #### Bundle improvements
   * Updated cisco-ios-xe bundle to support Cisco IOS XE 16.9.3 due to bug in Python generated code
@@ -459,7 +360,7 @@ The [backward incompatible](http://ydk.cisco.com/py/docs/backward_compatibility.
  * Add support for choosing either a per-device or a common cache for storing downloaded yang models ([#502](https://github.com/CiscoDevNet/ydk-gen/pull/502))
  * Introduced encoding/decoding subtree XML in `CodecService` and changed `CRUDService` to use XML subtree filtering to create filters for the `read` operation ([#489](https://github.com/CiscoDevNet/ydk-gen/pull/489))
  * Added support for non-standard RPCs as well in path API ([#498](https://github.com/CiscoDevNet/ydk-gen/pull/498))
- * Add ability to generate Linux and MacOS packages in cmake using [cpack](https://cmake.org/Wiki/CMake:Packaging_With_CPack) ([#466](https://github.com/CiscoDevNet/ydk-gen/pull/466))
+ * Add ability to generate Linux and Mac OSX packages in cmake using [cpack](https://cmake.org/Wiki/CMake:Packaging_With_CPack) ([#466](https://github.com/CiscoDevNet/ydk-gen/pull/466))
 
 #### ydk-gen
  * Updated [`cisco-ios-xr`](https://github.com/CiscoDevNet/ydk-gen/blob/master/profiles/bundles/cisco-ios-xr_6_2_2.json) to support Cisco IOS XR 6.2.2 release
@@ -533,7 +434,7 @@ The [backward incompatible](http://ydk.cisco.com/py/docs/backward_compatibility.
   * RestconfServiceProvider
   * OpenDaylightServiceProvider
 * Introduced support for netconf service ([#341](https://github.com/CiscoDevNet/ydk-gen/pull/341), [#352](https://github.com/CiscoDevNet/ydk-gen/pull/352))
-* Released ydk-cpp for MacOS platform (on [Homebrew](https://github.com/CiscoDevNet/homebrew-ydk)) and on Ubuntu platform (on [Lauchpad](https://launchpad.net/~ydk)) ([#362](https://github.com/CiscoDevNet/ydk-gen/pull/362), [#322](https://github.com/CiscoDevNet/ydk-gen/pull/322))
+* Released ydk-cpp for OSX platform (on [Homebrew](https://github.com/CiscoDevNet/homebrew-ydk)) and on Ubuntu platform (on [Lauchpad](https://launchpad.net/~ydk)) ([#362](https://github.com/CiscoDevNet/ydk-gen/pull/362), [#322](https://github.com/CiscoDevNet/ydk-gen/pull/322))
 * Added support for generated CRUD model tests based on bundles ([#354](https://github.com/CiscoDevNet/ydk-gen/pull/354))
 * Improved negative test cases and added support for netconf operations on leafs and leaf-lists ([#324](https://github.com/CiscoDevNet/ydk-gen/pull/324))
 

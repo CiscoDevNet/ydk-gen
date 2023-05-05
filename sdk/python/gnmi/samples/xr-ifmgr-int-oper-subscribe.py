@@ -35,7 +35,10 @@ import datetime
 import sys
 import signal
 
-from urllib.parse import urlparse
+if sys.version_info > (3,):
+    from urllib.parse import urlparse
+else:
+    from urlparse import urlparse
 
 from test_utils import enable_logging, print_entity
 

@@ -273,20 +273,6 @@ TEST_CASE("bgp_read_container")
     REQUIRE(bgp_read_ptr->neighbors->neighbor.len() == 0);
     REQUIRE(bgp_read_ptr->global->config->as.value == "65001");
 
-    // Read neighbor list
-    bgp_filter = make_unique<openconfig_bgp::Bgp>();
-    auto r = make_shared<openconfig_bgp::Bgp::Neighbors::Neighbor>();
-    r->neighbor_address = YFilter::read;
-    bgp_filter->neighbors->neighbor.append(r);
-    bgp_read = crud.read_config(provider, *(bgp_filter));
-    REQUIRE(bgp_read != nullptr);
-    bgp_read_ptr = dynamic_cast<openconfig_bgp::Bgp*>(bgp_read.get());
-    REQUIRE(bgp_read_ptr->neighbors->neighbor.len() == 2);
-    auto neighbor_entity = bgp_read_ptr->neighbors->neighbor["1.2.3.5"];
-    auto neighbor_ptr = dynamic_cast<openconfig_bgp::Bgp::Neighbors::Neighbor*>(neighbor_entity.get());
-    REQUIRE(neighbor_ptr->config->has_data() == false);
-
-    // Read neighbors container
     bgp_filter = make_unique<openconfig_bgp::Bgp>();
     bgp_filter->neighbors->yfilter = YFilter::read;
     bgp_read = crud.read_config(provider, *(bgp_filter));
@@ -375,8 +361,7 @@ TEST_CASE("oc_platform")
 
 TEST_CASE( "crud_entity_list_bgp" )
 {
-    ydk::path::Repository repo{TEST_HOME};
-    ydk::NetconfServiceProvider provider{repo, "127.0.0.1", "admin", "admin", 12022};
+    ydk::NetconfServiceProvider provider{"127.0.0.1", "admin", "admin", 12022};
     ydk::CrudService crud{};
 
     // Create 'native' configuration

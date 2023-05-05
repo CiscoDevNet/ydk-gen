@@ -54,7 +54,7 @@ The installation procedure on CentOS-7:
     sudo cp ~/myrestconf.crt /etc/pki/ca-trust/source/anchors/
     sudo update-ca-trust
 
-Getting MacOS to trust self-signed SSL Certificates:
+Getting Mac-OSX to trust self-signed SSL Certificates:
 
  1. Locate your CA certificate file.
  2. Open up Keychain Access.

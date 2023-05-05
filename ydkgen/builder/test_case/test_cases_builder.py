@@ -1,5 +1,5 @@
 #  ----------------------------------------------------------------
-# Copyright 2016-2019 Cisco Systems
+# Copyright 2016 Cisco Systems
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,18 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------
-# This file has been modified by Yan Gorelik, YDK Solutions.
-# All modifications in original under CiscoDevNet domain
-# introduced since October 2019 are copyrighted.
-# All rights reserved under Apache License, Version 2.0.
-# ------------------------------------------------------------------
 
 """
 test_cases_builder.py
 
 Build an individual test case within a test program file.
 """
-
+import sys
 from ydkgen import api_model as atypes
 from ydkgen.common import is_pkg_element, get_top_class, get_obj_name, get_qn, \
                         is_presence_element, is_list_element, is_mandatory_element, \
@@ -169,7 +164,10 @@ class TestCasesBuilder(ValueBuilder):
     """
 
     def __init__(self, lang, identity_subclasses):
-        super().__init__(lang, identity_subclasses)
+        if sys.version_info > (3,):
+            super().__init__(lang, identity_subclasses)
+        else:
+            super(TestCasesBuilder, self).__init__(lang, identity_subclasses)
         self.stmts = Statements()
         self.test_name = ''
         self.clazz = None
