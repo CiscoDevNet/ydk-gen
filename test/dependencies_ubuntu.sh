@@ -51,7 +51,7 @@ function install_dependencies {
     $sudo_cmd apt-get install -y lsb-release
     codename=$(lsb_release -c | awk '{ print $2 }')
     ubuntu_release=$(lsb_release -r | awk '{ print $2 }' | cut -d '.' -f 1)
-    if [[ $codename == "focal" && ! -h /etc/localtime ]]; then
+    if [[ $codename == "focal" || $codename == "jammy" ]] && [[ ! -h /etc/localtime ]]; then
       # Fixing timezone setting issue in focal
       export DEBIAN_FRONTEND=noninteractive
       $sudo_cmd apt-get install -y tzdata
@@ -61,18 +61,19 @@ function install_dependencies {
     fi
     run_cmd $sudo_cmd apt-get install -y --no-install-recommends apt-utils
     run_cmd $sudo_cmd apt-get update -y
+    run_cmd $sudo_cmd apt-get install -y build-essential
     run_cmd $sudo_cmd apt-get install libtool-bin -y > /dev/null
     local status=$?
     if [[ ${status} != 0 ]]; then
         run_cmd $sudo_cmd apt-get install libtool -y > /dev/null
     fi
-    if [[ $codename == "focal" ]]; then
+    if [[ $codename == "focal" || $codename == "jammy" ]]; then
         $sudo_cmd apt-get install -y mlocate git > /dev/null
         if [[ ! -h /usr/local/lib/libnettle.so.6 ]]; then
           cd /usr/local/lib/
           $sudo_cmd ln -s $curr_dir/3d_party/linux/ubuntu/lib/libnettle.so.6.4
           $sudo_cmd ln -s libnettle.so.6.4 libnettle.so.6
-          cd -
+          cd - > /dev/null
         fi
     else
         run_cmd $sudo_cmd apt-get install -y locate git > /dev/null
@@ -84,38 +85,48 @@ function install_dependencies {
     run_cmd $sudo_cmd apt-get install -y python3-dev python3-lxml python3-pip python3-venv > /dev/null
     run_cmd $sudo_cmd apt-get install -y pkg-config software-properties-common zlib1g-dev openjdk-8-jre > /dev/null
     run_cmd $sudo_cmd apt-get install -y valgrind > /dev/null
-    if [[ $codename == "focal" ]]; then
+    if [[ $codename == "focal" || $codename == "jammy" ]]; then
         run_cmd $sudo_cmd apt-get install -y python3-pybind11 > /dev/null
     fi
 }
 
+function check_install_gcc_link {
+  cd /usr/bin
+  if [ -x $1 ]; then
+    $sudo_cmd ln -fs $1 $2
+  else
+    print_msg "Compiler /usr/bin/$1 is not installed!"
+    return 1
+  fi
+  cd - > /dev/null
+  return 0
+}
+
 function check_install_gcc {
   which gcc
-  local status=$?
-  if [[ $status == 0 ]]
+  local status_gcc=$?
+  which g++
+  local status_gxx=$?
+  if [[ $status_gcc == 0  && $status_gxx == 0 ]]
   then
     gcc_version=$(echo $(gcc --version) | awk '{ print $3 }' | cut -d '-' -f 1)
     print_msg "Current gcc/g++ version is $gcc_version"
+    local major=$(echo $gcc_version | cut -d '.' -f 1)
+    if [[ $codename == "focal" && $major -gt 7 ]]; then
+      print_msg "Installing gcc/g++ version 7"
+#       $sudo_cmd add-apt-repository ppa:ubuntu-toolchain-r/test -y
+#       $sudo_cmd apt-get update -y > /dev/null
+      $sudo_cmd apt-get install gcc-7 g++-7 -y > /dev/null
+      gcc_version=$(echo $(gcc --version) | awk '{ print $3 }' | cut -d '-' -f 1)
+      print_msg "Installed gcc/g++ version is $gcc_version"
+      major=$(echo $gcc_version | cut -d '.' -f 1)
+    fi
+    print_msg "Checking and installing symbolic links for the gcc/g++ compilers"
+    run_cmd check_install_gcc_link gcc-$major cc
+    run_cmd check_install_gcc_link g++-$major c++
   else
     print_msg "The gcc/g++ not installed"
-    gcc_version="4.0.0"
-  fi
-  local major=$(echo $gcc_version | cut -d '.' -f 1)
-  if [[ $gcc_version < "4.8.1" || $major -gt 7 ]]
-  then
-    print_msg "Installing gcc/g++ version 7"
-#    $sudo_cmd add-apt-repository ppa:ubuntu-toolchain-r/test -y
-#    $sudo_cmd apt-get update -y > /dev/null
-    $sudo_cmd apt-get install gcc-7 g++-7 -y > /dev/null
-    $sudo_cmd ln -fs /usr/bin/g++-7 /usr/bin/c++
-    $sudo_cmd ln -fs /usr/bin/gcc-7 /usr/bin/cc
-    $sudo_cmd ln -fs /usr/bin/g++-7 /usr/bin/g++
-    $sudo_cmd ln -fs /usr/bin/gcc-7 /usr/bin/gcc
-    gcc_version=$(echo $(gcc --version) | awk '{ print $3 }' | cut -d '-' -f 1)
-    print_msg "Installed gcc/g++ version is $gcc_version"
-  else
-    $sudo_cmd ln -fs /usr/bin/g++ /usr/bin/c++
-    $sudo_cmd ln -fs /usr/bin/gcc /usr/bin/cc
+    exit 1
   fi
 }
 
@@ -128,7 +139,7 @@ function check_install_curl {
     ./configure --enable-versioned-symbols --with-openssl > /dev/null
     make > /dev/null
     $sudo_cmd make install
-    cd -
+    cd - > /dev/null
     $sudo_cmd rm -f /usr/lib/x86_64-linux-gnu/libcurl.so
     $sudo_cmd ln -sf /usr/local/lib/libcurl.so.4 /usr/lib/x86_64-linux-gnu/libcurl.so
     rm -rf curl
@@ -137,7 +148,7 @@ function check_install_curl {
 }
 
 function check_install_libssh {
-  if [[ $codename == "focal" && ! -h /usr/local/lib/libssh_threads.so ]]; then
+  if [[ $codename == "focal" || $codename == "jammy" ]] && [[ ! -h /usr/local/lib/libssh_threads.so ]]; then
     print_msg "Copying libssh and libssh_threads to /usr/local/lib"
     sudo cp $curr_dir/3d_party/linux/ubuntu/lib/libssh.so.4.5.0 /usr/local/lib/
     sudo cp $curr_dir/3d_party/linux/ubuntu/lib/libssh_threads.so.4.5.0 /usr/local/lib/
@@ -146,7 +157,23 @@ function check_install_libssh {
     sudo ln -s libssh.so.4 libssh.so
     sudo ln -s libssh_threads.so.4.5.0 libssh_threads.so.4
     sudo ln -s libssh_threads.so.4 libssh_threads.so
-    cd -
+    cd - > /dev/null
+  fi
+  if [[ $codename == "jammy" && ! -h /usr/local/lib/libcrypto.so.1 ]]
+  then
+    sudo cp $curr_dir/3d_party/linux/ubuntu/lib/libcrypto.so.1.1 /usr/local/lib/
+    cd /usr/local/lib/
+    sudo ln -s libcrypto.so.1.1 libcrypto.so.1
+    cd - > /dev/null
+  fi
+  if [[ $codename == "jammy" && ! -h /usr/local/lib/libssl.so ]]
+  then
+    wget https://www.openssl.org/source/old/1.1.0/openssl-1.1.0l.tar.gz
+    tar xfz openssl-1.1.0l.tar.gz
+    cd openssl-1.1.0l
+    ./config && make && make install
+    cd - > /dev/null
+    rm -rf openssl-1.1.0l*
   fi
 }
 
@@ -171,7 +198,7 @@ function check_install_go {
     rm -f go1.13.1.linux-amd64.tar.gz
     cd /usr/local/bin
     $sudo_cmd ln -sf /usr/local/go/bin/go
-    cd -
+    cd - > /dev/null
   fi
 }
 
@@ -187,7 +214,7 @@ function check_install_confd {
       unzip $curr_dir/3d_party/linux/confd-basic-7.3.linux.x86_64.zip
       cd confd-basic-7.3.linux.x86_64
       run_cmd ./confd-basic-7.3.linux.x86_64.installer.bin $HOME/confd
-      cd -
+      cd - > /dev/null
       ln -s $curr_dir/3d_party/linux/ubuntu/lib/libcrypto.so.1.0.0 $HOME/confd/lib/libcrypto.so.1.0.0
       ln -s $curr_dir/3d_party/linux/ubuntu/lib/libncurses.so.5.9 $HOME/confd/lib/libncurses.so.5
       ln -s $curr_dir/3d_party/linux/ubuntu/lib/libtinfo.so.5.9 $HOME/confd/lib/libtinfo.so.5

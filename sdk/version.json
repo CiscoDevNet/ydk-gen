@@ -1,6 +1,6 @@
 {
-    "core": "0.8.6.4",
-    "version": "0.8.6.4",
+    "core": "0.8.6.5",
+    "version": "0.8.6.5",
     "gnmi-service": "0.4.0.5",
     "ietf": "0.1.6",
     "openconfig": "0.1.9",

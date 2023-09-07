@@ -53,7 +53,7 @@ YANG Development Kit
   - [Generate and install model bundle](#generate-and-install-model-bundle)
   - [Writing your first app](#writing-your-first-app)
   - [Generating Documentation](#generating-documentation)
-  - [Generating an "Adhoc" YDK-Py Bundle](#generating-an-adhoc-ydk-py-bundle)
+  - [Generating an "Adhoc" Bundle](#generating-an-adhoc-bundle)
 - [Notes](#notes)
   - [Python requirements](#python-requirements)
   - [C++ requirements](#c-requirements)
@@ -88,7 +88,7 @@ Other tools and libraries are used to deliver `YDK` functionality:
 The output of ydk-gen is either a core package, that defines main services and providers,
 or add-on service package like gNMI Service, or a module bundle, consisting of programming language APIs derived from YANG models.
 Each module bundle is generated using a bundle profile and the ydk-gen tool.
-Developers can either use pre-packaged generated bundles (e.g. [ydk-py](http://cs.co/ydk-py)),
+Developers can either use pre-packaged generated bundles,
 or define their own bundle, consisting of a set of YANG models, using a bundle profile
 (e.g. [`ietf_0_1_5.json`](profiles/bundles/ietf_0_1_5.json)).
 This gives the developer an ability to customize scope of their bundle based on their requirements.
@@ -111,13 +111,13 @@ To use the docker image, [install docker](https://docs.docker.com/install/) on y
 See the [docker documentation](https://docs.docker.com/engine/reference/run/) for more details.
 
 ```
-docker run -it ydksolutions/ydk-gen:0.8.6.4
+docker run -it ydksolutions/ydk-gen:0.8.6.5
 ```
 
 # System Requirements
 
 The YDK is currently supported on the following platforms including native installations, virtual machines, and docker images:
- - Linux Ubuntu Xenial (16.04 LTS), Bionic (18.04 LTS), and Focal (20.04 LTS)
+ - Linux Ubuntu Xenial (16.04 LTS), Bionic (18.04 LTS), Focal (20.04 LTS), and Jammy (22.04 LTS)
  - Linux CentOS versions 7 and Centos Stream 8 (Centos 8.x has been EOL as of December 31 of 2021)
  - Linux RHEL version 7.x and 8.x 
  - MacOS up to 11.6.2 (Big Sur)
@@ -340,13 +340,7 @@ optional arguments:
 
 The below steps specify how to use `generate.py` to generate YDK core, model bundle, and service packages.
 In all the examples the script is executed from `ydk-gen` directory. 
-It is assumed that Python virtual environment is activated. 
-All the packages are available for Python, Go and C++ in corresponding github repositories: 
-[ydk-py](https://github.com/CiscoDevNet/ydk-py),  [ydk-go](https://github.com/CiscoDevNet/ydk-go) 
-and [ydk-cpp](https://github.com/CiscoDevNet/ydk-cpp).
-
-The script [create_ydk_sdk_for_github.sh](create_ydk_sdk_for_github.sh) can be used to generate the `ydk-py`, 
-`ydk-cpp` and `ydk-go` repositories after having generated all the bundles and core packages using `generate.py`.
+It is assumed that Python virtual environment is activated.
 
 ## Build model bundle profile
 
@@ -438,7 +432,7 @@ Check Python packages installed:
 
 ```
 pip list | grep ydk
-ydk (0.8.6.4)
+ydk (0.8.6.5)
 ydk-models-<name-of-bundle> (0.5.1)
 ...
 ```
@@ -460,8 +454,7 @@ python3 generate.py --cpp --bundle profiles/bundles/<name-of-profile>.json -is
 Now, you can start creating apps based on the models in your bundle.
 Assuming you have generated a python bundle, the models will be available for importing in your app under
 `ydk.models.<name-of-your-bundle>`.
-For examples, see [ydk-py-samples](https://github.com/CiscoDevNet/ydk-py-samples#a-hello-world-app) and
-[C++ samples](sdk/cpp/samples).
+For examples, see [C++ samples](sdk/cpp/samples).
 Also refer to the [documentation for python](http://ydk.cisco.com/py/docs/developer_guide.html),
 [Go](http://ydk.cisco.com/go/docs/developer_guide.html) and
 [C++](http://ydk.cisco.com/cpp/docs/developer_guide.html).
@@ -493,7 +486,7 @@ python3 generate.py --python --bundle profiles/bundles/cisco_ios_xr_6_6_3.json
 python3 generate.py --python --core --generate-doc --output-directory gen-api --cached-output-dir
 ```
 
-## Generating an "Adhoc" YDK-Py Bundle
+## Generating an "Adhoc" Bundle
 
 When YANG models available on the hard drive, there is capability to generate small model bundles, which include
 just few models. It is called an "adhoc" bundle. Such a bundle generated without profile directly from command line.
@@ -523,8 +516,6 @@ library. As example:
  - python3.6m - /usr/lib/x86_64-linux-gnu/libpython3.6m.so
 
 It is recommended to follow [Core Installation](#core-installation) procedure to ensure presence of shared Python libraries.
-
-**NOTE.** Due to GitHub issue [#1050](https://github.com/CiscoDevNet/ydk-gen/issues/1050) YDK is not supported with Python 3.9.x.
 
 ## C++ requirements
 
@@ -618,6 +609,6 @@ The script will install core and bundle packages and then perform the unit tests
 
 # Release Notes
 
-The current YDK release version is 0.8.6.4.
+The current YDK release version is 0.8.6.5.
 
 YDK-Gen is licensed under the Apache 2.0 License.

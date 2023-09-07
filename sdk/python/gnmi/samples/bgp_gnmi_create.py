@@ -30,9 +30,9 @@ def config_bgp(bgp_cfg):
     nbr_ipv4.config.peer_as = 65002
 
     bgp_cfg.neighbors.neighbor.append(nbr_ipv4)
-    nbr_ipv4.parent = bgp_cfg.neighbors
 
     # IPv4 Neighbor instance config done
+
 
 if __name__ == "__main__":
     """Execute main program."""

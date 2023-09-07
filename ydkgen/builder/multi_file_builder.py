@@ -39,7 +39,7 @@ class MultiFileHeader(MultiFile):
     def __init__(self, package, file_index, fragmented):
         super().__init__(fragmented)
         self.file_name = _get_header_name(package, file_index)
-        self.include_guard = get_include_guard_name(package.name, file_index)
+        self.include_guard = get_include_guard_name(package.name, package.bundle_version, file_index)
 
 
 class MultiFileSource(MultiFile):

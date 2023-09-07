@@ -109,8 +109,10 @@ class CodecService(object):
             Instance of YServiceError if encoding fails.
         """
         bundle_name = _get_bundle_name(entity)
-        provider.initialize(bundle_name, _get_yang_path(entity))
         root_schema = provider.get_root_schema(bundle_name)
+        if root_schema is None:
+            provider.initialize(bundle_name, _get_yang_path(entity))
+            root_schema = provider.get_root_schema(bundle_name)
 
         if subtree:
             if provider.encoding == EncodingFormat.XML:
@@ -122,7 +124,7 @@ class CodecService(object):
             data_node = _get_data_node_from_entity(entity, root_schema)
             codec_service = _Codec()
             result = codec_service.encode(data_node, provider.encoding, pretty)
-            self.logger.debug("Performing encode operation, resulting in {}".format(result))
+            self.logger.debug("Encode operation result:\n{}".format(result))
             return result
 
     @_check_argument
@@ -131,7 +133,8 @@ class CodecService(object):
 
         Args:
             provider: (ydk.providers.CodecServiceProvider): Codec provider.
-            payload_holder: (str or dict(str, str) or list(str)), which represents payload in XML or JSON format.
+            payload_holder: (str or dict(str, str) or list(str)),
+                            which represents payload in XML or JSON format.
             subtree: (bool) flag, which directs encode to XML subtree; default - False.
 
         Returns:
@@ -169,7 +172,8 @@ class CodecService(object):
             YServiceProviderError with _PAYLOAD_ERROR_MSG, if payload
             contains more than one top level containers.
         """
-        entity = _payload_to_top_entity(payload, provider.encoding)
+        entity = _payload_to_top_entity(payload, provider.encoding,
+                                        bundle_name=provider.bundle_name)
 
         if subtree:
             if provider.encoding == EncodingFormat.XML:
@@ -179,15 +183,14 @@ class CodecService(object):
             return codec.decode(payload, entity)
 
         bundle_name = _get_bundle_name(entity)
-        provider.initialize(bundle_name, _get_yang_path(entity))
-
         root_schema = provider.get_root_schema(bundle_name)
-
-        self.logger.debug("Performing decode operation on payload:\n{}".format(payload))
+        if root_schema is None:
+            provider.initialize(bundle_name, _get_yang_path(entity))
+            root_schema = provider.get_root_schema(bundle_name)
 
         codec_service = _Codec()
         root_data_node = codec_service.decode(root_schema, payload, provider.encoding)
-        data_nodes = root_data_node.get_children();
+        data_nodes = root_data_node.get_children()
         if data_nodes is None or len(data_nodes) == 0:
             self.logger.debug(_PAYLOAD_ERROR_MSG)
             raise YServiceProviderError(_PAYLOAD_ERROR_MSG)
@@ -199,6 +202,7 @@ class CodecService(object):
     def _log_error_and_raise_exception(self, msg, exception_class):
         self.logger.error(msg)
         raise exception_class(msg)
+
 
 def _get_yang_path(entity):
     """Return YANG models install location for entity.

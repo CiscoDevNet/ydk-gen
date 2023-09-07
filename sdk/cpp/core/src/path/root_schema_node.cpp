@@ -73,6 +73,13 @@ using json = nlohmann::json;
     {
         for (json::iterator it = o.begin(); it != o.end(); ++it)
         {
+            // extract module name from key
+            auto identifier = std::string(it.key());
+            auto found = identifier.find(":");
+            if (found != std::string::npos && found > 0)
+            {
+                module_names.insert(identifier.substr(0, found));
+            }
             if (it->is_array())
             {
                 for (auto i = it->begin(); i != it->end(); i++)
@@ -95,14 +102,7 @@ using json = nlohmann::json;
             }
             else
             {
-                // extract module name from key
-                auto identifier = std::string(it.key());
-                auto found = identifier.find(":");
-                if (found != std::string::npos && found > 0)
-                {
-                    module_names.insert(identifier.substr(0, found));
-                }
-                // extract module name from primitive type value
+                // extract module name from value
                 if (it->is_primitive())
                 {
                     auto v = it->dump();

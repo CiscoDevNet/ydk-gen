@@ -1,78 +1,40 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>How do I execute RPCs? &mdash; YANG Development Kit 0.8.6.4 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How do I execute RPCs? &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/width.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/width.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="YANG Development Kit 0.8.6.4 documentation" href="../index.html"/>
-        <link rel="up" title="Developer Guide" href="../developer_guide.html"/>
-        <link rel="next" title="How to Disable Validation" href="validation.html"/>
-        <link rel="prev" title="How do I work with instances of YANG data?" href="codec_guide.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to Disable Validation" href="validation.html" />
+    <link rel="prev" title="How do I work with instances of YANG data?" href="codec_guide.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="../index.html" class="icon icon-home"> YANG Development Kit
-          
-
-          
-            
-            <img src="../_static/logo.png" class="logo" />
-          
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
               <div class="version">
-                0.8.6.4
+                0.8.6.5
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,15 +42,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-                <ul class="current">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../about_ydk.html">About YDK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../developer_guide.html">Developer Guide</a><ul class="current">
@@ -110,189 +65,111 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api_guide.html">API Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">YANG Development Kit</a>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">YANG Development Kit</a>
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
- 
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
-          <li><a href="../developer_guide.html">Developer Guide</a> &raquo;</li>
-      
-    <li>How do I execute RPCs?</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../developer_guide.html">Developer Guide</a></li>
+      <li class="breadcrumb-item active">How do I execute RPCs?</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
   </ul>
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="how-do-i-execute-rpcs">
-<h1><a class="toc-backref" href="#toc-entry-1">How do I execute RPCs?</a><a class="headerlink" href="#how-do-i-execute-rpcs" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="how-do-i-execute-rpcs">
+<h1><a class="toc-backref" href="#id1">How do I execute RPCs?</a><a class="headerlink" href="#how-do-i-execute-rpcs" title="Permalink to this heading"></a></h1>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#how-do-i-execute-rpcs" id="toc-entry-1">How do I execute RPCs?</a><ul>
-<li><a class="reference internal" href="#executing-a-rollback-rpc" id="toc-entry-2">Executing a rollback RPC</a></li>
+<li><p><a class="reference internal" href="#how-do-i-execute-rpcs" id="id1">How do I execute RPCs?</a></p>
+<ul>
+<li><p><a class="reference internal" href="#executing-a-rollback-rpc" id="id2">Executing a rollback RPC</a></p></li>
 </ul>
 </li>
 </ul>
 </div>
-<p>This document contains some examples of executing RPCs defined in yang. To perform these operations, the <a class="reference internal" href="../api/services/executor_service.html#ydk.services.ExecutorService" title="ydk.services.ExecutorService"><code class="xref py py-class docutils literal"><span class="pre">ExecutorService</span></code></a> is used.</p>
+<p>This document contains some examples of executing RPCs defined in yang. To perform these operations, the <a class="reference internal" href="../api/services/executor_service.html#ydk.services.ExecutorService" title="ydk.services.ExecutorService"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExecutorService</span></code></a> is used.</p>
 <p>The below approach can be used to execute a rollback RPC.</p>
-<div class="section" id="executing-a-rollback-rpc">
-<h2><a class="toc-backref" href="#toc-entry-2">Executing a rollback RPC</a><a class="headerlink" href="#executing-a-rollback-rpc" title="Permalink to this headline">¶</a></h2>
-<p>For this example, the <code class="xref py py-class docutils literal"><span class="pre">Cisco_IOS_XR_cfgmgr_rollback_act.RollBackConfigurationLast</span></code> class is used. Note that the <code class="docutils literal"><span class="pre">ydk</span></code> and <code class="docutils literal"><span class="pre">ydk-models-cisco-ios-xr</span></code> python packages need to be installed for this example.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Import the rollback module</span>
-<span class="kn">from</span> <span class="nn">ydk.models.cisco_ios_xr</span> <span class="kn">import</span> <span class="n">Cisco_IOS_XR_cfgmgr_rollback_act</span>
-
-<span class="c1"># Import the executor service and netconf provider</span>
-<span class="kn">from</span> <span class="nn">ydk.services</span> <span class="kn">import</span> <span class="n">ExecutorService</span>
-<span class="kn">from</span> <span class="nn">ydk.providers</span> <span class="kn">import</span> <span class="n">NetconfServiceProvider</span>
-
-<span class="c1"># Create object</span>
-<span class="n">roll_back_configuration_to</span> <span class="o">=</span> <span class="n">Cisco_IOS_XR_cfgmgr_rollback_act</span><span class="o">.</span><span class="n">RollBackConfigurationLast</span><span class="p">()</span>
-
-<span class="c1"># Force roll back for the five most recent changes</span>
-<span class="n">roll_back_configuration_to</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;Forced programmatic rollback&quot;</span>
-<span class="n">roll_back_configuration_to</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">roll_back_configuration_to</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">roll_back_configuration_to</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;PRB-005&quot;</span>
-
-<span class="c1"># Create executor service</span>
-<span class="n">executor</span> <span class="o">=</span> <span class="n">ExecutorService</span><span class="p">()</span>
-
-<span class="c1"># Create a NetconfServiceProvider instance to connect to the device</span>
-<span class="n">provider</span> <span class="o">=</span> <span class="n">NetconfServiceProvider</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s1">&#39;10.0.0.1&#39;</span><span class="p">,</span>
-                                     <span class="n">port</span><span class="o">=</span><span class="mi">830</span><span class="p">,</span>
-                                     <span class="n">username</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
-                                     <span class="n">password</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
-
-<span class="c1"># Execute RPC on NETCONF device</span>
-<span class="n">executor</span><span class="o">.</span><span class="n">execute_rpc</span><span class="p">(</span><span class="n">provider</span><span class="p">,</span> <span class="n">roll_back_configuration_to</span><span class="p">)</span>
+<section id="executing-a-rollback-rpc">
+<h2><a class="toc-backref" href="#id2">Executing a rollback RPC</a><a class="headerlink" href="#executing-a-rollback-rpc" title="Permalink to this heading"></a></h2>
+<p>For this example, the <code class="xref py py-class docutils literal notranslate"><span class="pre">Cisco_IOS_XR_cfgmgr_rollback_act.RollBackConfigurationLast</span></code> class is used. Note that the <code class="docutils literal notranslate"><span class="pre">ydk</span></code> and <code class="docutils literal notranslate"><span class="pre">ydk-models-cisco-ios-xr</span></code> python packages need to be installed for this example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># Import the rollback module</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">ydk.models.cisco_ios_xr</span> <span class="kn">import</span> <span class="n">Cisco_IOS_XR_cfgmgr_rollback_act</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># Import the executor service and netconf provider</span>
+<span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">ydk.services</span> <span class="kn">import</span> <span class="n">ExecutorService</span>
+<span class="linenos"> 6</span><span class="kn">from</span> <span class="nn">ydk.providers</span> <span class="kn">import</span> <span class="n">NetconfServiceProvider</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="c1"># Create object</span>
+<span class="linenos"> 9</span><span class="n">roll_back_configuration_to</span> <span class="o">=</span> <span class="n">Cisco_IOS_XR_cfgmgr_rollback_act</span><span class="o">.</span><span class="n">RollBackConfigurationLast</span><span class="p">()</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="c1"># Force roll back for the five most recent changes</span>
+<span class="linenos">12</span><span class="n">roll_back_configuration_to</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;Forced programmatic rollback&quot;</span>
+<span class="linenos">13</span><span class="n">roll_back_configuration_to</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="linenos">14</span><span class="n">roll_back_configuration_to</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos">15</span><span class="n">roll_back_configuration_to</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;PRB-005&quot;</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="c1"># Create executor service</span>
+<span class="linenos">18</span><span class="n">executor</span> <span class="o">=</span> <span class="n">ExecutorService</span><span class="p">()</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="c1"># Create a NetconfServiceProvider instance to connect to the device</span>
+<span class="linenos">21</span><span class="n">provider</span> <span class="o">=</span> <span class="n">NetconfServiceProvider</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s1">&#39;10.0.0.1&#39;</span><span class="p">,</span>
+<span class="linenos">22</span>                                     <span class="n">port</span><span class="o">=</span><span class="mi">830</span><span class="p">,</span>
+<span class="linenos">23</span>                                     <span class="n">username</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
+<span class="linenos">24</span>                                     <span class="n">password</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="c1"># Execute RPC on NETCONF device</span>
+<span class="linenos">27</span><span class="n">executor</span><span class="o">.</span><span class="n">execute_rpc</span><span class="p">(</span><span class="n">provider</span><span class="p">,</span> <span class="n">roll_back_configuration_to</span><span class="p">)</span>
 </pre></div>
-</td></tr></table></div>
 </div>
-</div>
+</section>
+</section>
 
 
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="validation.html" class="btn btn-neutral float-right" title="How to Disable Validation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="codec_guide.html" class="btn btn-neutral" title="How do I work with instances of YANG data?" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="codec_guide.html" class="btn btn-neutral float-left" title="How do I work with instances of YANG data?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="validation.html" class="btn btn-neutral float-right" title="How to Disable Validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-
-    </p>
+    <p></p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.8.6.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  false
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -756,10 +756,10 @@ class YList(EntityCollection):
             entity.ylist_key = key
 
     def append(self, entities):
-        entities.parent = self.parent
         if entities is None:
             self._log_error_and_raise_exception("Cannot add None object to the YList", YInvalidArgumentError)
         elif isinstance(entities, Entity):
+            entities.parent = self.parent
             key = self._key(entities)
             self._cache_dict[key] = entities
             entities.ylist_key = key

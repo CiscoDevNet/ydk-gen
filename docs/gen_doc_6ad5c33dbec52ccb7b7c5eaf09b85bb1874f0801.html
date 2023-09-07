@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>State &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> YANG Development Kit
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.8.6.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">State</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="state">
+<h1>State<a class="headerlink" href="#state" title="Permalink to this heading"></a></h1>
+<p><strong>Leafs</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.auth_password" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.auth_password"><code class="xref py py-attr docutils literal notranslate"><span class="pre">auth_password</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.description" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.description"><code class="xref py py-attr docutils literal notranslate"><span class="pre">description</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.local_as" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.local_as"><code class="xref py py-attr docutils literal notranslate"><span class="pre">local_as</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_as" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_as"><code class="xref py py-attr docutils literal notranslate"><span class="pre">peer_as</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_group_name" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_group_name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">peer_group_name</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_type" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">peer_type</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.remove_private_as" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.remove_private_as"><code class="xref py py-attr docutils literal notranslate"><span class="pre">remove_private_as</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.route_flap_damping" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.route_flap_damping"><code class="xref py py-attr docutils literal notranslate"><span class="pre">route_flap_damping</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.send_community" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.send_community"><code class="xref py py-attr docutils literal notranslate"><span class="pre">send_community</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.total_paths" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.total_paths"><code class="xref py py-attr docutils literal notranslate"><span class="pre">total_paths</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.total_prefixes" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.total_prefixes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">total_prefixes</span></code></a></p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Bgp.PeerGroups.PeerGroup.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="api/types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a></p>
+<p>Class Hierarchy : <a class="reference internal" href="gen_doc_aa42a45c66c5f57d34a73a78a2fe5415e4873c15.html#ydk.models.ydktest.openconfig_bgp.Bgp" title="ydk.models.ydktest.openconfig_bgp.Bgp"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bgp</span></code></a> <a class="reference internal" href="gen_doc_a1c15c3ac0a68ad08639ccbafe85fe28253f9b08.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeerGroups</span></code></a> <a class="reference internal" href="gen_doc_ab505b53322189c2592a7e67e7fd98dce2f3eb04.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeerGroup</span></code></a> <a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This class represents state data.</p>
+<p>State information relating to the BGP peer-group</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_group_name">
+<span class="sig-name descname"><span class="pre">peer_group_name</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_group_name" title="Permalink to this definition"></a></dt>
+<dd><p>Name of the BGP peer-group</p>
+<p><strong>type</strong>: str</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_as">
+<span class="sig-name descname"><span class="pre">peer_as</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_as" title="Permalink to this definition"></a></dt>
+<dd><p>AS number of the peer</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..4294967295</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.local_as">
+<span class="sig-name descname"><span class="pre">local_as</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.local_as" title="Permalink to this definition"></a></dt>
+<dd><p>The local autonomous system number that is to be used when establishing sessions with the remote peer or peer group, if this differs from the global BGP router autonomous system number</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..4294967295</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_type">
+<span class="sig-name descname"><span class="pre">peer_type</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.peer_type" title="Permalink to this definition"></a></dt>
+<dd><p>Explicitly designate the peer or peer group as internal (iBGP) or external (eBGP)</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_31352c5ca973a376d94baeaec22a2f83e1e3af16.html#ydk.models.ydktest.openconfig_bgp_types.PeerType" title="ydk.models.ydktest.openconfig_bgp_types.PeerType"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeerType</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.auth_password">
+<span class="sig-name descname"><span class="pre">auth_password</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.auth_password" title="Permalink to this definition"></a></dt>
+<dd><p>Configures an MD5 authentication password for use with neighboring devices</p>
+<p><strong>type</strong>: str</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.remove_private_as">
+<span class="sig-name descname"><span class="pre">remove_private_as</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.remove_private_as" title="Permalink to this definition"></a></dt>
+<dd><p>Remove private AS numbers from updates sent to peers - when this leaf is not specified, the AS_PATH attribute should be sent to the peer unchanged</p>
+<p><strong>type</strong>: one of the below values:               <a class="reference internal" href="gen_doc_70bdfb33002010c360364660c72f99601eefc405.html#ydk.models.ydktest.openconfig_bgp_types.PRIVATEASREMOVEALL" title="ydk.models.ydktest.openconfig_bgp_types.PRIVATEASREMOVEALL"><code class="xref py py-class docutils literal notranslate"><span class="pre">PRIVATEASREMOVEALL</span></code></a></p>
+<blockquote>
+<div><p><a class="reference internal" href="gen_doc_464f26291e5d6a40fac988eca46950921a44f75a.html#ydk.models.ydktest.openconfig_bgp_types.PRIVATEASREPLACEALL" title="ydk.models.ydktest.openconfig_bgp_types.PRIVATEASREPLACEALL"><code class="xref py py-class docutils literal notranslate"><span class="pre">PRIVATEASREPLACEALL</span></code></a></p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.route_flap_damping">
+<span class="sig-name descname"><span class="pre">route_flap_damping</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.route_flap_damping" title="Permalink to this definition"></a></dt>
+<dd><p>Enable route flap damping</p>
+<p><strong>type</strong>: bool</p>
+<p><strong>config</strong>: False</p>
+<p><strong>default value</strong>: false</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.send_community">
+<span class="sig-name descname"><span class="pre">send_community</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.send_community" title="Permalink to this definition"></a></dt>
+<dd><p>Specify which types of community should be sent to the neighbor or group. The default is to not send the community attribute</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_79a6bb7977e2443cb0ddde85efd4400949314510.html#ydk.models.ydktest.openconfig_bgp_types.CommunityType" title="ydk.models.ydktest.openconfig_bgp_types.CommunityType"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommunityType</span></code></a></p>
+<p><strong>config</strong>: False</p>
+<p><strong>default value</strong>: NONE</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.description" title="Permalink to this definition"></a></dt>
+<dd><p>An optional textual description (intended primarily for use with a peer or group</p>
+<p><strong>type</strong>: str</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.total_paths">
+<span class="sig-name descname"><span class="pre">total_paths</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.total_paths" title="Permalink to this definition"></a></dt>
+<dd><p>Total number of BGP paths within the context</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..4294967295</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.total_prefixes">
+<span class="sig-name descname"><span class="pre">total_prefixes</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State.total_prefixes" title="Permalink to this definition"></a></dt>
+<dd><p>Total number of BGP prefixes received within the context</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..4294967295</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

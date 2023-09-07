@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PeerGroup &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> YANG Development Kit
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.8.6.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">PeerGroup</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="peergroup">
+<h1>PeerGroup<a class="headerlink" href="#peergroup" title="Permalink to this heading"></a></h1>
+<p><strong>Keys</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.peer_group_name" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.peer_group_name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">peer_group_name</span></code></a></p></li>
+</ul>
+<p><strong>Children</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.add_paths" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.add_paths"><code class="xref py py-attr docutils literal notranslate"><span class="pre">add_paths</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.afi_safis" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.afi_safis"><code class="xref py py-attr docutils literal notranslate"><span class="pre">afi_safis</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.apply_policy" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.apply_policy"><code class="xref py py-attr docutils literal notranslate"><span class="pre">apply_policy</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.as_path_options" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.as_path_options"><code class="xref py py-attr docutils literal notranslate"><span class="pre">as_path_options</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.config" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.config"><code class="xref py py-attr docutils literal notranslate"><span class="pre">config</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.ebgp_multihop" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.ebgp_multihop"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ebgp_multihop</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.error_handling" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.error_handling"><code class="xref py py-attr docutils literal notranslate"><span class="pre">error_handling</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.graceful_restart" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.graceful_restart"><code class="xref py py-attr docutils literal notranslate"><span class="pre">graceful_restart</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.logging_options" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.logging_options"><code class="xref py py-attr docutils literal notranslate"><span class="pre">logging_options</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.route_reflector" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.route_reflector"><code class="xref py py-attr docutils literal notranslate"><span class="pre">route_reflector</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.state" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.state"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.timers" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.timers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timers</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.transport" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.transport"><code class="xref py py-attr docutils literal notranslate"><span class="pre">transport</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.use_multiple_paths" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.use_multiple_paths"><code class="xref py py-attr docutils literal notranslate"><span class="pre">use_multiple_paths</span></code></a></p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Bgp.PeerGroups.</span></span><span class="sig-name descname"><span class="pre">PeerGroup</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="api/types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a></p>
+<p>Class Hierarchy : <a class="reference internal" href="gen_doc_aa42a45c66c5f57d34a73a78a2fe5415e4873c15.html#ydk.models.ydktest.openconfig_bgp.Bgp" title="ydk.models.ydktest.openconfig_bgp.Bgp"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bgp</span></code></a> <a class="reference internal" href="gen_doc_a1c15c3ac0a68ad08639ccbafe85fe28253f9b08.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeerGroups</span></code></a> <a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeerGroup</span></code></a></p>
+<p>This class represents configuration data.</p>
+<p>List of BGP peer-groups configured on the local system -</p>
+<p>uniquely identified by peer-group name</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.peer_group_name">
+<span class="sig-name descname"><span class="pre">peer_group_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.peer_group_name" title="Permalink to this definition"></a></dt>
+<dd><p>Reference to the name of the BGP peer-group used as a key in the peer-group list</p>
+<p><strong>type</strong>: str</p>
+<p><strong>refers to</strong>:  <a class="reference internal" href="gen_doc_442c65696161c4c595ff3fc038157bceea9d93bd.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.Config" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">peer_group_name</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.config" title="Permalink to this definition"></a></dt>
+<dd><p>Configuration parameters relating to the BGP neighbor or group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_442c65696161c4c595ff3fc038157bceea9d93bd.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.Config" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.state" title="Permalink to this definition"></a></dt>
+<dd><p>State information relating to the BGP peer-group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_6ad5c33dbec52ccb7b7c5eaf09b85bb1874f0801.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.timers">
+<span class="sig-name descname"><span class="pre">timers</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.timers" title="Permalink to this definition"></a></dt>
+<dd><p>Timers related to a BGP peer-group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_493e86c319301701825b6c4a9ccf1037a437aadf.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.Timers" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.Timers"><code class="xref py py-class docutils literal notranslate"><span class="pre">Timers</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.transport">
+<span class="sig-name descname"><span class="pre">transport</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.transport" title="Permalink to this definition"></a></dt>
+<dd><p>Transport session parameters for the BGP peer-group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_2942a51de1fc4c947f54f5bb2a757fa2218dbc0b.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.Transport" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.error_handling">
+<span class="sig-name descname"><span class="pre">error_handling</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.error_handling" title="Permalink to this definition"></a></dt>
+<dd><p>Error handling parameters used for the BGP peer-group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_07063470ee6d811e98d2d4c5cd1408eeeb7df932.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.ErrorHandling" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.ErrorHandling"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorHandling</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.graceful_restart">
+<span class="sig-name descname"><span class="pre">graceful_restart</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.graceful_restart" title="Permalink to this definition"></a></dt>
+<dd><p>Parameters relating the graceful restart mechanism for BGP</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_ae0c4504f1b62bad375a642db6e320024fe9b628.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.GracefulRestart" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.GracefulRestart"><code class="xref py py-class docutils literal notranslate"><span class="pre">GracefulRestart</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.logging_options">
+<span class="sig-name descname"><span class="pre">logging_options</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.logging_options" title="Permalink to this definition"></a></dt>
+<dd><p>Logging options for events related to the BGP neighbor or group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_50682c96e610ede800790d6d64a37afc032c9d85.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.LoggingOptions" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.LoggingOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.ebgp_multihop">
+<span class="sig-name descname"><span class="pre">ebgp_multihop</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.ebgp_multihop" title="Permalink to this definition"></a></dt>
+<dd><p>eBGP multi-hop parameters for the BGPgroup</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_f180b72dba3311bd64d596a3061344e66742ad59.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.EbgpMultihop" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.EbgpMultihop"><code class="xref py py-class docutils literal notranslate"><span class="pre">EbgpMultihop</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.route_reflector">
+<span class="sig-name descname"><span class="pre">route_reflector</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.route_reflector" title="Permalink to this definition"></a></dt>
+<dd><p>Route reflector parameters for the BGPgroup</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_4cdf7eedd3e30dd9d64c5be5fd17d82a0ac40a2f.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.RouteReflector" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.RouteReflector"><code class="xref py py-class docutils literal notranslate"><span class="pre">RouteReflector</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.as_path_options">
+<span class="sig-name descname"><span class="pre">as_path_options</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.as_path_options" title="Permalink to this definition"></a></dt>
+<dd><p>AS_PATH manipulation parameters for the BGP neighbor or group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_e5330ec43de7b30bea7b45feabee2523dff1fe16.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.AsPathOptions" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.AsPathOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsPathOptions</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.add_paths">
+<span class="sig-name descname"><span class="pre">add_paths</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.add_paths" title="Permalink to this definition"></a></dt>
+<dd><p>Parameters relating to the advertisement and receipt of multiple paths for a single NLRI (add-paths)</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_d660c1c3980b457fbda9630cbe084310433343b2.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.AddPaths" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.AddPaths"><code class="xref py py-class docutils literal notranslate"><span class="pre">AddPaths</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.use_multiple_paths">
+<span class="sig-name descname"><span class="pre">use_multiple_paths</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.use_multiple_paths" title="Permalink to this definition"></a></dt>
+<dd><p>Parameters related to the use of multiple paths for the same NLRI</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_d36ff55e202abe72318e8da8b89048de4095848f.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.UseMultiplePaths" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.UseMultiplePaths"><code class="xref py py-class docutils literal notranslate"><span class="pre">UseMultiplePaths</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.apply_policy">
+<span class="sig-name descname"><span class="pre">apply_policy</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.apply_policy" title="Permalink to this definition"></a></dt>
+<dd><p>Anchor point for routing policies in the model. Import and export policies are with respect to the local routing table, i.e., export (send) and import (receive), depending on the context</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_fecfd0273356e34bee2827db1706000d75f2475e.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.ApplyPolicy" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.ApplyPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplyPolicy</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.afi_safis">
+<span class="sig-name descname"><span class="pre">afi_safis</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.afi_safis" title="Permalink to this definition"></a></dt>
+<dd><p>Per-address-family configuration parameters associated with thegroup</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_949ad67a53d318dceb8e0709ef72f663bed6cbee.html#ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.AfiSafis" title="ydk.models.ydktest.openconfig_bgp.Bgp.PeerGroups.PeerGroup.AfiSafis"><code class="xref py py-class docutils literal notranslate"><span class="pre">AfiSafis</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

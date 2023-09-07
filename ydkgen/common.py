@@ -315,11 +315,16 @@ def is_config_prop(prop):
         is_config = prop.stmt.i_config
     return is_config
 
-def get_include_guard_name(name, file_index=-1):
-        if file_index > -1:
-            return '_{0}_{1}_'.format(name.upper(), file_index)
-        else:
-            return '_{0}_'.format(name.upper())
+
+def get_include_guard_name(name, version=None, file_index=-1):
+    name = name.upper()
+    if version:
+        name = f"{name}_{version.upper()}"
+    if file_index > -1:
+        return '_{0}_{1}_'.format(name, file_index)
+    else:
+        return '_{0}_'.format(name)
+
 
 def is_nonid_class_element(element):
     return isinstance(element, atypes.Class) and not element.is_identity()

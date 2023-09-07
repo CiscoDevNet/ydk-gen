@@ -6229,10 +6229,8 @@ namespace Catch {
 
 #include <signal.h>
 
-#ifndef SIGSTKSZ
-  // Patch for Linux distributions that do not define stack size environment variable
-  #define SIGSTKSZ 131072
-#endif
+// YG: OVERWRITING TO AVOID GCC-11 SYNTAX ERROR
+#define SIGSTKSZ 16384
 
 namespace Catch {
 

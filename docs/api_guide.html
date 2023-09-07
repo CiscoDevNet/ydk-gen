@@ -1,77 +1,40 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>API Guide &mdash; YANG Development Kit 0.8.6.4 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Guide &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
     <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="YANG Development Kit 0.8.6.4 documentation" href="index.html"/>
-        <link rel="next" title="YDK API" href="api/class_hierarchy.html"/>
-        <link rel="prev" title="Backward compatibility notes" href="guides/backward_compatibility.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="YDK API" href="api/class_hierarchy.html" />
+    <link rel="prev" title="Backward compatibility notes" href="guides/backward_compatibility.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> YANG Development Kit
-          
-
-          
-            
-            <img src="_static/logo.png" class="logo" />
-          
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
               <div class="version">
-                0.8.6.4
+                0.8.6.5
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -79,15 +42,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-                <ul class="current">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
@@ -97,50 +53,34 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">YANG Development Kit</a>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
- 
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="index.html">Docs</a> &raquo;</li>
-      
-    <li>API Guide</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">API Guide</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
   </ul>
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="api-guide">
-<h1>API Guide<a class="headerlink" href="#api-guide" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="api-guide">
+<h1>API Guide<a class="headerlink" href="#api-guide" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api/class_hierarchy.html">YDK API</a><ul>
@@ -162,7 +102,10 @@
 <li class="toctree-l3"><a class="reference internal" href="api/providers/restconf_provider.html">RESTCONF Service Provider</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api/filters.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/filters.html">Filters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/filters.html#ydk.filters.YFilter"><code class="docutils literal notranslate"><span class="pre">ydk.filters.YFilter</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="api/types.html">Types</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/types.html#yang-built-in-types">YANG built-in types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/types.html#ydk-types">YDK types</a></li>
@@ -171,93 +114,105 @@
 <li class="toctree-l3"><a class="reference internal" href="api/types.html#validation">Validation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/errors.html">Errors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YError"><code class="docutils literal notranslate"><span class="pre">YError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YCoreError"><code class="docutils literal notranslate"><span class="pre">YCoreError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YCodecError"><code class="docutils literal notranslate"><span class="pre">YCodecError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YModelError"><code class="docutils literal notranslate"><span class="pre">YModelError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YServiceProviderError"><code class="docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YClientError"><code class="docutils literal notranslate"><span class="pre">YClientError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YIllegalStateError"><code class="docutils literal notranslate"><span class="pre">YIllegalStateError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YInvalidArgumentError"><code class="docutils literal notranslate"><span class="pre">YInvalidArgumentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YOperationNotSupportedError"><code class="docutils literal notranslate"><span class="pre">YOperationNotSupportedError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/errors.html#ydk.errors.YServiceError"><code class="docutils literal notranslate"><span class="pre">YServiceError</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/path/path.html">YDK Path API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/path/annotation.html">Annotation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/capability.html">Capability</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/codec.html">Codec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/data_node.html">DataNode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/repository.html">Repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/root_schema_node.html">RootSchemaNode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/rpc.html">Rpc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/schema_node.html">SchemaNode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/statement.html">Statement</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/netconf_session.html">NetconfSession</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/restconf_session.html">RestconfSession</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/path/gnmi_session.html">gNMISession</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/annotation.html">Annotation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/annotation.html#ydk.path.Annotation"><code class="docutils literal notranslate"><span class="pre">Annotation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/capability.html">Capability</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/capability.html#ydk.path.Capability"><code class="docutils literal notranslate"><span class="pre">Capability</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/codec.html">Codec</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/codec.html#ydk.path.Codec"><code class="docutils literal notranslate"><span class="pre">Codec</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/data_node.html">DataNode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/data_node.html#ydk.path.DataNode"><code class="docutils literal notranslate"><span class="pre">DataNode</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/repository.html">Repository</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/repository.html#ydk.path.Repository"><code class="docutils literal notranslate"><span class="pre">Repository</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/root_schema_node.html">RootSchemaNode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/root_schema_node.html#ydk.path.RootSchemaNode"><code class="docutils literal notranslate"><span class="pre">RootSchemaNode</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/rpc.html">Rpc</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/rpc.html#ydk.path.Rpc"><code class="docutils literal notranslate"><span class="pre">Rpc</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/schema_node.html">SchemaNode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/schema_node.html#ydk.path.SchemaNode"><code class="docutils literal notranslate"><span class="pre">SchemaNode</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/statement.html">Statement</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/statement.html#ydk.path.Statement"><code class="docutils literal notranslate"><span class="pre">Statement</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/netconf_session.html">NetconfSession</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/netconf_session.html#ydk.path.NetconfSession"><code class="docutils literal notranslate"><span class="pre">NetconfSession</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/restconf_session.html">RestconfSession</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/restconf_session.html#ydk.path.RestconfSession"><code class="docutils literal notranslate"><span class="pre">RestconfSession</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/path/gnmi_session.html">gNMISession</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/path/gnmi_session.html#ydk.gnmi.path.gNMISession"><code class="docutils literal notranslate"><span class="pre">gNMISession</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
+</section>
 
 
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="api/class_hierarchy.html" class="btn btn-neutral float-right" title="YDK API" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="guides/backward_compatibility.html" class="btn btn-neutral" title="Backward compatibility notes" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guides/backward_compatibility.html" class="btn btn-neutral float-left" title="Backward compatibility notes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api/class_hierarchy.html" class="btn btn-neutral float-right" title="YDK API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-
-    </p>
+    <p></p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.6.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  false
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

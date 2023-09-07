@@ -46,6 +46,7 @@ class CodecServiceProvider(object):
     def __init__(self, **kwargs):
         self.logger = logging.getLogger(__name__)
         self._root_schema_table = {}
+        self.bundle_name = None
 
         repo = kwargs.get('repo', None)
         if repo is None:
@@ -79,6 +80,7 @@ class CodecServiceProvider(object):
         self.logger.log(_TRACE_LEVEL_NUM, "Creating repo in path {}".format(models_path))
         repo = _Repository(models_path)
         self._initialize_root_schema(bundle_name, repo)
+        self.bundle_name = bundle_name
 
     def get_root_schema(self, bundle_name):
         """Return root_schema for bundle_name.
@@ -89,11 +91,11 @@ class CodecServiceProvider(object):
         if self._user_provided_repo:
             return self._root_schema_table[_USER_PROVIDED_REPO]
 
-        if bundle_name not in self._root_schema_table:
-            self.logger.error("Root schema not created")
-            raise YServiceProviderError(error_msg="Root schema not created")
+        if bundle_name in self._root_schema_table:
+            return self._root_schema_table[bundle_name]
 
-        return self._root_schema_table[bundle_name]
+        self.logger.debug("Root schema yet to be initialized")
+        return None
 
     def _initialize_root_schema(self, bundle_name, repo, user_provided_repo=False):
         """Update root schema table entry.

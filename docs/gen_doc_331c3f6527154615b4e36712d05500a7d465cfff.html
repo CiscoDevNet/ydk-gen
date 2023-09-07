@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iso88025Dtr &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Iso88025Fiber" href="gen_doc_c7f463a52c8c3c7da6d7720963432c6051d7edb4.html" />
+    <link rel="prev" title="Iso88025CRFPInt" href="gen_doc_616a81dab06a8b10fe39096dd7ddbfe7619636f1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> YANG Development Kit
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.8.6.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gen_doc_288ad19384888df2af43ab22b42e4b12a972b5ab.html">iana_if_type</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_caa6da61d992230aa70fee89535c3629a18b7622.html">A12MppSwitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_19f0f27b41dee8df1d93379213608e1561223bee.html">Aal2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_766c5b034bba62de83632be13b68c3dd33853667.html">Aal5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_597804466f86739f92ac29f8a711771271d76a4c.html">ActelisMetaLOOP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2332533a44999a3f45c3fc40c65782777a58597f.html">Adsl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_500bc61dd88f6125b527fe808b90e4fb91d6b90d.html">Adsl2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4051874e0e78192b8ece13eb97e27c2978270caf.html">Adsl2plus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_34cf7b9fff1919f383e9dbd6d41ce606affd4986.html">Aflane8023</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_73a9ba06beed4f3fe88893ca258395909f05ef22.html">Aflane8025</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d64f8b8bd94f7978bbdd6f8d47a8fe788c6dad04.html">AluELP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3551e8cc1f91656b4e95bc97449946bbe223e9b4.html">AluEpon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_19381a889d59d9d057c2773868adfe9d1d1ee8be.html">AluEponLogicalLink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f75e2fec8a522432d06e97e71c144e250bdfcefa.html">AluEponOnu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d5ddd2032585a30a7a153adf706c5ca6d2b26c47.html">AluEponPhysicalUni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b92e7e9638c8939b813d843c7d762f66c44c3562.html">AluGponOnu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8197a99fc63b6ef1594d313878c2660968590da6.html">AluGponPhysicalUni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c2dbaac1f06cc2d4bce4fc57bbde7f097e2ba23e.html">Arap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_cbeb7dc485beaa24a2866a1f50a40edf249afe4e.html">Arcnet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bcdcbb51113f1d3d08f8bc0543e2fe00c0bdbcf0.html">ArcnetPlus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e8ed05f343bb9dcbcab8d1bb48d2dfbd31192e7c.html">Async</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f7e44a2e356504ac0731f21f3a324a9b01d70c91.html">Atm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0d9d1da9e1737d5b25d768625d67ba9be181ad7e.html">AtmDxi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8f809fa93a6fda4a5abb0aa4bde175486418c7e5.html">AtmFuni</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_22e385ad09f1230cccf69bd2992e537fb0a11f20.html">AtmIma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ddcfa4f34e64dd87426f335bf760a2b8fc8bb116.html">AtmLogical</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_584c269493ce0948fb00f235863164a2bc9334eb.html">AtmRadio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_837d1fce9bebc473efadc4f5fe0ea63f072ae874.html">AtmSubInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5982b5ca9caae57135b9079fd46540da9c93d246.html">AtmVciEndPt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7a2f6b20f4b97334c5acd9be1d97669c2fd54532.html">AtmVirtual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_46effe64b7a55dd0f501ad7f854acf65a2f18507.html">Atmbond</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a990a7f695f55bd3bc69640d145e365494191549.html">AviciOpticalEther</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_dccf972270947a0eb6f72ee4df792c5b6928e433.html">BasicISDN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_366d6d404a642c9d4584ff924339fb85cc6a4c06.html">Bgppolicyaccounting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_55d4e30f28c7e44c1d7a7f6f878002d35b26451a.html">Bits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d660fc859de352d9951fef0093f5d3e4cb7c57ad.html">Bridge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fa9319d9a24a48c6fca75a39cb804c5965d462cc.html">Bsc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5cbd8c603addf9ff61fe050528af183c19f91044.html">CableDownstreamRfPort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9507e13b3ec3da9fa5b250c724de8e319afce572.html">CapwapDot11Bss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_196e2bdd3f2aed0ad2a5b9d0ec6656fff0297a7e.html">CapwapDot11Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fd7471be9bf588285a8a1ebca49b663273dd4a29.html">CapwapWtpVirtualRadio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7a3d48f07593d90031794e4cb79fa85d5dda5ef9.html">CblVectaStar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bd8850c7567c11c2ea84fc397eeb28d30216a43e.html">CctEmul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5ddfaa2077f9479773ebb8346bd783b810bf95de.html">Ces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8fa57c1c57e73c2d8c9a3391ee1b74ce0fc42c64.html">Channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_148c2fc6f22f803ead2515ccdf6632edfd537bc8.html">CiscoISLvlan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_dd1278207c9b6003b1852c99c2d737dc3683a803.html">Cnr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7d1747ed5777c315daaf4bc2a01040ae2895f289.html">Coffee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_60c81ee64152e716e40ea29d8f6a591923272697.html">CompositeLink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_96fcfe706793c21070786bec0ebf300f6bf1a7a1.html">Dcn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_cf30660ac8b61746cee390d26adb243991acac6b.html">DdnX25</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_eaac0fe2c6391ca12194591245c6fa2ef8f16c4e.html">DigitalPowerline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2ff229f6ed424a30b629aef6e9666ea76b6fc4c7.html">DigitalWrapperOverheadChannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_354405fbf38a87ff550a9e3bb79d42ae8683fc0a.html">Dlsw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b9c50b29f38dd9c4605b121f81fdfef271481444.html">DocsCableDownstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d554dafab1c660c4230da0ddbe9d43e219f140a6.html">DocsCableMCmtsDownstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b6420008f243b9b2ae32b1cd81d7f00c3067e605.html">DocsCableMaclayer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ffd3402da67538d51ff701446e31c4462340ee8b.html">DocsCableUpstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c613fa91927835b708c88ba4e0b65b6eeefd96b6.html">DocsCableUpstreamChannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b72b22a554e6adb19c94f0349070179c9d6e2837.html">DocsCableUpstreamRfPort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3c4c19ced30b1fb066113794684f0b8abe589631.html">Ds0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6dd36258de94472d27fb19681847b59096020a03.html">Ds0Bundle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c7a0869e86601ada6876bec1abd7b0ef88f4a010.html">Ds1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f038ac3f61757589d1ba5e900a54964917877409.html">Ds1FDL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_06a64ebc88f1cb889d796b30e4ff87aa2b5ee257.html">Ds3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b4bf40b75db52ce02848f5946a48784946c82b06.html">Dtm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e9e5e8c3d5a6e5cf5a30b623047f2c922d23d2f2.html">DvbAsiIn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0be56687e219da55bfda6760347c2535a8db5f1f.html">DvbAsiOut</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ed8ed06bf4fb2ff7e089157c123743192bab814e.html">DvbRccDownstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6cb80eada2966b6e39045d76fa0400701db532c2.html">DvbRccMacLayer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_eeffa0ace0e0740f449e45247b1ab3903b5dc292.html">DvbRccUpstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c3f63a32174d60543d969950cdc36b0e7e764756.html">DvbRcsMacLayer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5acb4f762a116fe023cc4d34de18b7d25231c59b.html">DvbRcsTdma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4029acd804f4c25765e264eb52eb8d74dcd78a3e.html">DvbTdm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8f8b7ddef37d152b72248dbb0d6a0d17415e2af1.html">E1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e92250a689827fa06431b3c2e2aac07a3746e554.html">Econet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d00d1e93fb8e3b826965386acf93d9825f984b36.html">Eon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_554843f11f963b995d1432edbcb09ceb3139cbea.html">Eplrs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8d70e5f80438eee03da652efa3be074103503cae.html">Escon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_38d096c96b503c6b1e1f5e11c92b0722ce7c38d2.html">Ethernet3Mbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c89fc271b58f5eb3b2410cc187da4c313449561e.html">EthernetCsmacd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6f97af3174936e82e753a184d4392a75e56b9df4.html">Fast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bcc52b4609f649b4724ba2ca04b85312ccf3e07e.html">FastEther</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7db8d599ecea653c4f47ebe50d01068f2306e3f6.html">FastEtherFX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6383cddfb0c66f81d0259c8c6330ef52f7bd4aed.html">FcipLink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_eb2647386a4e132970dd838a5a329bb44795e447.html">Fddi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1ef502f0a409b5f6585d5229759df6a324f843b2.html">FibreChannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9793ea1f9303bf731c09c69f274e2d21e194dbec.html">FrDlciEndPt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7b96287433c561136686fcc4d2c2df015c9e9609.html">FrForward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_262977feb6dbe3fa1c16d84e648d9eb574d42cdb.html">FrameRelay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9605b7d67f418a11a6a334212b96565c1ceb333a.html">FrameRelayInterconnect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b929d8c18a7d852171b0deef7fea31625aefbbd2.html">FrameRelayMPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c0cdf7318b43d3dae5f90c72f6d18287f5e13e64.html">FrameRelayService</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7f1cdb763f9dd2432f7731a7a6c74f4448b4764b.html">Frf16MfrBundle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a07313b04c6fd42489ccd25fddfcdcb63871d950.html">G703at2mb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_81999aac9f8d9db40555857751f261f64f2dc8ef.html">G703at64k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c281d61f3b8e50e34792a84721d5eb7b0224332c.html">G9981</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_55110c122181e234656849e554df2591212f82e0.html">G9982</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b639cf6b6532478416d5932588d28111cad179c0.html">G9983</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_37b88cb8cc2c1e7832e7472968d7336b3e9f9ff8.html">Gfp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9423aa8ecb0544b1f34a565319ef1c3ffe7348ec.html">GigabitEthernet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ab2c32e966331459fe18ce205547c37b23539d1d.html">Gpon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1a318783d1ad53a59880eb22c76e9d06261e1f2c.html">Gr303IDT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f300f1371fe7b77e16b47ef6c4837357fcbd2ac7.html">Gr303RDT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_20e5cec4ef2b11a3590dc7a046856ad25fea678e.html">Gtp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_03a862ff5db54ad51b2f4cb8134cd8dd094360e5.html">H323Gatekeeper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bec7ad3b85bc67e55c7425a5f249d3403a2efb78.html">H323Proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8b4d5f2cff670716374aebd9b083526a1a303361.html">Hdh1822</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_11e7640e2d5827b18b877ef4395c396536f06921.html">Hdlc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4adf054b46f0961a7acea265c8be137162904b1b.html">Hdsl2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3d9731948a546137a1f87823c0a4bbd669c44aae.html">Hiperlan2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f1965a081107fe15827f7f7b3d684862092093dd.html">Hippi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e655558b2941c9694e39760c8f4e90b33c35de9c.html">HippiInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ad70787bd322bf23fb8b7b491db206bdc8abafc7.html">Homepna</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b4505b8190119f69bdeecf16113ccddcf43b7a4e.html">HostPad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_70322e2a635ced05b1acca1852ac188d102f130f.html">Hssi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c82fd1713330d88817c457e8b25369b2dfb934b7.html">Hyperchannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_78298b8fb477122a446fb1e76562d07782695549.html">IanaInterfaceType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_78edfb7cf32aab987a485bdd5d5d7a9302760322.html">Ibm370parChan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0d9799f409540675c0f5eecdbd63f042c637a2c8.html">Idsl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_856e6073596a2956d79c4ab062e7e612c3f2bcb4.html">Ieee1394</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_775eabb2cf80fffe47a59edec1a7ac3c65f53bd4.html">Ieee80211</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_683ade6128902bfcd9d6d10ddcd5a18e441ed5b9.html">Ieee80212</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_380596b4663884017f184ea4d14d0417701ce31a.html">Ieee802154</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e3aed586d2b8eebe42d77304bc43e5299f232e38.html">Ieee80216WMAN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_df67692d46a96aa4fcbd7bc3dd7cca570e76dbe8.html">Ieee8023adLag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8d1e8c009f3f9886b7f6dbe982e9d55fc9194bfb.html">IfGsn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_56361f79d13fd27933f62ddc87eb14ab4127f96e.html">IfPwType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_92be24d585b0126f082a7ebbb848f3d7d5c2d463.html">IfVfiType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0ef1658b1274a01036b5660508c89d9db9c99c9e.html">Ilan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1af17543b49626f66068190630e499db5336a57a.html">Imt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_110710b89e82e47f5ea349905794d616f51b608e.html">Infiniband</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_771186d69f5f81502c579978648686b9d9507bd4.html">Interleave</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_88b6bf54f4d2d165532d55687df8bbbda07f4eb7.html">Ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_66082588b97f8fdb7f2f312e4c6050d657726507.html">IpForward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9e4204bb4e01420c7f398f7b71c46d3007818024.html">IpOverAtm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2c4310bc7d0f3464fc054e36182b1d04d3f775a3.html">IpOverCdlc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_682a6ff16331281bd951a239eb19fce6be2dbba4.html">IpOverClaw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5c0fc1f041ac2201def991a625d312ffe79036c1.html">IpSwitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_df09a73ad07634c5f2e204364cc795d08fba0829.html">Isdn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_318bed9a5921984c96788cf58adb68031d4d08e8.html">Isdns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a4270d08ff308abf48545e48fad8542e65bf7df9.html">Isdnu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_08d11d3be5398362c44ef24e4fbf7fa255a4310d.html">Iso88022llc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c43070a62847172bc5f2c1c535633a2f9506e20b.html">Iso88023Csmacd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8226ac1b297072121fb37356800815979abc3e0c.html">Iso88024TokenBus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_616a81dab06a8b10fe39096dd7ddbfe7619636f1.html">Iso88025CRFPInt</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Iso88025Dtr</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ydk.models.ydktest.iana_if_type.Iso88025Dtr"><code class="docutils literal notranslate"><span class="pre">Iso88025Dtr</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c7f463a52c8c3c7da6d7720963432c6051d7edb4.html">Iso88025Fiber</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_12a332731aa75831672908efea28b97158442ed0.html">Iso88025TokenRing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b6fbd62a0565d00331408d5d51c60146b8b94b62.html">Iso88026Man</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_98a3824f46994a89106f1d98df04364f2fdb6900.html">Isup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f874c84b57cee395c6801ff514c60205926e1da0.html">L2vlan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e3ffca6c9a25bb32722f41f3794a8c52c463af04.html">L3ipvlan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_25270b5638665e05b3147e47ca1d9c00b4e7d402.html">L3ipxvlan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_92daa9587e7dc20248e3cfa4c2d911c2925550fc.html">Lapb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_01152b4c91536d659a3579cd8810179819822b56.html">Lapd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b0c5fe706c0c192725680a08ad199aede4dc8211.html">Lapf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a0c51e28a22be2af1e5cbf6bb4c4a0354c133a1f.html">Linegroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c47144fbfe4d0ce97a36e74b1cf1262e84e63b8c.html">Lmp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e85d29ab4e17b1c8250ed268aa4a3670fa868363.html">LocalTalk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_82a442db70422e314fa9c68aa1fa974c90fddac8.html">MacSecControlledIF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_582635af9000b2b835f20b7148df5520c1874b0c.html">MacSecUncontrolledIF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0811713cbd2d45e8f39cc61dde9256051f128ad0.html">MediaMailOverIp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2d2f0ffe42f9c195fe8f25df936a4643276d206a.html">MfSigLink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_849ddabd5ae6d6090d1d0869c0a38e2d49aab603.html">Miox25</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_cb509424929ffb9f122c2c401378c9965ce21d59.html">MocaVersion1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3c771a976847922bf1be6839cf0467b2921d6a30.html">Modem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9059dc5fe1e2c5bcd7738eab26983961220a6060.html">Mpc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_984d31be66a7399e8a108a1c37588bdfdca84c81.html">MpegTransport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f0d1892d0c0a1de6e6f6a90f88f96cd8c0a38c52.html">Mpls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_67d007757c7dba5b0439576533630790d98ccdf7.html">MplsTunnel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_986f4eb73df7188ade9613ba2c8a422c915cd59b.html">Msdsl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_dbeb65a659abace4aca7943f66c1a6376b6aa89e.html">Mvl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6b249199c59f419a440468a654602ba5ba9566a2.html">Myrinet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f98070f6bce109e604445e7b55a38f60b14f65cd.html">Nfas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fc9d1ad1859ebab6ed7227b9497cf7642a63a341.html">Nsip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b3d8fe7ce5a07fc9e9fa691d9d1c522456419a9d.html">OpticalChannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_cb3fa19ed4f6ef7c89d65a493b2866f30f0cb798.html">OpticalChannelGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_de70e607233e406fe2ef4eec95be4cb81b115da2.html">OpticalTransport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_09c6a4b1b55c9b635619996b55fc387e8c944f8d.html">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_82572acfb3b56fa64f38934db04ba366d0311fad.html">OtnOdu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_526a48920ce2b8c5341191218c404191680ec320.html">OtnOtu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5951026571ae51e5e37b672311e6b1c1c94cab33.html">Para</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0b143d368a215362ebe3fbdb0c0487574c45655a.html">PdnEtherLoop1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9f79e6c9d6d338da4e61efa0077987d67f9dc15c.html">PdnEtherLoop2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4f719d1e77e6785f4f470c4031bf1f3f8a992cb9.html">Pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_493d6d49ca33f5ee7adaf711143b02f59479dff7.html">Plc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a7197e71cf0fbe12af015de7e0bd481c09610b5d.html">Pon155</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9fc0e3892767a73d334eee1955cf6e4db1030a50.html">Pon622</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f9e234a2ed1c61b31f8e7b4fa2a23fc6d54a24d8.html">Pos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_284238968ed63730f45c89b14d592e0e50b3cb4a.html">Ppp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_271d8756cba34f94774fc94044510fe3b883922b.html">PppMultilinkBundle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f3f75dc05fb5d57ab6fb305b0be7d2112b5a6541.html">PrimaryISDN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fe52f3fb5b6147f54a1a660d58a651a603ae4319.html">PropAtm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5d7c356806b67c6595506a41f4c0bcb11c1b3135.html">PropBWAp2Mp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_810001df25aae15bd41475f65fb92dd1ef7f4d45.html">PropCnls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_71360168d8566e64e7fe97017274851d2c424305.html">PropDocsWirelessDownstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e88895b6459ec7a47201c0d04d3f0bdb9237f7ba.html">PropDocsWirelessMaclayer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c54a2762c1b715285ea31c8c03ad87cedb064505.html">PropDocsWirelessUpstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_34466ce00ec4dd6aebdd3461951a1dadce0c71fe.html">PropMultiplexor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c7657dd52b301eced3f4f389ddec32c566900932.html">PropPointToPointSerial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8e28d4e90f169b1fb39c01a95aab909a28f90a89.html">PropVirtual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_66eba4341113b0167b81d02f2b02ab4b65f0bcf2.html">PropWirelessP2P</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1e19c35f92130f6ad7b8550480f4044b3113eb63.html">Proteon10Mbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f1f05f6dda9a0facb343abb26c0206a7f53ae063.html">Proteon80Mbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f2fd053f124453e3aac3b68b6211db81de846c5e.html">Q2931</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3ee0232dec4eb685f687419b248c2ab44cee4597.html">Qam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e43b21975e97c2facad2ede886fd6908019fd1cc.html">Qllc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_65dc1ed448e0ada95fc0f86f648a544d7bd06d2a.html">RadioMAC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6c1c2eae79bf7248d4129b7136eb7f808136981c.html">Radsl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_986aa2220fe219cb96dced86a8d6345ccc594e46.html">ReachDSL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_39e957f76ba0a58023b72c40a14bccf36d8df7fb.html">Regular1822</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4eee2c47bc0174c3f3416815eb06a50e0d07c980.html">Rfc1483</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4a4d6652ace029217f01eedb23f62cbe07bb4434.html">Rfc877x25</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f4764b80fc606f462e1a1d1061682344cb55f7df.html">Rpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_595a55c498d590bf451c7e6fb538302f72ecf91a.html">Rs232</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fadfe1f84e310d6080f235b3449c9eccaca597c7.html">Rsrb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_819a660954fa8786c6217d73d7be9a177e281bd1.html">Sdlc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c476b3d23103c83c0b6d23a9dd4bc295beb1f804.html">Sdsl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bd524425d4266309aeb0f147234d9a26547d90e1.html">Shdsl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_87a20b87d1e6c542beefd65b5266f6f9ae9ecaaa.html">Sip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_213cd551364bc885bbfde1c7fb0b61e527103074.html">SipSig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3ca364dab2888b9ca465c03384e6942d60263dc6.html">SipTg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_99f6eabd17da8af96ee40a808d01812c89ec126d.html">SixToFour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1d9e43309946355a753a3255edbe37d8e5dc22a6.html">Slip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1b6030e340909395133bd80a2bb19c757f73a3ff.html">SmdsDxi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_89d1fb20aed2f944b78186fd426d6220505d2aca.html">SmdsIcip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6990c1e23214de6058f248a4c6f2a4b06a92b79f.html">SoftwareLoopback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8b388489695ec882d0336758bc0bc6bcf6c82207.html">Sonet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_83163e5d1bfb96756c17bcf264b74d50009dba74.html">SonetOverheadChannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_02cf18951ed8b4a06852393890b80987deb1ed45.html">SonetPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3bb8cfd57f676bd3d108cfe17a8f9b22d085e0f8.html">SonetVT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f9bcdb5715fb4274d5701aaec43627ca9a63dea2.html">Srp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_684767ffe40c0f93766b5d612ac5bc3a6c703ab1.html">Ss7SigLink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_643b1c86f49b122772f8359a7ebe5d695c538a02.html">StackToStack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bcac4fd906d51be52bb4b5fc5f34e46803a8cf9d.html">StarLan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e152ae7d9a3a52c581f2b63198cbf80220547270.html">Tdlc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c95bc7556e4e5b5dcc62472ebad903af48030e5f.html">TeLink</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_332ae406b82dd7cf0b1c2e6626991a406753f6a8.html">TermPad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2ee0e2d0806296e12decb790223ef32814359898.html">Tr008</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b7445b7047638140b954e5f567a738e342e8c2ee.html">TranspHdlc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fbe5bbdbee12a37b4e3d253324d63ed6fad70452.html">Tunnel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8d3193fe144777c079d6894de43f9e1fe95f7c2f.html">Ultra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9391fc103e6701f98bd846ea9d3802dce77cfbbe.html">Usb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_91b1ba1059df4206c09afaada410cb60e2c212db.html">V11</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_695a987f1463ebe7ce413e50ece72719278a6c6d.html">V35</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_eac2c4c1eb44047e2578eac16c11de6387f5ddcf.html">V36</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_364b185c8e5a222e177767f8db2938f7516b1974.html">V37</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c4158aeca7c83c3fcb831326c1e1638adf1ba67b.html">Vdsl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c1d5ee8c9553b9678b8f857f3dcccbf71dab9255.html">Vdsl2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8e6528cd7b97c5bd0d4d4e4f54ed67347b48426c.html">VirtualIpAddress</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_57dcbf7b83a99ff774c0f17fe6da98f2e1acddb5.html">VirtualTg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_dc1bfa7916e2e03121e5579563698b3282200aab.html">VmwareNicTeam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a01cca4b7555aef081256edfbd1b30fbfe5a2c42.html">VmwareVirtualNic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1bce5eccf90b6a0e35ef1c3605c61adbecd71593.html">VoiceDID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_887fcc0d3239132a2deaa665eaf719c6a2548606.html">VoiceEBS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bb615559d7cc64b6e38f266768c4a9f5d836c4ab.html">VoiceEM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4c79b7478652b661c3e5f3558d19f8978273859f.html">VoiceEMFGD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d7ca2a65903d83bf3b43798e56a5d5cffbe3d51c.html">VoiceEncap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_58f1a131330acae57abe27d3160b64db5a0c6bd6.html">VoiceFGDEANA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a5db045b3e8f33178d31459d59846b59163b1fa2.html">VoiceFGDOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b005162e460b27b8596c606225376cc8721df1ac.html">VoiceFXO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d5d38cb87519deb0a04baac8ef34212d10685eb4.html">VoiceFXS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ce3df8afc9f58e30d61ae5697e1b70420c21cded.html">VoiceOverAtm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_eafcb07f3abb8f00ec3c353829cccac4ce3419d3.html">VoiceOverCable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f9f561d3857ea063d3df274402758d5bafabb553.html">VoiceOverFrameRelay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d96990c425e086015f43d9c490fada0554dd0f4a.html">VoiceOverIp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_aa7d3d4189dc4f52df71246c25abb039d52322bc.html">WwanPP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e61d0592bbacd936b79f6f979243905511531e82.html">WwanPP2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7a3851cc86cf572f3e5229a050af3c7ec5fea8e4.html">X213</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_31541df262eb996906196772aa3fcc76a78bc876.html">X25huntGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d3d8da14b4efd395cc39a429e56db08152e04b8f.html">X25mlp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b8b88bcf0167a53571f8f4740738a4d57da9e026.html">X25ple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_61919ba7b6e78c339b9226d5d76822d9423cc1c3.html">X86Laps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_6f34c13b0ec33426031aaa29112b1eee4e5d4538.html">ietf_aug_base_1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_8d8688e6f8bfacb4b2249e3b11f355a457d49c93.html">ietf_aug_base_2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_de2b066dcae3b89cc0939acda503153e9ca7a98f.html">ietf_inet_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_98e926e1f8ba72a08a0992c52dca0ea227d81a0f.html">ietf_interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_aa6af1caabe6be9ed306ba4c935a150d9f590d5c.html">ietf_netconf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_8dfa40abff9043a59a88fc9540e9b56b0781d23a.html">ietf_netconf_acm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_fee1eaf5d2f60cf31af6b307c16a243f75504384.html">ietf_netconf_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_a631ea7ccc9509c7017aeac2fccb452fc3477e4c.html">ietf_netconf_with_defaults</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_4969e66bd13c69af2a9df2719e01bca4bfabffcb.html">ietf_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_6c1a7be7f1cba54a0ecdc2daae647209babc80f2.html">main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_499d3c0d5bf889f4614f3c8b356186879b05bc1f.html">oc_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_3ef4f57f820c9ed151166585d46b6b93c935c865.html">openconfig_bgp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_5df93a4f2ad0861a8b053d23318bfcd3715a046b.html">openconfig_bgp_policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_34f7dd53d51846eedf301eabe932aa31959c4e17.html">openconfig_bgp_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_61445652594ec075538ac77d428d36484be5563d.html">openconfig_if_ethernet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_d1eb05119bb4a9940b37ad0b79a6d9c95e6b2239.html">openconfig_interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_3c422767e32176068e70de9136854682a4501fb5.html">openconfig_platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_34dceffc4b1f22b5cab7d92f22f9dbc9f0f616a4.html">openconfig_platform_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_dc7e1c9c1bc6aa1a59104ae4c577e1011e152e72.html">openconfig_policy_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_2ee0743cad7f489609ec648ff907aece551baa61.html">openconfig_routing_policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_ba143e5b585861115de872b53a0d883607f487ee.html">openconfig_terminal_device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_08d99c582b00e49d7f9faa483613e29d324945c4.html">openconfig_transport_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_d7923e9f85956eac8f8764c111fa8273c8cfa9c1.html">openconfig_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_9636180ec39ddcad52425694c5485386da88f0db.html">ydktest_aug_ietf_5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_b89f2a0dc0185d0ce016dbcf18d0ff0ce56a2ab6.html">ydktest_filterread</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_f9ce93fc14be0e9fdea22f250b8f8e8a889be8b7.html">ydktest_sanity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_61df6284a9f4af6e19568c06490f8bdf39b2de1c.html">ydktest_sanity_typedefs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_1c96cfed7c3b4fba6d4d5d9d867c422514d4ba28.html">ydktest_sanity_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_a7214a5d8d620d682b13222af80d4ff6e202e553.html">ydktest_types</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="ydk.models.ydktest.html">ydktest bundle API</a></li>
+          <li class="breadcrumb-item"><a href="gen_doc_288ad19384888df2af43ab22b42e4b12a972b5ab.html">iana_if_type module</a></li>
+      <li class="breadcrumb-item active">Iso88025Dtr</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="iso88025dtr">
+<h1>Iso88025Dtr<a class="headerlink" href="#iso88025dtr" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.models.ydktest.iana_if_type.Iso88025Dtr">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.models.ydktest.iana_if_type.</span></span><span class="sig-name descname"><span class="pre">Iso88025Dtr</span></span><a class="headerlink" href="#ydk.models.ydktest.iana_if_type.Iso88025Dtr" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="api/types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>, <a class="reference internal" href="api/types.html#ydk.types.Identity" title="ydk.types.Identity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identity</span></code></a>,  <a class="reference internal" href="gen_doc_78298b8fb477122a446fb1e76562d07782695549.html#ydk.models.ydktest.iana_if_type.IanaInterfaceType" title="ydk.models.ydktest.iana_if_type.IanaInterfaceType"><code class="xref py py-class docutils literal notranslate"><span class="pre">IanaInterfaceType</span></code></a></p>
+<p>This class represents configuration data.</p>
+<p>ISO 802.5r DTR.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gen_doc_616a81dab06a8b10fe39096dd7ddbfe7619636f1.html" class="btn btn-neutral float-left" title="Iso88025CRFPInt" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gen_doc_c7f463a52c8c3c7da6d7720963432c6051d7edb4.html" class="btn btn-neutral float-right" title="Iso88025Fiber" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -116,6 +116,9 @@ function cpp_sanity_ydktest_test {
     run_cmd $script_dir/init_test_env.sh
 
     print_msg "Running cpp bundle tests"
+    # Need to touch the restcom server for the first time;
+    # expected to fail, but main test should pass
+    ./ydk_bundle_test c_api_provider_withpath
     run_cmd ./ydk_bundle_test -d yes
 }
 

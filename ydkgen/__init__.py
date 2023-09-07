@@ -212,7 +212,7 @@ class YdkGenerator(object):
         modules = pyang_builder.parse_and_return_modules()
 
         # build api model packages
-        packages = ApiModelBuilder(self.iskeyword, self.language, bundle.name).generate(modules)
+        packages = ApiModelBuilder(self.iskeyword, self.language, bundle.name, bundle.version).generate(modules)
         packages.extend(
             SubModuleBuilder().generate(pyang_builder.get_submodules(), self.iskeyword, self.language, bundle.name))
 

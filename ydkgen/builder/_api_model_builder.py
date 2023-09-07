@@ -34,11 +34,12 @@ from ydkgen.api_model import AnyXml, Enum, Class, Bits, Package, Property, Devia
 
 
 class ApiModelBuilder(object):
-    def __init__(self, iskeyword, language, bundle_name):
+    def __init__(self, iskeyword, language, bundle_name, bundle_version):
         self.types_extractor = TypesExtractor()
         self.iskeyword = iskeyword
         self.language = language
         self.bundle_name = bundle_name
+        self.bundle_version = bundle_version
 
     def generate(self, modules):
         """
@@ -62,6 +63,7 @@ class ApiModelBuilder(object):
             package = Package(self.iskeyword)
             module.i_package = package
             package.stmt = module
+            package.bundle_version = str(self.bundle_version).replace('.', '')
 
             if self.language == 'go':
                 package.name = get_go_package_name(package.name, self.bundle_name)
@@ -71,6 +73,7 @@ class ApiModelBuilder(object):
             package = Package(self.iskeyword)
             module.i_package = package
             package.stmt = module
+            package.bundle_version = str(self.bundle_version).replace('.', '')
 
             if self.language == 'go':
                 package.name = get_go_package_name(package.name, self.bundle_name)

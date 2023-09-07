@@ -114,23 +114,11 @@ function check_python_installation {
   python3 -V
   status=$?
   if [ $status -ne 0 ]; then
-    print_msg "Python3 is not installed"
-    need_installation=1
+    print_msg "Installing the latest Python3 version"
+    brew install python3
   else
     python_version=$(echo `python3 -V` | awk '{ print $2 }')
     print_msg "Installed Python3 version is $python_version"
-    if [[ $python_version == "3.9."* ]]; then
-      need_installation=1
-    fi
-  fi
-  if [[ -n $need_installation ]]; then
-    print_msg "Installing python3.7"
-    brew install python@3.7
-    export PATH="/usr/local/opt/python@3.7/bin":$PATH
-    echo 'export PATH=/usr/local/opt/python@3.7/bin:$PATH' > ~/.profile.python
-    echo 'if [ -z $CMAKE_LIBRARY_PATH ]; then' >> ~/.profile.python
-    echo '  export CMAKE_LIBRARY_PATH=/usr/local/opt/python@3.7/Frameworks/Python.framework/Versions/3.7/lib' >> ~/.profile.python
-    echo 'fi' >> ~/.profile.python
   fi
   pip3 -V
   status=$?

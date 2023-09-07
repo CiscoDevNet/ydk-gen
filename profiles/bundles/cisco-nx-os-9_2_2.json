@@ -5,7 +5,7 @@
   "author": "Cisco",
   "copyright": "Cisco",
   "description": "YDK bundle for Cisco NX-OS models",
-  "long_description": "This YANG Development Kit (YDK) bundle provides APIs for Cisco NX-OS YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for Cisco NX-OS models uses the YDK core package and additional model bundles.  You can find the SDK documentation at http://ydk.cisco.com/py/docs  You can find more details on YDK at http://ydk.io",
+  "long_description": "This YANG Development Kit (YDK) bundle provides APIs for Cisco NX-OS YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for Cisco NX-OS models uses the YDK core package and additional model bundles.",
   "models": {
     "description": "Each element on the list has details on git repositories to source models from, including commit ids and relative paths inside the repositories. If no commit id is specified, HEAD is taken. This is unwise. The nested dir and file references are interpreted the same way as specific dir and file references above.",
     "git": [

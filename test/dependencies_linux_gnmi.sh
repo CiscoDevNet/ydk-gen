@@ -31,15 +31,15 @@ function print_msg {
 }
 
 function install_protobuf {
-  if [[ ! -d $HOME/protobuf-3.5.0 ]]; then
-    cd $HOME
-    print_msg "Downloading protobuf and protoc"
-    wget https://github.com/google/protobuf/releases/download/v3.5.0/protobuf-cpp-3.5.0.zip > /dev/null
-    unzip protobuf-cpp-3.5.0.zip > /dev/null
-    rm -f protobuf-cpp-3.5.0.zip
-    cd -
-  fi
   if [[ ! -x /usr/local/lib/libprotoc.so.15.0.0 ]]; then
+    if [[ ! -d $HOME/protobuf-3.5.0 ]]; then
+      cd $HOME
+      print_msg "Downloading protobuf and protoc"
+      wget https://github.com/google/protobuf/releases/download/v3.5.0/protobuf-cpp-3.5.0.zip > /dev/null
+      unzip protobuf-cpp-3.5.0.zip > /dev/null
+      rm -f protobuf-cpp-3.5.0.zip
+      cd - > /dev/null
+    fi
     cd $HOME/protobuf-3.5.0
     print_msg "Configuring protobuf and protoc"
     ./configure > /dev/null
@@ -48,23 +48,23 @@ function install_protobuf {
     print_msg "Installing protobuf and protoc"
     $sudo_cmd make install
     $sudo_cmd ldconfig
-    cd -
+    cd - > /dev/null
   fi
 }
 
 function install_grpc {
-  if [[ ! -d $HOME/grpc ]]; then
-    cd $HOME
-    print_msg "Downloading grpc"
-    git clone -b v1.9.1 https://github.com/grpc/grpc
-    cd grpc
-    git submodule update --init
-    # Correcting source code, which fails in focal with gcc-7.5.0
-    cp $curr_dir/3d_party/grpc/log_linux.cc src/core/lib/gpr/
-    cp $curr_dir/3d_party/grpc/Makefile .
-    cd $curr_dir
-  fi
   if [[ ! -x /usr/local/lib/libgrpc.a ]]; then
+    if [[ ! -d $HOME/grpc ]]; then
+      cd $HOME
+      print_msg "Downloading grpc"
+      git clone -b v1.9.1 https://github.com/grpc/grpc
+      cd grpc
+      git submodule update --init
+      # Correcting source code, which fails in focal with gcc-7 and jammy with gcc-11
+      cp $curr_dir/3d_party/grpc/log_linux.cc src/core/lib/gpr/
+      cp $curr_dir/3d_party/grpc/Makefile .
+      cd $curr_dir
+    fi
     print_msg "Compiling grpc"
     cd $HOME/grpc
     make > /dev/null
@@ -75,7 +75,7 @@ function install_grpc {
     fi
     $sudo_cmd make install
     $sudo_cmd ldconfig
-    cd -
+    cd - > /dev/null
   fi
 }
 
@@ -104,6 +104,7 @@ fi
 
 export CFLAGS="${CFLAGS} -Wno-error"
 export CXXFLAGS="${CXXFLAGS} -Wno-error"
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/local/lib
 
 install_protobuf
 install_grpc

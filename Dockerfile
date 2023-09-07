@@ -1,7 +1,5 @@
 FROM ubuntu:bionic
 
-MAINTAINER http://ydk.io
-
 COPY . /root/ydk-gen
 
 RUN echo 'Installing dependencies'

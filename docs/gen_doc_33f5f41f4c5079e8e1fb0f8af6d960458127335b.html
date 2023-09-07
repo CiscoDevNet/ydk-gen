@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>State &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> YANG Development Kit
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.8.6.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">State</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="state">
+<h1>State<a class="headerlink" href="#state" title="Permalink to this heading"></a></h1>
+<p><strong>Leafs</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.connector_type" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.connector_type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">connector_type</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.date_code" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.date_code"><code class="xref py py-attr docutils literal notranslate"><span class="pre">date_code</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.enabled" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.enabled"><code class="xref py py-attr docutils literal notranslate"><span class="pre">enabled</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.ethernet_compliance_code" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.ethernet_compliance_code"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ethernet_compliance_code</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.fault_condition" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.fault_condition"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fault_condition</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.form_factor" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.form_factor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">form_factor</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.internal_temp" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.internal_temp"><code class="xref py py-attr docutils literal notranslate"><span class="pre">internal_temp</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.otn_compliance_code" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.otn_compliance_code"><code class="xref py py-attr docutils literal notranslate"><span class="pre">otn_compliance_code</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.present" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.present"><code class="xref py py-attr docutils literal notranslate"><span class="pre">present</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.serial_no" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.serial_no"><code class="xref py py-attr docutils literal notranslate"><span class="pre">serial_no</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.sonet_sdh_compliance_code" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.sonet_sdh_compliance_code"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sonet_sdh_compliance_code</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">vendor</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor_part" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor_part"><code class="xref py py-attr docutils literal notranslate"><span class="pre">vendor_part</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor_rev" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor_rev"><code class="xref py py-attr docutils literal notranslate"><span class="pre">vendor_rev</span></code></a></p></li>
+</ul>
+<p><strong>Enum Classes</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gen_doc_b8f13cfeb4c1181e538e4c2e84379a8290023bb0.html">Present</a></li>
+</ul>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Components.Component.Transceiver.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="api/types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a></p>
+<p>Class Hierarchy : <a class="reference internal" href="gen_doc_8125820091dbad4364692ec11ffe435e74840e4d.html#ydk.models.ydktest.openconfig_platform.Components" title="ydk.models.ydktest.openconfig_platform.Components"><code class="xref py py-class docutils literal notranslate"><span class="pre">Components</span></code></a> <a class="reference internal" href="gen_doc_d36a1494bf8f012334e23542a4431134109221c4.html#ydk.models.ydktest.openconfig_platform.Components.Component" title="ydk.models.ydktest.openconfig_platform.Components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> <a class="reference internal" href="gen_doc_25431df106d9903b8e1492edb04576a2d5454d2b.html#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transceiver</span></code></a> <a class="reference internal" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This class represents state data.</p>
+<p>Operational state data for client port transceivers</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.enabled" title="Permalink to this definition"></a></dt>
+<dd><p>Turns power on / off to the transceiver -- provides a means to power on/off the transceiver (in the case of SFP, SFP+, QSFP,…) or enable high-power mode (in the case of CFP, CFP2, CFP4) and is optionally supported (device can choose to always enable).  True = power on / high power, False = powered off</p>
+<p><strong>type</strong>: bool</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.form_factor">
+<span class="sig-name descname"><span class="pre">form_factor</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.form_factor" title="Permalink to this definition"></a></dt>
+<dd><p>Indicates the type of optical transceiver used on this port.  If the client port is built into the device and not plugable, then non-pluggable is the corresponding state. If a device port supports multiple form factors (e.g. QSFP28 and QSFP+, then the value of the transceiver installed shall be reported. If no transceiver is present, then the value of the highest rate form factor shall be reported (QSFP28, for example).  The form factor is included in configuration data to allow pre-configuring a device with the expected type of transceiver ahead of deployment.  The corresponding state leaf should reflect the actual transceiver type plugged into the system</p>
+<p><strong>type</strong>: one of the below values:               <a class="reference internal" href="gen_doc_525d7044aaca68974e4ed97f9a1463c6715060cb.html#ydk.models.ydktest.openconfig_transport_types.CFP" title="ydk.models.ydktest.openconfig_transport_types.CFP"><code class="xref py py-class docutils literal notranslate"><span class="pre">CFP</span></code></a></p>
+<blockquote>
+<div><p><a class="reference internal" href="gen_doc_c309ddad1040fe0df453f557fa2481422c20c48a.html#ydk.models.ydktest.openconfig_transport_types.CFP2" title="ydk.models.ydktest.openconfig_transport_types.CFP2"><code class="xref py py-class docutils literal notranslate"><span class="pre">CFP2</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_13f1db7cac50fbbd8cfeb2e7e0b332b22791b5d4.html#ydk.models.ydktest.openconfig_transport_types.CFP2ACO" title="ydk.models.ydktest.openconfig_transport_types.CFP2ACO"><code class="xref py py-class docutils literal notranslate"><span class="pre">CFP2ACO</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_e07e85a4e100113ed85469ce1808cde4985c39e1.html#ydk.models.ydktest.openconfig_transport_types.CFP4" title="ydk.models.ydktest.openconfig_transport_types.CFP4"><code class="xref py py-class docutils literal notranslate"><span class="pre">CFP4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_45bb37bf85a5163a5158dd87e897399c48ceef39.html#ydk.models.ydktest.openconfig_transport_types.QSFP" title="ydk.models.ydktest.openconfig_transport_types.QSFP"><code class="xref py py-class docutils literal notranslate"><span class="pre">QSFP</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_f9831e496cda0aaceaab08ea601864fc6556dfc9.html#ydk.models.ydktest.openconfig_transport_types.QSFP28" title="ydk.models.ydktest.openconfig_transport_types.QSFP28"><code class="xref py py-class docutils literal notranslate"><span class="pre">QSFP28</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_08b42e9f5d64564eb2f8bc0182e5cd2793385abf.html#ydk.models.ydktest.openconfig_transport_types.SFP" title="ydk.models.ydktest.openconfig_transport_types.SFP"><code class="xref py py-class docutils literal notranslate"><span class="pre">SFP</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_d0c5b89a62ae70178c234e6f4fc1dfe39e9ee561.html#ydk.models.ydktest.openconfig_transport_types.SFPPLUS" title="ydk.models.ydktest.openconfig_transport_types.SFPPLUS"><code class="xref py py-class docutils literal notranslate"><span class="pre">SFPPLUS</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_54206078960997fbbcb6107d6983e3f98cbd9848.html#ydk.models.ydktest.openconfig_transport_types.XFP" title="ydk.models.ydktest.openconfig_transport_types.XFP"><code class="xref py py-class docutils literal notranslate"><span class="pre">XFP</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_054c4d743aedcbe60fa50e48bd96d1fee0da6c30.html#ydk.models.ydktest.openconfig_transport_types.X2" title="ydk.models.ydktest.openconfig_transport_types.X2"><code class="xref py py-class docutils literal notranslate"><span class="pre">X2</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_eaa453a552c49c78b73dff196fd3800f3c0dae8e.html#ydk.models.ydktest.openconfig_transport_types.NONPLUGGABLE" title="ydk.models.ydktest.openconfig_transport_types.NONPLUGGABLE"><code class="xref py py-class docutils literal notranslate"><span class="pre">NONPLUGGABLE</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_dcc46088eaac7e1a980491f7deb1276d7bfc03f3.html#ydk.models.ydktest.openconfig_transport_types.OTHER" title="ydk.models.ydktest.openconfig_transport_types.OTHER"><code class="xref py py-class docutils literal notranslate"><span class="pre">OTHER</span></code></a></p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.present">
+<span class="sig-name descname"><span class="pre">present</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.present" title="Permalink to this definition"></a></dt>
+<dd><p>Indicates whether a transceiver is present in the specified client port</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_b8f13cfeb4c1181e538e4c2e84379a8290023bb0.html#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.Present" title="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.Present"><code class="xref py py-class docutils literal notranslate"><span class="pre">Present</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.connector_type">
+<span class="sig-name descname"><span class="pre">connector_type</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.connector_type" title="Permalink to this definition"></a></dt>
+<dd><p>Connector type used on this port</p>
+<p><strong>type</strong>: one of the below values:               <a class="reference internal" href="gen_doc_d673faa89b201bc475fe42657dccb7df5079565b.html#ydk.models.ydktest.openconfig_transport_types.SCCONNECTOR" title="ydk.models.ydktest.openconfig_transport_types.SCCONNECTOR"><code class="xref py py-class docutils literal notranslate"><span class="pre">SCCONNECTOR</span></code></a></p>
+<blockquote>
+<div><p><a class="reference internal" href="gen_doc_0eb6d91881a7ba1c4a3aeb6f3ab5e451e46e231b.html#ydk.models.ydktest.openconfig_transport_types.LCCONNECTOR" title="ydk.models.ydktest.openconfig_transport_types.LCCONNECTOR"><code class="xref py py-class docutils literal notranslate"><span class="pre">LCCONNECTOR</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_a81c25e34390202ead36e2c635d9df8ebf84b26e.html#ydk.models.ydktest.openconfig_transport_types.MPOCONNECTOR" title="ydk.models.ydktest.openconfig_transport_types.MPOCONNECTOR"><code class="xref py py-class docutils literal notranslate"><span class="pre">MPOCONNECTOR</span></code></a></p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.internal_temp">
+<span class="sig-name descname"><span class="pre">internal_temp</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.internal_temp" title="Permalink to this definition"></a></dt>
+<dd><p>Internally measured temperature in degrees Celsius. MSA valid range is between -40 and +125C. Accuracy shall be better than +/- 3 degC over the whole temperature range</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> -40..125</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor">
+<span class="sig-name descname"><span class="pre">vendor</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor" title="Permalink to this definition"></a></dt>
+<dd><p>Full name of transceiver vendor. 16-octet field that contains ASCII characters, left-aligned and padded on the right with ASCII spaces (20h)</p>
+<p><strong>type</strong>: str</p>
+<blockquote>
+<div><p><strong>length:</strong> 1..16</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor_part">
+<span class="sig-name descname"><span class="pre">vendor_part</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor_part" title="Permalink to this definition"></a></dt>
+<dd><p>Transceiver vendor’s part number. 16-octet field that contains ASCII characters, left-aligned and padded on the right with ASCII spaces (20h). If part number is undefined, all 16 octets = 0h</p>
+<p><strong>type</strong>: str</p>
+<blockquote>
+<div><p><strong>length:</strong> 1..16</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor_rev">
+<span class="sig-name descname"><span class="pre">vendor_rev</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.vendor_rev" title="Permalink to this definition"></a></dt>
+<dd><p>Transceiver vendor’s revision number. 2-octet field that contains ASCII characters, left-aligned and padded on the right with ASCII spaces (20h)</p>
+<p><strong>type</strong>: str</p>
+<blockquote>
+<div><p><strong>length:</strong> 1..2</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.ethernet_compliance_code">
+<span class="sig-name descname"><span class="pre">ethernet_compliance_code</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.ethernet_compliance_code" title="Permalink to this definition"></a></dt>
+<dd><p>Ethernet PMD that the transceiver supports. The SFF/QSFP MSAs have registers for this and CFP MSA has similar</p>
+<p><strong>type</strong>: one of the below values:               <a class="reference internal" href="gen_doc_cf3a2848d26b683fb42c8d75cf3b1d9703a92ea6.html#ydk.models.ydktest.openconfig_transport_types.ETH10GBASELRM" title="ydk.models.ydktest.openconfig_transport_types.ETH10GBASELRM"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH10GBASELRM</span></code></a></p>
+<blockquote>
+<div><p><a class="reference internal" href="gen_doc_c7172fc747e4058ab7b43d5738086690b77e5def.html#ydk.models.ydktest.openconfig_transport_types.ETH10GBASELR" title="ydk.models.ydktest.openconfig_transport_types.ETH10GBASELR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH10GBASELR</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_1a8c1d5d0acadb34fe9d99494bef8f26510a6ff2.html#ydk.models.ydktest.openconfig_transport_types.ETH10GBASEZR" title="ydk.models.ydktest.openconfig_transport_types.ETH10GBASEZR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH10GBASEZR</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_323b6133ddeb7c6cc03cd3bbac66662f43e366c2.html#ydk.models.ydktest.openconfig_transport_types.ETH10GBASEER" title="ydk.models.ydktest.openconfig_transport_types.ETH10GBASEER"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH10GBASEER</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_7fb80173fac4cade43327b02900facc3309f712e.html#ydk.models.ydktest.openconfig_transport_types.ETH10GBASESR" title="ydk.models.ydktest.openconfig_transport_types.ETH10GBASESR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH10GBASESR</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_777d7ef414cb3a0882735a89648364ad9606588a.html#ydk.models.ydktest.openconfig_transport_types.ETH40GBASECR4" title="ydk.models.ydktest.openconfig_transport_types.ETH40GBASECR4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH40GBASECR4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_eddd78b9ea7b06156c5c4a77d8b6aa1a9eb629b7.html#ydk.models.ydktest.openconfig_transport_types.ETH40GBASESR4" title="ydk.models.ydktest.openconfig_transport_types.ETH40GBASESR4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH40GBASESR4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_73b427c417f2e80516cb2d65ddce40b0d41cd726.html#ydk.models.ydktest.openconfig_transport_types.ETH40GBASELR4" title="ydk.models.ydktest.openconfig_transport_types.ETH40GBASELR4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH40GBASELR4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_eacde74f56b9812ba8fe6d2429da3eb9100e98f0.html#ydk.models.ydktest.openconfig_transport_types.ETH40GBASEER4" title="ydk.models.ydktest.openconfig_transport_types.ETH40GBASEER4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH40GBASEER4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_f13c5d421b4ce33cff5639d96a928c17737cbbd0.html#ydk.models.ydktest.openconfig_transport_types.ETH40GBASEPSM4" title="ydk.models.ydktest.openconfig_transport_types.ETH40GBASEPSM4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH40GBASEPSM4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_d034dfa51444cc508ac35f8477c6c0f8d83c2716.html#ydk.models.ydktest.openconfig_transport_types.ETH4X10GBASELR" title="ydk.models.ydktest.openconfig_transport_types.ETH4X10GBASELR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH4X10GBASELR</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_69753a39c5db2d0d525272635e31cf7b46610420.html#ydk.models.ydktest.openconfig_transport_types.ETH4X10GBASESR" title="ydk.models.ydktest.openconfig_transport_types.ETH4X10GBASESR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH4X10GBASESR</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_6a095b7ea0e18ec7384697b1146d0a9e2a17041c.html#ydk.models.ydktest.openconfig_transport_types.ETH100GAOC" title="ydk.models.ydktest.openconfig_transport_types.ETH100GAOC"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GAOC</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_5a8f0d892772c0b0b964e6a0da6d8a5ee3871938.html#ydk.models.ydktest.openconfig_transport_types.ETH100GACC" title="ydk.models.ydktest.openconfig_transport_types.ETH100GACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GACC</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_4f545f277d6a4f4168f82a1fe1b1dd3ec5f92439.html#ydk.models.ydktest.openconfig_transport_types.ETH100GBASESR10" title="ydk.models.ydktest.openconfig_transport_types.ETH100GBASESR10"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GBASESR10</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_782d9788d5f1f3d155d4d81882a9ec1b80289b1c.html#ydk.models.ydktest.openconfig_transport_types.ETH100GBASESR4" title="ydk.models.ydktest.openconfig_transport_types.ETH100GBASESR4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GBASESR4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_3f6ac1c4feaf33c39b76a45dd6135710c1005004.html#ydk.models.ydktest.openconfig_transport_types.ETH100GBASELR4" title="ydk.models.ydktest.openconfig_transport_types.ETH100GBASELR4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GBASELR4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_f261fa797abb25ef9068e747125fb35713976e88.html#ydk.models.ydktest.openconfig_transport_types.ETH100GBASEER4" title="ydk.models.ydktest.openconfig_transport_types.ETH100GBASEER4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GBASEER4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_e5fe27b28c4532687f7432793d2f534369d6e95a.html#ydk.models.ydktest.openconfig_transport_types.ETH100GBASECWDM4" title="ydk.models.ydktest.openconfig_transport_types.ETH100GBASECWDM4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GBASECWDM4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_2c038301c3da625f1cf9c8a1c189d7bd0da7c173.html#ydk.models.ydktest.openconfig_transport_types.ETH100GBASECLR4" title="ydk.models.ydktest.openconfig_transport_types.ETH100GBASECLR4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GBASECLR4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_ce4e1bfd8b4ce5e2502326a772ceba51bc585cf1.html#ydk.models.ydktest.openconfig_transport_types.ETH100GBASEPSM4" title="ydk.models.ydktest.openconfig_transport_types.ETH100GBASEPSM4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GBASEPSM4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_5acb1b016eebf04f645e9c5d852a5ee2d4cce590.html#ydk.models.ydktest.openconfig_transport_types.ETH100GBASECR4" title="ydk.models.ydktest.openconfig_transport_types.ETH100GBASECR4"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETH100GBASECR4</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_fc254d2f43039121b97fd04e614bef258dd158ed.html#ydk.models.ydktest.openconfig_transport_types.ETHUNDEFINED" title="ydk.models.ydktest.openconfig_transport_types.ETHUNDEFINED"><code class="xref py py-class docutils literal notranslate"><span class="pre">ETHUNDEFINED</span></code></a></p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.sonet_sdh_compliance_code">
+<span class="sig-name descname"><span class="pre">sonet_sdh_compliance_code</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.sonet_sdh_compliance_code" title="Permalink to this definition"></a></dt>
+<dd><p>SONET/SDH application code supported by the port</p>
+<p><strong>type</strong>: one of the below values:               <a class="reference internal" href="gen_doc_9331acd45965a845e4832f190f30ba90e5389205.html#ydk.models.ydktest.openconfig_transport_types.VSR20003R2" title="ydk.models.ydktest.openconfig_transport_types.VSR20003R2"><code class="xref py py-class docutils literal notranslate"><span class="pre">VSR20003R2</span></code></a></p>
+<blockquote>
+<div><p><a class="reference internal" href="gen_doc_94ce1d83e061d34b47e1d18ebb3069fe7840c06d.html#ydk.models.ydktest.openconfig_transport_types.VSR20003R3" title="ydk.models.ydktest.openconfig_transport_types.VSR20003R3"><code class="xref py py-class docutils literal notranslate"><span class="pre">VSR20003R3</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_195b72e322798b528b343dfc9bd4087a4b4b08eb.html#ydk.models.ydktest.openconfig_transport_types.VSR20003R5" title="ydk.models.ydktest.openconfig_transport_types.VSR20003R5"><code class="xref py py-class docutils literal notranslate"><span class="pre">VSR20003R5</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_5ff2b6ae749b5f5b52abd1ebabfa5f4a7fecdf82.html#ydk.models.ydktest.openconfig_transport_types.SONETUNDEFINED" title="ydk.models.ydktest.openconfig_transport_types.SONETUNDEFINED"><code class="xref py py-class docutils literal notranslate"><span class="pre">SONETUNDEFINED</span></code></a></p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.otn_compliance_code">
+<span class="sig-name descname"><span class="pre">otn_compliance_code</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.otn_compliance_code" title="Permalink to this definition"></a></dt>
+<dd><p>OTN application code supported by the port</p>
+<p><strong>type</strong>: one of the below values:               <a class="reference internal" href="gen_doc_c2f1788141e23886f6c70189d1d7d001efe6d0d6.html#ydk.models.ydktest.openconfig_transport_types.P1L12D1" title="ydk.models.ydktest.openconfig_transport_types.P1L12D1"><code class="xref py py-class docutils literal notranslate"><span class="pre">P1L12D1</span></code></a></p>
+<blockquote>
+<div><p><a class="reference internal" href="gen_doc_c378025612b02493d28389e764abe18a2bd2f828.html#ydk.models.ydktest.openconfig_transport_types.P1S12D2" title="ydk.models.ydktest.openconfig_transport_types.P1S12D2"><code class="xref py py-class docutils literal notranslate"><span class="pre">P1S12D2</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_f011063eeacb70d62c7a825c249d4a6d73116ae6.html#ydk.models.ydktest.openconfig_transport_types.P1L12D2" title="ydk.models.ydktest.openconfig_transport_types.P1L12D2"><code class="xref py py-class docutils literal notranslate"><span class="pre">P1L12D2</span></code></a></p>
+<p><a class="reference internal" href="gen_doc_0035ace69403e9082ccdb6a79965e4468da7a17a.html#ydk.models.ydktest.openconfig_transport_types.OTNUNDEFINED" title="ydk.models.ydktest.openconfig_transport_types.OTNUNDEFINED"><code class="xref py py-class docutils literal notranslate"><span class="pre">OTNUNDEFINED</span></code></a></p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.serial_no">
+<span class="sig-name descname"><span class="pre">serial_no</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.serial_no" title="Permalink to this definition"></a></dt>
+<dd><p>Transceiver serial number. 16-octet field that contains ASCII characters, left-aligned and padded on the right with ASCII spaces (20h). If part serial number is undefined, all 16 octets = 0h</p>
+<p><strong>type</strong>: str</p>
+<blockquote>
+<div><p><strong>length:</strong> 1..16</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.date_code">
+<span class="sig-name descname"><span class="pre">date_code</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.date_code" title="Permalink to this definition"></a></dt>
+<dd><p>Representation of the transceiver date code, typically stored as YYMMDD.  The time portion of the value is undefined and not intended to be read</p>
+<p><strong>type</strong>: str</p>
+<blockquote>
+<div><p><strong>pattern:</strong> \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[\+\-]\d{2}:\d{2})</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.fault_condition">
+<span class="sig-name descname"><span class="pre">fault_condition</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_platform.Components.Component.Transceiver.State.fault_condition" title="Permalink to this definition"></a></dt>
+<dd><p>Indicates if a fault condition exists in the transceiver</p>
+<p><strong>type</strong>: bool</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

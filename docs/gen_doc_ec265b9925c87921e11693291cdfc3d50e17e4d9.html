@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>State &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> YANG Development Kit
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.8.6.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">State</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="state">
+<h1>State<a class="headerlink" href="#state" title="Permalink to this heading"></a></h1>
+<p><strong>Leafs</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.background_block_errors" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.background_block_errors"><code class="xref py py-attr docutils literal notranslate"><span class="pre">background_block_errors</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.code_violations" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.code_violations"><code class="xref py py-attr docutils literal notranslate"><span class="pre">code_violations</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.errored_seconds" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.errored_seconds"><code class="xref py py-attr docutils literal notranslate"><span class="pre">errored_seconds</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_corrected_bits" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_corrected_bits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fec_corrected_bits</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_corrected_bytes" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_corrected_bytes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fec_corrected_bytes</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_uncorrectable_words" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_uncorrectable_words"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fec_uncorrectable_words</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.rdi_msg" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.rdi_msg"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rdi_msg</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.severely_errored_seconds" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.severely_errored_seconds"><code class="xref py py-attr docutils literal notranslate"><span class="pre">severely_errored_seconds</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_auto" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_auto"><code class="xref py py-attr docutils literal notranslate"><span class="pre">tti_msg_auto</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_expected" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_expected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">tti_msg_expected</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_recv" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_recv"><code class="xref py py-attr docutils literal notranslate"><span class="pre">tti_msg_recv</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_transmit" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_transmit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">tti_msg_transmit</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.unavailable_seconds" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.unavailable_seconds"><code class="xref py py-attr docutils literal notranslate"><span class="pre">unavailable_seconds</span></code></a></p></li>
+</ul>
+<p><strong>Children</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.esnr" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.esnr"><code class="xref py py-attr docutils literal notranslate"><span class="pre">esnr</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.post_fec_ber" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.post_fec_ber"><code class="xref py py-attr docutils literal notranslate"><span class="pre">post_fec_ber</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.pre_fec_ber" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.pre_fec_ber"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pre_fec_ber</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.q_value" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.q_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">q_value</span></code></a></p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TerminalDevice.LogicalChannels.Channel.Otn.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="api/types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a></p>
+<p>Class Hierarchy : <a class="reference internal" href="gen_doc_d65184e7e312b5bea82a4c5c3309489e4d222012.html#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice"><code class="xref py py-class docutils literal notranslate"><span class="pre">TerminalDevice</span></code></a> <a class="reference internal" href="gen_doc_036f27b37033ca08c372bf23bea510e5c5a77429.html#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogicalChannels</span></code></a> <a class="reference internal" href="gen_doc_4f2e03b36396478a8b480209a1540e952a5a7a38.html#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Channel</span></code></a> <a class="reference internal" href="gen_doc_d82a7b641fcae9c857255a28af87b3540972264e.html#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn"><code class="xref py py-class docutils literal notranslate"><span class="pre">Otn</span></code></a> <a class="reference internal" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p>This class represents state data.</p>
+<p>Operational state data for OTN protocol PMs, statistics,</p>
+<p>etc.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_transmit">
+<span class="sig-name descname"><span class="pre">tti_msg_transmit</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_transmit" title="Permalink to this definition"></a></dt>
+<dd><p>Trail trace identifier (TTI) message transmitted</p>
+<p><strong>type</strong>: str</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_expected">
+<span class="sig-name descname"><span class="pre">tti_msg_expected</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_expected" title="Permalink to this definition"></a></dt>
+<dd><p>Trail trace identifier (TTI) message expected</p>
+<p><strong>type</strong>: str</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_auto">
+<span class="sig-name descname"><span class="pre">tti_msg_auto</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_auto" title="Permalink to this definition"></a></dt>
+<dd><p>Trail trace identifier (TTI) transmit message automatically created. If True, then setting a custom transmit message would be invalid</p>
+<p><strong>type</strong>: bool</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_recv">
+<span class="sig-name descname"><span class="pre">tti_msg_recv</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.tti_msg_recv" title="Permalink to this definition"></a></dt>
+<dd><p>Trail trace identifier (TTI) message received</p>
+<p><strong>type</strong>: str</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.rdi_msg">
+<span class="sig-name descname"><span class="pre">rdi_msg</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.rdi_msg" title="Permalink to this definition"></a></dt>
+<dd><p>Remote defect indication (RDI) message received</p>
+<p><strong>type</strong>: str</p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.errored_seconds">
+<span class="sig-name descname"><span class="pre">errored_seconds</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.errored_seconds" title="Permalink to this definition"></a></dt>
+<dd><p>The number of seconds that at least one errored blocks occurs, at least one code violation occurs, loss of sync is detected or loss of signal is detected</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..18446744073709551615</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.severely_errored_seconds">
+<span class="sig-name descname"><span class="pre">severely_errored_seconds</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.severely_errored_seconds" title="Permalink to this definition"></a></dt>
+<dd><p>The number of seconds that loss of frame is detected OR the number of errored blocks, code violations, loss of sync or loss of signal is detected exceeds a predefined threshold</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..18446744073709551615</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.unavailable_seconds">
+<span class="sig-name descname"><span class="pre">unavailable_seconds</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.unavailable_seconds" title="Permalink to this definition"></a></dt>
+<dd><p>The number of seconds during which the link is unavailable</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..18446744073709551615</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.code_violations">
+<span class="sig-name descname"><span class="pre">code_violations</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.code_violations" title="Permalink to this definition"></a></dt>
+<dd><p>For ethernet or fiberchannel links, the number of 8b/10b coding violations. For SONET/SDH, the number of BIP (bit interleaved parity) errors</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..18446744073709551615</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_uncorrectable_words">
+<span class="sig-name descname"><span class="pre">fec_uncorrectable_words</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_uncorrectable_words" title="Permalink to this definition"></a></dt>
+<dd><p>The number words that were uncorrectable by the FEC</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..18446744073709551615</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_corrected_bytes">
+<span class="sig-name descname"><span class="pre">fec_corrected_bytes</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_corrected_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>The number of bytes that were corrected by the FEC</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..18446744073709551615</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_corrected_bits">
+<span class="sig-name descname"><span class="pre">fec_corrected_bits</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.fec_corrected_bits" title="Permalink to this definition"></a></dt>
+<dd><p>The number of bits that were corrected by the FEC</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..18446744073709551615</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.background_block_errors">
+<span class="sig-name descname"><span class="pre">background_block_errors</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.background_block_errors" title="Permalink to this definition"></a></dt>
+<dd><p>The number of background block errors</p>
+<p><strong>type</strong>: int</p>
+<blockquote>
+<div><p><strong>range:</strong> 0..18446744073709551615</p>
+</div></blockquote>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.pre_fec_ber">
+<span class="sig-name descname"><span class="pre">pre_fec_ber</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.pre_fec_ber" title="Permalink to this definition"></a></dt>
+<dd><p>Bit error rate before forward error correction -- computed value</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_1805d91f287c1d7f384e941438d1ad55d4e43bdf.html#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.PreFecBer" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.PreFecBer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PreFecBer</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.post_fec_ber">
+<span class="sig-name descname"><span class="pre">post_fec_ber</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.post_fec_ber" title="Permalink to this definition"></a></dt>
+<dd><p>Bit error rate after forward error correction -- computed value</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_91d4f395df0b2b6d85429b312ad39ec5aa815bc8.html#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.PostFecBer" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.PostFecBer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PostFecBer</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.q_value">
+<span class="sig-name descname"><span class="pre">q_value</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.q_value" title="Permalink to this definition"></a></dt>
+<dd><p>Quality value (factor) of a channel</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_d333c633dd7f5eb343713584e58c5570b90f65f5.html#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.QValue" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.QValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">QValue</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.esnr">
+<span class="sig-name descname"><span class="pre">esnr</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.esnr" title="Permalink to this definition"></a></dt>
+<dd><p>Electrical signal to noise ratio. Baud rate normalized signal to noise ratio based on error vector magnitude</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_79e9293c09fb3ce4bc32b23dc194557ce3499622.html#ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.Esnr" title="ydk.models.ydktest.openconfig_terminal_device.TerminalDevice.LogicalChannels.Channel.Otn.State.Esnr"><code class="xref py py-class docutils literal notranslate"><span class="pre">Esnr</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -282,6 +282,7 @@ class Package(NamedElement):
         self.identity_subclasses = {}
         self.iskeyword = iskeyword
         self.version = '1'
+        self.bundle_version = None
 
     def qn(self):
         """ Return the qualified name """

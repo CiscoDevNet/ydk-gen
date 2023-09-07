@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Runner &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SubTest" href="gen_doc_93b147b142ea6793eed3bf4f3201fcd4a4faa70c.html" />
+    <link rel="prev" title="Native" href="gen_doc_49300f799d7215326dd925412ed97438b6504f7c.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> YANG Development Kit
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.8.6.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_288ad19384888df2af43ab22b42e4b12a972b5ab.html">iana_if_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_6f34c13b0ec33426031aaa29112b1eee4e5d4538.html">ietf_aug_base_1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_8d8688e6f8bfacb4b2249e3b11f355a457d49c93.html">ietf_aug_base_2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_de2b066dcae3b89cc0939acda503153e9ca7a98f.html">ietf_inet_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_98e926e1f8ba72a08a0992c52dca0ea227d81a0f.html">ietf_interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_aa6af1caabe6be9ed306ba4c935a150d9f590d5c.html">ietf_netconf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_8dfa40abff9043a59a88fc9540e9b56b0781d23a.html">ietf_netconf_acm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_fee1eaf5d2f60cf31af6b307c16a243f75504384.html">ietf_netconf_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_a631ea7ccc9509c7017aeac2fccb452fc3477e4c.html">ietf_netconf_with_defaults</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_4969e66bd13c69af2a9df2719e01bca4bfabffcb.html">ietf_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_6c1a7be7f1cba54a0ecdc2daae647209babc80f2.html">main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_499d3c0d5bf889f4614f3c8b356186879b05bc1f.html">oc_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_3ef4f57f820c9ed151166585d46b6b93c935c865.html">openconfig_bgp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_5df93a4f2ad0861a8b053d23318bfcd3715a046b.html">openconfig_bgp_policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_34f7dd53d51846eedf301eabe932aa31959c4e17.html">openconfig_bgp_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_61445652594ec075538ac77d428d36484be5563d.html">openconfig_if_ethernet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_d1eb05119bb4a9940b37ad0b79a6d9c95e6b2239.html">openconfig_interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_3c422767e32176068e70de9136854682a4501fb5.html">openconfig_platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_34dceffc4b1f22b5cab7d92f22f9dbc9f0f616a4.html">openconfig_platform_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_dc7e1c9c1bc6aa1a59104ae4c577e1011e152e72.html">openconfig_policy_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_2ee0743cad7f489609ec648ff907aece551baa61.html">openconfig_routing_policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_ba143e5b585861115de872b53a0d883607f487ee.html">openconfig_terminal_device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_08d99c582b00e49d7f9faa483613e29d324945c4.html">openconfig_transport_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_d7923e9f85956eac8f8764c111fa8273c8cfa9c1.html">openconfig_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_9636180ec39ddcad52425694c5485386da88f0db.html">ydktest_aug_ietf_5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_b89f2a0dc0185d0ce016dbcf18d0ff0ce56a2ab6.html">ydktest_filterread</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="gen_doc_f9ce93fc14be0e9fdea22f250b8f8e8a889be8b7.html">ydktest_sanity</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6044bbbd26b826d2665697ac16636edc6905b5e0.html">CascadingTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_309706964065d2f15baa564ea7a4d99f62f6795c.html">ConditionalInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_49300f799d7215326dd925412ed97438b6504f7c.html">Native</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Runner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner"><code class="docutils literal notranslate"><span class="pre">Runner</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_93b147b142ea6793eed3bf4f3201fcd4a4faa70c.html">SubTest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_eb38b0da52370025ad55053fb582c7d75431f405.html">CompInstType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_238ca54aa816c1db8333984befc077c9eb99e12e.html">CompNicInstType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_41f131e52e8e81008c38bb77ad619cbbe7231b22.html">YdkEnumIntTest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_61c155d83743a89f913ca604cc3ca73d3004ebf4.html">YdkEnumTest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a2e4585702f40ae6a1327f242a91304fbdef2f48.html">BaseIdentity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f46db6ef87daa979ddaffa4c1a1a5214d8d6d6c0.html">ChildChildIdentity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_770d62cb2eb28ec6763070c5a61ba3577e306230.html">ChildIdentity</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_61df6284a9f4af6e19568c06490f8bdf39b2de1c.html">ydktest_sanity_typedefs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_1c96cfed7c3b4fba6d4d5d9d867c422514d4ba28.html">ydktest_sanity_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_a7214a5d8d620d682b13222af80d4ff6e202e553.html">ydktest_types</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="ydk.models.ydktest.html">ydktest bundle API</a></li>
+          <li class="breadcrumb-item"><a href="gen_doc_f9ce93fc14be0e9fdea22f250b8f8e8a889be8b7.html">ydktest_sanity module</a></li>
+      <li class="breadcrumb-item active">Runner</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="runner">
+<h1>Runner<a class="headerlink" href="#runner" title="Permalink to this heading"></a></h1>
+<p><strong>Children</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.enum_list" title="ydk.models.ydktest.ydktest_sanity.Runner.enum_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">enum_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.identity_list" title="ydk.models.ydktest.ydktest_sanity.Runner.identity_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">identity_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.inbtw_list" title="ydk.models.ydktest.ydktest_sanity.Runner.inbtw_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">inbtw_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.leaf_ref" title="ydk.models.ydktest.ydktest_sanity.Runner.leaf_ref"><code class="xref py py-attr docutils literal notranslate"><span class="pre">leaf_ref</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.mand_list" title="ydk.models.ydktest.ydktest_sanity.Runner.mand_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mand_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.mtus" title="ydk.models.ydktest.ydktest_sanity.Runner.mtus"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mtus</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.no_key_list" title="ydk.models.ydktest.ydktest_sanity.Runner.no_key_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">no_key_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.not_supported_1" title="ydk.models.ydktest.ydktest_sanity.Runner.not_supported_1"><code class="xref py py-attr docutils literal notranslate"><span class="pre">not_supported_1</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.not_supported_2" title="ydk.models.ydktest.ydktest_sanity.Runner.not_supported_2"><code class="xref py py-attr docutils literal notranslate"><span class="pre">not_supported_2</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.one" title="ydk.models.ydktest.ydktest_sanity.Runner.one"><code class="xref py py-attr docutils literal notranslate"><span class="pre">one</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.one_key_list" title="ydk.models.ydktest.ydktest_sanity.Runner.one_key_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">one_key_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.one_list" title="ydk.models.ydktest.ydktest_sanity.Runner.one_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">one_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.one_read_only" title="ydk.models.ydktest.ydktest_sanity.Runner.one_read_only"><code class="xref py py-attr docutils literal notranslate"><span class="pre">one_read_only</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.outer" title="ydk.models.ydktest.ydktest_sanity.Runner.outer"><code class="xref py py-attr docutils literal notranslate"><span class="pre">outer</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.passive" title="ydk.models.ydktest.ydktest_sanity.Runner.passive"><code class="xref py py-attr docutils literal notranslate"><span class="pre">passive</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.runner_2" title="ydk.models.ydktest.ydktest_sanity.Runner.runner_2"><code class="xref py py-attr docutils literal notranslate"><span class="pre">runner_2</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.three" title="ydk.models.ydktest.ydktest_sanity.Runner.three"><code class="xref py py-attr docutils literal notranslate"><span class="pre">three</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.three_list" title="ydk.models.ydktest.ydktest_sanity.Runner.three_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">three_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.two" title="ydk.models.ydktest.ydktest_sanity.Runner.two"><code class="xref py py-attr docutils literal notranslate"><span class="pre">two</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.two_key_list" title="ydk.models.ydktest.ydktest_sanity.Runner.two_key_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">two_key_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.two_list" title="ydk.models.ydktest.ydktest_sanity.Runner.two_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">two_list</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.ydktest_sanity_augm_one" title="ydk.models.ydktest.ydktest_sanity.Runner.ydktest_sanity_augm_one"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ydktest_sanity_augm_one</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner.ytypes" title="ydk.models.ydktest.ydktest_sanity.Runner.ytypes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ytypes</span></code></a></p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.models.ydktest.ydktest_sanity.</span></span><span class="sig-name descname"><span class="pre">Runner</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="api/types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a></p>
+<p>Class Hierarchy : <a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity.Runner" title="ydk.models.ydktest.ydktest_sanity.Runner"><code class="xref py py-class docutils literal notranslate"><span class="pre">Runner</span></code></a></p>
+<p>This class represents configuration data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.one">
+<span class="sig-name descname"><span class="pre">one</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.one" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_ef4faf7ba6418e739232f944ef7e10aed50148ba.html#ydk.models.ydktest.ydktest_sanity.Runner.One" title="ydk.models.ydktest.ydktest_sanity.Runner.One"><code class="xref py py-class docutils literal notranslate"><span class="pre">One</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.two">
+<span class="sig-name descname"><span class="pre">two</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.two" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_b224136e82e9176d39a9be308f7149eea566f337.html#ydk.models.ydktest.ydktest_sanity.Runner.Two" title="ydk.models.ydktest.ydktest_sanity.Runner.Two"><code class="xref py py-class docutils literal notranslate"><span class="pre">Two</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.three">
+<span class="sig-name descname"><span class="pre">three</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.three" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_1193f71ca8fe738e4312b7a371b441e0578a0a19.html#ydk.models.ydktest.ydktest_sanity.Runner.Three" title="ydk.models.ydktest.ydktest_sanity.Runner.Three"><code class="xref py py-class docutils literal notranslate"><span class="pre">Three</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.ytypes">
+<span class="sig-name descname"><span class="pre">ytypes</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.ytypes" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level data types</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_32f917f9d6510d34f6c136d705ff0a571c68327e.html#ydk.models.ydktest.ydktest_sanity.Runner.Ytypes" title="ydk.models.ydktest.ydktest_sanity.Runner.Ytypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ytypes</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.one_list">
+<span class="sig-name descname"><span class="pre">one_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.one_list" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level list data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_3794c1148017439a497f958d6b5f9a3dccd58515.html#ydk.models.ydktest.ydktest_sanity.Runner.OneList" title="ydk.models.ydktest.ydktest_sanity.Runner.OneList"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.two_list">
+<span class="sig-name descname"><span class="pre">two_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.two_list" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level list data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_fc004abb71afdc3912b98fe4b1d418f8666a71d5.html#ydk.models.ydktest.ydktest_sanity.Runner.TwoList" title="ydk.models.ydktest.ydktest_sanity.Runner.TwoList"><code class="xref py py-class docutils literal notranslate"><span class="pre">TwoList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.three_list">
+<span class="sig-name descname"><span class="pre">three_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.three_list" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level list data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_5a174a7e58de7207fee26854e12d75d21386d6e5.html#ydk.models.ydktest.ydktest_sanity.Runner.ThreeList" title="ydk.models.ydktest.ydktest_sanity.Runner.ThreeList"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThreeList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.inbtw_list">
+<span class="sig-name descname"><span class="pre">inbtw_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.inbtw_list" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level list data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_6032b6675d73e5c355da16b409af029bf7b44a43.html#ydk.models.ydktest.ydktest_sanity.Runner.InbtwList" title="ydk.models.ydktest.ydktest_sanity.Runner.InbtwList"><code class="xref py py-class docutils literal notranslate"><span class="pre">InbtwList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.two_key_list">
+<span class="sig-name descname"><span class="pre">two_key_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.two_key_list" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>: list of    <a class="reference internal" href="gen_doc_e0e096fdef2eb913194cc0d920b57acdebdc274d.html#ydk.models.ydktest.ydktest_sanity.Runner.TwoKeyList" title="ydk.models.ydktest.ydktest_sanity.Runner.TwoKeyList"><code class="xref py py-class docutils literal notranslate"><span class="pre">TwoKeyList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.identity_list">
+<span class="sig-name descname"><span class="pre">identity_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.identity_list" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>: list of    <a class="reference internal" href="gen_doc_2487b09b9a826cd94939b5efb557d4bd0f7a4549.html#ydk.models.ydktest.ydktest_sanity.Runner.IdentityList" title="ydk.models.ydktest.ydktest_sanity.Runner.IdentityList"><code class="xref py py-class docutils literal notranslate"><span class="pre">IdentityList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.enum_list">
+<span class="sig-name descname"><span class="pre">enum_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.enum_list" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>: list of    <a class="reference internal" href="gen_doc_654ee91d7205215b330c5ddb1e6bb3856d22ac65.html#ydk.models.ydktest.ydktest_sanity.Runner.EnumList" title="ydk.models.ydktest.ydktest_sanity.Runner.EnumList"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.leaf_ref">
+<span class="sig-name descname"><span class="pre">leaf_ref</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.leaf_ref" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>:  <a class="reference internal" href="gen_doc_509d4e117f3f8c84c5ceb028a1e6d4569052bb8a.html#ydk.models.ydktest.ydktest_sanity.Runner.LeafRef" title="ydk.models.ydktest.ydktest_sanity.Runner.LeafRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">LeafRef</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.not_supported_1">
+<span class="sig-name descname"><span class="pre">not_supported_1</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.not_supported_1" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>:  <a class="reference internal" href="gen_doc_c8d4210a1102af9ae4508ec3e34f002a545f3a14.html#ydk.models.ydktest.ydktest_sanity.Runner.NotSupported1" title="ydk.models.ydktest.ydktest_sanity.Runner.NotSupported1"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotSupported1</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.not_supported_2">
+<span class="sig-name descname"><span class="pre">not_supported_2</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.not_supported_2" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>: list of    <a class="reference internal" href="gen_doc_f8f92fa9ad5a3303bb4d8b075f2bd3c78188a393.html#ydk.models.ydktest.ydktest_sanity.Runner.NotSupported2" title="ydk.models.ydktest.ydktest_sanity.Runner.NotSupported2"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotSupported2</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.one_read_only">
+<span class="sig-name descname"><span class="pre">one_read_only</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.one_read_only" title="Permalink to this definition"></a></dt>
+<dd><p>one_read_only data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_8a9c869ca9f2fcda38ecbbb2cdca344b78a170f5.html#ydk.models.ydktest.ydktest_sanity.Runner.OneReadOnly" title="ydk.models.ydktest.ydktest_sanity.Runner.OneReadOnly"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneReadOnly</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.mtus">
+<span class="sig-name descname"><span class="pre">mtus</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.mtus" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>:  <a class="reference internal" href="gen_doc_6bf0e59b479cecb3114f7fbb6e2fae23d56fff43.html#ydk.models.ydktest.ydktest_sanity.Runner.Mtus" title="ydk.models.ydktest.ydktest_sanity.Runner.Mtus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mtus</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.passive">
+<span class="sig-name descname"><span class="pre">passive</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.passive" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>: list of    <a class="reference internal" href="gen_doc_a129e4b2f89ab0b7239cb4291341cfa7831356e5.html#ydk.models.ydktest.ydktest_sanity.Runner.Passive" title="ydk.models.ydktest.ydktest_sanity.Runner.Passive"><code class="xref py py-class docutils literal notranslate"><span class="pre">Passive</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.outer">
+<span class="sig-name descname"><span class="pre">outer</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.outer" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>:  <a class="reference internal" href="gen_doc_89d623be4a99dd87a373577bf37078ee384875a9.html#ydk.models.ydktest.ydktest_sanity.Runner.Outer" title="ydk.models.ydktest.ydktest_sanity.Runner.Outer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Outer</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.runner_2">
+<span class="sig-name descname"><span class="pre">runner_2</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.runner_2" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>:  <a class="reference internal" href="gen_doc_423b01a87ef738e1efcf9df7814148325ec5dcf7.html#ydk.models.ydktest.ydktest_sanity.Runner.Runner2" title="ydk.models.ydktest.ydktest_sanity.Runner.Runner2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Runner2</span></code></a></p>
+<p><strong>presence node</strong>: True</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.no_key_list">
+<span class="sig-name descname"><span class="pre">no_key_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.no_key_list" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>: list of    <a class="reference internal" href="gen_doc_f7481426005f0cba7a9d3bc5e8dee07f1dcdd257.html#ydk.models.ydktest.ydktest_sanity.Runner.NoKeyList" title="ydk.models.ydktest.ydktest_sanity.Runner.NoKeyList"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoKeyList</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.one_key_list">
+<span class="sig-name descname"><span class="pre">one_key_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.one_key_list" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>: list of    <a class="reference internal" href="gen_doc_3916b715f5edfac6e13e807af5020c466f25e8ad.html#ydk.models.ydktest.ydktest_sanity.Runner.OneKeyList" title="ydk.models.ydktest.ydktest_sanity.Runner.OneKeyList"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneKeyList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.mand_list">
+<span class="sig-name descname"><span class="pre">mand_list</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.mand_list" title="Permalink to this definition"></a></dt>
+<dd><p><strong>type</strong>: list of    <a class="reference internal" href="gen_doc_862ede372f19645a70826bbecafc3fb25a3aa6fa.html#ydk.models.ydktest.ydktest_sanity.Runner.MandList" title="ydk.models.ydktest.ydktest_sanity.Runner.MandList"><code class="xref py py-class docutils literal notranslate"><span class="pre">MandList</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity.Runner.ydktest_sanity_augm_one">
+<span class="sig-name descname"><span class="pre">ydktest_sanity_augm_one</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity.Runner.ydktest_sanity_augm_one" title="Permalink to this definition"></a></dt>
+<dd><p>config for one_level data</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_24a5f6bd45c75a789ee4fc076b6405d987ba552f.html#ydk.models.ydktest.ydktest_sanity.Runner.YdktestSanityAugmOne" title="ydk.models.ydktest.ydktest_sanity.Runner.YdktestSanityAugmOne"><code class="xref py py-class docutils literal notranslate"><span class="pre">YdktestSanityAugmOne</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gen_doc_49300f799d7215326dd925412ed97438b6504f7c.html" class="btn btn-neutral float-left" title="Native" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gen_doc_93b147b142ea6793eed3bf4f3201fcd4a4faa70c.html" class="btn btn-neutral float-right" title="SubTest" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -6,7 +6,7 @@ set(YDK_DESCRIPTION "YANG Development Kit Library. The library for  YDK API.")
 
 # CPack Dynamic Settings
 set (CPACK_PACKAGE_NAME "libydk")
-set (CPACK_PACKAGE_BUILD "4")
+set (CPACK_PACKAGE_BUILD "5")
 set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION}.${CPACK_PACKAGE_BUILD}")
 set (CPACK_LIBRARY_NAME "ydk-${CPACK_PACKAGE_VERSION}")
 set (CPACK_LIBRARY_TARGET "lib${CPACK_LIBRARY_NAME}.a")
@@ -488,8 +488,8 @@ SET( legacy_link   ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/libydk.a)
 SET( legacy_target ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/${CPACK_LIBRARY_TARGET})
 ADD_CUSTOM_COMMAND( TARGET ${CPACK_LIBRARY_NAME}
                     COMMAND echo "Creating symbolic link ${legacy_link}"
-                    COMMAND rm -f ${legacy_link}
-                    COMMAND ln -s ${CPACK_LIBRARY_TARGET} ${legacy_link}
+                    COMMAND sudo rm -f ${legacy_link}
+                    COMMAND sudo ln -s ${CPACK_LIBRARY_TARGET} ${legacy_link}
                     DEPENDS install ${CPACK_LIBRARY_NAME}
                   )
 ADD_CUSTOM_TARGET( install_legacy DEPENDS ${legacy_target} )

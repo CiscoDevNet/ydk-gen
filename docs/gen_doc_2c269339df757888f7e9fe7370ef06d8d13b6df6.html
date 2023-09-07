@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neighbor &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> YANG Development Kit
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.8.6.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Neighbor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="neighbor">
+<h1>Neighbor<a class="headerlink" href="#neighbor" title="Permalink to this heading"></a></h1>
+<p><strong>Keys</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.neighbor_address" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.neighbor_address"><code class="xref py py-attr docutils literal notranslate"><span class="pre">neighbor_address</span></code></a></p></li>
+</ul>
+<p><strong>Children</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.add_paths" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.add_paths"><code class="xref py py-attr docutils literal notranslate"><span class="pre">add_paths</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.afi_safis" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.afi_safis"><code class="xref py py-attr docutils literal notranslate"><span class="pre">afi_safis</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.apply_policy" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.apply_policy"><code class="xref py py-attr docutils literal notranslate"><span class="pre">apply_policy</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.as_path_options" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.as_path_options"><code class="xref py py-attr docutils literal notranslate"><span class="pre">as_path_options</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.config" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.config"><code class="xref py py-attr docutils literal notranslate"><span class="pre">config</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.ebgp_multihop" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.ebgp_multihop"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ebgp_multihop</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.error_handling" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.error_handling"><code class="xref py py-attr docutils literal notranslate"><span class="pre">error_handling</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.graceful_restart" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.graceful_restart"><code class="xref py py-attr docutils literal notranslate"><span class="pre">graceful_restart</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.logging_options" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.logging_options"><code class="xref py py-attr docutils literal notranslate"><span class="pre">logging_options</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.route_reflector" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.route_reflector"><code class="xref py py-attr docutils literal notranslate"><span class="pre">route_reflector</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.state" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.state"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.timers" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.timers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timers</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.transport" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.transport"><code class="xref py py-attr docutils literal notranslate"><span class="pre">transport</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.use_multiple_paths" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.use_multiple_paths"><code class="xref py py-attr docutils literal notranslate"><span class="pre">use_multiple_paths</span></code></a></p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Bgp.Neighbors.</span></span><span class="sig-name descname"><span class="pre">Neighbor</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="api/types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a></p>
+<p>Class Hierarchy : <a class="reference internal" href="gen_doc_aa42a45c66c5f57d34a73a78a2fe5415e4873c15.html#ydk.models.ydktest.openconfig_bgp.Bgp" title="ydk.models.ydktest.openconfig_bgp.Bgp"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bgp</span></code></a> <a class="reference internal" href="gen_doc_d61aaf7cdb080f448a3a56ef49080284d3bce61c.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Neighbors</span></code></a> <a class="reference internal" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Neighbor</span></code></a></p>
+<p>This class represents configuration data.</p>
+<p>List of BGP neighbors configured on the local system,</p>
+<p>uniquely identified by peer IPv[46] address</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.neighbor_address">
+<span class="sig-name descname"><span class="pre">neighbor_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.neighbor_address" title="Permalink to this definition"></a></dt>
+<dd><p>Reference to the address of the BGP neighbor used as a key in the neighbor list</p>
+<p><strong>type</strong>: union of the below types:</p>
+<blockquote>
+<div><p><strong>type</strong>: str</p>
+<blockquote>
+<div><p><strong>pattern:</strong> (([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?</p>
+</div></blockquote>
+<p><strong>type</strong>: str</p>
+<blockquote>
+<div><p><strong>pattern:</strong> ((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?</p>
+</div></blockquote>
+</div></blockquote>
+<p><strong>refers to</strong>:  <a class="reference internal" href="gen_doc_62681a31cd810c84c13527f3d4ca84be6f727e06.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.Config" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">neighbor_address</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.config" title="Permalink to this definition"></a></dt>
+<dd><p>Configuration parameters relating to the BGP neighbor or group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_62681a31cd810c84c13527f3d4ca84be6f727e06.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.Config" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.state" title="Permalink to this definition"></a></dt>
+<dd><p>State information relating to the BGP neighbor</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_68faf7553a355b62fa64f8b7ab512371cff2c16e.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.State" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
+<p><strong>config</strong>: False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.timers">
+<span class="sig-name descname"><span class="pre">timers</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.timers" title="Permalink to this definition"></a></dt>
+<dd><p>Timers related to a BGP neighbor</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_ce2ffc1f8bb2e79e5589dd104eeac29395c5ba9c.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.Timers" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.Timers"><code class="xref py py-class docutils literal notranslate"><span class="pre">Timers</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.transport">
+<span class="sig-name descname"><span class="pre">transport</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.transport" title="Permalink to this definition"></a></dt>
+<dd><p>Transport session parameters for the BGP neighbor</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_e35783206e68ab6950893790184122361c5aa5f9.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.Transport" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.error_handling">
+<span class="sig-name descname"><span class="pre">error_handling</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.error_handling" title="Permalink to this definition"></a></dt>
+<dd><p>Error handling parameters used for the BGP neighbor or group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_417a570aa2c6da395b51212964837d10ed76a648.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.ErrorHandling" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.ErrorHandling"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorHandling</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.graceful_restart">
+<span class="sig-name descname"><span class="pre">graceful_restart</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.graceful_restart" title="Permalink to this definition"></a></dt>
+<dd><p>Parameters relating the graceful restart mechanism for BGP</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_bc5d92b7835d38a885c0a32c1c0203cb0b8cc835.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.GracefulRestart" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.GracefulRestart"><code class="xref py py-class docutils literal notranslate"><span class="pre">GracefulRestart</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.logging_options">
+<span class="sig-name descname"><span class="pre">logging_options</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.logging_options" title="Permalink to this definition"></a></dt>
+<dd><p>Logging options for events related to the BGP neighbor or group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_d66764130b2deb8b2b781ded43cd8f839842b080.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.LoggingOptions" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.LoggingOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoggingOptions</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.ebgp_multihop">
+<span class="sig-name descname"><span class="pre">ebgp_multihop</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.ebgp_multihop" title="Permalink to this definition"></a></dt>
+<dd><p>eBGP multi-hop parameters for the BGPgroup</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_0d7ca98b579549eed0ea0a49eebb935960300b86.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.EbgpMultihop" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.EbgpMultihop"><code class="xref py py-class docutils literal notranslate"><span class="pre">EbgpMultihop</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.route_reflector">
+<span class="sig-name descname"><span class="pre">route_reflector</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.route_reflector" title="Permalink to this definition"></a></dt>
+<dd><p>Route reflector parameters for the BGPgroup</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_b73a737b0ca19d33c564fc85b39679d75a1236c9.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.RouteReflector" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.RouteReflector"><code class="xref py py-class docutils literal notranslate"><span class="pre">RouteReflector</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.as_path_options">
+<span class="sig-name descname"><span class="pre">as_path_options</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.as_path_options" title="Permalink to this definition"></a></dt>
+<dd><p>AS_PATH manipulation parameters for the BGP neighbor or group</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_f45b07742beeb53366e5a7faaa9a385aa81e5ba0.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.AsPathOptions" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.AsPathOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsPathOptions</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.add_paths">
+<span class="sig-name descname"><span class="pre">add_paths</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.add_paths" title="Permalink to this definition"></a></dt>
+<dd><p>Parameters relating to the advertisement and receipt of multiple paths for a single NLRI (add-paths)</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_2fe9e585d78b260ca37bd5f67df637c6f69a352d.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.AddPaths" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.AddPaths"><code class="xref py py-class docutils literal notranslate"><span class="pre">AddPaths</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.use_multiple_paths">
+<span class="sig-name descname"><span class="pre">use_multiple_paths</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.use_multiple_paths" title="Permalink to this definition"></a></dt>
+<dd><p>Parameters related to the use of multiple-paths for the same NLRI when they are received only from this neighbor</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_f48941e0d9a0f2c458a83dfa6d4dd3128e19b4d7.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.UseMultiplePaths" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.UseMultiplePaths"><code class="xref py py-class docutils literal notranslate"><span class="pre">UseMultiplePaths</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.apply_policy">
+<span class="sig-name descname"><span class="pre">apply_policy</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.apply_policy" title="Permalink to this definition"></a></dt>
+<dd><p>Anchor point for routing policies in the model. Import and export policies are with respect to the local routing table, i.e., export (send) and import (receive), depending on the context</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_83a82142a164d8cd7ed4a30df156c73c7708fcca.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.ApplyPolicy" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.ApplyPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplyPolicy</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.afi_safis">
+<span class="sig-name descname"><span class="pre">afi_safis</span></span><a class="headerlink" href="#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.afi_safis" title="Permalink to this definition"></a></dt>
+<dd><p>Per-address-family configuration parameters associated with the neighbor</p>
+<p><strong>type</strong>:  <a class="reference internal" href="gen_doc_cc8b13b2150dd8404d44bd52dfd3231da3fb514f.html#ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.AfiSafis" title="ydk.models.ydktest.openconfig_bgp.Bgp.Neighbors.Neighbor.AfiSafis"><code class="xref py py-class docutils literal notranslate"><span class="pre">AfiSafis</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,78 +1,40 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Opendaylight Service Provider &mdash; YANG Development Kit 0.8.6.4 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opendaylight Service Provider &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/width.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/width.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="YANG Development Kit 0.8.6.4 documentation" href="../../index.html"/>
-        <link rel="up" title="Service Providers" href="providers.html"/>
-        <link rel="next" title="RESTCONF Service Provider" href="restconf_provider.html"/>
-        <link rel="prev" title="gNMI Service Provider" href="gnmi_provider.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="RESTCONF Service Provider" href="restconf_provider.html" />
+    <link rel="prev" title="gNMI Service Provider" href="gnmi_provider.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> YANG Development Kit
-          
-
-          
-            
-            <img src="../../_static/logo.png" class="logo" />
-          
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
               <div class="version">
-                0.8.6.4
+                0.8.6.5
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,15 +42,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-                <ul class="current">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../about_ydk.html">About YDK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">Developer Guide</a></li>
@@ -113,177 +68,114 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">YANG Development Kit</a>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">YANG Development Kit</a>
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
- 
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
-          <li><a href="../../api_guide.html">API Guide</a> &raquo;</li>
-      
-          <li><a href="../class_hierarchy.html">YDK API</a> &raquo;</li>
-      
-          <li><a href="providers.html">Service Providers</a> &raquo;</li>
-      
-    <li>Opendaylight Service Provider</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_guide.html">API Guide</a></li>
+          <li class="breadcrumb-item"><a href="../class_hierarchy.html">YDK API</a></li>
+          <li class="breadcrumb-item"><a href="providers.html">Service Providers</a></li>
+      <li class="breadcrumb-item active">Opendaylight Service Provider</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
   </ul>
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="opendaylight-service-provider">
-<h1>Opendaylight Service Provider<a class="headerlink" href="#opendaylight-service-provider" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="ydk.providers.OpendaylightServiceProvider">
-<em class="property">class </em><code class="descclassname">ydk.providers.</code><code class="descname">OpendaylightServiceProvider</code><span class="sig-paren">(</span><em>repo</em>, <em>address</em>, <em>username</em>, <em>password</em>, <em>port</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.OpendaylightServiceProvider" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="opendaylight-service-provider">
+<h1>Opendaylight Service Provider<a class="headerlink" href="#opendaylight-service-provider" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.providers.OpendaylightServiceProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.providers.</span></span><span class="sig-name descname"><span class="pre">OpendaylightServiceProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.OpendaylightServiceProvider" title="Permalink to this definition"></a></dt>
 <dd><p>A service provider to be used to communicate with an OpenDaylight instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>repo</strong> &#8211; (<a class="reference internal" href="../path/repository.html#ydk.path.Repository" title="ydk.path.Repository"><code class="xref py py-class docutils literal"><span class="pre">Repository</span></code></a>) User provided repository stores cached models.</li>
-<li><strong>address</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) IP address of the ODL instance</li>
-<li><strong>username</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) Username to log in to the instance</li>
-<li><strong>password</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) Password to log in to the instance</li>
-<li><strong>port</strong> &#8211; (<code class="docutils literal"><span class="pre">int</span></code>) Device port used to access the ODL instance.</li>
-<li><strong>encoding</strong> &#8211; (<a class="reference internal" href="../types.html#ydk.types.EncodingFormat" title="ydk.types.EncodingFormat"><code class="xref py py-class docutils literal"><span class="pre">EncodingFormat</span></code></a>) Type of encoding to be used for the payload. Default is <a class="reference internal" href="../types.html#ydk.types.EncodingFormat.JSON" title="ydk.types.EncodingFormat.JSON"><code class="xref py py-attr docutils literal"><span class="pre">JSON</span></code></a></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> – (<a class="reference internal" href="../path/repository.html#ydk.path.Repository" title="ydk.path.Repository"><code class="xref py py-class docutils literal notranslate"><span class="pre">Repository</span></code></a>) User provided repository stores cached models.</p></li>
+<li><p><strong>address</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) IP address of the ODL instance</p></li>
+<li><p><strong>username</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Username to log in to the instance</p></li>
+<li><p><strong>password</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Password to log in to the instance</p></li>
+<li><p><strong>port</strong> – (<code class="docutils literal notranslate"><span class="pre">int</span></code>) Device port used to access the ODL instance.</p></li>
+<li><p><strong>encoding</strong> – (<a class="reference internal" href="../types.html#ydk.types.EncodingFormat" title="ydk.types.EncodingFormat"><code class="xref py py-class docutils literal notranslate"><span class="pre">EncodingFormat</span></code></a>) Type of encoding to be used for the payload. Default is <a class="reference internal" href="../types.html#ydk.types.EncodingFormat.JSON" title="ydk.types.EncodingFormat.JSON"><code class="xref py py-attr docutils literal notranslate"><span class="pre">JSON</span></code></a></p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="ydk.providers.OpendaylightServiceProvider.get_node_provider">
-<code class="descname">get_node_provider</code><span class="sig-paren">(</span><em>node_id</em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.OpendaylightServiceProvider.get_node_provider" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the ServiceProvider instance corresponding to the device being controlled by the OpenDaylight instance, indicated by <code class="docutils literal"><span class="pre">node_id</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_id</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) The name of the device being controlled by the OpenDaylight instance.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">One of supported service provider instance.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal"><span class="pre">YServiceProviderError</span></code></a> if no such service provider could be found.</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ydk.providers.OpendaylightServiceProvider.get_node_provider">
+<span class="sig-name descname"><span class="pre">get_node_provider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.OpendaylightServiceProvider.get_node_provider" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the ServiceProvider instance corresponding to the device being controlled by the OpenDaylight instance, indicated by <code class="docutils literal notranslate"><span class="pre">node_id</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node_id</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) The name of the device being controlled by the OpenDaylight instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>One of supported service provider instance.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a> if no such service provider could be found.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="ydk.providers.OpendaylightServiceProvider.get_node_ids">
-<code class="descname">get_node_ids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.OpendaylightServiceProvider.get_node_ids" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="ydk.providers.OpendaylightServiceProvider.get_node_ids">
+<span class="sig-name descname"><span class="pre">get_node_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.OpendaylightServiceProvider.get_node_ids" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a list of node ID’s of the devices being controlled by this OpenDaylight instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of node ID’s of the devices being controlled by this OpenDaylight instance.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of node ID’s of the devices being controlled by this OpenDaylight instance.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="restconf_provider.html" class="btn btn-neutral float-right" title="RESTCONF Service Provider" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="gnmi_provider.html" class="btn btn-neutral" title="gNMI Service Provider" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gnmi_provider.html" class="btn btn-neutral float-left" title="gNMI Service Provider" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="restconf_provider.html" class="btn btn-neutral float-right" title="RESTCONF Service Provider" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-
-    </p>
+    <p></p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.6.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  false
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

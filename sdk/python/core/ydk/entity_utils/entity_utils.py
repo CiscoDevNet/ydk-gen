@@ -81,10 +81,12 @@ def _datanode_to_entity(data_node):
                 class_name = name_list[-1]
                 module_name = entity_entry.split('.'+class_name)[0]
                 try:
-                    imported_module = importlib.import_module('ydk.models.{}.{}'.format(name, module_name))
+                    imported_module = importlib.import_module('ydk.models.{}.{}'.
+                                                              format(name, module_name))
                     entity = getattr(imported_module, class_name)()
                 except Exception as err:
-                    raise YModelError("Failed instantiate class '{}' from module '{}': {}".format(class_name, module_name, err))
+                    raise YModelError("Failed instantiate class '{}' from module '{}': {}".
+                                      format(class_name, module_name, err))
 
                 top_entity = entity.clone_ptr()
                 get_entity_from_data_node(data_node, top_entity)
@@ -93,7 +95,7 @@ def _datanode_to_entity(data_node):
     raise YModelError(_ENTITY_ERROR_MSG.format(node_path))
 
 
-def _payload_to_top_entity(payload, encoding):
+def _payload_to_top_entity(payload, encoding, bundle_name=None):
     """Return top level entity from payload.
 
     Namespace and entity name are extracted from payload. Then we use this
@@ -119,7 +121,7 @@ def _payload_to_top_entity(payload, encoding):
         raise YModelError("Could not retrieve namespace and container name")
     ydk_models = importlib.import_module('ydk.models')
     for (_, name, ispkg) in pkgutil.iter_modules(ydk_models.__path__):
-        if ispkg:
+        if ispkg and (bundle_name is None or bundle_name == name):
             yang_ns = importlib.import_module('ydk.models.{}._yang_ns'.format(name))
             entity_lookup = yang_ns.__dict__['ENTITY_LOOKUP']
             if ns_ename in entity_lookup:
@@ -244,9 +246,10 @@ def _get_child_entity_from_top(top_entity, filter_entity):
     """Searches for 'filter_entity' in the hierarchy of given top-level entity.
 
     Args:
-        top_entity (Entity or [Entity ..]): Top-level entity, usually returned from CRUD read operation.
+        top_entity (Entity or [Entity]): Top-level entity, usually returned from CRUD read operation
 
-        filter_entity (Entity or [Entity ..]): Top-level or non-top-level entity, which is expected to be in the 'top_entity' hierarchy.
+        filter_entity (Entity or [Entity]): Top-level or non-top-level entity,
+                                            which is expected to be in the 'top_entity' hierarchy.
 
         Argument type and list size must be matching.
 
@@ -254,7 +257,8 @@ def _get_child_entity_from_top(top_entity, filter_entity):
         Top-level or non-top-level entity, which matches given filter under top-entity hierarchy.
 
     Raises:
-        YServiceError, if specified argument types are not matching or 'filter_entity' does not belong to 'top_entity' hierarchy.
+        YServiceError, if specified argument types are not matching or 'filter_entity'
+        does not belong to 'top_entity' hierarchy.
     """
     if filter_entity is None:
         return top_entity
@@ -275,11 +279,13 @@ def _get_child_entity_from_top(top_entity, filter_entity):
             if filter_entity.get_absolute_path() == top_entity.get_absolute_path():
                 return top_entity
             else:
-                raise YServiceError("_get_child_entity_from_top: The filter '%s' points to different top-entity" %
+                raise YServiceError("_get_child_entity_from_top: "
+                                    "The filter '%s' points to different top-entity" %
                                     filter_entity.get_absolute_path())
         else:
             if not top_entity.is_top_level_class:
-                raise YServiceError("_get_child_entity_from_top: The '%s' is not a top-level entity" %
+                raise YServiceError("_get_child_entity_from_top: "
+                                    "The '%s' is not a top-level entity" %
                                     top_entity.get_absolute_path())
             filter_abs_path = filter_entity.get_absolute_path()
             entity = _find_child_entity(top_entity, filter_abs_path)
@@ -289,7 +295,8 @@ def _get_child_entity_from_top(top_entity, filter_entity):
     elif top_entity is None:
         return None
     else:
-        raise YServiceError('_get_child_entity_from_top: Invalid arguments. Expected Entity or [Entity ...] for both arguments')
+        raise YServiceError('_get_child_entity_from_top: '
+                            'Invalid arguments. Expected Entity or [Entity ...] for both arguments')
 
 
 def _set_nontop_entity_filter(entity, yfilter):

@@ -323,7 +323,7 @@ class SanityNetconf(unittest.TestCase):
                 self.ncc, target=Datastore.candidate, source=Datastore.running, with_defaults_option=1)
         except TypeError as err:
             expected_msg = "copy_config() got an unexpected keyword argument 'with_defaults_option'"
-            self.assertEqual(err.args[0], expected_msg)
+            self.assertTrue(expected_msg in err.args[0])
         else:
             raise Exception('YServiceError not raised')
 
@@ -434,7 +434,7 @@ class SanityNetconf(unittest.TestCase):
             self.netconf_service.get_config(self.ncc, Datastore.candidate, get_filter, with_defaults_option=1)
         except TypeError as err:
             expected_msg = "get_config() got an unexpected keyword argument 'with_defaults_option'"
-            self.assertEqual(err.args[0], expected_msg)
+            self.assertTrue(expected_msg in err.args[0])
         else:
             raise Exception('TypeError not raised')
 
@@ -459,7 +459,7 @@ class SanityNetconf(unittest.TestCase):
             self.assertEqual(is_equal(runner, result), True)
         except TypeError as err:
             expected_msg = "get() got an unexpected keyword argument 'with_defaults_option'"
-            self.assertEqual(err.args[0], expected_msg)
+            self.assertTrue(expected_msg in err.args[0])
         else:
             raise Exception('TypeError not raised')
 

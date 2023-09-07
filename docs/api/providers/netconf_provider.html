@@ -1,78 +1,40 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>NETCONF Service Provider &mdash; YANG Development Kit 0.8.6.4 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NETCONF Service Provider &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/width.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/width.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="YANG Development Kit 0.8.6.4 documentation" href="../../index.html"/>
-        <link rel="up" title="Service Providers" href="providers.html"/>
-        <link rel="next" title="gNMI Service Provider" href="gnmi_provider.html"/>
-        <link rel="prev" title="Codec Service Provider" href="codec_provider.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="gNMI Service Provider" href="gnmi_provider.html" />
+    <link rel="prev" title="Codec Service Provider" href="codec_provider.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> YANG Development Kit
-          
-
-          
-            
-            <img src="../../_static/logo.png" class="logo" />
-          
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
               <div class="version">
-                0.8.6.4
+                0.8.6.5
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,15 +42,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-                <ul class="current">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../about_ydk.html">About YDK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">Developer Guide</a></li>
@@ -113,182 +68,117 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">Questions and Answers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">YANG Development Kit</a>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">YANG Development Kit</a>
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
- 
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
-          <li><a href="../../api_guide.html">API Guide</a> &raquo;</li>
-      
-          <li><a href="../class_hierarchy.html">YDK API</a> &raquo;</li>
-      
-          <li><a href="providers.html">Service Providers</a> &raquo;</li>
-      
-    <li>NETCONF Service Provider</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_guide.html">API Guide</a></li>
+          <li class="breadcrumb-item"><a href="../class_hierarchy.html">YDK API</a></li>
+          <li class="breadcrumb-item"><a href="providers.html">Service Providers</a></li>
+      <li class="breadcrumb-item active">NETCONF Service Provider</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
   </ul>
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="netconf-service-provider">
-<h1>NETCONF Service Provider<a class="headerlink" href="#netconf-service-provider" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="ydk.providers.NetconfServiceProvider">
-<em class="property">class </em><code class="descclassname">ydk.providers.</code><code class="descname">NetconfServiceProvider</code><span class="sig-paren">(</span><em>address</em>, <em>username</em>, <em>password=None</em>, <em>port=830</em>, <em>protocol='ssh'</em>, <em>timeout=-1</em>, <em>repo=None</em>, <em>private_key_path=&quot;&quot;</em>, <em>public_key_path=&quot;&quot;</em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.NetconfServiceProvider" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructs an instance of the <cite>NetconfServiceProvider</cite> class and connects to Netconf server via <a class="reference internal" href="../path/netconf_session.html#ydk.path.NetconfSession" title="ydk.path.NetconfSession"><code class="xref py py-class docutils literal"><span class="pre">NetconfSession</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>address</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) IP address or DNS name of device, which supports Netconf server; required parameter</li>
-<li><strong>username</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) Username to log in to the device; required parameter</li>
-<li><strong>password</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) Password to log in to the device</li>
-<li><strong>port</strong> &#8211; (<code class="docutils literal"><span class="pre">int</span></code>) The Netconf server access port; defaults to 830</li>
-<li><strong>protocol</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) Currently supported <cite>ssh</cite> for secure connection and <cite>tcp</cite> for insecure connection; default - <cite>ssh</cite></li>
-<li><strong>timeout</strong> &#8211; (<code class="docutils literal"><span class="pre">int</span></code>) The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking</li>
-<li><strong>repo</strong> &#8211; (<a class="reference internal" href="../path/repository.html#ydk.path.Repository" title="ydk.path.Repository"><code class="xref py py-class docutils literal"><span class="pre">Repository</span></code></a>) User provided repository - directory, which stores cached Yang models</li>
-<li><strong>private_key_path</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) Path to private key file. Requires public_key_path field.</li>
-<li><strong>public_key_path</strong> &#8211; (<code class="docutils literal"><span class="pre">str</span></code>) Path to public key file. Does not allow password field.</li>
+             
+  <section id="netconf-service-provider">
+<h1>NETCONF Service Provider<a class="headerlink" href="#netconf-service-provider" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.providers.NetconfServiceProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.providers.</span></span><span class="sig-name descname"><span class="pre">NetconfServiceProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">830</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ssh'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_key_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.NetconfServiceProvider" title="Permalink to this definition"></a></dt>
+<dd><p>Constructs an instance of the <cite>NetconfServiceProvider</cite> class and connects to Netconf server via <a class="reference internal" href="../path/netconf_session.html#ydk.path.NetconfSession" title="ydk.path.NetconfSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfSession</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>address</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) IP address or DNS name of device, which supports Netconf server; required parameter</p></li>
+<li><p><strong>username</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Username to log in to the device; required parameter</p></li>
+<li><p><strong>password</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Password to log in to the device</p></li>
+<li><p><strong>port</strong> – (<code class="docutils literal notranslate"><span class="pre">int</span></code>) The Netconf server access port; defaults to 830</p></li>
+<li><p><strong>protocol</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Currently supported <cite>ssh</cite> for secure connection and <cite>tcp</cite> for insecure connection; default - <cite>ssh</cite></p></li>
+<li><p><strong>timeout</strong> – (<code class="docutils literal notranslate"><span class="pre">int</span></code>) The timeout in microseconds, -1 for infinite timeout, 0 for non-blocking</p></li>
+<li><p><strong>repo</strong> – (<a class="reference internal" href="../path/repository.html#ydk.path.Repository" title="ydk.path.Repository"><code class="xref py py-class docutils literal notranslate"><span class="pre">Repository</span></code></a>) User provided repository - directory, which stores cached Yang models</p></li>
+<li><p><strong>private_key_path</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Path to private key file. Requires public_key_path field.</p></li>
+<li><p><strong>public_key_path</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Path to public key file. Does not allow password field.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="ydk.providers.NetconfServiceProvider.get_encoding">
-<code class="descname">get_encoding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.NetconfServiceProvider.get_encoding" title="Permalink to this definition">¶</a></dt>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ydk.providers.NetconfServiceProvider.get_encoding">
+<span class="sig-name descname"><span class="pre">get_encoding</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.NetconfServiceProvider.get_encoding" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the type of encoding supported by the service provider.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="ydk.providers.NetconfServiceProvider.get_session">
-<code class="descname">get_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.NetconfServiceProvider.get_session" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the instance of the <a class="reference internal" href="../path/netconf_session.html#ydk.path.NetconfSession" title="ydk.path.NetconfSession"><code class="xref py py-class docutils literal"><span class="pre">NetconfSession</span></code></a> used to connect to the Netconf server</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="../path/netconf_session.html#ydk.path.NetconfSession" title="ydk.path.NetconfSession"><code class="xref py py-class docutils literal"><span class="pre">NetconfSession</span></code></a> instance.</td>
-</tr>
-</tbody>
-</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ydk.providers.NetconfServiceProvider.get_session">
+<span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.NetconfServiceProvider.get_session" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the instance of the <a class="reference internal" href="../path/netconf_session.html#ydk.path.NetconfSession" title="ydk.path.NetconfSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfSession</span></code></a> used to connect to the Netconf server</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A <a class="reference internal" href="../path/netconf_session.html#ydk.path.NetconfSession" title="ydk.path.NetconfSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfSession</span></code></a> instance.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="ydk.providers.NetconfServiceProvider.get_capabilities">
-<code class="descname">get_capabilities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.NetconfServiceProvider.get_capabilities" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="ydk.providers.NetconfServiceProvider.get_capabilities">
+<span class="sig-name descname"><span class="pre">get_capabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.providers.NetconfServiceProvider.get_capabilities" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a list of capabilities of the Netconf server</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of <code class="docutils literal"><span class="pre">str</span></code> representing the client&#8217;s/server&#8217;s capabilities</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of <code class="docutils literal notranslate"><span class="pre">str</span></code> representing the client’s/server’s capabilities</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="gnmi_provider.html" class="btn btn-neutral float-right" title="gNMI Service Provider" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="codec_provider.html" class="btn btn-neutral" title="Codec Service Provider" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="codec_provider.html" class="btn btn-neutral float-left" title="Codec Service Provider" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gnmi_provider.html" class="btn btn-neutral float-right" title="gNMI Service Provider" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-
-    </p>
+    <p></p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.6.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  false
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

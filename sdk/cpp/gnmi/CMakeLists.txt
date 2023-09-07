@@ -220,8 +220,8 @@ SET( legacy_link   ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/libydk_gnmi.a)
 SET( legacy_target ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}/${CPACK_LIBRARY_TARGET})
 ADD_CUSTOM_COMMAND( TARGET ${CPACK_LIBRARY_NAME}
                     COMMAND echo "Creating symbolic link ${legacy_link}"
-                    COMMAND rm -f ${legacy_link}
-                    COMMAND ln -s ${CPACK_LIBRARY_TARGET} ${legacy_link}
+                    COMMAND sudo rm -f ${legacy_link}
+                    COMMAND sudo ln -s ${CPACK_LIBRARY_TARGET} ${legacy_link}
                     DEPENDS install ${CPACK_LIBRARY_NAME}
                   )
 ADD_CUSTOM_TARGET( install_legacy DEPENDS ${legacy_target} )

@@ -32,7 +32,9 @@ yang/nxos*
 yang-git
 profiles/test/ydk-nxos*
 profiles/bundles/yang/xe-1764/
-profiles/test/cisco-iosxe-1764.json
+profiles/bundles/yang/xe
+profiles/bundles/yang/xr
+profiles/test/cisco-iosxe-test.json
 confd*
 grpc
 protobuf-3.5.0

@@ -92,7 +92,7 @@ function init_py_env {
   status=$?
   if [ $status -ne 0 ]; then
     MSG_COLOR=$RED
-    print_msg "Could not locate python3 interpretor"
+    print_msg "Could not locate python3 interpreter"
     exit $status
   fi
 
@@ -109,14 +109,10 @@ function init_py_env {
   if [[ $ydk_lang == "py" || $ydk_lang == "all" ]]; then
     print_msg "Checking installation of python shared libraries"
     ver=$(python3 -c "import sys;print('{}.{}'.format(sys.version_info.major,sys.version_info.minor))")
-    if [[ $ver. > "3.8." ]]; then
-      print_msg "YDK for python currently is not supported with Python version $ver"
-      print_msg "Please downgrade your Python installation to 3.8 or 3.7"
-      exit 1
-    fi
+    ver_minor=$(python3 -c "import sys;print('{}'.format(sys.version_info.minor))")
     os_type=$(uname)
     if [[ ${os_type} == "Linux" ]]; then
-      if [[ $ver. > "3.7." ]]; then
+      if [ $ver_minor -gt 7 ]; then
         ext="$ver.so"
       else
         ext="$ver"m.so
@@ -332,6 +328,8 @@ export YDKGEN_HOME=\"${YDKGEN_HOME}\"
 export C_INCLUDE_PATH=\"$C_INCLUDE_PATH\"
 export CPLUS_INCLUDE_PATH=\"$CPLUS_INCLUDE_PATH\"
 export PIP_DISABLE_PIP_VERSION_CHECK=1
+alias python=python3
+alias pip=pip3
 " > .env
   if [[ -n $LD_LIBRARY_PATH ]]; then
     echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH
@@ -342,8 +340,6 @@ export PIP_DISABLE_PIP_VERSION_CHECK=1
     echo "source $PYTHON_VENV/bin/activate" >> .env
   elif [[ -n $python_location ]]; then
     echo "export PATH=$python_location/bin:\$PATH
-alias python=python3
-alias pip=pip3
 " >> .env
   fi
   if [[ -n $sudo_cmd ]]; then
@@ -366,6 +362,11 @@ if [ -z \$GOPATH ]; then
 fi
 export CXX=/usr/bin/c++
 export CC=/usr/bin/cc
+export CGO_ENABLED=1
+export CGO_LDFLAGS_ALLOW=\"-fprofile-arcs|-ftest-coverage|--coverage\"
+if [[ \$go_version > \"1.11.\" ]]; then
+    go env -w GO111MODULE=off
+fi
 " >> .env
   fi
   if [[ -n $CMAKE_LIBRARY_PATH ]]; then
@@ -502,7 +503,7 @@ print_msg "Running OS type: $os_type"
 print_msg "OS info: $os_info"
 if [[ ${os_type} == "Linux" ]]; then
   if [[ ${os_info} == *"Ubuntu"* ]]; then
-    if [[ ${os_info} != *"xenial"* && ${os_info} != *"bionic"* && ${os_info} != *"focal"* ]]; then
+    if [[ ${os_info} != *"xenial"* && ${os_info} != *"bionic"* && ${os_info} != *"focal"* && ${os_info} != *"jammy"* ]]; then
         print_msg "WARNING! Unsupported Ubuntu distribution found. Will try the best efforts."
     fi
   elif [[ ${os_info} == *"fedora"* ]]; then
@@ -530,11 +531,11 @@ if [[ -z ${CPLUS_INCLUDE_PATH} ]]; then
     export CPLUS_INCLUDE_PATH=/usr/local/include
 fi
 
-if [[ $(uname) == "Linux" && ${os_info} == *"fedora"* ]]; then
+if [[ ${os_info} == *"fedora"* || ${os_info} == *"jammy"* ]]; then
   if [[ $LD_LIBRARY_PATH != *"/usr/local/lib"* ]]; then
     export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
   fi
-  if [[ $LD_LIBRARY_PATH != *"/lib64"* ]]; then
+  if [[ $LD_LIBRARY_PATH != *"/lib64"* && -d /usr/lib64 ]]; then
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib64:/usr/lib64
   fi
   print_msg "LD_LIBRARY_PATH is set to: $LD_LIBRARY_PATH"

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AaaLoggingLevel &mdash; YANG Development Kit 0.8.6.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AaaMonitorServerType" href="gen_doc_ca4f22f90522a19c33babe257db77e751ae8ec7f.html" />
+    <link rel="prev" title="AaaLdapSSLStrictnessLevel" href="gen_doc_87de2c69406f23b3fadd68a4d7cb046de91208a8.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> YANG Development Kit
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.8.6.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about_ydk.html">About YDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_288ad19384888df2af43ab22b42e4b12a972b5ab.html">iana_if_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_6f34c13b0ec33426031aaa29112b1eee4e5d4538.html">ietf_aug_base_1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_8d8688e6f8bfacb4b2249e3b11f355a457d49c93.html">ietf_aug_base_2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_de2b066dcae3b89cc0939acda503153e9ca7a98f.html">ietf_inet_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_98e926e1f8ba72a08a0992c52dca0ea227d81a0f.html">ietf_interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_aa6af1caabe6be9ed306ba4c935a150d9f590d5c.html">ietf_netconf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_8dfa40abff9043a59a88fc9540e9b56b0781d23a.html">ietf_netconf_acm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_fee1eaf5d2f60cf31af6b307c16a243f75504384.html">ietf_netconf_monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_a631ea7ccc9509c7017aeac2fccb452fc3477e4c.html">ietf_netconf_with_defaults</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_4969e66bd13c69af2a9df2719e01bca4bfabffcb.html">ietf_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_6c1a7be7f1cba54a0ecdc2daae647209babc80f2.html">main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_499d3c0d5bf889f4614f3c8b356186879b05bc1f.html">oc_pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_3ef4f57f820c9ed151166585d46b6b93c935c865.html">openconfig_bgp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_5df93a4f2ad0861a8b053d23318bfcd3715a046b.html">openconfig_bgp_policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_34f7dd53d51846eedf301eabe932aa31959c4e17.html">openconfig_bgp_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_61445652594ec075538ac77d428d36484be5563d.html">openconfig_if_ethernet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_d1eb05119bb4a9940b37ad0b79a6d9c95e6b2239.html">openconfig_interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_3c422767e32176068e70de9136854682a4501fb5.html">openconfig_platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_34dceffc4b1f22b5cab7d92f22f9dbc9f0f616a4.html">openconfig_platform_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_dc7e1c9c1bc6aa1a59104ae4c577e1011e152e72.html">openconfig_policy_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_2ee0743cad7f489609ec648ff907aece551baa61.html">openconfig_routing_policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_ba143e5b585861115de872b53a0d883607f487ee.html">openconfig_terminal_device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_08d99c582b00e49d7f9faa483613e29d324945c4.html">openconfig_transport_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_d7923e9f85956eac8f8764c111fa8273c8cfa9c1.html">openconfig_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_9636180ec39ddcad52425694c5485386da88f0db.html">ydktest_aug_ietf_5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_b89f2a0dc0185d0ce016dbcf18d0ff0ce56a2ab6.html">ydktest_filterread</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_f9ce93fc14be0e9fdea22f250b8f8e8a889be8b7.html">ydktest_sanity</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="gen_doc_61df6284a9f4af6e19568c06490f8bdf39b2de1c.html">ydktest_sanity_typedefs</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0f9ac074d3db7b65e606f59b252a9e8dd86e813d.html">System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2ae8e4126f8c695e1247aae8f333db615895e7f6.html">AaaAccountStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_58a43d118e99eeed8353fc57366c8d4411f190cc.html">AaaAuthenticationProtocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9ebfcb3760cae3eec6cec8ee60b8e8586f230f91.html">AaaBoolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b35e018a85c0aec2f73ef6dad4e060fda51b42fd.html">AaaClear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_89a7efb9507c2ad5900cc341e3ac75fa2d3a3220.html">AaaCmdType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0ee82a7a965ef1e42106b9cbbdb6a7f0c2590185.html">AaaKeyEnc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4ac6f2eb17b4d0e4dbb22095f64a309840714d23.html">AaaKeyEncUserPass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_87de2c69406f23b3fadd68a4d7cb046de91208a8.html">AaaLdapSSLStrictnessLevel</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">AaaLoggingLevel</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ydk.models.ydktest.ydktest_sanity_typedefs.AaaLoggingLevel"><code class="docutils literal notranslate"><span class="pre">AaaLoggingLevel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ca4f22f90522a19c33babe257db77e751ae8ec7f.html">AaaMonitorServerType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1528609d8a7b344229365506f094d2a2067ccca0.html">AaaNoRolePolicy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1bc6e79e0e257db231a666372413416eaea1efd9.html">AaaProviderGroupProtocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9599719188b173edda95d3cea1660eee43c9395b.html">AaaProviderState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b24db8179d882c2404adc8f6f4b1db94aabfcff6.html">AaaPwdPolicy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8aafc772de03c09668e0450a9fa03d64eee5fccf.html">AaaRadSrvUseType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8099bb33c25a759eea08bea6d2ba28057b4c5c00.html">AaaRealm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ee102cadabfa4af5dffdd6d04c3d43cfb7ad9f82.html">AaaRuleAccessType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6b0fbad7855cad16343064af641df4846e299b05.html">AaaRulePermissionType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fb9a1adef4e1c519239b00d131615b2cc9834413.html">AaaRuleScopeType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_01530a5d8c401103d3331bd6a399b9504ae43403.html">AaaUserRolePrivType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_494981fde0b2fbaac7337c44719c97a2a27d1510.html">AcBankT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_793767c0fd94ce097f8f76103b3e91af8b491cab.html">AcRuleOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e67656364f7533813d419bf53207b91c714b8c5e.html">AclActionType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_70d4b753fe6744a1e99be3d39c4c4940ab15c59b.html">AclHttpOptionType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d276f761099af431a54d9aea1adb0a5c56c6e2dd.html">AclVAclActionType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4a27e5f4e1fa4f4927d0f8fd0dd42ff04abb2153.html">ActionAdminSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_cff87361b2f8f74ee133d5cf3b98ee06fa9aeec3.html">ActionOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_87c7cc4a5aea2b839f5e6c5ecd1e060db40f32c2.html">ActionType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_945e5adcda15993340dba9c01925726fe2846330.html">ActrlDirection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0f434e1a75bb0c71fb7e60f775a095471fb7d079.html">ActrlOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4629bc427cb20931d586faa92dfd6eea3b386c13.html">ActrlRuleT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6f580554b5538430baf2ac89535adc07e3bb7c24.html">ActrlcapSubj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8534678955363a143579207f8b47e1b86dab5dee.html">AdjacencyAdjOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a0721031df7016727781b2e2e2ff0cb7b7fac29e.html">AdjacencyDbT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_eb4acb3d5b3d665afd49f848f16c9effa89478c7.html">AggregateAdminState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7e898ca999bfa39989acf1530e9b056dc04c111f.html">AggregateAfT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_731f4294b1bf61615df031a306b577be190890fd.html">AggregateBfdStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8cd5065d059f5d7d17bf6778159f1ea9b25659cd.html">AggregateBooleanFlag</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d934c10568f6b26a73286efad7510be4da22bb36.html">AggregateConfTmplStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_64516d00931c0c80858851437839099ab7ce7fd0.html">AggregateConfigMgmtStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6ab255560df94abb499ae46280151951f4df3963.html">AggregateConfigSourceType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a1751abadde6c103fdbe863c7d0ba1ffa3baddc2.html">AggregateConfigStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0a0b14c3bf96600041dbf44c56345052fd5a63dd.html">AggregateCtrlrType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f1ae95bdee2dda768982e48f2376d36004ce727a.html">AggregateFabFwdMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a7a6a90693c401ac20c01de538aa7c777c2857de.html">AggregateHostReachabilityMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ed1ebbbafadc8596946a00ff4b931255c41b29f0.html">AggregateIngressRepProtocolType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c3cc82682053a6ce91ede108dc0c06203e2228e1.html">AggregateIntfAssignMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_29181a3e1d635aa2c5c7910b430c922e80569243.html">AggregateIntfType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bfb853492a5aebb3ca357c20fdd6ae168a73a0a7.html">AggregateMacType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_861b06c0d7087cf05a7c5b8f6d243cbde7026c3c.html">AggregateOperState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0ccf8a24d4ab8b43ec3636aed3c79241a9396004.html">AggregateReplicationModeType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4381d5471764225a820f71a874eee4df4abe7700.html">AggregateResourceStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_93c59851ec341c9764e080bafc9c1e04357331c9.html">AggregateRttPType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_36fc01449dd82dfa5f786a22ed307bf896c1fe1e.html">AggregateTunnelType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f8c5ad4aadf54e78cd39c510bf9843d385e4ec84.html">AggregateVpcKeepaliveStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3b6f0ffa0487b72cbfcf1fd44e04c46d2f7a3021.html">AggregateVpcOperStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_587a4ec59a673c4e93b46792a7faa833ad137ded.html">AggregateVpcPeerLinkStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_301e9bd553b0b60a842cb0c235d77851d23ee1d8.html">AibDbT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a4a59c9468e550f8aed65815ccbc341c3c83c332.html">AnalyticsCModeT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f811b6978dddf3c2c4f36e466c8601fb87fe1d9c.html">AnalyticsCollVersion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8dc58466d0ca844944c321484ee03325ec5b152e.html">AnalyticsDefPolicyT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_37f8ecee9cf615b26a661a52280a22e5fd66334a.html">AnalyticsDirectionT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0daf073fd31fa539416aa44e6fa7ca2b0fcf4193.html">AnalyticsFltType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_02dde26745a37f34555ed6e7bc9c590041bb0637.html">AnalyticsModeT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5c641170d9cee53d84c3101566bde7314bc4819b.html">AnalyticsOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1c59b36ca6d055481bd8d26c63c1fece3f1380fd.html">AnalyticsSamplerMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fe1867e8b0bf036abb211d5296fa56bd52d515d1.html">ArpAdjOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6d38c9e9c799a6b941f9801f2b772559aa2959f9.html">ArpDbT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4715248fa4106ca60793cbf45e31f38750902a28.html">ArpEventLogSize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_283b090b021ec244bfcfa196aeaaf3828d97e8f5.html">ArpEventType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4b71ea6ea4e87522c18b9af0213c9e3aba9be12b.html">ArpLoggingLevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0936f7073433025730a69fca0712b3ed9c4c2d2e.html">ArpOpcode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a887f94a2267502851690d4bdaaf44429c807217.html">ArpStAdjOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_dd4738e54c2bfc1e5a77d36b9898530dca1be536.html">ArpStAdjOperStQual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_75d1a34a6b53ffa31d28387d2726f1969591a6f1.html">ArpSuppressArpMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d2d925c5c09e78dfa2ca9ab96ea9d292c233cb6f.html">BdDefaultSVIAutoState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4fee8af44c14283d9665514595078bf4543a90ea.html">BfdAfT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7734d1e96154097e46da1b9dbf31f3a17f533da6.html">BfdAuthT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b2923907cd2bb440a5c05334a6e7ee39dc5285c0.html">BfdDiagCode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5a505078989689f2a2f6fccd769becd73422caf8.html">BfdOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8b9ed1cfeb8bfd6d370cacdc879cc137b195b450.html">BfdTrkMbrLnk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_cbca7908a97bb75cfea406a2ea4daa7fce90f250.html">BgpAdminSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2da9fa0b8768fc06f85727e2990bcf6f0d926c79.html">BgpAdvertL2vpnEvpn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9c9967d34b9c0489e43d1e0b95d657fecf274a56.html">BgpAdvtMapCondition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3b93fc416a464898665562213def3b5777abba84.html">BgpAfT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ea4e196e7c77e3b7cf17d5af47fa9d50e971bccb.html">BgpAsSegT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_97480eb6c76eab4c51fbc985b2a673c870b6f331.html">BgpAsSet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_05df4117a8dde822b2374350767a4123d84ee4c5.html">BgpAsnPropagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fab0d2f658f5c40dd44575442f99f7c89b005494.html">BgpBmpSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_0b07e99c88bcc35af93a4a57fb77e541f58fac5d.html">BgpDomOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b5fecd4762113e2709c5f25d95262524f5d150ae.html">BgpEgressPeerEng</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ddd180d018d6cab56d9a07da283f9f2c884f1dcc.html">BgpEhType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_98abc50f15ea93deae6bbe7ec69c07fb37c01d44.html">BgpEvpnRtType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6133501631525c52a25cca84b1f48688ac5ee2bf.html">BgpLogNbrSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d21b4ba0b266d31f4c57ae0e1a3e629f402f0b6c.html">BgpLsAdminSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bae3711a2e96593fd88c22b4aa7f891aa9229ed3.html">BgpLsAttrEntryType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b77750fab1cdf3b12273091b08b107939b7292e6.html">BgpLsNlriType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1291ea26cb7ff9f833382ea5328c0ab13b633c49.html">BgpLsProtoId</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c1a5ed8f4c4efc9160464e31ac402af6187e33c1.html">BgpMajNotifErr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_58654e73507f03a14448e4ba8da644419f2ad551.html">BgpMaxPfxAct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e4d95bce055fa5fd2a2fb45681f413f127c56ae9.html">BgpMinNotifErr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_87d8322f018b32bea62cc40f9357b3df26778afd.html">BgpMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ab403c570b8ac69fe63c6ced78a3eb62471de167.html">BgpMvpnRtType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bd3b09878cead212dccabea0bc29d0bfb02e0f93.html">BgpOrigin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9341c57bc179806bcdc36e8c8cf5f69c10514a78.html">BgpPasswdSet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_a6b2bc1c7d58af27ed36a559cd019b252297ccc4.html">BgpPathSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5fa470df76374b1202549ca9ba56a3516bcb0111.html">BgpPathT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_bfd5048d1bf70756f1f4ffb3f502ba0b84e59656.html">BgpPeerFabType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_b86021f4daecd6d2922a95b97559c0aaeda7add2.html">BgpPeerGrSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_349f58ceab4b1e21ab430ba6f5eb05a37f0c3b66.html">BgpPeerOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8d49499911e0023afc09729816be9b5af5a9c194.html">BgpPeerType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c2582b8d4d0fbd8902793e696300d9e55c29eae0.html">BgpPfxSidAttrEntryType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2b424289c087c5f9f89cb541a772802f7aea3764.html">BgpPmsiTunType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2f7852b07322c7a76ddc62b25f1f3a72fdfddb94.html">BgpPrivateASControl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d1830883ac9efab736163bf0bb003812efa4401a.html">BgpRtCtrlDir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_93b9a9e0c05b054bc2fcbe0831e494088a5389e3.html">BgpRtCtrlOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ec95efd83f7810faf51c170afe37c7916fafbd3b.html">BgpRttPType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_5290ffd97e410559b61342be4fb88f4403774f12.html">BgpShutStQual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_eb40c178650e61e4e755bd0209445d162fcde15f.html">BgpSoftReconfigBackup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_569bcd98626eefd7faf31b53b967063ba4fb9f40.html">BgpStReason</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_43fe36a16512d3845530e462edb97c15739966e0.html">BgpSummaryOnly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_6ffb9c7f895b959619c59887ce61968ce2090661.html">BgpTblSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ec6c4e1ae8bb65ad520cb3768da6d6f09c55176e.html">BgpVer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_fb5f9e6480f3bbfe0a041503807d26115f53bfb5.html">CapRaiseFaultState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_3c96eb73317b0d893c7894f92f115500aaf83ab7.html">CapRuleT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_1385310dabbc0d441e49e83e9ca8a432bd118b21.html">CapScope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7770297a89d8789e6173d62924170b6120d13115.html">CdpDevIdT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_377e16cb4bc3bf4a19b47cfe4f3216e2f4911c9d.html">CdpDuplex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_c6bf69ad8d245ce72eece0e6b9c44700a62e7f75.html">CdpOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9f532d3596be7f7fc72fc523600a9cdc372ca2f8.html">CdpOperStQual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_f51fdda2d3f8e780f1427a001097239688efad13.html">CdpVer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4c658dcf80fb9199261ba78b445c48b1074f80a5.html">CompHostState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d1d90f5ddf1a5cbe2d1e4a3bff820d050042d311.html">CompNicInstType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_9b9f20dbd55a8bd196d2ae46452d3b40dc2b2803.html">CompNicState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_8bd9c0016fa475fb0687e9f0bb14a1b4b320a8a8.html">CompVendor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_ceefcaf5bcfcd290c4bdfc1aa0164e9b0c3a5d7f.html">CompatFilterStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_e0e2ad33fcbb99a0858572114feca412807386b0.html">ConftmplOperationType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_dd3f5efbb7039f0f1dc40ca6222cf74740f1ba97.html">ConftmplTemplateType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2e7a03f2c7c4f10e7a97d7760aec2a90e6b542b8.html">CoopAdjOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_51004c0f9ec65070329169526803c3a6a2de41f1.html">CoopAdjOperStQual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_4862aa3b7b8129662b18578ff9671c1c15435058.html">CoopDampAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_603824da64062b0be5adedd8893da42125f03b9e.html">CoopDomOperSt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_dcd581e65c71606b29e2bd5f1d8e8045accd2ac9.html">CoopDomOperStQual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_25d49766d145722ade8ac080ef9732c102df1f39.html">CoopRepT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_d0d7724dbe4263a36ac706015709d3388c3454a2.html">CoopRole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_2fc3148b830fda3ac5c2236dedb6d4c1498af700.html">CoopSynthGen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gen_doc_7a20b5a09a9634922edec7455a39ee5537557106.html">TopMode</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_1c96cfed7c3b4fba6d4d5d9d867c422514d4ba28.html">ydktest_sanity_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_doc_a7214a5d8d620d682b13222af80d4ff6e202e553.html">ydktest_types</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">YANG Development Kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="ydk.models.ydktest.html">ydktest bundle API</a></li>
+          <li class="breadcrumb-item"><a href="gen_doc_61df6284a9f4af6e19568c06490f8bdf39b2de1c.html">ydktest_sanity_typedefs module</a></li>
+      <li class="breadcrumb-item active">AaaLoggingLevel</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="aaalogginglevel">
+<h1>AaaLoggingLevel<a class="headerlink" href="#aaalogginglevel" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ydk.models.ydktest.ydktest_sanity_typedefs.AaaLoggingLevel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.models.ydktest.ydktest_sanity_typedefs.</span></span><span class="sig-name descname"><span class="pre">AaaLoggingLevel</span></span><a class="headerlink" href="#ydk.models.ydktest.ydktest_sanity_typedefs.AaaLoggingLevel" title="Permalink to this definition"></a></dt>
+<dd><p>AaaLoggingLevel (Enum Class)</p>
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Emergency</span> <span class="pre">=</span> <span class="pre">0</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Alert</span> <span class="pre">=</span> <span class="pre">1</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Critical</span> <span class="pre">=</span> <span class="pre">2</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Error</span> <span class="pre">=</span> <span class="pre">3</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Warning</span> <span class="pre">=</span> <span class="pre">4</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Notif</span> <span class="pre">=</span> <span class="pre">5</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Inform</span> <span class="pre">=</span> <span class="pre">6</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Debug</span> <span class="pre">=</span> <span class="pre">7</span></span></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gen_doc_87de2c69406f23b3fadd68a4d7cb046de91208a8.html" class="btn btn-neutral float-left" title="AaaLdapSSLStrictnessLevel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gen_doc_ca4f22f90522a19c33babe257db77e751ae8ec7f.html" class="btn btn-neutral float-right" title="AaaMonitorServerType" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

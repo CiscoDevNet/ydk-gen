@@ -27,12 +27,11 @@ from __future__ import print_function
 from ydk.types import Empty
 from ydk.providers import NetconfServiceProvider, CodecServiceProvider
 from ydk.services import CRUDService, NetconfService, CodecService, Datastore
-from ydk.models.openconfig import openconfig_bgp
+from ydk.models.openconfig import openconfig_bgp as bgp
 from ydk.models.openconfig import openconfig_bgp_types
 from ydk.models.openconfig.openconfig_routing_policy import RoutingPolicy
 
 from _config_builder import _get_bgp_config, _get_routing_cfg, _get_bgp_routing_multiple_object
-
 
 
 def bgp_run(netconf_service, session):
@@ -49,7 +48,6 @@ def bgp_run(netconf_service, session):
 
     # IPv6 Neighbor instance config
     nbr_ipv6 = bgp.Bgp.Neighbors.Neighbor()
-    nbr_ipv6.parent = bgp_cfg.neighbors
     nbr_ipv6.neighbor_address = '2001:db8:fff1::1'
     nbr_ipv6.config.neighbor_address = '2001:db8:fff1::1'
     nbr_ipv6.config.peer_as = 65002

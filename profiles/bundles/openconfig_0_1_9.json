@@ -5,7 +5,7 @@
   "author": "Yan Gorelik",
   "copyright": "Yan Gorelik, YDK Solution",
   "description": "YDK bundle for openconfig models revision 2020-05-06",
-  "long_description": "This YANG Development Kit (YDK) bundle provides API for openconfig YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for OpenConfig models uses the YDK core package and additional model bundles.  You can find the SDK documentation at http://ydk.cisco.com/py/docs  You can find more details on YDK at http://ydk.io",
+  "long_description": "This YANG Development Kit (YDK) bundle provides API for openconfig YANG models. YDK facilitates the use of YANG data models by expressing the model semantics in an API and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers, plus one or more module bundles.  This YDK bundle for OpenConfig models uses the YDK core package and additional model bundles.",
   "models": {
     "description": "Each element in the list has details of git repositories and sources of YANG models, including GitHub commit ID and relative paths inside the repositories. If no commit ID is specified, HEAD is assumed.",
     "git": [
