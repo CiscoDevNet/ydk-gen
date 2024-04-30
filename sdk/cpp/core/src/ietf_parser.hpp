@@ -43,6 +43,17 @@ class IetfCapabilitiesXmlParser : public CapabilitiesXmlParser
 };
 
 
+class IetfCapabilitiesJsonParser : public CapabilitiesJsonParser
+{
+    public:
+        IetfCapabilitiesJsonParser();
+        ~IetfCapabilitiesJsonParser();
+
+        std::vector<std::string> parse(const std::string & buffer);
+        std::vector<std::string> parse_yang_1_1(const std::string & buffer);
+};
+
+
 class IetfCapabilitiesParser : public CapabilitiesParser
 {
     public:

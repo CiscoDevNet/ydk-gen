@@ -1139,7 +1139,7 @@ class RestconfSession : public Session {
     std::shared_ptr<DataNode> invoke(DataNode& rpc) const;
 
   private:
-    void initialize(Repository & repo);
+    void initialize(Repository & repo, EncodingFormat encoding);
     std::shared_ptr<DataNode> handle_crud_edit(Rpc& rpc, const std::string & yfilter) const;
     std::shared_ptr<DataNode> handle_crud_read(Rpc& rpc) const;
 

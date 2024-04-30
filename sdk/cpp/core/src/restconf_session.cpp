@@ -67,7 +67,7 @@ RestconfSession::RestconfSession(path::Repository & repo,
       state_url_root(state_url_root)
 {
     edit_method = "PATCH";
-    initialize(repo);
+    initialize(repo, encoding);
 }
 
 RestconfSession::RestconfSession(std::shared_ptr<RestconfClient> client,
@@ -85,19 +85,25 @@ RestconfSession::RestconfSession(std::shared_ptr<RestconfClient> client,
 {
 }
 
-void RestconfSession::initialize(path::Repository & repo)
+void RestconfSession::initialize(path::Repository & repo, EncodingFormat encoding)
 {
     vector<path::Capability> capabilities;
     IetfCapabilitiesParser capabilities_parser{};
-    IetfCapabilitiesXmlParser capabilities_xml_parser{};
     edit_method = "PATCH";
-    server_capabilities = capabilities_xml_parser.parse
-                    (
-                    client->get_capabilities
-                                (
-                                state_url_root + default_capabilities_url, get_encoding_string(EncodingFormat::XML)
-                                )
-                    );
+    auto caps = client->get_capabilities
+                (
+                state_url_root + default_capabilities_url, get_encoding_string(encoding)
+                );
+    if (encoding == ydk::EncodingFormat::XML)
+    {
+        IetfCapabilitiesXmlParser capabilities_xml_parser{};
+        server_capabilities = capabilities_xml_parser.parse(caps);
+    }
+    else if (encoding == ydk::EncodingFormat::JSON)
+    {
+        IetfCapabilitiesJsonParser capabilities_json_parser{};
+        server_capabilities = capabilities_json_parser.parse(caps);
+    }
 
     auto lookup_table = capabilities_parser.get_lookup_table(server_capabilities);
     capabilities = capabilities_parser.parse(server_capabilities);

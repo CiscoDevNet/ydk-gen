@@ -22,9 +22,10 @@
 #include "path_api.hpp"
 #include "xml_util.hpp"
 #include "ydk_yang.hpp"
-
+#include "json.hpp"
 
 using namespace std;
+using json = nlohmann::json;
 
 namespace ydk
 {
@@ -224,6 +225,46 @@ vector<string> IetfCapabilitiesXmlParser::parse(const string & capabilities_buff
         }
         cur = cur->next;
     }
+    return capabilities;
+}
+
+//////////////////////////////////////////
+//// IetfCapabilitiesJsonParser
+//////////////////////////////////////////
+IetfCapabilitiesJsonParser::IetfCapabilitiesJsonParser()
+{
+}
+
+IetfCapabilitiesJsonParser::~IetfCapabilitiesJsonParser()
+{
+}
+
+vector<string> IetfCapabilitiesJsonParser::parse_yang_1_1(const std::string & buffer)
+{
+    return parse(buffer);
+}
+
+vector<string> IetfCapabilitiesJsonParser::parse(const std::string & buffer)
+{
+    std::vector<std::string> capabilities{};
+    
+    auto j = json::parse(buffer);
+    
+    if (j.find("ietf-restconf-monitoring:capabilities") != j.end())
+    {
+        auto& caps = j["ietf-restconf-monitoring:capabilities"];
+        if (caps.find("capability") != caps.end())
+        {
+            auto& cap = caps["capability"];
+            if (cap.size() > 0)
+            {
+                for (auto& c : cap) {
+                    capabilities.push_back(c);
+                }
+            }
+        }
+    }
+    
     return capabilities;
 }
 
