@@ -205,29 +205,48 @@ static bool token_not_found(size_t token)
     return token == string::npos;
 }
 
-static string parse_restconf_root_response(string response)
+static bool token_found(size_t token)
 {
-    size_t root_start, equals_sign;
-    if(token_not_found((root_start = response.find("href")))
-        || token_not_found((equals_sign = response.find("=", root_start))))
-    {
-        return "";
-    }
+    return token != string::npos;
+}
 
-    size_t start_quote = response.find("\"", equals_sign);
+/*
+ * Comparator function for case-insensitive find (ci_find).
+ */
+static bool ci_equals(char l, char r)
+{
+    return (std::tolower(l) == std::tolower(r));
+}
+
+/*
+ * Case-insensitive find.
+ */
+static size_t ci_find(std::string text, std::string search)
+{
+  std::string::iterator it = std::search(text.begin(), text.end(), search.begin(), search.end(), ci_equals);
+  if (it != text.end())
+  {
+      return std::distance(text.begin(), it);
+  }
+  return std::string::npos;
+}
+
+static string parse_quoted_string(string str)
+{
     size_t end_quote;
+    size_t start_quote = str.find("\"");
     if(token_not_found(start_quote))
     {
-        start_quote = response.find("'", equals_sign);
+        start_quote = str.find("'");
         if(token_not_found(start_quote))
         {
             return "";
         }
-        end_quote = response.find("'", start_quote + 1);
+        end_quote = str.find("'", start_quote + 1);
     }
     else
     {
-        end_quote = response.find("\"", start_quote + 1);
+        end_quote = str.find("\"", start_quote + 1);
         if(token_not_found(end_quote))
         {
             return "";
@@ -240,7 +259,47 @@ static string parse_restconf_root_response(string response)
         return "";
     }
 
-    return response.substr(start_quote + 1, (end_quote - start_quote - 1));
+    return str.substr(start_quote + 1, (end_quote - start_quote - 1));
+}
+
+static string parse_restconf_root_response(string response)
+{
+    size_t equals_sign, link_start, rel_start;
+    size_t end_bracket = 0;
+    if(token_not_found((link_start = ci_find(response, "link")))) {
+        return "";
+    }
+
+    // Find and parse `rel` with value of `restconf`
+    while (token_found(link_start))
+    {
+        link_start += end_bracket;
+
+        if(token_not_found((end_bracket = response.find(">", link_start)))
+          || token_not_found((rel_start = response.find("rel", link_start)))
+          || token_not_found((equals_sign = response.find("=", rel_start))))
+        {
+            return "";
+        }
+
+        if(parse_quoted_string(response.substr(equals_sign)) == "restconf")
+        {
+            // Found the `link` containing the `restconf` metadata
+            break;
+        }
+
+        link_start = ci_find(response.substr(end_bracket), "link")
+    }
+
+    // Parse value of `href` property
+    size_t root_start;
+    if(token_not_found((root_start = response.find("href", link_start)))
+        || token_not_found((equals_sign = response.find("=", root_start))))
+    {
+        return "";
+    }
+
+    return parse_quoted_string(response.substr(equals_sign));
 }
 
 static string get_restconf_root(CURL *curl, string base)
