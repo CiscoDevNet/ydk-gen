@@ -36,6 +36,15 @@ class CapabilitiesXmlParser
         virtual std::vector<std::string> parse(const std::string & capabilities_xml) = 0;
 };
 
+class CapabilitiesJsonParser
+{
+    public:
+        CapabilitiesJsonParser();
+        virtual ~CapabilitiesJsonParser();
+
+        virtual std::vector<std::string> parse(const std::string & capabilities_json) = 0;
+};
+
 class CapabilitiesParser
 {
     public:

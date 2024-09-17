@@ -26,6 +26,14 @@ CapabilitiesXmlParser::~CapabilitiesXmlParser()
 {
 }
 
+CapabilitiesJsonParser::CapabilitiesJsonParser()
+{
+}
+
+CapabilitiesJsonParser::~CapabilitiesJsonParser()
+{
+}
+
 CapabilitiesParser::CapabilitiesParser()
 {
 }
