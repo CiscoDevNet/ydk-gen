@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>What are deviations? &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>What are deviations? &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="How do I use the Path API?" href="path.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -66,7 +66,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api_guide.html">API Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -82,7 +81,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../developer_guide.html">Developer Guide</a></li>
       <li class="breadcrumb-item active">What are deviations?</li>
       <li class="wy-breadcrumbs-aside">
@@ -94,8 +93,8 @@
            <div itemprop="articleBody">
              
   <section id="what-are-deviations">
-<h1><a class="toc-backref" href="#id1">What are deviations?</a><a class="headerlink" href="#what-are-deviations" title="Permalink to this heading"></a></h1>
-<div class="contents topic" id="table-of-contents">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">What are deviations?</a><a class="headerlink" href="#what-are-deviations" title="Link to this heading"></a></h1>
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#what-are-deviations" id="id1">What are deviations?</a></p>
@@ -105,19 +104,19 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="overview">
-<h2><a class="toc-backref" href="#id2">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>Not all devices faithfully support features defined in standard yang models. For a particular device, it could support only part of features or the feature it supported varies from the standard module. The YANG language defines the <a class="reference external" href="https://tools.ietf.org/html/rfc6020#section-7.18.3">deviation statement</a> to indicate such a thing.
 For example, using a deviation statement in <a class="reference external" href="https://github.com/YangModels/yang/blob/master/vendor/cisco/xr/631/cisco-xr-openconfig-telemetry-deviations.yang#L73">cisco-xr-openconfig-telemetry-deviations.yang</a>, the netconf server can indicate that the <code class="xref py py-class docutils literal notranslate"><span class="pre">openconfig_telemetry.TelemetrySystem.Subscriptions.Dynamic.Subscription</span></code> container of the <code class="docutils literal notranslate"><span class="pre">openconfig_telemetry</span></code> model is not supported.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">deviation</span><span class="w"> </span><span class="o">/</span><span class="n">oc</span><span class="o">-</span><span class="n">telemetry</span><span class="o">:</span><span class="n">telemetry</span><span class="o">-</span><span class="n">system</span><span class="o">/</span><span class="n">oc</span><span class="o">-</span><span class="n">telemetry</span><span class="o">:</span><span class="n">subscriptions</span><span class="o">/</span><span class="n">oc</span><span class="o">-</span><span class="n">telemetry</span><span class="o">:</span><span class="n">dynamic</span><span class="o">/</span><span class="n">oc</span><span class="o">-</span><span class="n">telemetry</span><span class="o">:</span><span class="n">subscription</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">deviate</span><span class="w"> </span><span class="n">not</span><span class="o">-</span><span class="n">supported</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">deviation</span><span class="w"> </span><span class="o">/</span><span class="n">oc</span><span class="o">-</span><span class="n">telemetry</span><span class="o">:</span><span class="n">telemetry</span><span class="o">-</span><span class="n">system</span><span class="o">/</span><span class="n">oc</span><span class="o">-</span><span class="n">telemetry</span><span class="o">:</span><span class="n">subscriptions</span><span class="o">/</span><span class="n">oc</span><span class="o">-</span><span class="n">telemetry</span><span class="o">:</span><span class="n">dynamic</span><span class="o">/</span><span class="n">oc</span><span class="o">-</span><span class="n">telemetry</span><span class="o">:</span><span class="n">subscription</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">deviate</span><span class="w"> </span><span class="n">not</span><span class="o">-</span><span class="n">supported</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </section>
 <section id="how-to-use-deviation-with-ydk">
-<h2><a class="toc-backref" href="#id3">How to use deviation with YDK</a><a class="headerlink" href="#how-to-use-deviation-with-ydk" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">How to use deviation with YDK</a><a class="headerlink" href="#how-to-use-deviation-with-ydk" title="Link to this heading"></a></h2>
 <p>When using YDK to program a device which has some unsupported features, YDK will raise error <strong>before</strong> sending payload to device. For instance, if the device advertises via a deviation that it does not support the <code class="docutils literal notranslate"><span class="pre">subscription</span></code> node as shown above, an error will be raised.</p>
 <p>We can try to configure a dynamic subscription with the below app.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">ydk.models.openconfig.openconfig_telemetry</span> <span class="kn">import</span> <span class="n">TelemetrySystem</span>
@@ -134,21 +133,21 @@ For example, using a deviation statement in <a class="reference external" href="
 </pre></div>
 </div>
 <p>The above app results in the below errors logged and exception being raised because of the deviation which is active on the <code class="docutils literal notranslate"><span class="pre">subscription</span></code> node.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="m">2017</span>-11-08 <span class="m">21</span>:26:58,543 - ydk - ERROR - Data is invalid according to the yang model. Error details: Schema node not found. Path: <span class="s1">&#39;subscription&#39;</span>
-<span class="linenos"> 2</span><span class="m">2017</span>-11-08 <span class="m">21</span>:26:58,543 - ydk - ERROR - Invalid path: subscription<span class="o">[</span>subscription-id<span class="o">=</span><span class="s1">&#39;123&#39;</span><span class="o">]</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="m">2017</span>-11-08<span class="w"> </span><span class="m">21</span>:26:58,543<span class="w"> </span>-<span class="w"> </span>ydk<span class="w"> </span>-<span class="w"> </span>ERROR<span class="w"> </span>-<span class="w"> </span>Data<span class="w"> </span>is<span class="w"> </span>invalid<span class="w"> </span>according<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>yang<span class="w"> </span>model.<span class="w"> </span>Error<span class="w"> </span>details:<span class="w"> </span>Schema<span class="w"> </span>node<span class="w"> </span>not<span class="w"> </span>found.<span class="w"> </span>Path:<span class="w"> </span><span class="s1">&#39;subscription&#39;</span>
+<span class="linenos"> 2</span><span class="m">2017</span>-11-08<span class="w"> </span><span class="m">21</span>:26:58,543<span class="w"> </span>-<span class="w"> </span>ydk<span class="w"> </span>-<span class="w"> </span>ERROR<span class="w"> </span>-<span class="w"> </span>Invalid<span class="w"> </span>path:<span class="w"> </span>subscription<span class="o">[</span>subscription-id<span class="o">=</span><span class="s1">&#39;123&#39;</span><span class="o">]</span>
 <span class="linenos"> 3</span>
-<span class="linenos"> 4</span>  File <span class="s2">&quot;/Users/lib/python3.6/site-packages/ydk/errors/error_handler.py&quot;</span>, line <span class="m">112</span>, <span class="k">in</span> helper
-<span class="linenos"> 5</span>    <span class="k">return</span> func<span class="o">(</span>self, provider, entity, *args, **kwargs<span class="o">)</span>
-<span class="linenos"> 6</span>  File <span class="s2">&quot;/Users/lib/python3.6/site-packages/ydk/services/crud_service.py&quot;</span>, line <span class="m">30</span>, <span class="k">in</span> create
-<span class="linenos"> 7</span>    <span class="k">return</span> self._crud.create<span class="o">(</span>provider, entity<span class="o">)</span>
-<span class="linenos"> 8</span>  File <span class="s2">&quot;/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/contextlib.py&quot;</span>, line <span class="m">99</span>, <span class="k">in</span> __exit__
-<span class="linenos"> 9</span>    self.gen.throw<span class="o">(</span>type, value, traceback<span class="o">)</span>
-<span class="linenos">10</span>  File <span class="s2">&quot;/Users/lib/python3.6/site-packages/ydk/errors/error_handler.py&quot;</span>, line <span class="m">82</span>, <span class="k">in</span> handle_runtime_error
-<span class="linenos">11</span>    _raise<span class="o">(</span>_exc<span class="o">)</span>
-<span class="linenos">12</span>  File <span class="s2">&quot;/Users/lib/python3.6/site-packages/ydk/errors/error_handler.py&quot;</span>, line <span class="m">54</span>, <span class="k">in</span> _raise
-<span class="linenos">13</span>    exec<span class="o">(</span><span class="s2">&quot;raise exc from None&quot;</span><span class="o">)</span>
-<span class="linenos">14</span>  File <span class="s2">&quot;&lt;string&gt;&quot;</span>, line <span class="m">1</span>, <span class="k">in</span> &lt;module&gt;
-<span class="linenos">15</span>ydk.errors.YModelError:  Invalid path: subscription<span class="o">[</span>subscription-id<span class="o">=</span><span class="s1">&#39;123&#39;</span><span class="o">]</span> : Schema node not found.. Path: subscription
+<span class="linenos"> 4</span><span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/Users/lib/python3.6/site-packages/ydk/errors/error_handler.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">112</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>helper
+<span class="linenos"> 5</span><span class="w">    </span><span class="k">return</span><span class="w"> </span>func<span class="o">(</span>self,<span class="w"> </span>provider,<span class="w"> </span>entity,<span class="w"> </span>*args,<span class="w"> </span>**kwargs<span class="o">)</span>
+<span class="linenos"> 6</span><span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/Users/lib/python3.6/site-packages/ydk/services/crud_service.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">30</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>create
+<span class="linenos"> 7</span><span class="w">    </span><span class="k">return</span><span class="w"> </span>self._crud.create<span class="o">(</span>provider,<span class="w"> </span>entity<span class="o">)</span>
+<span class="linenos"> 8</span><span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/contextlib.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">99</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>__exit__
+<span class="linenos"> 9</span><span class="w">    </span>self.gen.throw<span class="o">(</span>type,<span class="w"> </span>value,<span class="w"> </span>traceback<span class="o">)</span>
+<span class="linenos">10</span><span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/Users/lib/python3.6/site-packages/ydk/errors/error_handler.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">82</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>handle_runtime_error
+<span class="linenos">11</span><span class="w">    </span>_raise<span class="o">(</span>_exc<span class="o">)</span>
+<span class="linenos">12</span><span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;/Users/lib/python3.6/site-packages/ydk/errors/error_handler.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">54</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_raise
+<span class="linenos">13</span><span class="w">    </span>exec<span class="o">(</span><span class="s2">&quot;raise exc from None&quot;</span><span class="o">)</span>
+<span class="linenos">14</span><span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;&lt;string&gt;&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;module&gt;
+<span class="linenos">15</span>ydk.errors.YModelError:<span class="w">  </span>Invalid<span class="w"> </span>path:<span class="w"> </span>subscription<span class="o">[</span>subscription-id<span class="o">=</span><span class="s1">&#39;123&#39;</span><span class="o">]</span><span class="w"> </span>:<span class="w"> </span>Schema<span class="w"> </span>node<span class="w"> </span>not<span class="w"> </span>found..<span class="w"> </span>Path:<span class="w"> </span>subscription
 </pre></div>
 </div>
 </section>

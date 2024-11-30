@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Codec &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Codec &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="DataNode" href="data_node.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -70,7 +70,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -86,7 +85,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../api_guide.html">API Guide</a></li>
           <li class="breadcrumb-item"><a href="path.html">YDK Path API</a></li>
       <li class="breadcrumb-item active">Codec</li>
@@ -99,17 +98,17 @@
            <div itemprop="articleBody">
              
   <section id="module-ydk.path">
-<span id="codec"></span><h1>Codec<a class="headerlink" href="#module-ydk.path" title="Permalink to this heading"></a></h1>
+<span id="codec"></span><h1>Codec<a class="headerlink" href="#module-ydk.path" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="ydk.path.Codec">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.path.</span></span><span class="sig-name descname"><span class="pre">Codec</span></span><a class="headerlink" href="#ydk.path.Codec" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.path.</span></span><span class="sig-name descname"><span class="pre">Codec</span></span><a class="headerlink" href="#ydk.path.Codec" title="Link to this definition"></a></dt>
 <dd><p>YDK Path Codec provides encode and decode translations between string payload and <a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">encode(data_node,</span> <span class="pre">encoding,</span> <span class="pre">pretty=True):</span></span></dt>
 <dd><p>Encodes data in <cite>data_node</cite> to string payload.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data_node</strong> – <p>(<a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a>) for single data node to encode.</p>
 <p>For multiple data nodes encapsulate <a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a> instances into Python <code class="docutils literal notranslate"><span class="pre">list</span></code>.</p>
@@ -118,10 +117,10 @@
 <li><p><strong>pretty</strong> – (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) Pretty format.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>(<code class="docutils literal notranslate"><span class="pre">str</span></code>) encoded payload.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> with <a class="reference internal" href="../errors.html#ydk.errors.YCodecError" title="ydk.errors.YCodecError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YCodecError</span></code></a> prefix, if an error has occurred.</p>
 </dd>
 </dl>
@@ -132,17 +131,17 @@
 <span class="sig-name descname"><span class="pre">decode(root_schema_node,</span> <span class="pre">payload,</span> <span class="pre">encoding):</span></span></dt>
 <dd><p>Decodes payload string into <a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a> instance.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>root_schema_node</strong> – (<a class="reference internal" href="root_schema_node.html#ydk.path.RootSchemaNode" title="ydk.path.RootSchemaNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">RootSchemaNode</span></code></a>) An instance of <cite>root_schema_node</cite>.</p></li>
 <li><p><strong>payload</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Payload to decode.</p></li>
 <li><p><strong>encoding</strong> – (<a class="reference internal" href="../types.html#ydk.types.EncodingFormat" title="ydk.types.EncodingFormat"><code class="xref py py-class docutils literal notranslate"><span class="pre">EncodingFormat</span></code></a>) Encoding format.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>(<a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a>) instance of a <cite>data-node</cite>.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> with <a class="reference internal" href="../errors.html#ydk.errors.YCodecError" title="ydk.errors.YCodecError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YCodecError</span></code></a> prefix, if an error has occurred.</p>
 </dd>
 </dl>

@@ -79,13 +79,13 @@ To use the docker image, [install docker](https://docs.docker.com/install/) on y
 See the [docker documentation](https://docs.docker.com/engine/reference/run/) for more details.
 
 ```
-docker run -it ydksolutions/ydk-gen:0.8.6.5
+docker run -it ydksolutions/ydk-gen:0.8.6.6
 ```
 
 ## System Requirements
 
 The YDK is currently supported on the following platforms including native installations, virtual machines, and docker images:
- - Linux Ubuntu Xenial (16.04 LTS), Bionic (18.04 LTS), Focal (20.04 LTS), and Jammy (22.04 LTS)
+ - Linux Ubuntu Xenial (16.04 LTS), Bionic (18.04 LTS), Focal (20.04 LTS), Jammy (22.04 LTS) and Noble (24.04 LTS)
  - Linux CentOS versions 7 and Centos Stream 8 (Centos 8.x has been EOL as of December 31 of 2021)
  - Linux RHEL version 7.x and 8.x 
  - MacOS up to 11.7.2 (Big Sur)
@@ -258,6 +258,6 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64
 
 ## Release Notes
 
-The current YDK release version is 0.8.6.5.
+The current YDK release version is 0.8.6.6.
 
 YDK is licensed under the Apache 2.0 License.

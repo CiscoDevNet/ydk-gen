@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How do I use OpenDaylight with YDK? &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>How do I use OpenDaylight with YDK? &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using Restconf with HTTPS" href="restconf_https.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -71,7 +71,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api_guide.html">API Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -87,7 +86,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../developer_guide.html">Developer Guide</a></li>
       <li class="breadcrumb-item active">How do I use OpenDaylight with YDK?</li>
       <li class="wy-breadcrumbs-aside">
@@ -99,8 +98,8 @@
            <div itemprop="articleBody">
              
   <section id="how-do-i-use-opendaylight-with-ydk">
-<h1><a class="toc-backref" href="#id1">How do I use OpenDaylight with YDK?</a><a class="headerlink" href="#how-do-i-use-opendaylight-with-ydk" title="Permalink to this heading"></a></h1>
-<div class="contents topic" id="contents">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">How do I use OpenDaylight with YDK?</a><a class="headerlink" href="#how-do-i-use-opendaylight-with-ydk" title="Link to this heading"></a></h1>
+<nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#how-do-i-use-opendaylight-with-ydk" id="id1">How do I use OpenDaylight with YDK?</a></p>
@@ -115,19 +114,19 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <p>YDK makes it easy to interact with OpenDaylight programmatically using the YANG model APIs.</p>
 <p>Applications can be written using the Python model API in conjunction with a service and a provider.</p>
 <section id="writing-the-app">
-<h2><a class="toc-backref" href="#id2">Writing the app</a><a class="headerlink" href="#writing-the-app" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Writing the app</a><a class="headerlink" href="#writing-the-app" title="Link to this heading"></a></h2>
 <p>In this example, we set some BGP configuration using the Cisco IOS XR model, the <a class="reference internal" href="../api/services/crud_service.html#ydk.services.CRUDService" title="ydk.services.CRUDService"><code class="xref py py-class docutils literal notranslate"><span class="pre">CRUD</span> <span class="pre">(Create/Read/Update/Delete)</span> <span class="pre">service</span></code></a> and the <a class="reference internal" href="../api/providers/odl_provider.html#ydk.providers.OpendaylightServiceProvider" title="ydk.providers.OpendaylightServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">OpenDaylightServiceProvider</span></code></a>. The example in this document is a simplified version of the more complete sample that is available in <code class="docutils literal notranslate"><span class="pre">core/samples/bgp_xr_opendaylight.py</span></code>. Assuming you have performed the <code class="docutils literal notranslate"><span class="pre">core</span></code> and <code class="docutils literal notranslate"><span class="pre">cisco-ios-xr</span></code> bundle installations first(see <a class="reference internal" href="../getting_started.html#howto-install"><span class="std std-ref">Core Installation</span></a>), the more complete sample can be run with the below steps:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ydk-py$ <span class="nb">cd</span> core/samples
-samples$ ./bgp_xr_opendaylight.py http://&lt;username&gt;:&lt;password&gt;@&lt;host-address&gt;:&lt;port&gt;
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ydk-py$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>core/samples
+samples$<span class="w"> </span>./bgp_xr_opendaylight.py<span class="w"> </span>http://&lt;username&gt;:&lt;password&gt;@&lt;host-address&gt;:&lt;port&gt;
 </pre></div>
 </div>
 </section>
 <section id="what-happens-underneath">
-<h2><a class="toc-backref" href="#id3">What happens underneath</a><a class="headerlink" href="#what-happens-underneath" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">What happens underneath</a><a class="headerlink" href="#what-happens-underneath" title="Link to this heading"></a></h2>
 <p>YDK performs the below actions when running this application:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -140,7 +139,7 @@ samples$ ./bgp_xr_opendaylight.py http://&lt;username&gt;:&lt;password&gt;@&lt;h
 </div></blockquote>
 </section>
 <section id="import-libraries">
-<h2><a class="toc-backref" href="#id4">Import libraries</a><a class="headerlink" href="#import-libraries" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Import libraries</a><a class="headerlink" href="#import-libraries" title="Link to this heading"></a></h2>
 <p>In our example YDK application, first, let us import the necessary libraries</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">sys</span>
@@ -162,7 +161,7 @@ samples$ ./bgp_xr_opendaylight.py http://&lt;username&gt;:&lt;password&gt;@&lt;h
 </div>
 </section>
 <section id="opendaylight-service-provider">
-<h2><a class="toc-backref" href="#id5">OpenDaylight service provider</a><a class="headerlink" href="#opendaylight-service-provider" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">OpenDaylight service provider</a><a class="headerlink" href="#opendaylight-service-provider" title="Link to this heading"></a></h2>
 <p>The first step in any application is to create a service provider instance. In this case, the OpenDaylight service provider is responsible for mapping between the CRUD service API and the underlying manageability protocol (Restconf).</p>
 <p>We first instantiate a <a class="reference internal" href="../api/path/repository.html#ydk.path.Repository" title="ydk.path.Repository"><code class="xref py py-class docutils literal notranslate"><span class="pre">Repository</span></code></a> using the location of the schema cache of the OpenDaylight instance. We instantiate an instance of the service provider that can communicate using Restconf with an OpenDaylight instance running at host address: <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port: <code class="docutils literal notranslate"><span class="pre">8181</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">17</span><span class="n">repo</span> <span class="o">=</span> <span class="n">Repository</span><span class="p">(</span><span class="s2">&quot;/Users/home/distribution-karaf-0.5.2-Boron-SR2/cache/schema&quot;</span><span class="p">)</span> <span class="c1"># In this case, we have a ODL boron instance with this schema cache location</span>
@@ -171,7 +170,7 @@ samples$ ./bgp_xr_opendaylight.py http://&lt;username&gt;:&lt;password&gt;@&lt;h
 </div>
 </section>
 <section id="using-the-model-apis">
-<h2><a class="toc-backref" href="#id6">Using the model APIs</a><a class="headerlink" href="#using-the-model-apis" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Using the model APIs</a><a class="headerlink" href="#using-the-model-apis" title="Link to this heading"></a></h2>
 <p>After establishing the connection, let’s instantiate the entities and set some data. Now, create a Cisco IOS XR <code class="xref py py-class docutils literal notranslate"><span class="pre">Bgp</span></code> configuration object and set the attributes</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">19</span><span class="c1"># Create BGP object</span>
 <span class="linenos">20</span><span class="n">bgp</span> <span class="o">=</span> <span class="n">xr_bgp</span><span class="o">.</span><span class="n">Bgp</span><span class="p">()</span>
@@ -199,7 +198,7 @@ samples$ ./bgp_xr_opendaylight.py http://&lt;username&gt;:&lt;password&gt;@&lt;h
 </div>
 </section>
 <section id="invoking-the-crud-service">
-<h2><a class="toc-backref" href="#id7">Invoking the CRUD Service</a><a class="headerlink" href="#invoking-the-crud-service" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Invoking the CRUD Service</a><a class="headerlink" href="#invoking-the-crud-service" title="Link to this heading"></a></h2>
 <p>The CRUD service provides methods to create, read, update and delete entities on a device making use of the session provided by a service provider.  In order to use the CRUD service, we need to instantiate the <a class="reference internal" href="../api/services/crud_service.html#ydk.services.CRUDService" title="ydk.services.CRUDService"><code class="xref py py-class docutils literal notranslate"><span class="pre">CRUDService</span></code></a> class</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">41</span><span class="n">crud_service</span> <span class="o">=</span> <span class="n">CRUDService</span><span class="p">()</span>
 </pre></div>
@@ -213,7 +212,7 @@ samples$ ./bgp_xr_opendaylight.py http://&lt;username&gt;:&lt;password&gt;@&lt;h
 <p>Note if there were any errors the above API will raise an exception with the base type <a class="reference internal" href="../api/errors.html#ydk.errors.YError" title="ydk.errors.YError"><code class="xref py py-class docutils literal notranslate"><span class="pre">YError</span></code></a></p>
 </section>
 <section id="logging">
-<h2><a class="toc-backref" href="#id8">Logging</a><a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Logging</a><a class="headerlink" href="#logging" title="Link to this heading"></a></h2>
 <p>YDK uses common Python logging. See <a class="reference internal" href="introduction.html#howto-logging"><span class="std std-ref">Logging</span></a>.</p>
 </section>
 </section>

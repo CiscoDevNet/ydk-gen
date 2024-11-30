@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gNMI Service API &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>gNMI Service API &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Service Providers" href="../providers/providers.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -68,7 +68,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -84,7 +83,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../api_guide.html">API Guide</a></li>
           <li class="breadcrumb-item"><a href="../class_hierarchy.html">YDK API</a></li>
           <li class="breadcrumb-item"><a href="services.html">Services</a></li>
@@ -98,8 +97,8 @@
            <div itemprop="articleBody">
              
   <section id="gnmi-service-api">
-<span id="gnmi-service"></span><h1><a class="toc-backref" href="#id1">gNMI Service API</a><a class="headerlink" href="#gnmi-service-api" title="Permalink to this heading"></a></h1>
-<div class="contents topic" id="table-of-contents">
+<span id="gnmi-service"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">gNMI Service API</a><a class="headerlink" href="#gnmi-service-api" title="Link to this heading"></a></h1>
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#gnmi-service-api" id="id1">gNMI Service API</a></p></li>
@@ -111,17 +110,17 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <dl class="py class">
 <dt class="sig sig-object py" id="ydk.gnmi.services.gNMIService">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.gnmi.services.</span></span><span class="sig-name descname"><span class="pre">gNMIService</span></span><a class="headerlink" href="#ydk.gnmi.services.gNMIService" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.gnmi.services.</span></span><span class="sig-name descname"><span class="pre">gNMIService</span></span><a class="headerlink" href="#ydk.gnmi.services.gNMIService" title="Link to this definition"></a></dt>
 <dd><p>Supports gNMI Set/Get/Subscribe operations on model API entities. It also allows to get gNMI server capabilities.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.gnmi.services.gNMIService.set">
-<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.gnmi.services.gNMIService.set" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.gnmi.services.gNMIService.set" title="Link to this definition"></a></dt>
 <dd><p>Create, update, or delete single entity or multiple entities in the server configuration.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – (<a class="reference internal" href="../providers/gnmi_provider.html#ydk.gnmi.providers.gNMIServiceProvider" title="ydk.gnmi.providers.gNMIServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">gNMIServiceProvider</span></code></a>) Provider instance.</p></li>
 <li><p><strong>entity</strong> – <p>(<a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>) instance, which represents single container in device supported model.
@@ -135,10 +134,10 @@ Each <strong>Entity</strong> instance must be annotated with <a class="reference
 </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if successful, <code class="docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a> if an error has occurred.</p>
 </dd>
 </dl>
@@ -146,10 +145,10 @@ Each <strong>Entity</strong> instance must be annotated with <a class="reference
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.gnmi.services.gNMIService.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CONFIG'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.gnmi.services.gNMIService.get" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CONFIG'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.gnmi.services.gNMIService.get" title="Link to this definition"></a></dt>
 <dd><p>Read the entity.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – (<a class="reference internal" href="../providers/gnmi_provider.html#ydk.gnmi.providers.gNMIServiceProvider" title="ydk.gnmi.providers.gNMIServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">gNMIServiceProvider</span></code></a>) Provider instance.</p></li>
 <li><p><strong>read_filter</strong> – <p>(<a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>) instance, which represents single container in device supported model.</p>
@@ -158,12 +157,12 @@ Each <strong>Entity</strong> instance must be annotated with <a class="reference
 <li><p><strong>read_mode</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) One of the values: <code class="docutils literal notranslate"><span class="pre">CONFIG</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE</span></code>, <code class="docutils literal notranslate"><span class="pre">OPERATIONAL</span></code>, or <code class="docutils literal notranslate"><span class="pre">ALL</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>For single entity filter - an instance of <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> as identified by the <strong>read_filter</strong> or <code class="docutils literal notranslate"><span class="pre">None</span></code>, if operation fails.</p>
 <p>For multiple filters - collection of <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> instances encapsulated into Python <code class="docutils literal notranslate"><span class="pre">list</span></code> or YDK <code class="docutils literal notranslate"><span class="pre">EntityCollection</span></code> <a class="reference internal" href="../types.html#ydk.types.Config" title="ydk.types.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code></a> accordingly to the type of <strong>read_filter</strong>.</p>
 </p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a> if an error has occurred.</p>
 </dd>
 </dl>
@@ -171,10 +170,10 @@ Each <strong>Entity</strong> instance must be annotated with <a class="reference
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.gnmi.services.gNMIService.subscribe">
-<span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subscription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qos=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode='ONCE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding='PROTO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback_function=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.gnmi.services.gNMIService.subscribe" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subscription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qos=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode='ONCE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding='PROTO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback_function=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.gnmi.services.gNMIService.subscribe" title="Link to this definition"></a></dt>
 <dd><p>Subscribe to telemetry updates.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – (<a class="reference internal" href="../providers/gnmi_provider.html#ydk.gnmi.providers.gNMIServiceProvider" title="ydk.gnmi.providers.gNMIServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">gNMIServiceProvider</span></code></a>) Provider instance.</p></li>
 <li><p><strong>subscription</strong> – (<a class="reference internal" href="#ydk.gnmi.services.gNMISubscription" title="ydk.gnmi.services.gNMISubscription"><code class="xref py py-class docutils literal notranslate"><span class="pre">gNMISubscription</span></code></a>) Single instance or Python <code class="docutils literal notranslate"><span class="pre">list</span></code> of instances of objects, which represent the subscription.</p></li>
@@ -186,7 +185,7 @@ The subscription data returned to the user as a string representation of protobu
 If not specified, the response is printed to system stdout.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a> if an error has occurred.</p>
 </dd>
 </dl>
@@ -194,13 +193,13 @@ If not specified, the response is printed to system stdout.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.gnmi.services.gNMIService.capabilities">
-<span class="sig-name descname"><span class="pre">capabilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.gnmi.services.gNMIService.capabilities" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">capabilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.gnmi.services.gNMIService.capabilities" title="Link to this definition"></a></dt>
 <dd><p>Get gNMI server capabilities</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>provider</strong> – (<a class="reference internal" href="../providers/gnmi_provider.html#ydk.gnmi.providers.gNMIServiceProvider" title="ydk.gnmi.providers.gNMIServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">gNMIServiceProvider</span></code></a>) Provider instance.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>(<code class="docutils literal notranslate"><span class="pre">str</span></code>) JSON encoded string, which represents gNMI server capabilities.</p>
 </dd>
 </dl>
@@ -210,7 +209,7 @@ If not specified, the response is printed to system stdout.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ydk.gnmi.services.gNMISubscription">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.gnmi.services.</span></span><span class="sig-name descname"><span class="pre">gNMISubscription</span></span><a class="headerlink" href="#ydk.gnmi.services.gNMISubscription" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.gnmi.services.</span></span><span class="sig-name descname"><span class="pre">gNMISubscription</span></span><a class="headerlink" href="#ydk.gnmi.services.gNMISubscription" title="Link to this definition"></a></dt>
 <dd><p>Instance of this class defines subscription for a single entity. Members of the class are:</p>
 <ul class="simple">
 <li><p>entity: (<a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>) Instance of the subscription entity. This parameter must be set by the user.</p></li>
@@ -223,7 +222,7 @@ If not specified, the response is printed to system stdout.</p></li>
 
 </section>
 <section id="gnmi-service-examples">
-<h1><a class="toc-backref" href="#id2">gNMI Service Examples</a><a class="headerlink" href="#gnmi-service-examples" title="Permalink to this heading"></a></h1>
+<h1><a class="toc-backref" href="#id2" role="doc-backlink">gNMI Service Examples</a><a class="headerlink" href="#gnmi-service-examples" title="Link to this heading"></a></h1>
 <p>To enable YDK logging include the following code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="linenos">2</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;ydk&quot;</span><span class="p">)</span>
@@ -235,12 +234,12 @@ If not specified, the response is printed to system stdout.</p></li>
 </pre></div>
 </div>
 <p>To enable GRPC trace set environment variables as followed:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nb">export</span> <span class="nv">GRPC_VERBOSITY</span><span class="o">=</span>debug
-<span class="linenos">2</span><span class="nb">export</span> <span class="nv">GRPC_TRACE</span><span class="o">=</span>transport_security
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nb">export</span><span class="w"> </span><span class="nv">GRPC_VERBOSITY</span><span class="o">=</span>debug
+<span class="linenos">2</span><span class="nb">export</span><span class="w"> </span><span class="nv">GRPC_TRACE</span><span class="o">=</span>transport_security
 </pre></div>
 </div>
 <section id="gnmi-set-example">
-<h2><a class="toc-backref" href="#id3">gNMI ‘set’ example</a><a class="headerlink" href="#gnmi-set-example" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">gNMI ‘set’ example</a><a class="headerlink" href="#gnmi-set-example" title="Link to this heading"></a></h2>
 <p>Example of instantiating and using objects of <code class="docutils literal notranslate"><span class="pre">gNMIServiceProvider</span></code> with <code class="docutils literal notranslate"><span class="pre">gNMIService</span></code> is shown below (assuming you have <code class="docutils literal notranslate"><span class="pre">openconfig</span></code> bundle installed).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">ydk.models.openconfig</span> <span class="kn">import</span> <span class="n">openconfig_bgp</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">ydk.path</span> <span class="kn">import</span> <span class="n">Repository</span>
@@ -277,7 +276,7 @@ If not specified, the response is printed to system stdout.</p></li>
 </div>
 </section>
 <section id="gnmi-get-example">
-<h2><a class="toc-backref" href="#id4">gNMI ‘get’ example</a><a class="headerlink" href="#gnmi-get-example" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">gNMI ‘get’ example</a><a class="headerlink" href="#gnmi-get-example" title="Link to this heading"></a></h2>
 <p>Example of instantiating and using objects of <code class="docutils literal notranslate"><span class="pre">gNMIServiceProvider</span></code> with <code class="docutils literal notranslate"><span class="pre">gNMIService</span></code> is shown below (assuming you have <code class="docutils literal notranslate"><span class="pre">openconfig</span></code> bundle installed).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">ydk.models.openconfig</span> <span class="kn">import</span> <span class="n">openconfig_bgp</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">ydk.path</span> <span class="kn">import</span> <span class="n">Repository</span>
@@ -297,7 +296,7 @@ If not specified, the response is printed to system stdout.</p></li>
 </div>
 </section>
 <section id="gnmi-subscribe-example">
-<h2><a class="toc-backref" href="#id5">gNMI ‘subscribe’ example</a><a class="headerlink" href="#gnmi-subscribe-example" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">gNMI ‘subscribe’ example</a><a class="headerlink" href="#gnmi-subscribe-example" title="Link to this heading"></a></h2>
 <p>Example of subscribing to telemetry using <code class="docutils literal notranslate"><span class="pre">gNMIServiceProvider</span></code> with <code class="docutils literal notranslate"><span class="pre">gNMIService</span></code> is shown below (assuming you have <code class="docutils literal notranslate"><span class="pre">openconfig</span></code> bundle installed).</p>
 <p><strong>NOTE:</strong> The <code class="docutils literal notranslate"><span class="pre">gNMIService</span></code> class <strong>can be</strong> used with <code class="docutils literal notranslate"><span class="pre">multiprocessing.Pool</span></code> for the <code class="docutils literal notranslate"><span class="pre">subscribe</span></code> operation as shown below as the subcription is a long-lived connection.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">ydk.models.openconfig</span> <span class="kn">import</span> <span class="n">openconfig_interfaces</span>

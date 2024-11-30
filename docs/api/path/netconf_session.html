@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NetconfSession &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>NetconfSession &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="RestconfSession" href="restconf_session.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -70,7 +70,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -86,7 +85,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../api_guide.html">API Guide</a></li>
           <li class="breadcrumb-item"><a href="path.html">YDK Path API</a></li>
       <li class="breadcrumb-item active">NetconfSession</li>
@@ -99,13 +98,13 @@
            <div itemprop="articleBody">
              
   <section id="module-ydk.path">
-<span id="netconfsession"></span><h1>NetconfSession<a class="headerlink" href="#module-ydk.path" title="Permalink to this heading"></a></h1>
+<span id="netconfsession"></span><h1>NetconfSession<a class="headerlink" href="#module-ydk.path" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="ydk.path.NetconfSession">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.path.</span></span><span class="sig-name descname"><span class="pre">NetconfSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port=830</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol=&quot;ssh&quot;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_demand=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_cache=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">timeout=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key_path=&quot;&quot;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_key_path=&quot;&quot;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.path.</span></span><span class="sig-name descname"><span class="pre">NetconfSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port=830</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol=&quot;ssh&quot;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_demand=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_cache=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">timeout=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key_path=&quot;&quot;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_key_path=&quot;&quot;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession" title="Link to this definition"></a></dt>
 <dd><p>Constructs an instance of the <cite>NetconfSession</cite> class and connects to Netconf server, which <strong>must</strong> support model download.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>address</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) IP address or DNS name of device, which supports Netconf server; required parameter.</p></li>
 <li><p><strong>username</strong> – (<code class="docutils literal notranslate"><span class="pre">str</span></code>) Username to log in to the device; required parameter.</p></li>
@@ -124,10 +123,10 @@ If not specified, the temporary repository at “~/.ydk/&lt;address&gt;” is cr
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.path.NetconfSession.get_root_schema">
-<span class="sig-name descname"><span class="pre">get_root_schema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession.get_root_schema" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_root_schema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession.get_root_schema" title="Link to this definition"></a></dt>
 <dd><p>Return <a class="reference internal" href="root_schema_node.html#ydk.path.RootSchemaNode" title="ydk.path.RootSchemaNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">RootSchemaNode</span></code></a> for this Netconf session.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="root_schema_node.html#ydk.path.RootSchemaNode" title="ydk.path.RootSchemaNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">RootSchemaNode</span></code></a> for this Netconf session.</p>
 </dd>
 </dl>
@@ -135,13 +134,13 @@ If not specified, the temporary repository at “~/.ydk/&lt;address&gt;” is cr
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.path.NetconfSession.invoke">
-<span class="sig-name descname"><span class="pre">invoke</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rpc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession.invoke" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">invoke</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rpc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession.invoke" title="Link to this definition"></a></dt>
 <dd><p>Invokes or executes the given RPC and returns a <a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a> pointer, if the RPC has an output modeled in YANG.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>rpc</strong> – (<a class="reference internal" href="rpc.html#ydk.path.Rpc" title="ydk.path.Rpc"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rpc</span></code></a>) Given RPC to be executed.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a>.</p>
 </dd>
 </dl>
@@ -149,13 +148,13 @@ If not specified, the temporary repository at “~/.ydk/&lt;address&gt;” is cr
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">invoke</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datanode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">invoke</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datanode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd><p>Invokes or executes the given DataNode and returns a <a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a> pointer if the action has an output modeled in YANG.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>datanode</strong> – (<a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rpc</span></code></a>) Given DataNode containing YANG 1.1 action to be executed.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="data_node.html#ydk.path.DataNode" title="ydk.path.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code></a>.</p>
 </dd>
 </dl>
@@ -163,13 +162,13 @@ If not specified, the temporary repository at “~/.ydk/&lt;address&gt;” is cr
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.path.NetconfSession.execute_netconf_operation">
-<span class="sig-name descname"><span class="pre">execute_netconf_operation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rpc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession.execute_netconf_operation" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute_netconf_operation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rpc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession.execute_netconf_operation" title="Link to this definition"></a></dt>
 <dd><p>Sends specified RPC to device (similar to <cite>invoke</cite> function) and returns device response as XML encoded string.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>rpc</strong> – (<a class="reference internal" href="rpc.html#ydk.path.Rpc" title="ydk.path.Rpc"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rpc</span></code></a>) The RPC to be executed.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code> - reply from device in XML encoded string.</p>
 </dd>
 </dl>
@@ -177,10 +176,10 @@ If not specified, the temporary repository at “~/.ydk/&lt;address&gt;” is cr
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.path.NetconfSession.get_capabilities">
-<span class="sig-name descname"><span class="pre">get_capabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession.get_capabilities" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_capabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ydk.path.NetconfSession.get_capabilities" title="Link to this definition"></a></dt>
 <dd><p>Returns a list of capabilities for the Netconf server.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A list of <code class="docutils literal notranslate"><span class="pre">str</span></code> representing the Netconf server capabilities.</p>
 </dd>
 </dl>

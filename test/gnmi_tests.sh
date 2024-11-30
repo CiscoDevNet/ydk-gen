@@ -182,6 +182,9 @@ function init_go_env {
 
     if [ ! -d $GOPATH/src/github.com/stretchr/testify ]; then
         go get github.com/stretchr/testify
+        go get github.com/davecgh/go-spew/spew
+        go get github.com/pmezard/go-difflib/difflib
+        go get gopkg.in/yaml.v3
         cd $GOPATH/src/github.com/stretchr/testify
         git checkout tags/v1.6.1
         cd -
@@ -493,8 +496,10 @@ if [[ ${status} == 0 ]] ; then
 fi
 
 if [[ $(uname) == "Linux" && ${os_info} == *"fedora"* ]] ; then
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64:/usr/lib64
+  if [[ $LD_LIBRARY_PATH != *"/usr/local/lib:/usr/local/lib64:/usr/lib64"* ]]; then
+    export /usr/local/lib:/usr/local/lib64:/usr/lib64:$LD_LIBRARY_PATH
     print_msg "LD_LIBRARY_PATH is set to: $LD_LIBRARY_PATH"
+  fi
 fi
 
 init_py_env

@@ -51,7 +51,7 @@ function install_dependencies {
     $sudo_cmd apt-get install -y lsb-release
     codename=$(lsb_release -c | awk '{ print $2 }')
     ubuntu_release=$(lsb_release -r | awk '{ print $2 }' | cut -d '.' -f 1)
-    if [[ $codename == "focal" || $codename == "jammy" ]] && [[ ! -h /etc/localtime ]]; then
+    if [[ $codename == "focal" || $codename == "jammy" || $codename == "noble" ]] && [[ ! -h /etc/localtime ]]; then
       # Fixing timezone setting issue in focal
       export DEBIAN_FRONTEND=noninteractive
       $sudo_cmd apt-get install -y tzdata
@@ -79,14 +79,37 @@ function install_dependencies {
         run_cmd $sudo_cmd apt-get install -y locate git > /dev/null
         run_cmd $sudo_cmd apt-get install -y curl libcurl4-openssl-dev > /dev/null
     fi
-    run_cmd $sudo_cmd apt-get install -y bison doxygen flex unzip wget cmake gdebi-core lcov > /dev/null
-    run_cmd $sudo_cmd apt-get install -y libcmocka0 libpcre3-dev libpcre++-dev > /dev/null
+    run_cmd $sudo_cmd apt-get install -y bison doxygen flex unzip wget cmake gdebi-core lcov vim > /dev/null
+    run_cmd $sudo_cmd apt-get install -y libcmocka0 libpcre3-dev libpcre++ > /dev/null
     run_cmd $sudo_cmd apt-get install -y libssh-dev libxml2-dev libxslt1-dev > /dev/null
     run_cmd $sudo_cmd apt-get install -y python3-dev python3-lxml python3-pip python3-venv > /dev/null
     run_cmd $sudo_cmd apt-get install -y pkg-config software-properties-common zlib1g-dev openjdk-8-jre > /dev/null
     run_cmd $sudo_cmd apt-get install -y valgrind > /dev/null
-    if [[ $codename == "focal" || $codename == "jammy" ]]; then
-        run_cmd $sudo_cmd apt-get install -y python3-pybind11 > /dev/null
+    if [[ $codename == "focal" || $codename == "jammy" || $codename == "noble" ]]; then
+        run_cmd $sudo_cmd apt-get install -y python3-pybind11 --fix-missing > /dev/null
+    fi
+}
+
+function check_install_python {
+    python_version=$(python3 -V | awk '{ print $2 }' | cut -d '.' -f 2)
+    if [[ $python_version -gt 11 ]]
+    then
+      print_msg "YDK does not support system installed Python 3.$python_version"
+      python3x_location=$(find /usr/local/bin/ -name 'python3.1[0-1]' | tail -n 1)
+      if [ -z $python3x_location ]
+      then
+        print_msg "Installing Python-3.11.10 from source to alternative location"
+        wget https://www.python.org/ftp/python/3.11.10/Python-3.11.10.tgz
+        tar zxf Python-3.11.10.tgz
+        cd Python-3.11.10 > /dev/null
+        ./configure --enable-shared --with-openssl=/usr/local/ssl --with-openssl-rpath=auto --enable-optimizations --with-ssl-default-suites=openssl CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-L/usr/local/ssl"
+        make
+        make altinstall
+        cd - > /dev/null
+        print_msg "NOTE! The python3.11 must be used explicitly; buiding venv is required!"
+      else
+        print_msg "Found local Python3 installation $python3x_location"
+      fi
     fi
 }
 
@@ -103,13 +126,13 @@ function check_install_gcc_link {
 }
 
 function check_install_gcc {
-  which gcc
+  command -v gcc > /dev/null
   local status_gcc=$?
-  which g++
+  command -v g++ > /dev/null
   local status_gxx=$?
   if [[ $status_gcc == 0  && $status_gxx == 0 ]]
   then
-    gcc_version=$(echo $(gcc --version) | awk '{ print $3 }' | cut -d '-' -f 1)
+    gcc_version=$(gcc --version | head -n 1 | awk '{ print $3 }' | cut -d '-' -f 1)
     print_msg "Current gcc/g++ version is $gcc_version"
     local major=$(echo $gcc_version | cut -d '.' -f 1)
     if [[ $codename == "focal" && $major -gt 7 ]]; then
@@ -117,7 +140,7 @@ function check_install_gcc {
 #       $sudo_cmd add-apt-repository ppa:ubuntu-toolchain-r/test -y
 #       $sudo_cmd apt-get update -y > /dev/null
       $sudo_cmd apt-get install gcc-7 g++-7 -y > /dev/null
-      gcc_version=$(echo $(gcc --version) | awk '{ print $3 }' | cut -d '-' -f 1)
+      gcc_version=$(gcc --version | head -n 1 | awk '{ print $3 }' | cut -d '-' -f 1)
       print_msg "Installed gcc/g++ version is $gcc_version"
       major=$(echo $gcc_version | cut -d '.' -f 1)
     fi
@@ -141,50 +164,51 @@ function check_install_curl {
     $sudo_cmd make install
     cd - > /dev/null
     $sudo_cmd rm -f /usr/lib/x86_64-linux-gnu/libcurl.so
-    $sudo_cmd ln -sf /usr/local/lib/libcurl.so.4 /usr/lib/x86_64-linux-gnu/libcurl.so
+    $sudo_cmd rm -f /usr/lib/x86_64-linux-gnu/libcurl.so.4
+    $sudo_cmd ln -sf /usr/local/lib/libcurl.so /usr/lib/x86_64-linux-gnu/libcurl.so
+    $sudo_cmd ln -sf /usr/local/lib/libcurl.so.4 /usr/lib/x86_64-linux-gnu/libcurl.so.4
     rm -rf curl
     print_msg "Installed curl version: $(curl --version | sed 1q | awk '{print$2}')"
   fi
 }
 
 function check_install_libssh {
-  if [[ $codename == "focal" || $codename == "jammy" ]] && [[ ! -h /usr/local/lib/libssh_threads.so ]]; then
+  if [[ $codename == "focal" || $codename == "jammy" || $codename == "noble" ]] && [[ ! -h /usr/local/lib/libssh_threads.so ]]; then
     print_msg "Copying libssh and libssh_threads to /usr/local/lib"
-    sudo cp $curr_dir/3d_party/linux/ubuntu/lib/libssh.so.4.5.0 /usr/local/lib/
+#    sudo cp $curr_dir/3d_party/linux/ubuntu/lib/libssh.so.4.5.0 /usr/local/lib/
     sudo cp $curr_dir/3d_party/linux/ubuntu/lib/libssh_threads.so.4.5.0 /usr/local/lib/
     cd /usr/local/lib/
-    sudo ln -s libssh.so.4.5.0 libssh.so.4
-    sudo ln -s libssh.so.4 libssh.so
+#    sudo ln -s libssh.so.4.5.0 libssh.so.4
+#    sudo ln -s libssh.so.4 libssh.so
     sudo ln -s libssh_threads.so.4.5.0 libssh_threads.so.4
     sudo ln -s libssh_threads.so.4 libssh_threads.so
     cd - > /dev/null
   fi
-  if [[ $codename == "jammy" && ! -h /usr/local/lib/libcrypto.so.1 ]]
+}
+
+function check_install_openssl {
+  if [[ $codename == "jammy" || $codename == "noble" ]] && [[ ! -h /usr/local/ssl/lib/libssl.so ]]
   then
-    sudo cp $curr_dir/3d_party/linux/ubuntu/lib/libcrypto.so.1.1 /usr/local/lib/
-    cd /usr/local/lib/
-    sudo ln -s libcrypto.so.1.1 libcrypto.so.1
+    print_msg "Installing openssl-1.1.1 in /usr/local/ssl"
+    cd /usr/local/src/
+    sudo git clone https://github.com/openssl/openssl.git -b OpenSSL_1_1_1-stable openssl-1.1.1m
+    cd openssl-1.1.1m
+    sudo ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib
+    sudo make
+    sudo make test
+    sudo make install_sw
     cd - > /dev/null
-  fi
-  if [[ $codename == "jammy" && ! -h /usr/local/lib/libssl.so ]]
-  then
-    wget https://www.openssl.org/source/old/1.1.0/openssl-1.1.0l.tar.gz
-    tar xfz openssl-1.1.0l.tar.gz
-    cd openssl-1.1.0l
-    ./config && make && make install
-    cd - > /dev/null
-    rm -rf openssl-1.1.0l*
   fi
 }
 
 function check_install_go {
-  go_exec=$(which go)
+  go_exec=$(command -v go)
   if [[ -z ${go_exec} && -d /usr/local/go ]]; then
     go_exec=/usr/local/go/bin/go
   fi
   if [[ -x ${go_exec} ]]
   then
-    go_version=$(echo `${go_exec} version` | awk '{ print $3 }' | cut -d 'o' -f 2)
+    go_version=$(${go_exec} version | awk '{ print $3 }' | cut -d 'o' -f 2)
     print_msg "Current Go version is $go_version"
     minor=$(echo $go_version | cut -d '.' -f 2)
   else
@@ -230,6 +254,7 @@ NOCOLOR="\033[0m"
 YELLOW='\033[1;33m'
 MSG_COLOR=$YELLOW
 
+print_msg "STARTED .."
 sudo_cmd=
 if [ $(id -u -n) != "root" ]; then
   sudo_cmd="sudo"
@@ -239,6 +264,8 @@ curr_dir=$(pwd)
 
 install_dependencies
 check_install_gcc
+check_install_openssl
+check_install_python
 
 check_install_go
 
@@ -249,3 +276,4 @@ check_install_confd
 
 $sudo_cmd updatedb
 check_install_libssh
+print_msg "FINISHED!"

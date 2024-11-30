@@ -18,6 +18,17 @@
 # Bash script to install YDK-CPP and run unit tests
 # ------------------------------------------------------------------------------
 
+function usage {
+    MSG_COLOR=$NOCOLOR
+    echo "usage: run_ccp_tests.sh [-c|--core] [-b|--bundle] [-g|--gnmi] [-h|--help]
+Options and arguments:
+  -c|--core         build libydk and run core tests;
+  -b|--bundle       build libydk_ydktest and run bundle tests
+  -g|--gnmi         build libydk_gnmi and run gNMI tests
+  -h|--help         show script usage
+If no arguments are specified, build all libraries and run all the tests"
+}
+
 function print_msg {
     echo -e "${MSG_COLOR}*** $(date): run_cpp_test.sh: $* ${NOCOLOR}"
 }
@@ -193,6 +204,11 @@ function build_and_run_tests {
 }
 
 function run_cpp_gnmi_tests {
+    locate libydk_ydktest.a
+    local st=$?
+    if [ $st -ne 0 ]; then
+        cpp_sanity_ydktest_gen_install
+    fi
     build_gnmi_core_library
     build_and_run_tests
 }
@@ -222,6 +238,41 @@ NOCOLOR='\033[0m'
 YELLOW='\033[1;33m'
 MSG_COLOR=$YELLOW
 
+if [[ $# -eq 0 ]]; then
+  print_msg "No arguments specified; will run all the tests!"
+  build_run_core=1
+  build_run_bundle=1
+  build_run_gnmi=1
+fi
+
+# As long as there is at least one more argument, keep looping
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+        # This is a flag type option. Will catch either -f or --foo
+        -c|--core)
+            build_run_core=1
+            ;;
+        -b|--bundle)
+            build_run_bundle=1
+            ;;
+        -g|--gnmi)
+            build_run_gnmi=1
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option '$key'"
+            usage
+            exit 1
+            ;;
+    esac
+    # Shift after checking all the cases to get the next option
+    shift
+done
+
 os_type=$(uname)
 if [[ ${os_type} == "Linux" ]] ; then
     os_info=$(cat /etc/*-release)
@@ -246,8 +297,8 @@ if [[ ${status} == 0 ]] ; then
 fi
 
 if [[ $(uname) == "Linux" && ${os_info} == *"fedora"* ]]; then
-  if [[ $LD_LIBRARY_PATH != *"protobuf-3.5.0"* ]]; then
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64:/usr/lib64
+  if [[ $LD_LIBRARY_PATH != *"/usr/local/lib:/usr/local/lib64:/usr/lib64"* ]]; then
+    export /usr/local/lib:/usr/local/lib64:/usr/lib64:$LD_LIBRARY_PATH
     print_msg "LD_LIBRARY_PATH is set to: $LD_LIBRARY_PATH"
   fi
   centos_version=$(echo `lsb_release -r` | awk '{ print $2 }' | cut -d '.' -f 1)
@@ -257,15 +308,21 @@ curr_dir=$(pwd)
 
 cd $YDKGEN_HOME
 
-install_test_cpp_core
+if [ $build_run_core ]; then
+  install_test_cpp_core
+fi
 
-run_cpp_bundle_tests
+if [ $build_run_bundle ]; then
+  run_cpp_bundle_tests
+fi
 
-run_cpp_gnmi_tests
+if [ $build_run_gnmi ]; then
+  run_cpp_gnmi_tests
+fi
 
 command -v valgrind
 status=$?
-if [[ ${status} == 0 ]]; then
+if [[ $build_run_gnmi && ${status} == 0 ]]; then
     run_cpp_gnmi_memcheck_tests
 fi
 

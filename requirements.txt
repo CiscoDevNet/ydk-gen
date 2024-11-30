@@ -1,7 +1,7 @@
-pyang>=2.5.3
+pyang>=2.6.1
 MarkupSafe>=1.1.1
 Jinja2>=2.11.3
-pybind11==2.6.2
+pybind11==2.13.6
 Sphinx>=1.5.6
 sphinx-rtd-theme>=0.1.9
 GitPython>=2.1.15

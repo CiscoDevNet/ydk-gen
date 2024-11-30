@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Backward compatibility notes &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Backward compatibility notes &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="API Guide" href="../api_guide.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -67,7 +67,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api_guide.html">API Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -83,7 +82,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../developer_guide.html">Developer Guide</a></li>
       <li class="breadcrumb-item active">Backward compatibility notes</li>
       <li class="wy-breadcrumbs-aside">
@@ -95,8 +94,8 @@
            <div itemprop="articleBody">
              
   <section id="backward-compatibility-notes">
-<span id="compatibility"></span><h1><a class="toc-backref" href="#id1">Backward compatibility notes</a><a class="headerlink" href="#backward-compatibility-notes" title="Permalink to this heading"></a></h1>
-<div class="contents topic" id="table-of-contents">
+<span id="compatibility"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">Backward compatibility notes</a><a class="headerlink" href="#backward-compatibility-notes" title="Link to this heading"></a></h1>
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#backward-compatibility-notes" id="id1">Backward compatibility notes</a></p>
@@ -107,20 +106,20 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <p>When installing and using the <code class="docutils literal notranslate"><span class="pre">0.6.0</span></code> and newer releases of <code class="docutils literal notranslate"><span class="pre">YDK-Py</span></code>, please note the below issues with backward compatibility.</p>
 <section id="installation">
-<h2><a class="toc-backref" href="#id2">Installation</a><a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Installation</a><a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
 <p>When installing <code class="docutils literal notranslate"><span class="pre">YDK-Py</span></code>, there is a new system requirement which needs to be installed.
 This is the <code class="docutils literal notranslate"><span class="pre">libydk</span></code> library, which is available on the DevHub website for various OS platforms.
 Please refer to the <a class="reference external" href="https://github.com/CiscoDevNet/ydk-gen#system-requirements">system requirements</a> for details.</p>
 </section>
 <section id="windows-support">
-<h2><a class="toc-backref" href="#id3">Windows Support</a><a class="headerlink" href="#windows-support" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Windows Support</a><a class="headerlink" href="#windows-support" title="Link to this heading"></a></h2>
 <p>From release <code class="docutils literal notranslate"><span class="pre">0.6.0</span></code> onwards, YDK no longer is supported on the Windows platform. We hope to add back support for this platform in the future.</p>
 </section>
 <section id="api-changes">
-<h2><a class="toc-backref" href="#id4">API Changes</a><a class="headerlink" href="#api-changes" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">API Changes</a><a class="headerlink" href="#api-changes" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="../api/providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> no longer has the <code class="docutils literal notranslate"><span class="pre">close()</span></code> method. There is no need to explicitly close the provider as it will be automatically cleaned up when the object goes out of scope.</p></li>
 <li><p><a class="reference internal" href="../api/filters.html#ydk.filters.YFilter" title="ydk.filters.YFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">YFilter</span></code></a> has replaced the functionality of the <code class="docutils literal notranslate"><span class="pre">READ</span></code> and <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> objects</p></li>

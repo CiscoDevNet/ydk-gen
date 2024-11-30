@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Introduction &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="How do I create, update, read and delete?" href="crud_guide.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -77,7 +77,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api_guide.html">API Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -93,7 +92,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../developer_guide.html">Developer Guide</a></li>
       <li class="breadcrumb-item active">Introduction</li>
       <li class="wy-breadcrumbs-aside">
@@ -105,8 +104,8 @@
            <div itemprop="articleBody">
              
   <section id="introduction">
-<h1><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h1>
-<div class="contents topic" id="table-of-contents">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#introduction" id="id1">Introduction</a></p>
@@ -128,7 +127,7 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <p>YDK consists of two main components: core library, which consists of services and providers, and python model API, which are APIs generated based on YANG models and packaged as bundles.</p>
 <p>Core library consists of the below:</p>
 <blockquote>
@@ -139,29 +138,29 @@
 </div></blockquote>
 <p>Applications can be written using the python model API in conjunction with a service and a provider.</p>
 <section id="writing-an-app">
-<h2><a class="toc-backref" href="#id2">Writing an app</a><a class="headerlink" href="#writing-an-app" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Writing an app</a><a class="headerlink" href="#writing-an-app" title="Link to this heading"></a></h2>
 <p>In this example, we set some BGP configuration using the OpenConfig model, the CRUD (Create/Read/Update/Delete) service and the NETCONF service provider. The example in this document is a simplified version of the more complete sample that is available in <code class="docutils literal notranslate"><span class="pre">samples/bgp.py</span></code>. The more complete sample can be run with the below steps:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>ydk-py<span class="o">)</span>ydk-py$ <span class="nb">cd</span> core/samples
-<span class="o">(</span>ydk-py<span class="o">)</span>samples$ ./bgp.py -h
-Usage: bgp.py <span class="o">[</span>-h <span class="p">|</span> --help<span class="o">]</span> <span class="o">[</span>options<span class="o">]</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>ydk-py<span class="o">)</span>ydk-py$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>core/samples
+<span class="o">(</span>ydk-py<span class="o">)</span>samples$<span class="w"> </span>./bgp.py<span class="w"> </span>-h
+Usage:<span class="w"> </span>bgp.py<span class="w"> </span><span class="o">[</span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>--help<span class="o">]</span><span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
 
 Options:
--h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
--v VERSION, --version<span class="o">=</span>VERSION
-                    force NETCONF version <span class="m">1</span>.0 or <span class="m">1</span>.1
--u USERNAME, --user<span class="o">=</span>USERNAME
--p PASSWORD, --password<span class="o">=</span>PASSWORD
-                    password
---proto<span class="o">=</span>PROTO         Which transport protocol to use, one of ssh or tcp
---host<span class="o">=</span>HOST           NETCONF agent hostname
---port<span class="o">=</span>PORT           NETCONF agent SSH port
+-h,<span class="w"> </span>--help<span class="w">            </span>show<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
+-v<span class="w"> </span>VERSION,<span class="w"> </span>--version<span class="o">=</span>VERSION
+<span class="w">                    </span>force<span class="w"> </span>NETCONF<span class="w"> </span>version<span class="w"> </span><span class="m">1</span>.0<span class="w"> </span>or<span class="w"> </span><span class="m">1</span>.1
+-u<span class="w"> </span>USERNAME,<span class="w"> </span>--user<span class="o">=</span>USERNAME
+-p<span class="w"> </span>PASSWORD,<span class="w"> </span>--password<span class="o">=</span>PASSWORD
+<span class="w">                    </span>password
+--proto<span class="o">=</span>PROTO<span class="w">         </span>Which<span class="w"> </span>transport<span class="w"> </span>protocol<span class="w"> </span>to<span class="w"> </span>use,<span class="w"> </span>one<span class="w"> </span>of<span class="w"> </span>ssh<span class="w"> </span>or<span class="w"> </span>tcp
+--host<span class="o">=</span>HOST<span class="w">           </span>NETCONF<span class="w"> </span>agent<span class="w"> </span>hostname
+--port<span class="o">=</span>PORT<span class="w">           </span>NETCONF<span class="w"> </span>agent<span class="w"> </span>SSH<span class="w"> </span>port
 
-<span class="o">(</span>ydk-py<span class="o">)</span>samples$ ./bgp.py --host &lt;ip-address-of-netconf-server&gt; -u &lt;username&gt; -p &lt;password&gt; --port &lt;port-number&gt;
+<span class="o">(</span>ydk-py<span class="o">)</span>samples$<span class="w"> </span>./bgp.py<span class="w"> </span>--host<span class="w"> </span>&lt;ip-address-of-netconf-server&gt;<span class="w"> </span>-u<span class="w"> </span>&lt;username&gt;<span class="w"> </span>-p<span class="w"> </span>&lt;password&gt;<span class="w"> </span>--port<span class="w"> </span>&lt;port-number&gt;
 </pre></div>
 </div>
 </section>
 <section id="what-happens-underneath">
-<h2><a class="toc-backref" href="#id3">What happens underneath</a><a class="headerlink" href="#what-happens-underneath" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">What happens underneath</a><a class="headerlink" href="#what-happens-underneath" title="Link to this heading"></a></h2>
 <p>YDK performs the below actions when running this application:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -174,7 +173,7 @@ Options:
 </div></blockquote>
 </section>
 <section id="service-providers">
-<h2><a class="toc-backref" href="#id4">Service providers</a><a class="headerlink" href="#service-providers" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Service providers</a><a class="headerlink" href="#service-providers" title="Link to this heading"></a></h2>
 <p>The first step in any application is to create a service provider instance. In this case, the NETCONF service provider (defined in <a class="reference internal" href="../api/providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a>) is responsible for mapping between the CRUD service API and the underlying manageability protocol (NETCONF RPCs).</p>
 <p>We instantiate an instance of the service provider that creates a NETCONF session to the machine with address 10.0.0.1:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">ydk.providers</span> <span class="kn">import</span> <span class="n">NetconfServiceProvider</span>
@@ -188,7 +187,7 @@ Options:
 </div>
 </section>
 <section id="using-the-model-apis">
-<h2><a class="toc-backref" href="#id5">Using the model APIs</a><a class="headerlink" href="#using-the-model-apis" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Using the model APIs</a><a class="headerlink" href="#using-the-model-apis" title="Link to this heading"></a></h2>
 <p>After establishing the connection, we instantiate the entities and set some data. First, we import the types from the OpenConfig BGP module:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">8</span><span class="kn">from</span> <span class="nn">ydk.models.openconfig</span> <span class="kn">import</span> <span class="n">openconfig_bgp</span>
 <span class="linenos">9</span><span class="kn">from</span> <span class="nn">ydk.models.openconfig</span> <span class="kn">import</span> <span class="n">openconfig_bgp_types</span>
@@ -213,7 +212,7 @@ Options:
 </div>
 </section>
 <section id="invoking-the-crud-service">
-<h2><a class="toc-backref" href="#id6">Invoking the CRUD Service</a><a class="headerlink" href="#invoking-the-crud-service" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Invoking the CRUD Service</a><a class="headerlink" href="#invoking-the-crud-service" title="Link to this heading"></a></h2>
 <p>The CRUD service provides methods to create, read, update and delete entities on a device making use of the session provided by a service provider (NETCONF in this case).  In order to use the CRUD service, we need to import the <a class="reference internal" href="../api/services/crud_service.html#ydk.services.CRUDService" title="ydk.services.CRUDService"><code class="xref py py-class docutils literal notranslate"><span class="pre">CRUDService</span></code></a> class:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">24</span><span class="kn">from</span> <span class="nn">ydk.services</span> <span class="kn">import</span> <span class="n">CRUDService</span>
 </pre></div>
@@ -232,11 +231,11 @@ service provider instance and our entity (<code class="docutils literal notransl
 <p>Note if there were any errors the above API will raise a YError exception.</p>
 </section>
 <section id="using-non-top-level-objects">
-<h2><a class="toc-backref" href="#id7">Using non-top level objects</a><a class="headerlink" href="#using-non-top-level-objects" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Using non-top level objects</a><a class="headerlink" href="#using-non-top-level-objects" title="Link to this heading"></a></h2>
 <p>In the example above you noticed that we started building model from top-level object - <code class="xref py py-class docutils literal notranslate"><span class="pre">Bgp</span></code> and then built the object tree down the hierarchy.
 However in certain conditions we can build independently non-top level objects and still be able to do all the CRUD operations.</p>
 <section id="top-level-object-vs-non-top">
-<h3><a class="toc-backref" href="#id8">Top level object vs. non-top</a><a class="headerlink" href="#top-level-object-vs-non-top" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Top level object vs. non-top</a><a class="headerlink" href="#top-level-object-vs-non-top" title="Link to this heading"></a></h3>
 <p>The top level object represents top-level container in the Yang model. Examples of top-level objects:</p>
 <blockquote>
 <div><ul class="simple">
@@ -257,7 +256,7 @@ Examples of non-top level objects:</p>
 </div></blockquote>
 </section>
 <section id="how-to-use-non-top-level-objects">
-<h3><a class="toc-backref" href="#id9">How to use non-top level objects</a><a class="headerlink" href="#how-to-use-non-top-level-objects" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">How to use non-top level objects</a><a class="headerlink" href="#how-to-use-non-top-level-objects" title="Link to this heading"></a></h3>
 <p>You should be able to work with non-top level objects similarly as with top level.
 Your program will look more simple and straight to the point.
 The above example will look now like this:</p>
@@ -282,7 +281,7 @@ The above example will look now like this:</p>
 </div>
 </section>
 <section id="limitations">
-<h3><a class="toc-backref" href="#id10">Limitations</a><a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Limitations</a><a class="headerlink" href="#limitations" title="Link to this heading"></a></h3>
 <p>Not all non-top level objects can be used independently. Here is the rule:</p>
 <blockquote>
 <div><p>When building non-top level object, we have to define all the list keys on the way up to the top level object.
@@ -290,7 +289,7 @@ In the example above the object <cite>ipv4_afsf</cite> is a member of the list. 
 </div></blockquote>
 </section>
 <section id="under-the-hood">
-<h3><a class="toc-backref" href="#id11">Under the hood</a><a class="headerlink" href="#under-the-hood" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Under the hood</a><a class="headerlink" href="#under-the-hood" title="Link to this heading"></a></h3>
 <p>The programmability protocols like Netconf, gNMI, etc. are always working with top level model objects.
 When non-top level object is presented to <cite>CRUDService</cite> or <cite>NetconfService</cite>, the YDK creates corresponding top-level object and perform the requested operation.
 In case of read/get operation the protocol returns always top-level objects.
@@ -298,7 +297,7 @@ When specified filter is a non-top level object, the YDK traverses the response 
 </section>
 </section>
 <section id="logging">
-<span id="howto-logging"></span><h2><a class="toc-backref" href="#id12">Logging</a><a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
+<span id="howto-logging"></span><h2><a class="toc-backref" href="#id12" role="doc-backlink">Logging</a><a class="headerlink" href="#logging" title="Link to this heading"></a></h2>
 <p>YDK uses common Python logging.  All modules are based on the <code class="docutils literal notranslate"><span class="pre">ydk</span></code> log. The below code snippet shows how to enable basic logging with the <code class="docutils literal notranslate"><span class="pre">INFO</span></code> level, which is useful for most <cite>users</cite> of YDK. Using the <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> level will produces a lot more detailed logs, which may be useful for <cite>developers</cite> working on YDK.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="linenos">2</span><span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;ydk&#39;</span><span class="p">)</span>

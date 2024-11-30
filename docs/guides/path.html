@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How do I use the Path API? &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>How do I use the Path API? &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="How do I use OpenDaylight with YDK?" href="opendaylight.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -68,7 +68,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api_guide.html">API Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -84,7 +83,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../developer_guide.html">Developer Guide</a></li>
       <li class="breadcrumb-item active">How do I use the Path API?</li>
       <li class="wy-breadcrumbs-aside">
@@ -96,8 +95,8 @@
            <div itemprop="articleBody">
              
   <section id="how-do-i-use-the-path-api">
-<span id="howto-path"></span><h1><a class="toc-backref" href="#id1">How do I use the Path API?</a><a class="headerlink" href="#how-do-i-use-the-path-api" title="Permalink to this heading"></a></h1>
-<div class="contents topic" id="table-of-contents">
+<span id="howto-path"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">How do I use the Path API?</a><a class="headerlink" href="#how-do-i-use-the-path-api" title="Link to this heading"></a></h1>
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#how-do-i-use-the-path-api" id="id1">How do I use the Path API?</a></p>
@@ -109,10 +108,10 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <p>The <a class="reference internal" href="../api/path/path.html#path-api-guide"><span class="std std-ref">Path API</span></a> (part of the <a class="reference external" href="https://github.com/CiscoDevNet/ydk-py/tree/master/core">YDK core</a>) is a generic API which can be used to create and access YANG data nodes without having to use the model bundle APIs (for example, <a class="reference external" href="https://github.com/CiscoDevNet/ydk-py/tree/master/openconfig">openconfig</a>). The <code class="docutils literal notranslate"><span class="pre">ydk</span></code> python package is sufficient to use the Path API. Apps can be written using xpath-like path expressions as illustrated below.</p>
 <section id="how-do-i-create-a-basic-configuration">
-<h2><a class="toc-backref" href="#id2">How do I create a basic configuration?</a><a class="headerlink" href="#how-do-i-create-a-basic-configuration" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">How do I create a basic configuration?</a><a class="headerlink" href="#how-do-i-create-a-basic-configuration" title="Link to this heading"></a></h2>
 <p>An example for using Path API to create a <code class="docutils literal notranslate"><span class="pre">bgp</span></code> configuration using the <code class="docutils literal notranslate"><span class="pre">openconfig-bgp</span></code> model in conjunction with the standard <a class="reference external" href="https://github.com/YangModels/yang/blob/4b12d5017eb94a0760746d72c6fd93cb02943d45/standard/ietf/RFC/ietf-netconf%402011-06-01.yang#L416">edit-config RPC</a> is shown below:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">ydk.path</span> <span class="kn">import</span> <span class="n">NetconfSession</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">ydk.path</span> <span class="kn">import</span> <span class="n">Codec</span>
@@ -164,7 +163,7 @@
 </div>
 </section>
 <section id="how-do-i-work-with-different-rpcs">
-<h2><a class="toc-backref" href="#id3">How do I work with different RPCs?</a><a class="headerlink" href="#how-do-i-work-with-different-rpcs" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">How do I work with different RPCs?</a><a class="headerlink" href="#how-do-i-work-with-different-rpcs" title="Link to this heading"></a></h2>
 <p>To invoke the <a class="reference external" href="https://github.com/YangModels/yang/blob/4b12d5017eb94a0760746d72c6fd93cb02943d45/standard/ietf/RFC/ietf-netconf-monitoring%402010-10-04.yang#L512">get-schema RPC</a> to download the <code class="docutils literal notranslate"><span class="pre">Cisco-IOS-XR-aaa-lib-cfg.yang</span></code> yang model from a netconf server using the path API, the below approach can be used.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">ydk.path</span> <span class="kn">import</span> <span class="n">NetconfSession</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">ydk.path</span> <span class="kn">import</span> <span class="n">Codec</span>
@@ -196,23 +195,23 @@
 </div>
 </section>
 <section id="how-do-i-work-with-yang-1-1-actions">
-<h2><a class="toc-backref" href="#id4">How do I work with YANG 1.1 actions?</a><a class="headerlink" href="#how-do-i-work-with-yang-1-1-actions" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">How do I work with YANG 1.1 actions?</a><a class="headerlink" href="#how-do-i-work-with-yang-1-1-actions" title="Link to this heading"></a></h2>
 <p>Path API can be used to work with a <code class="docutils literal notranslate"><span class="pre">action</span></code> as defined in the YANG 1.1 standard in <a class="reference external" href="https://tools.ietf.org/html/rfc7950">RFC 7950</a>.</p>
 <p>Consider the below snippet from an example <code class="docutils literal notranslate"><span class="pre">action-config.yang</span></code> model compliant with the YANG 1.1 standard.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">container</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">action</span><span class="w"> </span><span class="n">action</span><span class="o">-</span><span class="n">node</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">input</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">leaf</span><span class="w"> </span><span class="n">ip</span><span class="o">-</span><span class="n">test</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">type</span><span class="w"> </span><span class="n">string</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">     </span><span class="p">}</span><span class="w"></span>
-<span class="w">     </span><span class="n">output</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">leaf</span><span class="w"> </span><span class="n">op</span><span class="o">-</span><span class="n">test</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">type</span><span class="w"> </span><span class="n">string</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">     </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">container</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">action</span><span class="w"> </span><span class="n">action</span><span class="o">-</span><span class="n">node</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">input</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">leaf</span><span class="w"> </span><span class="n">ip</span><span class="o">-</span><span class="n">test</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">type</span><span class="w"> </span><span class="n">string</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">     </span><span class="n">output</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">leaf</span><span class="w"> </span><span class="n">op</span><span class="o">-</span><span class="n">test</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">type</span><span class="w"> </span><span class="n">string</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>The below script can be used to work with the above model</p>
@@ -237,7 +236,7 @@
 </div>
 </section>
 <section id="what-is-the-path-syntax">
-<h2><a class="toc-backref" href="#id5">What is the Path syntax?</a><a class="headerlink" href="#what-is-the-path-syntax" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">What is the Path syntax?</a><a class="headerlink" href="#what-is-the-path-syntax" title="Link to this heading"></a></h2>
 <p>Full XPath notation is supported for find operations on <code class="xref py py-class docutils literal notranslate"><span class="pre">DataNode</span></code>(s). This XPath conforms to the YANG specification (<a class="reference external" href="https://tools.ietf.org/html/rfc6020#section-6.4">RFC 6020 section 6.4</a>). Some useful examples:</p>
 <ul class="simple">
 <li><p>Get <code class="docutils literal notranslate"><span class="pre">list</span></code> instance with <code class="docutils literal notranslate"><span class="pre">key1</span></code> of value <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">key2</span></code> of value <code class="docutils literal notranslate"><span class="pre">2</span></code> (this can return more <code class="docutils literal notranslate"><span class="pre">list</span></code> instances if there are more keys than <code class="docutils literal notranslate"><span class="pre">key1</span></code> and <code class="docutils literal notranslate"><span class="pre">key2</span></code>)</p></li>

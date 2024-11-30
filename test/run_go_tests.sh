@@ -18,6 +18,16 @@
 # Bash script to install YDK-GO packages and run unit tests
 # ------------------------------------------------------------------------------
 
+function usage {
+    echo "usage: run_go_tests.sh [-c|--core] [-b|--bundle] [-g|--gnmi] [-h|--help]
+Options and arguments:
+  -c|--core         build core package and run core tests;
+  -b|--bundle       build test bundles and run bundle tests;
+  -g|--gnmi         build gnmi package and run gNMI tests
+  -h|--help         show script usage
+If no arguments are specified, build all the packages and run all the tests"
+}
+
 function print_msg {
     echo -e "${MSG_COLOR}*** $(date): run_go_tests.sh: $* ${NOCOLOR}"
 }
@@ -81,6 +91,9 @@ function init_go_env {
     if [ ! -d $GOPATH/src/github.com/stretchr/testify ]; then
       print_msg "Installing 'testify' package"
       run_cmd go get github.com/stretchr/testify
+      run_cmd go get github.com/davecgh/go-spew/spew
+      run_cmd go get github.com/pmezard/go-difflib/difflib
+      run_cmd go get gopkg.in/yaml.v3
       cd $GOPATH/src/github.com/stretchr/testify
       git checkout tags/v1.6.1
       cd -
@@ -102,7 +115,7 @@ function install_go_core {
 }
 
 function install_go_bundle {
-    print_msg "Generating/installing go bundles ydktest"
+    print_msg "Generating/installing go bundle ydktest"
     cd $YDKGEN_HOME
     run_cmd python3 generate.py --bundle profiles/test/ydktest-cpp.json --go -i
 }
@@ -200,6 +213,41 @@ NOCOLOR='\033[0m'
 YELLOW='\033[1;33m'
 MSG_COLOR=$YELLOW
 
+if [[ $# -eq 0 ]]; then
+  print_msg "No arguments specified; will run all the tests!"
+  build_run_core=1
+  build_run_bundle=1
+  build_run_gnmi=1
+fi
+
+# As long as there is at least one more argument, keep looping
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+        # This is a flag type option. Will catch either -f or --foo
+        -c|--core)
+            build_run_core=1
+            ;;
+        -b|--bundle)
+            build_run_bundle=1
+            ;;
+        -g|--gnmi)
+            build_run_gnmi=1
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option '$key'"
+            usage
+            exit 1
+            ;;
+    esac
+    # Shift after checking all the cases to get the next option
+    shift
+done
+
 os_type=$(uname)
 if [[ ${os_type} == "Linux" ]] ; then
   os_info=$(cat /etc/*-release)
@@ -217,8 +265,8 @@ if [ -z ${YDKGEN_HOME} ] || [ ! -d ${YDKGEN_HOME} ]; then
 fi
 
 if [[ $(uname) == "Linux" && ${os_info} == *"fedora"* ]]; then
-  if [[ $LD_LIBRARY_PATH != *"protobuf-3.5.0"* ]]; then
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64:/usr/lib64
+  if [[ $LD_LIBRARY_PATH != *"/usr/local/lib:/usr/local/lib64:/usr/lib64"* ]]; then
+    export /usr/local/lib:/usr/local/lib64:/usr/lib64:$LD_LIBRARY_PATH
     print_msg "LD_LIBRARY_PATH is set to: $LD_LIBRARY_PATH"
   fi
   centos_version=$(echo `lsb_release -r` | awk '{ print $2 }' | cut -d '.' -f 1)
@@ -236,13 +284,20 @@ curr_dir="$(pwd)"
 cd $YDKGEN_HOME
 
 init_go_env
-install_go_core
-install_go_bundle
 
-run_go_bundle_tests
+if [ $build_run_core ]; then
+  install_go_core
+fi
 
-install_go_gnmi
-run_go_gnmi_tests
+if [ $build_run_bundle ]; then
+  install_go_bundle
+  run_go_bundle_tests
+fi
+
+if [ $build_run_gnmi ]; then
+  install_go_gnmi
+  run_go_gnmi_tests
+fi
 
 $script_dir/clean_test_env.sh
 

@@ -1,3 +1,15 @@
+### 2024-11-30 version 
+
+#### New features and enhancements
+  * Added support for Ubuntu 24.04 LTS (noble)
+  * Upgraded pyang to version 2.6.1
+  * Upgraded pybind11 to version 2.13.6
+
+#### Resolved GitHub issues
+  * Incorrect loading of submodules into YANG repository ([#1094](https://github.com/CiscoDevNet/ydk-gen/issues/1094))
+  * Added support for finding the Root Resource as specified by RFC 8040 ([#1096](https://github.com/CiscoDevNet/ydk-gen/issues/1096))
+
+
 ### 2023-08-31 version 0.8.6.5
 
 #### New features and enhancements

@@ -172,7 +172,6 @@ class CodecServiceProvider(object):
             capabilities (list): List of ydk.path.Capability available for this bundle.
         """
         capabilities = []
-        capability_map = {}
 
         mod_yang_ns = self._get_bundle_yang_ns(bundle_name)
         if mod_yang_ns is not None:

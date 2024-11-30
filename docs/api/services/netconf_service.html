@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NETCONF Service &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="../../_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>NETCONF Service &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d688945f"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="gNMI Service API" href="gnmi_service.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> YANG Development Kit
-            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -68,7 +68,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -84,7 +83,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../api_guide.html">API Guide</a></li>
           <li class="breadcrumb-item"><a href="../class_hierarchy.html">YDK API</a></li>
           <li class="breadcrumb-item"><a href="services.html">Services</a></li>
@@ -98,58 +97,58 @@
            <div itemprop="articleBody">
              
   <section id="netconf-service">
-<h1>NETCONF Service<a class="headerlink" href="#netconf-service" title="Permalink to this heading"></a></h1>
+<h1>NETCONF Service<a class="headerlink" href="#netconf-service" title="Link to this heading"></a></h1>
 <p>YDK NetconfService class provides API for various operations on device configuration.</p>
 <p>All NetconfService operations performed on <a class="reference internal" href="#ydk.ext.services.Datastore" title="ydk.ext.services.Datastore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Datastore</span></code></a>, which instance represents data storage of configuration on device, and/or <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>, which instance represents single container in one of the device supported models.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="ydk.ext.services.Datastore">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.ext.services.</span></span><span class="sig-name descname"><span class="pre">Datastore</span></span><a class="headerlink" href="#ydk.ext.services.Datastore" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.ext.services.</span></span><span class="sig-name descname"><span class="pre">Datastore</span></span><a class="headerlink" href="#ydk.ext.services.Datastore" title="Link to this definition"></a></dt>
 <dd><p>Type of data storage on device.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="ydk.ext.services.Datastore.candidate">
-<span class="sig-name descname"><span class="pre">candidate</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.candidate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">candidate</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.candidate" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="ydk.ext.services.Datastore.running">
-<span class="sig-name descname"><span class="pre">running</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.running" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">running</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.running" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="ydk.ext.services.Datastore.startup">
-<span class="sig-name descname"><span class="pre">startup</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.startup" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">startup</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.startup" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="ydk.ext.services.Datastore.url">
-<span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.url" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.url" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="ydk.ext.services.Datastore.na">
-<span class="sig-name descname"><span class="pre">na</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.na" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">na</span></span><a class="headerlink" href="#ydk.ext.services.Datastore.na" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ydk.services.NetconfService">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.services.</span></span><span class="sig-name descname"><span class="pre">NetconfService</span></span><a class="headerlink" href="#ydk.services.NetconfService" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ydk.services.</span></span><span class="sig-name descname"><span class="pre">NetconfService</span></span><a class="headerlink" href="#ydk.services.NetconfService" title="Link to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.cancel_commit">
-<span class="sig-name descname"><span class="pre">cancel_commit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.cancel_commit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cancel_commit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.cancel_commit" title="Link to this definition"></a></dt>
 <dd><p>Cancels an ongoing confirmed commit. If the <strong>persist_id</strong> parameter is None, the operation <strong>must</strong> be issued on the same session that issued the confirmed commit.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>persist_id</strong> – An <code class="docutils literal notranslate"><span class="pre">int</span></code> that cancels a persistent confirmed commit.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -157,16 +156,16 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.close_session">
-<span class="sig-name descname"><span class="pre">close_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.close_session" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">close_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.close_session" title="Link to this definition"></a></dt>
 <dd><p>Request graceful termination of a NETCONF session.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -174,10 +173,10 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.commit">
-<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confirmed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confirm_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.commit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confirmed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confirm_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.commit" title="Link to this definition"></a></dt>
 <dd><p>Instructs the device to implement the configuration data contained in the candidate configuration.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>confirmed</strong> – A <code class="docutils literal notranslate"><span class="pre">bool</span></code> that signals a confirmed commit operation.</p></li>
@@ -186,10 +185,10 @@
 <li><p><strong>persist_id</strong> – An <code class="docutils literal notranslate"><span class="pre">int</span></code> that is given in order to commit a persistent confirmed commit.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -197,10 +196,10 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.copy_config">
-<span class="sig-name descname"><span class="pre">copy_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source-config=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.copy_config" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">copy_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source-config=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.copy_config" title="Link to this definition"></a></dt>
 <dd><p>Create or replace an entire <strong>target</strong> configuration from one of another source of configuration: <strong>source</strong>, <strong>url</strong>, or <strong>source-config</strong>. Only one source of configuration must be specified. If target datastore exists, it is overwritten; otherwise - new datastore is created.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>target</strong> – An instance of <a class="reference internal" href="#ydk.ext.services.Datastore" title="ydk.ext.services.Datastore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Datastore</span></code></a> representing configuration being used as destination.</p></li>
@@ -211,10 +210,10 @@
 </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -222,20 +221,20 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.delete_config">
-<span class="sig-name descname"><span class="pre">delete_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.delete_config" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">delete_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.delete_config" title="Link to this definition"></a></dt>
 <dd><p>Delete a configuration Datastore. The RUNNING configuration Datastore cannot be deleted.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>target</strong> – An instance of <a class="reference internal" href="#ydk.ext.services.Datastore" title="ydk.ext.services.Datastore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Datastore</span></code></a> representing configuration to be deleted.</p></li>
 <li><p><strong>url</strong> – A <code class="docutils literal notranslate"><span class="pre">str</span></code> representing the configuration URL. Optional parameter required only when target is set to <code class="docutils literal notranslate"><span class="pre">url</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -243,16 +242,16 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.discard_changes">
-<span class="sig-name descname"><span class="pre">discard_changes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.discard_changes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">discard_changes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.discard_changes" title="Link to this definition"></a></dt>
 <dd><p>Used to revert the candidate configuration to the current running configuration.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -260,10 +259,10 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.edit_config">
-<span class="sig-name descname"><span class="pre">edit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.edit_config" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">edit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.edit_config" title="Link to this definition"></a></dt>
 <dd><p>Loads all or part of a specified configuration to the specified target configuration datastore. Allows new configuration to be read from local file, remote file, or inline. If the target configuration datastore does not exist, it will be created.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>target</strong> – An instance of <a class="reference internal" href="#ydk.ext.services.Datastore" title="ydk.ext.services.Datastore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Datastore</span></code></a> representing the configuration being edited.</p></li>
@@ -275,10 +274,10 @@
 <li><p><strong>test_option</strong> – A <code class="docutils literal notranslate"><span class="pre">str</span></code> that can be set to <code class="docutils literal notranslate"><span class="pre">stop-on-error</span></code>, <code class="docutils literal notranslate"><span class="pre">continue-on-error</span></code>, or <code class="docutils literal notranslate"><span class="pre">rollback-on-error</span></code>; this parameter is optional.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -286,10 +285,10 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.get_config">
-<span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.get_config" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.get_config" title="Link to this definition"></a></dt>
 <dd><p>Retrieve all or part of a specified configuration datastore.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>source</strong> – An instance of <a class="reference internal" href="#ydk.ext.services.Datastore" title="ydk.ext.services.Datastore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Datastore</span></code></a> representing source configuration.</p></li>
@@ -298,12 +297,12 @@
 </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>For single entity filter - an instance of <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> as identified by the <strong>filter</strong> or <code class="docutils literal notranslate"><span class="pre">None</span></code>, if operation fails.</p>
 <p>For multiple filters - collection of <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> instances encapsulated into Python <code class="docutils literal notranslate"><span class="pre">list</span></code> or <a class="reference internal" href="../types.html#ydk.types.Config" title="ydk.types.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code></a> accordingly to the type of <strong>filter</strong>.</p>
 </p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -311,10 +310,10 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.get" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.get" title="Link to this definition"></a></dt>
 <dd><p>Retrieve running configuration and device state information.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>filter</strong> – <p>An instance of <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>, which represents single container in device supported model.</p>
@@ -322,12 +321,12 @@
 </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>For single entity filter - an instance of <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> as identified by the <strong>filter</strong> or <code class="docutils literal notranslate"><span class="pre">None</span></code>, if operation fails.</p>
 <p>For multiple filters - collection of <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> instances encapsulated into Python <code class="docutils literal notranslate"><span class="pre">list</span></code> or <a class="reference internal" href="../types.html#ydk.types.Config" title="ydk.types.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code></a> accordingly to the type of <strong>filter</strong>.</p>
 </p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -335,19 +334,19 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.kill_session">
-<span class="sig-name descname"><span class="pre">kill_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.kill_session" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">kill_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.kill_session" title="Link to this definition"></a></dt>
 <dd><p>Force the termination of a NETCONF session.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>session_id</strong> – An <code class="docutils literal notranslate"><span class="pre">int</span></code> - session identifier of the NETCONF session to be terminated.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -355,19 +354,19 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.lock">
-<span class="sig-name descname"><span class="pre">lock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.lock" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">lock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.lock" title="Link to this definition"></a></dt>
 <dd><p>Allows the client to lock the entire configuration datastore system of a device.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>target</strong> – An instance of <a class="reference internal" href="#ydk.ext.services.Datastore" title="ydk.ext.services.Datastore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Datastore</span></code></a> representing the configuration to lock.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -375,19 +374,19 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.unlock">
-<span class="sig-name descname"><span class="pre">unlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.unlock" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">unlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.unlock" title="Link to this definition"></a></dt>
 <dd><p>Used to release a configuration lock, previously obtained with the LOCK operation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>target</strong> – An instance of <a class="reference internal" href="#ydk.ext.services.Datastore" title="ydk.ext.services.Datastore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Datastore</span></code></a> representing the configuration to unlock.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>
@@ -395,10 +394,10 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ydk.services.NetconfService.validate">
-<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.validate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ydk.services.NetconfService.validate" title="Link to this definition"></a></dt>
 <dd><p>Execute a validate operation to validate the contents of the specified configuration.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>provider</strong> – <a class="reference internal" href="../providers/netconf_provider.html#ydk.providers.NetconfServiceProvider" title="ydk.providers.NetconfServiceProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetconfServiceProvider</span></code></a> instance.</p></li>
 <li><p><strong>source</strong> – An instance of <a class="reference internal" href="#ydk.ext.services.Datastore" title="ydk.ext.services.Datastore"><code class="xref py py-class docutils literal notranslate"><span class="pre">Datastore</span></code></a> representing the configuration datastore to validate.</p></li>
@@ -406,10 +405,10 @@
 <li><p><strong>source_config</strong> – <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> An instance of <a class="reference internal" href="../types.html#ydk.types.Entity" title="ydk.types.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> representing the configuration to validate.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the operation succeeds, <code class="docutils literal notranslate"><span class="pre">False</span></code> - otherwise.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="../errors.html#ydk.errors.YServiceProviderError" title="ydk.errors.YServiceProviderError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">YServiceProviderError</span></code></a>, if error has occurred.</p>
 </dd>
 </dl>

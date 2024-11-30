@@ -143,77 +143,91 @@ namespace ydk {
             return enlarged_data;
         }
 
-        extern "C" char* get_module_callback(const char* module_name, const char* module_rev, const char *submod_name, const char *sub_rev,
-                                       void* user_data, LYS_INFORMAT* format, void (**free_module_data)(void *model_data))
+        extern "C" char* get_module_callback(const char* module_name, const char* module_rev,
+                                             const char *submod_name, const char *sub_rev,
+                                             void* user_data, LYS_INFORMAT* format,
+                                             void (**free_module_data)(void *model_data))
         {
-            YLOG_DEBUG("Getting module '{}' submodule '{}'", module_name, (submod_name?submod_name:"none"));
+            if (submod_name) {
+                YLOG_DEBUG("Getting module '{}' submodule '{}' with revision {}",
+                           module_name, submod_name, (sub_rev ? sub_rev : "none"));
+            }
+            else {
+                YLOG_DEBUG("Getting module '{}' with revision {}",
+                           module_name, (module_rev ? module_rev : "none"));
+            }
             *free_module_data = c_free_data;
 
-            if(user_data != nullptr){
+            if (user_data != nullptr) {
                 ModelProvider::Format m_format = ModelProvider::Format::YANG;
                 *format = LYS_IN_YANG;
                 auto repo = reinterpret_cast<const RepositoryPtr*>(user_data);
 
-                //first check our directory for a file of the form <module-module_name>@<module_rev-date>.yang
-                YLOG_DEBUG("Looking for file in folder: {}", repo->path);
+                // first check the directory for a file name <module-module_name>@<module_rev-date>.yang
+                // YLOG_DEBUG("Looking for file in folder: {}", repo->path);
                 std::string yang_file_path{repo->path};
-                std::string yang_file_path_no_revision{repo->path};
                 yang_file_path += '/';
-                yang_file_path += (submod_name?submod_name:module_name);
-                yang_file_path_no_revision += yang_file_path;
+                yang_file_path += (submod_name ? submod_name : module_name);
+                std::string yang_file_path_no_revision = yang_file_path + ".yang";
+                bool with_revision = false;
 
-                if(submod_name && sub_rev){
-                    yang_file_path += "@";
-                    yang_file_path += sub_rev;
+                if (submod_name) {
+                    if (sub_rev) {
+                        yang_file_path += "@";
+                        yang_file_path += sub_rev;
+                        with_revision = true;
+                    }
                 }
-                else if(module_name && module_rev){
+                else if (module_name && module_rev) {
                     yang_file_path += "@";
                     yang_file_path += module_rev;
+                    with_revision = true;
                 }
                 yang_file_path += ".yang";
-                YLOG_DEBUG("Opening file '{}'", yang_file_path);
+                // YLOG_DEBUG("Opening file '{}'", yang_file_path);
 
                 if (file_exists(yang_file_path) || file_exists(yang_file_path_no_revision)) {
-                    if (file_exists(yang_file_path))
-                        YLOG_DEBUG("Path found with revision: {}", yang_file_path);
-                    else
-                        YLOG_DEBUG("Path found without revision: {}", yang_file_path_no_revision);
+                    if (with_revision && file_exists(yang_file_path))
+                        YLOG_DEBUG("File found with revision: {}", yang_file_path);
+                    else {
+                        YLOG_DEBUG("File found with no revision: {}", yang_file_path_no_revision);
+                        yang_file_path = yang_file_path_no_revision;
+                    }
 
-                    //open the file read the data and return it
+                    // open the file and read the data
                     std::string model_data {""};
                     std::ifstream yang_file {yang_file_path};
-                    if(yang_file.is_open()) {
+                    if (yang_file.is_open()) {
                         std::string line;
-                        while(std::getline(yang_file, line)){
-                            model_data+=line;
-                            model_data+='\n';
+                        while (std::getline(yang_file, line)) {
+                            model_data += line;
+                            model_data += '\n';
                         }
-
                         yang_file.close();
-
                         return get_enlarged_data(model_data, yang_file_path);
-                    } else {
+                    }
+                    else {
                         YLOG_ERROR("Cannot open file '{}'", yang_file_path);
                         throw(YIllegalStateError("Cannot open file " + yang_file_path));
                     }
                 }
                 else {
-                    YLOG_DEBUG("File '{}' is not found in repository", yang_file_path);
+                    YLOG_DEBUG("File '{}' is not found in repository", yang_file_path_no_revision);
                 }
 
-                for(auto model_provider : repo->get_model_providers()) {
+                for (auto model_provider : repo->get_model_providers()) {
                     std::string model_data{};
-                    if(submod_name)
+                    if (submod_name)
                     {
                         YLOG_DEBUG("Getting submodule '{}' using get-schema", submod_name);
-                        model_data = model_provider->get_model(submod_name, sub_rev != nullptr ? sub_rev : "", m_format);
+                        model_data = model_provider->get_model(submod_name, sub_rev ? sub_rev : "", m_format);
                     }
                     else
                     {
                         YLOG_DEBUG("Getting module '{}' using get-schema", module_name);
-                        model_data = model_provider->get_model(module_name, module_rev != nullptr ? module_rev : "", m_format);
+                        model_data = model_provider->get_model(module_name, module_rev ? module_rev : "", m_format);
                     }
-                    if(!model_data.empty()){
+                    if (!model_data.empty()) {
                         sink_to_file(yang_file_path, model_data);
                         return get_enlarged_data(model_data, yang_file_path);
                     }
@@ -221,7 +235,7 @@ namespace ydk {
             }
             YLOG_ERROR("Cannot find model with module name '{}'", module_name);
             //throw(YServiceProviderError("Cannot find model with module name: " + std::string(module_name)));
-            return {};
+            return nullptr;
         }
     }
 }

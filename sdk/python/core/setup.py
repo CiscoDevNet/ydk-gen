@@ -35,9 +35,9 @@ from setuptools import setup, Extension, find_packages
 
 NAME = 'ydk'
 
-VERSION = '0.8.6.5'
+VERSION = '0.8.6.6'
 
-INSTALL_REQUIREMENTS = ['pybind11==2.6.2']
+INSTALL_REQUIREMENTS = ['pybind11==2.13.6']
 
 LONG_DESCRIPTION = '''
                    The YANG Development Kit (YDK) is a Software Development Kit
@@ -78,7 +78,7 @@ class YdkBuildExtension(build_ext):
             import pybind11
         except ImportError:
             import pip
-            pip.main(['install', 'pybind11==2.6.2'])
+            pip.main(['install', 'pybind11==2.13.6'])
             import pybind11
 
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))

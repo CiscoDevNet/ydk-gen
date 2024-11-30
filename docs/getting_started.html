@@ -1,23 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started &mdash; YANG Development Kit 0.8.6.5 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/width.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/icon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Getting Started &mdash; YANG Development Kit 0.8.6.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/width.css?v=6892ff54" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d688945f"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Developer Guide" href="developer_guide.html" />
@@ -29,15 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> YANG Development Kit
-            <img src="_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            YANG Development Kit
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.8.6.5
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -85,7 +85,6 @@
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_guide.html">API Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Questions and Answers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ydk.models.ydktest.html">ydktest bundle API</a></li>
 </ul>
 
         </div>
@@ -101,7 +100,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Getting Started</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -112,8 +111,8 @@
            <div itemprop="articleBody">
              
   <section id="getting-started">
-<h1><a class="toc-backref" href="#id2">Getting Started</a><a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
-<div class="contents topic" id="table-of-contents">
+<h1><a class="toc-backref" href="#id2" role="doc-backlink">Getting Started</a><a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
+<nav class="contents" id="table-of-contents">
 <p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#getting-started" id="id2">Getting Started</a></p>
@@ -160,33 +159,33 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="overview">
-<h2><a class="toc-backref" href="#id3">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The YANG Development Kit (YDK) is a software development tool, which provides API for building applications based on YANG models.
 The main goal of YDK is to reduce the learning curve of YANG data models by expressing the model semantics in an API
 and abstracting protocol/encoding details.  YDK is composed of a core package that defines services and providers,
 plus one or more module bundles that are based on YANG models.</p>
 </section>
 <section id="backward-compatibility">
-<h2><a class="toc-backref" href="#id4">Backward Compatibility</a><a class="headerlink" href="#backward-compatibility" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Backward Compatibility</a><a class="headerlink" href="#backward-compatibility" title="Link to this heading"></a></h2>
 <p>The Python YDK-0.8.6 core package is compatible with all model bundles generated previously with ydk-gen releases starting from 0.7.3.
 However the YDK-0.8.6 generates slightly different code and model API comparing to YDK-0.8.4.
 The YDK-0.8.6 generated code is not compatible with YDK-0.7.2 and earlier bundle packages due to changes in modeling and handling YList objects.</p>
 <p><strong>NOTE.</strong> Starting from release 0.8.5 the YDK does not support Python2 interpreter as it was deprecated.</p>
 </section>
 <section id="docker">
-<h2><a class="toc-backref" href="#id5">Docker</a><a class="headerlink" href="#docker" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Docker</a><a class="headerlink" href="#docker" title="Link to this heading"></a></h2>
 <p>A <a class="reference external" href="https://docs.docker.com/engine/reference/run/">docker image</a> is automatically built with the latest ydk-gen installed.
 This be used to run ydk-gen without installing anything natively on your platform.</p>
 <p>To use the docker image, <a class="reference external" href="https://docs.docker.com/install/">install docker</a> on your system and run the below command.
 See the <a class="reference external" href="https://docs.docker.com/engine/reference/run/">docker documentation</a> for more details:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="n">ydksolutions</span><span class="o">/</span><span class="n">ydk</span><span class="o">-</span><span class="n">gen</span><span class="p">:</span><span class="mf">0.8.6.5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="n">ydksolutions</span><span class="o">/</span><span class="n">ydk</span><span class="o">-</span><span class="n">gen</span><span class="p">:</span><span class="mf">0.8.6.6</span>
 </pre></div>
 </div>
 </section>
 <section id="system-requirements">
-<h2><a class="toc-backref" href="#id6">System Requirements</a><a class="headerlink" href="#system-requirements" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">System Requirements</a><a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h2>
 <p>The YDK is currently supported on the following platforms including native installations, virtual machines, and docker images:</p>
 <blockquote>
 <div><ul class="simple">
@@ -210,17 +209,17 @@ The user must have sudo access in order to install YDK core components to these 
 Make sure the <cite>sudo</cite> package is installed on your platform prior to the YDK installation procedure.</p>
 </section>
 <section id="core-installation">
-<span id="howto-install"></span><h2><a class="toc-backref" href="#id7">Core Installation</a><a class="headerlink" href="#core-installation" title="Permalink to this heading"></a></h2>
+<span id="howto-install"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Core Installation</a><a class="headerlink" href="#core-installation" title="Link to this heading"></a></h2>
 <section id="installation-script">
-<h3><a class="toc-backref" href="#id8">Installation Script</a><a class="headerlink" href="#installation-script" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Installation Script</a><a class="headerlink" href="#installation-script" title="Link to this heading"></a></h3>
 <p>For YDK installation it is recommended to use script <cite>install_ydk.sh</cite> from <cite>ydk-gen</cite> git repository.
 The script detects platform OS, installs all the dependencies and builds complete set of YDK components for specified language.
 The user must have sudo access to these locations.</p>
 <p>If the script installs any YDK component, it also creates an environment activation file ‘.env’ in the ‘ydk-gen’
 directory, which can be used to activate YDK runtime environment identical to the installation environment.
 To activate YDK runtime environment simply run this command once in bash shell:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ydk-gen
-<span class="nb">source</span> .env
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>ydk-gen
+<span class="nb">source</span><span class="w"> </span>.env
 </pre></div>
 </div>
 <p>The YDK extensively uses Python scripts for building its components and model API packages (bundles).
@@ -231,12 +230,12 @@ If user has different location, the PYTHON_VENV environment variable should be s
 <p>When installing YDK for Python programming language, the third party dependencies and C++ packages must be installed first.
 This step requires sudo/root access to the installation platform.
 Here is simple example of core YDK installation for Python programming language with virtual environment:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/CiscoDevNet/ydk-gen.git
-<span class="nb">cd</span> ydk-gen
-<span class="nb">export</span> <span class="nv">YDKGEN_HOME</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>  <span class="c1"># optional</span>
-<span class="nb">export</span> <span class="nv">PYTHON_VENV</span><span class="o">=</span><span class="nv">$HOME</span>/ydk_vne  <span class="c1"># optional</span>
-./install_ydk.sh --cpp --core --venv
-./install_ydk.sh --py --core --venv
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/CiscoDevNet/ydk-gen.git
+<span class="nb">cd</span><span class="w"> </span>ydk-gen
+<span class="nb">export</span><span class="w"> </span><span class="nv">YDKGEN_HOME</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span><span class="w">  </span><span class="c1"># optional</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PYTHON_VENV</span><span class="o">=</span><span class="nv">$HOME</span>/ydk_vne<span class="w">  </span><span class="c1"># optional</span>
+./install_ydk.sh<span class="w"> </span>--cpp<span class="w"> </span>--core<span class="w"> </span>--venv
+./install_ydk.sh<span class="w"> </span>--py<span class="w"> </span>--core<span class="w"> </span>--venv
 </pre></div>
 </div>
 <p>The script also allows to install individual components like dependencies, core, and service packages
@@ -279,9 +278,9 @@ CMAKE_LIBRARY_PATH  Location of Python shared libraries;
 location of libraries), then building from source method should be used.</p>
 </section>
 <section id="building-from-source">
-<h3><a class="toc-backref" href="#id9">Building from source</a><a class="headerlink" href="#building-from-source" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Building from source</a><a class="headerlink" href="#building-from-source" title="Link to this heading"></a></h3>
 <section id="environment-variables">
-<h4><a class="toc-backref" href="#id10">Environment variables</a><a class="headerlink" href="#environment-variables" title="Permalink to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id10" role="doc-backlink">Environment variables</a><a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h4>
 <p>In some OS configurations during YDK package installation the cmake fails to find C/C++ headers for previously installed YDK libraries.
 In this case the headers file location must be specified explicitly (in below commands the default location is shown):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">C_INCLUDE_PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">include</span>
@@ -293,7 +292,7 @@ the PATH and CMAKE_LIBRARY_PATH environment variables must be set accordingly in
 to pick up correct Python binaries and shared libraries.</p>
 </section>
 <section id="installing-third-party-dependencies">
-<h4><a class="toc-backref" href="#id11">Installing third party dependencies</a><a class="headerlink" href="#installing-third-party-dependencies" title="Permalink to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id11" role="doc-backlink">Installing third party dependencies</a><a class="headerlink" href="#installing-third-party-dependencies" title="Link to this heading"></a></h4>
 <p>If user platform is supported one, it is recommended to use <cite>ydk-gen/install_ydk.sh</cite> script.
 The script will also install Python virtual environment in default or specified location:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Clone ydk-gen from GitHub
@@ -309,7 +308,7 @@ export PYTHON_VENV=$HOME/ydk_venv  # optional
 <p>For unsupported platforms it is recommended to follow logic of <cite>ydk-gen/test/dependencies-*</cite> scripts.</p>
 </section>
 <section id="installing-core-components">
-<h4><a class="toc-backref" href="#id12">Installing core components</a><a class="headerlink" href="#installing-core-components" title="Permalink to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id12" role="doc-backlink">Installing core components</a><a class="headerlink" href="#installing-core-components" title="Link to this heading"></a></h4>
 <p>Please follow this procedure to install YDK core components for Python apps development:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate runtime environment</span>
 <span class="n">source</span> <span class="o">.</span><span class="n">env</span>
@@ -324,11 +323,11 @@ export PYTHON_VENV=$HOME/ydk_venv  # optional
 </section>
 </section>
 <section id="adding-gnmi-service">
-<h3><a class="toc-backref" href="#id13">Adding gNMI Service</a><a class="headerlink" href="#adding-gnmi-service" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Adding gNMI Service</a><a class="headerlink" href="#adding-gnmi-service" title="Link to this heading"></a></h3>
 <p>In order to enable YDK support for gNMI protocol, which is optional, the user need install third party software
 and YDK gNMI service package.</p>
 <section id="gnmi-service-installation">
-<h4><a class="toc-backref" href="#id14">gNMI Service installation</a><a class="headerlink" href="#gnmi-service-installation" title="Permalink to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id14" role="doc-backlink">gNMI Service installation</a><a class="headerlink" href="#gnmi-service-installation" title="Link to this heading"></a></h4>
 <p>Here is simple example, how gNMI service package for Python could be added:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">ydk</span><span class="o">-</span><span class="n">gen</span>
 <span class="o">./</span><span class="n">install_ydk</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">cpp</span> <span class="o">--</span><span class="n">service</span> <span class="n">gnmi</span> <span class="o">--</span><span class="n">venv</span>  <span class="c1"># requires sudo access</span>
@@ -337,7 +336,7 @@ and YDK gNMI service package.</p>
 </div>
 </section>
 <section id="gnmi-runtime-environment">
-<h4><a class="toc-backref" href="#id15">gNMI runtime environment</a><a class="headerlink" href="#gnmi-runtime-environment" title="Permalink to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id15" role="doc-backlink">gNMI runtime environment</a><a class="headerlink" href="#gnmi-runtime-environment" title="Link to this heading"></a></h4>
 <p>When YDK is installed using ‘install_ydk.sh’ script, the runtime environment is set by running ‘source .env’ in bash shell.
 The below information is applicable only when YDK is installed manually, which is not recommended.</p>
 <p>There is an open issue with gRPC on Centos/RHEL, which requires an extra step before running any YDK gNMI application.
@@ -350,9 +349,9 @@ As a workaround, the YDK based application runtime environment must include sett
 </section>
 </section>
 <section id="bundle-installation">
-<h2><a class="toc-backref" href="#id16">Bundle Installation</a><a class="headerlink" href="#bundle-installation" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">Bundle Installation</a><a class="headerlink" href="#bundle-installation" title="Link to this heading"></a></h2>
 <section id="quick-installation">
-<h3><a class="toc-backref" href="#id17">Quick installation</a><a class="headerlink" href="#quick-installation" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Quick installation</a><a class="headerlink" href="#quick-installation" title="Link to this heading"></a></h3>
 <p>You can install the latest model packages from Python package index.
 Note that Python index does not have this release, therefore make sure the Python core package for this release is already installed prior to bundle installation.
 Make sure to activate Python virtual environment prior to package installation.
@@ -381,7 +380,7 @@ If you prefer to install only the <cite>openconfig</cite> bundle and its depende
 </div>
 </section>
 <section id="installing-from-source">
-<h3><a class="toc-backref" href="#id18">Installing from source</a><a class="headerlink" href="#installing-from-source" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Installing from source</a><a class="headerlink" href="#installing-from-source" title="Link to this heading"></a></h3>
 <p>Once you have installed the <cite>ydk</cite> core package, you can install one or more model bundles.  Note that some bundles have dependencies on other bundles.
 Those dependencies are already captured in the bundle package.  Make sure you install the desired bundles in the order below.
 To install the <cite>ietf</cite> bundle from <cite>ydk-gen</cite> execute:</p>
@@ -414,9 +413,9 @@ To install the <cite>ietf</cite> bundle from <cite>ydk-gen</cite> execute:</p>
 </section>
 </section>
 <section id="generate-ydk-components">
-<h2><a class="toc-backref" href="#id19">Generate YDK components</a><a class="headerlink" href="#generate-ydk-components" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">Generate YDK components</a><a class="headerlink" href="#generate-ydk-components" title="Link to this heading"></a></h2>
 <section id="generation-script">
-<h3><a class="toc-backref" href="#id20">Generation script</a><a class="headerlink" href="#generation-script" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">Generation script</a><a class="headerlink" href="#generation-script" title="Link to this heading"></a></h3>
 <p>All the YDK components/packages can be generated by using Python script <cite>generate.py</cite>. To get all of its options run:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">ydk</span><span class="o">-</span><span class="n">gen</span>
 <span class="n">python3</span> <span class="n">generate</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
@@ -459,7 +458,7 @@ To install the <cite>ietf</cite> bundle from <cite>ydk-gen</cite> execute:</p>
 </div>
 </section>
 <section id="build-model-bundle-profile">
-<h3><a class="toc-backref" href="#id21">Build model bundle profile</a><a class="headerlink" href="#build-model-bundle-profile" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Build model bundle profile</a><a class="headerlink" href="#build-model-bundle-profile" title="Link to this heading"></a></h3>
 <p>The first step in using ydk-gen is either using one of the already built <a class="reference external" href="https://github.com/CiscoDevNet/ydk-gen/tree/master/profiles/bundles">bundle profiles</a>
 or constructing your own bundle profile, consisting of the YANG models you are interested to include into the bundle.</p>
 <p>Construct a bundle profile file, such as <a class="reference external" href="https://github.com/CiscoDevNet/ydk-gen/blob/master/profiles/bundles/cisco-ios-xr_6_5_3.json">cisco-ios-xr_6_5_3</a>
@@ -523,7 +522,7 @@ Each element in <cite>commits</cite> list can specify:</p>
 </div>
 </section>
 <section id="generate-and-install-model-bundle">
-<h3><a class="toc-backref" href="#id22">Generate and install model bundle</a><a class="headerlink" href="#generate-and-install-model-bundle" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id22" role="doc-backlink">Generate and install model bundle</a><a class="headerlink" href="#generate-and-install-model-bundle" title="Link to this heading"></a></h3>
 <p>Generate model bundle using a bundle profile and install it.
 YDK Runtime environment must be activated prior to these procedures:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">generate</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">i</span> <span class="o">--</span><span class="n">bundle</span> <span class="n">profiles</span><span class="o">/</span><span class="n">bundles</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">profile</span><span class="o">&gt;.</span><span class="n">json</span>
@@ -531,14 +530,14 @@ YDK Runtime environment must be activated prior to these procedures:</p>
 </div>
 <p>Check Python packages installed:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">ydk</span>
-<span class="n">ydk</span> <span class="p">(</span><span class="mf">0.8.6.5</span><span class="p">)</span>
+<span class="n">ydk</span> <span class="p">(</span><span class="mf">0.8.6.6</span><span class="p">)</span>
 <span class="n">ydk</span><span class="o">-</span><span class="n">models</span><span class="o">-&lt;</span><span class="n">name</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">bundle</span><span class="o">&gt;</span> <span class="p">(</span><span class="mf">0.1.1</span><span class="p">)</span>
 <span class="o">...</span>
 </pre></div>
 </div>
 </section>
 <section id="generate-adhoc-bundle">
-<h3><a class="toc-backref" href="#id23">Generate “adhoc” bundle</a><a class="headerlink" href="#generate-adhoc-bundle" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">Generate “adhoc” bundle</a><a class="headerlink" href="#generate-adhoc-bundle" title="Link to this heading"></a></h3>
 <p>When YANG models available on the hard drive, there is capability to generate small model bundles, which include
 just few models. It is called an “adhoc” bundle. Such a bundle generated without profile directly from command line.
 Here is simple example:</p>
@@ -555,7 +554,7 @@ for generating point model bundles for specific testing. The <cite>–verbose</c
 and easily let the user see if dependencies have been satisfied.</p>
 </section>
 <section id="generate-bundle-documentation">
-<h3><a class="toc-backref" href="#id24">Generate bundle documentation</a><a class="headerlink" href="#generate-bundle-documentation" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Generate bundle documentation</a><a class="headerlink" href="#generate-bundle-documentation" title="Link to this heading"></a></h3>
 <p>In order to generate YDK core and bundles documentation, the <cite>–generate-doc</cite> option is used when generating core package.
 Therefore the user should generate all the bundles without the <cite>–generate-doc</cite> option prior to the documentation generation.
 For example, the below sequence of commands will generate the documentation for the three python bundles and the python core:</p>
@@ -578,7 +577,7 @@ the add-on documentation generation time can be reduced. Adding cisco-ios-xr doc
 </section>
 </section>
 <section id="documentation-and-support">
-<h2><a class="toc-backref" href="#id25">Documentation and Support</a><a class="headerlink" href="#documentation-and-support" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id25" role="doc-backlink">Documentation and Support</a><a class="headerlink" href="#documentation-and-support" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Pre-generated documentation for YDK-0.8.6 core and model API for IETF and OpenConfig can be found <a class="reference external" href="https://ciscodevnet.github.io/ydk-gen/">here</a></p></li>
 <li><p>Application samples can be found under the <a class="reference external" href="https://github.com/CiscoDevNet/ydk-gen/tree/master/sdk/python/core/samples">samples</a> directory</p></li>
@@ -587,8 +586,8 @@ the add-on documentation generation time can be reduced. Adding cisco-ios-xr doc
 </ul>
 </section>
 <section id="release-notes">
-<h2><a class="toc-backref" href="#id26">Release Notes</a><a class="headerlink" href="#release-notes" title="Permalink to this heading"></a></h2>
-<p>The current YDK release version is 0.8.6.5.</p>
+<h2><a class="toc-backref" href="#id26" role="doc-backlink">Release Notes</a><a class="headerlink" href="#release-notes" title="Link to this heading"></a></h2>
+<p>The current YDK release version is 0.8.6.6.</p>
 <p>YDK is licensed under the Apache 2.0 License.</p>
 </section>
 </section>

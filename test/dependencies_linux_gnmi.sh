@@ -54,6 +54,8 @@ function install_protobuf {
 
 function install_grpc {
   if [[ ! -x /usr/local/lib/libgrpc.a ]]; then
+    gcc_version=$(echo $(gcc --version) | awk '{ print $3 }')
+    major=$(echo $gcc_version | cut -d '.' -f 1)
     if [[ ! -d $HOME/grpc ]]; then
       cd $HOME
       print_msg "Downloading grpc"
@@ -62,7 +64,11 @@ function install_grpc {
       git submodule update --init
       # Correcting source code, which fails in focal with gcc-7 and jammy with gcc-11
       cp $curr_dir/3d_party/grpc/log_linux.cc src/core/lib/gpr/
-      cp $curr_dir/3d_party/grpc/Makefile .
+      if [ $major -eq 8 ]; then
+        yes | cp $curr_dir/3d_party/grpc/gcc-8/Makefile .
+      else
+        yes | cp $curr_dir/3d_party/grpc/Makefile .
+      fi
       cd $curr_dir
     fi
     print_msg "Compiling grpc"
@@ -74,8 +80,10 @@ function install_grpc {
        exit $status
     fi
     $sudo_cmd make install
+    cd /usr/local/lib
+    $sudo_cmd ln -sf libgrpc++.so.1.9.1 libgrpc++.so.1
     $sudo_cmd ldconfig
-    cd - > /dev/null
+    cd $curr_dir
   fi
 }
 
@@ -86,6 +94,7 @@ NOCOLOR="\033[0m"
 YELLOW='\033[1;33m'
 MSG_COLOR=$YELLOW
 
+print_msg "STARTED .."
 sudo_cmd=
 if [ $(id -u -n) != "root" ]; then
   sudo_cmd="sudo"
@@ -108,3 +117,4 @@ export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/local/lib
 
 install_protobuf
 install_grpc
+print_msg "FINISHED!"

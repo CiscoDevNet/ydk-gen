@@ -1,3 +1,9 @@
+### 2023-12-31 version 0.8.6.6
+
+#### Resolved GitHub issues
+  * Incorrect loading of submodules into YANG repository ([#1094](https://github.com/CiscoDevNet/ydk-gen/issues/1094))
+
+
 ### 2023-08-31 version 0.8.6.5
 
 #### New features and enhancements
