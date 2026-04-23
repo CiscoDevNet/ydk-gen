@@ -43,3 +43,5 @@ sdk/python/gnmi/dist
 sdk/python/gnmi/ydk_service_gnmi.egg-info
 venv
 temp
+.claude/
+.claude/
