@@ -26,6 +26,7 @@ NetconfServiceProvider Python wrapper.
 """
 
 from ydk_.providers import NetconfServiceProvider as _NetconfServiceProvider
+from ._endpoint import validate_endpoint
 
 
 class NetconfServiceProvider(_NetconfServiceProvider):
@@ -40,8 +41,7 @@ class NetconfServiceProvider(_NetconfServiceProvider):
 
         if timeout is None:
             timeout = -1
-        if port is None:
-            port = 830
+        address, port = validate_endpoint(address, port, protocol)
         if private_key_path is None:
             private_key_path = ""
         if public_key_path is None:

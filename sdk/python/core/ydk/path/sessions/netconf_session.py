@@ -25,6 +25,7 @@ NetconfSession Python wrapper.
 """
 
 from ydk_.path import NetconfSession as _NetconfSession
+from ydk.providers._endpoint import validate_endpoint
 
 
 class NetconfSession(_NetconfSession):
@@ -39,8 +40,7 @@ class NetconfSession(_NetconfSession):
 
         if timeout is None:
             timeout = -1
-        if port is None:
-            port = 830
+        address, port = validate_endpoint(address, port, protocol)
         if private_key_path is None:
             private_key_path = ""
         if public_key_path is None:
